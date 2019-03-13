@@ -16,6 +16,7 @@ import Profile from './Profile/Profile'
 import DrawerComponent from './Drawer/Drawer'
 import ContactGroups from './ContactGroups/ContactGroups'
 import NewsComments from './NewsComments/NewsComments'
+import NewDialog from './NewDialog/NewDialog'
 
 export {
     Group,
@@ -36,4 +37,5 @@ export {
     DrawerComponent,
     ContactGroups,
     NewsComments,
+    NewDialog,
 }

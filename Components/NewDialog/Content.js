@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native'
-import { BackIcon, EllipsisVIcon, ArrowDownIcon } from '../../assets/index'
+import { BackIcon, GroupIcon, ArrowDownIcon } from '../../assets/index'
 import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -8,7 +8,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import helper from '../../Helper/helper'
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
-const { Colors } = helper;
+const { Colors, HeaderHeightNumber } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
@@ -27,11 +27,6 @@ const AnimatedScrollView = posed.View({
     },
 
 })
-const Animated = styled(AnimatedScrollView)`
-    display: flex;
-    flex-direction: row;
-    width: ${Dimensions.get('window').width * 3};
-`
 const AnimatedBox = posed.View({
     visible: { flex: 1 },
     hidden: { flex: 0 }
@@ -44,10 +39,11 @@ const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
     margin-bottom: 110px;
-    
+    height: ${Dimensions.get('window').height - HeaderHeightNumber}px;
 `
 const ContactList = styled(ScrollView)`
     padding: 30px;
+    padding-top: 10px;
     padding-bottom: 10px;
     max-width: ${Dimensions.get('window').width};
     overflow: hidden;
@@ -102,92 +98,84 @@ const ContactRole = styled(Text)`
 const ArrowWrapper = styled(AnimatedArrowWrapper)`
     
 `
-const Options = styled(View)`
-    display: flex;
-    align-self: center;
-    background: ${green};
-    flex-direction: row;
-    padding: 1px;
-    border-radius: 13;
-    overflow: hidden;
-`
-const Option = styled(Text)`
-    color: ${({ active }) => active ? black : 'white'};
-    background: ${({ active }) => active ? 'white' : 'transparent'};
-    margin: 1px;
-    border-radius: 10;
-    padding: 2px 5px;
-    overflow: hidden;
-    min-width: 50px;
-    text-align: center;
-`
 const Group = styled(BoxInnerItem)``
 const GroupInfo = styled(ContactInfo)``
 const GroupTitle = styled(ContactName)``
 const GroupParticipants = styled(ContactRole)``
 const GroupImage = styled(ContactImage)``
+const CreateDialog = styled(TouchableOpacity)`
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    align-self: center;
+    background: ${green};
+    padding: 15px 30px;
+    border-radius: 50000px;
+
+`
+const CreateDialogText = styled(Text)`
+    margin-left: 10px;
+    color: white;
+`
 export default class Settings extends Component {
     render() {
         const { users, collapsed, options, groups } = this.state;
         const { department } = users;
-        const { active } = options;
         return (
             <SafeAreaView>
                 <Wrapper>
                     <KeyboardAwareScrollView enableOnAndroid>
-                        <Options>
+                        <CreateDialog>
+                            <GroupIcon noPadding color={'white'} />
+                            <CreateDialogText>
+                                Создать группу
+                            </CreateDialogText>
+                        </CreateDialog>
+                        <ContactList>
                             {
-                                options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                                    <Option active={active === i}>{e}</Option>
-                                </TouchableOpacity>)
+                                department.map((e, i) => (
+                                    <Box key={i} last={i === department.length - 1}>
+                                        <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
+                                            <BoxItem title={true}>{e.title}</BoxItem>
+                                            <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
+                                                <ArrowDownIcon />
+                                            </ArrowWrapper>
+                                        </BoxTitle>
+                                        <Collapsible collapsed={collapsed[i] || false}>
+                                            <BoxInner>
+                                                {
+                                                    e.workers.map((e, i) => <BoxInnerItem key={i}>
+                                                        <ContactImage />
+                                                        <ContactInfo>
+                                                            <ContactName>{e.name}</ContactName>
+                                                            <ContactRole>{e.role}</ContactRole>
+                                                        </ContactInfo>
+                                                    </BoxInnerItem>)
+                                                }
+                                            </BoxInner>
+                                        </Collapsible>
+                                    </Box>
+                                ))
                             }
-                        </Options>
-                        <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
-                            <ContactList>
-                                {
-                                    department.map((e, i) => (
-                                        <Box key={i} last={i === department.length - 1}>
-                                            <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                                <BoxItem title={true}>{e.title}</BoxItem>
-                                                <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                                                    <ArrowDownIcon />
-                                                </ArrowWrapper>
-                                            </BoxTitle>
-                                            <Collapsible collapsed={collapsed[i] || false}>
-                                                <BoxInner>
-                                                    {
-                                                        e.workers.map((e, i) => <BoxInnerItem key={i}>
-                                                            <ContactImage />
-                                                            <ContactInfo>
-                                                                <ContactName>{e.name}</ContactName>
-                                                                <ContactRole>{e.role}</ContactRole>
-                                                            </ContactInfo>
-                                                        </BoxInnerItem>)
-                                                    }
-                                                </BoxInner>
-                                            </Collapsible>
-                                        </Box>
-                                    ))
+                        </ContactList>
+                        <ContactList>
+                            <FlatList
+                                style={{ paddingRight: 5, paddingLeft: 5, }}
+                                ListHeaderComponent={<View style={{ margin: 35, }} />}
+                                inverted={true}
+                                data={groups}
+                                renderItem={({ item }) => <Group>
+                                    <GroupImage />
+                                    <GroupInfo>
+                                        <GroupTitle>{item.title}</GroupTitle>
+                                        <GroupParticipants>{item.participants} участников</GroupParticipants>
+                                    </GroupInfo>
+                                </Group>
                                 }
-                            </ContactList>
-                            <ContactList>
-                                <FlatList
-                                    style={{ paddingRight: 5, paddingLeft: 5, }}
-                                    ListHeaderComponent={<View style={{ margin: 35, }} />}
-                                    inverted={true}
-                                    data={groups}
-                                    renderItem={({ item }) => <Group>
-                                        <GroupImage />
-                                        <GroupInfo>
-                                            <GroupTitle>{item.title}</GroupTitle>
-                                            <GroupParticipants>{item.participants} участников</GroupParticipants>
-                                        </GroupInfo>
-                                    </Group>
-                                    }
-                                    keyExtractor={(item, index) => index.toString()}
-                                />
-                            </ContactList>
-                        </Animated>
+                                keyExtractor={(item, index) => index.toString()}
+                            />
+                        </ContactList>
                     </KeyboardAwareScrollView>
                 </Wrapper>
             </SafeAreaView>
@@ -214,14 +202,6 @@ export default class Settings extends Component {
                     ],
                 },
             ],
-        },
-        options: {
-            active: 1,
-            options: [
-                'Все',
-                'Пользователи',
-                'Группы'
-            ]
         },
         groups: [
             { title: 'длинное корпоративное название группы', participants: 15 },

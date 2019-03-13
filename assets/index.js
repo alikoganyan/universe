@@ -220,11 +220,11 @@ export function CloseIcon({ onPress }) {
     )
 }
 
-export function GroupIcon({ onPress, noPadding }) {
+export function GroupIcon({ onPress, noPadding, color }) {
     return (
-        <Right onPress={onPress} noPadding={noPadding}>
-            <Icon name="group" size={IconSize} color={IconDarkColor} />
-        </Right>
+        <View onPress={onPress} noPadding={noPadding}>
+            <Icon name="group" size={IconSize} color={color || IconDarkColor} />
+        </View>
     )
 }
 

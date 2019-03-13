@@ -56,9 +56,6 @@ const Input = (props) => {
 
 }
 export default class Content extends Component {
-    state = {
-        error: false,
-    }
     render() {
         return (
             <Wrapper>
@@ -81,6 +78,9 @@ export default class Content extends Component {
                 </CreateTask>
             </Wrapper>
         )
+    }
+    state = {
+        error: false,
     }
     handleChange = (e) => {}
 }
