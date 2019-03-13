@@ -35,7 +35,7 @@ export default class HeaderComponent extends Component {
             <Header>
                 <Left>
                     <BackIcon />
-                    <Text>Новости</Text>
+                    <Text>Все входящие задачи</Text>
                 </Left>
                 <Right>
                     <SearchIcon />

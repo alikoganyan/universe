@@ -93,12 +93,12 @@ const TaskPostTimeText = styled(MessageDate)`
 const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
 }
-export default function TaskComponent({ children, style, triangleLeft, triangleRight }) {
+export default function TaskComponent({ children, style, triangleLeft, triangleRight, creator }) {
     const item = children;
     const { stage, author, created, deadline, text, title } = item;
     const statuses = ['Прочитано', 'Принял в работу', 'Выполнена', 'Принята',]
     const colors = [red, yellow, green, purple];
-    return (<Wrapper style={{alignSelf: triangleRight ? 'flex-end' : 'flex-start',}}>
+    return (<Wrapper style={{ alignSelf: triangleRight ? 'flex-end' : 'flex-start', }}>
         {triangleLeft && <TriangleRightIcon style={{
             position: 'relative',
             left: 11,
@@ -125,7 +125,7 @@ export default function TaskComponent({ children, style, triangleLeft, triangleR
             <TaskFooter>
                 <TaskDeadline>
                     <TaskDeadlineLabel numberOfLines={1}>Делайн: <TaskDeadlineValue>25 января 2017 16:16</TaskDeadlineValue></TaskDeadlineLabel>
-                    <TaskDeadlineLabel numberOfLines={1}>Поставил: <TaskDeadlineValue>Константин Константинопольский</TaskDeadlineValue></TaskDeadlineLabel>
+                    {creator && <TaskDeadlineLabel numberOfLines={1}>Поставил: <TaskDeadlineValue>Константин Константинопольский</TaskDeadlineValue></TaskDeadlineLabel>}
                 </TaskDeadline>
                 <TaskPostTime>
                     <TaskPostTimeText>1:40</TaskPostTimeText>
