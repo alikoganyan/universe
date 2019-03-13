@@ -12,28 +12,34 @@ const Header = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
 `
-const Right = styled(View)`
+const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    position: absolute;
-    right: 0;
-
 `
 const Center = styled(View)``
+const Right = styled(Left)``
+const UserIcon = styled(Image)`
+    background: red;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+    margin-right: ${sidePadding};
+`
+
 export default class HeaderComponent extends Component {
     render() {
         return (
             <Header>
-                <Center>
+                <Left>
+                    <BackIcon />
                     <Text>Новости</Text>
-                </Center>
+                </Left>
                 <Right>
-                    <EditIcon />
-                    <FunnelIcon />
-                    <BurgerIcon />
+                    <SearchIcon />
+                    <UserIcon />
                 </Right>
             </Header>
         )

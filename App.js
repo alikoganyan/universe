@@ -4,27 +4,19 @@ import { Group, Dialogs, Chat, Signup, PinCode, Login, Restore, GroupInfo, Group
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import {
   createStore,
-  applyMiddleware,
-  combineReducers,
 } from 'redux';
-import {
-  reduxifyNavigator,
-  createReactNavigationReduxMiddleware,
-  createNavigationReducer,
-} from 'react-navigation-redux-helpers';
 import Drawer from 'react-native-drawer'
 
-import { Provider, connect } from 'react-redux';
+import { Provider } from 'react-redux';
 import reducers from './reducers/'
 
 import {
-  ActionSheetProvider,
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
 const RootStack = createStackNavigator(
   {
     // Home: { screen: Login },
-    Home: { screen: ContactGroups },
+    Home: { screen: News },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,

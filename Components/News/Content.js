@@ -3,11 +3,11 @@ import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'rea
 import { CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-const { sidePadding } = helper;
+const { sidePadding, Colors } = helper;
+const { yellow } = Colors;
 const Wrapper = styled(View)`
-    background: white;
     margin-bottom: 50px;   
-    background: #EAEAEA;
+    background: white;
 `
 const NewsList = styled(FlatList)`
     padding: 10px;
@@ -17,15 +17,19 @@ const NewsList = styled(FlatList)`
 `
 const NewsItem = styled(View)`
     background: white;
-    padding: 10px;
-    margin-bottom: 10px;
+    padding: 20px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-radius: 8;
+    border: 1px solid ${yellow};
     border-radius: 5;
 
 `
 const Sender = styled(View)`
     display: flex;
     flex-direction: row;
-    margin-bottom: 10px;
+    align-items: center;
+    margin-bottom: 15px;
 `
 const Sendermage = styled(Image)`
     width: 40;
@@ -40,11 +44,11 @@ const SenderName = styled(Text)`
 const SenderInfo = styled(View)`
     display: flex;
     justify-content: space-between;
-    height: 40px;
+    height: 35px;
 `
 const TimeSent = styled(Text)`
     color: #848484;
-    font-size: 14;
+    font-size: 13;
 `
 const NewsItemInfo = styled(View)`
     width: 100%;
@@ -53,15 +57,17 @@ const NewsItemInfo = styled(View)`
     flex-direction: row;
     align-items: center;
 `
-const HashTags = styled(View)`
+const ShowAll = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
 `
 const HashTag = styled(Text)`
-    color: #436786;
+    color: ${yellow};
     margin-right: 5px;
+    font-weight: 500;
+    font-size: 17px;
 `
 const Reactions = styled(View)`
     display: flex;
@@ -88,13 +94,13 @@ export default class Content extends Component {
                             </Sender>
                             <Text>{item.text}</Text>
                             <NewsItemInfo>
-                                <HashTags>
-                                    {item.hashtags.map((e, i) => <TouchableOpacity key={i}><HashTag>{e}</HashTag></TouchableOpacity>)}
-                                </HashTags>
+                                <ShowAll>
+                                    <TouchableOpacity><HashTag>Читать далее</HashTag></TouchableOpacity>
+                                </ShowAll>
 
                                 <Reactions>
-                                    <CommentIcon onPress={this.handleHold} /><Text>12</Text>
                                     <HeartIcon /><Text>12</Text>
+                                    <CommentIcon /><Text>12</Text>
                                 </Reactions>
                             </NewsItemInfo>
                         </NewsItem>}
