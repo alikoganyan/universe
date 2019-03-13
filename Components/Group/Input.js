@@ -42,20 +42,6 @@ const Right = styled(View)`
 `
 
 class InputComponent extends Component {
-    componentDidMount() {
-        const { messages, addMessage } = this.props
-
-    }
-    state = {
-        text: '', height: 0
-    }
-    sendMessage = (event) => {
-        this.props.addMessage({ payload: this.state.text })
-        this.setState({ text: '' })
-    }
-    handleChange = (e) => {
-        this.setState({ text: e })
-    }
     render() {
         const { text } = this.state;
         const { startSearch, stopSearch } = this.props;
@@ -77,6 +63,19 @@ class InputComponent extends Component {
 
             </Wrapper>
         )
+    }
+    componentDidMount() {
+        const { messages, addMessage } = this.props
+    }
+    state = {
+        text: '', height: 0
+    }
+    sendMessage = (event) => {
+        this.props.addMessage({ payload: this.state.text })
+        this.setState({ text: '' })
+    }
+    handleChange = (e) => {
+        this.setState({ text: e })
     }
 }
 

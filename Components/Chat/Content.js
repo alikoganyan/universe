@@ -65,7 +65,7 @@ const MessageInfo = styled(View)`
 `
 
 const MessageDate = styled(Text)`
-    color: ${({color}) => color ||'#ABABAB'};
+    color: ${({ color }) => color || '#ABABAB'};
 `
 
 const Feed = styled(View)`
@@ -181,7 +181,7 @@ const TaskPostTime = styled(View)`
 const TaskPostTimeText = styled(MessageDate)`
 `
 const Indicator = ({ delievered = false, read = false, color }) => {
-    return <CheckIcon color={color}/>
+    return <CheckIcon color={color} />
 }
 const Message = (props) => {
     const { children } = props;
@@ -194,7 +194,7 @@ const Message = (props) => {
                 </MyMessageText>
                 <MessageInfo>
                     <MessageDate color={'white'}>1:40</MessageDate>
-                    <Indicator color={'white'}/>
+                    <Indicator color={'white'} />
                 </MessageInfo>
             </MyMessage>
             <TriangleLeftIcon color={'#3776F9'} />
@@ -215,25 +215,8 @@ const Message = (props) => {
 
 const myId = 1;
 class Content extends Component {
-    componentDidMount() {
-
-    }
-    handleHold = () => {
-        ActionSheetIOS.showActionSheetWithOptions(
-            {
-                options: ['Отменить', 'Ответить', 'Копировать', 'Изменить', 'Удалить'],
-                cancelButtonIndex: 0,
-            },
-            (buttonIndex) => {
-                if (buttonIndex === 1) {
-                    /* destructive action */
-                }
-            },
-        );
-    }
     render() {
         const { messages, search } = this.props
-
         const revesedMessages = [...messages].reverse();
         return (
             <SafeAreaView>
@@ -311,6 +294,20 @@ class Content extends Component {
                 </Wrapper>
             </SafeAreaView>
         )
+    }
+    componentDidMount() {}
+    handleHold = () => {
+        ActionSheetIOS.showActionSheetWithOptions(
+            {
+                options: ['Отменить', 'Ответить', 'Копировать', 'Изменить', 'Удалить'],
+                cancelButtonIndex: 0,
+            },
+            (buttonIndex) => {
+                if (buttonIndex === 1) {
+                    /* destructive action */
+                }
+            },
+        );
     }
 }
 

@@ -6,17 +6,17 @@ import { Header, Content } from './index'
 
 const Wrapper = styled(View)``
 export default class Signup extends Component {
-    moveForward = () => {
-        this.props.navigation.navigate('Group')
-    }
     render() {
         return (
             <SafeAreaView>
-                    <Wrapper>
-                        <Header back={this.moveForward} />
-                        <Content />
-                    </Wrapper>
+                <Wrapper>
+                    <Header back={this.moveForward} />
+                    <Content />
+                </Wrapper>
             </SafeAreaView>
         )
+    }
+    moveForward = () => {
+        this.props.navigation.navigate('Group')
     }
 }

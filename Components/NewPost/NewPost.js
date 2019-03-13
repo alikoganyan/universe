@@ -6,9 +6,6 @@ import { Header, Content } from './index'
 
 const Wrapper = styled(View)``
 export default class NewPost extends Component {
-    moveForward = () => {
-        this.props.navigation.navigate('Group')
-    }
     render() {
         return (
             <SafeAreaView>
@@ -18,5 +15,8 @@ export default class NewPost extends Component {
                 </Wrapper>
             </SafeAreaView>
         )
+    }
+    moveForward = () => {
+        this.props.navigation.navigate('Group')
     }
 }

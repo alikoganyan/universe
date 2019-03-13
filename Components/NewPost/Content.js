@@ -56,20 +56,7 @@ const Input = (props) => {
 
 }
 export default class Content extends Component {
-    state = {
-        height: 'auto',
-    }
-    componentDidMount(){
-    }
-    updateSize = (height) => {
-        this.setState({
-            height
-        });
-    }
     render() {
-        let newStyle = {
-            height: this.state.height
-        }
         return (
             <KeyboardAwareScrollView enableOnAndroid behavior='padding'>
                 <Wrapper>
@@ -79,7 +66,7 @@ export default class Content extends Component {
                     </Author>
                     <Post>
 
-                        <AutoGrowingInput placeholder={'введите ваше сообщение'}/>
+                        <AutoGrowingInput placeholder={'введите ваше сообщение'} />
 
                         <Input style={{ flex: 1 }}>Укажите хештег</Input>
 
@@ -87,5 +74,15 @@ export default class Content extends Component {
                 </Wrapper>
             </KeyboardAwareScrollView>
         )
+    }
+    state = {
+        height: 'auto',
+    }
+    componentDidMount() {
+    }
+    updateSize = (height) => {
+        this.setState({
+            height
+        });
     }
 }

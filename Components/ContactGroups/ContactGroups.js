@@ -20,9 +20,6 @@ const Bottom = styled(View)`
 `
 
 export default class ContactGroups extends Component {
-    navigateBack = () => {
-        this.props.navigation.goBack()
-    }
     render() {
         return (
             <ActionSheetProvider>
@@ -36,5 +33,8 @@ export default class ContactGroups extends Component {
                 </SafeAreaView>
             </ActionSheetProvider>
         )
+    }
+    navigateBack = () => {
+        this.props.navigation.goBack()
     }
 }

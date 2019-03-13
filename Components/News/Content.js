@@ -71,7 +71,41 @@ const Reactions = styled(View)`
 `
 export default class Content extends Component {
     render() {
-        const newsList = [
+        const { newsList } = this.state;
+        return (
+            <SafeAreaView>
+                <Wrapper>
+                    <NewsList
+                        data={newsList}
+                        ListFooterComponent={<View style={{ margin: 5, }} />}
+                        renderItem={({ item }) => <NewsItem>
+                            <Sender>
+                                <Sendermage source={{ uri: item.sender.img }} />
+                                <SenderInfo>
+                                    <SenderName>{item.sender.name}</SenderName>
+                                    <TimeSent>{item.timeSent}</TimeSent>
+                                </SenderInfo>
+                            </Sender>
+                            <Text>{item.text}</Text>
+                            <NewsItemInfo>
+                                <HashTags>
+                                    {item.hashtags.map((e, i) => <TouchableOpacity key={i}><HashTag>{e}</HashTag></TouchableOpacity>)}
+                                </HashTags>
+
+                                <Reactions>
+                                    <CommentIcon onPress={this.handleHold} /><Text>12</Text>
+                                    <HeartIcon /><Text>12</Text>
+                                </Reactions>
+                            </NewsItemInfo>
+                        </NewsItem>}
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                </Wrapper>
+            </SafeAreaView>
+        )
+    }
+    state = {
+        newsList: [
             {
                 sender: {
                     img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
@@ -158,36 +192,5 @@ export default class Content extends Component {
             },
 
         ]
-        return (
-            <SafeAreaView>
-                <Wrapper>
-                    <NewsList
-                        data={newsList}
-                        ListFooterComponent={ <View style={{ margin: 5, }} /> }
-                        renderItem={({ item }) => <NewsItem>
-                            <Sender>
-                                <Sendermage source={{ uri: item.sender.img }} />
-                                <SenderInfo>
-                                    <SenderName>{item.sender.name}</SenderName>
-                                    <TimeSent>{item.timeSent}</TimeSent>
-                                </SenderInfo>
-                            </Sender>
-                            <Text>{item.text}</Text>
-                            <NewsItemInfo>
-                                <HashTags>
-                                    {item.hashtags.map((e, i) => <TouchableOpacity key={i}><HashTag>{e}</HashTag></TouchableOpacity>)}
-                                </HashTags>
-
-                                <Reactions>
-                                    <CommentIcon  onPress={this.handleHold}/><Text>12</Text>
-                                    <HeartIcon /><Text>12</Text>
-                                </Reactions>
-                            </NewsItemInfo>
-                        </NewsItem>}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
-                </Wrapper>
-            </SafeAreaView>
-        )
     }
 }

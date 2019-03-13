@@ -10,17 +10,17 @@ const Wrapper = styled(View)`
 `
 
 export default class News extends Component {
-    navigateBack = () => {
-        this.props.navigation.goBack()
-    }
     render() {
         return (
             <SafeAreaView>
                 <Wrapper>
-                    <Header back={this.navigateBack}/>
-                    <Content/>
+                    <Header back={this.navigateBack} />
+                    <Content />
                 </Wrapper>
             </SafeAreaView>
         )
+    }
+    navigateBack = () => {
+        this.props.navigation.goBack()
     }
 }

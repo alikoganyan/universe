@@ -43,9 +43,6 @@ const Right = styled(TouchableOpacity)`
 `
 
 export default class HeaderComponent extends Component {
-    moveForward = () => {
-        this.props.back()
-    }
     render() {
         return (
             <Header>
@@ -57,5 +54,8 @@ export default class HeaderComponent extends Component {
                 </Right>
             </Header>
         )
+    }
+    moveForward = () => {
+        this.props.back()
     }
 }

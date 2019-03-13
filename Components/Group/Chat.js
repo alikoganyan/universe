@@ -3,7 +3,7 @@ import { View, Text, Image } from 'react-native'
 import { BackIcon, EllipsisVIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { SafeAreaView } from '../../Common/'
-import {connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { Header, Content, Input } from './'
 const Wrapper = styled(View)`
     height: 100%;
@@ -17,17 +17,11 @@ const Bottom = styled(View)`
 `
 
 class Chat extends Component {
-    navigateBack = () => {
-        this.props.navigation.goBack()
-    }
-    navigateToUser = () => {
-        this.props.navigation.goBack()
-    }
     render() {
         return (
             <SafeAreaView>
                 <Wrapper>
-                    <Header back={this.navigateBack}/>
+                    <Header back={this.navigateBack} />
                     <Content />
                     <Bottom>
                         <Input />
@@ -35,6 +29,12 @@ class Chat extends Component {
                 </Wrapper>
             </SafeAreaView>
         )
+    }
+    navigateBack = () => {
+        this.props.navigation.goBack()
+    }
+    navigateToUser = () => {
+        this.props.navigation.goBack()
     }
 }
 const mapStateToProps = state => {

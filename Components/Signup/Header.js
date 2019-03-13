@@ -42,9 +42,6 @@ const Right = styled(TouchableOpacity)`
 `
 
 export default class HeaderComponent extends Component {
-    moveForward = () => {
-        this.props.back()
-    }
     render() {
         return (
             <Header>
@@ -52,9 +49,12 @@ export default class HeaderComponent extends Component {
                 </Left>
                 <Right onPress={this.moveForward}>
                     <Text>Далее</Text>
-                    <ForwardIcon/>
+                    <ForwardIcon />
                 </Right>
             </Header>
         )
+    }
+    moveForward = () => {
+        this.props.back()
     }
 }

@@ -16,15 +16,7 @@ const Bottom = styled(View)`
 `
 
 export default class Chat extends Component {
-    navigateBack = () => {
-        this.props.navigation.goBack()
-    }
-    componentDidMount() {
-
-
-    }
     render() {
-
         return (
             <SafeAreaView>
                 <Wrapper>
@@ -37,4 +29,8 @@ export default class Chat extends Component {
             </SafeAreaView>
         )
     }
+    navigateBack = () => {
+        this.props.navigation.goBack()
+    }
+    componentDidMount() { }
 }

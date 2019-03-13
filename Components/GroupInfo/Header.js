@@ -29,19 +29,6 @@ const Right = styled(View)`
 `
 @connectActionSheet
 export default class HeaderComponent extends Component {
-    openModal = () => {
-        const options = Platform.OS === 'ios' ?
-            ['Отмена', 'Редактировать группу', 'Очистить историю'] :
-            ['Редактировать группу', 'Очистить историю'];
-        const cancelButtonIndex = 0;
-        this.props.showActionSheetWithOptions(
-            {
-                options,
-                cancelButtonIndex,
-            },
-            buttonIndex => { },
-        );
-    }
     render() {
         const { navigateBack } = this.props;
         return (
@@ -57,5 +44,18 @@ export default class HeaderComponent extends Component {
                 </Right>
             </Header>
         )
+    }
+    openModal = () => {
+        const options = Platform.OS === 'ios' ?
+            ['Отмена', 'Редактировать группу', 'Очистить историю'] :
+            ['Редактировать группу', 'Очистить историю'];
+        const cancelButtonIndex = 0;
+        this.props.showActionSheetWithOptions(
+            {
+                options,
+                cancelButtonIndex,
+            },
+            buttonIndex => { },
+        );
     }
 }

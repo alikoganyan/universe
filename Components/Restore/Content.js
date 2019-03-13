@@ -48,12 +48,6 @@ const Input = (props) => {
 
 }
 export default class Content extends Component {
-    state = {
-        error: false,
-    }
-    handleChange = (e) => {
-    }
-
     render() {
         return (
             <Wrapper>
@@ -74,4 +68,9 @@ export default class Content extends Component {
             </Wrapper>
         )
     }
+    state = {
+        error: false,
+    }
+    handleChange = (e) => {}
+
 }

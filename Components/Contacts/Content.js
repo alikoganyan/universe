@@ -70,6 +70,34 @@ const ContactInfo = styled(View)`
     margin-bottom: 10px;
 `
 export default class Settings extends Component {
+    render() {
+        return (
+            <SafeAreaView>
+                <Wrapper>
+                    <InputWrapper>
+                        <StyledIcon name="search" />
+                        <Input placeholder={'найти'} />
+                    </InputWrapper>
+                    <KeyboardAwareScrollView enableOnAndroid>
+                        <ContactList>
+                            {Object.keys(this.state.names).map((e, i) => {
+                                const item = this.state.names[e];
+                                if (item.length > 0) {
+                                    return <ContactsListItem key={`letter_${i}`}>
+                                        <Letter><Text style={{ fontSize: 18, color: '#6A6A6A' }}>{e}</Text></Letter>
+                                        <Contact>{item.map((e, i) => <ContactInfo key={`contact_${i}`}>
+                                            <ContactImage source={{ uri: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg' }} />
+                                            <Text>{e.name}</Text>
+                                        </ContactInfo>)}</Contact>
+                                    </ContactsListItem>
+                                }
+                            })}
+                        </ContactList>
+                    </KeyboardAwareScrollView>
+                </Wrapper>
+            </SafeAreaView>
+        )
+    }
     state = {
         names: {
             a: [],
@@ -140,33 +168,5 @@ export default class Settings extends Component {
     }
     componentDidMount() {
         this.sortUsersByName(this.state.users)
-    }
-    render() {
-        return (
-            <SafeAreaView>
-                <Wrapper>
-                    <InputWrapper>
-                        <StyledIcon name="search" />
-                        <Input placeholder={'найти'} />
-                    </InputWrapper>
-                    <KeyboardAwareScrollView enableOnAndroid>
-                        <ContactList>
-                            {Object.keys(this.state.names).map((e, i) => {
-                                const item = this.state.names[e];
-                                if (item.length > 0) {
-                                    return <ContactsListItem key={`letter_${i}`}>
-                                        <Letter><Text style={{ fontSize: 18, color: '#6A6A6A' }}>{e}</Text></Letter>
-                                        <Contact>{item.map((e, i) => <ContactInfo key={`contact_${i}`}>
-                                            <ContactImage source={{ uri: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg' }} />
-                                            <Text>{e.name}</Text>
-                                        </ContactInfo>)}</Contact>
-                                    </ContactsListItem>
-                                }
-                            })}
-                        </ContactList>
-                    </KeyboardAwareScrollView>
-                </Wrapper>
-            </SafeAreaView>
-        )
     }
 }

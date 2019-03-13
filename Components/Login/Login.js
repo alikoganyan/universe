@@ -7,7 +7,6 @@ import { SafeAreaView } from '../../Common/'
 const Wrapper = styled(View)``
 
 export default class PinCode extends Component {
-    navigateToDialogs = () => this.props.navigation.navigate('Dialogs')
     render() {
         return (
             <SafeAreaView>
@@ -18,4 +17,5 @@ export default class PinCode extends Component {
             </SafeAreaView>
         )
     }
+    navigateToDialogs = () => this.props.navigation.navigate('Dialogs')
 }

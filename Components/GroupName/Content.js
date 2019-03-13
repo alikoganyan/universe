@@ -42,7 +42,6 @@ const Cancel = styled(Create)`
     color: #B1B1B1;
 `
 export default class Content extends Component {
-
     render() {
         const Input = (props) => {
             const { children, password = false, value, style, editable } = props;

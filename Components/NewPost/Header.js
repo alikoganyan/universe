@@ -48,9 +48,6 @@ const GroupImage = styled(Image)`
     margin-right: 10px;
 `
 export default class HeaderComponent extends Component {
-    moveForward = () => {
-        this.props.back()
-    }
     render() {
         return (
             <Header>
@@ -61,5 +58,8 @@ export default class HeaderComponent extends Component {
                 </Left>
             </Header>
         )
+    }
+    moveForward = () => {
+        this.props.back()
     }
 }

@@ -72,7 +72,31 @@ const NewMessages = styled(Text)`
   text-align: center;
 `
 export default class Content extends Component {
+  render() {
+    const { children, title, onClick } = this.props;
+    const { height, width } = this.state;
+    return (
+      <TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}>
+        <Wrapper>
+          <DialogImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
+          <DialogText>
+            <DialogTextInner>
+              <DialogTitle>{title}</DialogTitle>
+              <DialogLastMessage numberOfLines={1} >{children}Labore quis nulla velit sit occaecat deserunt cillum occaecat dolor et elit duis. Dolore laboris nostrud esse ullamco irure cupidatat mollit nisi nostrud in irure aliquip adipisicing proident. Eu aliquip consectetur velit quis pariatur velit sint esse incididunt laborum aute aliqua. Laboris laboris aliqua magna laborum reprehenderit nostrud aliquip consectetur proident aliquip commodo elit officia.</DialogLastMessage>
+            </DialogTextInner>
+            <DialogDate>
+              <LastMessageDate>Thu</LastMessageDate>
+              <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
+                <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}
+                  style={{ borderRadius: height / 2, width: width < height ? height : width }}>2</NewMessages>
+              </UnreadMessages>
+            </DialogDate>
+          </DialogText>
 
+        </Wrapper >
+      </TouchableHighlight >
+    );
+  }
   state = {
     size: null
   }
@@ -98,30 +122,5 @@ export default class Content extends Component {
   }
   getUnreadMessageWidth = (e) => {
     this.setState({ width: e.nativeEvent.layout.width })
-  }
-  render() {
-    const { children, title, onClick } = this.props;
-    const { height, width } = this.state;
-    return (
-      <TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}>
-        <Wrapper>
-          <DialogImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
-          <DialogText>
-            <DialogTextInner>
-              <DialogTitle>{title}</DialogTitle>
-              <DialogLastMessage numberOfLines={1} >{children}Labore quis nulla velit sit occaecat deserunt cillum occaecat dolor et elit duis. Dolore laboris nostrud esse ullamco irure cupidatat mollit nisi nostrud in irure aliquip adipisicing proident. Eu aliquip consectetur velit quis pariatur velit sint esse incididunt laborum aute aliqua. Laboris laboris aliqua magna laborum reprehenderit nostrud aliquip consectetur proident aliquip commodo elit officia.</DialogLastMessage>
-            </DialogTextInner>
-            <DialogDate>
-              <LastMessageDate>Thu</LastMessageDate>
-              <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-                <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}
-                  style={{ borderRadius: height / 2, width: width < height ? height : width }}>2</NewMessages>
-              </UnreadMessages>
-            </DialogDate>
-          </DialogText>
-
-        </Wrapper >
-      </TouchableHighlight >
-    );
   }
 }

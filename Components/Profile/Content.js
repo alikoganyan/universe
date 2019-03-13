@@ -90,20 +90,8 @@ const PersonalData = styled(View)`
 `
 const SendMessage = styled(Button)``
 export default class Settings extends Component {
-    state = {
-        userName: 'Константин Константинопольский',
-        status: 'В сети',
-    }
     render() {
-        const UserData = [
-            { type: 'Подразделение', value: 'Стандартный' },
-            { type: 'Должность', value: 'Главный инженер' },
-            { type: 'Личный', value: '+7(395)282-48-57' },
-            { type: 'Задачи', value: '26.09.1986', icon: <TaskIcon /> },
-            { type: 'Общих групп', value: 'youmail@irkutskoil.ru', icon: <GroupIcon /> },
-            { type: 'Общих файлов', value: '+7(395)282-48-57', icon: <GroupIcon /> },
-        ]
-        const { userName, status } = this.state;
+        const { UserData, userName, status } = this.state;
 
         return (
             <Wrapper style={{ flex: 1 }}>
@@ -133,5 +121,17 @@ export default class Settings extends Component {
                 </ScrollView>
             </Wrapper>
         )
+    }
+    state = {
+        userName: 'Константин Константинопольский',
+        status: 'В сети',
+        UserData: [
+            { type: 'Подразделение', value: 'Стандартный' },
+            { type: 'Должность', value: 'Главный инженер' },
+            { type: 'Личный', value: '+7(395)282-48-57' },
+            { type: 'Задачи', value: '26.09.1986', icon: <TaskIcon /> },
+            { type: 'Общих групп', value: 'youmail@irkutskoil.ru', icon: <GroupIcon /> },
+            { type: 'Общих файлов', value: '+7(395)282-48-57', icon: <GroupIcon /> },
+        ]
     }
 }

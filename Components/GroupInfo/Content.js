@@ -84,8 +84,10 @@ const StyledFlatList = styled(FlatList)`
 `
 export default class Content extends Component {
     render() {
+        const { groupsList } = this.state;
         const Participant = (props) => {
             const { img, name, lastSeen } = props.children;
+
             return (
                 <User>
                     <ParticipantImage source={{ uri: img }} />
@@ -96,33 +98,6 @@ export default class Content extends Component {
                 </User>
             )
         }
-        const groupsList = [
-            {
-                img: 'https://facebook.github.io/react/logo-og.png',
-                name: 'test',
-                lastSeen: '2 дня назад',
-            },
-            {
-                img: 'https://facebook.github.io/react/logo-og.png',
-                name: 'test',
-                lastSeen: '2 дня назад',
-            },
-            {
-                img: 'https://facebook.github.io/react/logo-og.png',
-                name: 'test',
-                lastSeen: '2 дня назад',
-            },
-            {
-                img: 'https://facebook.github.io/react/logo-og.png',
-                name: 'test',
-                lastSeen: '2 дня назад',
-            },
-            {
-                img: 'https://facebook.github.io/react/logo-og.png',
-                name: 'test',
-                lastSeen: '2 дня назад',
-            },
-        ]
         return (
             <SafeAreaView>
                 <Wrapper>
@@ -150,5 +125,34 @@ export default class Content extends Component {
                 </Wrapper>
             </SafeAreaView>
         )
+    }
+    state = {
+        groupsList: [
+            {
+                img: 'https://facebook.github.io/react/logo-og.png',
+                name: 'test',
+                lastSeen: '2 дня назад',
+            },
+            {
+                img: 'https://facebook.github.io/react/logo-og.png',
+                name: 'test',
+                lastSeen: '2 дня назад',
+            },
+            {
+                img: 'https://facebook.github.io/react/logo-og.png',
+                name: 'test',
+                lastSeen: '2 дня назад',
+            },
+            {
+                img: 'https://facebook.github.io/react/logo-og.png',
+                name: 'test',
+                lastSeen: '2 дня назад',
+            },
+            {
+                img: 'https://facebook.github.io/react/logo-og.png',
+                name: 'test',
+                lastSeen: '2 дня назад',
+            },
+        ]
     }
 }

@@ -85,12 +85,6 @@ const Input = (props) => {
 
 }
 export default class Content extends Component {
-    state = {
-        error: false,
-    }
-    handleChange = (e) => {
-    }
-
     render() {
         const { error } = this.state;
         const { navigateToDialogs } = this.props;
@@ -134,4 +128,8 @@ export default class Content extends Component {
             </Wrapper>
         )
     }
+    state = {
+        error: false,
+    }
+    handleChange = (e) => {}
 }

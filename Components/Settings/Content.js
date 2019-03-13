@@ -81,26 +81,8 @@ const TopLine = styled(View)`
     justify-content: space-between;
 `
 export default class Settings extends Component {
-    state = {
-        userName: 'Константин Константинопольский',
-        status: 'В сети',
-        editingName: false,
-        editing: true,
-    }
     render() {
-        const UserData = [
-            { type: 'Тип пользователя', value: 'Стандартный' },
-            { type: 'Должность', value: 'Главный инженер' },
-            { type: 'Дата рождения', value: '26.09.1986' },
-            { type: 'Рабочий', value: 'youmail@irkutskoil.ru' },
-            { type: 'Рабочий', value: '+7(395)282-48-57' },
-            { type: 'Личный', value: '+7(395)282-48-57' },
-        ]
-        const privacyData = [
-            { value: '****', type: 'Пароль', actionText: 'Изменить пароль', action: () => console.log('password') },
-            { value: 'PC-481', type: 'Текущее устройство', actionText: 'Удалить устройство', action: () => console.log('current') },
-            { value: 'PC-483', type: 'Недавнее устройство', actionText: 'Удалить устройство', action: () => console.log('current') },
-        ]
+        const { UserData, privacyData } = this.state
         const Input = (props) => {
             const { children, password = false, value, style, editable } = props;
             return <FloatingLabel
@@ -192,5 +174,24 @@ export default class Settings extends Component {
                 </Wrapper>
             </SafeAreaView>
         )
+    }
+    state = {
+        userName: 'Константин Константинопольский',
+        status: 'В сети',
+        editingName: false,
+        editing: true,
+        UserData: [
+            { type: 'Тип пользователя', value: 'Стандартный' },
+            { type: 'Должность', value: 'Главный инженер' },
+            { type: 'Дата рождения', value: '26.09.1986' },
+            { type: 'Рабочий', value: 'youmail@irkutskoil.ru' },
+            { type: 'Рабочий', value: '+7(395)282-48-57' },
+            { type: 'Личный', value: '+7(395)282-48-57' },
+        ],
+        privacyData: [
+            { value: '****', type: 'Пароль', actionText: 'Изменить пароль', action: () => console.log('password') },
+            { value: 'PC-481', type: 'Текущее устройство', actionText: 'Удалить устройство', action: () => console.log('current') },
+            { value: 'PC-483', type: 'Недавнее устройство', actionText: 'Удалить устройство', action: () => console.log('current') },
+        ]
     }
 }

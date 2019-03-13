@@ -12,17 +12,8 @@ const StyledFlatList = styled(FlatList)`
 `
 
 export default class Dialogs extends Component {
-  componentDidMount() {
-
-  }
-  toChat = () => {
-    this.props.navigation.navigate('Chat')
-  }
-  toGroup = () => {
-    this.props.navigation.navigate('Group')
-  }
   render() {
-    const FlatListData = [{ text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }, { text: 'text', title: 'title' }]
+    const { FlatListData } = this.state;
     return (
       <SafeAreaView>
         <Wrapper>
@@ -37,5 +28,35 @@ export default class Dialogs extends Component {
         </Wrapper>
       </SafeAreaView>
     )
+  }
+  state = {
+    FlatListData: [
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' },
+      { text: 'text', title: 'title' }
+    ]
+  }
+  componentDidMount() { }
+  toChat = () => {
+    this.props.navigation.navigate('Chat')
+  }
+  toGroup = () => {
+    this.props.navigation.navigate('Group')
   }
 }

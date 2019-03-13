@@ -25,8 +25,6 @@ const Closer = styled(TouchableOpacity)`
   background: rgba(0,0,0,.5);
 `
 class Drawer extends Component {
-  componentDidMount() {
-  }
   render() {
     return (
       <SafeAreaView>
@@ -40,6 +38,7 @@ class Drawer extends Component {
       </SafeAreaView>
     )
   }
+  componentDidMount() {}
 }
 
 const mapStateToProps = state => {

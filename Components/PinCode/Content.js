@@ -28,21 +28,12 @@ const Input = styled(TextInput)`
     text-align: center;
 `
 export default class Content extends Component {
-    state = {
-        pin: '',
-    }
-    handleChange = (e) => {
-        e.length <= 4 && this.setState({
-            pin: e
-        })
-    }
     render() {
         return (
             <Wrapper>
                 <Title>
                     Введите PIN для доступа на данном устройстве
                     </Title>
-                {/* <Input password value={this.state.pin} onChange={this.handleChange}></Input> */}
                 <Input secureTextEntry={true} onChangeText={this.handleChange} value={this.state.pin} />
                 <TouchableOpacity>
                     <LogIn>
@@ -51,5 +42,13 @@ export default class Content extends Component {
                 </TouchableOpacity>
             </Wrapper>
         )
+    }
+    state = {
+        pin: '',
+    }
+    handleChange = (e) => {
+        e.length <= 4 && this.setState({
+            pin: e
+        })
     }
 }

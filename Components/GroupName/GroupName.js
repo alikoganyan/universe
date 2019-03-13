@@ -16,9 +16,6 @@ const Bottom = styled(View)`
 `
 
 export default class GroupInfo extends Component {
-    navigateBack = () => {
-        this.props.navigation.goBack()
-    }
     render() {
         return (
             <SafeAreaView>
@@ -30,5 +27,8 @@ export default class GroupInfo extends Component {
                 </Wrapper>
             </SafeAreaView>
         )
+    }
+    navigateBack = () => {
+        this.props.navigation.goBack()
     }
 }
