@@ -3,8 +3,8 @@ import { Text, View } from 'react-native'
 import styled from 'styled-components'
 import { CheckIcon } from '../assets/'
 const { HeaderHeightNumber, Colors } = helper;
-const { red, yellow, green, purple } = Colors;
-
+const { red, yellow, green, purple, grey1 } = Colors;
+console.log(Colors)
 const MessageDate = styled(Text)`
     color: ${({ color }) => color || '#ABABAB'};
 `
@@ -15,8 +15,9 @@ const Task = styled(View)`
     display: flex;
     flex-direction: column;
     padding: 10px;
-    padding-bottom: 0;
-    background: #F6F6F6;
+    padding-bottom: 5px;
+    background: #fff;
+    border: 1px solid ${purple};
     border-radius: 5;
 `
 const Status = styled(View)`
@@ -39,22 +40,32 @@ const StatusStage = styled(View)`
     display: flex;
     flex-direction: row;
 `
-const StatusText = styled(Text)``
+const StatusText = styled(Text)`
+    color: ${purple};
+    margin-bottom: 5px;
+`
 const TaskTitle = styled(View)`
     margin-bottom: 10px;
 `
 const TaskBody = styled(View)`
     margin-bottom: 10px;
 `
+const TaskBodyText = styled(Text)`
+    color: ${grey1};
+`
 const TaskDeadline = styled(View)`
     display: flex;
-    flex-direction: row;
-    flex: 1;
+    flex-direction: column;
     width: 100%;
+    flex: 6;
 `
 const TaskDeadlineLabel = styled(Text)`
-    color: #999999;
+    color: ${grey1};
+    flex: 1;
     
+`
+const TaskDeadlineValue = styled(Text)`
+    color: ${purple};
 `
 const TaskPostTime = styled(View)`
     display: flex;
@@ -63,6 +74,13 @@ const TaskPostTime = styled(View)`
     justify-content: flex-end;
     padding: 0;
     width: 100%;
+    flex: 1;
+`
+const TaskFooter = styled(View)`
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    flex: 1;
 `
 const TaskPostTimeText = styled(MessageDate)`
 `
@@ -76,25 +94,26 @@ export default function TaskComponent({ children }) {
     const colors = [red, yellow, green, purple]
     return (<Task>
         <Status>
-            <StatusText></StatusText>
-            <Text>{statuses[stage]}</Text>
+            <StatusText>{statuses[stage]}</StatusText>
             <StatusStage>
-                {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= stage} color={colors[i]}/>)}
-
+                {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= stage} color={colors[i]} />)}
             </StatusStage>
         </Status>
         <TaskTitle>
             <Text>{title}</Text>
         </TaskTitle>
         <TaskBody>
-            <Text>{text}</Text>
+            <TaskBodyText>{text}</TaskBodyText>
         </TaskBody>
-        <TaskDeadline>
-            <TaskDeadlineLabel>делайн: </TaskDeadlineLabel><Text>25 января 2017 16:16</Text>
-        </TaskDeadline>
-        <TaskPostTime>
-            <TaskPostTimeText>1:40</TaskPostTimeText>
-            <Indicator />
-        </TaskPostTime>
+        <TaskFooter>
+            <TaskDeadline>
+                <TaskDeadlineLabel numberOfLines={1}>Делайн: <TaskDeadlineValue>25 января 2017 16:16</TaskDeadlineValue></TaskDeadlineLabel>
+                <TaskDeadlineLabel numberOfLines={1}>Поставил: <TaskDeadlineValue>Константин Константинопольский</TaskDeadlineValue></TaskDeadlineLabel>
+            </TaskDeadline>
+            <TaskPostTime>
+                <TaskPostTimeText>1:40</TaskPostTimeText>
+                <Indicator />
+            </TaskPostTime>
+        </TaskFooter>
     </Task>)
 }

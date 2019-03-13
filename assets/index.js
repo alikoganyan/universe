@@ -196,18 +196,18 @@ export function FunnelIcon({ onPress }) {
     )
 }
 
-export function HeartIcon({ onPress }) {
+export function HeartIcon({ onPress, color }) {
     return (
         <Right onPress={onPress}>
-            <Icon name="heart-o" size={IconSize} color={IconBlueColor} />
+            <Icon name="heart-o" size={IconSize} color={color || IconBlueColor} />
         </Right>
     )
 }
 
-export function CommentIcon({ onPress }) {
+export function CommentIcon({ onPress, color }) {
     return (
         <Right onPress={onPress}>
-            <Icon name="comment-o" size={IconSize} color={IconBlueColor} />
+            <Icon name="comment-o" size={IconSize} color={color || IconBlueColor} />
         </Right>
     )
 }
