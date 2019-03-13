@@ -219,7 +219,7 @@ export default class Settings extends Component {
                                         <GroupImage />
                                         <GroupInfo>
                                             <GroupTitle>{item.title}</GroupTitle>
-                                            <GroupParticipants>{item.participants}</GroupParticipants>
+                                            <GroupParticipants>{item.participants} участников</GroupParticipants>
                                         </GroupInfo>
                                     </Group>
                                     }
