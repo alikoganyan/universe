@@ -263,7 +263,7 @@ class Content extends Component {
                 <Wrapper search={search}>
                     <FlatList
                         style={{ paddingRight: 5, paddingLeft: 5, }}
-                        ListHeaderComponent={<View style={{ margin: 30, }} />}
+                        ListHeaderComponent={<View style={{ margin: 35, }} />}
                         inverted={true}
                         data={reversedMessages}
                         renderItem={({ item }) => {

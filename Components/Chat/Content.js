@@ -65,7 +65,7 @@ const MessageInfo = styled(View)`
 `
 
 const MessageDate = styled(Text)`
-    color: #ABABAB;
+    color: ${({color}) => color ||'#ABABAB'};
 `
 
 const Feed = styled(View)`
@@ -180,8 +180,8 @@ const TaskPostTime = styled(View)`
 `
 const TaskPostTimeText = styled(MessageDate)`
 `
-const Indicator = ({ delievered = false, read = false }) => {
-    return <CheckIcon />
+const Indicator = ({ delievered = false, read = false, color }) => {
+    return <CheckIcon color={color}/>
 }
 const Message = (props) => {
     const { children } = props;
@@ -193,8 +193,8 @@ const Message = (props) => {
                     {text}
                 </MyMessageText>
                 <MessageInfo>
-                    <MessageDate>1:40</MessageDate>
-                    <Indicator />
+                    <MessageDate color={'white'}>1:40</MessageDate>
+                    <Indicator color={'white'}/>
                 </MessageInfo>
             </MyMessage>
             <TriangleLeftIcon color={'#3776F9'} />
@@ -207,7 +207,6 @@ const Message = (props) => {
                 </InterlocutorsMessageText>
                 <MessageInfo>
                     <MessageDate>1:40</MessageDate>
-                    <Indicator />
                 </MessageInfo>
             </InterlocutorsMessage>
         </ View>
@@ -241,7 +240,7 @@ class Content extends Component {
                 <Wrapper search={search}>
                     <FlatList
                         style={{ paddingRight: 5, paddingLeft: 5, }}
-                        ListHeaderComponent={<View style={{ margin: 30, }} />}
+                        ListHeaderComponent={<View style={{ margin: 35, }} />}
                         inverted={true}
                         data={revesedMessages}
                         renderItem={({ item }) => {

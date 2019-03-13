@@ -24,7 +24,7 @@ import {
 const RootStack = createStackNavigator(
   {
     // Home: { screen: Login },
-    Home: { screen: Chat },
+    Home: { screen: Group },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,
