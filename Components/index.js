@@ -15,6 +15,7 @@ import CreateTask from './CreateTask/CreateTask'
 import Profile from './Profile/Profile'
 import DrawerComponent from './Drawer/Drawer'
 import ContactGroups from './ContactGroups/ContactGroups'
+import NewsComments from './NewsComments/NewsComments'
 
 export {
     Group,
@@ -34,4 +35,5 @@ export {
     Profile,
     DrawerComponent,
     ContactGroups,
+    NewsComments,
 }
