@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
-import { Group, Dialogs, Chat, Signup, PinCode, Login, Restore, GroupInfo, GroupName, Settings, Contacts, News, NewPost, CreateTask, Profile, DrawerComponent, ContactGroups, NewsComments, NewDialog } from './Components'
+import { Group, Dialogs, Chat, Signup, PinCode, Login, Restore, GroupInfo, GroupName, Settings, Contacts, News, NewPost, CreateTask, Profile, DrawerComponent, ContactGroups, NewsComments, NewDialog, Tasks } from './Components'
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import {
   createStore,
@@ -16,7 +16,7 @@ import {
 const RootStack = createStackNavigator(
   {
     // Home: { screen: Login },
-    Home: { screen: Chat },
+    Home: { screen: Tasks },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,
@@ -38,6 +38,7 @@ const RootStack = createStackNavigator(
     Profile: { screen: Profile },
     ContactGroups: { screen: ContactGroups },
     NewsComments: { screen: NewsComments },
+    Tasks: { screen: Tasks },
 
   },
   {

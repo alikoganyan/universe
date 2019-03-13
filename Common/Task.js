@@ -1,10 +1,14 @@
 import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 import styled from 'styled-components'
-import { CheckIcon } from '../assets/'
+import { CheckIcon, TriangleLeftIcon, TriangleRightIcon } from '../assets/'
 const { HeaderHeightNumber, Colors } = helper;
 const { red, yellow, green, purple, grey1 } = Colors;
-console.log(Colors)
+const borderRadius = 5;
+const Wrapper = styled(View)`
+    display :flex;
+    flex-direction: row;
+`
 const MessageDate = styled(Text)`
     color: ${({ color }) => color || '#ABABAB'};
 `
@@ -18,7 +22,8 @@ const Task = styled(View)`
     padding-bottom: 5px;
     background: #fff;
     border: 1px solid ${purple};
-    border-radius: 5;
+    border-radius: ${borderRadius};
+    align-self: flex-end;
 `
 const Status = styled(View)`
     display: flex;
@@ -46,6 +51,7 @@ const StatusText = styled(Text)`
 `
 const TaskTitle = styled(View)`
     margin-bottom: 10px;
+    ${({ style }) => style}
 `
 const TaskBody = styled(View)`
     margin-bottom: 10px;
@@ -87,33 +93,51 @@ const TaskPostTimeText = styled(MessageDate)`
 const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
 }
-export default function TaskComponent({ children }) {
+export default function TaskComponent({ children, style, triangleLeft, triangleRight }) {
     const item = children;
     const { stage, author, created, deadline, text, title } = item;
     const statuses = ['Прочитано', 'Принял в работу', 'Выполнена', 'Принята',]
-    const colors = [red, yellow, green, purple]
-    return (<Task>
-        <Status>
-            <StatusText>{statuses[stage]}</StatusText>
-            <StatusStage>
-                {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= stage} color={colors[i]} />)}
-            </StatusStage>
-        </Status>
-        <TaskTitle>
-            <Text>{title}</Text>
-        </TaskTitle>
-        <TaskBody>
-            <TaskBodyText>{text}</TaskBodyText>
-        </TaskBody>
-        <TaskFooter>
-            <TaskDeadline>
-                <TaskDeadlineLabel numberOfLines={1}>Делайн: <TaskDeadlineValue>25 января 2017 16:16</TaskDeadlineValue></TaskDeadlineLabel>
-                <TaskDeadlineLabel numberOfLines={1}>Поставил: <TaskDeadlineValue>Константин Константинопольский</TaskDeadlineValue></TaskDeadlineLabel>
-            </TaskDeadline>
-            <TaskPostTime>
-                <TaskPostTimeText>1:40</TaskPostTimeText>
-                <Indicator />
-            </TaskPostTime>
-        </TaskFooter>
-    </Task>)
+    const colors = [red, yellow, green, purple];
+    return (<Wrapper style={{alignSelf: triangleRight ? 'flex-end' : 'flex-start',}}>
+        {triangleLeft && <TriangleRightIcon style={{
+            position: 'relative',
+            left: 11,
+            top: -10,
+            zIndex: 99,
+        }} hollow color={purple} />}
+        <Task style={{
+            ...style,
+            borderBottomLeftRadius: triangleLeft ? 0 : borderRadius,
+            borderBottomRightRadius: triangleRight ? 0 : borderRadius,
+        }}>
+            <Status>
+                <StatusText>{statuses[stage]}</StatusText>
+                <StatusStage>
+                    {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= stage} color={colors[i]} />)}
+                </StatusStage>
+            </Status>
+            <TaskTitle>
+                <Text>{title}</Text>
+            </TaskTitle>
+            <TaskBody>
+                <TaskBodyText>{text}</TaskBodyText>
+            </TaskBody>
+            <TaskFooter>
+                <TaskDeadline>
+                    <TaskDeadlineLabel numberOfLines={1}>Делайн: <TaskDeadlineValue>25 января 2017 16:16</TaskDeadlineValue></TaskDeadlineLabel>
+                    <TaskDeadlineLabel numberOfLines={1}>Поставил: <TaskDeadlineValue>Константин Константинопольский</TaskDeadlineValue></TaskDeadlineLabel>
+                </TaskDeadline>
+                <TaskPostTime>
+                    <TaskPostTimeText>1:40</TaskPostTimeText>
+                    <Indicator />
+                </TaskPostTime>
+            </TaskFooter>
+        </Task>
+        {triangleRight && <TriangleLeftIcon style={{
+            position: 'relative',
+            left: -11,
+            top: -10,
+            zIndex: 99,
+        }} hollow={true} color={purple} />}
+    </Wrapper>)
 }

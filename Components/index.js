@@ -17,6 +17,7 @@ import DrawerComponent from './Drawer/Drawer'
 import ContactGroups from './ContactGroups/ContactGroups'
 import NewsComments from './NewsComments/NewsComments'
 import NewDialog from './NewDialog/NewDialog'
+import Tasks from './Tasks/Tasks'
 
 export {
     Group,
@@ -38,4 +39,5 @@ export {
     ContactGroups,
     NewsComments,
     NewDialog,
+    Tasks,
 }

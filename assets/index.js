@@ -36,23 +36,28 @@ const TriangleLeft = styled(View)`
     left: -15px;
     top: -5px;
     line-height: 0px;
+    ${({ style }) => style};
+`
+const TriangleLeftInner = styled(TriangleLeft)`
 `
 
 const TriangleRight = styled(View)`
-    width: 0;
-    height: 0;
+    width: 0px;
+    height: 0px;
     border-style: solid;
     border-width: 0;
     border-left-width: 15px;
     border-bottom-width: 15px;
     border-color: transparent;
-    line-height: 0px;
     border-bottom-color: ${({ color }) => color || IconLightColor};    
     position: relative;
     align-self: flex-end;
     left: 5px;
     top: -5px;
     line-height: 0px;
+    ${({ style }) => style};
+`
+const TriangleRightInner = styled(TriangleRight)`
 `
 export function BackIcon(props) {
     return (
@@ -138,15 +143,33 @@ export function SearchIcon({ onPress }) {
 }
 
 
-export function TriangleLeftIcon({ color }) {
+export function TriangleLeftIcon({ color, style, hollow }) {
     return (
-        <TriangleLeft color={color || IconDarkColor} />
+        <TriangleLeft color={color || IconDarkColor} style={{ ...style }}>
+            {hollow && <TriangleLeftInner color={'#fff'} style={{
+                ...style,
+                position: 'relative',
+                borderRightWidth: 15,
+                borderTopWidth: 15,
+                top: -16,
+                left: 12.5,
+            }} />}
+        </TriangleLeft>
     )
 }
 
-export function TriangleRightIcon({ color }) {
+export function TriangleRightIcon({ color, style, hollow }) {
     return (
-        <TriangleRight color={color || IconDarkColor} />
+        <TriangleRight color={color || IconDarkColor} style={{ ...style }}>
+            {hollow && <TriangleRightInner color={'#fff'} style={{
+                ...style,
+                position: 'relative',
+                borderLeftWidth: 15,
+                borderBottomWidth: 15,
+                top: -1,
+                left: 2,
+            }} />}
+        </TriangleRight>
     )
 }
 
