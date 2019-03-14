@@ -19,6 +19,7 @@ import NewsComments from './NewsComments/NewsComments'
 import NewDialog from './NewDialog/NewDialog'
 import Tasks from './Tasks/Tasks'
 import TasksList from './TasksList/TasksList'
+import NewContact from './NewContact/NewContact'
 
 export {
     Group,
@@ -42,4 +43,5 @@ export {
     NewDialog,
     Tasks,
     TasksList,
+    NewContact,
 }
