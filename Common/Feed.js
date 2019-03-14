@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, Image, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
-import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../assets/index'
+import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../assets/'
 const { HeaderHeightNumber, Colors } = helper;
 const { yellow, purple, red } = Colors;
 const Feed = styled(View)`
@@ -81,9 +81,9 @@ export default function FeedComponent({ children }) {
                 </ShowMore>
 
                 <Reactions>
-                    <CommentIcon onPress={this.handleHold} color={purple} />
+                    <CommentIcon style={{marginRight: 15}} onPress={this.handleHold} color={purple} />
                     <Text>12</Text>
-                    <HeartIcon color={red} />
+                    <HeartIcon style={{marginRight: 15}} color={red} />
                     <Text>12</Text>
                 </Reactions>
             </FeedInfo>

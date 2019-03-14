@@ -16,10 +16,12 @@ const StyledTouchableOpacity = styled(TouchableOpacity)`
 const Left = styled(StyledTouchableOpacity)`
     margin-right: ${({ noPadding }) => noPadding ? 0 : 10}px;
     padding: ${({ noPadding }) => noPadding ? 0 : 10}px;
+    ${({ style }) => style}
 `
 const Right = styled(StyledTouchableOpacity)`
     margin-left: ${({ noPadding }) => noPadding ? 0 : 10}px;
     padding: ${({ noPadding }) => noPadding ? 0 : 10}px;
+    ${({ style }) => style}
 `
 // ${({ color }) => color || IconLightColor}
 const TriangleLeft = styled(View)`
@@ -59,86 +61,106 @@ const TriangleRight = styled(View)`
 `
 const TriangleRightInner = styled(TriangleRight)`
 `
-export function BackIcon(props) {
+const LeftWrapper = function (props) {
+    const { children } = props;
     return (
-        <Left onPress={props.onPress}>
+        <Left style={{ ...props.style }} onPress={props.onPress}>
             <Text>
-                <Icon name="angle-left" size={IconSizeLarge} color={IconDarkColor} />
+                {children}
             </Text>
         </Left>
+    )
+}
+const RightWrapper = function (props) {
+    const { children } = props;
+    return (
+        <Right style={{ ...props.style }} onPress={props.onPress} noPadding={props.noPadding}>
+            <Text>
+                {children}
+            </Text>
+        </Right>
+    )
+}
+export function BackIcon(props) {
+    return (
+        <LeftWrapper props={props}>
+
+            <Icon name="angle-left" size={IconSizeLarge} color={IconDarkColor} />
+        </LeftWrapper >
     )
 }
 
 export function ForwardIcon(props) {
     return (
-        <Left onPress={props.onPress}>
-            <Text>
-                <Icon name="angle-right" size={IconSize} color={IconDarkColor} />
-            </Text>
-        </Left>
+        <LeftWrapper props={props}>
+
+            <Icon name="angle-right" size={IconSize} color={IconDarkColor} />
+        </LeftWrapper >
     )
 }
 
 
 export function EllipsisVIcon(props) {
     return (
-        <Right onPress={props.onPress}>
-            <Text>
-                <Icon name="ellipsis-v" size={IconSize} color={IconDarkColor} />
-            </Text>
-        </Right>
+        <RightWrapper props={props}>
+
+            <Icon name="ellipsis-v" size={IconSize} color={IconDarkColor} />
+
+        </RightWrapper>
     )
 }
 
 
 export function SmileIcon(props) {
     return (
-        <Left onPress={console.log()}>
-            <Text>
-                <Icon name="smile-o" size={IconSize} color={IconDarkColor} />
-            </Text>
-        </Left>
+        <LeftWrapper props={props}>
+
+            <Icon name="smile-o" size={IconSize} color={IconDarkColor} />
+
+        </LeftWrapper>
     )
 }
 
 export function FileIcon(props) {
     return (
-        <Right>
-            <Text>
-                <Icon name="file" size={IconSize} color={IconDarkColor} />
-            </Text>
-        </Right>
+        <RightWrapper props={props}>
+
+
+            <Icon name="file" size={IconSize} color={IconDarkColor} />
+
+        </RightWrapper>
     )
 }
 
 export function CameraIcon(props) {
     return (
-        <Right>
-            <Text>
-                <Icon name="camera" size={IconSize} color={IconDarkColor} />
-            </Text>
-        </Right>
+        <RightWrapper props={props}>
+
+
+            <Icon name="camera" size={IconSize} color={IconDarkColor} />
+
+        </RightWrapper>
     )
 }
 
 
-export function BurgerIcon({ onPress }) {
+export function BurgerIcon(props) {
     return (
-        <Left onPress={onPress}>
-            <Text>
-                {/* <Icon name="bars" size={IconSize} color={IconLightColor} /> */}
-            </Text>
-        </Left>
+        <LeftWrapper props={props}>
+
+            <Icon name="bars" size={IconSize} color={IconLightColor} />
+
+        </LeftWrapper>
     )
 }
 
-export function SearchIcon({ onPress }) {
+export function SearchIcon(props) {
     return (
-        <Left onPress={onPress}>
-            <Text>
-                <Icon name="search" size={IconSize} color={IconDarkColor} />
-            </Text>
-        </Left>
+        <LeftWrapper props={props}>
+
+            <Icon name="search" size={IconSize} color={IconDarkColor} />
+
+        </LeftWrapper>
     )
 }
 
@@ -175,21 +197,23 @@ export function TriangleRightIcon({ color, style, hollow }) {
 
 export function LocationIcon(props) {
     return (
-        <Right>
-            <Text>
-                <Icon name="map-marker" size={IconSize} color={IconDarkColor} />
-            </Text>
-        </Right>
+        <RightWrapper props={props}>
+
+
+            <Icon name="map-marker" size={IconSize} color={IconDarkColor} />
+
+        </RightWrapper>
     )
 }
 
 export function ImageIcon(props) {
     return (
-        <Right>
-            <Text>
-                <Icon name="file-photo-o" size={IconSize} color={IconDarkColor} />
-            </Text>
-        </Right>
+        <RightWrapper props={props}>
+
+
+            <Icon name="file-photo-o" size={IconSize} color={IconDarkColor} />
+
+        </RightWrapper>
     )
 }
 
@@ -202,60 +226,59 @@ export function MessageIndicatorIcon(props) {
 }
 
 
-export function EditIcon({ onPress }) {
+export function EditIcon(props) {
     return (
-        <TouchableOpacity onPress={onPress}>
+        <TouchableOpacity onPress={props.onPress}>
             <Icon name="pencil" size={IconSize} color={IconDarkColor} />
         </TouchableOpacity>
     )
 }
 
 
-export function FunnelIcon({ onPress }) {
+export function FunnelIcon(props) {
     return (
-        <Left onPress={onPress}>
+        <LeftWrapper props={props}>
             <Ionicons name="ios-funnel" size={IconSize} color={IconDarkColor} />
-        </Left>
+        </LeftWrapper>
+    )
+}
+export function HeartIcon(props) {
+    return (
+        <RightWrapper props={props}>
+            <Icon name="heart-o" size={IconSize} color={props.color || IconBlueColor} />
+        </RightWrapper>
     )
 }
 
-export function HeartIcon({ onPress, color }) {
+export function CommentIcon(props) {
     return (
-        <Right onPress={onPress}>
-            <Icon name="heart-o" size={IconSize} color={color || IconBlueColor} />
-        </Right>
+        <RightWrapper props={props}>
+            <Icon name="comment-o" size={IconSize} color={props.color || IconBlueColor} />
+        </RightWrapper>
     )
 }
 
-export function CommentIcon({ onPress, color }) {
+export function CloseIcon(props) {
     return (
-        <Right onPress={onPress}>
-            <Icon name="comment-o" size={IconSize} color={color || IconBlueColor} />
-        </Right>
-    )
-}
-
-export function CloseIcon({ onPress }) {
-    return (
-        <Right onPress={onPress}>
+        <RightWrapper props={props}>
             <Icon name="close" size={IconSize} color={IconDarkColor} />
-        </Right>
+        </RightWrapper>
     )
 }
 
-export function GroupIcon({ onPress, noPadding, color }) {
+export function GroupIcon(props) {
     return (
-        <View onPress={onPress} noPadding={noPadding}>
-            <Icon name="group" size={IconSize} color={color || IconDarkColor} />
+        <View onPress={props.onPress} noPadding={props.noPadding}>
+            <Icon name="group" size={IconSize} color={props.color || IconDarkColor} />
         </View>
     )
 }
 
-export function TaskIcon({ onPress }) {
+export function TaskIcon(props) {
     return (
-        <Right onPress={onPress}>
+        <RightWrapper props={props}>
             <Icon name="tasks" size={IconSize} color={IconDarkColor} />
-        </Right>
+        </RightWrapper>
     )
 }
 
@@ -274,35 +297,35 @@ export function CheckAllIcon({ onPress, color }) {
         </View>
     )
 }
-export function PapperPlaneIcon({ onPress }) {
+export function PapperPlaneIcon(props) {
     return (
         <View>
             <Icon name="paper-plane" size={IconSize} color={IconDarkColor} />
         </View>
     )
 }
-export function FeedIcon({ onPress }) {
+export function FeedIcon(props) {
     return (
         <View>
             <Icon name="newspaper-o" size={IconSize} color={IconDarkColor} />
         </View>
     )
 }
-export function TasksIcon({ onPress }) {
+export function TasksIcon(props) {
     return (
         <View>
             <Icon name="tasks" size={IconSize} color={IconDarkColor} />
         </View>
     )
 }
-export function SettingsIcon({ onPress }) {
+export function SettingsIcon(props) {
     return (
         <View>
             <Ionicons name="ios-settings" size={IconSize} color={IconDarkColor} />
         </View>
     )
 }
-export function AddIcon({ onPress }) {
+export function AddIcon(props) {
     return (
         <View>
             <Ionicons name="md-add" size={IconSizeLarge} color={IconDarkColor} />
@@ -310,7 +333,7 @@ export function AddIcon({ onPress }) {
     )
 }
 
-export function ArrowDownIcon({ onPress }) {
+export function ArrowDownIcon(props) {
     return (
         <Icon name="angle-down" size={IconSizeLarge} color={IconDarkColor} />
     )

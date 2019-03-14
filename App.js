@@ -16,7 +16,7 @@ import {
 const RootStack = createStackNavigator(
   {
     // Home: { screen: Login },
-    Home: { screen: TasksList },
+    Home: { screen: NewsComments },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,

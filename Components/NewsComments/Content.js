@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, Dimensions } from 'react-native'
 import { CommentIcon, HeartIcon, TriangleLeftIcon, TriangleRightIcon, CheckIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-const { sidePadding, Colors } = helper;
+const { HeaderHeightNumber, sidePadding, Colors } = helper;
 const { yellow, black } = Colors;
 const Wrapper = styled(View)`
     margin-bottom: 50px;   
     background: white;
     padding: 0 ${sidePadding};
+    display: flex;
 `
 const NewsItem = styled(View)`
     background: white;
@@ -143,7 +144,7 @@ const Message = (props) => {
                     {text}
                 </MyMessageText>
                 <MessageInfo>
-                    <HeartIcon /><Text>12</Text>
+                    <HeartIcon style={{paddingRight: 5}}/><Text>12</Text>
                     <MessageDate color={black}>1:40</MessageDate>
                 </MessageInfo>
             </MyMessage>
@@ -156,7 +157,7 @@ const Message = (props) => {
                     {text}
                 </InterlocutorsMessageText>
                 <MessageInfo>
-                    <HeartIcon /><Text>12</Text>
+                    <HeartIcon style={{paddingRight: 5}}/><Text>12</Text>
                     <MessageDate>1:40</MessageDate>
                 </MessageInfo>
             </InterlocutorsMessage>
@@ -167,10 +168,11 @@ export default class Content extends Component {
         const { CurrentFeed } = this.state;
         const { comments } = CurrentFeed;
         const reversedCommnets = [...comments].reverse();
+        const height = Dimensions.get('window').height - HeaderHeightNumber - 20 - (this.state.height || 0);
         return (
             <SafeAreaView>
                 <Wrapper>
-                    <NewsItem>
+                    <NewsItem onLayout={(e) => this.getUnreadMessageHeight(e)}>
                         <Sender>
                             <Sendermage />
                             <SenderInfo>
@@ -191,7 +193,7 @@ export default class Content extends Component {
                         </NewsItemInfo>
                     </NewsItem>
                     <FlatList
-                        style={{ paddingRight: 5, paddingLeft: 5,  }}
+                        style={{ paddingRight: 5, paddingLeft: 5, height }}
                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                         contentContainerStyle={{ alignItems: 'stretch' }}
                         inverted={true}
@@ -204,6 +206,7 @@ export default class Content extends Component {
         )
     }
     state = {
+        height: null,
         CurrentFeed: {
             sender: {
                 img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
@@ -224,5 +227,8 @@ export default class Content extends Component {
                 { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 1 },
             ]
         },
+    }
+    getUnreadMessageHeight = (e) => {
+        this.setState({ height: e.nativeEvent.layout.height }, console.log(this.state.height));
     }
 }
