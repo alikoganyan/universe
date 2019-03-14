@@ -12,10 +12,22 @@ import reducers from './reducers/'
 import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
-const RootStack = createDrawerNavigator(
+
+const AppDrawerNavigator = createDrawerNavigator(
   {
     // Home: { screen: Login },
     Home: { screen: Dialogs },
+  },
+  {
+    drawerWidth: Dimensions.get('window').width * 0.8,
+    contentComponent: ({ navigation }) => <DrawerComponent navigation={navigation} />,
+    headerMode: 'none',
+  },
+
+);
+const AppStackNavigator = createStackNavigator(
+  {
+    Home: { screen: AppDrawerNavigator },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,
@@ -40,17 +52,12 @@ const RootStack = createDrawerNavigator(
     Tasks: { screen: Tasks },
     TasksList: { screen: TasksList },
     NewContact: { screen: NewContact },
-  },
-  {
-    drawerWidth: Dimensions.get('window').width*0.8,
-    contentComponent: ({ navigation }) => <DrawerComponent navigation={navigation}/>
+    NewDialog: { screen: NewDialog },
   },
   {
     headerMode: 'none',
-  },
-
-);
-const App = createAppContainer(RootStack)
+  })
+const App = createAppContainer(AppStackNavigator)
 const store = createStore(reducers)
 @connectActionSheet
 export default class AppComponent extends React.Component {

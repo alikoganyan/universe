@@ -11,11 +11,14 @@ export default class NewContact extends Component {
         return (
             <SafeAreaView>
                 <Wrapper>
-                    <Header />
+                    <Header back={this.navigateBack}/>
                     <Content navigateToDialogs={this.navigateToDialogs}/>
                 </Wrapper>
             </SafeAreaView>
         )
     }
     navigateToDialogs = () => this.props.navigation.navigate('Dialogs')
+    navigateBack = () => {
+        this.props.navigation.goBack()
+    }
 }

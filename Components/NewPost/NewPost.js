@@ -10,13 +10,13 @@ export default class NewPost extends Component {
         return (
             <SafeAreaView>
                 <Wrapper>
-                    <Header back={this.moveForward} />
+                    <Header back={this.navigateBack} />
                     <Content />
                 </Wrapper>
             </SafeAreaView>
         )
     }
-    moveForward = () => {
-        this.props.navigation.navigate('Group')
+    navigateBack = () => {
+        this.props.navigation.goBack()
     }
 }

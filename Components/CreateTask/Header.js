@@ -47,7 +47,7 @@ export default class HeaderComponent extends Component {
     render() {
         return (
             <Header>
-                <CloseIcon />
+                <CloseIcon onPress={this.props.back}/>
             </Header>
         )
     }

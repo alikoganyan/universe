@@ -10,10 +10,13 @@ export default class CreateTask extends Component {
         return (
             <SafeAreaView>
                 <Wrapper>
-                    <Header />
+                    <Header back={this.navigateBack}/>
                     <Content />
                 </Wrapper>
             </SafeAreaView>
         )
+    }
+    navigateBack = () => {
+        this.props.navigation.goBack()
     }
 }

@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { View, Text, TextInput, Image, Platform, Dimensions } from 'react-native'
 import { SearchIcon, BurgerIcon } from '../../assets/index'
 import { openDrawer } from '../../actions/drawerActions'
+
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'

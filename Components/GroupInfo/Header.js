@@ -30,11 +30,11 @@ const Right = styled(View)`
 @connectActionSheet
 export default class HeaderComponent extends Component {
     render() {
-        const { navigateBack } = this.props;
+        const { back } = this.props;
         return (
             <Header>
                 <Left>
-                    <BackIcon onPress={navigateBack} />
+                    <BackIcon onPress={back} />
                     <Text>
                         Информация о группе
                     </Text>

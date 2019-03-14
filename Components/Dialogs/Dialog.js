@@ -116,7 +116,7 @@ export default class Content extends Component {
     );
   }
   handleClick = () => {
-    onClick()
+    this.props.onClick()
   }
   getUnreadMessageHeight = (e) => {
     this.setState({ height: e.nativeEvent.layout.height })

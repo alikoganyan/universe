@@ -1,4 +1,4 @@
-import Group from './Group/Chat';
+import Group from './Group/Group';
 import Dialogs from './Dialogs/Dialogs'
 import Chat from './Chat/Chat'
 import PinCode from './PinCode/PinCode'

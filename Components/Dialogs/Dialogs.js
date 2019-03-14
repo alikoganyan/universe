@@ -3,6 +3,8 @@ import { View, Text, FlatList, Dimensions, StatusBar } from 'react-native'
 import styled from 'styled-components'
 import { Header, Dialog } from './index'
 import { SafeAreaView } from '../../Common/'
+import { DrawerActions } from 'react-navigation-drawer';
+
 import helper from '../../Helper/helper'
 const { sidePaddingNumber, HeaderHeightNumber } = helper;
 const Wrapper = styled(View)`
@@ -17,12 +19,12 @@ export default class Dialogs extends Component {
     return (
       <SafeAreaView>
         <Wrapper>
-          <Header toggleDrawer={this.props.navigation.openDrawer}/>
+          <Header toggleDrawer={this.props.navigation.openDrawer} />
           <StyledFlatList
             ListHeaderComponent={<View style={{ margin: 30, }} />}
             ref={(ref) => { this.flatList = ref; }}
             data={FlatListData}
-            renderItem={({ item, index }) => <Dialog onClick={index % 2 ? this.toChat : this.toGroup} title={item.title}>{item.text}</Dialog>}
+            renderItem={({ item, index }) => <Dialog onClick={this.toChat} title={item.title}>{item.text}</Dialog>}
             keyExtractor={(item, index) => index.toString()}
           />
         </Wrapper>

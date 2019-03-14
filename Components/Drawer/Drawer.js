@@ -21,12 +21,14 @@ class Drawer extends Component {
       <Outer>
         <Wrapper>
           <Header />
-          <Content navigate={this.props.navigation.navigate}/>
+          <Content navigate={this.props.navigation.navigate} dispatch={this.props.navigation.dispatch}/>
         </Wrapper>
       </Outer>
     )
   }
-  componentDidMount(){
+  componentDidMount() {
+    console.log('123')
+    this.props.navigation.navigate('DrawerClose')
   }
 }
 
