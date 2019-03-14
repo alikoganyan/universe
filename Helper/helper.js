@@ -1,7 +1,7 @@
 import { StyleSheet, Platform } from 'react-native';
 import io from 'socket.io-client';
-import Config from 'react-native-config'
-console.log(Config)
+import {API_URL} from 'react-native-dotenv'
+console.log(API_URL)
 export default helper = {
     IconDarkColor: '#979897',
     IconLightColor: '#ABABAB',
