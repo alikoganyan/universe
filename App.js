@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, SafeAreaView } from 'react-native';
-import { Group, Dialogs, Chat, Signup, PinCode, Login, Restore, GroupInfo, GroupName, Settings, Contacts, News, NewPost, CreateTask, Profile, DrawerComponent, ContactGroups, NewsComments, NewDialog, Tasks } from './Components'
+import { Group, Dialogs, Chat, Signup, PinCode, Login, Restore, GroupInfo, GroupName, Settings, Contacts, News, NewPost, CreateTask, Profile, DrawerComponent, ContactGroups, NewsComments, NewDialog, Tasks, TasksList } from './Components'
 import { createStackNavigator, createAppContainer } from 'react-navigation';
 import {
   createStore,
@@ -16,7 +16,7 @@ import {
 const RootStack = createStackNavigator(
   {
     // Home: { screen: Login },
-    Home: { screen: Tasks },
+    Home: { screen: Dialogs },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,
@@ -39,7 +39,7 @@ const RootStack = createStackNavigator(
     ContactGroups: { screen: ContactGroups },
     NewsComments: { screen: NewsComments },
     Tasks: { screen: Tasks },
-
+    TasksList: { screen: TasksList },
   },
   {
     headerMode: 'none',
@@ -56,20 +56,20 @@ export default class AppComponent extends React.Component {
   drawerClose = () => {
     this._drawer.close()
   }
-  componentDidMount(){
+  componentDidMount() {
     this.drawerClose()
   }
   render() {
     return (
       <Provider store={store}>
-      <Drawer
-        ref={(ref) => this._drawer = ref}
-        type="overlay"
-        content={<DrawerComponent closeDrawer={() => this._drawer.close()}/>}
-        closedDrawerOffset={0}
-      >
-        <App />
-      </Drawer>
+        <Drawer
+          ref={(ref) => this._drawer = ref}
+          type="overlay"
+          content={<DrawerComponent closeDrawer={() => this._drawer.close()} />}
+          closedDrawerOffset={0}
+        >
+          <App />
+        </Drawer>
       </Provider>
     )
   }

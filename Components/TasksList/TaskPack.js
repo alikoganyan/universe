@@ -2,68 +2,72 @@ import React, { Component } from 'react'
 import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionSheetIOS } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-const { fontSize, PressDelay, sidePadding, Colors } = helper;
+const { fontSize, PressDelay, sidePadding, Colors, sidePaddingNumber } = helper;
 const { purple, lightColor } = Colors;
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-top: 20px;
-  padding: 0 ${sidePadding} ${sidePadding};
+  margin: 0 ${sidePaddingNumber * 2}px;  
+  padding: ${sidePadding} 0;
+  border: 1px solid ${lightColor};
+  border-width: 0;
+  border-top-width: 1px;
+  border-bottom-width: ${({ last }) => last ? 1 : 0}px;
 `
-const DialogImage = styled(Image)`
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
-  margin-right: ${sidePadding};
-`
-const DialogText = styled(View)`
+const TaskText = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  flex: 1;
 `
 
-const DialogTextInner = styled(View)`
+const TaskTextInner = styled(View)`
   display: flex;
   flex-direction: column;
-  width: ${Dimensions.get('window').width - 100}px;
-
+  max-width: 90%;
 `
-const DialogTitle = styled(Text)`
+const TaskTitle = styled(Text)`
   font-size: ${fontSize.header};
   font-weight: 500;
-  flex: 1;
-  width: ${Dimensions.get('window').width - 20}px;
+  max-width: 90%;  
+  margin-bottom: 5px;
 `
 const LastMessageDate = styled(Text)`
   color: ${lightColor};
   font-size: ${fontSize.text};
-  text-align: left;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  margin-bottom: 5px;
 `
-const DialogLastMessage = styled(Text)`
-  flex: 1;
+const TaskLastMessage = styled(Text)`
   font-size: ${fontSize.text};
   color: ${lightColor};
   padding-right: 20px;
+  margin-bottom: 5px;
+
 `
-const DialogDate = styled(View)`
+const TaskDate = styled(View)`
   right: ${sidePadding};
   color: ${lightColor};
-  flex: 1;
   font-size: ${fontSize.text};
   display: flex;
   justify-content: center;
+  align-items: center;
+  max-width: 10%;
   
 `
 const UnreadMessages = styled(View)`
   display: flex;
   justify-content: flex-start;
-  align-items: flex-start;
+  align-items: flex-end;
+  flex: 1;
 `
 const NewMessages = styled(Text)`
-   color: white;
+  color: white;
   font-size: ${fontSize.text};
   background: ${purple};
   padding: 5px;
@@ -73,26 +77,43 @@ const NewMessages = styled(Text)`
   height: 25px;
   border-radius: 12.5;
 `
-export default class Content extends Component {
+const TaskStatus = styled(View)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+const TaskStatusText = styled(Text)`
+  border: 1px solid ${lightColor};
+  border-radius: 10;
+  padding: 1px 5px;
+  margin-right: 5px;
+  color: ${lightColor};
+`
+const TaskStatusAdditional = styled(Text)`
+  color: ${lightColor};
+`
+export default class TaskPack extends Component {
   render() {
-    const { children, title, onClick } = this.props;
-    const { height, width } = this.state;
+    const { children, title, onClick, last } = this.props;
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}>
-        <Wrapper>
-          <DialogImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
-          <DialogText>
-            <DialogTextInner>
-              <DialogTitle>{title}</DialogTitle>
-              <DialogLastMessage numberOfLines={1} >{children}Labore quis nulla velit sit occaecat deserunt cillum occaecat dolor et elit duis. Dolore laboris nostrud esse ullamco irure cupidatat mollit nisi nostrud in irure aliquip adipisicing proident. Eu aliquip consectetur velit quis pariatur velit sint esse incididunt laborum aute aliqua. Laboris laboris aliqua magna laborum reprehenderit nostrud aliquip consectetur proident aliquip commodo elit officia.</DialogLastMessage>
-            </DialogTextInner>
-            <DialogDate>
+        <Wrapper last={last}>
+          <TaskText>
+            <TaskTextInner>
+              <TaskTitle>{title}</TaskTitle>
+              <TaskLastMessage numberOfLines={1} >{children}Labore quis nulla velit sit occaecat deserunt cillum occaecat dolor et elit duis. Dolore laboris nostrud esse ullamco irure cupidatat mollit nisi nostrud in irure aliquip adipisicing proident. Eu aliquip consectetur velit quis pariatur velit sint esse incididunt laborum aute aliqua. Laboris laboris aliqua magna laborum reprehenderit nostrud aliquip consectetur proident aliquip commodo elit officia.</TaskLastMessage>
+              <TaskStatus>
+                <TaskStatusText>в работе</TaskStatusText>
+                <TaskStatusAdditional>+4 задачи</TaskStatusAdditional>
+              </TaskStatus>
+            </TaskTextInner>
+            <TaskDate>
               <LastMessageDate>Thu</LastMessageDate>
               <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
                 <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>2</NewMessages>
               </UnreadMessages>
-            </DialogDate>
-          </DialogText>
+            </TaskDate>
+          </TaskText>
 
         </Wrapper >
       </TouchableHighlight >
@@ -116,7 +137,6 @@ export default class Content extends Component {
     );
   }
   handleClick = () => {
-    onClick()
   }
   getUnreadMessageHeight = (e) => {
     this.setState({ height: e.nativeEvent.layout.height })
