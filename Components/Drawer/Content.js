@@ -23,34 +23,35 @@ const LinkText = styled(Text)`
     margin-left: 10px;
 `
 export default function ContentComponent(props) {
+    const { navigate } = props
     return (
         <Wrapper>
             <Content>
-                <Link>
+                <Link onPress={() => navigate('Chat')}>
                     <PapperPlaneIcon />
                     <LinkText>
                         Новый диалог
                     </LinkText>
                 </Link>
-                <Link>
-                    <GroupIcon noPadding={true}/>
+                <Link onPress={() => navigate('ContactGroups')}>
+                    <GroupIcon noPadding={true} />
                     <LinkText>
                         Контакты
                     </LinkText>
                 </Link>
-                <Link>
+                <Link onPress={() => navigate('News')}>
                     <FeedIcon />
                     <LinkText>
                         Новости
                     </LinkText>
                 </Link>
-                <Link>
+                <Link onPress={() => navigate('TasksList')}>
                     <TasksIcon />
                     <LinkText>
                         Задачи
                     </LinkText>
                 </Link>
-                <Link>
+                <Link onPress={() => navigate('Settings')}>
                     <SettingsIcon />
                     <LinkText>
                         Настройки

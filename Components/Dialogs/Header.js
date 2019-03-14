@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react'
 import { View, Text, TextInput, Image, Platform, Dimensions } from 'react-native'
 import { SearchIcon, BurgerIcon } from '../../assets/index'
+import { openDrawer } from '../../actions/drawerActions'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight } = helper;
@@ -31,14 +33,24 @@ const Input = styled(TextInput)`
     flex: 1;
     height: ${HeaderHeight};
 `
-export default class HeaderComponent extends Component {
+class HeaderComponent extends Component {
     render() {
         return (
             <Header>
-                <BurgerIcon />
+                <BurgerIcon onPress={this.props.toggleDrawer} />
                 <Input placeholder={'Найти'} />
                 <UserImage />
             </Header>
         )
     }
 }
+const mapStateToProps = state => {
+    return {
+        messages: state.messageReducer.messages,
+        search: state.messageReducer.search,
+        drawer: state.drawerReducer.open,
+    };
+};
+const mapDispatchToProps = dispatch => ({
+})
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)

@@ -17,7 +17,7 @@ export default class Dialogs extends Component {
     return (
       <SafeAreaView>
         <Wrapper>
-          <Header />
+          <Header toggleDrawer={this.props.navigation.openDrawer}/>
           <StyledFlatList
             ListHeaderComponent={<View style={{ margin: 30, }} />}
             ref={(ref) => { this.flatList = ref; }}

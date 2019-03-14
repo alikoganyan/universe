@@ -1,11 +1,10 @@
 import React from 'react';
-import { View, Text, SafeAreaView } from 'react-native';
+import { View, Text, Dimensions } from 'react-native';
 import { Group, Dialogs, Chat, Signup, PinCode, Login, Restore, GroupInfo, GroupName, Settings, Contacts, News, NewPost, CreateTask, Profile, DrawerComponent, ContactGroups, NewsComments, NewDialog, Tasks, TasksList, NewContact } from './Components'
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
 import {
   createStore,
 } from 'redux';
-import Drawer from 'react-native-drawer'
 
 import { Provider } from 'react-redux';
 import reducers from './reducers/'
@@ -13,10 +12,10 @@ import reducers from './reducers/'
 import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
-const RootStack = createStackNavigator(
+const RootStack = createDrawerNavigator(
   {
     // Home: { screen: Login },
-    Home: { screen: Settings },
+    Home: { screen: Dialogs },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,
@@ -43,34 +42,23 @@ const RootStack = createStackNavigator(
     NewContact: { screen: NewContact },
   },
   {
+    drawerWidth: Dimensions.get('window').width*0.8,
+    contentComponent: ({ navigation }) => <DrawerComponent navigation={navigation}/>
+  },
+  {
     headerMode: 'none',
-  }
+  },
+
 );
 const App = createAppContainer(RootStack)
 const store = createStore(reducers)
-
 @connectActionSheet
 export default class AppComponent extends React.Component {
-  drawerOpen = () => {
-    this._drawer.open()
-  }
-  drawerClose = () => {
-    this._drawer.close()
-  }
-  componentDidMount() {
-    this.drawerClose()
-  }
+
   render() {
     return (
       <Provider store={store}>
-        <Drawer
-          ref={(ref) => this._drawer = ref}
-          type="overlay"
-          content={<DrawerComponent closeDrawer={() => this._drawer.close()} />}
-          closedDrawerOffset={0}
-        >
-          <App />
-        </Drawer>
+        <App />
       </Provider>
     )
   }

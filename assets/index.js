@@ -62,9 +62,9 @@ const TriangleRight = styled(View)`
 const TriangleRightInner = styled(TriangleRight)`
 `
 const LeftWrapper = function (props) {
-    const { children } = props;
+    const { children, onPress } = props;
     return (
-        <Left style={{ ...props.style }} onPress={props.onPress} noPadding={props.noPadding}>
+        <Left style={{ ...props.style }} onPress={props.props.onPress} noPadding={props.noPadding}>
             <Text>
                 {children}
             </Text>
@@ -74,7 +74,7 @@ const LeftWrapper = function (props) {
 const RightWrapper = function (props) {
     const { children } = props;
     return (
-        <Right style={{ ...props.style }} onPress={props.onPress} noPadding={props.noPadding}>
+        <Right style={{ ...props.style }} onPress={props.props.onPress} noPadding={props.noPadding}>
             <Text>
                 {children}
             </Text>
