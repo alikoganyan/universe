@@ -229,6 +229,6 @@ export default class Content extends Component {
         },
     }
     getUnreadMessageHeight = (e) => {
-        this.setState({ height: e.nativeEvent.layout.height }, console.log(this.state.height));
+        this.setState({ height: e.nativeEvent.layout.height });
     }
 }

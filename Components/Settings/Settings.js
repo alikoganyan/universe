@@ -27,8 +27,6 @@ export default class GroupInfo extends Component {
                     <Wrapper>
                         <Header back={this.navigateBack} />
                         <Content />
-                        <Bottom>
-                        </Bottom>
                     </Wrapper>
                 </SafeAreaView>
             </ActionSheetProvider>

@@ -1,12 +1,8 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS } from 'react-native'
-import { BackIcon, BurgerIcon } from '../../assets/index'
+import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-import {
-    ActionSheetProvider,
-    connectActionSheet,
-} from '@expo/react-native-action-sheet';
 const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
@@ -15,7 +11,8 @@ const Header = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: center;
+    justify-content: space-between;
+    padding-right: ${sidePadding};
 `
 const Left = styled(View)`
     display: flex;
@@ -27,20 +24,24 @@ const Right = styled(View)`
     flex-direction: row;
     align-items: flex-end;
 `
-const Center = styled(View)`
+const UserImage = styled(Image)`
+    width: 40px;
+    height: 40px;
+    background: red;
+    border-radius: 20px;
 `
-@connectActionSheet
 export default class HeaderComponent extends Component {
     render() {
         return (
             <Header>
-                <Center>
+                <Left>
+                    <BackIcon noPadding/>
                     <Text>
                         Настройки
                     </Text>
-                </Center>
-                <Right style={{ position: "absolute", right: 0, }}>
-                    <BurgerIcon />
+                </Left>
+                <Right>
+                    <UserImage />
                 </Right>
             </Header>
         )

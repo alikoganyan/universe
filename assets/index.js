@@ -64,7 +64,7 @@ const TriangleRightInner = styled(TriangleRight)`
 const LeftWrapper = function (props) {
     const { children } = props;
     return (
-        <Left style={{ ...props.style }} onPress={props.onPress}>
+        <Left style={{ ...props.style }} onPress={props.onPress} noPadding={props.noPadding}>
             <Text>
                 {children}
             </Text>

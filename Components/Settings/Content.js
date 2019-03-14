@@ -1,197 +1,126 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, TouchableOpacity } from 'react-native'
 import { BackIcon, EllipsisVIcon, MessageIndicatorIcon } from '../../assets/index'
 import styled from 'styled-components'
-import FloatingLabel from 'react-native-floating-labels'
+import SwitchToggle from 'react-native-switch-toggle';
 import helper from '../../Helper/helper'
-const { sidePadding } = helper;
+const { Colors, sidePaddingNumber, fontSize } = helper;
+const { lightGrey1, blue, lightBlue } = Colors;
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
     margin-bottom: 110px;
+    padding: 0 ${sidePaddingNumber}px;
     
 `
-const User = styled(View)`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 20px 0;
-    border: 1px solid #E6E6E6;
-    border-width: 0;
-    border-bottom-width: 1px;
-`
-const UserImage = styled(Image)`
-    width: 60px;
-    height: 60px;
-    border-radius: 30;
-    margin: 0 10px;
-
-`
-const UserInfo = styled(View)`
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: flex-start;
-    height: 60px;
-`
-const UserName = styled(View)`
-    display: flex;
-    flex-direction: row;
-`
-const UserStatus = styled(Text)`
-    font-size: 11;
-    color: #B9B9B9;
-`
-const ChangeName = styled(TouchableOpacity)`
-    position: relative;
-    right: 0px;
-    top: -5px;
-`
-const Name = styled(Text)`
-    font-size: 15;
-    display: flex;
-    flex-wrap: wrap;
-    width: 60%;
-`
-const Info = styled(View)`
-    padding: 0 10px;
-    margin: 10px 0;
-`
-const Data = styled(View)``
-const Value = styled(Text)`
-    font-size: 15px;
-`
-const Type = styled(Value)`
-    color: #BABABA;
-`
-const PersonalData = styled(View)`
-    border: 1px solid #E6E6E6;
-    border-width: 0;
-    border-bottom-width: 1px;
-    flex: 1;
-`
-const PrivacyData = styled(PersonalData)``
-const UserAgreements = styled(PersonalData)``
-const LogOut = styled(PersonalData)``
-const TopLine = styled(View)`
+const Box = styled(View)`
     display: flex;
     flex-direction: row;
     width: 100%;
-    justify-content: space-between;
+    align-self: center;
+    padding: 20px 0;
+    border: 1px solid ${lightGrey1};
+    border-width: 0;
+    border-top-width: 1px;
+    border-bottom-width: ${({ last }) => last ? '1px' : 0};
 `
+const Label = styled(Text)`
+    flex: 2;
+    color: ${lightGrey1};
+    font-size: ${fontSize.text};
+    margin-right: 5px;
+`
+const Status = styled(Text)`
+    flex: 3;
+    font-size: ${fontSize.text};
+`
+const Option = styled(View)`
+    flex: 2;
+    display: flex;
+    align-items: flex-end;
+    font-size: ${fontSize.text};
+`
+const Link = styled(Text)`
+    font-size: ${fontSize.text};
+    color: ${blue};
+`
+const Policy = styled(View)``
+const PolicyLink = styled(Link)`
+    padding: 10px 0;
+`
+const Toggle = (props) => {
+    const { switchOn, onPress } = props;
+    return <SwitchToggle
+        containerStyle={{
+            width: 50,
+            height: 22,
+            borderRadius: 25,
+            padding: 5,
+        }}
+        circleStyle={{
+            width: 18,
+            height: 18,
+            borderRadius: 10,
+            backgroundColor: '#fff', // rgb(102,134,205)
+        }}
+        circleColorOn={blue}
+        circleColorOff='#fff'
+        backgroundColorOn={lightBlue}
+        backgroundColorOff={lightGrey1}
+        switchOn={switchOn}
+        onPress={onPress}
+    />
+}
 export default class Settings extends Component {
     render() {
-        const { UserData, privacyData } = this.state
-        const Input = (props) => {
-            const { children, password = false, value, style, editable } = props;
-            return <FloatingLabel
-                labelStyle={{
-                    fontSize: 15,
-                    position: 'relative',
-                    marginTop: 0,
-                    bottom: 50,
-                    top: 56,
-                    left: -3,
-                    color: '#BABABA'
-                }}
-                inputStyle={{
-                    fontSize: 15,
-                    display: 'flex',
-                    borderWidth: 0,
-                    flexWrap: 'wrap',
-                    maxWidth: '60%',
-                    minWidth: '60%',
-                    height: 'auto',
-                    paddingTop: -15,
-                    paddingBottom: 5,
-                }}
-                password={password}
-                value={value}
-                style={{
-                    marginTop: -38,
-                    left: -10,
-                    position: 'relative',
-                    marginBottom: 13,
-                }}
-                editable={editable}
-            > {children}</FloatingLabel >
-
-        }
-        const { userName, status, editingName, editing } = this.state;
-
+        const { settings, switchOn } = this.state;
         return (
             <SafeAreaView>
                 <Wrapper>
-                    <User>
-                        <UserImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
-                        <UserInfo>
-                            <UserName>
-                                {!editingName ? <Name>{userName}</Name> : <Input value={userName} />}
-                                <ChangeName onPress={() => this.setState({
-                                    editing: !this.state.editing
-                                })}><Text style={{ color: '#305576' }}>Изменить имя</Text></ChangeName>
-                            </UserName>
-                            <UserStatus>{status}</UserStatus>
-
-
-                        </UserInfo>
-                    </User>
-                    <ScrollView>
-                        <PersonalData>
-                            {UserData.map((item, index) => {
-                                return <Info key={index}>
-                                    <Data>
-                                        {!editing ? <Value>{item.value}</Value> : <Input value={item.value}>{item.type}</Input>}
-                                        {!editing && <Type>{item.type}</Type>}
-                                    </Data>
-                                </Info>
-                            })}
-                        </PersonalData>
-                        <PrivacyData>
-                            {privacyData.map((item, index) => {
-                                return <Info key={index}>
-                                    <Data>
-                                        <TopLine>
-                                            <Value>{item.value}</Value>
-                                            <TouchableOpacity>
-                                                <Text style={{ color: '#305576' }}>{item.actionText}</Text>
-                                            </TouchableOpacity>
-                                        </TopLine>
-                                        <Type>{item.type}</Type>
-                                    </Data>
-                                </Info>
-                            })}
-                        </PrivacyData>
-                        <UserAgreements>
-                            <TouchableOpacity><Text>Пользовательское соглашение</Text></TouchableOpacity>
-                            <TouchableOpacity><Text>Соглашение о персональных данных</Text></TouchableOpacity>
-                        </UserAgreements>
-                        <LogOut>
-                            <TouchableOpacity><Text>Выйти из профиля</Text></TouchableOpacity>
-                        </LogOut>
-                    </ScrollView>
+                    <FlatList
+                        style={{ paddingRight: 5, paddingLeft: 5, marginBottom: 10 }}
+                        ListHeaderComponent={<View style={{ margin: 10, }} />}
+                        data={settings}
+                        scrollEnabled={false}
+                        renderItem={({ item, index }) => <Box key={index} last={index === settings.length - 1}>
+                            <Label>{item.label}</Label>
+                            <Status>{item.status}</Status>
+                            <Option>
+                                {item.option.type === 'toggle' && <Toggle
+                                    onPress={() => this.handleToggle(item.label)}
+                                    switchOn={item.option.value}
+                                />}
+                                {item.option.type === 'link' && <TouchableOpacity>
+                                    <Link>{item.option.value}</Link>
+                                </TouchableOpacity>}
+                            </Option>
+                        </Box>
+                        }
+                        keyExtractor={(item, index) => index.toString()}
+                    />
+                    <Policy>
+                        <PolicyLink>Соглашение об использовании персональных данных</PolicyLink>
+                        <PolicyLink>Политика соглашения</PolicyLink>
+                        <PolicyLink>Условия использования</PolicyLink>
+                    </Policy>
                 </Wrapper>
             </SafeAreaView>
         )
     }
     state = {
-        userName: 'Константин Константинопольский',
-        status: 'В сети',
-        editingName: false,
-        editing: true,
-        UserData: [
-            { type: 'Тип пользователя', value: 'Стандартный' },
-            { type: 'Должность', value: 'Главный инженер' },
-            { type: 'Дата рождения', value: '26.09.1986' },
-            { type: 'Рабочий', value: 'youmail@irkutskoil.ru' },
-            { type: 'Рабочий', value: '+7(395)282-48-57' },
-            { type: 'Личный', value: '+7(395)282-48-57' },
-        ],
-        privacyData: [
-            { value: '****', type: 'Пароль', actionText: 'Изменить пароль', action: () => console.log('password') },
-            { value: 'PC-481', type: 'Текущее устройство', actionText: 'Удалить устройство', action: () => console.log('current') },
-            { value: 'PC-483', type: 'Недавнее устройство', actionText: 'Удалить устройство', action: () => console.log('current') },
+        switchOn: true,
+        settings: [
+            { label: 'язык', status: 'Русский', option: { type: 'link', value: 'изменить' } },
+            { label: 'уведомления', status: 'Включены', option: { type: 'toggle', value: true } },
+            { label: 'звук', status: 'Включен', option: { type: 'toggle', value: false } },
+            { label: 'контакты', status: 'По подразделениям', option: { type: 'toggle', value: false } },
         ]
+    }
+    handleToggle = (e) => {
+        const { settings } = this.state;
+        const newSetting = [...settings]
+        newSetting.filter(({ label }) => e === label)[0].option.value = !newSetting.filter(({ label }) => e === label)[0].option.value;
+
+        this.setState({ settings: newSetting })
     }
 }
