@@ -8,7 +8,7 @@ const { Colors } = helper;
 const { green, lightGrey1, black, color } = Colors;
 
 const Wrapper = styled(View)`
-    padding: 0 10%;
+    padding: 0 10% 10%;
     display: flex;
     justify-content: center;
     height: 90%;
