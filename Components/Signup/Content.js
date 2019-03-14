@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, KeyboardAvoidingView, Platform } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 const Wrapper = styled(View)`

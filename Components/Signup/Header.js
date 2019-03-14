@@ -55,6 +55,6 @@ export default class HeaderComponent extends Component {
         )
     }
     moveForward = () => {
-        this.props.back()
+        this.props.forward()
     }
 }

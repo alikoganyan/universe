@@ -10,13 +10,13 @@ export default class Signup extends Component {
         return (
             <SafeAreaView>
                 <Wrapper>
-                    <Header back={this.moveForward} />
+                    <Header forward={this.moveForward} />
                     <Content />
                 </Wrapper>
             </SafeAreaView>
         )
     }
     moveForward = () => {
-        this.props.navigation.navigate('Group')
+        this.props.navigation.navigate('Dialogs')
     }
 }

@@ -1,6 +1,7 @@
 import { StyleSheet, Platform } from 'react-native';
 import io from 'socket.io-client';
-
+import Config from 'react-native-config'
+console.log(Config)
 export default helper = {
     IconDarkColor: '#979897',
     IconLightColor: '#ABABAB',
@@ -12,10 +13,6 @@ export default helper = {
         border: '#F1F1F1',
         color: '#2A2A2A',
         lightColor: '#5F6468',
-
-
-
-
         purple: '#8b81c5',
         green: '#abd070',
         yellow: '#fdb557',
@@ -29,10 +26,6 @@ export default helper = {
         grey2: '#80868b',
         lightGrey1: '#b1b9c2',
         lightGrey2: '#f7f7f7',
-        
-
-
-
     },
     socket: io(`http://192.168.1.34:8080`),
     sidePaddingNumber: 10,
