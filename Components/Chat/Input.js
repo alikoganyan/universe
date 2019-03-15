@@ -69,8 +69,10 @@ class InputComponent extends Component {
     }
     componentDidMount() {
         const { messages, addMessage } = this.props
-        socket.on('send message reply', (e) => {
+        socket.on('new message', (e) => {
+            console.log('test',e)
             addMessage({ payload: e })
+
         })
     }
     sendMessage = (event) => {
@@ -78,7 +80,7 @@ class InputComponent extends Component {
         const { text } = this.state;
         this.setState({ text: '' })
         socket.emit('send message', {
-            userId: 1,
+            userId: id,
             text,
         })
     }
