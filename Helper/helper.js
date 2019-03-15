@@ -35,6 +35,7 @@ export default helper = {
     HeaderHeight: `50px`,
     PressDelay: 700,
     fontSize: {
+        large: '20px',
         header: '15px',
         text: '12px',
     },

@@ -3,17 +3,20 @@ import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native'
 import helper from '../../Helper/helper'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
-const { Colors } = helper;
-const { border, lightColor, color } = Colors;
-
+const { Colors, fontSize } = helper;
+const { border, lightColor, lightGrey1, color, blue } = Colors;
+const { large, header, text } = fontSize;
 const Wrapper = styled(View)`
     padding: 0 20%;
     padding-top: 50px;
     height: 90%;
+    display: flex;
+    justify-content: center;
 `
 const Title = styled(Text)`
     width: 100%;
-    font-size: 15px;
+    font-size: ${large};
+    text-align: center;
 `
 const ControlBar = styled(View)`
     display: flex;
@@ -22,24 +25,15 @@ const ControlBar = styled(View)`
     align-items: center;
     flex-direction: column;
 `
-const LogIn = styled(Text)`
-    text-align: center;
-    margin-top: 50px;
-    color: ${lightColor};
-    text-transform: uppercase;
-    padding: 10px 20px;
-    border-radius: 20px;
-    border: 1px solid ${border};
-    font-size: 10px;
-`
 const SingUp = styled(Text)`
-    color: ${color};
+    color: ${blue};
 `
 const PhoneNumber = styled(View)`
     display: flex;
     flex-direction: row;
     margin-top: 30px;
-
+    margin-bottom: 30px;
+    align-items: flex-end;
 `
 const Error = styled(Text)`
     color: red;
@@ -48,6 +42,8 @@ const Error = styled(Text)`
 `
 const ForgotPass = styled(Text)`
     font-size: 10px;
+    margin-bottom: 10px;
+    color: ${blue};
 `
 const NoAccount = styled(View)`
     display: flex;
@@ -62,20 +58,29 @@ const Label = styled(Text)`
     color: ${lightColor};
     font-size: 10px;
 `
-const InputLabel = styled(Text)`
-    position: absolute;
-    font-size: 11;
-
+const StyledInput = styled(TextInput)`
+    border: 1px solid ${lightGrey1};
+    border-width: 0;
+    border-bottom-width: 1px;
+    padding-bottom: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    ${({ style }) => style}
 `
 const Input = (props) => {
-    const { children, password = false, value, style, editable } = props;
+    const { children, password = false, value, style, editable, inputStyle, labelStyle } = props;
     return <FloatingLabel
-        labelStyle={{ fontSize: 11 }}
+        labelStyle={{
+            fontSize: 15,
+            ...labelStyle
+        }}
         inputStyle={{
-            fontSize: 11,
+            fontSize: 15,
+            borderColor: lightGrey1,
             borderWidth: 0,
             borderBottomWidth: 1,
             display: 'flex',
+            ...inputStyle
         }}
         password={password}
         value={value}
@@ -97,11 +102,22 @@ export default class Content extends Component {
                     Номер телефона задан некорректно
                 </Error>}
                 <PhoneNumber>
-                    <InputLabel>Телефон</InputLabel>
-                    <Input style={{ width: '25%' }} value='+7' />
-                    <Input style={{ width: '75%' }}></Input>
+                    <Input style={{ width: '20%', }}
+                        inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
+                        value='+7' />
+                    <StyledInput password={true}
+                        onChangeText={this.handleChangePhone}
+                        value={this.state.phone}
+                        placeholder={'XXX-XXX-XX-XX'}
+                        style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10 }}
+                    />
                 </PhoneNumber>
-                <Input password={true} onChangeText={this.handleChange} value={this.state.pin} />
+                <StyledInput password={true}
+                    onChangeText={this.handleChangePassword}
+                    value={this.state.password}
+                    placeholder={'Пароль'}
+                    secureTextEntry={true}
+                />
 
                 <ControlBar>
                     <TouchableOpacity>
@@ -110,9 +126,7 @@ export default class Content extends Component {
                         </ForgotPass>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={navigateToDialogs}>
-                        <LogIn>
-                            войти
-                        </LogIn>
+                        <Button style={{ backgroundColor: blue }} color={'#fff'}>войти</Button>
                     </TouchableOpacity>
                 </ControlBar>
                 <NoAccount>
@@ -125,11 +139,19 @@ export default class Content extends Component {
                         </SingUp>
                     </TouchableOpacity>
                 </NoAccount>
-            </Wrapper>
+            </Wrapper >
         )
     }
     state = {
         error: false,
+        password: '',
+        phone: '',
     }
-    handleChange = (e) => {}
+    handleChangePassword = (e) => {
+        this.setState({password: e})
+
+    }
+    handleChangePhone = (e) => {
+        this.setState({phone: e})
+    }
 }

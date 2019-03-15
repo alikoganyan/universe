@@ -1,6 +1,30 @@
 import React from 'react';
 import { View, Text, Dimensions } from 'react-native';
-import { Group, Dialogs, Chat, Signup, PinCode, Login, Restore, GroupInfo, GroupName, Settings, Contacts, News, NewPost, CreateTask, Profile, DrawerComponent, ContactGroups, NewsComments, NewDialog, Tasks, TasksList, NewContact } from './Components'
+import {
+  Group,
+  Dialogs,
+  Chat,
+  Signup,
+  PinCode,
+  Login,
+  Restore,
+  GroupInfo,
+  GroupName,
+  Settings,
+  Contacts,
+  News,
+  NewPost,
+  CreateTask,
+  Profile,
+  DrawerComponent,
+  ContactGroups,
+  NewsComments,
+  NewDialog,
+  Tasks,
+  TasksList,
+  NewContact,
+  FirstInstall,
+} from './Components'
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
 import {
   createStore,
@@ -27,7 +51,7 @@ const AppDrawerNavigator = createDrawerNavigator(
 );
 const AppStackNavigator = createStackNavigator(
   {
-    Home: { screen: Signup },
+    Home: { screen: Login },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,
@@ -36,6 +60,7 @@ const AppStackNavigator = createStackNavigator(
       },
     },
     Chat: { screen: Chat },
+    Login: { screen: Login },
     Signup: { screen: Signup },
     PinCode: { screen: PinCode },
     Restore: { screen: Restore },
@@ -53,6 +78,7 @@ const AppStackNavigator = createStackNavigator(
     TasksList: { screen: TasksList },
     NewContact: { screen: NewContact },
     NewDialog: { screen: NewDialog },
+    FirstInstall: { screen: FirstInstall },
   },
   {
     headerMode: 'none',

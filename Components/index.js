@@ -20,6 +20,7 @@ import NewDialog from './NewDialog/NewDialog'
 import Tasks from './Tasks/Tasks'
 import TasksList from './TasksList/TasksList'
 import NewContact from './NewContact/NewContact'
+import FirstInstall from './FirstInstall/FirstInstall'
 
 export {
     Group,
@@ -44,4 +45,5 @@ export {
     Tasks,
     TasksList,
     NewContact,
+    FirstInstall,
 }
