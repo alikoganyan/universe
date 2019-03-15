@@ -27,7 +27,6 @@ class Drawer extends Component {
     )
   }
   componentDidMount() {
-    console.log('123')
     this.props.navigation.navigate('DrawerClose')
   }
 }

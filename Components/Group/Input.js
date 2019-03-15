@@ -4,16 +4,15 @@ import { SmileIcon, FileIcon, CameraIcon, ImageIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
-import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
+import { addGroupMessage, startSearch, stopSearch } from '../../actions/messageActions'
 
 const { socket, sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
-    position: absolute;
     background: white;
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
     left: 10px;
     bottom: 10px;
-    z-index: 2;
+    z-index: 20;
     padding: 10px;
     display: flex;
     flex-direction: row;
@@ -53,6 +52,7 @@ class InputComponent extends Component {
                         onChangeText={e => this.handleChange(e)}
                         onSubmitEditing={this.sendMessage}
                         value={text}
+                        blurOnSubmit={false}
                     />
                 </Left>
                 <Right>
@@ -64,16 +64,25 @@ class InputComponent extends Component {
             </Wrapper>
         )
     }
-    componentDidMount() {
-        const { messages, addMessage } = this.props
-    }
     state = {
         text: '', height: 0
     }
-    sendMessage = (event) => {
-        this.props.addMessage({ payload: this.state.text })
-        this.setState({ text: '' })
+    componentDidMount() {
+        const { messages, addGroupMessage } = this.props
+        socket.on('send message reply', (e) => {
+            addGroupMessage({ payload: e })
+        })
     }
+    sendMessage = (event) => {
+        const { addMessage, id } = this.props;
+        const { text } = this.state;
+        this.setState({ text: '' })
+        socket.emit('send message', {
+            userId: id,
+            text,
+        })
+    }
+
     handleChange = (e) => {
         this.setState({ text: e })
     }
@@ -81,11 +90,13 @@ class InputComponent extends Component {
 
 const mapStateToProps = state => {
     return {
-        messages: state.messageReducer.messages
+        messages: state.messageReducer.groupMessages,
+        id: state.userReducer.id,
+
     };
 };
 const mapDispatchToProps = dispatch => ({
-    addMessage: _ => dispatch(addMessage(_)),
+    addGroupMessage: _ => dispatch(addGroupMessage(_)),
     startSearch: _ => dispatch(startSearch()),
     stopSearch: _ => dispatch(stopSearch()),
 })

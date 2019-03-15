@@ -148,10 +148,10 @@ export default class Content extends Component {
         phone: '',
     }
     handleChangePassword = (e) => {
-        this.setState({password: e})
+        this.setState({ password: e })
 
     }
     handleChangePhone = (e) => {
-        this.setState({phone: e})
+        this.setState({ phone: e })
     }
 }

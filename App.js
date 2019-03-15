@@ -39,7 +39,6 @@ import {
 
 const AppDrawerNavigator = createDrawerNavigator(
   {
-    // Home: { screen: Login },
     Home: { screen: Dialogs },
   },
   {
@@ -51,7 +50,7 @@ const AppDrawerNavigator = createDrawerNavigator(
 );
 const AppStackNavigator = createStackNavigator(
   {
-    Home: { screen: Login },
+    Home: { screen: Chat },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,

@@ -1,35 +1,62 @@
 import React, { Component } from 'react'
-import { View, Text, KeyboardAvoidingView, Platform } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { View, Text, TextInput, Dimensions } from 'react-native'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
+import helper from '../../Helper/helper'
+import { connect } from 'react-redux'
+import { setUserId } from '../../actions/userActions'
+import { Button } from '../../Common'
+const { Colors, HeaderHeightNumber, socket } = helper;
+const { lightGrey1, blue } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
-    padding-top: 50px;
+    justify-content: center;
+    flex-grow: 1;
+    
 `
 const Title = styled(Text)`
     width: 100%;
     margin-bottom: 30px;
     font-size: 15px;
+    text-align: center;
 `
 const SubTitle = styled(Text)`
     width: 100%;
-    color: #A3A3A3;
+    color: ${lightGrey1};
+    text-align: center;
 `
 const PhoneNumber = styled(View)`
     display: flex;
     flex-direction: row;
+    align-items: flex-end;
+    margin-bottom: 20px;
 
 `
+
+const StyledInput = styled(TextInput)`
+    border: 1px solid ${lightGrey1};
+    border-width: 0;
+    border-bottom-width: 1px;
+    padding-bottom: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    ${({ style }) => style}
+`
+const ButtonBox = styled(View)`
+    width: 170px;
+    align-self: center;
+`
 const Input = (props) => {
-    const { children, password = false, value, style, editable } = props;
+    const { children, password = false, value, style, editable, inputStyle, labelStyle } = props;
     return <FloatingLabel
-        labelStyle={{ fontSize: 11 }}
+        labelStyle={{ fontSize: 15, ...labelStyle }}
         inputStyle={{
-            fontSize: 11,
+            fontSize: 15,
             borderWidth: 0,
             borderBottomWidth: 1,
             display: 'flex',
+            borderColor: lightGrey1,
+            ...inputStyle
         }}
         password={password}
         value={value}
@@ -38,28 +65,70 @@ const Input = (props) => {
     >{children}</FloatingLabel>
 
 }
-export default class Content extends Component {
+class Content extends Component {
     render() {
+        const {
+            country,
+            phone
+        } = this.state
         return (
-            <KeyboardAwareScrollView enableOnAndroid behavior='padding'>
-                <Wrapper>
-                    <Title>
-                        Регистрация
-                    </Title>
-                    <SubTitle>
-                        Введите учетные данные, чтобы активировать устройство:
-                    </SubTitle>
-                    <Input>Фамилия</Input>
-                    <Input>Имя</Input>
-                    <Input>Отчество</Input>
-                    <Input>E-mail</Input>
-                    <PhoneNumber>
-                        <Input style={{ width: '25%' }} value='+7' editable={false}>Телефон</Input>
-                        <Input style={{ width: '75%' }}></Input>
-                    </PhoneNumber>
-                    <Input password={true}>Пароль пользователя</Input>
-                </Wrapper>
-            </KeyboardAwareScrollView>
+            <Wrapper>
+                <Title>
+                    Регистрация
+                </Title>
+                <SubTitle>
+                    Телефон
+                </SubTitle>
+                <PhoneNumber>
+                    <Input
+                        value={country} onPress={this.handleCountry}
+                        style={{ width: '20%' }}
+                        value='+7'
+                        inputStyle={{ paddingLeft: 0, textAlign: 'center' }} />
+                    <StyledInput password={true}
+                        onChangeText={this.handlePhone}
+                        value={phone}
+                        placeholder={'XXX-XXX-XX-XX'}
+                        style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10, }}
+                    />
+                </PhoneNumber>
+                <ButtonBox>
+                    <Button
+                        onPress={this.proceed}
+                        style={{ background: blue }}
+                        color={'white'}>Продолжить</Button>
+                </ButtonBox>
+            </Wrapper>
         )
     }
+    state = {
+        country: '',
+        phone: '',
+    }
+    componentDidMount() {
+        socket.on('new user reply', (e) => {
+            setUserId(e.userId)
+        })
+    }
+    proceed = (e) => {
+        const { country, phone } = this.state;
+        socket.emit('new user', {
+            "phone": country + phone
+        })
+    }
+    handleCountry = (e) => {
+        this.setState({ country: e })
+    }
+    handlePhone = (e) => {
+        this.setState({ phone: e })
+    }
 }
+const mapStateToProps = state => {
+    return {
+        id: state.userReducer.id
+    };
+};
+const mapDispatchToProps = dispatch => ({
+    setUserId: _ => dispatch(setUserId(_)),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

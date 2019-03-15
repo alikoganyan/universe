@@ -53,8 +53,8 @@ class Content extends Component {
 }
 const mapStateToProps = state => {
     return {
-        messages: state.messageReducer.messages,
-        search: state.messageReducer.search
+        messages: state.messageReducer.groupMessages,
+        search: state.messageReducer.search,
     };
 };
 const mapDispatchToProps = dispatch => ({

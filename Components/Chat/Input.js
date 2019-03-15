@@ -8,12 +8,10 @@ import { addMessage, startSearch, stopSearch } from '../../actions/messageAction
 
 const { socket, sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
-    position: absolute;
     background: white;
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
     left: 10px;
     bottom: 10px;
-    z-index: 2;
     padding: 10px;
     display: flex;
     flex-direction: row;
@@ -30,6 +28,7 @@ const Input = styled(TextInput)`
     display: flex;
     flex-direction: column;
     width: 85%;
+    z-index: 50;
     overflow: hidden;
 `
 const Left = styled(View)`
@@ -53,6 +52,7 @@ class InputComponent extends Component {
                         onChangeText={e => this.handleChange(e)}
                         onSubmitEditing={this.sendMessage}
                         value={text}
+                        blurOnSubmit={false}
                     />
                 </Left>
                 <Right>
@@ -69,10 +69,18 @@ class InputComponent extends Component {
     }
     componentDidMount() {
         const { messages, addMessage } = this.props
+        socket.on('send message reply', (e) => {
+            addMessage({ payload: e })
+        })
     }
     sendMessage = (event) => {
-        this.props.addMessage({ payload: this.state.text })
+        const { addMessage, id } = this.props;
+        const { text } = this.state;
         this.setState({ text: '' })
+        socket.emit('send message', {
+            userId: 1,
+            text,
+        })
     }
     handleChange = (e) => {
         this.setState({ text: e })
@@ -81,7 +89,8 @@ class InputComponent extends Component {
 
 const mapStateToProps = state => {
     return {
-        messages: state.messageReducer.messages
+        messages: state.messageReducer.messages,
+        id: state.userReducer.id
     };
 };
 const mapDispatchToProps = dispatch => ({
