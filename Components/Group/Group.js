@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, Platform } from 'react-native'
 import { BackIcon, EllipsisVIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { SafeAreaView } from '../../Common'

@@ -2,10 +2,9 @@ import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, TextInput, ActionSheetIOS, Platform, Dimensions } from 'react-native'
 import { SmileIcon, FileIcon, CameraIcon, ImageIcon } from '../../assets/index'
 import styled from 'styled-components'
-import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 import { addGroupMessage, startSearch, stopSearch } from '../../actions/messageActions'
-
+import helper from '../../Helper/helper'
 const { socket, sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
     background: white;
@@ -69,18 +68,16 @@ class InputComponent extends Component {
     }
     componentDidMount() {
         const { messages, addGroupMessage } = this.props
-        socket.on('send message reply', (e) => {
-            addGroupMessage({ payload: e })
+        socket.on('chat message', e => {
+            const { text, id } = e;
+            addGroupMessage({ type: 'message', text, id })
         })
     }
     sendMessage = (event) => {
         const { addMessage, id } = this.props;
         const { text } = this.state;
+        socket.emit('chat message', { text, id })
         this.setState({ text: '' })
-        socket.emit('send message', {
-            userId: id,
-            text,
-        })
     }
 
     handleChange = (e) => {
@@ -91,7 +88,7 @@ class InputComponent extends Component {
 const mapStateToProps = state => {
     return {
         messages: state.messageReducer.groupMessages,
-        id: state.userReducer.id,
+        id: state.userReducer.user.id,
 
     };
 };

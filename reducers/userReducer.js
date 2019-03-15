@@ -2,7 +2,7 @@ import { SET_USERID } from '../actions/userActions'
 
 const initialState = {
     user: {
-        id: null
+        id: 2,
     },
 }
 const userReducer = (state = initialState, action) => {

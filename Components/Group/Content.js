@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 import { TaskComponent, Message } from '../../Common/'
-const { HeaderHeightNumber, Colors, Feed } = helper;
+const { HeaderHeightNumber, Colors, Feed, socket } = helper;
 const { lightColor } = Colors
 const Wrapper = styled(View)`
     background: white;
@@ -42,6 +42,9 @@ class Content extends Component {
                 </Wrapper>
             </SafeAreaView>
         )
+    }
+    componentDidMount() {
+        
     }
     getUnreadMessageHeight = (e) => {
         return e.nativeEvent.layout.height;

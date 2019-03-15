@@ -46,6 +46,5 @@ export default helper = {
         },
     }),
 }
-console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
-helper.socket.on('connection', e => console.log('connection'))
-helper.socket.on('connect', e => console.log('connect'))
+// console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
+// helper.socket.on('connect', e => console.log(socketUrl, 'connect'))

@@ -50,7 +50,7 @@ const AppDrawerNavigator = createDrawerNavigator(
 );
 const AppStackNavigator = createStackNavigator(
   {
-    Home: { screen: Chat },
+    Home: { screen: Group },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,

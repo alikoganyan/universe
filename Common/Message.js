@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, Image } from 'react-native'
 import styled from 'styled-components'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../assets/index'
+import { connect } from 'react-redux'
 const { HeaderHeightNumber, Colors } = helper;
 
 const MyMessage = styled(View)`
@@ -66,9 +67,10 @@ const MessageDate = styled(Text)`
 const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
 }
-export default function Message({ children }) {
+function Message(props) {
+    const { children, myId } = props
     const { text, id } = children;
-    myId = 1;
+
     return (myId === id ? (
         <View style={{ display: 'flex', flexDirection: 'row' }}>
             <MyMessage>
@@ -95,3 +97,11 @@ export default function Message({ children }) {
         </ View>
     )
 }
+
+const mapStateToProps = state => {
+    return {
+        messages: state.messageReducer.messages,
+        myId: state.userReducer.user.id
+    };
+};
+export default connect(mapStateToProps)(Message)
