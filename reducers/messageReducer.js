@@ -1,30 +1,23 @@
 import {
     ADD_MESSAGE,
-    ADD_GROUP_MESSAGE,
+    GET_MESSAGES,
     START_SEARCH,
     STOP_SEARCH,
+    SET_ROOM,
 } from '../actions/messageActions'
 const initialState = {
     search: false,
-    messages: [
-        { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-        { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-        { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-        { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-        { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-        { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-    ],
-    groupMessages: [
-        { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-    ],
+    currentRoom: null,
+    messages: [],
 }
 const messageReducer = (state = initialState, action) => {
-    console.log(action)
     switch (action.type) {
+        case GET_MESSAGES:
+            return { ...state, messages: action.payload }
+        case SET_ROOM:
+            return { ...state, currentRoom: action.payload }
         case ADD_MESSAGE:
             return { ...state, messages: [...state.messages, { type: 'message', text: action.payload.text, id: action.payload.id }] }
-        case ADD_GROUP_MESSAGE:
-            return { ...state, groupMessages: [...state.groupMessages, { type: "message", text: action.payload.text, id: action.payload.id }] }
         case STOP_SEARCH:
             return { ...state, search: false }
         case START_SEARCH:

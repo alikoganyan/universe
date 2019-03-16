@@ -74,10 +74,13 @@ class InputComponent extends Component {
             addMessage({ type, text, id: senderId })
         })
     }
+    componentWillUnmount() {
+        socket.removeListener('chat message');
+    }
     sendMessage = (event) => {
-        const { addMessage, id } = this.props;
+        const { currentRoom, id } = this.props;
         const { text } = this.state;
-        socket.emit('chat message', { text, senderId: id, type: 'message', chatId: 1 })
+        socket.emit('chat message', { text, senderId: id, type: 'message', chatId: currentRoom })
         this.setState({ text: '' })
     }
     handleChange = (e) => {
@@ -88,6 +91,7 @@ class InputComponent extends Component {
 const mapStateToProps = state => {
     return {
         messages: state.messageReducer.messages,
+        currentRoom: state.messageReducer.currentRoom,
         id: state.userReducer.user.id
     };
 };

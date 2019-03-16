@@ -2,7 +2,6 @@ import { StyleSheet, Platform } from 'react-native';
 import io from 'socket.io-client';
 import {API_URL, API_PORT} from 'react-native-dotenv'
 const socketUrl = `http://${API_URL}:${API_PORT}`
-console.log(socketUrl)
 export default helper = {
     IconDarkColor: '#979897',
     IconLightColor: '#ABABAB',
@@ -46,5 +45,3 @@ export default helper = {
         },
     }),
 }
-// console.log('\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n')
-// helper.socket.on('connect', e => console.log(socketUrl, 'connect'))

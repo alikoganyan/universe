@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, Image, TextInput, ActionSheetIOS, Platform, D
 import { SmileIcon, FileIcon, CameraIcon, ImageIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { addGroupMessage, startSearch, stopSearch } from '../../actions/messageActions'
+import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
 import helper from '../../Helper/helper'
 const { socket, sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
@@ -73,6 +73,9 @@ class InputComponent extends Component {
             addMessage({ type, text, id: senderId })
         })
     }
+    componentWillUnmount() {
+        socket.removeListener('chat message');
+    }
     sendMessage = (event) => {
         const { id } = this.props;
         const { text } = this.state;
@@ -93,7 +96,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = dispatch => ({
-    addMessage: _ => dispatch(addGroupMessage(_)),
+    addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch()),
     stopSearch: _ => dispatch(stopSearch()),
 })
