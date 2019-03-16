@@ -67,16 +67,16 @@ class InputComponent extends Component {
         text: '', height: 0
     }
     componentDidMount() {
-        const { messages, addGroupMessage } = this.props
+        const { messages, addMessage } = this.props
         socket.on('chat message', e => {
-            const { text, id } = e;
-            addGroupMessage({ type: 'message', text, id })
+            const { text, senderId, type } = e;
+            addMessage({ type, text, id: senderId })
         })
     }
     sendMessage = (event) => {
-        const { addMessage, id } = this.props;
+        const { id } = this.props;
         const { text } = this.state;
-        socket.emit('chat message', { text, id })
+        socket.emit('chat message', { text, senderId: id, type: 'message', chatId: 1 })
         this.setState({ text: '' })
     }
 
@@ -93,7 +93,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = dispatch => ({
-    addGroupMessage: _ => dispatch(addGroupMessage(_)),
+    addMessage: _ => dispatch(addGroupMessage(_)),
     startSearch: _ => dispatch(startSearch()),
     stopSearch: _ => dispatch(stopSearch()),
 })

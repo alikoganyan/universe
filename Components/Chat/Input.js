@@ -70,14 +70,14 @@ class InputComponent extends Component {
     componentDidMount() {
         const { messages, addMessage } = this.props
         socket.on('chat message', e => {
-            const { text, id } = e;
-            addMessage({ type: 'message', text, id })
+            const { text, senderId, type } = e;
+            addMessage({ type, text, id: senderId })
         })
     }
     sendMessage = (event) => {
         const { addMessage, id } = this.props;
         const { text } = this.state;
-        socket.emit('chat message', { text, id })
+        socket.emit('chat message', { text, senderId: id, type: 'message', chatId: 1 })
         this.setState({ text: '' })
     }
     handleChange = (e) => {

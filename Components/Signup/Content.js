@@ -106,7 +106,7 @@ class Content extends Component {
         phone: '',
     }
     componentDidMount() {
-        socket.on('new user reply', (e) => {
+        socket.on('new user', (e) => {
             setUserId(e.userId)
         })
     }
