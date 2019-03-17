@@ -17,7 +17,7 @@ const messageReducer = (state = initialState, action) => {
         case SET_ROOM:
             return { ...state, currentRoom: action.payload }
         case ADD_MESSAGE:
-            return { ...state, messages: [...state.messages, { type: 'message', text: action.payload.text, id: action.payload.id }] }
+            return { ...state, messages: [...state.messages, action.payload] }
         case STOP_SEARCH:
             return { ...state, search: false }
         case START_SEARCH:

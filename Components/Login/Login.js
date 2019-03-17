@@ -12,10 +12,10 @@ export default class PinCode extends Component {
             <SafeAreaView>
                 <Wrapper>
                     <Header />
-                    <Content navigateToDialogs={this.navigateToDialogs} />
+                    <Content navigate={this.navigate} />
                 </Wrapper>
             </SafeAreaView>
         )
     }
-    navigateToDialogs = () => this.props.navigation.navigate('Dialogs')
+    navigate = (e) => this.props.navigation.navigate(e)
 }

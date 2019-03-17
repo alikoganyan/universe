@@ -10,13 +10,6 @@ export const addMessage = (payload) => {
         payload: payload
     })
 }
-
-export const addGroupMessage = (payload) => {
-    return ({
-        type: ADD_GROUP_MESSAGE,
-        payload
-    })
-}
 export const startSearch = () => {
     return ({
         type: START_SEARCH

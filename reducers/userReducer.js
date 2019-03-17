@@ -8,7 +8,7 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_USERID:
-            return { ...state, user: { ...user, id: action.payload } }
+            return { ...state, user: { ...state.user, id: action.payload } }
 
     }
     return state;
