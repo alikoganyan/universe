@@ -40,7 +40,6 @@ class Dialogs extends Component {
     socket.emit('dialogs', {});
     socket.on('dialogs', (e) => {
       const { dialogs, messages } = e;
-      console.log('\n\n\n\n\n\n\n\n\n\n\n')
       const newDialogs = [];
       dialogs.map(e => {
         const message = messages.filter(message => {

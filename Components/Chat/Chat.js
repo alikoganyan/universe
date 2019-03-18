@@ -22,7 +22,7 @@ class Chat extends Component {
         return (
             <SafeAreaView behavior={Platform.os === 'ios' ? 'height' : 'padding'}>
                 <Wrapper>
-                    <Header back={this.navigateBack} />
+                    <Header back={this.navigateBack} currentChat={this.state.currentChat}/>
                     <Content />
                     <Bottom>
                         <Input />
@@ -31,12 +31,21 @@ class Chat extends Component {
             </SafeAreaView>
         )
     }
+    state = {
+        currentChat: null
+    }
+    componentDidMount() {
+        const { currentRoom } = this.props;
+        socket.emit('get chat info', { id: currentRoom })
+        socket.on('get chat info', e => {
+            this.setState({ currentChat: e })
+        })
+    }
     navigateBack = () => {
         const { currentRoom, navigation } = this.props;
         socket.emit('leave chat', { chatId: currentRoom })
         navigation.goBack()
     }
-    componentDidMount() { }
 }
 
 

@@ -83,7 +83,7 @@ const IconLeft = styled(Icon)`
 `
 class HeaderComponent extends Component {
     render() {
-        const { back, search, startSearch, stopSearch } = this.props
+        const { back, search, startSearch, stopSearch, currentChat } = this.props
         return (
             <Header>
                 <Top>
@@ -91,9 +91,9 @@ class HeaderComponent extends Component {
                         {!search ? (
                             <>
                                 <BackIcon onPress={back} />
-                                <HeaderUserImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
+                                <HeaderUserImage source={{ uri: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
                                 <Info>
-                                    <InfoChatName>lol</InfoChatName>
+                                    <InfoChatName>{currentChat && currentChat.phone}</InfoChatName>
                                     <InfoParticipants>был последний раз вчера</InfoParticipants>
                                 </Info>
                             </>

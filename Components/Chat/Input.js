@@ -91,7 +91,7 @@ const mapStateToProps = state => {
     return {
         messages: state.messageReducer.messages,
         currentRoom: state.messageReducer.currentRoom,
-        id: state.userReducer.user.id
+        id: state.userReducer.user.user.id
     };
 };
 const mapDispatchToProps = dispatch => ({
