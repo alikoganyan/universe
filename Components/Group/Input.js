@@ -69,17 +69,16 @@ class InputComponent extends Component {
     componentDidMount() {
         const { messages, addMessage } = this.props
         socket.on('chat message', e => {
-            const { text, senderId, type } = e;
-            addMessage({ type, text, id: senderId })
+            addMessage(e)
         })
     }
     componentWillUnmount() {
         socket.removeListener('chat message');
     }
     sendMessage = (event) => {
-        const { id } = this.props;
+        const { currentRoom, id } = this.props;
         const { text } = this.state;
-        socket.emit('chat message', { text, senderId: id, type: 'message', chatId: 1 })
+        text && socket.emit('chat message', { text, senderId: id, type: 'message', chatId: currentRoom })
         this.setState({ text: '' })
     }
 
@@ -92,6 +91,7 @@ const mapStateToProps = state => {
     return {
         messages: state.messageReducer.groupMessages,
         id: state.userReducer.user.id,
+        currentRoom: state.messageReducer.currentRoom
 
     };
 };

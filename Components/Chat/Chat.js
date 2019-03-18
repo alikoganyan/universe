@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, Image, KeyboardAvoidingView, Platform } from 'react-native'
+import { View, Text, Image, KeyboardAvoidingView, Dimensions, Platform } from 'react-native'
 import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { SafeAreaView } from '../../Common/'
 import helper from '../../Helper/helper';
 import { Header, Content, Input } from './'
-import {connect} from 'react-redux'
-const { socket } = helper
+import { connect } from 'react-redux'
+const { socket, HeaderHeightNumber } = helper
 const Wrapper = styled(View)`
     height: 100%;
 `
@@ -14,7 +14,8 @@ const Bottom = styled(View)`
     position: absolute;
     bottom: 0;
     width: 100%;
-    background: white;
+    background: transparent;
+    z-index: 200;
 `
 class Chat extends Component {
     render() {

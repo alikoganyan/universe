@@ -36,7 +36,7 @@ import reducers from './reducers/'
 import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
-
+console.disableYellowBox = true;
 const AppDrawerNavigator = createDrawerNavigator(
   {
     Home: { screen: Dialogs },

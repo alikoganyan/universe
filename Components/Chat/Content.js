@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ActionSheetIOS } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, Dimensions, TouchableOpacity, ActionSheetIOS, Platform } from 'react-native'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
@@ -15,7 +15,9 @@ const Wrapper = styled(View)`
 class Content extends Component {
     render() {
         const { messages, search } = this.props
-        const revesedMessages = [...messages].reverse();
+        const reveesedMessages = [...messages].sort((x, y) => {
+            return x.timeSent < y.timeSent
+        });
         return (
             <SafeAreaView>
                 <Wrapper search={search}>
@@ -23,7 +25,7 @@ class Content extends Component {
                         style={{ paddingRight: 5, paddingLeft: 5, }}
                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                         inverted={true}
-                        data={revesedMessages}
+                        data={reveesedMessages}
                         renderItem={({ item }) => {
                             if (item.type === 'message') {
                                 return <TouchableOpacity onLongPress={this.handleHold}>
@@ -47,7 +49,7 @@ class Content extends Component {
     }
     componentDidMount() { }
     handleHold = () => {
-        ActionSheetIOS.showActionSheetWithOptions(
+        Platform.os === 'ios' && ActionSheetIOS.showActionSheetWithOptions(
             {
                 options: ['Отменить', 'Ответить', 'Копировать', 'Изменить', 'Удалить'],
                 cancelButtonIndex: 0,
@@ -65,6 +67,7 @@ const mapStateToProps = state => {
     return {
         messages: state.messageReducer.messages,
         search: state.messageReducer.search,
+        currentRoom: state.messageReducer.currentRoom,
     };
 };
 const mapDispatchToProps = dispatch => ({

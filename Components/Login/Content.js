@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native'
 import helper from '../../Helper/helper'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { setUserId } from '../../actions/userActions'
+import { setUser } from '../../actions/userActions'
 const { Colors, fontSize, socket } = helper;
 const { border, lightColor, lightGrey1, color, blue } = Colors;
 const { large, header, text } = fontSize;
 const Wrapper = styled(View)`
     padding: 0 20%;
-    padding-top: 50px;
     height: 90%;
     display: flex;
     justify-content: center;
@@ -27,9 +26,7 @@ const ControlBar = styled(View)`
     align-items: center;
     flex-direction: column;
 `
-const SingUp = styled(Text)`
-    color: ${blue};
-`
+
 const PhoneNumber = styled(View)`
     display: flex;
     flex-direction: row;
@@ -131,29 +128,24 @@ class Content extends Component {
                         <Button onPress={this.login} style={{ backgroundColor: blue }} color={'#fff'}>войти</Button>
                     </TouchableOpacity>
                 </ControlBar>
-                <NoAccount>
-                    <Label>
-                        Нет аккаунта?
-                    </Label>
-                    <TouchableOpacity onPress={this.signup}>
-                        <SingUp>
-                            Зарегистрироваться
-                        </SingUp>
-                    </TouchableOpacity>
-                </NoAccount>
             </Wrapper >
         )
     }
     state = {
         error: false,
         password: '',
-        phone: '',
+        phone: '1111111111',
     }
     componentDidMount() {
+        const { navigate } = this.props;
         socket.on('login success', ({ result }) => {
-            const { setUserId } = this.props;
-            const { id } = result;
-            setUserId(id)
+            const { setUser } = this.props;
+            const { id, image } = result;
+            setUser({
+                id,
+                image: image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
+            })
+            navigate('Dialogs')
         })
         socket.on('login error', e => {
             console.log(e)
@@ -161,8 +153,6 @@ class Content extends Component {
     }
     login = (e) => {
         const { phone, password } = this.state;
-        const { navigate } = this.props;
-        navigate('Dialogs')
         socket.emit('login', { phone, password })
     }
     signup = (e) => {
@@ -174,7 +164,7 @@ class Content extends Component {
 
     }
     handleChangePhone = (e) => {
-        this.setState({ phone: e })
+        e.length <= 10 && this.setState({ phone: e })
     }
 }
 
@@ -184,6 +174,6 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = dispatch => ({
-    setUserId: _ => dispatch(setUserId(_)),
+    setUser: _ => dispatch(setUser(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

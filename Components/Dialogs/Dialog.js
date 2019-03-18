@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionSheetIOS } from 'react-native'
+import { View, Text, Image, TouchableHighlight, Dimensions, Platform, ActionSheetIOS } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
+import { connect } from 'react-redux'
 const { fontSize, PressDelay, sidePadding, Colors } = helper;
 const { purple, lightColor } = Colors;
 const Wrapper = styled(View)`
@@ -73,23 +74,24 @@ const NewMessages = styled(Text)`
   height: 25px;
   border-radius: 12.5;
 `
-export default class Content extends Component {
+class Content extends Component {
   render() {
-    const { children, title, onClick } = this.props;
-    const { height, width } = this.state;
+    const { children, title, user, lastMessage } = this.props;
+    const daysOfTheWeek = ['Sun', 'Mon', 'Tues', 'Wednes', 'Thurs', 'Fri', 'Sat'];
+    const dayOfTheWeek = daysOfTheWeek[new Date(lastMessage).getDay()-1]
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}>
         <Wrapper>
-          <DialogImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
+          <DialogImage source={{ uri: user.image }} />
           <DialogText>
             <DialogTextInner>
               <DialogTitle>{title}</DialogTitle>
-              <DialogLastMessage numberOfLines={1} >{children}Labore quis nulla velit sit occaecat deserunt cillum occaecat dolor et elit duis. Dolore laboris nostrud esse ullamco irure cupidatat mollit nisi nostrud in irure aliquip adipisicing proident. Eu aliquip consectetur velit quis pariatur velit sint esse incididunt laborum aute aliqua. Laboris laboris aliqua magna laborum reprehenderit nostrud aliquip consectetur proident aliquip commodo elit officia.</DialogLastMessage>
+              <DialogLastMessage numberOfLines={1} >{children}</DialogLastMessage>
             </DialogTextInner>
             <DialogDate>
-              <LastMessageDate>Thu</LastMessageDate>
+              <LastMessageDate>{dayOfTheWeek}</LastMessageDate>
               <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-                <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>2</NewMessages>
+                {/* <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>2</NewMessages> */}
               </UnreadMessages>
             </DialogDate>
           </DialogText>
@@ -102,7 +104,7 @@ export default class Content extends Component {
     size: null
   }
   handleHold = () => {
-    ActionSheetIOS.showActionSheetWithOptions(
+    Platform.os === 'ios' && ActionSheetIOS.showActionSheetWithOptions(
       {
         options: ['Cancel', 'Remove'],
         destructiveButtonIndex: 1,
@@ -125,3 +127,17 @@ export default class Content extends Component {
     this.setState({ width: e.nativeEvent.layout.width })
   }
 }
+const mapStateToProps = state => {
+  return {
+    messages: state.messageReducer.messages,
+    storeDialogs: state.messageReducer,
+    currentRoom: state.messageReducer.currentRoom,
+    user: state.userReducer.user.user
+  };
+};
+const mapDispatchToProps = dispatch => ({
+  getMessages: _ => dispatch(getMessages(_)),
+  setRoom: _ => dispatch(setRoom(_)),
+  setDialogs: _ => dispatch(setDialogs(_))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

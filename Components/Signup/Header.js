@@ -26,10 +26,11 @@ const Right = styled(TouchableOpacity)`
 
 export default class HeaderComponent extends Component {
     render() {
+        const { back } = this.props
         return (
             <Header>
                 <Left>
-                    <BackIcon />
+                    <BackIcon onPress={back} />
                 </Left>
                 <Right onPress={this.moveForward}>
                 </Right>

@@ -4,7 +4,7 @@ import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
-import { setUserId } from '../../actions/userActions'
+import { setUser } from '../../actions/userActions'
 import { Button } from '../../Common'
 const { Colors, HeaderHeightNumber, socket } = helper;
 const { lightGrey1, blue } = Colors;
@@ -129,6 +129,6 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = dispatch => ({
-    setUserId: _ => dispatch(setUserId(_)),
+    setUser: _ => dispatch(setUser(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

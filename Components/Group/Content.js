@@ -14,8 +14,9 @@ const Wrapper = styled(View)`
 class Content extends Component {
     render() {
         const { messages, search } = this.props
-        const reversedMessages = [...messages].reverse();
-
+        const reversedMessages = [...messages].sort((x, y) => {
+            return x.timeSent < y.timeSent
+        });
         return (
             <SafeAreaView>
                 <Wrapper search={search}>
@@ -44,7 +45,7 @@ class Content extends Component {
         )
     }
     componentDidMount() {
-        
+
     }
     getUnreadMessageHeight = (e) => {
         return e.nativeEvent.layout.height;

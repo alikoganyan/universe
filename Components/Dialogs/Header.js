@@ -27,7 +27,6 @@ const UserImage = styled(Image)`
     width: 30px;
     height: 30px;
     border-radius: 15;
-    background: red;
     margin-right: 10px;
 `
 const Input = styled(TextInput)`
@@ -36,11 +35,12 @@ const Input = styled(TextInput)`
 `
 class HeaderComponent extends Component {
     render() {
+        const { user } = this.props
         return (
             <Header>
                 <BurgerIcon onPress={this.props.toggleDrawer} />
-                <Input placeholder={'Найти'} />
-                <UserImage />
+                <Input placeholder={'Поиск'} />
+                <UserImage source={{uri: user.image}}/>
             </Header>
         )
     }
@@ -50,6 +50,7 @@ const mapStateToProps = state => {
         messages: state.messageReducer.messages,
         search: state.messageReducer.search,
         drawer: state.drawerReducer.open,
+        user: state.userReducer.user.user
     };
 };
 const mapDispatchToProps = dispatch => ({

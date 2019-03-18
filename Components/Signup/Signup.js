@@ -15,7 +15,7 @@ export default class Signup extends Component {
         return (
             <SafeAreaView behavior={'height'}>
                 <Wrapper>
-                    <Header forward={this.moveForward} />
+                    <Header forward={this.moveForward} back={this.back}/>
                     <Content />
                 </Wrapper>
             </SafeAreaView>
@@ -26,5 +26,8 @@ export default class Signup extends Component {
     }
     moveForward = () => {
         this.props.navigation.navigate('Dialogs')
+    }
+    back = () => {
+        this.props.navigation.goBack()
     }
 }
