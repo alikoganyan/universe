@@ -39,7 +39,8 @@ import {
 console.disableYellowBox = true;
 const AppDrawerNavigator = createDrawerNavigator(
   {
-    Home: { screen: Dialogs },
+    // Home: { screen: Login },
+    Home: { screen: Login },
   },
   {
     drawerWidth: Dimensions.get('window').width * 0.8,
@@ -48,9 +49,10 @@ const AppDrawerNavigator = createDrawerNavigator(
   },
 
 );
+
 const AppStackNavigator = createStackNavigator(
   {
-    Home: { screen: Login },
+    Home: { screen: AppDrawerNavigator },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,

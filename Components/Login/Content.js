@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, AsyncStorage } from 'react-native'
 import helper from '../../Helper/helper'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
@@ -134,26 +134,49 @@ class Content extends Component {
     state = {
         error: false,
         password: '',
-        phone: '1111111111',
+        phone: '',
     }
-    componentDidMount() {
+    componentDidMount = async () => {
         const { navigate } = this.props;
-        socket.on('login success', ({ result }) => {
-            const { setUser } = this.props;
-            const { id, image } = result;
+        console.log('\n\n\n\n\n\n\n\n\n')
+        const value = await AsyncStorage.getItem('user2');
+        if (value) {
             setUser({
-                id,
-                image: image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
+                id: value.id,
+                image: value.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
             })
             navigate('Dialogs')
-        })
-        socket.on('login error', e => {
-            console.log(e)
-        })
+
+        } else {
+            socket.on('login success', ({ result }) => {
+                const { setUser } = this.props;
+                const { id, image } = result;
+                setUser({
+                    id,
+                    image: image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
+                })
+                this.storeUserData(JSON.stringify({
+                    id,
+                    image: image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
+                }))
+                navigate('Dialogs')
+            })
+            socket.on('login error', e => {
+                console.log(e)
+            })
+        }
     }
+    storeUserData = async (user) => {
+        try {
+            await AsyncStorage.setItem('user', user);
+        } catch (error) {
+            // Error saving data
+        }
+    };
     login = (e) => {
         const { phone, password } = this.state;
         socket.emit('login', { phone, password })
+
     }
     signup = (e) => {
         const { navigate } = this.props;

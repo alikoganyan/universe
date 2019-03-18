@@ -27,7 +27,7 @@
       "bundleIdentifier": "team.amigo.media"
     },
     "android": {
-      "package": "com.yourcompany.yourappname"
+      "package": "com.team.amigo.media"
     }
   }
 }
