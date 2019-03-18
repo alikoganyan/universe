@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View, Text, Dimensions, AsyncStorage, BackHandler } from 'react-native';
 import {
   Group,
   Dialogs,
@@ -37,7 +37,8 @@ import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
 console.disableYellowBox = true;
-
+AsyncStorage.clear()
+let value = null;
 const AppStackNavigator = createStackNavigator(
   {
     Home: { screen: Login },
@@ -84,12 +85,16 @@ const AppDrawerNavigator = createDrawerNavigator(
   },
 
 );
-
+(async () => {
+  console.log(value)
+})
 const App = createAppContainer(AppDrawerNavigator)
 const store = createStore(reducers)
 @connectActionSheet
 export default class AppComponent extends React.Component {
-
+  componentDidMount() {
+    BackHandler.addEventListener("hardwareBackPress", () => {})
+  }
   render() {
     return (
       <Provider store={store}>

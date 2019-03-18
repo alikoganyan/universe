@@ -138,18 +138,17 @@ class Content extends Component {
     }
     componentDidMount = async () => {
         const { navigate } = this.props;
-        console.log('\n\n\n\n\n\n\n\n\n')
-        const value = await AsyncStorage.getItem('user2');
+        const { setUser } = this.props;
+        let value = await AsyncStorage.getItem('user');
+        value = JSON.parse(value);
         if (value) {
             setUser({
                 id: value.id,
                 image: value.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
             })
-            navigate('Dialogs')
-
+            setTimeout(() => navigate('Dialogs'), 0)
         } else {
             socket.on('login success', ({ result }) => {
-                const { setUser } = this.props;
                 const { id, image } = result;
                 setUser({
                     id,

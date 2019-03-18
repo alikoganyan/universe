@@ -40,7 +40,7 @@ class HeaderComponent extends Component {
             <Header>
                 <BurgerIcon onPress={this.props.toggleDrawer} />
                 <Input placeholder={'Поиск'} />
-                {/* <UserImage source={{uri: user.image}}/> */}
+                <UserImage source={{uri: user.image}}/>
             </Header>
         )
     }

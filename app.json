@@ -11,11 +11,6 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
     "updates": {
       "fallbackToCacheTimeout": 0
     },
@@ -27,7 +22,17 @@
       "bundleIdentifier": "team.amigo.media"
     },
     "android": {
-      "package": "com.team.amigo.media"
+      "package": "com.team.amigo.media",
+      "splash": {
+        "resizeMode": "contain",
+        "backgroundColor": "#ffffff",
+        "ldpi": "./assets/200px.png",
+        "mdpi": "./assets/320px.png",
+        "hdpi": "./assets/480px.png",
+        "xhdpi": "./assets/720px.png",
+        "xxhdpi": "./assets/960px.png",
+        "xxxhdpi": "./assets/1242px.png"
+      }
     }
   }
 }

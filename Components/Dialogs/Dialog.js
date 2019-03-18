@@ -82,7 +82,7 @@ class Content extends Component {
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}>
         <Wrapper>
-          <DialogImage source={{ uri: 'user.image' }} />
+          <DialogImage source={{ uri: user.image }} />
           <DialogText>
             <DialogTextInner>
               <DialogTitle>{title}</DialogTitle>
