@@ -37,22 +37,10 @@ import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
 console.disableYellowBox = true;
-const AppDrawerNavigator = createDrawerNavigator(
-  {
-    // Home: { screen: Login },
-    Home: { screen: Login },
-  },
-  {
-    drawerWidth: Dimensions.get('window').width * 0.8,
-    contentComponent: ({ navigation }) => <DrawerComponent navigation={navigation} />,
-    headerMode: 'none',
-  },
-
-);
 
 const AppStackNavigator = createStackNavigator(
   {
-    Home: { screen: AppDrawerNavigator },
+    Home: { screen: Login },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,
@@ -84,7 +72,20 @@ const AppStackNavigator = createStackNavigator(
   {
     headerMode: 'none',
   })
-const App = createAppContainer(AppStackNavigator)
+const AppDrawerNavigator = createDrawerNavigator(
+  {
+    // Home: { screen: Login },
+    Home: { screen: AppStackNavigator },
+  },
+  {
+    drawerWidth: Dimensions.get('window').width * 0.8,
+    contentComponent: ({ navigation }) => <DrawerComponent navigation={navigation} />,
+    headerMode: 'none',
+  },
+
+);
+
+const App = createAppContainer(AppDrawerNavigator)
 const store = createStore(reducers)
 @connectActionSheet
 export default class AppComponent extends React.Component {

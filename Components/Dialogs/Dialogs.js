@@ -6,6 +6,8 @@ import { SafeAreaView } from '../../Common/'
 import { connect } from 'react-redux';
 import { getMessages, setRoom, setDialogs } from '../../actions/messageActions'
 import helper from '../../Helper/helper'
+import { DrawerActions } from 'react-navigation';
+
 const { sidePaddingNumber, HeaderHeightNumber, socket } = helper;
 const Wrapper = styled(View)`
   height: 100%;
@@ -36,7 +38,6 @@ class Dialogs extends Component {
     FlatListData: []
   }
   componentDidMount() {
-    console.log(this.props.navigation)
     const { getMessages, setDialogs, storeDialogs } = this.props;
     socket.emit('dialogs', {});
     socket.on('dialogs', (e) => {
