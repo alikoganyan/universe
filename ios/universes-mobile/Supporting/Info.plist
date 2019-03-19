@@ -66,8 +66,6 @@
 	<string>Allow universes-mobile to access your contacts</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Allow universes-mobile to use your location</string>
-	<key>NSMainNibFile</key>
-	<string>LaunchScreen</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Allow universes-mobile to access your microphone</string>
 	<key>NSMotionUsageDescription</key>
@@ -78,8 +76,6 @@
 	<string>Give universes-mobile permission to access your photos</string>
 	<key>NSRemindersUsageDescription</key>
 	<string>Allow universes-mobile to access your reminders</string>
-	<key>UILaunchStoryboardName</key>
-	<string>Launch Screen</string>
 	<key>UIRequiredDeviceCapabilities</key>
 	<array/>
 	<key>UIRequiresFullScreen</key>
