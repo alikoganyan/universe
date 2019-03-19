@@ -199,7 +199,7 @@ PODS:
   - lottie-ios (2.5.3)
   - React (0.57.1):
     - React/Core (= 0.57.1)
-  - react-native-splash-screen (3.2.0):
+  - react-native-splash-screen (3.0.6):
     - React
   - React/ART (0.57.1):
     - React/Core
@@ -487,7 +487,7 @@ SPEC CHECKSUMS:
   JKBigInteger2: e91672035c42328c48b7dd015b66812ddf40ca9b
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
-  react-native-splash-screen: a49be22f0f6648b8416f3bd28258645eeaa5b42b
+  react-native-splash-screen: 8e3f866dc79bfe533baeffd0a38c33f7a7eae7f8
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
 PODFILE CHECKSUM: 70632ab88770aa57b7f5620490d2e7c708dbfe39
