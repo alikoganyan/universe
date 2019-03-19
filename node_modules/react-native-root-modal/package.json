@@ -1,0 +1,22 @@
+{
+    "version": "3.1.1",
+    "name": "react-native-root-modal",
+    "description": "react native modal component",
+    "license": "MIT",
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/magicismight/react-native-root-modal"
+    },
+    "dependencies": {
+        "react-native-root-siblings": "^3.1.0"
+    },
+    "main": "./lib/Modal.js",
+    "keywords": [
+        "react-component",
+        "react-native",
+        "ios",
+        "android",
+        "modal",
+        "popover"
+    ]
+}
