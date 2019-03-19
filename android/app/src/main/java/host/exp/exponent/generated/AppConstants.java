@@ -13,7 +13,7 @@ public class AppConstants {
 
   public static final String VERSION_NAME = "2.10.7";
   public static String INITIAL_URL = "exp://exp.host/@dr0kd3n/universes-mobile";
-  public static final String SHELL_APP_SCHEME = "exp0da6e6b53ba04e08a7ab0943b855e9c0";
+  public static final String SHELL_APP_SCHEME = "expffb10a7da95340f79e62cdd2cebeaebe";
   public static final String RELEASE_CHANNEL = "default";
   public static boolean SHOW_LOADING_VIEW_IN_SHELL_APP = false;
   public static boolean ARE_REMOTE_UPDATES_ENABLED = true;

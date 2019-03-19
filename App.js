@@ -29,6 +29,7 @@ import { createStackNavigator, createAppContainer, createDrawerNavigator } from 
 import {
   createStore,
 } from 'redux';
+import SplashScreen from 'react-native-splash-screen'
 
 import { Provider } from 'react-redux';
 import reducers from './reducers/'
@@ -41,7 +42,7 @@ AsyncStorage.clear()
 let value = null;
 const AppStackNavigator = createStackNavigator(
   {
-    Home: { screen: Login },
+    Home: { screen: Signup },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,
@@ -72,7 +73,8 @@ const AppStackNavigator = createStackNavigator(
   },
   {
     headerMode: 'none',
-  })
+  }
+)
 const AppDrawerNavigator = createDrawerNavigator(
   {
     // Home: { screen: Login },
@@ -83,17 +85,14 @@ const AppDrawerNavigator = createDrawerNavigator(
     contentComponent: ({ navigation }) => <DrawerComponent navigation={navigation} />,
     headerMode: 'none',
   },
-
 );
-(async () => {
-  console.log(value)
-})
 const App = createAppContainer(AppDrawerNavigator)
 const store = createStore(reducers)
 @connectActionSheet
 export default class AppComponent extends React.Component {
   componentDidMount() {
-    BackHandler.addEventListener("hardwareBackPress", () => {})
+    // SplashScreen.hide();
+    BackHandler.addEventListener("hardwareBackPress", () => { })
   }
   render() {
     return (

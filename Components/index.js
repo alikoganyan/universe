@@ -3,6 +3,7 @@ import Dialogs from './Dialogs/Dialogs'
 import Chat from './Chat/Chat'
 import PinCode from './PinCode/PinCode'
 import Signup from './Signup/Signup'
+import Signup2 from './Signup2/Signup2'
 import Login from './Login/Login'
 import Restore from './Restore/Restore'
 import GroupInfo from './GroupInfo/GroupInfo'
@@ -28,6 +29,7 @@ export {
     Chat,
     PinCode,
     Signup,
+    Signup2,
     Login,
     Restore,
     GroupInfo,
