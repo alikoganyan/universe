@@ -4,7 +4,8 @@ import styled from 'styled-components'
 import { Header, Dialog } from './index'
 import { SafeAreaView } from '../../Common/'
 import { connect } from 'react-redux';
-import { getMessages, setRoom, setDialogs } from '../../actions/messageActions'
+import { getMessages, setRoom } from '../../actions/messageActions'
+import { setDialogs } from '../../actions/dialogsActions'
 import helper from '../../Helper/helper'
 import { DrawerActions } from 'react-navigation';
 
@@ -27,7 +28,7 @@ class Dialogs extends Component {
             ListHeaderComponent={<View style={{ margin: 30, }} />}
             ref={(ref) => { this.flatList = ref; }}
             data={FlatListData}
-            renderItem={({ item, index }) => <Dialog lastMessage={item.lastMessage} onClick={() => this.toChat(item.id)} title={item.title}>{item.text}</Dialog>}
+            renderItem={({ item, index }) => <Dialog lastMessage={item.lastMessage} onClick={() => this.toChat(item.id)} title={item.title} item={item}>{item.text}</Dialog>}
             keyExtractor={(item, index) => index.toString()}
           />
         </Wrapper>
@@ -37,9 +38,16 @@ class Dialogs extends Component {
   state = {
     FlatListData: []
   }
+  componentWillReceiveProps(props) {
+    // this.setState({ FlatListData: [...props.dialog] })
+  }
   componentDidMount() {
-    const { getMessages, setDialogs, storeDialogs } = this.props;
-    socket.emit('dialogs', {});
+    const { getMessages, setDialogs, messages, id } = this.props;
+    socket.emit('dialogs', {userId: id});
+    socket.emit('set dialogs', {userId: id, dialogId: 33});
+    socket.on('find', e => {
+      this.setState({ FlatListData: e.result })
+    })
     socket.on('dialogs', (e) => {
       const { dialogs, messages } = e;
       const newDialogs = [];
@@ -47,13 +55,12 @@ class Dialogs extends Component {
         const message = messages.filter(message => {
           return message ? Number(e.id) === Number(message.chatId) : false;
         })[0];
-        message && newDialogs.push({ title: e.phone, text: message.text, id: e.id, lastMessage: message.timeSent })
+        newDialogs.push({ title: e.phone, text: message ? message.text : ' no messages yet', id: e.id, lastMessage: message ? message.timeSent : null  })
       })
       newDialogs.sort((x, y) => {
         return x.lastMessage < y.lastMessage
       });
       this.setState({ FlatListData: newDialogs })
-
     })
     socket.on('select chat', e => {
       getMessages(e)
@@ -76,9 +83,9 @@ class Dialogs extends Component {
 const mapStateToProps = state => {
   return {
     messages: state.messageReducer.messages,
-    storeDialogs: state.messageReducer,
+    dialog: state.dialogsReducer.dialogs,
     currentRoom: state.messageReducer.currentRoom,
-    id: state.userReducer.user.id
+    id: state.userReducer.user.user.id
   };
 };
 const mapDispatchToProps = dispatch => ({

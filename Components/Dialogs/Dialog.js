@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableHighlight, Dimensions, Platform, ActionShee
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
-const { fontSize, PressDelay, sidePadding, Colors } = helper;
+const { fontSize, PressDelay, sidePadding, Colors, socket } = helper;
 const { purple, lightColor } = Colors;
 const Wrapper = styled(View)`
   display: flex;
@@ -37,6 +37,9 @@ const DialogTitle = styled(Text)`
   font-weight: 500;
   flex: 1;
   width: ${Dimensions.get('window').width - 20}px;
+  font-size: 14px;
+  color: #000000;
+  font-weight: 400;
 `
 const LastMessageDate = styled(Text)`
   color: ${lightColor};
@@ -48,6 +51,9 @@ const DialogLastMessage = styled(Text)`
   font-size: ${fontSize.text};
   color: ${lightColor};
   padding-right: 20px;
+  font-size: 12px;
+  color: #000000;
+  font-weight: 400;
 `
 const DialogDate = styled(View)`
   right: ${sidePadding};
@@ -76,17 +82,25 @@ const NewMessages = styled(Text)`
 `
 class Content extends Component {
   render() {
-    const { children, title, user, lastMessage } = this.props;
-    const daysOfTheWeek = ['Sun', 'Mon', 'Tues', 'Wednes', 'Thurs', 'Fri', 'Sat'];
-    const dayOfTheWeek = daysOfTheWeek[new Date(lastMessage).getDay()-1]
+    const { children, title, user, lastMessage, item } = this.props;
+    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const dayOfTheWeek = daysOfTheWeek[new Date(lastMessage).getDay() - 1]
     return (
-      <TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}>
+      <TouchableHighlight underlayColor='#2B7DE2' onPress={item.phone ? () => this.newDialog(item.id) : this.handleClick} onLongPress={this.handleHold}>
         <Wrapper>
           <DialogImage source={{ uri: user.image }} />
           <DialogText>
             <DialogTextInner>
-              <DialogTitle>{title}</DialogTitle>
-              <DialogLastMessage numberOfLines={1} >{children}</DialogLastMessage>
+              {title && <>
+                <DialogTitle>{title}</DialogTitle>
+                <DialogLastMessage numberOfLines={1} >{children}</DialogLastMessage>
+              </>
+              }
+              {item.phone && <>
+                <View>
+                  <Text>{item.phone}</Text>
+                </View>
+              </>}
             </DialogTextInner>
             <DialogDate>
               <LastMessageDate>{dayOfTheWeek}</LastMessageDate>
@@ -102,6 +116,11 @@ class Content extends Component {
   }
   state = {
     size: null
+  }
+  newDialog = (e) => {
+    const { user } = this.props;
+    socket.emit('set dialogs', {userId: user.id, dialogId: e})
+    // this.handleClick
   }
   handleHold = () => {
     Platform.os === 'ios' && ActionSheetIOS.showActionSheetWithOptions(

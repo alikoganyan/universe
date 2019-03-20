@@ -44,7 +44,8 @@
     "yarn": "^1.13.0"
   },
   "devDependencies": {
-    "babel-preset-expo": "^5.0.0"
+    "babel-preset-expo": "^5.0.0",
+    "remote-redux-devtools": "^0.5.16"
   },
   "private": true
 }

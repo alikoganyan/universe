@@ -2,11 +2,12 @@ import React, { Component, Fragment } from 'react'
 import { View, Text, TextInput, Image, Platform, Dimensions } from 'react-native'
 import { SearchIcon, BurgerIcon } from '../../assets/index'
 import { openDrawer } from '../../actions/drawerActions'
+import { setDialogs } from '../../actions/dialogsActions'
 
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight } = helper;
+const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight, socket } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
     background-color: ${Colors.background};
@@ -36,17 +37,36 @@ const Input = styled(TextInput)`
 class HeaderComponent extends Component {
     render() {
         const { user } = this.props
+        const { input } = this.state;
         return (
             <Header>
                 <BurgerIcon onPress={this.props.toggleDrawer} />
-                <Input placeholder={'Поиск'} />
-                <UserImage source={{uri: user.image}}/>
+                <Input value={input} onChangeText={this.handleInputChange} onFocus={this.handleFocus} placeholder={'Поиск'} />
+                <UserImage source={{ uri: user.image }} />
             </Header>
         )
     }
+    state = {
+        input: ''
+    }
+    componentDidMount() {
+        const { setDialogs } = this.props;
+        socket.on('find', ({ result }) => {
+            setDialogs(result)
+        })
+    }
+    handleInputChange = (e) => {
+        this.setState({ input: e })
+        e && socket.emit('find', { text: e })
+    }
+    handleFocus = () => {
+        socket.emit('find')
+    }
 }
+
 const mapStateToProps = state => {
     return {
+        dialogs: state.dialogsReducer.dialogs,
         messages: state.messageReducer.messages,
         search: state.messageReducer.search,
         drawer: state.drawerReducer.open,
@@ -54,5 +74,6 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = dispatch => ({
+    setDialogs: _ => dispatch(setDialogs(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)

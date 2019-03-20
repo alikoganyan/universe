@@ -33,7 +33,7 @@ import SplashScreen from 'react-native-splash-screen'
 
 import { Provider } from 'react-redux';
 import reducers from './reducers/'
-
+import devToolsEnhancer from 'remote-redux-devtools';
 import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
@@ -87,7 +87,7 @@ const AppDrawerNavigator = createDrawerNavigator(
   },
 );
 const App = createAppContainer(AppDrawerNavigator)
-const store = createStore(reducers)
+const store = createStore(reducers, devToolsEnhancer())
 @connectActionSheet
 export default class AppComponent extends React.Component {
   componentDidMount() {

@@ -4,7 +4,6 @@ export const START_SEARCH = 'START_SEARCH'
 export const STOP_SEARCH = 'STOP_SEARCH'
 export const GET_MESSAGES = 'GET_MESSAGES'
 export const SET_ROOM = 'SET_ROOM'
-export const SET_DIALOGS = 'SET_DIALOGS'
 export const addMessage = (payload) => {
     return ({
         type: ADD_MESSAGE,
@@ -35,9 +34,3 @@ export const setRoom = (payload) => {
         payload
     })
 }
-export const setDialogs = (payload) => {
-    return ({
-        type: SET_DIALOGS,
-        payload
-    })
-} 
