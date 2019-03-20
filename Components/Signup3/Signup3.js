@@ -25,6 +25,6 @@ export default class Signup extends Component {
 
     }
     moveForward = () => {
-        this.props.navigation.navigate('Signup3')
+        this.props.navigation.navigate('Login')
     }
 }

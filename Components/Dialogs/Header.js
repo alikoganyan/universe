@@ -41,7 +41,10 @@ class HeaderComponent extends Component {
         return (
             <Header>
                 <BurgerIcon onPress={this.props.toggleDrawer} />
-                <Input value={input} onChangeText={this.handleInputChange} onFocus={this.handleFocus} placeholder={'Поиск'} />
+                <Input value={input} onChangeText={this.handleInputChange}
+                    onFocus={this.handleFocus}
+                    onBlur={this.handleBlur}
+                    placeholder={'Поиск'} />
                 <UserImage source={{ uri: user.image }} />
             </Header>
         )
@@ -58,9 +61,14 @@ class HeaderComponent extends Component {
     handleInputChange = (e) => {
         this.setState({ input: e })
         e && socket.emit('find', { text: e })
+
     }
     handleFocus = () => {
         socket.emit('find')
+    }
+    handleBlur = () => {
+        const { user } = this.props
+        socket.emit('dialogs', { userId: user.id });
     }
 }
 

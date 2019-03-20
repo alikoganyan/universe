@@ -21,7 +21,7 @@ class Dialogs extends Component {
   render() {
     const { FlatListData } = this.state;
     return (
-      <SafeAreaView behavior={'height'}>
+      <SafeAreaView behavior={'padding'}>
         <Wrapper>
           <Header toggleDrawer={this.props.navigation.openDrawer} />
           <StyledFlatList

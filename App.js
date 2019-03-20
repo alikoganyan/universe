@@ -6,6 +6,7 @@ import {
   Chat,
   Signup,
   Signup2,
+  Signup3,
   PinCode,
   Login,
   Restore,
@@ -44,7 +45,7 @@ AsyncStorage.clear()
 let value = null;
 const AppStackNavigator = createStackNavigator(
   {
-    Home: { screen: Signup2 },
+    Home: { screen: Login },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,
@@ -56,6 +57,7 @@ const AppStackNavigator = createStackNavigator(
     Login: { screen: Login },
     Signup: { screen: Signup },
     Signup2: { screen: Signup2 },
+    Signup3: { screen: Signup3 },
     PinCode: { screen: PinCode },
     Restore: { screen: Restore },
     GroupInfo: { screen: GroupInfo },

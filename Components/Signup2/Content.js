@@ -95,7 +95,6 @@ class Content extends Component {
     handleSMS = (e) => {
         this.state.sms.length < 4 && this.setState({ sms: e })
         this.state.sms.length === 3 && this.props.forward()
-        
     }
 }
 const mapStateToProps = state => {
