@@ -102,19 +102,24 @@ class Content extends Component {
         )
     }
     state = {
-        country: '',
+        country: '+7',
         phone: '',
     }
     componentDidMount() {
         socket.on('user exists', e => {
-            console.log(e)
+            console.log(e)  
         })
+        socket.on('user created', e => {
+            this.props.forward()
+        })
+
     }
     proceed = (e) => {
         const { country, phone } = this.state;
-        socket.emit('new user', {
+        country && phone && socket.emit('new user', {
             "phone": country + phone
         })
+
     }
     handleCountry = (e) => {
         this.setState({ country: e })

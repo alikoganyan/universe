@@ -13,10 +13,10 @@ const Wrapper = styled(View)`
 export default class Signup extends Component {
     render() {
         return (
-            <SafeAreaView behavior={'height'}>
+            <SafeAreaView behavior={'padding'}>
                 <Wrapper>
                     <Header/>
-                    <Content  forward={this.moveForward}/>
+                    <Content forward={this.moveForward}/>
                 </Wrapper>
             </SafeAreaView>
         )
@@ -25,6 +25,6 @@ export default class Signup extends Component {
 
     }
     moveForward = () => {
-        this.props.navigation.navigate('Signup2')
+        this.props.navigation.navigate('Login')
     }
 }

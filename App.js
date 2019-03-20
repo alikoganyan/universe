@@ -5,6 +5,7 @@ import {
   Dialogs,
   Chat,
   Signup,
+  Signup2,
   PinCode,
   Login,
   Restore,
@@ -24,6 +25,7 @@ import {
   TasksList,
   NewContact,
   FirstInstall,
+  
 } from './Components'
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
 import {
@@ -42,7 +44,7 @@ AsyncStorage.clear()
 let value = null;
 const AppStackNavigator = createStackNavigator(
   {
-    Home: { screen: Login },
+    Home: { screen: Signup2 },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,
@@ -53,6 +55,7 @@ const AppStackNavigator = createStackNavigator(
     Chat: { screen: Chat },
     Login: { screen: Login },
     Signup: { screen: Signup },
+    Signup2: { screen: Signup2 },
     PinCode: { screen: PinCode },
     Restore: { screen: Restore },
     GroupInfo: { screen: GroupInfo },

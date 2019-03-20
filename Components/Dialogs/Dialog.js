@@ -120,7 +120,7 @@ class Content extends Component {
   newDialog = (e) => {
     const { user } = this.props;
     socket.emit('set dialogs', {userId: user.id, dialogId: e})
-    // this.handleClick
+    this.handleClick()
   }
   handleHold = () => {
     Platform.os === 'ios' && ActionSheetIOS.showActionSheetWithOptions(

@@ -6,7 +6,7 @@ import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
 import { Button } from '../../Common'
-const { Colors, HeaderHeightNumber, socket } = helper;
+const { Colors, fontSize, HeaderHeightNumber, socket } = helper;
 const { lightGrey1, blue } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
@@ -24,6 +24,8 @@ const SubTitle = styled(Text)`
     width: 100%;
     color: ${lightGrey1};
     text-align: center;
+    margin-bottom: 30px;
+
 `
 const PhoneNumber = styled(View)`
     display: flex;
@@ -42,85 +44,58 @@ const StyledInput = styled(TextInput)`
     margin-bottom: 10px;
     ${({ style }) => style}
 `
-const ButtonBox = styled(View)`
-    width: 170px;
+const Controls = styled(View)`
     align-self: center;
+    justify-content: center;
+    align-items: center;
 `
-const Input = (props) => {
-    const { children, password = false, value, style, editable, inputStyle, labelStyle } = props;
-    return <FloatingLabel
-        labelStyle={{ fontSize: 15, ...labelStyle }}
-        inputStyle={{
-            fontSize: 15,
-            borderWidth: 0,
-            borderBottomWidth: 1,
-            display: 'flex',
-            borderColor: lightGrey1,
-            ...inputStyle
-        }}
-        password={password}
-        value={value}
-        style={{ ...style }}
-        editable={editable}
-    >{children}</FloatingLabel>
+const SendAgain = styled(Text)`
+    text-align: center;
+    font-size: ${fontSize.text};
+    width: 100%;
 
-}
+`
+const NoSMS = styled(SendAgain)`
+    color: ${lightGrey1};
+`
+
 class Content extends Component {
     render() {
-        const {
-            country,
-            phone
-        } = this.state
         return (
             <Wrapper>
                 <Title>
                     Регистрация
                 </Title>
                 <SubTitle>
-                    Телефон
+                    вам выслано sms с временным паролем, введите его тут
                 </SubTitle>
                 <PhoneNumber>
-                    <Input
-                        value={country} onPress={this.handleCountry}
-                        style={{ width: '20%' }}
-                        value='+7'
-                        inputStyle={{ paddingLeft: 0, textAlign: 'center' }} />
                     <StyledInput password={true}
-                        onChangeText={this.handlePhone}
-                        value={phone}
-                        placeholder={'XXX-XXX-XX-XX'}
-                        style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10, }}
+                        onChangeText={this.handleSMS}
+                        placeholder={'**********'}
+                        value={this.state.sms}
+                        style={{ margin: 0, flex: 1, textAlign: 'center', paddingLeft: 10, }}
                     />
                 </PhoneNumber>
-                <ButtonBox>
-                    <Button
-                        onPress={this.proceed}
-                        style={{ background: blue }}
-                        color={'white'}>Продолжить</Button>
-                </ButtonBox>
+                <Controls>
+                    <NoSMS>не получили sms?</NoSMS>
+                    <SendAgain>отправить sms повтороно можно будет через 5:00</SendAgain>
+                </Controls>
             </Wrapper>
         )
     }
     state = {
-        country: '',
-        phone: '',
+        sms: '',
     }
     componentDidMount() {
         socket.on('user exists', e => {
             console.log(e)
         })
     }
-    proceed = (e) => {
-        const { country, phone } = this.state;
-        socket.emit('new user', {
-            "phone": country + phone
-        })
-    }
-    handleCountry = (e) => {
-        this.setState({ country: e })
-    }
-    handlePhone = (e) => {
-        this.setState({ phone: e })
+    handleSMS = (e) => {
+        this.state.sms.length < 4 && this.setState({ sms: e })
+        this.state.sms.length === 3 && this.props.forward()
+        
     }
 }
 const mapStateToProps = state => {
