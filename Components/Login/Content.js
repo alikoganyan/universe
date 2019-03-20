@@ -134,7 +134,7 @@ class Content extends Component {
     state = {
         error: false,
         password: '',
-        phone: '',
+        phone: '1111111111',
     }
     componentDidMount = async () => {
         const { navigate } = this.props;
