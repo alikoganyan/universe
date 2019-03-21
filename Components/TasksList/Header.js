@@ -39,7 +39,7 @@ export default class HeaderComponent extends Component {
                 </Left>
                 <Right>
                     <SearchIcon />
-                    <AddIcon />
+                    {/* <AddIcon /> */}
                     <UserImage />
                 </Right>
             </Header>

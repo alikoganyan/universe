@@ -7,10 +7,12 @@ import helper from '../../Helper/helper'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
 import Icon from 'react-native-vector-icons/FontAwesome';
 
+import { ImageComponent } from '../../Common/'
 const { sidePadding, sidePaddingNumber, HeaderHeight, Colors } = helper;
 const { border } = Colors;
 const Header = styled(View)`
-    width: 100%;
+    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
+    align-self: center;
     background: white;
     display: flex;
     flex-direction: column;
@@ -25,6 +27,7 @@ const HeaderUserImage = styled(Image)`
 `
 const Info = styled(View)`
     display: flex;
+    margin-left: 10px;
 `
 const InfoChatName = styled(Text)`
     color: black;
@@ -43,6 +46,7 @@ const Right = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
+    justify-content: flex-end;
 `
 const Categories = styled(Header)`
     display: flex;
@@ -90,8 +94,8 @@ class HeaderComponent extends Component {
                     <Left>
                         {!search ? (
                             <>
-                                <BackIcon onPress={back} />
-                                <HeaderUserImage source={{ uri: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
+                                <BackIcon onPress={back} right />
+                                <ImageComponent source={{ uri: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
                                 <Info>
                                     <InfoChatName>{currentChat && currentChat.phone}</InfoChatName>
                                     <InfoParticipants>был последний раз вчера</InfoParticipants>
@@ -110,9 +114,7 @@ class HeaderComponent extends Component {
                                 <SearchIcon onPress={startSearch} />
                                 <LocationIcon />
                             </>
-                        ) : <>
-                                <CloseIcon onPress={stopSearch} />
-                            </>}
+                        ) : <CloseIcon onPress={stopSearch} />}
                     </Right>
                 </Top>
                 {search && (

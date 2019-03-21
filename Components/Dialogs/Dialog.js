@@ -3,6 +3,8 @@ import { View, Text, Image, TouchableHighlight, Dimensions, Platform, ActionShee
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
+import { ImageComponent } from '../../Common/'
+
 const { fontSize, PressDelay, sidePadding, Colors, socket } = helper;
 const { purple, lightColor } = Colors;
 const Wrapper = styled(View)`
@@ -23,23 +25,22 @@ const DialogText = styled(View)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
 `
 
 const DialogTextInner = styled(View)`
   display: flex;
   flex-direction: column;
-  width: ${Dimensions.get('window').width - 100}px;
+  justify-content: flex-end;
+  width: ${Dimensions.get('window').width - 110}px;
 
 `
 const DialogTitle = styled(Text)`
   font-size: ${fontSize.header};
-  font-weight: 500;
-  flex: 1;
   width: ${Dimensions.get('window').width - 20}px;
   font-size: 14px;
   color: #000000;
   font-weight: 400;
+  padding-bottom: 5px;
 `
 const LastMessageDate = styled(Text)`
   color: ${lightColor};
@@ -47,7 +48,6 @@ const LastMessageDate = styled(Text)`
   text-align: left;
 `
 const DialogLastMessage = styled(Text)`
-  flex: 1;
   font-size: ${fontSize.text};
   color: ${lightColor};
   padding-right: 20px;
@@ -88,7 +88,7 @@ class Content extends Component {
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={item.phone ? () => this.newDialog(item.id) : this.handleClick} onLongPress={this.handleHold}>
         <Wrapper>
-          <DialogImage source={{ uri: user.image }} />
+          <ImageComponent source={{ uri: user.image }} size={"large"}/>
           <DialogText>
             <DialogTextInner>
               {title && <>

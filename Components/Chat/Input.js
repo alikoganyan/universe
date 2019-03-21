@@ -10,8 +10,9 @@ const { socket, sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
     background: white;
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
-    left: 10px;
+    left: 0;
     bottom: 10px;
+    align-self: center;
     padding: 10px;
     display: flex;
     flex-direction: row;

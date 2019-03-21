@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native'
-import { BackIcon, GroupIcon, ArrowDownIcon } from '../../assets/index'
+import { BackIcon, GroupIconWhite, ArrowDownIcon } from '../../assets/index'
 import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../Helper/helper'
 import posed, { Transition } from 'react-native-pose';
+
 import Collapsible from 'react-native-collapsible';
-const { Colors, HeaderHeightNumber } = helper;
+const { Colors, HeaderHeightNumber, HeaderHeight } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
@@ -40,6 +41,7 @@ const Wrapper = styled(View)`
     background: white;
     margin-bottom: 110px;
     height: ${Dimensions.get('window').height - HeaderHeightNumber}px;
+    margin-top: ${HeaderHeight};
 `
 const ContactList = styled(ScrollView)`
     padding: 30px;
@@ -112,11 +114,15 @@ const CreateDialog = styled(TouchableOpacity)`
     background: ${green};
     padding: 15px 30px;
     border-radius: 50000px;
+    margin-top: 30px;
 
 `
 const CreateDialogText = styled(Text)`
     margin-left: 10px;
     color: white;
+`
+const Padding = styled(View)`
+    height: 30px;
 `
 export default class Settings extends Component {
     render() {
@@ -127,7 +133,7 @@ export default class Settings extends Component {
                 <Wrapper>
                     <KeyboardAwareScrollView enableOnAndroid>
                         <CreateDialog>
-                            <GroupIcon noPadding color={'white'} />
+                            <GroupIconWhite />
                             <CreateDialogText>
                                 Создать группу
                             </CreateDialogText>

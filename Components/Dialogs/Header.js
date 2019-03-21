@@ -4,6 +4,7 @@ import { SearchIcon, BurgerIcon, CloseIcon } from '../../assets/index'
 import { openDrawer } from '../../actions/drawerActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
+import { ImageComponent } from '../../Common/'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight, socket } = helper;
@@ -11,7 +12,7 @@ const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
     background-color: ${Colors.background};
     border: 1px solid ${Colors.border};
-    border-radius: 3;
+    border-radius: 7;
     font-size: ${fontSize.header};
     height: ${HeaderHeight}; 
     display: flex;
@@ -19,15 +20,10 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
     position: absolute;
+    padding-right: ${sidePadding};
     z-index: 2;
-    top: ${sidePadding};
+    top: 1%;
     left: ${sidePadding};
-`
-const UserImage = styled(Image)`
-    width: 30px;
-    height: 30px;
-    border-radius: 15;
-    margin-right: 10px;
 `
 const Input = styled(TextInput)`
     flex: 1;
@@ -39,14 +35,13 @@ class HeaderComponent extends Component {
         const { input } = this.state;
         return (
             <Header>
-                <BurgerIcon onPress={this.props.toggleDrawer} />
+                <BurgerIcon onPress={this.props.toggleDrawer} left right/>
                 <Input value={input} onChangeText={this.handleInputChange}
                     onFocus={this.handleFocus}
-                    // onBlur={this.handleBlur}
                     placeholder={'Поиск'} />
                 {this.state.focused ?
                     <CloseIcon onPress={this.onBlur}/>
-                    : <UserImage source={{ uri: user.image }} />}
+                    : <ImageComponent source={{uri: user.image}}/>}
             </Header>
         )
     }

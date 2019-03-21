@@ -1,6 +1,6 @@
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet, Platform, Dimensions } from 'react-native';
 import io from 'socket.io-client';
-import {API_URL, API_PORT} from 'react-native-dotenv'
+import { API_URL, API_PORT } from 'react-native-dotenv'
 const socketUrl = `http://${API_URL}:${API_PORT}`
 export default helper = {
     IconDarkColor: '#979897',
@@ -27,9 +27,9 @@ export default helper = {
         lightGrey1: '#b1b9c2',
         lightGrey2: '#f7f7f7',
     },
-    socket: io(socketUrl, {transports: ['websocket']}),
-    sidePaddingNumber: 10,
-    sidePadding: `10px`,
+    socket: io(socketUrl, { transports: ['websocket'] }),
+    sidePaddingNumber: Dimensions.get('window').width / 100 * 4.5,
+    sidePadding: `4.5%`,
     HeaderHeightNumber: 50,
     HeaderHeight: `50px`,
     PressDelay: 700,

@@ -4,14 +4,20 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 import styled from 'styled-components'
 import helper from '../Helper/helper'
+import SVG from './svg/'
+import SvgUri from 'react-native-svg-uri';
+
 const { IconDarkColor,
     IconLightColor,
     IconBlueColor,
     IconSize,
-    IconSizeLarge } = helper;
+    IconSizeLarge,
+    sidePadding } = helper;
 
 const StyledTouchableOpacity = styled(TouchableOpacity)`
-    padding: 2px 10px;
+    margin-left: ${({ left }) => left ? sidePadding : 0};
+    margin-right: ${({ right }) => right ? sidePadding : 0};
+    padding: 2px;
 `
 const Left = styled(StyledTouchableOpacity)`
     margin-right: ${({ noPadding }) => noPadding ? 0 : 10}px;
@@ -61,6 +67,7 @@ const TriangleRight = styled(View)`
 `
 const TriangleRightInner = styled(TriangleRight)`
 `
+
 const LeftWrapper = function (props) {
     const { children, onPress } = props;
     return (
@@ -82,11 +89,15 @@ const RightWrapper = function (props) {
     )
 }
 export function BackIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <LeftWrapper props={props}>
-
-            <Icon name="angle-left" size={IconSizeLarge} color={IconDarkColor} />
-        </LeftWrapper >
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Arrow_back}
+            />
+        </StyledTouchableOpacity>
     )
 }
 
@@ -122,13 +133,15 @@ export function SmileIcon(props) {
 }
 
 export function FileIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <RightWrapper props={props}>
-
-
-            <Icon name="file" size={IconSize} color={IconDarkColor} />
-
-        </RightWrapper>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.File}
+            />
+        </StyledTouchableOpacity>
     )
 }
 
@@ -145,22 +158,28 @@ export function CameraIcon(props) {
 
 
 export function BurgerIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <LeftWrapper props={props}>
-
-            <Icon name="bars" size={IconSize} color={IconLightColor} />
-
-        </LeftWrapper>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Menu}
+            />
+        </StyledTouchableOpacity>
     )
 }
 
 export function SearchIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <LeftWrapper props={props}>
-
-            <Icon name="search" size={IconSize} color={IconDarkColor} />
-
-        </LeftWrapper>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Search}
+            />
+        </StyledTouchableOpacity>
     )
 }
 
@@ -196,24 +215,28 @@ export function TriangleRightIcon({ color, style, hollow }) {
 }
 
 export function LocationIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <RightWrapper props={props}>
-
-
-            <Icon name="map-marker" size={IconSize} color={IconDarkColor} />
-
-        </RightWrapper>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Geolocation}
+            />
+        </StyledTouchableOpacity>
     )
 }
 
 export function ImageIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <RightWrapper props={props}>
-
-
-            <Icon name="file-photo-o" size={IconSize} color={IconDarkColor} />
-
-        </RightWrapper>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Files_white}
+            />
+        </StyledTouchableOpacity>
     )
 }
 
@@ -227,10 +250,15 @@ export function MessageIndicatorIcon(props) {
 
 
 export function EditIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <TouchableOpacity onPress={props.onPress}>
-            <Icon name="pencil" size={IconSize} color={IconDarkColor} />
-        </TouchableOpacity>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Edit}
+            />
+        </StyledTouchableOpacity>
     )
 }
 
@@ -251,85 +279,167 @@ export function HeartIcon(props) {
 }
 
 export function CommentIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <RightWrapper props={props}>
-            <Icon name="comment-o" size={IconSize} color={props.color || IconBlueColor} />
-        </RightWrapper>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Comments}
+            />
+        </StyledTouchableOpacity>
     )
 }
 
 export function CloseIcon(props) {
+    const { onPress, style } = props
     return (
-        <RightWrapper props={props}>
-            <Icon name="close" size={IconSize} color={IconDarkColor} />
-        </RightWrapper>
+        <TouchableOpacity onPress={onPress} style={style}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Close}
+            />
+        </TouchableOpacity>
     )
 }
 
 export function GroupIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <View onPress={props.onPress} noPadding={props.noPadding}>
-            <Icon name="group" size={IconSize} color={props.color || IconDarkColor} />
-        </View>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Contacts_grey}
+            />
+        </StyledTouchableOpacity>
+    )
+}
+
+
+export function GroupIconWhite(props) {
+    const { onPress, left, right } = props;
+    return (
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Contacts_white}
+            />
+        </StyledTouchableOpacity>
     )
 }
 
 export function TaskIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <RightWrapper props={props}>
-            <Icon name="tasks" size={IconSize} color={IconDarkColor} />
-        </RightWrapper>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Tasks}
+            />
+        </StyledTouchableOpacity>
     )
 }
 
-export function CheckIcon({ onPress, color }) {
+export function CheckIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <View style={{ marginLeft: 5 }}>
-            <Ionicons name="md-checkmark" size={IconSize} color={color || IconDarkColor} />
-        </View>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Message_delivered}
+            />
+        </StyledTouchableOpacity>
     )
 }
 
-export function CheckAllIcon({ onPress, color }) {
+export function CheckAllIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <View>
-            <Ionicons name="md-done-all" size={IconSize} color={color || IconDarkColor} />
-        </View>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Message_read}
+            />
+        </StyledTouchableOpacity>
     )
 }
 export function PapperPlaneIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <View>
-            <Icon name="paper-plane" size={IconSize} color={IconDarkColor} />
-        </View>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.New_dialog}
+            />
+        </StyledTouchableOpacity>
     )
 }
 export function FeedIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <View>
-            <Icon name="newspaper-o" size={IconSize} color={IconDarkColor} />
-        </View>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.News}
+            />
+        </StyledTouchableOpacity>
     )
 }
 export function TasksIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <View>
-            <Icon name="tasks" size={IconSize} color={IconDarkColor} />
-        </View>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Tasks}
+            />
+        </StyledTouchableOpacity>
     )
 }
 export function SettingsIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <View>
-            <Ionicons name="ios-settings" size={IconSize} color={IconDarkColor} />
-        </View>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Settings}
+            />
+        </StyledTouchableOpacity>
     )
 }
 export function AddIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <View>
-            <Ionicons name="md-add" size={IconSizeLarge} color={IconDarkColor} />
-        </View>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Add}
+            />
+        </StyledTouchableOpacity>
+    )
+}
+
+export function IntroIcon(props) {
+    const { onPress, left, right } = props;
+    return (
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Intro}
+            />
+        </StyledTouchableOpacity>
     )
 }
 

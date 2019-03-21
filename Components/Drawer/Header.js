@@ -16,7 +16,7 @@ const Header = styled(Text)`
 export default function HeaderComponent(props) {
     return (
         <Wrapper>
-            <Header> Universe </Header>
+            <Header> Multiverse </Header>
         </Wrapper>
     )
 }
