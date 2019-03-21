@@ -28,6 +28,7 @@ import {
   TasksList,
   NewContact,
   FirstInstall,
+  NewFeed,
 
 } from './Components'
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
@@ -47,7 +48,7 @@ AsyncStorage.clear()
 let value = null;
 const AppStackNavigator = createStackNavigator(
   {
-    Home: { screen: Login },
+    Home: { screen: NewFeed },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,
@@ -77,6 +78,7 @@ const AppStackNavigator = createStackNavigator(
     NewContact: { screen: NewContact },
     NewDialog: { screen: NewDialog },
     FirstInstall: { screen: FirstInstall },
+    NewFeed: { screen: NewFeed },
   },
   {
     headerMode: 'none',
