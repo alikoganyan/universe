@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react'
-import { View, Text, TextInput, Image, Platform, Dimensions } from 'react-native'
-import { SearchIcon, BurgerIcon } from '../../assets/index'
+import { View, Text, TextInput, Image, Platform, Dimensions, Keyboard } from 'react-native'
+import { SearchIcon, BurgerIcon, CloseIcon } from '../../assets/index'
 import { openDrawer } from '../../actions/drawerActions'
 import { setDialogs } from '../../actions/dialogsActions'
-
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
@@ -43,14 +42,17 @@ class HeaderComponent extends Component {
                 <BurgerIcon onPress={this.props.toggleDrawer} />
                 <Input value={input} onChangeText={this.handleInputChange}
                     onFocus={this.handleFocus}
-                    onBlur={this.handleBlur}
+                    // onBlur={this.handleBlur}
                     placeholder={'Поиск'} />
-                <UserImage source={{ uri: user.image }} />
+                {this.state.focused ?
+                    <CloseIcon onPress={this.onBlur}/>
+                    : <UserImage source={{ uri: user.image }} />}
             </Header>
         )
     }
     state = {
-        input: ''
+        input: '',
+        focused: false
     }
     componentDidMount() {
         const { setDialogs } = this.props;
@@ -65,10 +67,13 @@ class HeaderComponent extends Component {
     }
     handleFocus = () => {
         socket.emit('find')
+        this.setState({ focused: true });
     }
-    handleBlur = () => {
+    onBlur = () => {
         const { user } = this.props
+        this.setState({ focused: false });
         socket.emit('dialogs', { userId: user.id });
+        Keyboard.dismiss()
     }
 }
 

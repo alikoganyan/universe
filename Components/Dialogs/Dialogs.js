@@ -28,6 +28,7 @@ class Dialogs extends Component {
             ListHeaderComponent={<View style={{ margin: 30, }} />}
             ref={(ref) => { this.flatList = ref; }}
             data={FlatListData}
+            keyboardShouldPersistTaps={'handled'}
             renderItem={({ item, index }) => <Dialog lastMessage={item.lastMessage} onClick={() => this.toChat(item.id)} title={item.title} item={item}>{item.text}</Dialog>}
             keyExtractor={(item, index) => index.toString()}
           />
