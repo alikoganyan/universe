@@ -271,10 +271,15 @@ export function FunnelIcon(props) {
     )
 }
 export function HeartIcon(props) {
+    const { onPress, left, right } = props;
     return (
-        <RightWrapper props={props}>
-            <Icon name="heart-o" size={IconSize} color={props.color || IconBlueColor} />
-        </RightWrapper>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Likes}
+            />
+        </StyledTouchableOpacity>
     )
 }
 

@@ -45,6 +45,8 @@ class Dialogs extends Component {
   componentDidMount() {
     const { getMessages, setDialogs, messages, id } = this.props;
     socket.emit('dialogs', {userId: id});
+    socket.emit('news', {userId: id});
+    socket.on('news', e => console.log('test', e));
     socket.emit('set dialogs', {userId: id, dialogId: 33});
     socket.on('find', e => {
       this.setState({ FlatListData: e.result })

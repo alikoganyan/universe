@@ -1,24 +1,24 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 import { CommentIcon, HeartIcon, TriangleLeftIcon, TriangleRightIcon, CheckIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-const { HeaderHeightNumber, sidePadding, Colors } = helper;
+import { ImageComponent } from '../../Common'
+const { HeaderHeightNumber, sidePadding, borderRadius, Colors } = helper;
 const { yellow, black } = Colors;
 const Wrapper = styled(View)`
     margin-bottom: 50px;   
     background: white;
-    padding: 0 ${sidePadding};
+    /* padding: 0 ${sidePadding}; */
     display: flex;
 `
 const NewsItem = styled(View)`
     background: white;
     padding: 20px;
     padding-bottom: 10px;
-    border-radius: 8;
     border: 1px solid ${yellow};
-    border-radius: 5;
-
+    border-radius: ${borderRadius};
+    margin: 0 ${sidePadding};
 `
 const Sender = styled(View)`
     display: flex;
@@ -130,12 +130,12 @@ const MessageDate = styled(Text)`
     color: ${({ color }) => color || '#ABABAB'};
     margin-left: 15px;
 `
-const Indicator = ({ delievered = false, read = false, color }) => {
-    return <CheckIcon color={color} />
-}
+const FeedText = styled(ScrollView)`
+    max-height: 150px;
+`
 const Message = (props) => {
     const { children } = props;
-    const { text, id } = children;
+    const { text, id, likes } = children;
     const myId = 1;
     return myId === id ? (
         <View style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
@@ -144,20 +144,23 @@ const Message = (props) => {
                     {text}
                 </MyMessageText>
                 <MessageInfo>
-                    <HeartIcon style={{paddingRight: 5}}/><Text>12</Text>
+                    <HeartIcon style={{ paddingRight: 5 }} /><Text>{likes}</Text>
                     <MessageDate color={black}>1:40</MessageDate>
                 </MessageInfo>
             </MyMessage>
             <TriangleLeftIcon color={yellow} />
         </ View>
-    ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
+    ) : <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
+            <ImageComponent
+                style={{ position: 'relative', left: 5, bottom: 5 }}
+                source={{ uri: 'https://cdn.pixabay.com/photo/2016/06/18/17/42/image-1465348_960_720.jpg' }} />
             <TriangleRightIcon color={'#F6F6F6'} />
             <InterlocutorsMessage>
                 <InterlocutorsMessageText>
                     {text}
                 </InterlocutorsMessageText>
                 <MessageInfo>
-                    <HeartIcon style={{paddingRight: 5}}/><Text>12</Text>
+                    <HeartIcon style={{ paddingRight: 5 }} /><Text>{likes}</Text>
                     <MessageDate>1:40</MessageDate>
                 </MessageInfo>
             </InterlocutorsMessage>
@@ -166,7 +169,7 @@ const Message = (props) => {
 export default class Content extends Component {
     render() {
         const { CurrentFeed } = this.state;
-        const { comments } = CurrentFeed;
+        const { comments, likes } = CurrentFeed;
         const reversedCommnets = [...comments].reverse();
         const height = Dimensions.get('window').height - HeaderHeightNumber - 20 - (this.state.height || 0);
         return (
@@ -180,15 +183,16 @@ export default class Content extends Component {
                                 <TimeSent>{CurrentFeed.timeSent}</TimeSent>
                             </SenderInfo>
                         </Sender>
-                        <Text>{CurrentFeed.text}</Text>
+                        <FeedText>
+                            <Text>Elit nisi ut ea fugiat mollit velit. Nulla sunt veniam eu consequat esse sunt aliqua pariatur. Anim aliquip fugiat nulla exercitation elit qui id commodo aute esse pariatur cupidatat ex. Dolor qui culpa tempor Lorem consectetur sunt consectetur minim proident irure excepteur commodo mollit. Eiusmod id laboris ea mollit magna nulla fugiat Lorem mollit aute adipisicing nulla non.Sint aute nulla adipisicing irure. Laboris qui aute dolor ex reprehenderit veniam duis culpa cillum minim sit adipisicing laborum. Culpa ea sit minim fugiat in cillum eiusmod. Ipsum do commodo est labore.</Text>
+                        </FeedText>
                         <NewsItemInfo>
                             <ShowAll>
-                                <TouchableOpacity><HashTag>Читать далее</HashTag></TouchableOpacity>
                             </ShowAll>
 
                             <Reactions>
-                                <HeartIcon /><Text>12</Text>
-                                <CommentIcon /><Text>12</Text>
+                                <HeartIcon /><Text>{likes}</Text>
+                                <CommentIcon /><Text>{comments.length}</Text>
                             </Reactions>
                         </NewsItemInfo>
                     </NewsItem>
@@ -214,17 +218,16 @@ export default class Content extends Component {
             },
             text: 'some text',
             likes: 10,
-            shares: 2,
             timeSent: 'Сегодня в 15:00',
             comments: [
-                { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 1 },
+                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 1 },
             ]
         },
     }

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, TextInput, AsyncStorage } from 'react-native'
+import { Font } from 'expo'
 import helper from '../../Helper/helper'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
@@ -64,7 +65,7 @@ const StyledInput = styled(TextInput)`
     padding-bottom: 10px;
     text-align: center;
     margin-bottom: 10px;
-    ${({ style }) => style}
+    ${({ style }) => style};
 `
 const Input = (props) => {
     const { children, password = false, value, style, editable, inputStyle, labelStyle } = props;
@@ -92,43 +93,42 @@ class Content extends Component {
     render() {
         const { error } = this.state;
         const { navigateToDialogs } = this.props;
-        return (
-            <Wrapper>
-                <Title>
-                    Авторизация
+        return (<Wrapper>
+            <Title>
+                Авторизация
                 </Title>
-                {error && <Error>
-                    Номер телефона задан некорректно
+            {error && <Error>
+                Номер телефона задан некорректно
                 </Error>}
-                <PhoneNumber>
-                    <Input style={{ width: '20%', }}
-                        inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
-                        value='+7' />
-                    <StyledInput password={true}
-                        onChangeText={this.handleChangePhone}
-                        value={this.state.phone}
-                        placeholder={'XXX-XXX-XX-XX'}
-                        style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10 }}
-                    />
-                </PhoneNumber>
+            <PhoneNumber>
+                <Input style={{ width: '20%', }}
+                    inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
+                    value='+7' />
                 <StyledInput password={true}
-                    onChangeText={this.handleChangePassword}
-                    value={this.state.password}
-                    placeholder={'Пароль'}
-                    secureTextEntry={true}
+                    onChangeText={this.handleChangePhone}
+                    value={this.state.phone}
+                    placeholder={'XXX-XXX-XX-XX'}
+                    style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10 }}
                 />
+            </PhoneNumber>
+            <StyledInput password={true}
+                onChangeText={this.handleChangePassword}
+                value={this.state.password}
+                placeholder={'Пароль'}
+                secureTextEntry={true}
+            />
 
-                <ControlBar>
-                    <TouchableOpacity>
-                        <ForgotPass>
-                            забыли пароль?
+            <ControlBar>
+                <TouchableOpacity>
+                    <ForgotPass>
+                        забыли пароль?
                         </ForgotPass>
-                    </TouchableOpacity>
-                    <TouchableOpacity onPress={navigateToDialogs}>
-                        <Button onPress={this.login} style={{ backgroundColor: blue }} color={'#fff'}>войти</Button>
-                    </TouchableOpacity>
-                </ControlBar>
-            </Wrapper >
+                </TouchableOpacity>
+                <TouchableOpacity onPress={navigateToDialogs}>
+                    <Button onPress={this.login} style={{ backgroundColor: blue }} color={'#fff'}>войти</Button>
+                </TouchableOpacity>
+            </ControlBar>
+        </Wrapper >
         )
     }
     state = {
@@ -137,6 +137,7 @@ class Content extends Component {
         phone: '1111111111',
     }
     componentDidMount = async () => {
+
         const { navigate } = this.props;
         const { setUser } = this.props;
         let value = await AsyncStorage.getItem('user');

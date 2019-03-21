@@ -1,5 +1,7 @@
 import React from 'react';
-import { View, Text, Dimensions, AsyncStorage, BackHandler } from 'react-native';
+import { View, Text, Dimensions, AsyncStorage, BackHandler, ActivityIndicator } from 'react-native';
+import GlobalFont from 'react-native-global-font'
+import { Font } from 'expo';
 import {
   Group,
   Dialogs,
@@ -26,7 +28,7 @@ import {
   TasksList,
   NewContact,
   FirstInstall,
-  
+
 } from './Components'
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
 import {
@@ -95,15 +97,27 @@ const App = createAppContainer(AppDrawerNavigator)
 const store = createStore(reducers, devToolsEnhancer())
 @connectActionSheet
 export default class AppComponent extends React.Component {
-  componentDidMount() {
+  async componentDidMount() {
     // SplashScreen.hide();
+    // Font.loadAsync({
+    //   'vincHand': require('./assets/fonts/vincHand.ttf'),
+    // });
+    await Font.loadAsync({
+      'Roboto': require('./assets/fonts/Roboto-Medium.ttf'),
+    });
+    GlobalFont.applyGlobal('Roboto')
+    this.setState({ loaded: true })
+
     BackHandler.addEventListener("hardwareBackPress", () => { })
   }
   render() {
     return (
       <Provider store={store}>
-        <App />
+        {this.state.loaded ? <App /> : < ActivityIndicator />}
       </Provider>
     )
+  }
+  state = {
+    loaded: false
   }
 }

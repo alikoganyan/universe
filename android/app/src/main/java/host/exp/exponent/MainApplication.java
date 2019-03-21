@@ -34,6 +34,9 @@ import expolib_v1.okhttp3.OkHttpClient;
 
 // Needed for `react-native link`
 // import com.facebook.react.ReactApplication;
+import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
+import com.wix.autogrowtextinput.AutoGrowTextInputPackage;
 import com.horcrux.svg.SvgPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -53,6 +56,9 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
 
         // Needed for `react-native link`
         // new MainReactPackage(),
+            new ReactNativePushNotificationPackage(),
+            new ReactNativeConfigPackage(),
+            new AutoGrowTextInputPackage(),
             new SvgPackage(),
             new VectorIconsPackage(),
             new SplashScreenReactPackage()

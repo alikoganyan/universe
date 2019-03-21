@@ -3,10 +3,10 @@ import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'rea
 import { CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-const { sidePadding, Colors } = helper;
+const { borderRadius, Colors } = helper;
 const { yellow } = Colors;
 const Wrapper = styled(View)`
-    margin-bottom: 50px;   
+    margin-bottom: 40px;   
     background: white;
 `
 const NewsList = styled(FlatList)`
@@ -20,7 +20,7 @@ const NewsItem = styled(View)`
     padding: 20px;
     padding-bottom: 10px;
     margin-bottom: 20px;
-    border-radius: 8;
+    border-radius: ${borderRadius};
     border: 1px solid ${yellow};
     border-radius: 5;
 
@@ -56,6 +56,7 @@ const NewsItemInfo = styled(View)`
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
+    margin-top: 10px;
 `
 const ShowAll = styled(View)`
     display: flex;
@@ -78,6 +79,7 @@ const Reactions = styled(View)`
 export default class Content extends Component {
     render() {
         const { newsList } = this.state;
+        const { proceed } = this.props;
         return (
             <SafeAreaView>
                 <Wrapper>
@@ -92,15 +94,15 @@ export default class Content extends Component {
                                     <TimeSent>{item.timeSent}</TimeSent>
                                 </SenderInfo>
                             </Sender>
-                            <Text>{item.text}</Text>
+                            <Text numberOfLines={2}>{item.text}</Text>
                             <NewsItemInfo>
                                 <ShowAll>
-                                    <TouchableOpacity><HashTag>Читать далее</HashTag></TouchableOpacity>
+                                    <TouchableOpacity onPress={proceed}><HashTag>Читать далее</HashTag></TouchableOpacity>
                                 </ShowAll>
 
                                 <Reactions>
                                     <HeartIcon /><Text>12</Text>
-                                    <CommentIcon /><Text>12</Text>
+                                    <CommentIcon left/><Text>12</Text>
                                 </Reactions>
                             </NewsItemInfo>
                         </NewsItem>}

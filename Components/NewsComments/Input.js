@@ -8,12 +8,10 @@ import { addMessage, startSearch, stopSearch } from '../../actions/messageAction
 
 const { socket, sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
-    position: absolute;
-    background: white;
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
-    left: 10px;
-    bottom: 10px;
-    z-index: 2;
+    left: 0;
+    bottom: 0px;
+    align-self: center;
     padding: 10px;
     display: flex;
     flex-direction: row;
@@ -23,6 +21,7 @@ const Wrapper = styled(View)`
     border-width: 1;
     border-color: #ddd;
     border-bottom-width: 2;
+    background: white;
 `
 const Input = styled(TextInput)`
     font-size: 15px;
@@ -30,6 +29,7 @@ const Input = styled(TextInput)`
     display: flex;
     flex-direction: column;
     width: 85%;
+    z-index: 50;
     overflow: hidden;
 `
 const Left = styled(View)`
@@ -53,6 +53,7 @@ class InputComponent extends Component {
                         onChangeText={e => this.handleChange(e)}
                         onSubmitEditing={this.sendMessage}
                         value={text}
+                        blurOnSubmit={false}
                     />
                 </Left>
                 <Right>
@@ -69,9 +70,17 @@ class InputComponent extends Component {
     }
     componentDidMount() {
         const { messages, addMessage } = this.props
+        socket.on('chat message', e => {
+            addMessage(e)
+        })
+    }
+    componentWillUnmount() {
+        socket.removeListener('chat message');
     }
     sendMessage = (event) => {
-        this.props.addMessage({ payload: this.state.text })
+        const { currentRoom, id } = this.props;
+        const { text } = this.state;
+        text && socket.emit('chat message', { text, senderId: id, type: 'message', chatId: currentRoom })
         this.setState({ text: '' })
     }
     handleChange = (e) => {
@@ -81,7 +90,9 @@ class InputComponent extends Component {
 
 const mapStateToProps = state => {
     return {
-        messages: state.messageReducer.messages
+        messages: state.messageReducer.messages,
+        currentRoom: state.messageReducer.currentRoom,
+        id: state.userReducer.user.user.id
     };
 };
 const mapDispatchToProps = dispatch => ({

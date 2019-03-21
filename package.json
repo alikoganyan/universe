@@ -6,6 +6,11 @@
     "ios": "expo start --ios",
     "eject": "expo eject"
   },
+  "rnpm": {
+    "assets": [
+      "./assets/fonts/"
+    ]
+  },
   "dependencies": {
     "@expo/react-native-action-sheet": "^2.1.0",
     "add": "^2.0.6",
@@ -27,6 +32,7 @@
     "react-native-dotenv": "^0.2.0",
     "react-native-drawer": "^2.5.1",
     "react-native-floating-labels": "^1.1.9",
+    "react-native-global-font": "^1.0.2",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-keyboard-aware-scrollview": "^2.0.0",
     "react-native-keyboard-spacer": "^0.4.1",

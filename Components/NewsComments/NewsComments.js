@@ -13,7 +13,8 @@ const Bottom = styled(View)`
     position: absolute;
     bottom: 0;
     width: 100%;
-    background: white;
+    background: transparent;
+    
 `
 export default class NewsComments extends Component {
     render() {

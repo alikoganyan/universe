@@ -7,12 +7,12 @@ import { connect } from 'react-redux'
 import { ImageComponent } from '../../Common/'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight, socket } = helper;
+const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight, borderRadius, socket } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
     background-color: ${Colors.background};
     border: 1px solid ${Colors.border};
-    border-radius: 7;
+    border-radius: ${borderRadius};
     font-size: ${fontSize.header};
     height: ${HeaderHeight}; 
     display: flex;

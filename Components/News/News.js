@@ -15,12 +15,15 @@ export default class News extends Component {
             <SafeAreaView>
                 <Wrapper>
                     <Header back={this.navigateBack} />
-                    <Content />
+                    <Content proceed={this.proceed}/>
                 </Wrapper>
             </SafeAreaView>
         )
     }
     navigateBack = () => {
         this.props.navigation.goBack()
+    }
+    proceed = () => {
+        this.props.navigation.navigate('NewsComments')
     }
 }

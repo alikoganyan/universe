@@ -104,6 +104,9 @@ apply from: 'expo.gradle'
 // WHEN_PREPARING_SHELL_REMOVE_TO_HERE
 
 dependencies {
+    compile project(':react-native-push-notification')
+    compile project(':react-native-config')
+    compile project(':react-native-autogrow-textinput')
     compile project(':react-native-svg')
     compile project(':react-native-vector-icons')
     compile project(':react-native-splash-screen')
