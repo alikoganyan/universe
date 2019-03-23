@@ -52,13 +52,16 @@ class Dialogs extends Component {
       this.setState({ FlatListData: e.result })
     })
     socket.on('dialogs', (e) => {
-      const { dialogs, messages } = e;
+      const { dialogs, messages, unread } = e;
       const newDialogs = [];
       dialogs.map(e => {
         const message = messages.filter(message => {
           return message ? Number(e.id) === Number(message.chatId) : false;
         })[0];
-        newDialogs.push({ title: e.phone, text: message ? message.text : ' no messages yet', id: e.id, lastMessage: message ? message.timeSent : null  })
+        const unreadMessage = unread.filter(unreadMessage => {
+          return unreadMessage ? Number(e.id) === Number(unreadMessage.chatId) : false;
+        })[0];
+        newDialogs.push({ title: e.phone, text: message ? message.text : ' no messages yet', id: e.id, unreadMessage, lastMessage: message ? message.timeSent : null  })
       })
       newDialogs.sort((x, y) => {
         return x.lastMessage < y.lastMessage
@@ -71,8 +74,8 @@ class Dialogs extends Component {
 
   }
   toChat = (index) => {
-    const { setRoom, navigation } = this.props
-    socket.emit('select chat', { chatId: index })
+    const { setRoom, navigation, id } = this.props
+    socket.emit('select chat', { chatId: index, userId: id })
     setRoom(index)
     navigation.navigate('Chat')
   }

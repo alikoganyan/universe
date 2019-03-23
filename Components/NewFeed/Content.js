@@ -159,7 +159,6 @@ class Content extends Component {
         recievers.map((e) => {
             idList = [...idList, e.id]
         })
-        console.log(idList)
         country && phone && socket.emit('new user', {
             "phone": country + phone
         })

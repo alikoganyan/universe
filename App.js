@@ -48,7 +48,7 @@ AsyncStorage.clear()
 let value = null;
 const AppStackNavigator = createStackNavigator(
   {
-    Home: { screen: NewFeed },
+    Home: { screen: Login },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,

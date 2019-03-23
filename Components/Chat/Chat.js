@@ -35,8 +35,8 @@ class Chat extends Component {
         currentChat: null
     }
     componentDidMount() {
-        const { currentRoom } = this.props;
-        socket.emit('get chat info', { id: currentRoom })
+        const { currentRoom, id } = this.props;
+        socket.emit('get chat info', { id: currentRoom, room: id })
         socket.on('get chat info', e => {
             this.setState({ currentChat: e })
         })
@@ -53,7 +53,7 @@ const mapStateToProps = state => {
     return {
         messages: state.messageReducer.messages,
         currentRoom: state.messageReducer.currentRoom,
-        id: state.userReducer.user.id
+        id: state.userReducer.user.user.id
     };
 };
 const mapDispatchToProps = dispatch => ({

@@ -83,12 +83,13 @@ const NewMessages = styled(Text)`
 class Content extends Component {
   render() {
     const { children, title, user, lastMessage, item } = this.props;
+    const { phone, unreadMessage, id } = item;
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const dayOfTheWeek = daysOfTheWeek[new Date(lastMessage).getDay() - 1]
     return (
-      <TouchableHighlight underlayColor='#2B7DE2' onPress={item.phone ? () => this.newDialog(item.id) : this.handleClick} onLongPress={this.handleHold}>
+      <TouchableHighlight underlayColor='#2B7DE2' onPress={phone ? () => this.newDialog(id) : this.handleClick} onLongPress={this.handleHold}>
         <Wrapper>
-          <ImageComponent source={{ uri: user.image }} size={"large"}/>
+          <ImageComponent source={{ uri: user.image }} size={"large"} />
           <DialogText>
             <DialogTextInner>
               {title && <>
@@ -96,16 +97,16 @@ class Content extends Component {
                 <DialogLastMessage numberOfLines={1} >{children}</DialogLastMessage>
               </>
               }
-              {item.phone && <>
+              {phone && <>
                 <View>
-                  <Text>{item.phone}</Text>
+                  <Text>{phone}</Text>
                 </View>
               </>}
             </DialogTextInner>
             <DialogDate>
               <LastMessageDate>{dayOfTheWeek}</LastMessageDate>
               <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-                {/* <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>2</NewMessages> */}
+                {unreadMessage && (!!unreadMessage.length && <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{unreadMessage.length}</NewMessages>)}
               </UnreadMessages>
             </DialogDate>
           </DialogText>
@@ -119,7 +120,7 @@ class Content extends Component {
   }
   newDialog = (e) => {
     const { user } = this.props;
-    socket.emit('set dialogs', {userId: user.id, dialogId: e})
+    socket.emit('set dialogs', { userId: user.id, dialogId: e })
     this.handleClick()
   }
   handleHold = () => {

@@ -134,7 +134,7 @@ class Content extends Component {
     state = {
         error: false,
         password: '',
-        phone: '1111111111',
+        phone: '11111111112',
     }
     componentDidMount = async () => {
 

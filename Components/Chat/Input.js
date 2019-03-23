@@ -72,6 +72,7 @@ class InputComponent extends Component {
         const { messages, addMessage } = this.props
         socket.on('chat message', e => {
             addMessage(e)
+            console.log('123')
         })
     }
     componentWillUnmount() {
