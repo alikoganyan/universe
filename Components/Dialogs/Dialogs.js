@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Header, Dialog } from './index'
 import { SafeAreaView } from '../../Common/'
 import { connect } from 'react-redux';
-import { getMessages, setRoom } from '../../actions/messageActions'
+import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import helper from '../../Helper/helper'
 import { DrawerActions } from 'react-navigation';
@@ -43,14 +43,18 @@ class Dialogs extends Component {
     // this.setState({ FlatListData: [...props.dialog] })
   }
   componentDidMount() {
-    const { getMessages, setDialogs, messages, id } = this.props;
-    socket.emit('dialogs', {userId: id});
-    socket.emit('news', {userId: id});
+    const { getMessages, setDialogs, messages, id, addMessage } = this.props;
+    socket.emit('dialogs', { userId: id });
+    socket.emit('news', { userId: id });
     socket.on('news', e => console.log('test', e));
-    socket.emit('set dialogs', {userId: id, dialogId: 33});
+    socket.emit('set dialogs', { userId: id, dialogId: 33 });
     socket.on('find', e => {
       this.setState({ FlatListData: e.result })
     })
+    socket.on('chat message', e => {
+      addMessage(e)
+    })
+    socket.on('zhopa', e => console.log('\n\n\n\n\nzhopa'))
     socket.on('dialogs', (e) => {
       const { dialogs, messages, unread } = e;
       const newDialogs = [];
@@ -61,7 +65,7 @@ class Dialogs extends Component {
         const unreadMessage = unread.filter(unreadMessage => {
           return unreadMessage ? Number(e.id) === Number(unreadMessage.chatId) : false;
         })[0];
-        newDialogs.push({ title: e.phone, text: message ? message.text : ' no messages yet', id: e.id, unreadMessage, lastMessage: message ? message.timeSent : null  })
+        newDialogs.push({ title: e.phone, text: message ? message.text : ' no messages yet', id: e.id, unreadMessage, lastMessage: message ? message.timeSent : null })
       })
       newDialogs.sort((x, y) => {
         return x.lastMessage < y.lastMessage
@@ -88,7 +92,7 @@ class Dialogs extends Component {
 
 const mapStateToProps = state => {
   return {
-    messages: state.messageReducer.messages,
+    messages: state.messageReducer,
     dialog: state.dialogsReducer.dialogs,
     currentRoom: state.messageReducer.currentRoom,
     id: state.userReducer.user.user.id
@@ -97,6 +101,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   getMessages: _ => dispatch(getMessages(_)),
   setRoom: _ => dispatch(setRoom(_)),
-  setDialogs: _ => dispatch(setDialogs(_))
+  setDialogs: _ => dispatch(setDialogs(_)),
+  addMessage: _ => dispatch(addMessage(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)
