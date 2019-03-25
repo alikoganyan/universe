@@ -8,6 +8,8 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import helper from '../../Helper/helper'
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+
 const { Colors } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
@@ -134,63 +136,69 @@ export default class Settings extends Component {
         const { active } = options;
         return (
             <SafeAreaView>
-                <Wrapper>
-                    <KeyboardAwareScrollView enableOnAndroid>
-                        <Options>
-                            {
-                                options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                                    <Option active={active === i}>{e}</Option>
-                                </TouchableOpacity>)
-                            }
-                        </Options>
-                        <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
-                            <ContactList>
+                <GestureRecognizer
+                    onSwipeLeft={this.optionLeft}
+                    onSwipeRight={this.optionRight}
+                >
+
+                    <Wrapper>
+                        <KeyboardAwareScrollView enableOnAndroid>
+                            <Options>
                                 {
-                                    department.map((e, i) => (
-                                        <Box key={i} last={i === department.length - 1}>
-                                            <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                                <BoxItem title={true}>{e.title}</BoxItem>
-                                                <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                                                    <ArrowDownIcon />
-                                                </ArrowWrapper>
-                                            </BoxTitle>
-                                            <Collapsible collapsed={collapsed[i] || false}>
-                                                <BoxInner>
-                                                    {
-                                                        e.workers.map((e, i) => <BoxInnerItem key={i}>
-                                                            <ContactImage />
-                                                            <ContactInfo>
-                                                                <ContactName>{e.name}</ContactName>
-                                                                <ContactRole>{e.role}</ContactRole>
-                                                            </ContactInfo>
-                                                        </BoxInnerItem>)
-                                                    }
-                                                </BoxInner>
-                                            </Collapsible>
-                                        </Box>
-                                    ))
+                                    options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+                                        <Option active={active % 3 === i}>{e}</Option>
+                                    </TouchableOpacity>)
                                 }
-                            </ContactList>
-                            <ContactList>
-                                <FlatList
-                                    style={{ paddingRight: 5, paddingLeft: 5, }}
-                                    ListHeaderComponent={<View style={{ margin: 35, }} />}
-                                    inverted={true}
-                                    data={groups}
-                                    renderItem={({ item }) => <Group>
-                                        <GroupImage />
-                                        <GroupInfo>
-                                            <GroupTitle>{item.title}</GroupTitle>
-                                            <GroupParticipants>{item.participants} участников</GroupParticipants>
-                                        </GroupInfo>
-                                    </Group>
+                            </Options>
+                            <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
+                                <ContactList>
+                                    {
+                                        department.map((e, i) => (
+                                            <Box key={i} last={i === department.length - 1}>
+                                                <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
+                                                    <BoxItem title={true}>{e.title}</BoxItem>
+                                                    <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
+                                                        <ArrowDownIcon />
+                                                    </ArrowWrapper>
+                                                </BoxTitle>
+                                                <Collapsible collapsed={collapsed[i] || false}>
+                                                    <BoxInner>
+                                                        {
+                                                            e.workers.map((e, i) => <BoxInnerItem key={i}>
+                                                                <ContactImage />
+                                                                <ContactInfo>
+                                                                    <ContactName>{e.name}</ContactName>
+                                                                    <ContactRole>{e.role}</ContactRole>
+                                                                </ContactInfo>
+                                                            </BoxInnerItem>)
+                                                        }
+                                                    </BoxInner>
+                                                </Collapsible>
+                                            </Box>
+                                        ))
                                     }
-                                    keyExtractor={(item, index) => index.toString()}
-                                />
-                            </ContactList>
-                        </Animated>
-                    </KeyboardAwareScrollView>
-                </Wrapper>
+                                </ContactList>
+                                <ContactList>
+                                    <FlatList
+                                        style={{ paddingRight: 5, paddingLeft: 5, }}
+                                        ListHeaderComponent={<View style={{ margin: 35, }} />}
+                                        inverted={true}
+                                        data={groups}
+                                        renderItem={({ item }) => <Group>
+                                            <GroupImage />
+                                            <GroupInfo>
+                                                <GroupTitle>{item.title}</GroupTitle>
+                                                <GroupParticipants>{item.participants} участников</GroupParticipants>
+                                            </GroupInfo>
+                                        </Group>
+                                        }
+                                        keyExtractor={(item, index) => index.toString()}
+                                    />
+                                </ContactList>
+                            </Animated>
+                        </KeyboardAwareScrollView>
+                    </Wrapper>
+                </GestureRecognizer>
             </SafeAreaView>
         )
     }
@@ -234,6 +242,22 @@ export default class Settings extends Component {
             { title: 'длинное корпоративное название группы', participants: 15 },
             { title: 'длинное корпоративное название группы', participants: 15 },
         ]
+    }
+    optionLeft = () => {
+        const newState = { ...this.state.options }
+        const length = this.state.options.options.length
+        newState.active = this.state.options.active < length - 1 ? this.state.options.active + 1 : 0;
+        this.setState({ options: newState }, () => {
+            console.log('right', length, this.state.options.active)
+        })
+    }
+    optionRight = () => {
+        const newState = { ...this.state.options }
+        const length = this.state.options.options.length
+        newState.active = this.state.options.active > 0 ? this.state.options.active - 1 : length - 1;
+        this.setState({ options: newState }, () => {
+            console.log('right', length, this.state.options.active)
+        })
     }
     collapseDepartment = (i) => {
         const newDCollapsed = [...this.state.collapsed]

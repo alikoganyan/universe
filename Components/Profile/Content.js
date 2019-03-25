@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
+
 const { sidePadding, sidePaddingNumber, Colors, HeaderHeight, socket } = helper;
 const { border } = Colors;
 const Wrapper = styled(View)`
@@ -98,7 +99,7 @@ class Content extends Component {
         const { id, image, lastName, firstName, phone } = user;
 
         return (
-            <Wrapper style={{ flex: 1 }}>
+            <Wrapper>
                 <User>
                     <UserImage source={{ uri: image || 'https://facebook.github.io/react/logo-og.png' }} />
                     <UserInfo>
@@ -124,6 +125,7 @@ class Content extends Component {
                     </PersonalData>
                 </ScrollView>
             </Wrapper>
+
         )
     }
     state = {

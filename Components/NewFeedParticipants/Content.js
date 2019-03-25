@@ -6,9 +6,11 @@ import FloatingLabel from 'react-native-floating-labels'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../Helper/helper'
-import posed, { Transition } from 'react-native-pose';
 import RoundCheckbox from 'rn-round-checkbox';
+import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
+import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+
 const { Colors } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
@@ -135,23 +137,24 @@ export default class Settings extends Component {
         const { active } = options;
         return (
             <SafeAreaView>
-                <Wrapper>
-                    <KeyboardAwareScrollView enableOnAndroid>
-                        <Options>
-                            {
-                                options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                                    <Option active={active === i}>{e}</Option>
-                                </TouchableOpacity>)
-                            }
-                        </Options>
-                        <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
-                            <ContactList>
+                <GestureRecognizer
+                    onSwipeLeft={this.optionLeft}
+                    onSwipeRight={this.optionRight}
+                >
+
+                    <Wrapper>
+                        <KeyboardAwareScrollView enableOnAndroid>
+                            <Options>
                                 {
-                                    department.map((e, i) => {
-                                        for (let i = 0; i <= e.length; i++) {
-                                            newCollapsed.push(false)
-                                        }
-                                        return (
+                                    options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+                                        <Option active={active % 3 === i}>{e}</Option>
+                                    </TouchableOpacity>)
+                                }
+                            </Options>
+                            <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
+                                <ContactList>
+                                    {
+                                        department.map((e, i) => (
                                             <Box key={i} last={i === department.length - 1}>
                                                 <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
                                                     <>
@@ -160,7 +163,8 @@ export default class Settings extends Component {
                                                             checked={this.state.isSelected}
                                                             onValueChange={(newValue) => { console.log(newValue) }}
                                                         />
-                                                        <BoxItem title={true}>{e.title}</BoxItem></>
+                                                        <BoxItem title={true}>{e.title}</BoxItem>
+                                                    </>
                                                     <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
                                                         <ArrowDownIcon />
                                                     </ArrowWrapper>
@@ -168,66 +172,62 @@ export default class Settings extends Component {
                                                 <Collapsible collapsed={collapsed[i] || false}>
                                                     <BoxInner>
                                                         {
-                                                            e.workers.map((e, i) =>
-                                                                <TouchableOpacity onPress={() => this.toggleParticipant(e)}>
-                                                                    <BoxInnerItem key={i}>
-                                                                        <ContactImage />
-                                                                        <ContactInfo>
-                                                                            <ContactName>{e.name}</ContactName>
-                                                                            <ContactRole>{e.role}</ContactRole>
-                                                                        </ContactInfo>
-                                                                    </BoxInnerItem>
-                                                                </TouchableOpacity>)
+                                                            e.workers.map((e, i) => <BoxInnerItem key={i}>
+                                                                <ContactImage />
+                                                                <ContactInfo>
+                                                                    <ContactName>{e.name}</ContactName>
+                                                                    <ContactRole>{e.role}</ContactRole>
+                                                                </ContactInfo>
+                                                            </BoxInnerItem>)
                                                         }
                                                     </BoxInner>
                                                 </Collapsible>
                                             </Box>
-                                        )
-                                    })
-                                }
-                            </ContactList>
-                            <ContactList>
-                                <FlatList
-                                    style={{ paddingRight: 5, paddingLeft: 5, }}
-                                    ListHeaderComponent={<View style={{ margin: 35, }} />}
-                                    inverted={true}
-                                    data={groups}
-                                    renderItem={({ item }) => <Group>
-                                        <GroupImage />
-                                        <GroupInfo>
-                                            <GroupTitle>{item.title}</GroupTitle>
-                                            <GroupParticipants>{item.participants} участников</GroupParticipants>
-                                        </GroupInfo>
-                                    </Group>
+                                        ))
                                     }
-                                    keyExtractor={(item, index) => index.toString()}
-                                />
-                            </ContactList>
-                        </Animated>
-                    </KeyboardAwareScrollView>
-                </Wrapper>
+                                </ContactList>
+                                <ContactList>
+                                    <FlatList
+                                        style={{ paddingRight: 5, paddingLeft: 5, }}
+                                        ListHeaderComponent={<View style={{ margin: 35, }} />}
+                                        inverted={true}
+                                        data={groups}
+                                        renderItem={({ item }) => <Group>
+                                            <GroupImage />
+                                            <GroupInfo>
+                                                <GroupTitle>{item.title}</GroupTitle>
+                                                <GroupParticipants>{item.participants} участников</GroupParticipants>
+                                            </GroupInfo>
+                                        </Group>
+                                        }
+                                        keyExtractor={(item, index) => index.toString()}
+                                    />
+                                </ContactList>
+                            </Animated>
+                        </KeyboardAwareScrollView>
+                    </Wrapper>
+                </GestureRecognizer>
             </SafeAreaView>
         )
     }
     state = {
         collapsed: [],
-        selected: [],
         users: {
             department: [
                 {
                     title: 'Отдел длинных корпоративных названий',
                     workers: [
-                        { name: "Noah", id: 0, role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", id: 1, role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", id: 2, role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
+                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
+                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
+                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
                     ],
                 },
                 {
                     title: 'Отдел коротких корпоративных названий',
                     workers: [
-                        { name: "Noah", id: 3, role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", id: 4, role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", id: 5, role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
+                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
+                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
+                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
                     ],
                 },
             ],
@@ -251,32 +251,38 @@ export default class Settings extends Component {
             { title: 'длинное корпоративное название группы', participants: 15 },
         ]
     }
+    optionLeft = () => {
+        const newState = { ...this.state.options }
+        const length = this.state.options.options.length
+        newState.active = this.state.options.active < length - 1 ? this.state.options.active + 1 : 0;
+        this.setState({ options: newState }, () => {
+            console.log('right', length, this.state.options.active)
+        })
+    }
+    optionRight = () => {
+        const newState = { ...this.state.options }
+        const length = this.state.options.options.length
+        newState.active = this.state.options.active > 0 ? this.state.options.active - 1 : length - 1;
+        this.setState({ options: newState }, () => {
+            console.log('right', length, this.state.options.active)
+        })
+    }
     collapseDepartment = (i) => {
-        const newCollapsed = [...this.state.collapsed]
-        newCollapsed[i] = false;
-        this.setState({ collapsed: newCollapsed })
+        const newDCollapsed = [...this.state.collapsed]
+        newDCollapsed[i] = false;
+        this.setState({ collapsed: newDCollapsed })
     }
     showDepartment = (i) => {
-        const newCollapsed = [...this.state.collapsed]
-        newCollapsed[i] = true;
-        this.setState({ collapsed: newCollapsed })
-    }
-    toggleParticipant = (e) => {
-        const { selected } = this.state;
-        const { id } = e
-        selected.includes(id) ?
-            this.setState({ selected: [...selected].filter(e => e.id != id) }) :
-            this.setState({ selected: [...selected, id] })
-        setTimeout(() => {
-            console.log(id, e.id != id , selected)
-        }, 100)
+        const newDCollapsed = [...this.state.collapsed]
+        newDCollapsed[i] = true;
+        this.setState({ collapsed: newDCollapsed })
     }
     componentDidMount() {
-        const newCollapsed = [...this.state.collapsed]
+        const newDCollapsed = [...this.state.collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
-            newCollapsed.push(false)
+            newDCollapsed.push(false)
         }
-        this.setState({ collapsed: newCollapsed })
+        this.setState({ collapsed: newDCollapsed })
     }
     selectOption = (e) => {
         const newState = { ...this.state.options }
