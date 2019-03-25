@@ -47,7 +47,7 @@ class Dialogs extends Component {
     socket.emit('dialogs', { userId: id });
     socket.emit('news', { userId: id });
     socket.on('news', e => {
-      console.log('test', e)
+      console.log('news', e)
     });
     socket.emit('set dialogs', { userId: id, dialogId: 33 });
     socket.on('find', e => {

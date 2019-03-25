@@ -8,7 +8,6 @@ import { IntroIcon } from '../../assets/index'
 const { Colors, fontSize } = helper;
 const { border, blue, grey1, lightGrey1, lightGrey2 } = Colors;
 const { xs, xl, large, text } = fontSize
-console.log(fontSize)
 const Wrapper = styled(View)`
     padding-top: 50px;
     display: flex;

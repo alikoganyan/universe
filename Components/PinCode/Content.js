@@ -9,7 +9,6 @@ import { connect } from 'react-redux'
 const { Colors, fontSize } = helper;
 const { border, blue, grey1, lightGrey1, lightBlue } = Colors;
 const { xs, xl, large, text } = fontSize
-console.log(fontSize)
 const Wrapper = styled(View)`
     padding-top: 50px;
     display: flex;
@@ -64,7 +63,6 @@ class Content extends Component {
             1, 2, 3, 4, 5, 6, 7, 8, 9, null, 0, null
         ]
         const dots = [];
-        console.log(this.state.pin)
         for (let i = 0; i < 4; i++) {
             dots.push(<Dot active={i < this.state.pin.length} last={i === 3} />)
         }
@@ -107,7 +105,6 @@ class Content extends Component {
         if (pin.length === 3) {
             this.setState({ pin: [] });
             this.tryLogin()
-            console.log(user)
 
         }
     }

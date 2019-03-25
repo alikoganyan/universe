@@ -161,7 +161,6 @@ class Content extends Component {
         recievers.map((e) => {
             idList = [...idList, e.id]
         })
-        console.log(idList, text, id)
 
     }
     handleCountry = (e) => {

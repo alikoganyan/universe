@@ -142,7 +142,6 @@ class Content extends Component {
         const { setUser } = this.props;
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
-        console.log(value)
         if (value) {
             setUser({
                 id: value.id,

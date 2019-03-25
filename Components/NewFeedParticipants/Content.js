@@ -255,17 +255,15 @@ export default class Settings extends Component {
         const newState = { ...this.state.options }
         const length = this.state.options.options.length
         newState.active = this.state.options.active < length - 1 ? this.state.options.active + 1 : 0;
-        this.setState({ options: newState }, () => {
-            console.log('right', length, this.state.options.active)
-        })
+        this.setState({ options: newState })
+
     }
     optionRight = () => {
         const newState = { ...this.state.options }
         const length = this.state.options.options.length
         newState.active = this.state.options.active > 0 ? this.state.options.active - 1 : length - 1;
-        this.setState({ options: newState }, () => {
-            console.log('right', length, this.state.options.active)
-        })
+        this.setState({ options: newState })
+
     }
     collapseDepartment = (i) => {
         const newDCollapsed = [...this.state.collapsed]
