@@ -149,17 +149,17 @@ class Content extends Component {
             })
             setTimeout(() => navigate('Dialogs'), 0)
         } else {
-            socket.on('login success', ({ result }) => {
+            socket.on('login success', async ({ result }) => {
                 const { id, image } = result;
-                setUser({
+                const user = {
                     id,
                     image: image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
-                })
-                this.storeUserData(JSON.stringify({
-                    id,
-                    image: image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
-                }))
+                }
+                await AsyncStorage.setItem('user', JSON.stringify(user))
+                setUser(user)
+                this.storeUserData(JSON.stringify(user))
                 navigate('Dialogs')
+
             })
             socket.on('login error', e => {
                 console.log(e)

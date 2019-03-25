@@ -79,14 +79,13 @@ const RecieverComponent = (props) => {
 class Content extends Component {
     render() {
         const {
-            country,
-            phone
+            text
         } = this.state
         return (
             <Wrapper>
                 <StyledInput password={true}
-                    onChangeText={this.handlePhone}
-                    value={phone}
+                    onChangeText={this.handleChange}
+                    value={text}
                     placeholder={'Текст новости'}
                     multiline={true}
                     style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }}
@@ -120,8 +119,6 @@ class Content extends Component {
         )
     }
     state = {
-        country: '+7',
-        phone: '',
         recievers: [
             {
                 id: 0,
@@ -141,7 +138,8 @@ class Content extends Component {
                 info: 'менеджер по продажам',
                 title: 'Константи константинопольский'
             }
-        ]
+        ],
+        text: ''
     }
     componentDidMount() {
         socket.on('user exists', e => {
@@ -153,27 +151,25 @@ class Content extends Component {
 
     }
     proceed = (e) => {
-
-        const { country, phone, recievers } = this.state;
+        const { id } = this.props;
+        const { text, recievers } = this.state;
         let idList = []
         recievers.map((e) => {
             idList = [...idList, e.id]
         })
-        country && phone && socket.emit('new user', {
-            "phone": country + phone
-        })
+        console.log(idList, text, id)
 
     }
     handleCountry = (e) => {
         this.setState({ country: e })
     }
-    handlePhone = (e) => {
-        this.setState({ phone: e })
+    handleChange = (e) => {
+        this.setState({ text: e })
     }
 }
 const mapStateToProps = state => {
     return {
-        id: state.userReducer.id
+        id: state.userReducer.user.id
     };
 };
 const mapDispatchToProps = dispatch => ({

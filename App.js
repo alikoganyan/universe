@@ -45,7 +45,7 @@ import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
 console.disableYellowBox = true;
-AsyncStorage.clear()
+// AsyncStorage.clear()
 let value = null;
 const AppStackNavigator = createStackNavigator(
   {
