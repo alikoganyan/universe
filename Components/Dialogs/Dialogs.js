@@ -76,7 +76,7 @@ class Dialogs extends Component {
     socket.on('select chat', e => {
       getMessages(e)
     })
-
+ 
   }
   toChat = (index) => {
     const { setRoom, navigation, id } = this.props

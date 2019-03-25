@@ -32,7 +32,7 @@ export default class HeaderComponent extends Component {
         return (
             <Header>
                 <Left>
-                    <BackIcon />
+                    <BackIcon onPress={this.props.back}/>
                 </Left>
                 <Right>
                     <LocationIcon />

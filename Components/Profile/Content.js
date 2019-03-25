@@ -94,14 +94,16 @@ const SendMessage = styled(Button)``
 class Content extends Component {
     render() {
         const { UserData, userName, status } = this.state;
+        const { user } = this.props;
+        const { id, image, lastName, firstName, phone } = user;
 
         return (
             <Wrapper style={{ flex: 1 }}>
                 <User>
-                    <UserImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
+                    <UserImage source={{ uri: image || 'https://facebook.github.io/react/logo-og.png' }} />
                     <UserInfo>
                         <UserName>
-                            <Name>{userName}</Name>
+                            <Name>{phone}</Name>
                         </UserName>
                         <UserStatus>{status}</UserStatus>
                         <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>
@@ -131,13 +133,14 @@ class Content extends Component {
             { type: 'Подразделение', value: 'Стандартный' },
             { type: 'Должность', value: 'Главный инженер' },
             { type: 'Личный', value: '+7(395)282-48-57' },
-            { type: 'Задачи', value: '26.09.1986', icon: <TaskIcon /> },
-            { type: 'Общих групп', value: 'youmail@irkutskoil.ru', icon: <GroupIcon /> },
-            { type: 'Общих файлов', value: '+7(395)282-48-57', icon: <FilesRedIcon /> },
+            { type: 'Задачи', value: '4', icon: <TaskIcon /> },
+            { type: 'Общих групп', value: '32', icon: <GroupIcon /> },
+            { type: 'Общих файлов', value: '10', icon: <FilesRedIcon /> },
         ]
     }
     toChat = () => {
-        const { toChat, setRoom, id } = this.props
+        const { toChat, setRoom, user } = this.props
+        const { id } = user
         socket.emit('select chat', { chatId: id, userId: id })
         setRoom(id)
         toChat()
@@ -149,7 +152,7 @@ const mapStateToProps = state => {
         messages: state.messageReducer,
         dialog: state.dialogsReducer.dialogs,
         currentRoom: state.messageReducer.currentRoom,
-        id: state.userReducer.user.user.id
+        user: state.userReducer.user.user,
     };
 };
 const mapDispatchToProps = dispatch => ({

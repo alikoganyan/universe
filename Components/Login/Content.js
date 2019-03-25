@@ -140,7 +140,7 @@ class Content extends Component {
 
         const { navigate } = this.props;
         const { setUser } = this.props;
-        let value = await AsyncStorage.getItem('user');
+        let value = await AsyncStorage.getItem('user2');
         value = JSON.parse(value);
         if (value) {
             setUser({
@@ -150,9 +150,9 @@ class Content extends Component {
             setTimeout(() => navigate('Dialogs'), 0)
         } else {
             socket.on('login success', async ({ result }) => {
-                const { id, image } = result;
+                const { image } = result;
                 const user = {
-                    id,
+                    ...result,
                     image: image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
                 }
                 await AsyncStorage.setItem('user', JSON.stringify(user))
