@@ -140,14 +140,15 @@ class Content extends Component {
 
         const { navigate } = this.props;
         const { setUser } = this.props;
-        let value = await AsyncStorage.getItem('user2');
+        let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
+        console.log(value)
         if (value) {
             setUser({
                 id: value.id,
                 image: value.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
             })
-            setTimeout(() => navigate('Dialogs'), 0)
+            setTimeout(() => navigate('PinCode'), 0)
         } else {
             socket.on('login success', async ({ result }) => {
                 const { image } = result;

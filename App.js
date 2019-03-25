@@ -44,11 +44,13 @@ import devToolsEnhancer from 'remote-redux-devtools';
 import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
+// AsyncStorage.clear();
+
 console.disableYellowBox = true;
 let value = null;
 const AppStackNavigator = createStackNavigator(
   {
-    Home: { screen: FirstInstall },
+    Home: { screen: Login },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,
