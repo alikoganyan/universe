@@ -53,8 +53,8 @@ class Dialogs extends Component {
     })
     socket.on('chat message', e => {
       addMessage(e)
+      console.log('123')
     })
-    socket.on('zhopa', e => console.log('\n\n\n\n\nzhopa'))
     socket.on('dialogs', (e) => {
       const { dialogs, messages, unread } = e;
       const newDialogs = [];

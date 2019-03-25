@@ -24,6 +24,7 @@ import TasksList from './TasksList/TasksList'
 import NewContact from './NewContact/NewContact'
 import FirstInstall from './FirstInstall/FirstInstall'
 import NewFeed from './NewFeed/NewFeed'
+import SplashScreen from './SplashScreen/SplashScreen'
 
 export {
     Group,
@@ -52,4 +53,5 @@ export {
     NewContact,
     FirstInstall,
     NewFeed,
+    SplashScreen,
 }

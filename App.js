@@ -29,13 +29,14 @@ import {
   NewContact,
   FirstInstall,
   NewFeed,
+  SplashScreen,
 
 } from './Components'
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
 import {
   createStore,
 } from 'redux';
-import SplashScreen from 'react-native-splash-screen'
+// import SplashScreen from 'react-native-splash-screen'
 
 import { Provider } from 'react-redux';
 import reducers from './reducers/'
@@ -92,7 +93,6 @@ const AppDrawerNavigator = createDrawerNavigator(
   {
     drawerWidth: Dimensions.get('window').width * 0.8,
     contentComponent: ({ navigation }) => <DrawerComponent navigation={navigation} />,
-    headerMode: 'none',
   },
 );
 const App = createAppContainer(AppDrawerNavigator)
@@ -100,10 +100,6 @@ const store = createStore(reducers, devToolsEnhancer())
 @connectActionSheet
 export default class AppComponent extends React.Component {
   async componentDidMount() {
-    // SplashScreen.hide();
-    // Font.loadAsync({
-    //   'vincHand': require('./assets/fonts/vincHand.ttf'),
-    // });
     await Font.loadAsync({
       'Roboto': require('./assets/fonts/Roboto-Medium.ttf'),
     });
@@ -115,7 +111,7 @@ export default class AppComponent extends React.Component {
   render() {
     return (
       <Provider store={store}>
-        {this.state.loaded ? <App /> : < ActivityIndicator />}
+        {this.state.loaded ? <App /> : <SplashScreen />}
       </Provider>
     )
   }

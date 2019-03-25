@@ -71,9 +71,6 @@ class InputComponent extends Component {
     componentDidMount() {
         const { messages, addMessage } = this.props
     }
-    componentWillUnmount() {
-        socket.removeListener('chat message');
-    }
     sendMessage = (event) => {
         const { currentRoom, id, addMessage } = this.props;
         const { text } = this.state;
@@ -82,7 +79,8 @@ class InputComponent extends Component {
         addMessage(event)
     }
     handleChange = (e) => {
-        this.setState({ text: e })
+        const text = e
+        text && this.setState({ text })
     }
 }
 

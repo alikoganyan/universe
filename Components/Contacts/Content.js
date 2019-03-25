@@ -164,7 +164,7 @@ export default class Settings extends Component {
         })
         this.setState({
             names: newNames
-        }, this.forceUpdate())
+        })
     }
     componentDidMount() {
         this.sortUsersByName(this.state.users)

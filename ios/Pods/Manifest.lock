@@ -199,7 +199,9 @@ PODS:
   - lottie-ios (2.5.3)
   - React (0.57.1):
     - React/Core (= 0.57.1)
-  - react-native-splash-screen (3.0.6):
+  - react-native-config (0.11.7):
+    - React
+  - react-native-splash-screen (3.2.0):
     - React
   - React/ART (0.57.1):
     - React/Core
@@ -247,6 +249,10 @@ PODS:
     - React/Core
     - React/fishhook
     - React/RCTBlob
+  - RNSVG (8.0.10):
+    - React
+  - RNVectorIcons (6.3.0):
+    - React
   - yoga (0.57.1.React)
 
 DEPENDENCIES:
@@ -290,6 +296,7 @@ DEPENDENCIES:
   - EXTaskManagerInterface (from `../node_modules/expo-task-manager-interface/ios`)
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
+  - react-native-config (from `../node_modules/react-native-config`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - React/ART (from `../node_modules/react-native`)
   - React/Core (from `../node_modules/react-native`)
@@ -304,6 +311,8 @@ DEPENDENCIES:
   - React/RCTText (from `../node_modules/react-native`)
   - React/RCTVibration (from `../node_modules/react-native`)
   - React/RCTWebSocket (from `../node_modules/react-native`)
+  - RNSVG (from `../node_modules/react-native-svg`)
+  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -414,8 +423,14 @@ EXTERNAL SOURCES:
     :podspec: "../node_modules/react-native/third-party-podspecs/glog.podspec"
   React:
     :path: "../node_modules/react-native"
+  react-native-config:
+    :path: "../node_modules/react-native-config"
   react-native-splash-screen:
     :path: "../node_modules/react-native-splash-screen"
+  RNSVG:
+    :path: "../node_modules/react-native-svg"
+  RNVectorIcons:
+    :path: "../node_modules/react-native-vector-icons"
   yoga:
     :path: "../node_modules/react-native/ReactCommon/yoga"
 
@@ -487,9 +502,12 @@ SPEC CHECKSUMS:
   JKBigInteger2: e91672035c42328c48b7dd015b66812ddf40ca9b
   lottie-ios: a50d5c0160425cd4b01b852bb9578963e6d92d31
   React: 1fe0eb13d90b625d94c3b117c274dcfd2e760e11
-  react-native-splash-screen: 8e3f866dc79bfe533baeffd0a38c33f7a7eae7f8
+  react-native-config: 8c2a92aa66a6cec1a23d9eda7ba6fcf31a63ace5
+  react-native-splash-screen: a49be22f0f6648b8416f3bd28258645eeaa5b42b
+  RNSVG: 6252323c0312735f0af5f58b5adf2965b6a9ffbf
+  RNVectorIcons: 8c52e1e8da1153613fdef44748e865c25556cb9c
   yoga: b1ce48b6cf950b98deae82838f5173ea7cf89e85
 
-PODFILE CHECKSUM: 70632ab88770aa57b7f5620490d2e7c708dbfe39
+PODFILE CHECKSUM: c5b2f350a4eb927029826118c128884fe4a9b2dd
 
 COCOAPODS: 1.5.3

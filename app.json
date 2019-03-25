@@ -25,16 +25,16 @@
     },
     "android": {
       "package": "com.team.amigo.media",
-      "splash": {
-        "resizeMode": "contain",
-        "backgroundColor": "#ffffff",
-        "ldpi": "./assets/200px.png",
-        "mdpi": "./assets/320px.png",
-        "hdpi": "./assets/480px.png",
-        "xhdpi": "./assets/720px.png",
-        "xxhdpi": "./assets/960px.png",
-        "xxxhdpi": "./assets/1242px.png"
-      },
+      // "splash": {
+      //   "resizeMode": "contain",
+      //   "backgroundColor": "#ffffff",
+      //   "ldpi": "./assets/200px.png",
+      //   "mdpi": "./assets/320px.png",
+      //   "hdpi": "./assets/480px.png",
+      //   "xhdpi": "./assets/720px.png",
+      //   "xxhdpi": "./assets/960px.png",
+      //   "xxxhdpi": "./assets/1242px.png"
+      // },
       "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
       "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
     },
