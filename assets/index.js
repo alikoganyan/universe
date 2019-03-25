@@ -448,12 +448,12 @@ export function AddIcon(props) {
 }
 
 export function IntroIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, size } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             <SvgUri
-                width={IconSize}
-                height={IconSize}
+                width={size || IconSize}
+                height={size || IconSize}
                 source={SVG.Intro}
             />
         </StyledTouchableOpacity>

@@ -48,7 +48,7 @@ console.disableYellowBox = true;
 let value = null;
 const AppStackNavigator = createStackNavigator(
   {
-    Home: { screen: Login },
+    Home: { screen: FirstInstall },
     Group: { screen: Group },
     Dialogs: {
       screen: Dialogs,

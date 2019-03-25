@@ -1,12 +1,14 @@
 import React, { Component } from 'react'
 import { View, Text, Image, TouchableOpacity, TextInput, Platform } from 'react-native'
 import helper from '../../Helper/helper'
-import FloatingLabel from 'react-native-floating-labels'
 import { Button } from '../../Common'
 import styled from 'styled-components'
+import { IntroIcon } from '../../assets/index'
+
 const { Colors, fontSize } = helper;
 const { border, blue, grey1, lightGrey1, lightGrey2 } = Colors;
-const { large, text } = fontSize
+const { xs, xl, large, text } = fontSize
+console.log(fontSize)
 const Wrapper = styled(View)`
     padding-top: 50px;
     display: flex;
@@ -18,15 +20,14 @@ const FirstTime = styled(View)`
     background: #fff;
     width: 80%;
     height: 70%;
-    padding: 60px 40px;
+    padding: 40px 40px;
     border-radius: 10px;
     margin-bottom: 20px;
     align-items: center;
     justify-content: space-between;
 `
 const Header = styled(Text)`
-    font-size: ${large};
-    margin-bottom: 30px;
+    font-size: ${xs};
 `
 const Icon = styled(Image)`
     background: red;
@@ -37,14 +38,13 @@ const Icon = styled(Image)`
 `
 const FirstTimeText = styled(Text)`
     text-align: center;
-    margin-bottom: 40px;
     color: ${grey1};
 `
 const Dots = styled(View)`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 `
 const Dot = styled(View)`
     width: 10px;
@@ -60,7 +60,7 @@ const HaveAccount = styled(View)`
 `
 const LogIn = styled(Text)`
     color: #fff;
-    font-size: ${large};
+    font-size: ${xs};
 `
 const Label = styled(Text)`
     color: ${lightGrey2};
@@ -73,9 +73,9 @@ export default class Content extends Component {
             <Wrapper>
                 <FirstTime>
                     <Header>
-                        первый раз?
+                        Первый раз?
                     </Header>
-                    <Icon />
+                    <IntroIcon size={150} />
                     <FirstTimeText>
                         Pariatur consectetur Lorem est irure et in ullamco. Proident pariatur labore aliquip fugiat ullamco sunt non. Laborum mollit velit amet
                     </FirstTimeText>
