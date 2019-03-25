@@ -103,7 +103,7 @@ class Content extends Component {
                         }
                     </ScrollView>
                     <DialogsLabel>
-                        <TouchableOpacity>
+                        <TouchableOpacity onPress={this.addParticipant}>
                             <AddReciever>Добавить</AddReciever>
                         </TouchableOpacity>
                     </DialogsLabel>
@@ -149,6 +149,10 @@ class Content extends Component {
             this.props.forward()
         })
 
+    }
+    addParticipant = () => {
+        const { addParticipant } = this.props
+        addParticipant()
     }
     proceed = (e) => {
         const { id } = this.props;

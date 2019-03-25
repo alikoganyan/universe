@@ -19,14 +19,14 @@ const Bottom = styled(View)`
     
 `
 
-export default class Profile extends Component {
+export default class NewFeedParticipants extends Component {
     render() {
         return (
             <ActionSheetProvider>
                 <SafeAreaView>
                     <Wrapper>
                         <Header back={this.navigateBack} />
-                        <Content toChat={this.toChat}/>
+                        <Content />
                         <Bottom>
                         </Bottom>
                     </Wrapper>
@@ -36,8 +36,5 @@ export default class Profile extends Component {
     }
     navigateBack = () => {
         this.props.navigation.goBack()
-    }
-    toChat = () => {
-        this.props.navigation.navigate('Chat')
     }
 }

@@ -25,6 +25,7 @@ import NewContact from './NewContact/NewContact'
 import FirstInstall from './FirstInstall/FirstInstall'
 import NewFeed from './NewFeed/NewFeed'
 import SplashScreen from './SplashScreen/SplashScreen'
+import NewFeedParticipants from './NewFeedParticipants/NewFeedParticipants'
 
 export {
     Group,
@@ -54,4 +55,5 @@ export {
     FirstInstall,
     NewFeed,
     SplashScreen,
+    NewFeedParticipants,
 }

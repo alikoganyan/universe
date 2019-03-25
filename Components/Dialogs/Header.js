@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { View, Text, TextInput, Image, Platform, Dimensions, Keyboard } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Platform, Dimensions, Keyboard } from 'react-native'
 import { SearchIcon, BurgerIcon, CloseIcon } from '../../assets/index'
 import { openDrawer } from '../../actions/drawerActions'
 import { setDialogs } from '../../actions/dialogsActions'
@@ -35,13 +35,15 @@ class HeaderComponent extends Component {
         const { input } = this.state;
         return (
             <Header>
-                <BurgerIcon onPress={this.props.toggleDrawer} left right/>
+                <BurgerIcon onPress={this.props.toggleDrawer} left right />
                 <Input value={input} onChangeText={this.handleInputChange}
                     onFocus={this.handleFocus}
                     placeholder={'Поиск'} />
                 {this.state.focused ?
-                    <CloseIcon onPress={this.onBlur}/>
-                    : <ImageComponent source={{uri: user.image}}/>}
+                    <CloseIcon onPress={this.onBlur} />
+                    : <TouchableOpacity onPress={this.toProfile}>
+                        <ImageComponent source={{ uri: user.image }} />
+                    </TouchableOpacity>}
             </Header>
         )
     }
@@ -54,6 +56,10 @@ class HeaderComponent extends Component {
         socket.on('find', ({ result }) => {
             setDialogs(result)
         })
+    }
+    toProfile = (e) => {
+        const { toProfile } = this.props
+        toProfile()
     }
     handleInputChange = (e) => {
         this.setState({ input: e })

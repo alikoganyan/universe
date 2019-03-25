@@ -23,7 +23,7 @@ class Dialogs extends Component {
     return (
       <SafeAreaView behavior={'padding'}>
         <Wrapper>
-          <Header toggleDrawer={this.props.navigation.openDrawer} />
+          <Header toProfile={this.toProfile} toggleDrawer={this.props.navigation.openDrawer} />
           <StyledFlatList
             ListHeaderComponent={<View style={{ margin: 30, }} />}
             ref={(ref) => { this.flatList = ref; }}
@@ -39,8 +39,8 @@ class Dialogs extends Component {
   state = {
     FlatListData: []
   }
-  componentWillReceiveProps(props) {
-    // this.setState({ FlatListData: [...props.dialog] })
+  toProfile = () => {
+    this.props.navigation.navigate('Profile')
   }
   componentDidMount() {
     const { getMessages, setDialogs, messages, id, addMessage } = this.props;

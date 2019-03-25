@@ -5615,6 +5615,11 @@ rn-host-detect@^1.1.5:
   resolved "https://registry.yarnpkg.com/rn-host-detect/-/rn-host-detect-1.1.5.tgz#fbecb982b73932f34529e97932b9a63e58d8deb6"
   integrity sha512-ufk2dFT3QeP9HyZ/xTuMtW27KnFy815CYitJMqQm+pgG3ZAtHBsrU8nXizNKkqXGy3bQmhEoloVbrfbvMJMqkg==
 
+rn-round-checkbox@^0.3.4:
+  version "0.3.4"
+  resolved "https://registry.yarnpkg.com/rn-round-checkbox/-/rn-round-checkbox-0.3.4.tgz#6625b401dec20dee188db2b25dd0bd85718b7193"
+  integrity sha512-RK9hNFu09d0oCotL/CgBF1mft9f2rF3KzUiBQ8dsPP1Mxt4rxvz5sXIm9LdVO8nzdzci4K0sbsJCouI1xFp1yA==
+
 rsvp@^3.3.3:
   version "3.6.2"
   resolved "https://registry.yarnpkg.com/rsvp/-/rsvp-3.6.2.tgz#2e96491599a96cde1b515d5674a8f7a91452926a"

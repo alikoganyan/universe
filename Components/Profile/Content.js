@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native'
-import { BackIcon, TaskIcon, GroupIcon } from '../../assets/index'
+import { BackIcon, TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
 import { Button } from '../../Common/';
+import { setRoom } from '../../actions/messageActions'
 import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../Helper/helper'
-const { sidePadding, sidePaddingNumber, Colors, HeaderHeight } = helper;
+import { connect } from 'react-redux'
+const { sidePadding, sidePaddingNumber, Colors, HeaderHeight, socket } = helper;
 const { border } = Colors;
 const Wrapper = styled(View)`
     padding-top: 0px;
@@ -66,7 +68,7 @@ const Data = styled(View)`
     align-items: flex-end;
     justify-content: flex-start;
     border: 1px solid ${border};
-    padding: ${sidePaddingNumber * 3}px 0;
+    padding: ${sidePaddingNumber}px 0;
     border-width: 0;
     border-top-width: 1px;
 `
@@ -89,7 +91,7 @@ const PersonalData = styled(View)`
     flex: 1;
 `
 const SendMessage = styled(Button)``
-export default class Settings extends Component {
+class Content extends Component {
     render() {
         const { UserData, userName, status } = this.state;
 
@@ -102,7 +104,7 @@ export default class Settings extends Component {
                             <Name>{userName}</Name>
                         </UserName>
                         <UserStatus>{status}</UserStatus>
-                        <SendMessage>Написать сообщение</SendMessage>
+                        <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>
 
                     </UserInfo>
                 </User>
@@ -131,7 +133,29 @@ export default class Settings extends Component {
             { type: 'Личный', value: '+7(395)282-48-57' },
             { type: 'Задачи', value: '26.09.1986', icon: <TaskIcon /> },
             { type: 'Общих групп', value: 'youmail@irkutskoil.ru', icon: <GroupIcon /> },
-            { type: 'Общих файлов', value: '+7(395)282-48-57', icon: <GroupIcon /> },
+            { type: 'Общих файлов', value: '+7(395)282-48-57', icon: <FilesRedIcon /> },
         ]
     }
+    toChat = () => {
+        const { toChat, setRoom, id } = this.props
+        socket.emit('select chat', { chatId: id, userId: id })
+        setRoom(id)
+        toChat()
+    }
 }
+
+const mapStateToProps = state => {
+    return {
+        messages: state.messageReducer,
+        dialog: state.dialogsReducer.dialogs,
+        currentRoom: state.messageReducer.currentRoom,
+        id: state.userReducer.user.user.id
+    };
+};
+const mapDispatchToProps = dispatch => ({
+    getMessages: _ => dispatch(getMessages(_)),
+    setRoom: _ => dispatch(setRoom(_)),
+    setDialogs: _ => dispatch(setDialogs(_)),
+    addMessage: _ => dispatch(addMessage(_))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

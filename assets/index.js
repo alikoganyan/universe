@@ -144,6 +144,18 @@ export function FileIcon(props) {
         </StyledTouchableOpacity>
     )
 }
+export function FilesRedIcon(props) {
+    const { onPress, left, right } = props;
+    return (
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Files_red}
+            />
+        </StyledTouchableOpacity>
+    )
+}
 
 export function CameraIcon(props) {
     return (

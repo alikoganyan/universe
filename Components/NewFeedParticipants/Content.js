@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../Helper/helper'
 import posed, { Transition } from 'react-native-pose';
+import RoundCheckbox from 'rn-round-checkbox';
 import Collapsible from 'react-native-collapsible';
 const { Colors } = helper;
 const { green, black } = Colors;
@@ -146,29 +147,43 @@ export default class Settings extends Component {
                         <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
                             <ContactList>
                                 {
-                                    department.map((e, i) => (
-                                        <Box key={i} last={i === department.length - 1}>
-                                            <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                                <BoxItem title={true}>{e.title}</BoxItem>
-                                                <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                                                    <ArrowDownIcon />
-                                                </ArrowWrapper>
-                                            </BoxTitle>
-                                            <Collapsible collapsed={collapsed[i] || false}>
-                                                <BoxInner>
-                                                    {
-                                                        e.workers.map((e, i) => <BoxInnerItem key={i}>
-                                                            <ContactImage />
-                                                            <ContactInfo>
-                                                                <ContactName>{e.name}</ContactName>
-                                                                <ContactRole>{e.role}</ContactRole>
-                                                            </ContactInfo>
-                                                        </BoxInnerItem>)
-                                                    }
-                                                </BoxInner>
-                                            </Collapsible>
-                                        </Box>
-                                    ))
+                                    department.map((e, i) => {
+                                        for (let i = 0; i <= e.length; i++) {
+                                            newCollapsed.push(false)
+                                        }
+                                        return (
+                                            <Box key={i} last={i === department.length - 1}>
+                                                <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
+                                                    <>
+                                                        <RoundCheckbox
+                                                            size={24}
+                                                            checked={this.state.isSelected}
+                                                            onValueChange={(newValue) => { console.log(newValue) }}
+                                                        />
+                                                        <BoxItem title={true}>{e.title}</BoxItem></>
+                                                    <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
+                                                        <ArrowDownIcon />
+                                                    </ArrowWrapper>
+                                                </BoxTitle>
+                                                <Collapsible collapsed={collapsed[i] || false}>
+                                                    <BoxInner>
+                                                        {
+                                                            e.workers.map((e, i) =>
+                                                                <TouchableOpacity onPress={() => this.toggleParticipant(e)}>
+                                                                    <BoxInnerItem key={i}>
+                                                                        <ContactImage />
+                                                                        <ContactInfo>
+                                                                            <ContactName>{e.name}</ContactName>
+                                                                            <ContactRole>{e.role}</ContactRole>
+                                                                        </ContactInfo>
+                                                                    </BoxInnerItem>
+                                                                </TouchableOpacity>)
+                                                        }
+                                                    </BoxInner>
+                                                </Collapsible>
+                                            </Box>
+                                        )
+                                    })
                                 }
                             </ContactList>
                             <ContactList>
@@ -196,22 +211,23 @@ export default class Settings extends Component {
     }
     state = {
         collapsed: [],
+        selected: [],
         users: {
             department: [
                 {
                     title: 'Отдел длинных корпоративных названий',
                     workers: [
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
+                        { name: "Noah", id: 0, role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
+                        { name: "Noah", id: 1, role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
+                        { name: "Noah", id: 2, role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
                     ],
                 },
                 {
                     title: 'Отдел коротких корпоративных названий',
                     workers: [
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
+                        { name: "Noah", id: 3, role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
+                        { name: "Noah", id: 4, role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
+                        { name: "Noah", id: 5, role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
                     ],
                 },
             ],
@@ -236,21 +252,31 @@ export default class Settings extends Component {
         ]
     }
     collapseDepartment = (i) => {
-        const newDCollapsed = [...this.state.collapsed]
-        newDCollapsed[i] = false;
-        this.setState({ collapsed: newDCollapsed })
+        const newCollapsed = [...this.state.collapsed]
+        newCollapsed[i] = false;
+        this.setState({ collapsed: newCollapsed })
     }
     showDepartment = (i) => {
-        const newDCollapsed = [...this.state.collapsed]
-        newDCollapsed[i] = true;
-        this.setState({ collapsed: newDCollapsed })
+        const newCollapsed = [...this.state.collapsed]
+        newCollapsed[i] = true;
+        this.setState({ collapsed: newCollapsed })
+    }
+    toggleParticipant = (e) => {
+        const { selected } = this.state;
+        const { id } = e
+        selected.includes(id) ?
+            this.setState({ selected: [...selected].filter(e => e.id != id) }) :
+            this.setState({ selected: [...selected, id] })
+        setTimeout(() => {
+            console.log(id, e.id != id , selected)
+        }, 100)
     }
     componentDidMount() {
-        const newDCollapsed = [...this.state.collapsed]
+        const newCollapsed = [...this.state.collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
-            newDCollapsed.push(false)
+            newCollapsed.push(false)
         }
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newCollapsed })
     }
     selectOption = (e) => {
         const newState = { ...this.state.options }

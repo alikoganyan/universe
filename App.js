@@ -30,13 +30,13 @@ import {
   FirstInstall,
   NewFeed,
   SplashScreen,
+  NewFeedParticipants,
 
 } from './Components'
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
 import {
   createStore,
 } from 'redux';
-// import SplashScreen from 'react-native-splash-screen'
 
 import { Provider } from 'react-redux';
 import reducers from './reducers/'
@@ -45,7 +45,6 @@ import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
 console.disableYellowBox = true;
-// AsyncStorage.clear()
 let value = null;
 const AppStackNavigator = createStackNavigator(
   {
@@ -80,6 +79,7 @@ const AppStackNavigator = createStackNavigator(
     NewDialog: { screen: NewDialog },
     FirstInstall: { screen: FirstInstall },
     NewFeed: { screen: NewFeed },
+    NewFeedParticipants: { screen: NewFeedParticipants },
   },
   {
     headerMode: 'none',
