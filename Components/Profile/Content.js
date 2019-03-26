@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native'
 import { BackIcon, TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
 import { Button } from '../../Common/';
 import { setRoom } from '../../actions/messageActions'
@@ -8,11 +8,12 @@ import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 
-const { sidePadding, sidePaddingNumber, Colors, HeaderHeight, socket } = helper;
+const { sidePadding, sidePaddingNumber, Colors, HeaderHeightNumber, socket } = helper;
 const { border } = Colors;
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
+    height: ${Dimensions.get('window').height - HeaderHeightNumber}px;
 `
 const User = styled(View)`
     display: flex;
@@ -62,6 +63,7 @@ const UserStatus = styled(Name)`
 
 const Info = styled(View)`
     padding: 0 ${sidePadding};
+    flex: 1;
 `
 const Data = styled(View)`
     display: flex;
@@ -89,18 +91,16 @@ const Type = styled(Value)`
 const PersonalData = styled(View)`
     border: 1px solid #E6E6E6;
     border-width: 0;
-    flex: 1;
 `
 const SendMessage = styled(Button)``
 class Content extends Component {
     render() {
         const { UserData, userName, status } = this.state;
-        const { user } = this.props;
-        const { id, image, lastName, firstName, phone } = user;
-
+        const { user, currentRoom, currentChat } = this.props;
+        const { id, image, lastName, firstName, phone } = currentChat || user;
         return (
             <Wrapper>
-                <User>
+                <User >
                     <UserImage source={{ uri: image || 'https://facebook.github.io/react/logo-og.png' }} />
                     <UserInfo>
                         <UserName>
@@ -154,6 +154,7 @@ const mapStateToProps = state => {
         messages: state.messageReducer,
         dialog: state.dialogsReducer.dialogs,
         currentRoom: state.messageReducer.currentRoom,
+        currentChat: state.messageReducer.currentChat,
         user: state.userReducer.user.user,
     };
 };

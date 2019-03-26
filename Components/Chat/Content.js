@@ -14,7 +14,7 @@ const Wrapper = styled(View)`
 
 class Content extends Component {
     render() {
-        const { messages, search } = this.props
+        const { messages, search, currentChat } = this.props
         const reveesedMessages = [...messages].sort((x, y) => {
             return x.timeSent < y.timeSent
         });

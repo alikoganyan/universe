@@ -98,7 +98,7 @@ const AppDrawerNavigator = createDrawerNavigator(
   },
 );
 const App = createAppContainer(AppDrawerNavigator)
-const store = createStore(reducers)
+const store = createStore(reducers, devToolsEnhancer())
 @connectActionSheet
 export default class AppComponent extends React.Component {
   async componentDidMount() {

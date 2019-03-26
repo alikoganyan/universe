@@ -4,6 +4,7 @@ export const START_SEARCH = 'START_SEARCH'
 export const STOP_SEARCH = 'STOP_SEARCH'
 export const GET_MESSAGES = 'GET_MESSAGES'
 export const SET_ROOM = 'SET_ROOM'
+export const SET_CURRENT_CHAT = 'SET_CURRENT_CHAT'
 export const addMessage = (payload) => {
     return ({
         type: ADD_MESSAGE,
@@ -31,6 +32,13 @@ export const getMessages = (payload) => {
 export const setRoom = (payload) => {
     return ({
         type: SET_ROOM,
+        payload
+    })
+}
+
+export const setCurrentChat = (payload) => {
+    return ({
+        type: SET_CURRENT_CHAT,
         payload
     })
 }

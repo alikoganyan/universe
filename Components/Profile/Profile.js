@@ -2,12 +2,15 @@ import React, { Component } from 'react'
 import { View, Text, Image } from 'react-native'
 import { BackIcon, EllipsisVIcon } from '../../assets/index'
 import styled from 'styled-components'
+import helper from '../../Helper/helper'
 import { SafeAreaView } from '../../Common/'
+import { connect } from 'react-redux'
 import {
     ActionSheetProvider,
     connectActionSheet,
 } from '@expo/react-native-action-sheet';
 import { Header, Content } from './'
+const { socket } = helper
 const Wrapper = styled(View)`
     height: 100%;
 `
@@ -19,14 +22,14 @@ const Bottom = styled(View)`
     
 `
 
-export default class Profile extends Component {
+class Profile extends Component {
     render() {
         return (
             <ActionSheetProvider>
                 <SafeAreaView>
                     <Wrapper>
                         <Header back={this.navigateBack} />
-                        <Content toChat={this.toChat}/>
+                        <Content toChat={this.toChat} />
                         <Bottom>
                         </Bottom>
                     </Wrapper>
@@ -38,6 +41,26 @@ export default class Profile extends Component {
         this.props.navigation.goBack()
     }
     toChat = () => {
+        const { currentChat, user } = this.props
+        socket.emit('select chat', { chatId: currentChat.id, userId: user.id })
         this.props.navigation.navigate('Chat')
+
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        messages: state.messageReducer,
+        dialog: state.dialogsReducer.dialogs,
+        currentRoom: state.messageReducer.currentRoom,
+        currentChat: state.messageReducer.currentChat,
+        user: state.userReducer.user.user,
+    };
+};
+const mapDispatchToProps = dispatch => ({
+    getMessages: _ => dispatch(getMessages(_)),
+    setRoom: _ => dispatch(setRoom(_)),
+    setDialogs: _ => dispatch(setDialogs(_)),
+    addMessage: _ => dispatch(addMessage(_))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)

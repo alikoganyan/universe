@@ -34,7 +34,7 @@ io.on('connection', (socket) => {
         con.query(`SELECT * FROM messages WHERE chatId = "${room}"`, async (err, result) => {
             if (err) throw err;
             await socket.join(room);
-            console.log(room)
+            console.log('room', room)
             con.query(`UPDATE messages SET isread = true WHERE senderId = ${e.chatId} AND chatId = "${room}" AND isread = false`, (err, result) => {
                 if (err) throw err;
             })
@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
     })
 
 
-
+ 
     /* new user */
     socket.on('new user', (e) => {
         con.query(`SELECT COUNT(*) AS users FROM users WHERE phone = ${e.phone}`, (err, result, fields) => {
@@ -161,6 +161,9 @@ io.on('connection', (socket) => {
             if (err) throw err;
         })
     })
+
+    /* get profile */
+    socket.on('get profile', e => console.log('123'))
 });
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');

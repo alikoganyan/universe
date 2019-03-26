@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import { ImageComponent } from '../../Common/'
 const { sidePadding, sidePaddingNumber, HeaderHeight, Colors } = helper;
 const { border } = Colors;
@@ -85,9 +84,13 @@ const Input = styled(TextInput)`
 const IconLeft = styled(Icon)`
     margin-left: ${sidePadding};
 `
+const ToProfile = styled(TouchableOpacity)`
+    display: flex;
+    flex-direction: row;
+`
 class HeaderComponent extends Component {
     render() {
-        const { back, search, startSearch, stopSearch, currentChat } = this.props
+        const { back, search, startSearch, stopSearch, currentChat, toProfile } = this.props
         return (
             <Header>
                 <Top>
@@ -95,11 +98,13 @@ class HeaderComponent extends Component {
                         {!search ? (
                             <>
                                 <BackIcon onPress={back} right />
-                                <ImageComponent source={{ uri: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
-                                <Info>
-                                    <InfoChatName>{currentChat && currentChat.phone}</InfoChatName>
-                                    <InfoParticipants>был последний раз вчера</InfoParticipants>
-                                </Info>
+                                <ToProfile onPress={toProfile}>
+                                    <ImageComponent source={{ uri: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
+                                    <Info>
+                                        <InfoChatName>{currentChat && currentChat.phone}</InfoChatName>
+                                        <InfoParticipants>был последний раз вчера</InfoParticipants>
+                                    </Info>
+                                </ToProfile>
                             </>
                         ) : (
                                 <>

@@ -147,7 +147,7 @@ class Content extends Component {
                 id: value.id,
                 image: value.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
             })
-            setTimeout(() => navigate('PinCode'), 0)
+            setTimeout(() => navigate('Dialogs'), 0)
         } else {
             socket.on('login success', async ({ result }) => {
                 const { image } = result;

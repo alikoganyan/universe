@@ -5,14 +5,13 @@ import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 import { ImageComponent } from '../../Common/'
 
-const { fontSize, PressDelay, sidePadding, Colors, socket } = helper;
+const { fontSize, PressDelay, sidePadding, sidePaddingNumber, Colors, socket } = helper;
 const { purple, lightColor } = Colors;
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-top: 20px;
-  padding: 0 ${sidePadding} ${sidePadding};
+  padding: 20px ${sidePadding};
 `
 const DialogImage = styled(Image)`
   width: 50px;
