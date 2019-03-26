@@ -1,16 +1,15 @@
 import React, { Component } from 'react'
 import { View, Text, Image, TouchableOpacity, TextInput, AsyncStorage, Platform } from 'react-native'
 import helper from '../../Helper/helper'
-import { Button } from '../../Common'
 import styled from 'styled-components'
 import { setUser } from '../../actions/userActions'
-import { IntroIcon } from '../../assets/index'
 import { connect } from 'react-redux'
+import PINCode from '@haskkor/react-native-pincode'
 const { Colors, fontSize } = helper;
 const { border, blue, grey1, lightGrey1, lightBlue } = Colors;
 const { xs, xl, large, text } = fontSize
 const Wrapper = styled(View)`
-    padding-top: 50px;
+    padding-bottom: 50px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -68,27 +67,14 @@ class Content extends Component {
         }
         return (
             <Wrapper>
-                <Header>
-                    Введите PIN
-                    </Header>
-                <Dots>
-                    {
-                        dots.map(e => (
-                            e
-                        ))
-                    }
-                </Dots>
-                <ButtonBox>
-                    {
-                        buttons.map((e, i) => {
-                            return <NumberButton onPress={() => this.handleChange(e)} right={i && i % 3 === 2} transparent={e === null}>
-                                <NumberButtonText>{e}</NumberButtonText>
-                            </NumberButton>
-                        })
-
-                    }
-
-                </ButtonBox>
+                < PINCode
+                    titleEnter={'Введите PIN'}
+                    disableLockScreen={true}
+                    status={'enter'}
+                    timeLocked={100}
+                    colorCircleButtons={blue}
+                    numbersButtonOverlayColor={lightBlue}
+                />
             </Wrapper>
         )
     }

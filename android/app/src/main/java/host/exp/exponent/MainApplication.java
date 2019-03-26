@@ -34,6 +34,7 @@ import expolib_v1.okhttp3.OkHttpClient;
 
 // Needed for `react-native link`
 // import com.facebook.react.ReactApplication;
+import com.rnfingerprint.FingerprintAuthPackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.lugg.ReactNativeConfig.ReactNativeConfigPackage;
 import com.wix.autogrowtextinput.AutoGrowTextInputPackage;
@@ -56,6 +57,7 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
 
         // Needed for `react-native link`
         // new MainReactPackage(),
+            new FingerprintAuthPackage(),
             new ReactNativePushNotificationPackage(),
             new ReactNativeConfigPackage(),
             new AutoGrowTextInputPackage(),
