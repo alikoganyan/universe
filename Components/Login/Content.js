@@ -143,13 +143,16 @@ class Content extends Component {
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
         if (value) {
+            console.log("value", value)
             setUser({
+                ...value,
                 id: value.id,
                 image: value.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
             })
             setTimeout(() => navigate('Dialogs'), 0)
         } else {
             socket.on('login success', async ({ result }) => {
+                console.log('login success', result)
                 const { image } = result;
                 const user = {
                     ...result,

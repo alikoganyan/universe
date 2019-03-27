@@ -23,7 +23,7 @@ class Chat extends Component {
         return (
             <SafeAreaView behavior={Platform.os === 'ios' ? 'height' : 'padding'}>
                 <Wrapper>
-                    <Header toProfile={this.toProfile} back={this.navigateBack} currentChat={this.state.currentChat} />
+                    <Header toProfile={this.toProfile} back={this.navigateBack} currentChat={this.props.currentChat} />
                     <Content />
                     <Bottom>
                         <Input />
@@ -39,7 +39,6 @@ class Chat extends Component {
         const { currentRoom, id, setCurrentChat, currentChat } = this.props;
         socket.emit('get chat info', { id: currentRoom, room: id })
         socket.on('get chat info', e => {
-            this.setState({ currentChat: e })
             setCurrentChat({ currentChat: e })
             setTimeout(() => {
                 currentChat
@@ -48,6 +47,8 @@ class Chat extends Component {
     }
     componentWillUnmount() {
         socket.removeListener('get chat info')
+        const { setCurrentChat } = this.props;
+        setCurrentChat({ currentChat: null })
     }
     navigateBack = () => {
         const { currentRoom, navigation } = this.props;
@@ -57,7 +58,6 @@ class Chat extends Component {
     toProfile = () => {
         const { navigation } = this.props;
         const { navigate } = navigation;
-        // socket.emit('get profile', { user: this.state.currentChat })
         navigate('Profile')
     }
 }

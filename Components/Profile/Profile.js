@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { SafeAreaView } from '../../Common/'
 import { connect } from 'react-redux'
+import { setCurrentChat } from '../../actions/messageActions'
 import {
     ActionSheetProvider,
     connectActionSheet,
@@ -58,9 +59,6 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = dispatch => ({
-    getMessages: _ => dispatch(getMessages(_)),
-    setRoom: _ => dispatch(setRoom(_)),
-    setDialogs: _ => dispatch(setDialogs(_)),
-    addMessage: _ => dispatch(addMessage(_))
+    setCurrentChat: _ => dispatch(setCurrentChat(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)

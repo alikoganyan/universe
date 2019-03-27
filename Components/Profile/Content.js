@@ -97,7 +97,9 @@ class Content extends Component {
     render() {
         const { UserData, userName, status } = this.state;
         const { user, currentRoom, currentChat } = this.props;
-        const { id, image, lastName, firstName, phone } = currentChat || user;
+        const myProfile = currentChat ? currentChat.id === user.id : true
+        const { id, image, lastName, firstName, phone } = myProfile ? user : currentChat;
+        console.log(!!myProfile)
         return (
             <Wrapper>
                 <User >
@@ -107,14 +109,14 @@ class Content extends Component {
                             <Name>{phone}</Name>
                         </UserName>
                         <UserStatus>{status}</UserStatus>
-                        <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>
+                        {!myProfile && <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>}
 
                     </UserInfo>
                 </User>
                 <ScrollView style={{ flex: 1 }}>
                     <PersonalData>
                         {UserData.map((item, index) => {
-                            return <Info key={index}>
+                            return (!myProfile || !item.icon) && <Info key={index}>
                                 <Data>
                                     <Type>{item.type}</Type>
                                     <Value>{item.value}</Value>
