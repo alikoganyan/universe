@@ -26,7 +26,7 @@ export default class ContactGroups extends Component {
             <ActionSheetProvider>
                 <SafeAreaView>
                     <Wrapper>
-                        <Header back={this.navigateBack} />
+                        <Header toProfile={this.toProfile} back={this.navigateBack} />
                         <Content />
                         <Bottom>
                         </Bottom>
@@ -37,5 +37,8 @@ export default class ContactGroups extends Component {
     }
     navigateBack = () => {
         this.props.navigation.goBack()
+    }
+    toProfile = () => {
+        this.props.navigation.navigate('Profile')
     }
 }

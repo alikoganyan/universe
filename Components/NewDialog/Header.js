@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { View, Text, TextInput, Image, Platform, Dimensions, Keyboard } from 'react-native'
+import { View, Text, TextInput, Image, Platform, Dimensions, Keyboard, TouchableOpacity } from 'react-native'
 import { SearchIcon, BurgerIcon, CloseIcon, BackIcon } from '../../assets/index'
 import { openDrawer } from '../../actions/drawerActions'
 import { setDialogs } from '../../actions/dialogsActions'
@@ -45,7 +45,7 @@ const Right = styled(Left)`
 `
 class HeaderComponent extends Component {
     render() {
-        const { user } = this.props
+        const { user, toProfile } = this.props
         const { input } = this.state;
         return (
             <Header>
@@ -54,8 +54,10 @@ class HeaderComponent extends Component {
                     <Text>Новый диалог</Text>
                 </Left>
                 <Right>
-                    <SearchIcon right/>
-                    <ImageComponent source={{uri: user.image}}/>
+                    <SearchIcon right />
+                    <TouchableOpacity onPress={toProfile}>
+                        <ImageComponent source={{ uri: user.image }} />
+                    </TouchableOpacity>
                 </Right>
             </Header>
         )
