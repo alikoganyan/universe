@@ -1,58 +1,35 @@
 import React, { Component } from 'react'
-import { View, Text, Image, Dimensions, Platform, TouchableOpacity, AsyncStorage } from 'react-native'
+import { View, Text, Image, Dimensions, Platform, TouchableOpacity, AsyncStorage, ScrollView, KeyboardAvoidingView } from 'react-native'
 import { BackIcon, EllipsisVIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-import { SafeAreaView } from '../../Common/'
+import { SafeAreaView, Button } from '../../Common/'
 import { connect } from 'react-redux'
 import { setCurrentChat } from '../../actions/messageActions'
 import {
     ActionSheetProvider,
     connectActionSheet,
 } from '@expo/react-native-action-sheet';
+
 import { Header, Content } from './'
 const { socket, Colors } = helper
-const { red } = Colors;
+const { blue } = Colors;
 const Wrapper = styled(View)`
     height: ${Dimensions.get('window').height};
 `
-const Bottom = styled(View)`
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    background: white;
-    
-`
-const Logout = styled(TouchableOpacity)`
-    position: absolute;
-    bottom: 20;
-    z-index: 20;
-    width: 100%;
-    display: flex;
-    align-items: center;
-`
-const LogoutText = styled(Text)`
-    color: ${red};
-    padding: 20px;
-`
-class Profile extends Component {
-    render() {
-        const { currentChat, user } = this.props;
-        const myProfile = currentChat ? currentChat.id === user.id : true
 
+class ProfileEdit extends Component {
+    render() {
         return (
             <ActionSheetProvider>
-                <SafeAreaView>
-                    <Wrapper>
-                        <Header edit={this.edit} back={this.navigateBack} myProfile={myProfile} />
-                        <Content toChat={this.toChat} myProfile={myProfile} />
-                        <Bottom>
-                            {
-                                myProfile && <Logout onPress={this.logout}><LogoutText>Выйти из аккаунта</LogoutText></Logout>
-                            }
-                        </Bottom>
-                    </Wrapper>
-                </SafeAreaView>
+                <Wrapper>
+                    <Header />
+                    <KeyboardAvoidingView behavior={'padding'}>
+                        <ScrollView>
+                            <Content />
+                        </ScrollView>
+                    </KeyboardAvoidingView>
+                </Wrapper>
             </ActionSheetProvider>
         )
     }
@@ -71,10 +48,6 @@ class Profile extends Component {
         navigation.navigate('Login')
 
     }
-    edit = () => {
-        const { navigation } = this.props;
-        navigation.navigate('ProfileEdit')
-    }
 }
 
 const mapStateToProps = state => {
@@ -89,4 +62,4 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
     setCurrentChat: _ => dispatch(setCurrentChat(_)),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileEdit)

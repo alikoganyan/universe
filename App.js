@@ -31,6 +31,7 @@ import {
   NewFeed,
   SplashScreen,
   NewFeedParticipants,
+  ProfileEdit,
 
 } from './Components'
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
@@ -82,6 +83,7 @@ const AppStackNavigator = createStackNavigator(
     FirstInstall: { screen: FirstInstall },
     NewFeed: { screen: NewFeed },
     NewFeedParticipants: { screen: NewFeedParticipants },
+    ProfileEdit: { screen: ProfileEdit },
   },
   {
     headerMode: 'none',

@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn install
+  /usr/local/bin/node /usr/local/bin/yarn add react-native-keyboard-aware-scroll-view
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin

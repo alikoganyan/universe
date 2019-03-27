@@ -146,9 +146,11 @@ class Content extends Component {
             setUser({
                 ...value,
                 id: value.id,
-                image: value.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
             })
+            socket.emit('update user', { id: value.id })
+            socket.on('update user', e => setUser({ ...e, image: e.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png', }))
             setTimeout(() => navigate('Dialogs'), 0)
+            socket.on('update user', e => console.log(e))
         } else {
             socket.on('login success', async ({ result }) => {
                 const { image } = result;

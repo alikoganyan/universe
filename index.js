@@ -163,6 +163,22 @@ io.on('connection', (socket) => {
 
     /* get profile */
     socket.on('get profile', e => console.log(e))
+
+    /* edit user */
+    socket.on('edit user', e => {
+        const { firstName, lastName, id, patronymic } = e.user
+        con.query(`UPDATE users SET firstName = "${firstName || null}", lastName = "${lastName || null}", patronymic = "${patronymic || null}" WHERE id = ${id}`, (err, result) => {
+            if (err) throw err;
+            console.log(result)
+        })
+    })
+    /* update  user */
+    socket.on('update user', e => {
+        con.query(`SELECT * FROM users WHERE id = ${e.id}`, (err, result) => {
+            if (err) throw err;
+            io.emit('update user', result[0])
+        })
+    })
 });
 app.get('/', function (req, res) {
     res.sendFile(__dirname + '/index.html');

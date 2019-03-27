@@ -26,6 +26,7 @@ import FirstInstall from './FirstInstall/FirstInstall'
 import NewFeed from './NewFeed/NewFeed'
 import SplashScreen from './SplashScreen/SplashScreen'
 import NewFeedParticipants from './NewFeedParticipants/NewFeedParticipants'
+import ProfileEdit from './ProfileEdit/ProfileEdit'
 
 export {
     Group,
@@ -56,4 +57,5 @@ export {
     NewFeed,
     SplashScreen,
     NewFeedParticipants,
+    ProfileEdit,
 }

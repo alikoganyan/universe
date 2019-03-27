@@ -35,18 +35,12 @@ export default class HeaderComponent extends Component {
             <Header>
                 <Left>
                     <BackIcon onPress={this.props.back} />
+                    <Text>Изменить профиль</Text>
                 </Left>
-                <Right>
-                    {myProfile ?
-                        <EditIcon onPress={this.editProfile}/> :
-                        <LocationIcon />}
-                </Right>
             </Header>
         )
     }
     editProfile = () => {
-        const { edit } = this.props;
-        edit()
-
+        console.log('edit')
     }
 }
