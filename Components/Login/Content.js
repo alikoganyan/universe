@@ -143,7 +143,6 @@ class Content extends Component {
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
         if (value) {
-            console.log("value", value)
             setUser({
                 ...value,
                 id: value.id,
@@ -152,7 +151,6 @@ class Content extends Component {
             setTimeout(() => navigate('Dialogs'), 0)
         } else {
             socket.on('login success', async ({ result }) => {
-                console.log('login success', result)
                 const { image } = result;
                 const user = {
                     ...result,

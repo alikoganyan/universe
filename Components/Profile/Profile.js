@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, Dimensions, Platform, TouchableOpacity, AsyncStorage } from 'react-native'
 import { BackIcon, EllipsisVIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
@@ -11,9 +11,10 @@ import {
     connectActionSheet,
 } from '@expo/react-native-action-sheet';
 import { Header, Content } from './'
-const { socket } = helper
+const { socket, Colors } = helper
+const { red } = Colors;
 const Wrapper = styled(View)`
-    height: 100%;
+    height: ${Dimensions.get('window').height};
 `
 const Bottom = styled(View)`
     position: absolute;
@@ -22,16 +23,33 @@ const Bottom = styled(View)`
     background: white;
     
 `
-
+const Logout = styled(TouchableOpacity)`
+    position: absolute;
+    bottom: 20;
+    z-index: 20;
+    width: 100%;
+    display: flex;
+    align-items: center;
+`
+const LogoutText = styled(Text)`
+    color: ${red};
+    padding: 20px;
+`
 class Profile extends Component {
     render() {
+        const { currentChat, user } = this.props;
+        const myProfile = currentChat ? currentChat.id === user.id : true
+
         return (
             <ActionSheetProvider>
                 <SafeAreaView>
                     <Wrapper>
-                        <Header back={this.navigateBack} />
-                        <Content toChat={this.toChat} />
+                        <Header back={this.navigateBack} myProfile={myProfile} />
+                        <Content toChat={this.toChat} myProfile={myProfile} />
                         <Bottom>
+                            {
+                                myProfile && <Logout onPress={this.logout}><LogoutText>Выйти из аккаунта</LogoutText></Logout>
+                            }
                         </Bottom>
                     </Wrapper>
                 </SafeAreaView>
@@ -45,6 +63,12 @@ class Profile extends Component {
         const { currentChat, user } = this.props
         socket.emit('select chat', { chatId: currentChat.id, userId: user.id })
         this.props.navigation.navigate('Chat')
+
+    }
+    logout = async () => {
+        const { navigation } = this.props
+        await AsyncStorage.clear();
+        navigation.navigate('Login')
 
     }
 }

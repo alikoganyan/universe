@@ -93,11 +93,11 @@ const PersonalData = styled(View)`
     border-width: 0;
 `
 const SendMessage = styled(Button)``
+
 class Content extends Component {
     render() {
         const { UserData, userName, status } = this.state;
-        const { user, currentRoom, currentChat } = this.props;
-        const myProfile = currentChat ? currentChat.id === user.id : true
+        const { user, currentRoom, currentChat, myProfile } = this.props;
         const { id, image, lastName, firstName, phone } = myProfile ? user : currentChat;
         console.log(!!myProfile)
         return (
@@ -113,7 +113,8 @@ class Content extends Component {
 
                     </UserInfo>
                 </User>
-                <ScrollView style={{ flex: 1 }}>
+
+                <ScrollView>
                     <PersonalData>
                         {UserData.map((item, index) => {
                             return (!myProfile || !item.icon) && <Info key={index}>
@@ -126,6 +127,7 @@ class Content extends Component {
                         })}
                     </PersonalData>
                 </ScrollView>
+
             </Wrapper>
 
         )
