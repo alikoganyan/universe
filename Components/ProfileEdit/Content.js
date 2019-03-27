@@ -24,7 +24,7 @@ const User = styled(View)`
     margin-bottom: 10px;
 `
 const UserImage = styled(Image)`
-    width: 90px;
+    width: 80px;
     height: 80px;
     border-radius: 40;
     margin: 0 10px 40px;

@@ -23,7 +23,7 @@ class ProfileEdit extends Component {
         return (
             <ActionSheetProvider>
                 <Wrapper>
-                    <Header />
+                    <Header back={this.navigateBack} />
                     <KeyboardAvoidingView behavior={'padding'}>
                         <ScrollView>
                             <Content />

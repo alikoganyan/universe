@@ -167,7 +167,7 @@ io.on('connection', (socket) => {
     /* edit user */
     socket.on('edit user', e => {
         const { firstName, lastName, id, patronymic } = e.user
-        con.query(`UPDATE users SET firstName = "${firstName || null}", lastName = "${lastName || null}", patronymic = "${patronymic || null}" WHERE id = ${id}`, (err, result) => {
+        con.query(`UPDATE users SET firstName = "${firstName || ''}", lastName = "${lastName || ''}", patronymic = "${patronymic || ''}" WHERE id = ${id}`, (err, result) => {
             if (err) throw err;
             console.log(result)
         })
