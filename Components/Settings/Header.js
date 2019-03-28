@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS } from 'react-native'
 import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
 import helper from '../../Helper/helper'
 const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
@@ -27,23 +28,37 @@ const Right = styled(View)`
 const UserImage = styled(Image)`
     width: 40px;
     height: 40px;
-    background: red;
     border-radius: 20px;
 `
-export default class HeaderComponent extends Component {
+class HeaderComponent extends Component {
     render() {
+        const { user } = this.props;
+        const { image } = user;
         return (
             <Header>
                 <Left>
-                    <BackIcon noPadding/>
+                    <BackIcon noPadding />
                     <Text>
                         Настройки
                     </Text>
                 </Left>
                 <Right>
-                    <UserImage />
+                    <UserImage source={{uri: image}}/>
                 </Right>
             </Header>
         )
     }
 }
+const mapStateToProps = state => {
+    return {
+        messages: state.messageReducer,
+        dialog: state.dialogsReducer.dialogs,
+        currentRoom: state.messageReducer.currentRoom,
+        currentChat: state.messageReducer.currentChat,
+        user: state.userReducer.user.user,
+    };
+};
+const mapDispatchToProps = dispatch => ({
+    setCurrentChat: _ => dispatch(setCurrentChat(_)),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)

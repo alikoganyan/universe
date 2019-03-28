@@ -99,14 +99,15 @@ class Content extends Component {
         const { UserData, userName, status } = this.state;
         const { user, currentRoom, currentChat, myProfile } = this.props;
         const { id, image, lastName, firstName, phone } = myProfile ? user : currentChat;
-        console.log(!!myProfile)
+        const name = firstName || lastName ? `${firstName} ${lastName}` : phone
+        console.log(user)
         return (
             <Wrapper>
                 <User >
                     <UserImage source={{ uri: image || 'https://facebook.github.io/react/logo-og.png' }} />
                     <UserInfo>
                         <UserName>
-                            <Name>{phone}</Name>
+                            <Name>{name}</Name>
                         </UserName>
                         <UserStatus>{status}</UserStatus>
                         {!myProfile && <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>}
@@ -117,7 +118,7 @@ class Content extends Component {
                 <ScrollView>
                     <PersonalData>
                         {UserData.map((item, index) => {
-                            return (!myProfile || !item.icon) && <Info key={index}>
+                            return item && (!myProfile || !item.icon) && <Info key={index}>
                                 <Data>
                                     <Type>{item.type}</Type>
                                     <Value>{item.value}</Value>
@@ -143,6 +144,19 @@ class Content extends Component {
             { type: 'Общих групп', value: '32', icon: <GroupIcon /> },
             { type: 'Общих файлов', value: '10', icon: <FilesRedIcon /> },
         ]
+    }
+    componentDidMount() {
+        const { myProfile, user, currentChat } = this.props
+        const { id, image, lastName, firstName, role, phone, department } = myProfile ? user : currentChat;
+        const newUserData = [
+            { type: 'Подразделение', value: department },
+            { type: 'Должность', value: role },
+            { type: 'Личный', value: phone },
+            !myProfile ? { type: 'Задачи', value: '4', icon: <TaskIcon /> } : undefined,
+            !myProfile ? { type: 'Общих групп', value: '32', icon: <GroupIcon /> } : undefined,
+            !myProfile ? { type: 'Общих файлов', value: '10', icon: <FilesRedIcon /> } : undefined,
+        ]
+        this.setState({UserData: newUserData})
     }
     toChat = () => {
         const { toChat, setRoom, user } = this.props

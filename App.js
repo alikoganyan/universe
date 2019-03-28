@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Dimensions, AsyncStorage, BackHandler, ActivityIndicator } from 'react-native';
+import { View, Text, Dimensions, BackHandler } from 'react-native';
 import GlobalFont from 'react-native-global-font'
 import { Font } from 'expo';
 import {
@@ -45,10 +45,7 @@ import devToolsEnhancer from 'remote-redux-devtools';
 import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
-// AsyncStorage.clear();
-
 console.disableYellowBox = true;
-let value = null;
 const AppDrawerNavigator = createDrawerNavigator(
   {
     // Home: { screen: Login },

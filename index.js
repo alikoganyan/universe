@@ -54,11 +54,16 @@ io.on('connection', (socket) => {
     socket.on('new user', (e) => {
         con.query(`SELECT COUNT(*) AS users FROM users WHERE phone = ${e.phone}`, (err, result, fields) => {
             const usersCount = result[0].users;
+            console.log(e.phone)            
             if (usersCount !== 0) {
                 socket.emit('user exists', { message: `user ${e.phone} already exists ${usersCount}` })
             } else {
-                con.query(`INSERT INTO users (phone) VALUES (${e.phone})`, (err, result) => {
+                con.query(`INSERT INTO users (phone) VALUES ("${e.phone}")`, (err, result) => {
                     socket.emit('user created')
+                    console.log(result, `INSERT INTO settings (id) VALUES (${result.insertId})`)
+                    con.query(`INSERT INTO settings (id) VALUES (${result.insertId})`, (err) => {
+                        socket.emit('new user', result)
+                    })
                 })
             }
         });
@@ -73,8 +78,11 @@ io.on('connection', (socket) => {
     socket.on('login', e => {
         e.phone && con.query(`SELECT * FROM users WHERE phone = ${e.phone}`, (err, result, fields) => {
             if (result.length) {
-                socket.emit('login success', {
-                    result: result[0]
+                con.query(`SELECT * FROM settings WHERE id = ${result[0].id}`, (err, res) => {
+                    if (err) throw err;
+                    socket.emit('login success', {
+                        result: { ...result[0], ...res[0] }
+                    })
                 })
             } else {
                 socket.emit('login error', {
@@ -83,7 +91,6 @@ io.on('connection', (socket) => {
             }
         })
     })
-
 
 
     /* get dialogs */
@@ -176,8 +183,31 @@ io.on('connection', (socket) => {
     socket.on('update user', e => {
         con.query(`SELECT * FROM users WHERE id = ${e.id}`, (err, result) => {
             if (err) throw err;
-            io.emit('update user', result[0])
+            con.query(`SELECT * FROM settings WHERE id = ${e.id}`, (err, res) => {
+                if (err) throw err;
+                io.emit('update user', { ...result[0], ...res[0] })
+            })
         })
+    })
+    /* change settings */
+    socket.on('change settings', e => {
+
+        const { setting, id } = e
+        const settings = {}
+        setting.map(e => {
+            settings[e.item] = e.value
+        })
+        const { language, sound, notifications, contacts } = settings
+        console.log({ language, sound, notifications, contacts })
+        con.query(`UPDATE settings SET 
+        language = ${language}, 
+        notifications = ${notifications}, 
+        sound = ${sound}, 
+        contacts = ${contacts} 
+        WHERE id = ${id}`, (err, result) => {
+                if (err) throw err;
+                console.log(result)
+            })
     })
 });
 app.get('/', function (req, res) {

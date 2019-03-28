@@ -4,7 +4,8 @@ import { BackIcon, EllipsisVIcon, MessageIndicatorIcon } from '../../assets/inde
 import styled from 'styled-components'
 import SwitchToggle from 'react-native-switch-toggle';
 import helper from '../../Helper/helper'
-const { Colors, sidePaddingNumber, fontSize } = helper;
+import { connect } from 'react-redux'
+const { Colors, sidePaddingNumber, fontSize, socket } = helper;
 const { lightGrey1, blue, lightBlue } = Colors;
 const Wrapper = styled(View)`
     padding-top: 0px;
@@ -71,9 +72,11 @@ const Toggle = (props) => {
         onPress={onPress}
     />
 }
-export default class Settings extends Component {
+class Content extends Component {
     render() {
         const { settings, switchOn } = this.state;
+        const { user } = this.props;
+        const { sound, language, notifications, contacts } = user;
         return (
             <SafeAreaView>
                 <Wrapper>
@@ -109,18 +112,66 @@ export default class Settings extends Component {
     }
     state = {
         switchOn: true,
+        langs: [
+            'Английский',
+            'Русский'
+        ],
         settings: [
-            { label: 'язык', status: 'Русский', option: { type: 'link', value: 'изменить' } },
-            { label: 'уведомления', status: 'Включены', option: { type: 'toggle', value: true } },
-            { label: 'звук', status: 'Включен', option: { type: 'toggle', value: false } },
-            { label: 'контакты', status: 'По подразделениям', option: { type: 'toggle', value: false } },
+            { item: 'language', label: 'язык', status: 'Русский', option: { type: 'link', value: 'изменить' } },
+            { item: 'notifications', label: 'уведомления', status: 'Включены', option: { type: 'toggle', value: 1 } },
+            { item: 'sound', label: 'звук', status: 'Включен', option: { type: 'toggle', value: 0 } },
+            { item: 'contacts', label: 'контакты', status: 'По подразделениям', option: { type: 'toggle', value: 0 } },
         ]
+    }
+    componentDidMount() {
+        const { settings, langs } = this.state
+        const { user } = this.props
+        console.log(user.language, user.notifications, user.sound, user.contacts)
+        const newSettings = [...settings]
+        newSettings.map(e => {
+            if (e.item === 'language') {
+                e.option.value = 'Изменить'
+                e.status = langs[user[e.item]]
+            }
+            else
+                e.option.value = user[e.item]
+        })
+        setTimeout(() => {
+
+            this.setState({ settings: newSettings })
+        }, 0)
     }
     handleToggle = (e) => {
         const { settings } = this.state;
-        const newSetting = [...settings]
-        newSetting.filter(({ label }) => e === label)[0].option.value = !newSetting.filter(({ label }) => e === label)[0].option.value;
-
-        this.setState({ settings: newSetting })
+        const newSettings = [...settings]
+        newSettings.filter(({ label }) => e === label)[0].option.value = !newSettings.filter(({ label }) => e === label)[0].option.value;
+        this.setState({ settings: newSettings })
+    }
+    componentWillUnmount() {
+        const { settings } = this.state;
+        const { user } = this.props;
+        const setting = []
+        settings.map(e => {
+            setting.push({ item: e.item, value: !!e.option.value })
+        })
+        socket.emit('change settings', { setting, id: user.id })
+        socket.emit('update user', { id: user.id })
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        messages: state.messageReducer,
+        dialog: state.dialogsReducer.dialogs,
+        currentRoom: state.messageReducer.currentRoom,
+        currentChat: state.messageReducer.currentChat,
+        user: state.userReducer.user.user,
+    };
+};
+const mapDispatchToProps = dispatch => ({
+    getMessages: _ => dispatch(getMessages(_)),
+    setRoom: _ => dispatch(setRoom(_)),
+    setDialogs: _ => dispatch(setDialogs(_)),
+    addMessage: _ => dispatch(addMessage(_))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

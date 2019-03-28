@@ -116,7 +116,8 @@ class Content extends Component {
     }
     proceed = (e) => {
         const { country, phone } = this.state;
-        country && phone && socket.emit('new user', {
+        console.log(country + phone )
+        country && phone &&socket.emit('new user', {
             "phone": country + phone
         })
 
@@ -125,7 +126,7 @@ class Content extends Component {
         this.setState({ country: e })
     }
     handlePhone = (e) => {
-        this.setState({ phone: e })
+        e.length <= 10 && this.setState({ phone: e })
     }
 }
 const mapStateToProps = state => {

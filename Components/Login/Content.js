@@ -91,7 +91,7 @@ const Input = (props) => {
 }
 class Content extends Component {
     render() {
-        const { error } = this.state;
+        const { error, country, phone, password } = this.state;
         const { navigateToDialogs } = this.props;
         return (<Wrapper>
             <Title>
@@ -103,17 +103,18 @@ class Content extends Component {
             <PhoneNumber>
                 <Input style={{ width: '20%', }}
                     inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
-                    value='+7' />
+                    value={country}
+                    onChangeText={this.handleChangeCountry} />
                 <StyledInput password={true}
                     onChangeText={this.handleChangePhone}
-                    value={this.state.phone}
+                    value={phone}
                     placeholder={'XXX-XXX-XX-XX'}
                     style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10 }}
                 />
             </PhoneNumber>
             <StyledInput password={true}
                 onChangeText={this.handleChangePassword}
-                value={this.state.password}
+                value={password}
                 placeholder={'Пароль'}
                 secureTextEntry={true}
             />
@@ -134,7 +135,8 @@ class Content extends Component {
     state = {
         error: false,
         password: '',
-        phone: '11111111112',
+        phone: '',
+        country: '+7'
     }
     componentDidMount = async () => {
 
@@ -143,14 +145,16 @@ class Content extends Component {
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
         if (value) {
+            this.setState({phone: value.phone.slice(2)})
             setUser({
                 ...value,
                 id: value.id,
+                image: value.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png'
             })
             socket.emit('update user', { id: value.id })
             socket.on('update user', e => setUser({ ...e, image: e.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png', }))
+
             setTimeout(() => navigate('Dialogs'), 0)
-            socket.on('update user', e => console.log(e))
         } else {
             socket.on('login success', async ({ result }) => {
                 const { image } = result;
@@ -177,9 +181,8 @@ class Content extends Component {
         }
     };
     login = (e) => {
-        const { phone, password } = this.state;
-        socket.emit('login', { phone, password })
-
+        const { country, phone, password } = this.state;
+        socket.emit('login', { phone: country.concat(phone), password })
     }
     signup = (e) => {
         const { navigate } = this.props;
@@ -191,6 +194,9 @@ class Content extends Component {
     }
     handleChangePhone = (e) => {
         e.length <= 10 && this.setState({ phone: e })
+    }
+    handleChangeCountry = (e) => {
+        e.length <= 3 && this.setState({ country: e })
     }
 }
 
