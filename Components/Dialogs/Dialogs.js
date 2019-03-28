@@ -6,6 +6,7 @@ import { SafeAreaView } from '../../Common/'
 import { connect } from 'react-redux';
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
 import { setDialogs } from '../../actions/dialogsActions'
+import { setAllUsers } from '../../actions/userActions'
 import helper from '../../Helper/helper'
 import { DrawerActions } from 'react-navigation';
 
@@ -43,13 +44,22 @@ class Dialogs extends Component {
     this.props.navigation.navigate('Profile')
   }
   componentDidMount() {
-    const { getMessages, setDialogs, messages, id, addMessage } = this.props;
+    const { getMessages, setDialogs, messages, id, addMessage, setAllUsers, users } = this.props;
     socket.emit('dialogs', { userId: id });
     socket.emit('news', { userId: id });
+    socket.emit('set dialogs', { userId: id, dialogId: 33 });
     socket.on('news', e => {
       console.log('news', e)
     });
-    socket.emit('set dialogs', { userId: id, dialogId: 33 });
+    socket.on('get users', e => {
+      setAllUsers(e);
+      this.forceUpdate()
+
+      setTimeout(() => {
+        console.log(users)
+      }, 2000)
+
+    })
     socket.on('find', e => {
       this.setState({ FlatListData: e.result })
     })
@@ -76,7 +86,7 @@ class Dialogs extends Component {
     socket.on('select chat', e => {
       getMessages(e)
     })
- 
+
   }
   toChat = (index) => {
     const { setRoom, navigation, id } = this.props
@@ -96,13 +106,15 @@ const mapStateToProps = state => {
     messages: state.messageReducer,
     dialog: state.dialogsReducer.dialogs,
     currentRoom: state.messageReducer.currentRoom,
-    id: state.userReducer.user.user.id
+    id: state.userReducer.user.user.id,
+    users: state.userReducer
   };
 };
 const mapDispatchToProps = dispatch => ({
   getMessages: _ => dispatch(getMessages(_)),
   setRoom: _ => dispatch(setRoom(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
-  addMessage: _ => dispatch(addMessage(_))
+  addMessage: _ => dispatch(addMessage(_)),
+  setAllUsers: _ => dispatch(setAllUsers(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)

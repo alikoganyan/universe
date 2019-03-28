@@ -4,7 +4,7 @@ import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
-import { setUser } from '../../actions/userActions'
+import { setUser, registerUser } from '../../actions/userActions'
 import { Button } from '../../Common'
 const { Colors, HeaderHeightNumber, socket } = helper;
 const { lightGrey1, blue } = Colors;
@@ -106,20 +106,26 @@ class Content extends Component {
         phone: '',
     }
     componentDidMount() {
+
+
         socket.on('user exists', e => {
-            console.log(e)  
+            console.log(e)
         })
-        socket.on('user created', e => {
+        socket.on('check user', e => {
+            const { country, phone } = this.state;
+            const { registerUser } = this.props;
+            registerUser(country + phone)
             this.props.forward()
         })
 
     }
     proceed = (e) => {
         const { country, phone } = this.state;
-        console.log(country + phone )
-        country && phone &&socket.emit('new user', {
-            "phone": country + phone
-        })
+        const { registerUser } = this.props;
+        country && phone &&
+            socket.emit('check user', {
+                "phone": country + phone
+            })
 
     }
     handleCountry = (e) => {
@@ -136,5 +142,6 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
+    registerUser: _ => dispatch(registerUser(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

@@ -86,15 +86,28 @@ class Content extends Component {
     }
     state = {
         sms: '',
+        asnwer: '1111',
+        error: 0,
+        tries: 3
     }
     componentDidMount() {
-        socket.on('user exists', e => {
-            console.log(e)
-        })
     }
     handleSMS = (e) => {
-        this.state.sms.length < 4 && this.setState({ sms: e })
-        this.state.sms.length === 3 && this.props.forward()
+        const { asnwer, sms, error, tries } = this.state;
+        if (error <= tries) {
+            sms.length < 4 && this.setState({ sms: e }, () => {
+                if (this.state.sms !== asnwer && this.state.sms.length === asnwer.length) {
+                    let err = error
+                    ++err
+                    this.setState({ error: err, sms: '' })
+                }
+                if (this.state.sms === asnwer && this.state.sms.length === asnwer.length) {
+                    this.props.forward()
+
+                }
+            })
+        }
+
     }
 }
 const mapStateToProps = state => {

@@ -53,19 +53,15 @@ io.on('connection', (socket) => {
     /* new user */
     socket.on('new user', (e) => {
         con.query(`SELECT COUNT(*) AS users FROM users WHERE phone = ${e.phone}`, (err, result, fields) => {
-            const usersCount = result[0].users;
-            console.log(e.phone)            
-            if (usersCount !== 0) {
-                socket.emit('user exists', { message: `user ${e.phone} already exists ${usersCount}` })
-            } else {
-                con.query(`INSERT INTO users (phone) VALUES ("${e.phone}")`, (err, result) => {
-                    socket.emit('user created')
-                    console.log(result, `INSERT INTO settings (id) VALUES (${result.insertId})`)
-                    con.query(`INSERT INTO settings (id) VALUES (${result.insertId})`, (err) => {
-                        socket.emit('new user', result)
-                    })
+            if (err) throw err;
+            con.query(`INSERT INTO users (phone) VALUES ("${e.phone}")`, (err, result) => {
+                if (err) throw err;
+                socket.emit('user created')
+                console.log(result, `INSERT INTO settings (id) VALUES (${result.insertId})`)
+                con.query(`INSERT INTO settings (id) VALUES (${result.insertId})`, (err) => {
+                    socket.emit('new user', result)
                 })
-            }
+            })
         });
         //     if (err) throw err;
 
@@ -208,6 +204,27 @@ io.on('connection', (socket) => {
                 if (err) throw err;
                 console.log(result)
             })
+    })
+    /* get all users */
+    socket.on('get users', e => {
+        console.log('test')
+        con.query(`SELECT * FROM users WHERE id != ${e.id}`, (err, result) => {
+            if (err) throw err;
+            socket.emit('get users', result)
+        })
+    })
+    /* check user */
+    socket.on('check user', e => {
+        con.query(`SELECT COUNT(*) AS users FROM users WHERE phone = ${e.phone}`, (err, result, fields) => {
+            if (err) throw err;
+            const count = result[0].users;
+            if (count) {
+                socket.emit('user exists', { message: `user ${e.phone} already exists ${count}` })
+            } else {
+                socket.emit('check user', {})
+                console.log('test')
+            }
+        })
     })
 });
 app.get('/', function (req, res) {

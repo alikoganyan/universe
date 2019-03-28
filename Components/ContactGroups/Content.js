@@ -9,22 +9,22 @@ import helper from '../../Helper/helper'
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
-
-const { Colors } = helper;
+import { connect } from 'react-redux'
+const { Colors, socket } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
-        x: Dimensions.get('window').width,
+        x: 0,
         transition: { duration: 300, ease: 'easeOut' }
     },
     center: {
-        x: 0,
+        x: -Dimensions.get('window').width,
         transition: { duration: 300, ease: 'easeOut' },
     },
 
 
     right: {
-        x: -Dimensions.get('window').width,
+        x: -Dimensions.get('window').width * 2,
         transition: { duration: 300, ease: 'easeOut' }
     },
 
@@ -129,7 +129,7 @@ const GroupInfo = styled(ContactInfo)``
 const GroupTitle = styled(ContactName)``
 const GroupParticipants = styled(ContactRole)``
 const GroupImage = styled(ContactImage)``
-export default class Settings extends Component {
+class Content extends Component {
     render() {
         const { users, collapsed, options, groups } = this.state;
         const { department } = users;
@@ -151,6 +151,7 @@ export default class Settings extends Component {
                                 }
                             </Options>
                             <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
+                                <ContactList style={{ width: '100%' }}><Text>123</Text></ContactList>
                                 <ContactList>
                                     {
                                         department.map((e, i) => (
@@ -243,6 +244,17 @@ export default class Settings extends Component {
             { title: 'длинное корпоративное название группы', participants: 15 },
         ]
     }
+    componentDidMount() {
+        const { user, users } = this.props;
+
+        socket.emit('get users', { id: user.id })
+
+        const newDCollapsed = [...this.state.collapsed]
+        for (let i = 0; i <= this.state.users.department.length; i++) {
+            newDCollapsed.push(false)
+        }
+        this.setState({ collapsed: newDCollapsed })
+    }
     optionLeft = () => {
         const newState = { ...this.state.options }
         const length = this.state.options.options.length
@@ -265,16 +277,27 @@ export default class Settings extends Component {
         newDCollapsed[i] = true;
         this.setState({ collapsed: newDCollapsed })
     }
-    componentDidMount() {
-        const newDCollapsed = [...this.state.collapsed]
-        for (let i = 0; i <= this.state.users.department.length; i++) {
-            newDCollapsed.push(false)
-        }
-        this.setState({ collapsed: newDCollapsed })
-    }
     selectOption = (e) => {
         const newState = { ...this.state.options }
         newState.active = e;
         this.setState({ options: newState })
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        messages: state.messageReducer,
+        dialog: state.dialogsReducer.dialogs,
+        currentRoom: state.messageReducer.currentRoom,
+        user: state.userReducer.user.user,
+        users: state.userReducer,
+    };
+};
+const mapDispatchToProps = dispatch => ({
+    getMessages: _ => dispatch(getMessages(_)),
+    setRoom: _ => dispatch(setRoom(_)),
+    setDialogs: _ => dispatch(setDialogs(_)),
+    addMessage: _ => dispatch(addMessage(_)),
+    setAllUsers: _ => dispatch(setAllUsers(_))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

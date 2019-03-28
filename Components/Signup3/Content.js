@@ -135,17 +135,26 @@ class Content extends Component {
         this.setState({ agreements: newAgreements })
     }
     proceed = (e) => {
+        const { register } = this.props;
         const checkboxes = [];
         Object.values(this.state.agreements).map((e, i) => {
             checkboxes.push(e.value);
         })
         const checked = !checkboxes.includes(false);
-        checked && this.props.forward()
+        if (checked) {
+            this.props.forward()
+            socket.emit('new user', {
+                "phone": register.phone
+            })
+        }else{
+            console.log('unchecked')
+        }
     }
 }
 const mapStateToProps = state => {
     return {
-        id: state.userReducer.id
+        id: state.userReducer.id,
+        register: state.userReducer.register
     };
 };
 const mapDispatchToProps = dispatch => ({
