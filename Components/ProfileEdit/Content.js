@@ -156,7 +156,6 @@ class Content extends Component {
     }
     apply = () => {
         const { user } = this.state
-        console.log(user)
         socket.emit('edit user', { ...this.props.user,  user })
     }
 }

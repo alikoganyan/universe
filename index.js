@@ -191,7 +191,7 @@ io.on('connection', (socket) => {
             if (err) throw err;
             con.query(`SELECT * FROM settings WHERE id = ${e.id}`, (err, res) => {
                 if (err) throw err;
-                io.emit('update user', { ...result[0], ...res[0] })
+                socket.emit('update user', { ...result[0], ...res[0] })
             })
         })
     })

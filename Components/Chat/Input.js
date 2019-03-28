@@ -54,6 +54,7 @@ class InputComponent extends Component {
                         onSubmitEditing={this.sendMessage}
                         value={text}
                         blurOnSubmit={false}
+                        autoFocus={true}
                     />
                 </Left>
                 <Right>
@@ -80,8 +81,7 @@ class InputComponent extends Component {
         this.setState({ text: '' })
     }
     handleChange = (e) => {
-        const text = e
-        text && this.setState({ text })
+        this.setState({ text: e })
     }
 }
 

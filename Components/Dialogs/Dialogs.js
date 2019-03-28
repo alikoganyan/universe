@@ -50,7 +50,6 @@ class Dialogs extends Component {
     socket.emit('news', { userId: user.id });
     socket.emit('set dialogs', { userId: user.id, dialogId: 33 });
     socket.on('news', e => {
-      console.log('news', e)
     });
     socket.on('get users', e => {
       setAllUsers(e);
