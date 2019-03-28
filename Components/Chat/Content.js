@@ -15,7 +15,7 @@ const Wrapper = styled(View)`
 class Content extends Component {
     render() {
         const { messages, search, currentChat } = this.props
-        const reveesedMessages = [...messages].sort((x, y) => {
+        const reversedMessages = [...messages].sort((x, y) => {
             return x.timeSent < y.timeSent
         });
         return (
@@ -25,7 +25,7 @@ class Content extends Component {
                         style={{ paddingRight: 5, paddingLeft: 5, }}
                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                         inverted={true}
-                        data={reveesedMessages}
+                        data={reversedMessages}
                         renderItem={({ item }) => {
                             if (item.type === 'message') {
                                 return <TouchableOpacity onLongPress={this.handleHold}>

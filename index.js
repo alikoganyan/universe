@@ -101,7 +101,9 @@ io.on('connection', (socket) => {
                     result && result.map(event => {
                         con.query(`SELECT * FROM messages WHERE chatId = ${event.id}  ORDER BY id DESC LIMIT 1`, (err, result) => {
                             messages.push(result[0])
-                            con.query(`SELECT * from messages WHERE senderId = ${e.userId} AND chatId = ${event.id} AND isread = 0`, (err, result) => {
+                            const room = `room${event.id > e.userId ? event.id.toString().concat("_", e.userId) : e.userId.toString().concat("_", event.id)}`
+                            console.log(result)
+                            con.query(`SELECT * from messages WHERE senderId = ${e.userId} AND chatId = "${room}" AND isread = 0`, (err, result) => {
                                 if (err) throw err;
                                 unread.push({ length: result.length, chatId: event.id })
                             })

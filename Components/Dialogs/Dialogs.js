@@ -55,9 +55,6 @@ class Dialogs extends Component {
       setAllUsers(e);
       this.forceUpdate()
 
-      setTimeout(() => {
-        console.log(users)
-      }, 2000)
 
     })
     socket.on('find', e => {

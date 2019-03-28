@@ -4,7 +4,7 @@ import helper from '../../Helper/helper'
 import styled from 'styled-components'
 import { setUser } from '../../actions/userActions'
 import { connect } from 'react-redux'
-import PINCode from '@haskkor/react-native-pincode'
+// import PINCode from '@haskkor/react-native-pincode'
 const { Colors, fontSize } = helper;
 const { border, blue, grey1, lightGrey1, lightBlue } = Colors;
 const { xs, xl, large, text } = fontSize
@@ -67,14 +67,14 @@ class Content extends Component {
         }
         return (
             <Wrapper>
-                < PINCode
+                {/* < PINCode
                     titleEnter={'Введите PIN'}
                     disableLockScreen={true}
                     status={'enter'}
                     timeLocked={100}
                     colorCircleButtons={blue}
                     numbersButtonOverlayColor={lightBlue}
-                />
+                /> */}
             </Wrapper>
         )
     }
