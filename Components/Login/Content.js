@@ -182,6 +182,7 @@ class Content extends Component {
     };
     login = (e) => {
         const { country, phone, password } = this.state;
+        
         socket.emit('login', { phone: country.concat(phone), password })
     }
     signup = (e) => {

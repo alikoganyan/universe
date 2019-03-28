@@ -21,12 +21,13 @@ const Bottom = styled(View)`
     bottom: 0;
     width: 100%;
     background: white;
+    z-index: 20;
     
 `
 const Logout = styled(TouchableOpacity)`
-    position: absolute;
+    /* position: absolute; */
     bottom: 20;
-    z-index: 20;
+    z-index: 21;
     width: 100%;
     display: flex;
     align-items: center;
