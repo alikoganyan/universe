@@ -15,11 +15,14 @@ export default class Signup extends Component {
         return (
             <SafeAreaView behavior={'height'}>
                 <Wrapper>
-                    <Header/>
+                    <Header back={this.navigateBack}/>
                     <Content  forward={this.moveForward}/>
                 </Wrapper>
             </SafeAreaView>
         )
+    }
+    navigateBack = () => {
+        this.props.navigation.goBack()
     }
     componentDidMount() {
 

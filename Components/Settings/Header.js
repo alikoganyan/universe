@@ -32,12 +32,12 @@ const UserImage = styled(Image)`
 `
 class HeaderComponent extends Component {
     render() {
-        const { user } = this.props;
+        const { user, back } = this.props;
         const { image } = user;
         return (
             <Header>
                 <Left>
-                    <BackIcon noPadding />
+                    <BackIcon noPadding onPress={back} />
                     <Text>
                         Настройки
                     </Text>

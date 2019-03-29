@@ -45,12 +45,12 @@ const Right = styled(Left)`
 `
 class HeaderComponent extends Component {
     render() {
-        const { user, toProfile } = this.props
+        const { user, toProfile, back } = this.props
         const { input } = this.state;
         return (
             <Header>
                 <Left>
-                    <BackIcon right />
+                    <BackIcon right onPress={back} />
                     <Text>Новый диалог</Text>
                 </Left>
                 <Right>
