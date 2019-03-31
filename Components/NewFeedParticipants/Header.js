@@ -13,6 +13,7 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
     padding-right: ${sidePadding};
+    padding-left: ${sidePadding};
 `
 const Left = styled(View)`
     display: flex;
@@ -31,7 +32,7 @@ const UserImage = styled(Image)`
     height: 30px;
     border-radius: 15px;
     background: red;
-    margin-left: 10px;
+    margin-left: 20px;
 `
 
 export default class HeaderComponent extends Component {

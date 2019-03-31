@@ -43,6 +43,9 @@ const Left = styled(View)`
 const Right = styled(Left)`
     justify-content: flex-end;
 `
+const MarginRight = styled(View)`
+margin-right: ${sidePaddingNumber};
+`
 class HeaderComponent extends Component {
     render() {
         const { user, toProfile, back } = this.props
@@ -50,11 +53,15 @@ class HeaderComponent extends Component {
         return (
             <Header>
                 <Left>
+                <MarginRight>
                     <BackIcon right onPress={back} />
+                    </MarginRight>
                     <Text>Новый диалог</Text>
                 </Left>
                 <Right>
-                    <SearchIcon right />
+                    <MarginRight>
+                        <SearchIcon right />
+                    </MarginRight>
                     <TouchableOpacity onPress={toProfile}>
                         <ImageComponent source={{ uri: user.image }} />
                     </TouchableOpacity>

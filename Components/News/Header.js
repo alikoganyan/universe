@@ -85,6 +85,9 @@ const Input = styled(TextInput)`
 const IconLeft = styled(Icon)`
     margin-left: ${sidePadding};
 `
+const MarginRight = styled(View)`
+    margin-right: ${sidePaddingNumber};
+`
 class HeaderComponent extends Component {
     render() {
         const { back, search, startSearch, stopSearch, currentChat } = this.props
@@ -92,11 +95,15 @@ class HeaderComponent extends Component {
             <Header>
                 <Top>
                     <Left>
-                        <BackIcon onPress={back} right />
+                        <MarginRight>
+                            <BackIcon onPress={back} right />
+                        </MarginRight>
                         <Text>Новости</Text>
                     </Left>
                     <Right>
-                        <SearchIcon onPress={startSearch} />
+                        <MarginRight>
+                            <SearchIcon onPress={startSearch} />
+                        </MarginRight>
                         <ImageComponent source={{ uri: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
                     </Right>
                 </Top>
