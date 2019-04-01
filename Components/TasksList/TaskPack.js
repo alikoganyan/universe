@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionSheetIOS } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
+import { TasksIcon } from '../../assets/index'
 const { fontSize, PressDelay, sidePadding, Colors, sidePaddingNumber } = helper;
 const { purple, lightColor } = Colors;
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin: 0 ${sidePaddingNumber * 2}px;  
-  padding: ${sidePadding} 0;
+  padding: ${sidePaddingNumber}px 0 ${sidePadding} ${sidePaddingNumber}px;
   border: 1px solid ${lightColor};
   border-width: 0;
   border-top-width: 1px;
@@ -77,16 +77,20 @@ const NewMessages = styled(Text)`
   height: 25px;
   border-radius: 12.5;
 `
+const TaskStatusTextContainer = styled(View)`
+  border: 1px solid ${lightColor};
+  border-radius: 15px; 
+  padding: 2px 8px;
+  margin-right: 5px;
+  display: flex;
+  flex-direction: row;
+`
 const TaskStatus = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center;
 `
 const TaskStatusText = styled(Text)`
-  border: 1px solid ${lightColor};
-  border-radius: 10;
-  padding: 1px 5px;
-  margin-right: 5px;
   color: ${lightColor};
 `
 const TaskStatusAdditional = styled(Text)`
@@ -103,7 +107,10 @@ export default class TaskPack extends Component {
               <TaskTitle>{title}</TaskTitle>
               <TaskLastMessage numberOfLines={1} >{children}Labore quis nulla velit sit occaecat deserunt cillum occaecat dolor et elit duis. Dolore laboris nostrud esse ullamco irure cupidatat mollit nisi nostrud in irure aliquip adipisicing proident. Eu aliquip consectetur velit quis pariatur velit sint esse incididunt laborum aute aliqua. Laboris laboris aliqua magna laborum reprehenderit nostrud aliquip consectetur proident aliquip commodo elit officia.</TaskLastMessage>
               <TaskStatus>
-                <TaskStatusText>в работе</TaskStatusText>
+                <TaskStatusTextContainer>
+                  <TasksIcon/>
+                  <TaskStatusText>в работе</TaskStatusText>
+                </TaskStatusTextContainer>
                 <TaskStatusAdditional>+4 задачи</TaskStatusAdditional>
               </TaskStatus>
             </TaskTextInner>
