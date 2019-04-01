@@ -4,7 +4,8 @@ import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import helper from '../../Helper/helper'
-const { sidePadding, HeaderHeight } = helper;
+import { ImageComponent } from '../../Common/'
+const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -14,6 +15,7 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
     padding-right: ${sidePadding};
+    padding-left: ${sidePadding};
 `
 const Left = styled(View)`
     display: flex;
@@ -26,24 +28,29 @@ const Right = styled(View)`
     align-items: flex-end;
 `
 const UserImage = styled(Image)`
-    width: 40px;
-    height: 40px;
-    border-radius: 20px;
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
+`
+const MarginRight = styled(View)`
+    margin-right: ${sidePaddingNumber};
 `
 class HeaderComponent extends Component {
     render() {
-        const { user } = this.props;
+        const { user, back } = this.props;
         const { image } = user;
         return (
             <Header>
                 <Left>
-                    <BackIcon noPadding />
+                    <MarginRight>
+                        <BackIcon noPadding onPress={back} />
+                    </MarginRight>
                     <Text>
                         Настройки
                     </Text>
                 </Left>
                 <Right>
-                    <UserImage source={{uri: image}}/>
+                    <ImageComponent source={{uri: image}}/>
                 </Right>
             </Header>
         )

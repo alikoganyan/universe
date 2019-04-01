@@ -6,15 +6,15 @@ import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
 const Header = styled(View)`
-    width: ${Dimensions.get('window').width - sidePaddingNumber * 2}px;
-    margin: ${sidePadding} 0;
-    align-self: center;
+    width: 100%;
     background: white;
-    height: ${HeaderHeight}; 
+    height: ${HeaderHeight};
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    padding-right: ${sidePadding};
+    padding-left: ${sidePadding};
 `
 const Left = styled(View)`
     display: flex;
@@ -28,13 +28,18 @@ const Right = styled(View)`
     align-items: flex-end;
     justify-content: flex-start;
 `
+const MarginRight = styled(View)`
+    margin-right: ${sidePaddingNumber};
+`
 export default class HeaderComponent extends Component {
     render() {
         const { myProfile } = this.props;
         return (
             <Header>
                 <Left>
-                    <BackIcon onPress={this.props.back} />
+                    <MarginRight>
+                        <BackIcon onPress={this.props.back} />
+                    </MarginRight>
                     <Text>Изменить профиль</Text>
                 </Left>
             </Header>

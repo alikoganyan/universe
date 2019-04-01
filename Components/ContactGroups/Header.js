@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS } from 'react
 import { BackIcon, AddIcon, SearchIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-const { HeaderHeight, sidePadding } = helper;
+const { HeaderHeight, sidePadding, sidePaddingNumber } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -13,6 +13,7 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
     padding-right: ${sidePadding};
+    padding-left: ${sidePadding};
 `
 const Left = styled(View)`
     display: flex;
@@ -31,7 +32,10 @@ const UserImage = styled(Image)`
     height: 30px;
     border-radius: 15px;
     background: red;
-    margin-left: 10px;
+    margin-left:${sidePaddingNumber};
+`
+const MarginRight = styled(View)`
+margin-right: ${sidePaddingNumber};
 `
 
 export default class HeaderComponent extends Component {
@@ -39,7 +43,9 @@ export default class HeaderComponent extends Component {
         return (
             <Header>
                 <Left>
-                    <BackIcon onPress={this.props.back}/>
+                    <MarginRight>
+                        <BackIcon onPress={this.props.back}/>
+                    </MarginRight>
                     <Text>
                         Контакты
                     </Text>

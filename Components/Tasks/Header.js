@@ -31,10 +31,11 @@ const UserIcon = styled(Image)`
 
 export default class HeaderComponent extends Component {
     render() {
+        const { back } = this.props
         return (
             <Header>
                 <Left>
-                    <BackIcon />
+                    <BackIcon  onPress={back}/>
                     <Text>Все входящие задачи</Text>
                 </Left>
                 <Right>

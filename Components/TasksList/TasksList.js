@@ -14,12 +14,15 @@ export default class Tasks extends Component {
     return (
       <SafeAreaView>
         <Wrapper>
-          <Header />
+          <Header back={this.navigateBack}/>
           <Content />
         </Wrapper>
       </SafeAreaView>
     )
   }
+  navigateBack = () => {
+    this.props.navigation.goBack()
+}
   componentDidMount() { }
   toChat = () => {
     this.props.navigation.navigate('Chat')

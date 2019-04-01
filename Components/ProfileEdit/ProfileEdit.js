@@ -15,21 +15,23 @@ import { Header, Content } from './'
 const { socket, Colors } = helper
 const { blue } = Colors;
 const Wrapper = styled(View)`
-    height: ${Dimensions.get('window').height};
+    height: 100%;
 `
 
 class ProfileEdit extends Component {
     render() {
         return (
             <ActionSheetProvider>
-                <Wrapper>
-                    <Header back={this.navigateBack} />
-                    <KeyboardAvoidingView behavior={'padding'}>
-                        <ScrollView>
-                            <Content />
-                        </ScrollView>
-                    </KeyboardAvoidingView>
-                </Wrapper>
+                <SafeAreaView>
+                    <Wrapper>
+                        <Header back={this.navigateBack} />
+                        <KeyboardAvoidingView behavior={'padding'}>
+                            <ScrollView>
+                                <Content />
+                            </ScrollView>
+                        </KeyboardAvoidingView>
+                    </Wrapper>
+                </SafeAreaView>
             </ActionSheetProvider>
         )
     }
