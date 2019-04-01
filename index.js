@@ -15,7 +15,7 @@ io.on('connection', (socket) => {
     let room = null;
     /* chat messages */
     socket.on('chat message', (e) => {
-        const room = `room${e.senderId > e.chatId ? e.senderId.toString().concat("_", e.chatId) : e.chatId.toString().concat("_", e.senderId)}`
+        room = `room${e.senderId > e.chatId ? e.senderId.toString().concat("_", e.chatId) : e.chatId.toString().concat("_", e.senderId)}`
         con.query(`INSERT INTO messages (type, text, senderId, chatId, likes, comments, stage, title, performers) VALUES
             ("${e.type}","${e.text}","${e.senderId}","${room}","${e.likes || 0}",
                 "${e.comments || 0}","${e.stage || 0}","${e.title}","${e.performers}")`,
@@ -23,7 +23,9 @@ io.on('connection', (socket) => {
                 if (err) throw err;
                 con.query(`SELECT * FROM messages WHERE chatId = "${room}" ORDER BY id DESC LIMIT 1`, (err, res) => {
                     if (err) throw err;
-                    socket.broadcast.emit('new message', res[0])
+                    io.sockets
+                        .in(room || `room${e.senderId > e.chatId ? e.senderId.toString().concat("_", e.chatId) : e.chatId.toString().concat("_", e.senderId)}`)
+                        .emit('new message', res[0])
                 })
 
             });
@@ -51,7 +53,7 @@ io.on('connection', (socket) => {
 
     /* leave chat */
     socket.on('leave chat', (e) => {
-        // socket.leave(room);
+        socket.leave(room);
     })
 
 

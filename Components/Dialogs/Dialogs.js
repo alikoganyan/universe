@@ -60,7 +60,12 @@ class Dialogs extends Component {
     })
     socket.on('chat message', e => {
       addMessage(e)
-      this.forceUpdate()
+      const { FlatListData } = this.state
+      const newFlatListData = [...FlatListData]
+      newFlatListData.sort((a, b) => {
+        return new Date(a.lastMessage) - new Date(b.lastMessage)
+      })
+      // this.setState({ FlatListData: newFlatListData })
     })
     socket.on('new message', (e) => {
       const { senderId } = e
@@ -72,6 +77,9 @@ class Dialogs extends Component {
       if (newFlatListData[index]) {
         newFlatListData[index].text = e.text
       }
+      newFlatListData.sort((a, b) => {
+        return new Date(b.lastMessage) - new Date(a.lastMessage)
+      })
       this.setState({ FlatListData: newFlatListData })
     })
     socket.on('dialogs', (e) => {

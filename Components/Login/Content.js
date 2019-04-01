@@ -182,20 +182,7 @@ class Content extends Component {
     login = async (e) => {
         const { navigate, setUser } = this.props;
         const { country, phone, password } = this.state;
-        let value = await AsyncStorage.getItem('user');
-        value = JSON.parse(value);
-        if (value) {
-            this.setState({ phone: value.phone.slice(2) })
-            setUser({
-                ...value,
-                id: value.id,
-                image: value.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png'
-            })
-            socket.emit('update user', { id: value.id })
-            socket.on('update user', e => setUser({ ...e, image: e.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png', }))
-        } else {
-            socket.emit('login', { phone: country.concat(phone), password })
-        }
+        socket.emit('login', { phone: country.concat(phone), password })
     }
     signup = (e) => {
         const { navigate } = this.props;
