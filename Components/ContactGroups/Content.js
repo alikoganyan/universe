@@ -136,13 +136,13 @@ class Content extends Component {
         const { active } = options;
         return (
             <SafeAreaView>
-                <GestureRecognizer
-                    onSwipeLeft={this.optionLeft}
-                    onSwipeRight={this.optionRight}
-                >
+                <KeyboardAwareScrollView enableOnAndroid>
+                    <GestureRecognizer
+                        onSwipeLeft={this.optionLeft}
+                        onSwipeRight={this.optionRight}
+                    >
 
-                    <Wrapper>
-                        <KeyboardAwareScrollView enableOnAndroid>
+                        <Wrapper>
                             <Options>
                                 {
                                     options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
@@ -197,9 +197,9 @@ class Content extends Component {
                                     />
                                 </ContactList>
                             </Animated>
-                        </KeyboardAwareScrollView>
-                    </Wrapper>
-                </GestureRecognizer>
+                        </Wrapper>
+                    </GestureRecognizer>
+                </KeyboardAwareScrollView>
             </SafeAreaView>
         )
     }

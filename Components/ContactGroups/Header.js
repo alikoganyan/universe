@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS } from 'react
 import { BackIcon, AddIcon, SearchIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
+import { ImageComponent } from '../../Common/'
 const { HeaderHeight, sidePadding, sidePaddingNumber } = helper;
 const Header = styled(View)`
     width: 100%;
