@@ -13,6 +13,7 @@ var con = mysql.createConnection({
 
 io.on('connection', (socket) => {
     let room = null;
+
     /* chat messages */
     socket.on('chat message', (e) => {
         room = `room${e.senderId > e.chatId ? e.senderId.toString().concat("_", e.chatId) : e.chatId.toString().concat("_", e.senderId)}`
@@ -23,9 +24,8 @@ io.on('connection', (socket) => {
                 if (err) throw err;
                 con.query(`SELECT * FROM messages WHERE chatId = "${room}" ORDER BY id DESC LIMIT 1`, (err, res) => {
                     if (err) throw err;
-                    io.sockets
-                        .in(room || `room${e.senderId > e.chatId ? e.senderId.toString().concat("_", e.chatId) : e.chatId.toString().concat("_", e.senderId)}`)
-                        .emit('new message', res[0])
+                    io.sockets.emit('new message', res[0])
+                    io.emit('new message local', res[0])
                 })
 
             });
@@ -112,6 +112,7 @@ io.on('connection', (socket) => {
                             messages.push(result[0])
                             con.query(`SELECT * from messages WHERE senderId = ${e.userId} AND chatId = "${room}" AND isread = 0`, (err, result) => {
                                 if (err) throw err;
+                                console.log(e)
                                 unread.push({ length: result.length, chatId: event.id })
                             })
                         })

@@ -65,22 +65,28 @@ class Dialogs extends Component {
       newFlatListData.sort((a, b) => {
         return new Date(a.lastMessage) - new Date(b.lastMessage)
       })
-      // this.setState({ FlatListData: newFlatListData })
+      // this.setState({ FlatListData: newFlatListData })?
     })
     socket.on('new message', (e) => {
-      const { senderId } = e
+      const { senderId, chatId } = e
+      const { user, currentChat } = this.props
+      const chat = chatId.split('room')[1].replace(/\_/, '').replace(senderId, '')
       const { FlatListData } = this.state
       const newFlatListData = [...FlatListData]
       const index = newFlatListData.findIndex((event) => {
         return event.id === e.senderId
       })
-      if (newFlatListData[index]) {
-        newFlatListData[index].text = e.text
+      const myIndex = newFlatListData.findIndex((event) => {
+        return event.id === user.id
+      })
+      if (newFlatListData[index] || newFlatListData[myIndex]) {
+        if (chat == user.id) newFlatListData[index].text = e.text
+        if (senderId == user.id) newFlatListData[myIndex].text = e.text
       }
       newFlatListData.sort((a, b) => {
         return new Date(b.lastMessage) - new Date(a.lastMessage)
       })
-      this.setState({ FlatListData: newFlatListData })
+      if (chat == user.id || senderId == user.id) this.setState({ FlatListData: newFlatListData })
     })
     socket.on('dialogs', (e) => {
       const { user } = this.props
@@ -132,6 +138,7 @@ const mapStateToProps = state => {
     messages: state.messageReducer,
     dialog: state.dialogsReducer.dialogs,
     currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
     user: state.userReducer.user.user,
     users: state.userReducer
   };
