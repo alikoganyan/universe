@@ -7,9 +7,10 @@ import helper from '../../Helper/helper'
 const { sidePaddingNumber, HeaderHeightNumber } = helper;
 const Wrapper = styled(View)`
   max-height: ${Dimensions.get('window').height - sidePaddingNumber}px;
-`
-const StyledScrollView = styled(ScrollView)`
+  `
+  const StyledScrollView = styled(ScrollView)`
   height: ${Dimensions.get('window').height - HeaderHeightNumber - 20}px;
+  padding: 0  ${sidePaddingNumber}px;
 `
 
 export default class Tasks extends Component {
@@ -18,8 +19,8 @@ export default class Tasks extends Component {
     return (
       <Wrapper>
         <StyledScrollView>
-          <TaskPack title={'title'}>task</TaskPack>
-          <TaskPack title={'title'} last>task</TaskPack>
+          <TaskPack title={'Все исходящие задачи'}>task</TaskPack>
+          <TaskPack title={'Все исходящие задачи'} last>task</TaskPack>
           {
             FlatListData.map((e, i) => {
               return <Task key={i} title={e.title}></Task>

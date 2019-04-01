@@ -45,7 +45,7 @@ export default class HeaderComponent extends Component {
                     <MarginRight>
                         <BackIcon onPress={back} />
                     </MarginRight>
-                    <Text>Новости</Text>
+                    <Text>Задачи</Text>
                 </Left>
                 <Right>
                     <SearchIcon />
