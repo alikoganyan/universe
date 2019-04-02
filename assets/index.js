@@ -11,6 +11,7 @@ const { IconDarkColor,
     IconLightColor,
     IconBlueColor,
     IconSize,
+    IconSizeSmall,
     IconSizeLarge,
     sidePadding } = helper;
 
@@ -287,8 +288,8 @@ export function HeartIcon(props) {
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             <SvgUri
-                width={IconSize}
-                height={IconSize}
+                width={IconSizeSmall}
+                height={IconSizeSmall}
                 source={SVG.Likes}
             />
         </StyledTouchableOpacity>
@@ -300,8 +301,8 @@ export function CommentIcon(props) {
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             <SvgUri
-                width={IconSize}
-                height={IconSize}
+                width={IconSizeSmall}
+                height={IconSizeSmall}
                 source={SVG.Comments}
             />
         </StyledTouchableOpacity>

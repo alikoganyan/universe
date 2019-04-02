@@ -4,7 +4,7 @@ import { CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 const { borderRadius, Colors } = helper;
-const { yellow } = Colors;
+const { yellow, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`
     margin-bottom: 40px;   
     background: white;
@@ -19,9 +19,9 @@ const NewsItem = styled(View)`
     background: white;
     padding: 20px;
     padding-bottom: 10px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     border-radius: ${borderRadius};
-    border: 1px solid ${yellow};
+    border: 0.5px solid ${yellow};
     border-radius: 5;
 
 `
@@ -32,14 +32,14 @@ const Sender = styled(View)`
     margin-bottom: 15px;
 `
 const Sendermage = styled(Image)`
-    width: 40;
-    height: 40;
-    border-radius: 20;
+    width: 30;
+    height: 30;
+    border-radius: 15;
     background: red;
     margin-right: 10px;
 `
 const SenderName = styled(Text)`
-    font-size: 16px;
+    font-size: 13;
 `
 const SenderInfo = styled(View)`
     display: flex;
@@ -48,7 +48,7 @@ const SenderInfo = styled(View)`
 `
 const TimeSent = styled(Text)`
     color: #848484;
-    font-size: 13;
+    font-size: 11;
 `
 const NewsItemInfo = styled(View)`
     width: 100%;
@@ -68,7 +68,12 @@ const HashTag = styled(Text)`
     color: ${yellow};
     margin-right: 5px;
     font-weight: 500;
-    font-size: 17px;
+    font-size: 13px;
+`
+const NewsText = styled(Text)`
+    color: ${darkBlue2};
+    font-weight: 300;
+    font-size: 13px;
 `
 const Reactions = styled(View)`
     display: flex;
@@ -76,6 +81,11 @@ const Reactions = styled(View)`
     flex-direction: row;
     align-items: center;
 `
+const Reactionsext = styled(Text)`
+    color: ${grey2};
+    font-size: 10px;
+`
+
 export default class Content extends Component {
     render() {
         const { newsList } = this.state;
@@ -94,15 +104,15 @@ export default class Content extends Component {
                                     <TimeSent>{item.timeSent}</TimeSent>
                                 </SenderInfo>
                             </Sender>
-                            <Text numberOfLines={2}>{item.text}</Text>
+                            <NewsText numberOfLines={2}>{item.text}</NewsText>
                             <NewsItemInfo>
                                 <ShowAll>
                                     <TouchableOpacity onPress={proceed}><HashTag>Читать далее</HashTag></TouchableOpacity>
                                 </ShowAll>
 
                                 <Reactions>
-                                    <HeartIcon /><Text>12</Text>
-                                    <CommentIcon left/><Text>12</Text>
+                                    <HeartIcon /><Reactionsext>12</Reactionsext>
+                                    <CommentIcon left/><Reactionsext>12</Reactionsext>
                                 </Reactions>
                             </NewsItemInfo>
                         </NewsItem>}
@@ -117,86 +127,86 @@ export default class Content extends Component {
             {
                 sender: {
                     img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
-                    name: 'lol'
+                    name: 'Константин Константинопольский'
                 },
-                text: 'some text',
+                text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
                 hashtags: [
-                    '#lol',
+                    '#Константин Константинопольский',
                     '#kek'
                 ],
                 likes: 10,
                 shares: 2,
-                timeSent: 'Сегодня в 15:00'
+                timeSent: '16 января 2018 17:17'
             },
             {
                 sender: {
                     img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
-                    name: 'lol'
+                    name: 'Константин Константинопольский'
                 },
-                text: 'some text',
+                text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
                 hashtags: [
-                    '#lol',
+                    '#Константин Константинопольский',
                     '#kek'
                 ],
                 likes: 10,
                 shares: 2,
-                timeSent: 'Сегодня в 15:00'
+                timeSent: '16 января 2018 17:17'
             },
             {
                 sender: {
                     img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
-                    name: 'lol'
+                    name: 'Константин Константинопольский'
                 },
-                text: 'some text',
+                text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
                 hashtags: [
-                    '#lol',
+                    '#Константин Константинопольский',
                     '#kek'
                 ],
                 likes: 10,
                 shares: 2,
-                timeSent: 'Сегодня в 15:00'
+                timeSent: '16 января 2018 17:17'
             },
             {
                 sender: {
                     img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
-                    name: 'lol'
+                    name: 'Константин Константинопольский'
                 },
-                text: 'some text',
+                text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
                 hashtags: [
-                    '#lol',
+                    '#Константин Константинопольский',
                     '#kek'
                 ],
                 likes: 10,
                 shares: 2,
-                timeSent: 'Сегодня в 15:00'
+                timeSent: '16 января 2018 17:17'
             },
             {
                 sender: {
                     img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
-                    name: 'lol'
+                    name: 'Константин Константинопольский'
                 },
-                text: 'some text',
+                text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
                 hashtags: [
-                    '#lol',
+                    '#Константин Константинопольский',
                     '#kek'
                 ],
                 likes: 10,
                 shares: 2,
-                timeSent: 'Сегодня в 15:00'
+                timeSent: '16 января 2018 17:17'
             },
             {
                 sender: {
                     img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
-                    name: 'lol'
+                    name: 'Константин Константинопольский'
                 },
-                text: 'some text',
+                text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
                 hashtags: [
-                    '#lol',
+                    '#Константин Константинопольский',
                     '#kek'
                 ],
                 likes: 10,
                 shares: 2,
-                timeSent: 'Сегодня в 15:00'
+                timeSent: '16 января 2018 17:17'
             },
 
         ]

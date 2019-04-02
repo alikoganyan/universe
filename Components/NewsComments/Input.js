@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
-
-const { socket, sidePaddingNumber } = helper;
+const { socket, sidePaddingNumber, Colors} = helper;
+const { yellow } = Colors;
 const Wrapper = styled(View)`
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
     left: 0;
@@ -19,9 +19,8 @@ const Wrapper = styled(View)`
     align-items: center;
     border-radius: 5;
     border-width: 1;
-    border-color: #ddd;
-    border-bottom-width: 2;
-    background: white;
+    border-color: ${yellow};
+    background-color: white;
 `
 const Input = styled(TextInput)`
     font-size: 15px;
