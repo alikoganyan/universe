@@ -7,6 +7,7 @@ export default helper = {
     IconLightColor: '#ABABAB',
     IconBlueColor: '#2B5275',
     IconSize: 15,
+    IconSizeSmall: 11,
     IconSizeLarge: 20,
     borderRadius: 7,
     Colors: {

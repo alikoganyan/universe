@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
 import { CommentIcon, HeartIcon, TriangleLeftIcon, TriangleRightIcon, CheckIcon } from '../../assets/index'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { ImageComponent } from '../../Common'
 const { HeaderHeightNumber, sidePadding, borderRadius, Colors } = helper;
-const { yellow, black } = Colors;
+const { yellow, black, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`
     margin-bottom: 50px;   
     background: white;
@@ -16,9 +17,10 @@ const NewsItem = styled(View)`
     background: white;
     padding: 20px;
     padding-bottom: 10px;
-    border: 1px solid ${yellow};
+    border: 0.5px solid ${yellow};
     border-radius: ${borderRadius};
     margin: 0 ${sidePadding};
+    margin-bottom: 10px;
 `
 const Sender = styled(View)`
     display: flex;
@@ -27,14 +29,14 @@ const Sender = styled(View)`
     margin-bottom: 15px;
 `
 const Sendermage = styled(Image)`
-    width: 40;
-    height: 40;
-    border-radius: 20;
+    width: 30;
+    height: 30;
+    border-radius: 15;
     background: red;
     margin-right: 10px;
 `
 const SenderName = styled(Text)`
-    font-size: 16px;
+    font-size: 13px;
 `
 const SenderInfo = styled(View)`
     display: flex;
@@ -43,7 +45,7 @@ const SenderInfo = styled(View)`
 `
 const TimeSent = styled(Text)`
     color: #848484;
-    font-size: 13;
+    font-size: 11;
 `
 const NewsItemInfo = styled(View)`
     width: 100%;
@@ -51,6 +53,7 @@ const NewsItemInfo = styled(View)`
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
+    margin-top: 10px;
 `
 const ShowAll = styled(View)`
     display: flex;
@@ -58,19 +61,16 @@ const ShowAll = styled(View)`
     align-items: center;
     justify-content: flex-start;
 `
-const HashTag = styled(Text)`
-    color: ${yellow};
-    margin-right: 5px;
-    font-weight: 500;
-    font-size: 17px;
-`
 const Reactions = styled(View)`
     display: flex;
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
 `
-
+const ReactionsText = styled(Text)`
+    font-size: 10px;
+    color: ${grey2};
+`
 const MyMessage = styled(View)`
     display: flex;
     justify-content: flex-end;
@@ -87,8 +87,8 @@ const MyMessageText = styled(Text)`
     display: flex;
     justify-content: flex-end;
     text-align: left;
-    padding: 10px;
-    padding-bottom: 0;
+    padding: 10px 15px;
+    font-size: 13;
     color: ${black};
 `
 
@@ -97,11 +97,10 @@ const InterlocutorsMessage = styled(MyMessage)`
     flex-direction: column;
     text-align: left;
     align-items: flex-start;
-    background: #F6F6F6;
+    background: #fff1dd;
     margin-left: 10px;
     position: relative;
     left: -10px;
-    
 `
 
 const InterlocutorsMessageText = styled(MyMessageText)`
@@ -111,11 +110,19 @@ const InterlocutorsMessageText = styled(MyMessageText)`
     flex-direction: column;
     justify-content: flex-end;
     text-align: left;
-    color: #54585D;    
-    border-radius: 3;
+    color: ${darkBlue2};
     overflow: hidden;
-    padding: 10px;
+    padding-top: 0;
     flex-wrap: wrap;
+`
+const InterlocutorsMessageName = styled(MyMessageText)`
+    justify-content: flex-start;
+    display: flex;
+    justify-content: flex-end;
+    text-align: left;
+    color: ${black};  
+    padding-bottom: 5px;
+    overflow: hidden;
 `
 const MessageInfo = styled(View)`
     display: flex;
@@ -127,15 +134,24 @@ const MessageInfo = styled(View)`
 `
 
 const MessageDate = styled(Text)`
-    color: ${({ color }) => color || '#ABABAB'};
+    color: ${({ color }) => color || grey2};
     margin-left: 15px;
 `
-const FeedText = styled(ScrollView)`
-    max-height: 150px;
+const FeedText = styled(View)``
+
+const NewsText = styled(Text)`
+    color: ${darkBlue2};
+    font-weight: 300;
+    font-size: 13;
 `
+const LikeText = styled(Text)`
+    font-size: 10px;
+    color: ${({ color }) => color || grey2};
+`
+
 const Message = (props) => {
     const { children } = props;
-    const { text, id, likes } = children;
+    const { text, id, likes, name } = children;
     const myId = 1;
     return myId === id ? (
         <View style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
@@ -144,8 +160,8 @@ const Message = (props) => {
                     {text}
                 </MyMessageText>
                 <MessageInfo>
-                    <HeartIcon style={{ paddingRight: 5 }} /><Text>{likes}</Text>
-                    <MessageDate color={black}>1:40</MessageDate>
+                    <HeartIcon style={{ paddingRight: 5 }} /><LikeText color={darkBlue2}>{likes}</LikeText>
+                    <MessageDate color={darkBlue2}>1:40</MessageDate>
                 </MessageInfo>
             </MyMessage>
             <TriangleLeftIcon color={yellow} />
@@ -154,13 +170,12 @@ const Message = (props) => {
             <ImageComponent
                 style={{ position: 'relative', left: 5, bottom: 5 }}
                 source={{ uri: 'https://cdn.pixabay.com/photo/2016/06/18/17/42/image-1465348_960_720.jpg' }} />
-            <TriangleRightIcon color={'#F6F6F6'} />
+            <TriangleRightIcon color={'#fff1dd'} />
             <InterlocutorsMessage>
-                <InterlocutorsMessageText>
-                    {text}
-                </InterlocutorsMessageText>
+                <InterlocutorsMessageName>{name}</InterlocutorsMessageName>
+                <InterlocutorsMessageText>{text}</InterlocutorsMessageText>
                 <MessageInfo>
-                    <HeartIcon style={{ paddingRight: 5 }} /><Text>{likes}</Text>
+                    <HeartIcon style={{ paddingRight: 5 }} /><LikeText>{likes}</LikeText>
                     <MessageDate>1:40</MessageDate>
                 </MessageInfo>
             </InterlocutorsMessage>
@@ -175,6 +190,7 @@ export default class Content extends Component {
         return (
             <SafeAreaView>
                 <Wrapper>
+                <KeyboardAwareScrollView enableOnAndroid>
                     <NewsItem onLayout={(e) => this.getUnreadMessageHeight(e)}>
                         <Sender>
                             <Sendermage />
@@ -184,20 +200,19 @@ export default class Content extends Component {
                             </SenderInfo>
                         </Sender>
                         <FeedText>
-                            <Text>Elit nisi ut ea fugiat mollit velit. Nulla sunt veniam eu consequat esse sunt aliqua pariatur. Anim aliquip fugiat nulla exercitation elit qui id commodo aute esse pariatur cupidatat ex. Dolor qui culpa tempor Lorem consectetur sunt consectetur minim proident irure excepteur commodo mollit. Eiusmod id laboris ea mollit magna nulla fugiat Lorem mollit aute adipisicing nulla non.Sint aute nulla adipisicing irure. Laboris qui aute dolor ex reprehenderit veniam duis culpa cillum minim sit adipisicing laborum. Culpa ea sit minim fugiat in cillum eiusmod. Ipsum do commodo est labore.</Text>
+                            <NewsText>Elit nisi ut ea fugiat mollit velit. Nulla sunt veniam eu consequat esse sunt aliqua pariatur. Anim aliquip fugiat nulla exercitation elit qui id commodo aute esse pariatur cupidatat ex. Dolor qui culpa tempor Lorem consectetur sunt consectetur minim proident irure excepteur commodo mollit. Eiusmod id laboris ea mollit magna nulla fugiat Lorem mollit aute adipisicing nulla non.Sint aute nulla adipisicing irure. Laboris qui aute dolor ex reprehenderit veniam duis culpa cillum minim sit adipisicing laborum. Culpa ea sit minim fugiat in cillum eiusmod. Ipsum do commodo est labore.</NewsText>
                         </FeedText>
                         <NewsItemInfo>
                             <ShowAll>
                             </ShowAll>
-
                             <Reactions>
-                                <HeartIcon /><Text>{likes}</Text>
-                                <CommentIcon /><Text>{comments.length}</Text>
+                                <HeartIcon /><ReactionsText>{likes}</ReactionsText>
+                                <CommentIcon left/><ReactionsText>{comments.length}</ReactionsText>
                             </Reactions>
                         </NewsItemInfo>
                     </NewsItem>
                     <FlatList
-                        style={{ paddingRight: 5, paddingLeft: 5, height }}
+                        style={{ paddingRight: 5, paddingLeft: 5, }}
                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                         contentContainerStyle={{ alignItems: 'stretch' }}
                         inverted={true}
@@ -205,6 +220,7 @@ export default class Content extends Component {
                         renderItem={({ item }) => <Message>{item}</Message>}
                         keyExtractor={(item, index) => index.toString()}
                     />
+                    </KeyboardAwareScrollView>
                 </Wrapper>
             </SafeAreaView>
         )
@@ -220,14 +236,14 @@ export default class Content extends Component {
             likes: 10,
             timeSent: 'Сегодня в 15:00',
             comments: [
-                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
-                { type: 'message', likes: 2, text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 1 },
+                { type: 'message', likes: 2, name: 'Константин Константинопольский',text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, name: 'Константин Константинопольский',text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, name: 'Константин Константинопольский',text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, name: 'Константин Константинопольский',text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, name: 'Константин Константинопольский',text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, name: 'Константин Константинопольский',text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, name: 'Константин Константинопольский',text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 0 },
+                { type: 'message', likes: 2, name: 'Константин Константинопольский',text: 'Irure cillum sunt ut pariatur laboris sint nisi12123123123123123123123123123123s.', id: 1 },
             ]
         },
     }

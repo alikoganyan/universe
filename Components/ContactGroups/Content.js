@@ -45,7 +45,7 @@ const AnimatedArrowWrapper = posed.View({
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
-    margin-bottom: 110px;
+    margin-bottom: 40px;
     
 `
 const ContactList = styled(ScrollView)`
@@ -136,16 +136,14 @@ class Content extends Component {
         const { active } = options;
         return (
             <SafeAreaView>
-                <KeyboardAwareScrollView enableOnAndroid>
-                    <GestureRecognizer
-                        onSwipeLeft={this.optionLeft}
-                        onSwipeRight={this.optionRight}
-                    >
-
-                        <Wrapper>
+                <GestureRecognizer
+                    onSwipeLeft={this.optionLeft}
+                    onSwipeRight={this.optionRight}
+                >
+                    <Wrapper>
+                        <KeyboardAwareScrollView enableOnAndroid>
                             <Options>
-                                {
-                                    options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+                                {options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
                                         <Option active={active % 3 === i}>{e}</Option>
                                     </TouchableOpacity>)
                                 }
@@ -153,8 +151,7 @@ class Content extends Component {
                             <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
                                 <ContactList style={{ width: '100%' }}><Text>123</Text></ContactList>
                                 <ContactList>
-                                    {
-                                        department.map((e, i) => (
+                                    {department.map((e, i) => (
                                             <Box key={i} last={i === department.length - 1}>
                                                 <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
                                                     <BoxItem title={true}>{e.title}</BoxItem>
@@ -164,8 +161,7 @@ class Content extends Component {
                                                 </BoxTitle>
                                                 <Collapsible collapsed={collapsed[i] || false}>
                                                     <BoxInner>
-                                                        {
-                                                            e.workers.map((e, i) => <BoxInnerItem key={i}>
+                                                        {e.workers.map((e, i) => <BoxInnerItem key={i}>
                                                                 <ContactImage />
                                                                 <ContactInfo>
                                                                     <ContactName>{e.name}</ContactName>
@@ -176,8 +172,7 @@ class Content extends Component {
                                                     </BoxInner>
                                                 </Collapsible>
                                             </Box>
-                                        ))
-                                    }
+                                        ))}
                                 </ContactList>
                                 <ContactList>
                                     <FlatList
