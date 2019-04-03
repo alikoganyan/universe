@@ -192,9 +192,9 @@ class Content extends Component {
                                     />
                                 </ContactList>
                             </Animated>
-                        </KeyboardAwareScrollView>
-                    </Wrapper>
-                </GestureRecognizer>
+                        </Wrapper>
+                    </GestureRecognizer>
+                </KeyboardAwareScrollView>
             </SafeAreaView>
         )
     }

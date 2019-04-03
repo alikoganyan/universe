@@ -29,7 +29,7 @@ export default helper = {
         lightGrey1: '#b1b9c2',
         lightGrey2: '#f7f7f7',
     },
-    socket: io(socketUrl, { transports: ['websocket'] }),
+    socket: io(socketUrl, { test: '123', transports: ['websocket'] }),
     sidePaddingNumber: Dimensions.get('window').width / 100 * 4.5,
     sidePadding: `4.5%`,
     HeaderHeightNumber: 50,

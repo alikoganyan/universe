@@ -127,7 +127,6 @@ class Content extends Component {
     componentDidMount() {
         const { settings, langs } = this.state
         const { user } = this.props
-        console.log(user.language, user.notifications, user.sound, user.contacts)
         const newSettings = [...settings]
         newSettings.map(e => {
             if (e.item === 'language') {

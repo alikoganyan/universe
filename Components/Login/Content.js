@@ -140,12 +140,11 @@ class Content extends Component {
     }
     componentDidMount = async () => {
 
-        const { navigate } = this.props;
-        const { setUser } = this.props;
+        const { navigate, setUser } = this.props;
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
         if (value) {
-            this.setState({phone: value.phone.slice(2)})
+            this.setState({ phone: value.phone.slice(2) })
             setUser({
                 ...value,
                 id: value.id,
@@ -180,7 +179,8 @@ class Content extends Component {
             // Error saving data
         }
     };
-    login = (e) => {
+    login = async (e) => {
+        const { navigate, setUser } = this.props;
         const { country, phone, password } = this.state;
         socket.emit('login', { phone: country.concat(phone), password })
     }

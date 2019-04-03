@@ -101,7 +101,6 @@ class Content extends Component {
         const { user, currentRoom, currentChat, myProfile } = this.props;
         const { id, image, lastName, firstName, phone } = myProfile ? user : currentChat;
         const name = firstName || lastName ? `${firstName} ${lastName}` : phone
-        console.log(user)
         return (
             <Wrapper>
                 <User >

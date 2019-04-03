@@ -31,7 +31,7 @@ const Option = styled(Text)`
     background: ${({ active }) => active ? 'white' : 'transparent'};
     margin: 1px;
     border-radius: 10;
-    padding: 2px 10px;
+    padding: 2px 0;
     overflow: hidden;
     min-width: 50px;
     text-align: center;

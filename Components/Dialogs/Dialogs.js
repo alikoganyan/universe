@@ -20,6 +20,7 @@ const StyledFlatList = styled(FlatList)`
 
 class Dialogs extends Component {
   render() {
+    const { user } = this.props
     const { FlatListData } = this.state;
     return (
       <SafeAreaView behavior={'padding'}>
@@ -44,34 +45,60 @@ class Dialogs extends Component {
     this.props.navigation.navigate('Profile')
   }
   componentDidMount() {
-    const { getMessages, setDialogs, messages, id, addMessage, setAllUsers, users } = this.props;
-    socket.emit('dialogs', { userId: id });
-    socket.emit('news', { userId: id });
-    socket.emit('set dialogs', { userId: id, dialogId: 33 });
+    const { getMessages, setDialogs, messages, user, addMessage, setAllUsers, users } = this.props;
+    socket.emit('dialogs', { userId: user.id });
+    socket.emit('news', { userId: user.id });
+    socket.emit('set dialogs', { userId: user.id, dialogId: 33 });
     socket.on('news', e => {
-      console.log('news', e)
     });
     socket.on('get users', e => {
       setAllUsers(e);
       this.forceUpdate()
-
-
     })
     socket.on('find', e => {
       this.setState({ FlatListData: e.result })
     })
     socket.on('chat message', e => {
       addMessage(e)
+      const { FlatListData } = this.state
+      const newFlatListData = [...FlatListData]
+      newFlatListData.sort((a, b) => {
+        return new Date(a.lastMessage) - new Date(b.lastMessage)
+      })
+      // this.setState({ FlatListData: newFlatListData })?
+    })
+    socket.on('new message', (e) => {
+      const { senderId, chatId } = e
+      const { user, currentChat } = this.props
+      const chat = chatId.split('room')[1].replace(/\_/, '').replace(senderId, '')
+      const { FlatListData } = this.state
+      const newFlatListData = [...FlatListData]
+      const index = newFlatListData.findIndex((event) => {
+        return event.id === e.senderId
+      })
+      const myIndex = newFlatListData.findIndex((event) => {
+        return event.id === user.id
+      })
+      if (newFlatListData[index] || newFlatListData[myIndex]) {
+        if (chat == user.id) newFlatListData[index].text = e.text
+        if (senderId == user.id) newFlatListData[myIndex].text = e.text
+      }
+      newFlatListData.sort((a, b) => {
+        return new Date(b.lastMessage) - new Date(a.lastMessage)
+      })
+      if (chat == user.id || senderId == user.id) this.setState({ FlatListData: newFlatListData })
     })
     socket.on('dialogs', (e) => {
+      const { user } = this.props
       const { dialogs, messages, unread } = e;
       const newDialogs = [];
       dialogs.map(e => {
         const message = messages.filter(message => {
-          return message ? Number(e.id) === Number(message.chatId) : false;
+          const room = user.id >= e.id ? `room${user.id}_${e.id}` : `room${e.id}_${user.id}`
+          return message ? room === message.chatId : false;
         })[0];
         const unreadMessage = unread.filter(unreadMessage => {
-          return unreadMessage ? Number(e.id) === Number(unreadMessage.chatId) : false;
+          return unreadMessage ? e.id === unreadMessage.chatId : false;
         })[0];
         newDialogs.push({ title: e.phone, text: message ? message.text : ' no messages yet', id: e.id, unreadMessage, lastMessage: message ? message.timeSent : null })
       })
@@ -85,9 +112,17 @@ class Dialogs extends Component {
     })
 
   }
+  componentWillUnmount() {
+    socket.removeListener('news', {});
+    socket.removeListener('get users', {});
+    socket.removeListener('find', {});
+    socket.removeListener('chat message', {});
+    socket.removeListener('dialogs', {});
+    socket.removeListener('select chat', {});
+  }
   toChat = (index) => {
-    const { setRoom, navigation, id } = this.props
-    socket.emit('select chat', { chatId: index, userId: id })
+    const { setRoom, navigation, user } = this.props
+    socket.emit('select chat', { chatId: index, userId: user.id })
     setRoom(index)
     navigation.navigate('Chat')
   }
@@ -103,7 +138,8 @@ const mapStateToProps = state => {
     messages: state.messageReducer,
     dialog: state.dialogsReducer.dialogs,
     currentRoom: state.messageReducer.currentRoom,
-    id: state.userReducer.user.user.id,
+    currentChat: state.messageReducer.currentChat,
+    user: state.userReducer.user.user,
     users: state.userReducer
   };
 };

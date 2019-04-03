@@ -67,10 +67,6 @@ class InputComponent extends Component {
         text: '', height: 0
     }
     componentDidMount() {
-        const { messages, addMessage } = this.props
-        socket.on('chat message', e => {
-            addMessage(e)
-        })
     }
     sendMessage = (event) => {
         const { currentRoom, id } = this.props;
