@@ -13,13 +13,21 @@ var con = mysql.createConnection({
 
 io.on('connection', (socket) => {
     let room = null;
+
     /* chat messages */
     socket.on('chat message', (e) => {
+        room = `room${e.senderId > e.chatId ? e.senderId.toString().concat("_", e.chatId) : e.chatId.toString().concat("_", e.senderId)}`
         con.query(`INSERT INTO messages (type, text, senderId, chatId, likes, comments, stage, title, performers) VALUES
-            ("${e.type}","${e.text}","${e.senderId}","room${e.senderId > e.chatId ? e.senderId.toString().concat("_", e.chatId) : e.chatId.toString().concat("_", e.senderId)}","${e.likes || 0}",
+            ("${e.type}","${e.text}","${e.senderId}","${room}","${e.likes || 0}",
                 "${e.comments || 0}","${e.stage || 0}","${e.title}","${e.performers}")`,
             (err, result) => {
                 if (err) throw err;
+                con.query(`SELECT * FROM messages WHERE chatId = "${room}" ORDER BY id DESC LIMIT 1`, (err, res) => {
+                    if (err) throw err;
+                    io.sockets.emit('new message', res[0])
+                    io.emit('new message local', res[0])
+                })
+
             });
         io.sockets
             .to(room || `room${e.senderId > e.chatId ? e.senderId.toString().concat("_", e.chatId) : e.chatId.toString().concat("_", e.senderId)}`)
@@ -45,7 +53,7 @@ io.on('connection', (socket) => {
 
     /* leave chat */
     socket.on('leave chat', (e) => {
-        // socket.leave(room);
+        socket.leave(room);
     })
 
 
@@ -99,17 +107,20 @@ io.on('connection', (socket) => {
                     const messages = []
                     const unread = []
                     result && result.map(event => {
-                        con.query(`SELECT * FROM messages WHERE chatId = ${event.id}  ORDER BY id DESC LIMIT 1`, (err, result) => {
+                        const room = `room${event.id > e.userId ? event.id.toString().concat("_", e.userId) : e.userId.toString().concat("_", event.id)}`
+                        con.query(`SELECT * FROM messages WHERE chatId = "${room}"  ORDER BY id DESC LIMIT 1`, (err, result) => {
                             messages.push(result[0])
-                            const room = `room${event.id > e.userId ? event.id.toString().concat("_", e.userId) : e.userId.toString().concat("_", event.id)}`
-                            console.log(result)
                             con.query(`SELECT * from messages WHERE senderId = ${e.userId} AND chatId = "${room}" AND isread = 0`, (err, result) => {
                                 if (err) throw err;
+                                console.log(e)
                                 unread.push({ length: result.length, chatId: event.id })
                             })
                         })
                     });
-                    result && setTimeout(() => socket.emit('dialogs', { dialogs: result, messages, unread }), 10)
+
+                    result && setTimeout(() => {
+                        socket.emit('dialogs', { dialogs: result, messages, unread })
+                    }, 10)
                 })
             }
         })
@@ -183,7 +194,7 @@ io.on('connection', (socket) => {
             if (err) throw err;
             con.query(`SELECT * FROM settings WHERE id = ${e.id}`, (err, res) => {
                 if (err) throw err;
-                io.emit('update user', { ...result[0], ...res[0] })
+                socket.emit('update user', { ...result[0], ...res[0] })
             })
         })
     })

@@ -49,10 +49,10 @@ class Chat extends Component {
         socket.removeListener('get chat info')
         const { setCurrentChat } = this.props;
         setCurrentChat({ currentChat: null })
+        socket.emit('leave chat', {})
     }
     navigateBack = () => {
         const { currentRoom, navigation } = this.props;
-        socket.emit('leave chat', { chatId: currentRoom })
         navigation.goBack()
     }
     toProfile = () => {

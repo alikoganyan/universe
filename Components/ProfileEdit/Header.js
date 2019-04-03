@@ -46,6 +46,5 @@ export default class HeaderComponent extends Component {
         )
     }
     editProfile = () => {
-        console.log('edit')
     }
 }

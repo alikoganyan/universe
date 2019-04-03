@@ -161,7 +161,6 @@ export default class Settings extends Component {
                                                         <RoundCheckbox
                                                             size={24}
                                                             checked={this.state.isSelected}
-                                                            onValueChange={(newValue) => { console.log(newValue) }}
                                                         />
                                                         <BoxItem title={true}>{e.title}</BoxItem>
                                                     </>

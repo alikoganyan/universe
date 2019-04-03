@@ -54,6 +54,7 @@ class InputComponent extends Component {
                         onSubmitEditing={this.sendMessage}
                         value={text}
                         blurOnSubmit={false}
+                        autoFocus={true}
                     />
                 </Left>
                 <Right>
@@ -74,14 +75,11 @@ class InputComponent extends Component {
     sendMessage = (event) => {
         const { currentRoom, id, addMessage } = this.props;
         const { text } = this.state;
-        if (text) {
-            socket.emit('chat message', { text, senderId: id, type: 'message', chatId: currentRoom })
-        }
+        text && socket.emit('chat message', { text, senderId: id, type: 'message', chatId: currentRoom })
         this.setState({ text: '' })
     }
     handleChange = (e) => {
-        const text = e
-        text && this.setState({ text })
+        this.setState({ text: e })
     }
 }
 
