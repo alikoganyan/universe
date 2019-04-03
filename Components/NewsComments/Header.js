@@ -8,7 +8,7 @@ import { addMessage, startSearch, stopSearch } from '../../actions/messageAction
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { ImageComponent } from '../../Common/'
-const { sidePadding, sidePaddingNumber, HeaderHeight, Colors } = helper;
+const { sidePadding, sidePaddingNumber, HeaderHeight, Colors, fontSize } = helper;
 const { border } = Colors;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
@@ -31,11 +31,11 @@ const Info = styled(View)`
 `
 const InfoChatName = styled(Text)`
     color: black;
-    font-size: 12px;
+    font-size:  ${fontSize.text};
 `
 const InfoParticipants = styled(Text)`
     color: #5F7991;
-    font-size: 10px;
+    font-size: ${fontSize.sm};
 `
 const Left = styled(View)`
     display: flex;

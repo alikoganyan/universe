@@ -9,7 +9,7 @@ import helper from '../../Helper/helper'
 import posed, { Transition } from 'react-native-pose';
 
 import Collapsible from 'react-native-collapsible';
-const { Colors, HeaderHeightNumber, HeaderHeight } = helper;
+const { Colors, HeaderHeightNumber, HeaderHeight, fontSize } = helper;
 const { green, black, grey2 } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
@@ -93,11 +93,11 @@ const ContactImage = styled(Image)`
 `
 const ContactInfo = styled(View)``
 const ContactName = styled(Text)`
-    font-size: 12px;
+    font-size: ${fontSize.text};
     color: ${black};
 `
 const ContactRole = styled(Text)`
-    font-size: 10px;
+    font-size: ${fontSize.sm};
     color: ${grey2}
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)`

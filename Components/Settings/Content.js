@@ -6,7 +6,7 @@ import SwitchToggle from 'react-native-switch-toggle';
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 const { Colors, sidePaddingNumber, fontSize, socket } = helper;
-const { lightGrey1, blue, lightBlue } = Colors;
+const { lightGrey1, blue, lightBlue, grey2 } = Colors;
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
@@ -27,8 +27,8 @@ const Box = styled(View)`
 `
 const Label = styled(Text)`
     flex: 2;
-    color: ${lightGrey1};
-    font-size: ${fontSize.text};
+    color: ${grey2};
+    font-size: ${fontSize.sm};
     margin-right: 5px;
 `
 const Status = styled(Text)`
@@ -47,21 +47,22 @@ const Link = styled(Text)`
 `
 const Policy = styled(View)``
 const PolicyLink = styled(Link)`
-    padding: 10px 0;
+    padding: 10px 0 20px;
 `
 const Toggle = (props) => {
     const { switchOn, onPress } = props;
     return <SwitchToggle
         containerStyle={{
-            width: 50,
-            height: 22,
-            borderRadius: 25,
-            padding: 5,
+            width: 34,
+            height: 14,
+            borderRadius: 20,
+            padding: 0.1
         }}
         circleStyle={{
-            width: 18,
-            height: 18,
-            borderRadius: 10,
+            width: 20,
+            height: 20,
+            borderRadius: 12,
+            elevation: 3,
             backgroundColor: '#fff', // rgb(102,134,205)
         }}
         circleColorOn={blue}

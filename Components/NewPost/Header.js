@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'rea
 import { BackIcon, ForwardIcon, LocationIcon, SearchIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-const { sidePadding, HeaderHeight } = helper;
+const { sidePadding, HeaderHeight, fontSize } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -24,11 +24,11 @@ const Info = styled(View)`
 `
 const InfoChatName = styled(Text)`
     color: black;
-    font-size: 12px;
+    font-size: ${fontSize.text};
 `
 const InfoParticipants = styled(Text)`
     color: #5F7991;
-    font-size: 10px;
+    font-size: ${fontSize.sm};
 `
 const Left = styled(View)`
     display: flex;

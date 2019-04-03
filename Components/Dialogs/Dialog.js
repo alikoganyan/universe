@@ -6,11 +6,11 @@ import { connect } from 'react-redux'
 import { ImageComponent } from '../../Common/'
 
 const { fontSize, PressDelay, sidePadding, sidePaddingNumber, Colors, socket } = helper;
-const { purple, lightColor } = Colors;
+const { purple, lightColor, grey2 } = Colors;
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: center; 
   padding: 20px ${sidePadding};
 `
 const DialogImage = styled(Image)`
@@ -34,9 +34,8 @@ const DialogTextInner = styled(View)`
 
 `
 const DialogTitle = styled(Text)`
-  font-size: ${fontSize.header};
+  font-size: ${fontSize.md};
   width: ${Dimensions.get('window').width - 20}px;
-  font-size: 14px;
   color: #000000;
   font-weight: 400;
   padding-bottom: 5px;
@@ -45,22 +44,22 @@ const LastMessageDate = styled(Text)`
   color: ${lightColor};
   font-size: ${fontSize.text};
   text-align: left;
+  margin-bottom: 10px;
 `
 const DialogLastMessage = styled(Text)`
   font-size: ${fontSize.text};
   color: ${lightColor};
   padding-right: 20px;
-  font-size: 12px;
-  color: #000000;
+  color: ${grey2};
   font-weight: 400;
 `
 const DialogDate = styled(View)`
   right: ${sidePadding};
   color: ${lightColor};
   flex: 1;
-  font-size: ${fontSize.text};
+  font-size: ${fontSize.sm};
   display: flex;
-  justify-content: center;
+  justify-content: flex-start;
   
 `
 const UnreadMessages = styled(View)`
@@ -93,7 +92,7 @@ class Content extends Component {
             <DialogTextInner>
               {title && <>
                 <DialogTitle>{title}</DialogTitle>
-                <DialogLastMessage numberOfLines={1} >{children}</DialogLastMessage>
+                <DialogLastMessage numberOfLines={2} >{children}</DialogLastMessage>
               </>
               }
               {phone && <>

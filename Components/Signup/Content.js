@@ -6,7 +6,7 @@ import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 import { setUser, registerUser } from '../../actions/userActions'
 import { Button } from '../../Common'
-const { Colors, HeaderHeightNumber, socket } = helper;
+const { Colors, HeaderHeightNumber, socket, fontSize } = helper;
 const { lightGrey1, blue } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
@@ -17,13 +17,14 @@ const Wrapper = styled(View)`
 const Title = styled(Text)`
     width: 100%;
     margin-bottom: 30px;
-    font-size: 15px;
+    font-size: ${fontSize.large};
     text-align: center;
 `
 const SubTitle = styled(Text)`
     width: 100%;
     color: ${lightGrey1};
     text-align: center;
+    font-size: ${fontSize.text}
 `
 const PhoneNumber = styled(View)`
     display: flex;
@@ -32,7 +33,6 @@ const PhoneNumber = styled(View)`
     margin-bottom: 20px;
 
 `
-
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
     border-width: 0;
@@ -40,6 +40,7 @@ const StyledInput = styled(TextInput)`
     padding-bottom: 10px;
     text-align: center;
     margin-bottom: 10px;
+    margin-left: 20px;
     ${({ style }) => style}
 `
 const ButtonBox = styled(View)`
@@ -89,7 +90,7 @@ class Content extends Component {
                         onChangeText={this.handlePhone}
                         value={phone}
                         placeholder={'XXX-XXX-XX-XX'}
-                        style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10, }}
+                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, }}
                     />
                 </PhoneNumber>
                 <ButtonBox>

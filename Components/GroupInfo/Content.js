@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'rea
 import { BackIcon, EllipsisVIcon, MessageIndicatorIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
+const { fontSize } = helper
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
@@ -67,7 +68,7 @@ const ParticipantName = styled(Text)`
     font-size: 15px;
 `
 const ParticipantLastSeen = styled(Text)`
-    font-size: 12px;
+    font-size:${fontSize.text};
     color: #A3A3A3;
 `
 const GoBack = styled(View)`

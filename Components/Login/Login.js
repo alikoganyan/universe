@@ -4,7 +4,7 @@ import { Header, Content } from './index'
 import styled from 'styled-components'
 import { SafeAreaView } from '../../Common/'
 import helper from '../../Helper/helper'
-const { socket, Colors } = helper;
+const { socket, Colors, fontSize } = helper;
 const { lightColor, blue } = Colors;
 const Wrapper = styled(View)`
     height: 100%;
@@ -20,7 +20,7 @@ const NoAccount = styled(View)`
 `
 const Label = styled(Text)`
     color: ${lightColor};
-    font-size: 10px;
+    font-size: ${fontSize.sm};
 `
 const SingUp = styled(Text)`
     color: ${blue};
