@@ -2,9 +2,9 @@
   "devToolsPort": 19002,
   "expoServerPort": 19000,
   "packagerPort": 19001,
-  "packagerPid": 5704,
-  "expoServerNgrokUrl": "https://m9-3jd.hovhannes.mobile-front.exp.direct",
-  "packagerNgrokUrl": "https://packager.m9-3jd.hovhannes.mobile-front.exp.direct",
-  "ngrokPid": 8932,
+  "packagerPid": 41163,
+  "expoServerNgrokUrl": "https://m9-3jd.anonymous.mobile-front.exp.direct",
+  "packagerNgrokUrl": "https://packager.m9-3jd.anonymous.mobile-front.exp.direct",
+  "ngrokPid": 41198,
   "webpackServerPort": null
 }
