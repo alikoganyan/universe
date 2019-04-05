@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'rea
 import { CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-const { borderRadius, Colors } = helper;
+const { borderRadius, Colors, fontSize } = helper;
 const { yellow, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`
     margin-bottom: 40px;   
@@ -83,7 +83,7 @@ const Reactions = styled(View)`
 `
 const Reactionsext = styled(Text)`
     color: ${grey2};
-    font-size: 10px;
+    font-size: ${fontSize.sm};
 `
 
 export default class Content extends Component {

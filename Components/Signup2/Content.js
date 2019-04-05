@@ -17,7 +17,7 @@ const Wrapper = styled(View)`
 const Title = styled(Text)`
     width: 100%;
     margin-bottom: 30px;
-    font-size: 15px;
+    font-size: ${fontSize.large};
     text-align: center;
 `
 const SubTitle = styled(Text)`
@@ -25,6 +25,7 @@ const SubTitle = styled(Text)`
     color: ${lightGrey1};
     text-align: center;
     margin-bottom: 30px;
+    font-size: ${fontSize.text}
 
 `
 const PhoneNumber = styled(View)`

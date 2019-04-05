@@ -8,7 +8,7 @@ import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 
-const { sidePadding, sidePaddingNumber, Colors, HeaderHeightNumber, socket } = helper;
+const { sidePadding, sidePaddingNumber, Colors, HeaderHeightNumber, socket, fontSize } = helper;
 const { border } = Colors;
 const Wrapper = styled(View)`
     padding-top: 0px;
@@ -27,7 +27,7 @@ const UserImage = styled(Image)`
     width: 80px;
     height: 80px;
     border-radius: 40;
-    margin: 0 10px 40px;
+    margin: 0 10px 16px;
 
 `
 const UserInfo = styled(View)`
@@ -87,6 +87,7 @@ const Type = styled(Value)`
     color: #BABABA;
     min-width: 110px;
     flex: 0;
+    font-size: ${fontSize.sm}
 `
 const PersonalData = styled(View)`
     border: 1px solid #E6E6E6;
@@ -110,10 +111,8 @@ class Content extends Component {
                         </UserName>
                         <UserStatus>{status}</UserStatus>
                         {!myProfile && <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>}
-
                     </UserInfo>
                 </User>
-
                 <ScrollView>
                     <PersonalData>
                         {UserData.map((item, index) => {

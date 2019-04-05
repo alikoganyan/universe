@@ -7,8 +7,8 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
 const { Colors, fontSize, socket } = helper;
-const { border, lightColor, lightGrey1, color, blue } = Colors;
-const { large, header, text } = fontSize;
+const { lightColor, lightGrey1, blue } = Colors;
+const { large, text, sm } = fontSize;
 const Wrapper = styled(View)`
     padding: 0 20%;
     height: 90%;
@@ -37,11 +37,11 @@ const PhoneNumber = styled(View)`
 `
 const Error = styled(Text)`
     color: red;
-    font-size: 12px;
+    font-size: ${text};
     width: 100%;
 `
 const ForgotPass = styled(Text)`
-    font-size: 10px;
+    font-size: ${sm};
     margin-bottom: 10px;
     color: ${blue};
 `
@@ -56,7 +56,7 @@ const NoAccount = styled(View)`
 `
 const Label = styled(Text)`
     color: ${lightColor};
-    font-size: 10px;
+    font-size: ${sm};
 `
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
