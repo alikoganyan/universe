@@ -6,11 +6,12 @@ import FloatingLabel from 'react-native-floating-labels'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../Helper/helper'
+import { ImageComponent } from '../../Common'
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { connect } from 'react-redux'
-const { Colors, socket } = helper;
+const { Colors, socket, sidePadding } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
@@ -49,7 +50,7 @@ const Wrapper = styled(View)`
     
 `
 const ContactList = styled(ScrollView)`
-    padding: 30px;
+    padding: 10px;
     padding-bottom: 10px;
     max-width: ${Dimensions.get('window').width};
     overflow: hidden;
@@ -81,7 +82,7 @@ const BoxItem = styled(Text)`
     color: #A7B0BA;
 `
 const BoxInnerItem = styled(View)`
-    padding: 10px;
+    padding: 20px 5px;
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     display: flex;
     flex-direction: row;
@@ -128,13 +129,15 @@ const Group = styled(BoxInnerItem)`
     justify-content: flex-start;
     flex: 1;
 `
-const GroupInfo = styled(ContactInfo)``
+const GroupInfo = styled(ContactInfo)`
+    flex: 1;
+`
 const GroupTitle = styled(ContactName)``
 const GroupParticipants = styled(ContactRole)``
 const GroupImage = styled(ContactImage)``
 class Content extends Component {
     render() {
-        const { users, collapsed, options, groups } = this.state;
+        const { allUsers, users, collapsed, options, groups } = this.state;
         const { department } = users;
         const { active } = options;
         return (
@@ -152,7 +155,22 @@ class Content extends Component {
                                 }
                             </Options>
                             <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
-                                <ContactList style={{ width: '100%' }}><Text>123</Text></ContactList>
+                                <ContactList style={{ width: '100%' }}>
+                                    <FlatList
+                                        style={{ paddingRight: 5, paddingLeft: 5, }}
+                                        ListHeaderComponent={<View style={{ margin: 35, }} />}
+                                        inverted={true}
+                                        data={allUsers}
+                                        renderItem={({ item }) => <Group>
+                                            <ImageComponent size={"xs"} style={{marginRight: sidePadding}} source={{uri: item.uri}}/>
+                                            <GroupInfo>
+                                                <GroupTitle numberOfLines={1}>{item.name}</GroupTitle>
+                                            </GroupInfo>
+                                        </Group>
+                                        }
+                                        keyExtractor={(item, index) => index.toString()}
+                                    />
+                                </ContactList>
                                 <ContactList>
                                     {department.map((e, i) => (
                                         <Box key={i} last={i === department.length - 1}>
@@ -240,6 +258,16 @@ class Content extends Component {
             { title: 'длинное корпоративное название группы', participants: 15 },
             { title: 'длинное корпоративное название группы', participants: 15 },
             { title: 'длинное корпоративное название группы', participants: 15 },
+        ],
+        allUsers: [
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
         ]
     }
     componentDidMount() {
