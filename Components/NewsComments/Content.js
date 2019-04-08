@@ -5,7 +5,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { ImageComponent } from '../../Common'
-const { HeaderHeightNumber, sidePadding, borderRadius, Colors } = helper;
+const { HeaderHeightNumber, sidePadding, borderRadius, Colors, fontSize } = helper;
 const { yellow, black, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`
     margin-bottom: 50px;   
@@ -68,7 +68,7 @@ const Reactions = styled(View)`
     align-items: center;
 `
 const ReactionsText = styled(Text)`
-    font-size: 10px;
+    font-size: ${fontSize.sm};
     color: ${grey2};
 `
 const MyMessage = styled(View)`
@@ -145,7 +145,7 @@ const NewsText = styled(Text)`
     font-size: 13;
 `
 const LikeText = styled(Text)`
-    font-size: 10px;
+    font-size: ${fontSize.sm};
     color: ${({ color }) => color || grey2};
 `
 

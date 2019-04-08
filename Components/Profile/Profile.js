@@ -11,7 +11,7 @@ import {
     connectActionSheet,
 } from '@expo/react-native-action-sheet';
 import { Header, Content } from './'
-const { socket, Colors } = helper
+const { socket, Colors, fontSize } = helper
 const { red } = Colors;
 const Wrapper = styled(View)`
     height: ${Dimensions.get('window').height};
@@ -35,6 +35,7 @@ const Logout = styled(TouchableOpacity)`
 const LogoutText = styled(Text)`
     color: ${red};
     padding: 20px;
+    font-size: ${fontSize.sm}
 `
 class Profile extends Component {
     render() {

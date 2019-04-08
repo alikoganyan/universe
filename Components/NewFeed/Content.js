@@ -88,19 +88,16 @@ class Content extends Component {
                     value={text}
                     placeholder={'Текст новости'}
                     multiline={true}
-                    style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }}
-                />
+                    style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }}/>
                 <Recievers>
                     <DialogsLabel>
                         <GroupIcon />
                         <Text>диалоги</Text>
                     </DialogsLabel>
                     <ScrollView>
-                        {
-                            this.state.recievers.map((e, i) => (
+                        {this.state.recievers.map((e, i) => (
                                 <RecieverComponent key={i} last={i === this.state.recievers.length}>{e}</RecieverComponent>
-                            ))
-                        }
+                            ))}
                     </ScrollView>
                     <DialogsLabel>
                         <TouchableOpacity onPress={this.addParticipant}>
@@ -108,16 +105,14 @@ class Content extends Component {
                         </TouchableOpacity>
                     </DialogsLabel>
                 </Recievers>
-
                 <ButtonBox>
                     <Button
                         onPress={this.proceed}
                         style={{ background: yellow }}
                         color={black}>Продолжить</Button>
                 </ButtonBox>
-            </Wrapper>
-        )
-    }
+            </Wrapper>)
+            }
     state = {
         recievers: [
             {

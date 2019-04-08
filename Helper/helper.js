@@ -41,6 +41,8 @@ export default helper = {
         large: '20px',
         header: '15px',
         text: '12px',
+        sm: '10px',
+        md: '14px'
     },
     globalStyle: StyleSheet.create({
         droidSafeArea: {

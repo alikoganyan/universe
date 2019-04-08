@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native'
-import { BackIcon, TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
+import { View, Text, Image, Dimensions } from 'react-native'
+import { TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
 import { Button } from '../../Common/';
 import { setRoom } from '../../actions/messageActions'
 import styled from 'styled-components'
@@ -8,10 +8,10 @@ import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 
-const { sidePadding, sidePaddingNumber, Colors, HeaderHeightNumber, socket } = helper;
-const { border, grey2, blue } = Colors;
+const { Colors, HeaderHeightNumber, socket, fontSize } = helper;
+const { grey2, blue } = Colors;
 const Wrapper = styled(View)`
-    padding-top: 0px;
+    padding-top: 30px;
     background: white;
     height: ${Dimensions.get('window').height - HeaderHeightNumber}px;
 `
@@ -27,28 +27,31 @@ const UserImage = styled(Image)`
     width: 80px;
     height: 80px;
     border-radius: 40;
-    margin: 0 10px 40px;
+    margin: 0 10px 0px;
 
 `
 const UserInfo = styled(View)`
     display: flex;
     flex-direction: column;
-    align-items: center;
-    height: 60px;
-    width: 80%;
+    align-items: flex-start;
+    width: 90%;
     
 `
 const InputBox = styled(View)`
     display: flex;
     flex-direction: row;
-    align-items: center;
+    align-items: flex-end;
     justify-content: center;
+    height: 60px;
 `
 const InputLabel = styled(Text)`
     flex: 1;
     text-align: right;
     color: ${grey2};
     z-index: 20;
+    margin-bottom: 15px;
+    font-size: ${fontSize.sm};
+    margin-right: 15px;
 `
 const Bottom = styled(View)`
     bottom: 30;
@@ -58,7 +61,9 @@ const Bottom = styled(View)`
     position: absolute;
     justify-content: center;
     background: white;
-    
+`
+const ButtonText = styled(Text)`
+font-size: ${fontSize.text}
 `
 const Input = (props) => {
     const { style, value, children, onChange } = props;
@@ -69,6 +74,7 @@ const Input = (props) => {
             borderWidth: 0,
             borderBottomWidth: 1,
             display: 'flex',
+            flex: 1
         }}
         value={value}
         style={{ flex: 2, width: "50%", ...style }}
@@ -86,9 +92,9 @@ class Content extends Component {
                 <User >
                     <UserImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
                     <UserInfo>
-                        <InputBox>
-                            <InputLabel numberOfLines={1}>Фамилия</InputLabel>
-                            <Input value={lastName} onChange={(e) => this.handleChange(e, "lastName")}>Фамилия</Input>
+                        <InputBox >
+                            <InputLabel numberOfLines={1} >Фамилия</InputLabel>
+                            <Input value={lastName} onChange={(e) => this.handleChange(e, "lastName")} style={{fontSize: 12}}>Фамилия</Input>
                         </InputBox>
                         <InputBox>
                             <InputLabel numberOfLines={1}>Имя</InputLabel>
@@ -114,10 +120,9 @@ class Content extends Component {
                 </User>
                 <Bottom>
                     <Button style={{ backgroundColor: blue }} color={'#fff'} onPress={this.apply}>
-                        Сохранить изменения
+                      <ButtonText>Сохранить изменения</ButtonText> 
                     </Button>
                 </Bottom>
-
             </Wrapper >
 
         )

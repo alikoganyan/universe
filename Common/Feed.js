@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, Image, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../assets/'
-const { HeaderHeightNumber, Colors } = helper;
+const { HeaderHeightNumber, Colors, fontSize } = helper;
 const { yellow, purple, red } = Colors;
 const Feed = styled(View)`
     padding: 10px;
@@ -36,7 +36,7 @@ const SenderInfo = styled(View)`
 `
 const TimeSent = styled(Text)`
     color: #848484;
-    font-size: 12;
+    font-size: ${fontSize.text};
 `
 const FeedInfo = styled(View)`
     width: 100%;

@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'rea
 import { ForwardIcon, LocationIcon, SearchIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-const { HeaderHeight } = helper;
+const { HeaderHeight, fontSize } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -24,7 +24,7 @@ const Info = styled(View)`
 `
 const InfoChatName = styled(Text)`
     color: black;
-    font-size: 12px;
+    font-size: ${fontSize.text};
 `
 const InfoParticipants = styled(Text)`
     color: #5F7991;
