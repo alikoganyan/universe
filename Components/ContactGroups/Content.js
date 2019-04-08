@@ -124,7 +124,10 @@ const Option = styled(Text)`
     overflow: hidden;
     text-align: center;
 `
-const Group = styled(BoxInnerItem)``
+const Group = styled(BoxInnerItem)`
+    justify-content: flex-start;
+    flex: 1;
+`
 const GroupInfo = styled(ContactInfo)``
 const GroupTitle = styled(ContactName)``
 const GroupParticipants = styled(ContactRole)``
@@ -136,12 +139,12 @@ class Content extends Component {
         const { active } = options;
         return (
             <SafeAreaView>
-                <GestureRecognizer
-                    onSwipeLeft={this.optionLeft}
-                    onSwipeRight={this.optionRight}
-                >
-                    <Wrapper>
-                        <KeyboardAwareScrollView enableOnAndroid>
+                <Wrapper>
+                    <KeyboardAwareScrollView enableOnAndroid>
+                        <GestureRecognizer
+                            onSwipeLeft={this.optionLeft}
+                            onSwipeRight={this.optionRight}
+                        >
                             <Options>
                                 {options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
                                     <Option active={active % 3 === i}>{e}</Option>
@@ -183,7 +186,7 @@ class Content extends Component {
                                         renderItem={({ item }) => <Group>
                                             <GroupImage />
                                             <GroupInfo>
-                                                <GroupTitle>{item.title}</GroupTitle>
+                                                <GroupTitle numberOfLines={1}>{item.title}</GroupTitle>
                                                 <GroupParticipants>{item.participants} участников</GroupParticipants>
                                             </GroupInfo>
                                         </Group>
@@ -192,9 +195,9 @@ class Content extends Component {
                                     />
                                 </ContactList>
                             </Animated>
-                        </KeyboardAwareScrollView>
-                    </Wrapper>
-                </GestureRecognizer>
+                        </GestureRecognizer>
+                    </KeyboardAwareScrollView>
+                </Wrapper>
             </SafeAreaView>
         )
     }

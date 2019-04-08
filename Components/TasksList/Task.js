@@ -24,19 +24,16 @@ const TaskText = styled(View)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  
+  flex: 1;
 `
 
 const TaskTextInner = styled(View)`
   display: flex;
   flex-direction: column;
-  width: ${Dimensions.get('window').width - 120}px;
-
 `
 const TaskTitle = styled(Text)`
   font-size: ${fontSize.header};
   font-weight: 500;
-  /* width: ${Dimensions.get('window').width - 20}px; */
   margin-bottom: 1px;
 `
 const LastMessageDate = styled(Text)`
@@ -55,7 +52,7 @@ const TaskLastMessage = styled(Text)`
 const TaskDate = styled(View)`
   right: ${sidePadding};
   color: ${lightColor};
-  flex: 1;
+  /* flex: 1; */
   font-size: ${fontSize.text};
   display: flex;
   justify-content: flex-start;

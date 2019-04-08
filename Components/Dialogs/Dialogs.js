@@ -19,6 +19,7 @@ const StyledFlatList = styled(FlatList)`
 `
 
 class Dialogs extends Component {
+
   render() {
     const { user } = this.props
     const { FlatListData } = this.state;
@@ -41,92 +42,104 @@ class Dialogs extends Component {
   state = {
     FlatListData: []
   }
-  toProfile = () => {
-    this.props.navigation.navigate('Profile')
-  }
   componentDidMount() {
-    const { getMessages, setDialogs, messages, user, addMessage, setAllUsers, users } = this.props;
+    const { user } = this.props;
     socket.emit('dialogs', { userId: user.id });
     socket.emit('news', { userId: user.id });
     socket.emit('set dialogs', { userId: user.id, dialogId: 33 });
-    socket.on('news', e => {
-    });
-    socket.on('get users', e => {
-      setAllUsers(e);
-      this.forceUpdate()
-    })
-    socket.on('find', e => {
-      this.setState({ FlatListData: e.result })
-    })
-    socket.on('chat message', e => {
-      addMessage(e)
-      const { FlatListData } = this.state
-      const newFlatListData = [...FlatListData]
-      newFlatListData.sort((a, b) => {
-        return new Date(a.lastMessage) - new Date(b.lastMessage)
-      })
-      // this.setState({ FlatListData: newFlatListData })?
-    })
-    socket.on('new message', (e) => {
-      const { senderId, chatId } = e
-      const { user, currentChat } = this.props
-      const chat = chatId.split('room')[1].replace(/\_/, '').replace(senderId, '')
-      const { FlatListData } = this.state
-      const newFlatListData = [...FlatListData]
-      const index = newFlatListData.findIndex((event) => {
-        return event.id === e.senderId
-      })
-      const myIndex = newFlatListData.findIndex((event) => {
-        return event.id === user.id
-      })
-      if (newFlatListData[index] || newFlatListData[myIndex]) {
-        if (chat == user.id) newFlatListData[index].text = e.text
-        if (senderId == user.id) newFlatListData[myIndex].text = e.text
-      }
-      newFlatListData.sort((a, b) => {
-        return new Date(b.lastMessage) - new Date(a.lastMessage)
-      })
-      if (chat == user.id || senderId == user.id) this.setState({ FlatListData: newFlatListData })
-    })
-    socket.on('dialogs', (e) => {
-      const { user } = this.props
-      const { dialogs, messages, unread } = e;
-      const newDialogs = [];
-      dialogs.map(e => {
-        const message = messages.filter(message => {
-          const room = user.id >= e.id ? `room${user.id}_${e.id}` : `room${e.id}_${user.id}`
-          return message ? room === message.chatId : false;
-        })[0];
-        const unreadMessage = unread.filter(unreadMessage => {
-          return unreadMessage ? e.id === unreadMessage.chatId : false;
-        })[0];
-        newDialogs.push({ title: e.phone, text: message ? message.text : ' no messages yet', id: e.id, unreadMessage, lastMessage: message ? message.timeSent : null })
-      })
-      newDialogs.sort((x, y) => {
-        return x.lastMessage < y.lastMessage
-      });
-      this.setState({ FlatListData: newDialogs })
-    })
-    socket.on('select chat', e => {
-      getMessages(e)
-    })
+    socket.on('news', this.news);
+    socket.on('get users', this.getUsers)
+    socket.on('find', this.find)
+    socket.on('chat message', this.chatMessage)
+    socket.on('new message', this.newMessage)
+    socket.on('dialogs', this.dialogs);
+    socket.on('select chat', this.selectChat)
 
   }
   componentWillUnmount() {
-    socket.removeListener('news', {});
-    socket.removeListener('get users', {});
-    socket.removeListener('find', {});
-    socket.removeListener('chat message', {});
-    socket.removeListener('dialogs', {});
-    socket.removeListener('select chat', {});
+    socket.removeListener('news', this.news);
+    socket.removeListener('get users', this.getUsers);
+    socket.removeListener('find', this.find);
+    socket.removeListener('chat message', this.chatMessage);
+    socket.removeListener('dialogs', this.dialogs);
+    socket.removeListener('new message', this.newMessage);
+    socket.removeListener('select chat', this.selectChat);
   }
-  toChat = (index) => {
+  toProfile = e => {
+    this.props.navigation.navigate('Profile')
+  }
+  news = e => {
+
+  }
+  getUsers = e => {
+    const { setAllUsers } = this.props;
+    setAllUsers(e);
+    this.forceUpdate()
+  }
+  find = e => {
+    this.setState({ FlatListData: e.result })
+  }
+  selectChat = e => {
+    const { getMessages } = this.props;
+    getMessages(e)
+  }
+  chatMessage = e => {
+    const { addMessage } = this.props
+    addMessage(e)
+    const { FlatListData } = this.state
+    const newFlatListData = [...FlatListData]
+    newFlatListData.sort((a, b) => {
+      return new Date(a.lastMessage) - new Date(b.lastMessage)
+    })
+    // this.setState({ FlatListData: newFlatListData })?
+  }
+  newMessage = e => {
+    const { senderId, chatId } = e
+    const { user, currentChat } = this.props
+    const chat = chatId.split('room')[1].replace(/\_/, '').replace(senderId, '')
+    const { FlatListData } = this.state
+    const newFlatListData = [...FlatListData]
+    const index = newFlatListData.findIndex((event) => {
+      return event.id === e.senderId
+    })
+    const myIndex = newFlatListData.findIndex((event) => {
+      return event.id === user.id
+    })
+    if (newFlatListData[index] || newFlatListData[myIndex]) {
+      if (chat == user.id) newFlatListData[index].text = e.text
+      if (senderId == user.id) newFlatListData[myIndex].text = e.text
+    }
+    newFlatListData.sort((a, b) => {
+      return new Date(b.lastMessage) - new Date(a.lastMessage)
+    })
+    if (chat == user.id || senderId == user.id) this.setState({ FlatListData: newFlatListData })
+  }
+  dialogs = e => {
+    const { user } = this.props
+    const { dialogs, messages, unread } = e;
+    const newDialogs = [];
+    dialogs.map(e => {
+      const message = messages.filter(message => {
+        const room = user.id >= e.id ? `room${user.id}_${e.id}` : `room${e.id}_${user.id}`
+        return message ? room === message.chatId : false;
+      })[0];
+      const unreadMessage = unread.filter(unreadMessage => {
+        return unreadMessage ? e.id === unreadMessage.chatId : false;
+      })[0];
+      newDialogs.push({ title: e.phone, text: message ? message.text : ' no messages yet', id: e.id, unreadMessage, lastMessage: message ? message.timeSent : null })
+    })
+    newDialogs.sort((x, y) => {
+      return x.lastMessage < y.lastMessage
+    });
+    this.setState({ FlatListData: newDialogs })
+  }
+  toChat = e => {
     const { setRoom, navigation, user } = this.props
-    socket.emit('select chat', { chatId: index, userId: user.id })
-    setRoom(index)
+    socket.emit('select chat', { chatId: e, userId: user.id })
+    setRoom(e)
     navigation.navigate('Chat')
   }
-  toGroup = () => {
+  toGroup = e => {
     const { navigation } = this.props
     navigation.navigate('Group')
   }

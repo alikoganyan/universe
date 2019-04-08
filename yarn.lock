@@ -5426,6 +5426,11 @@ react-native-actionsheet@^2.4.2:
   resolved "https://registry.yarnpkg.com/react-native-actionsheet/-/react-native-actionsheet-2.4.2.tgz#6a00dd51a75ef2c8974312130e405af73191500f"
   integrity sha512-DBoWIvVwuWXuptF4t46pBqkFxaUxS+rsIdHiA05t0n4BdTIDV2R4s9bLEUVOGzb94D7VxIamsXZPA/3mmw+SXg==
 
+react-native-animated-flatlist@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-animated-flatlist/-/react-native-animated-flatlist-0.0.3.tgz#7712d37f7dd8f9d70b389595ca532fe502e0e956"
+  integrity sha512-1CL7HUKfV1FXmYyQp2/nApOrksJ/zfN7ENW/y0LUKPjf6bKtmpYmS0DXiJ0PqIW9ai+D6+PdK86Id/T6NKfSJg==
+
 react-native-autogrow-textinput@^5.2.0:
   version "5.2.0"
   resolved "https://registry.yarnpkg.com/react-native-autogrow-textinput/-/react-native-autogrow-textinput-5.2.0.tgz#acf736454781f5beaba8b7d9c943b7333691b65e"
