@@ -24,7 +24,7 @@ const TaskText = styled(View)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  width: 100%;
+  
 `
 
 const TaskTextInner = styled(View)`
@@ -36,7 +36,7 @@ const TaskTextInner = styled(View)`
 const TaskTitle = styled(Text)`
   font-size: ${fontSize.header};
   font-weight: 500;
-  width: ${Dimensions.get('window').width - 20}px;
+  /* width: ${Dimensions.get('window').width - 20}px; */
   margin-bottom: 1px;
 `
 const LastMessageDate = styled(Text)`
@@ -108,12 +108,12 @@ export default class Content extends Component {
           <TaskText>
             <TaskTextInner>
               <TaskTitle>{title}</TaskTitle>
-              <TaskLastMessage numberOfLines={1} >{children}Labore quis nulla velit sit occaecat deserunt cillum occaecat dolor et elit duis. Dolore laboris nostrud esse ullamco irure cupidatat mollit nisi nostrud in irure aliquip adipisicing proident. Eu aliquip consectetur velit quis pariatur velit sint esse incididunt laborum aute aliqua. Laboris laboris aliqua magna laborum reprehenderit nostrud aliquip consectetur proident aliquip commodo elit officia.</TaskLastMessage>
+              <TaskLastMessage numberOfLines={1} >{children}</TaskLastMessage>
               <TaskStatus>
                 <TaskStatusTextContainer>
-                  <TasksIcon/>
+                  <TasksIcon />
                   <TaskStatusText>в работе</TaskStatusText>
-                </TaskStatusTextContainer> 
+                </TaskStatusTextContainer>
                 <TaskStatusAdditional>+4 задачи</TaskStatusAdditional>
               </TaskStatus>
             </TaskTextInner>

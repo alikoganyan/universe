@@ -144,35 +144,35 @@ class Content extends Component {
                         <KeyboardAwareScrollView enableOnAndroid>
                             <Options>
                                 {options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                                        <Option active={active % 3 === i}>{e}</Option>
-                                    </TouchableOpacity>)
+                                    <Option active={active % 3 === i}>{e}</Option>
+                                </TouchableOpacity>)
                                 }
                             </Options>
                             <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
                                 <ContactList style={{ width: '100%' }}><Text>123</Text></ContactList>
                                 <ContactList>
                                     {department.map((e, i) => (
-                                            <Box key={i} last={i === department.length - 1}>
-                                                <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                                    <BoxItem title={true}>{e.title}</BoxItem>
-                                                    <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                                                        <ArrowDownIcon />
-                                                    </ArrowWrapper>
-                                                </BoxTitle>
-                                                <Collapsible collapsed={collapsed[i] || false}>
-                                                    <BoxInner>
-                                                        {e.workers.map((e, i) => <BoxInnerItem key={i}>
-                                                                <ContactImage />
-                                                                <ContactInfo>
-                                                                    <ContactName>{e.name}</ContactName>
-                                                                    <ContactRole>{e.role}</ContactRole>
-                                                                </ContactInfo>
-                                                            </BoxInnerItem>)
-                                                        }
-                                                    </BoxInner>
-                                                </Collapsible>
-                                            </Box>
-                                        ))}
+                                        <Box key={i} last={i === department.length - 1}>
+                                            <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
+                                                <BoxItem title={true}>{e.title}</BoxItem>
+                                                <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
+                                                    <ArrowDownIcon />
+                                                </ArrowWrapper>
+                                            </BoxTitle>
+                                            <Collapsible collapsed={collapsed[i] || false}>
+                                                <BoxInner>
+                                                    {e.workers.map((e, i) => <BoxInnerItem key={i}>
+                                                        <ContactImage />
+                                                        <ContactInfo>
+                                                            <ContactName>{e.name}</ContactName>
+                                                            <ContactRole>{e.role}</ContactRole>
+                                                        </ContactInfo>
+                                                    </BoxInnerItem>)
+                                                    }
+                                                </BoxInner>
+                                            </Collapsible>
+                                        </Box>
+                                    ))}
                                 </ContactList>
                                 <ContactList>
                                     <FlatList
@@ -192,9 +192,9 @@ class Content extends Component {
                                     />
                                 </ContactList>
                             </Animated>
-                        </Wrapper>
-                    </GestureRecognizer>
-                </KeyboardAwareScrollView>
+                        </KeyboardAwareScrollView>
+                    </Wrapper>
+                </GestureRecognizer>
             </SafeAreaView>
         )
     }
