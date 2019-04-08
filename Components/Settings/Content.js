@@ -92,7 +92,7 @@ class Content extends Component {
                             <Option>
                                 {item.option.type === 'toggle' && <Toggle
                                     onPress={() => this.handleToggle(item.label)}
-                                    switchOn={item.option.value}
+                                    switchOn={!!item.option.value}
                                 />}
                                 {item.option.type === 'link' && <TouchableOpacity>
                                     <Link>{item.option.value}</Link>
