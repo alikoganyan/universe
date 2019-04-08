@@ -50,7 +50,7 @@ const Wrapper = styled(View)`
     
 `
 const ContactList = styled(ScrollView)`
-    padding: 10px;
+    padding: 20px;
     padding-bottom: 10px;
     max-width: ${Dimensions.get('window').width};
     overflow: hidden;
@@ -80,6 +80,7 @@ const BoxInner = styled(AnimatedBox)`
 const BoxItem = styled(Text)`
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     color: #A7B0BA;
+    flex: 1;
 `
 const BoxInnerItem = styled(View)`
     padding: 20px 5px;
@@ -128,6 +129,8 @@ const Option = styled(Text)`
 const Group = styled(BoxInnerItem)`
     justify-content: flex-start;
     flex: 1;
+    padding-left: 0;
+    padding-right: 0;
 `
 const GroupInfo = styled(ContactInfo)`
     flex: 1;
@@ -175,7 +178,7 @@ class Content extends Component {
                                     {department.map((e, i) => (
                                         <Box key={i} last={i === department.length - 1}>
                                             <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                                <BoxItem title={true}>{e.title}</BoxItem>
+                                                <BoxItem numberOfLines={1} title={true}>{e.title}</BoxItem>
                                                 <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
                                                     <ArrowDownIcon />
                                                 </ArrowWrapper>

@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS } from 'react
 import { BackIcon, AddIcon, SearchIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
+import { connect } from 'react-redux'
 import { ImageComponent } from '../../Common/'
 const { HeaderHeight, sidePadding, sidePaddingNumber } = helper;
 const Header = styled(View)`
@@ -39,13 +40,15 @@ const MarginRight = styled(View)`
 margin-right: ${sidePaddingNumber};
 `
 
-export default class HeaderComponent extends Component {
+class HeaderComponent extends Component {
     render() {
+        const { user } = this.props;
+        console.log(user.image)
         return (
             <Header>
                 <Left>
                     <MarginRight>
-                        <BackIcon onPress={this.props.back}/>
+                        <BackIcon onPress={this.props.back} />
                     </MarginRight>
                     <Text>
                         Контакты
@@ -54,9 +57,18 @@ export default class HeaderComponent extends Component {
                 <Right>
                     <SearchIcon />
                     {/* <AddIcon /> */}
-                    <UserImage />
+                    <ImageComponent source={{ uri: user.image }} style={{marginLeft: 10}}/>
                 </Right>
             </Header>
         )
     }
 }
+const mapStateToProps = state => {
+    return {
+        user: state.userReducer.user.user
+    };
+};
+const mapDispatchToProps = dispatch => ({
+    setDialogs: _ => dispatch(setDialogs(_))
+})
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
