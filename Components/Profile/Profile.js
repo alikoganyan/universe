@@ -81,14 +81,10 @@ class Profile extends Component {
 
 const mapStateToProps = state => {
     return {
-        messages: state.messageReducer,
-        dialog: state.dialogsReducer.dialogs,
-        currentRoom: state.messageReducer.currentRoom,
-        currentChat: state.messageReducer.currentChat,
-        user: state.userReducer.user.user,
+        user: state.userReducer.user,
     };
 };
 const mapDispatchToProps = dispatch => ({
-    setCurrentChat: _ => dispatch(setCurrentChat(_)),
+    setUser: _ => dispatch(setUser(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Profile)
