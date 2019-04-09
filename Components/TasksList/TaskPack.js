@@ -9,7 +9,7 @@ const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: ${sidePaddingNumber}px 0 ${sidePadding} ${sidePaddingNumber}px;
+  padding: ${sidePaddingNumber}px 0;
   border: 1px solid ${lightColor};
   border-width: 0;
   border-top-width: 1px;

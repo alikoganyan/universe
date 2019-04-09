@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Dimensions, TouchableOpacity, ActionSheetIOS, Platform } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, Dimensions, TouchableOpacity, ActionSheetIOS, Platform, Animated } from 'react-native'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
@@ -21,11 +21,12 @@ class Content extends Component {
         return (
             <SafeAreaView>
                 <Wrapper search={search}>
-                    <FlatList
+                    <Animated.FlatList
                         style={{ paddingRight: 5, paddingLeft: 5, }}
                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                         inverted={true}
                         data={reversedMessages}
+                        animated={true}
                         renderItem={({ item }) => {
                             if (item.type === 'message') {
                                 return <TouchableOpacity onLongPress={this.handleHold}>

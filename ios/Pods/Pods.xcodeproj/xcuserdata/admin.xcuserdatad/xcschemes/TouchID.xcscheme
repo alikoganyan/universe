@@ -14,9 +14,9 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "B0B4F9137070BA7FC6890D1BAA6D4D97"
-               BuildableName = "libreact-native-splash-screen.a"
-               BlueprintName = "react-native-splash-screen"
+               BlueprintIdentifier = "DA28C2438642FDF833BD4242CDD7A5E6"
+               BuildableName = "libTouchID.a"
+               BlueprintName = "TouchID"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>

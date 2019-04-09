@@ -71,7 +71,6 @@ class Profile extends Component {
         const { navigation } = this.props
         await AsyncStorage.clear();
         navigation.navigate('Login')
-
     }
     edit = () => {
         const { navigation } = this.props;

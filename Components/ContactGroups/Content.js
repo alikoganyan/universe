@@ -6,11 +6,12 @@ import FloatingLabel from 'react-native-floating-labels'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../Helper/helper'
+import { ImageComponent } from '../../Common'
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { connect } from 'react-redux'
-const { Colors, socket } = helper;
+const { Colors, socket, sidePadding } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
@@ -49,7 +50,7 @@ const Wrapper = styled(View)`
     
 `
 const ContactList = styled(ScrollView)`
-    padding: 30px;
+    padding: 20px;
     padding-bottom: 10px;
     max-width: ${Dimensions.get('window').width};
     overflow: hidden;
@@ -79,9 +80,10 @@ const BoxInner = styled(AnimatedBox)`
 const BoxItem = styled(Text)`
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     color: #A7B0BA;
+    flex: 1;
 `
 const BoxInnerItem = styled(View)`
-    padding: 10px;
+    padding: 20px 5px;
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     display: flex;
     flex-direction: row;
@@ -124,55 +126,77 @@ const Option = styled(Text)`
     overflow: hidden;
     text-align: center;
 `
-const Group = styled(BoxInnerItem)``
-const GroupInfo = styled(ContactInfo)``
+const Group = styled(BoxInnerItem)`
+    justify-content: flex-start;
+    flex: 1;
+    padding-left: 0;
+    padding-right: 0;
+`
+const GroupInfo = styled(ContactInfo)`
+    flex: 1;
+`
 const GroupTitle = styled(ContactName)``
 const GroupParticipants = styled(ContactRole)``
 const GroupImage = styled(ContactImage)``
 class Content extends Component {
     render() {
-        const { users, collapsed, options, groups } = this.state;
+        const { allUsers, users, collapsed, options, groups } = this.state;
         const { department } = users;
         const { active } = options;
         return (
             <SafeAreaView>
-                <GestureRecognizer
-                    onSwipeLeft={this.optionLeft}
-                    onSwipeRight={this.optionRight}
-                >
-                    <Wrapper>
-                        <KeyboardAwareScrollView enableOnAndroid>
+                <Wrapper>
+                    <KeyboardAwareScrollView enableOnAndroid>
+                        <GestureRecognizer
+                            onSwipeLeft={this.optionLeft}
+                            onSwipeRight={this.optionRight}
+                        >
                             <Options>
                                 {options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                                        <Option active={active % 3 === i}>{e}</Option>
-                                    </TouchableOpacity>)
+                                    <Option active={active % 3 === i}>{e}</Option>
+                                </TouchableOpacity>)
                                 }
                             </Options>
                             <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
-                                <ContactList style={{ width: '100%' }}><Text>123</Text></ContactList>
+                                <ContactList style={{ width: '100%' }}>
+                                    <FlatList
+                                        style={{ paddingRight: 5, paddingLeft: 5, }}
+                                        ListHeaderComponent={<View style={{ margin: 35, }} />}
+                                        inverted={true}
+                                        data={allUsers}
+                                        renderItem={({ item }) => <Group>
+                                            <ImageComponent size={"xs"} style={{marginRight: sidePadding}} source={{uri: item.uri}}/>
+                                            <GroupInfo>
+                                                <GroupTitle numberOfLines={1}>{item.name}</GroupTitle>
+                                            </GroupInfo>
+                                        </Group>
+                                        }
+                                        keyExtractor={(item, index) => index.toString()}
+                                    />
+                                </ContactList>
                                 <ContactList>
                                     {department.map((e, i) => (
-                                            <Box key={i} last={i === department.length - 1}>
-                                                <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                                    <BoxItem title={true}>{e.title}</BoxItem>
-                                                    <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                                                        <ArrowDownIcon />
-                                                    </ArrowWrapper>
-                                                </BoxTitle>
-                                                <Collapsible collapsed={collapsed[i] || false}>
-                                                    <BoxInner>
-                                                        {e.workers.map((e, i) => <BoxInnerItem key={i}>
-                                                                <ContactImage />
-                                                                <ContactInfo>
-                                                                    <ContactName>{e.name}</ContactName>
-                                                                    <ContactRole>{e.role}</ContactRole>
-                                                                </ContactInfo>
-                                                            </BoxInnerItem>)
-                                                        }
-                                                    </BoxInner>
-                                                </Collapsible>
-                                            </Box>
-                                        ))}
+                                        <Box key={i} last={i === department.length - 1}>
+                                            <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
+                                                <BoxItem numberOfLines={1} title={true}>{e.title}</BoxItem>
+                                                <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
+                                                    <ArrowDownIcon />
+                                                </ArrowWrapper>
+                                            </BoxTitle>
+                                            <Collapsible collapsed={collapsed[i] || false}>
+                                                <BoxInner>
+                                                    {e.workers.map((e, i) => <BoxInnerItem key={i}>
+                                                        <ContactImage />
+                                                        <ContactInfo>
+                                                            <ContactName>{e.name}</ContactName>
+                                                            <ContactRole>{e.role}</ContactRole>
+                                                        </ContactInfo>
+                                                    </BoxInnerItem>)
+                                                    }
+                                                </BoxInner>
+                                            </Collapsible>
+                                        </Box>
+                                    ))}
                                 </ContactList>
                                 <ContactList>
                                     <FlatList
@@ -183,7 +207,7 @@ class Content extends Component {
                                         renderItem={({ item }) => <Group>
                                             <GroupImage />
                                             <GroupInfo>
-                                                <GroupTitle>{item.title}</GroupTitle>
+                                                <GroupTitle numberOfLines={1}>{item.title}</GroupTitle>
                                                 <GroupParticipants>{item.participants} участников</GroupParticipants>
                                             </GroupInfo>
                                         </Group>
@@ -192,9 +216,9 @@ class Content extends Component {
                                     />
                                 </ContactList>
                             </Animated>
-                        </Wrapper>
-                    </GestureRecognizer>
-                </KeyboardAwareScrollView>
+                        </GestureRecognizer>
+                    </KeyboardAwareScrollView>
+                </Wrapper>
             </SafeAreaView>
         )
     }
@@ -237,6 +261,16 @@ class Content extends Component {
             { title: 'длинное корпоративное название группы', participants: 15 },
             { title: 'длинное корпоративное название группы', participants: 15 },
             { title: 'длинное корпоративное название группы', participants: 15 },
+        ],
+        allUsers: [
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
         ]
     }
     componentDidMount() {

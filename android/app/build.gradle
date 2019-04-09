@@ -49,15 +49,16 @@ android {
     }
   }
   signingConfigs {
-        release {
-            if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
-                storeFile file(MYAPP_RELEASE_STORE_FILE)
-                storePassword MYAPP_RELEASE_STORE_PASSWORD
-                keyAlias MYAPP_RELEASE_KEY_ALIAS
-                keyPassword MYAPP_RELEASE_KEY_PASSWORD
-            }
-        }
+    debug {
+      storeFile file('../debug.keystore')
     }
+    release {
+      storeFile file(System.getenv("ANDROID_KEYSTORE_PATH") ?: "release-key.jks")
+      storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+      keyAlias System.getenv("ANDROID_KEY_ALIAS")
+      keyPassword System.getenv("ANDROID_KEY_PASSWORD")
+    }
+  }
   buildTypes {
     debug {
       debuggable true
@@ -103,13 +104,12 @@ apply from: 'expo.gradle'
 // WHEN_PREPARING_SHELL_REMOVE_TO_HERE
 
 dependencies {
+    compile project(':react-native-vector-icons')
     compile project(':react-native-touch-id')
+    compile project(':react-native-splash-screen')
     compile project(':react-native-push-notification')
     compile project(':react-native-config')
     compile project(':react-native-autogrow-textinput')
-    compile project(':react-native-svg')
-    compile project(':react-native-vector-icons')
-    compile project(':react-native-splash-screen')
   implementation fileTree(dir: 'libs', include: ['*.jar'])
 
   implementation 'com.android.support:multidex:1.0.1'

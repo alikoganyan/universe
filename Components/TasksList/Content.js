@@ -23,7 +23,7 @@ export default class Tasks extends Component {
           <TaskPack title={'Все исходящие задачи'} last>task</TaskPack>
           {
             FlatListData.map((e, i) => {
-              return <Task key={i} title={e.title}></Task>
+              return <Task key={i} title={e.title}>{e.text}</Task>
             })
           }
         </StyledScrollView>

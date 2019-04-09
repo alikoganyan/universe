@@ -3,14 +3,15 @@ import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'rea
 import { CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-const { borderRadius, Colors, fontSize } = helper;
+import { ImageComponent } from '../../Common'
+const { borderRadius, Colors, fontSize, sidePadding } = helper;
 const { yellow, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`
-    margin-bottom: 40px;   
+    padding-bottom: 20px;   
     background: white;
 `
 const NewsList = styled(FlatList)`
-    padding: 10px;
+    padding: ${sidePadding};
     display: flex;
     flex-grow: 1;
     padding-bottom: 20px;
@@ -20,23 +21,14 @@ const NewsItem = styled(View)`
     padding: 20px;
     padding-bottom: 10px;
     margin-bottom: 10px;
-    border-radius: ${borderRadius};
     border: 0.5px solid ${yellow};
-    border-radius: 5;
-
+    border-radius: ${borderRadius};
 `
 const Sender = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-bottom: 15px;
-`
-const Sendermage = styled(Image)`
-    width: 30;
-    height: 30;
-    border-radius: 15;
-    background: red;
-    margin-right: 10px;
 `
 const SenderName = styled(Text)`
     font-size: 13;
@@ -45,6 +37,7 @@ const SenderInfo = styled(View)`
     display: flex;
     justify-content: space-between;
     height: 35px;
+    flex: 1;
 `
 const TimeSent = styled(Text)`
     color: #848484;
@@ -95,12 +88,14 @@ export default class Content extends Component {
                 <Wrapper>
                     <NewsList
                         data={newsList}
-                        ListFooterComponent={<View style={{ margin: 5, }} />}
+                        ListFooterComponent={<View style={{ margin: 10, }} />}
                         renderItem={({ item }) => <NewsItem>
                             <Sender>
-                                <Sendermage source={{ uri: item.sender.img }} />
+                                <ImageComponent source={{ uri: item.sender.img }} size={"xs"} style={{
+                                    marginRight: 10
+                                }} />
                                 <SenderInfo>
-                                    <SenderName>{item.sender.name}</SenderName>
+                                    <SenderName numberOfLines={1}>{item.sender.name}</SenderName>
                                     <TimeSent>{item.timeSent}</TimeSent>
                                 </SenderInfo>
                             </Sender>
@@ -112,7 +107,7 @@ export default class Content extends Component {
 
                                 <Reactions>
                                     <HeartIcon /><Reactionsext>12</Reactionsext>
-                                    <CommentIcon left/><Reactionsext>12</Reactionsext>
+                                    <CommentIcon left /><Reactionsext>12</Reactionsext>
                                 </Reactions>
                             </NewsItemInfo>
                         </NewsItem>}
@@ -126,7 +121,7 @@ export default class Content extends Component {
         newsList: [
             {
                 sender: {
-                    img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
+                    img: 'https://facebook.github.io/react/logo-og.png',
                     name: 'Константин Константинопольский'
                 },
                 text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
@@ -140,7 +135,7 @@ export default class Content extends Component {
             },
             {
                 sender: {
-                    img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
+                    img: 'https://facebook.github.io/react/logo-og.png',
                     name: 'Константин Константинопольский'
                 },
                 text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
@@ -154,7 +149,7 @@ export default class Content extends Component {
             },
             {
                 sender: {
-                    img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
+                    img: 'https://facebook.github.io/react/logo-og.png',
                     name: 'Константин Константинопольский'
                 },
                 text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
@@ -168,7 +163,7 @@ export default class Content extends Component {
             },
             {
                 sender: {
-                    img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
+                    img: 'https://facebook.github.io/react/logo-og.png',
                     name: 'Константин Константинопольский'
                 },
                 text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
@@ -182,7 +177,7 @@ export default class Content extends Component {
             },
             {
                 sender: {
-                    img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
+                    img: 'https://facebook.github.io/react/logo-og.png',
                     name: 'Константин Константинопольский'
                 },
                 text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
@@ -196,7 +191,7 @@ export default class Content extends Component {
             },
             {
                 sender: {
-                    img: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
+                    img: 'https://facebook.github.io/react/logo-og.png',
                     name: 'Константин Константинопольский'
                 },
                 text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',

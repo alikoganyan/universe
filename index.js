@@ -86,7 +86,7 @@ io.on('connection', (socket) => {
                     if (err) throw err;
                     socket.emit('login success', {
                         result: { ...result[0], ...res[0] }
-                    })
+                    })  
                 })
             } else {
                 socket.emit('login error', {
@@ -112,7 +112,6 @@ io.on('connection', (socket) => {
                             messages.push(result[0])
                             con.query(`SELECT * from messages WHERE senderId = ${e.userId} AND chatId = "${room}" AND isread = 0`, (err, result) => {
                                 if (err) throw err;
-                                console.log(e)
                                 unread.push({ length: result.length, chatId: event.id })
                             })
                         })
@@ -220,7 +219,7 @@ io.on('connection', (socket) => {
     })
     /* get all users */
     socket.on('get users', e => {
-        console.log('test')
+        // console.log('test')
         con.query(`SELECT * FROM users WHERE id != ${e.id}`, (err, result) => {
             if (err) throw err;
             socket.emit('get users', result)
