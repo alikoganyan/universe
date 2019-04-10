@@ -102,7 +102,7 @@ const mapStateToProps = state => {
         messages: state.messageReducer.messages,
         search: state.messageReducer.search,
         drawer: state.drawerReducer.open,
-        user: state.userReducer.user.user
+        user: state.userReducer.user
     };
 };
 const mapDispatchToProps = dispatch => ({

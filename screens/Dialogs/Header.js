@@ -42,7 +42,7 @@ class HeaderComponent extends Component {
                 {this.state.focused ?
                     <CloseIcon onPress={this.onBlur} />
                     : <TouchableOpacity onPress={this.toProfile}>
-                        <ImageComponent source={{ uri: user }} />
+                        <ImageComponent source={{ uri: user.image }} />
                     </TouchableOpacity>}
             </Header>
         )
@@ -84,7 +84,7 @@ const mapStateToProps = state => {
         messages: state.messageReducer.messages,
         search: state.messageReducer.search,
         drawer: state.drawerReducer.open,
-        user: state.userReducer.user.user
+        user: state.userReducer.user
     };
 };
 const mapDispatchToProps = dispatch => ({

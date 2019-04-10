@@ -100,7 +100,7 @@ function Message(props) {
 const mapStateToProps = state => {
     return {
         messages: state.messageReducer.messages,
-        myId: state.userReducer.user.user.id
+        myId: state.userReducer.user.id
     };
 };
 export default connect(mapStateToProps)(Message)

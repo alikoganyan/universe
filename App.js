@@ -37,11 +37,13 @@ import {
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
 import {
   createStore,
+  applyMiddleware,
 } from 'redux';
-
+import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
 import reducers from './reducers/'
 import devToolsEnhancer from 'remote-redux-devtools';
+import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction';
 import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
@@ -107,7 +109,7 @@ const AppStackNavigator = createStackNavigator(
 )
 
 const App = createAppContainer(AppStackNavigator)
-const store = createStore(reducers, devToolsEnhancer())
+const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk), devToolsEnhancer()))
 @connectActionSheet
 export default class AppComponent extends React.Component {
   async componentDidMount() {

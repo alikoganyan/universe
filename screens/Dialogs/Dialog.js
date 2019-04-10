@@ -150,7 +150,7 @@ const mapStateToProps = state => {
     messages: state.messageReducer.messages,
     storeDialogs: state.messageReducer,
     currentRoom: state.messageReducer.currentRoom,
-    user: state.userReducer.user.user
+    user: state.userReducer.user
   };
 };
 const mapDispatchToProps = dispatch => ({

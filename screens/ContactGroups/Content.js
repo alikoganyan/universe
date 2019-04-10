@@ -318,7 +318,7 @@ const mapStateToProps = state => {
         messages: state.messageReducer,
         dialog: state.dialogsReducer.dialogs,
         currentRoom: state.messageReducer.currentRoom,
-        user: state.userReducer.user.user,
+        user: state.userReducer.user,
         users: state.userReducer,
     };
 };

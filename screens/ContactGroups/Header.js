@@ -65,7 +65,7 @@ class HeaderComponent extends Component {
 }
 const mapStateToProps = state => {
     return {
-        user: state.userReducer.user.user
+        user: state.userReducer.user
     };
 };
 const mapDispatchToProps = dispatch => ({
