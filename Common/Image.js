@@ -1,6 +1,6 @@
-import React from 'react'
-import { Text, View, Image } from 'react-native'
-import styled from 'styled-components'
+import React from './node_modules/react'
+import { Text, View, Image } from './node_modules/react-native'
+import styled from './node_modules/styled-components'
 const sizes = {
     medium: 24,
     xs: 40,

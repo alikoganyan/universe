@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'rea
 import { CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-import { ImageComponent } from '../../Common'
+import { ImageComponent } from '../../common'
 const { borderRadius, Colors, fontSize, sidePadding } = helper;
 const { yellow, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`

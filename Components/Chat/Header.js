@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { ImageComponent } from '../../Common/'
+import { ImageComponent } from '../../common'
 const { sidePadding, sidePaddingNumber, HeaderHeight, Colors, fontSize } = helper;
 const { border } = Colors;
 const Header = styled(View)`

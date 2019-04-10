@@ -6,7 +6,7 @@ import CheckboxFormX from 'react-native-checkbox-form';
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
-import { Button } from '../../Common'
+import { Button } from '../../common'
 import CheckBox from 'react-native-check-box'
 
 const { Colors, fontSize, HeaderHeightNumber, socket } = helper;

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, Image } from 'react-native'
 import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
-import { SafeAreaView } from '../../Common/'
+import { SafeAreaView } from '../../common'
 
 import { Header, Content, Input } from './'
 const Wrapper = styled(View)`

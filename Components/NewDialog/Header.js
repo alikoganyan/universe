@@ -3,7 +3,7 @@ import { View, Text, TextInput, Image, Platform, Dimensions, Keyboard, Touchable
 import { SearchIcon, BurgerIcon, CloseIcon, BackIcon } from '../../assets/index'
 import { openDrawer } from '../../actions/drawerActions'
 import { setDialogs } from '../../actions/dialogsActions'
-import { ImageComponent } from '../../Common/'
+import { ImageComponent } from '../../common'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'

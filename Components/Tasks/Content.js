@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'react-native'
 import { CommentIcon, HeartIcon } from '../../assets/index'
-import { TaskComponent } from '../../Common/'
+import { TaskComponent } from '../../common'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 const { sidePadding, Colors } = helper;

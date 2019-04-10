@@ -3,7 +3,7 @@ import { View, Text, Image, Dimensions, Platform, TouchableOpacity, AsyncStorage
 import { BackIcon, EllipsisVIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-import { SafeAreaView } from '../../Common/'
+import { SafeAreaView } from '../../common'
 import { connect } from 'react-redux'
 import { setCurrentChat } from '../../actions/messageActions'
 import {

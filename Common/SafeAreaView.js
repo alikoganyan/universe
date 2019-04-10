@@ -1,6 +1,6 @@
-import React from 'react'
-import { SafeAreaView, Platform, KeyboardAvoidingView } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import React from './node_modules/react'
+import { SafeAreaView, Platform, KeyboardAvoidingView } from './node_modules/react-native'
+import { KeyboardAwareScrollView } from './node_modules/react-native-keyboard-aware-scroll-view'
 
 export default function SafeAreaViewComponent(props) {
   const { children, style, behavior } = props;

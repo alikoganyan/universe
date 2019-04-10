@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, Dimensions } from 'react-native'
 import styled from 'styled-components'
-import { SafeAreaView } from '../../Common/'
+import { SafeAreaView } from '../../common'
 import { Header, Content } from './index'
 import helper from '../../Helper/helper'
 

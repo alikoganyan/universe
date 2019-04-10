@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, Image, Dimensions } from 'react-native'
 import { TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
-import { Button } from '../../Common/';
+import { Button } from '../../common';
 import { setRoom } from '../../actions/messageActions'
 import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'

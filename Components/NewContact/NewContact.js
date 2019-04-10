@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 import { Header, Content } from './index'
 import styled from 'styled-components'
-import { SafeAreaView } from '../../Common/'
+import { SafeAreaView } from '../../common'
 
 const Wrapper = styled(View)``
 

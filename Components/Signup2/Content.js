@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
-import { Button } from '../../Common'
+import { Button } from '../../common'
 const { Colors, fontSize, HeaderHeightNumber, socket } = helper;
 const { lightGrey1, blue } = Colors;
 const Wrapper = styled(View)`

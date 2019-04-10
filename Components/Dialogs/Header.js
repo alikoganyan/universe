@@ -4,7 +4,7 @@ import { SearchIcon, BurgerIcon, CloseIcon } from '../../assets/index'
 import { openDrawer } from '../../actions/drawerActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
-import { ImageComponent } from '../../Common/'
+import { ImageComponent } from '../../common'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight, borderRadius, socket } = helper;

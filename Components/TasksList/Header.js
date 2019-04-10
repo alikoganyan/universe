@@ -4,7 +4,7 @@ import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon } from 
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
-import { ImageComponent } from '../../Common'
+import { ImageComponent } from '../../common'
 const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
 
 const Header = styled(View)`

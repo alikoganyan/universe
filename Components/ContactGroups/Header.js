@@ -4,7 +4,7 @@ import { BackIcon, AddIcon, SearchIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
-import { ImageComponent } from '../../Common/'
+import { ImageComponent } from '../../common'
 const { HeaderHeight, sidePadding, sidePaddingNumber } = helper;
 const Header = styled(View)`
     width: 100%;

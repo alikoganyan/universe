@@ -4,7 +4,7 @@ import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon 
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
-import { TaskComponent, Message, Feed } from '../../Common/'
+import { TaskComponent, Message, Feed } from '../../common'
 
 const { HeaderHeightNumber } = helper;
 const Wrapper = styled(View)`

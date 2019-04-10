@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { Text, View } from 'react-native'
-import styled from 'styled-components'
-import { CheckIcon, TriangleLeftIcon, TriangleRightIcon } from '../assets/'
+import React, { Component } from './node_modules/react'
+import { Text, View } from './node_modules/react-native'
+import styled from './node_modules/styled-components'
+import { CheckIcon, TriangleLeftIcon, TriangleRightIcon } from '../assets'
 const { HeaderHeightNumber, Colors } = helper;
 const { red, yellow, green, purple, grey1 } = Colors;
 const borderRadius = 5;

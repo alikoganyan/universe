@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import helper from '../../Helper/helper'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
-import { Button } from '../../Common'
-import { ImageComponent } from '../../Common'
+import { Button } from '../../common'
+import { ImageComponent } from '../../common'
 import { GroupIcon, CloseIcon } from '../../assets/'
 const { Colors, HeaderHeightNumber, socket, sidePadding } = helper;
 const { lightGrey1, black, yellow } = Colors;

@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native'
 import helper from '../../Helper/helper'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
-import { Button } from '../../Common'
+import { Button } from '../../common'
 const { Colors } = helper;
 const { green, lightGrey1, black, color } = Colors;
 

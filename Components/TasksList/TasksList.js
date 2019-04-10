@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, FlatList, Dimensions, ScrollView } from 'react-native'
 import styled from 'styled-components'
 import { Header, Content } from './'
-import { SafeAreaView } from '../../Common/'
+import { SafeAreaView } from '../../common'
 import helper from '../../Helper/helper'
 const { sidePaddingNumber } = helper;
 const Wrapper = styled(View)`

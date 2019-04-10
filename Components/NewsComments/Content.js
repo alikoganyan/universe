@@ -4,7 +4,7 @@ import { CommentIcon, HeartIcon, TriangleLeftIcon, TriangleRightIcon, CheckIcon 
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import styled from 'styled-components'
 import helper from '../../Helper/helper'
-import { ImageComponent } from '../../Common'
+import { ImageComponent } from '../../common'
 const { HeaderHeightNumber, sidePadding, borderRadius, Colors, fontSize } = helper;
 const { yellow, black, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`

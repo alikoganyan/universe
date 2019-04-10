@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, FlatList, Dimensions, StatusBar } from 'react-native'
 import styled from 'styled-components'
 import { Header, Dialog } from './index'
-import { SafeAreaView } from '../../Common/'
+import { SafeAreaView } from '../../common'
 import { connect } from 'react-redux';
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
 import { setDialogs } from '../../actions/dialogsActions'
