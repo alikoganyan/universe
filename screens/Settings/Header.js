@@ -38,7 +38,8 @@ const MarginRight = styled(View)`
 class HeaderComponent extends Component {
     render() {
         const { user, back } = this.props;
-        const { image } = user;
+        // const { image } = user;
+        console.log({user})
         return (
             <Header>
                 <Left>
@@ -50,7 +51,7 @@ class HeaderComponent extends Component {
                     </Text>
                 </Left>
                 <Right>
-                    <ImageComponent source={{uri: image}}/>
+                    <ImageComponent source={{uri: "image"}}/>
                 </Right>
             </Header>
         )
@@ -62,7 +63,7 @@ const mapStateToProps = state => {
         dialog: state.dialogsReducer.dialogs,
         currentRoom: state.messageReducer.currentRoom,
         currentChat: state.messageReducer.currentChat,
-        user: state.userReducer.user.user,
+        user: state.userReducer.user,
     };
 };
 const mapDispatchToProps = dispatch => ({

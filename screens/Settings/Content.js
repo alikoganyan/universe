@@ -113,15 +113,15 @@ class Content extends Component {
     }
     state = {
         switchOn: true,
-        langs: [
-            'Английский',
-            'Русский'
-        ],
+        langs: {
+            en: 'Английский',
+            ru: 'Русский'
+        },
         settings: [
             { item: 'language', label: 'язык', status: 'Русский', option: { type: 'link', value: 'изменить' } },
             { item: 'notifications', label: 'уведомления', status: 'Включены', option: { type: 'toggle', value: 1 } },
             { item: 'sound', label: 'звук', status: 'Включен', option: { type: 'toggle', value: 0 } },
-            { item: 'contacts', label: 'контакты', status: 'По подразделениям', option: { type: 'toggle', value: 0 } },
+            { item: 'partition_contacts', label: 'контакты', status: 'По подразделениям', option: { type: 'toggle', value: 0 } },
         ]
     }
     componentDidMount() {
@@ -131,10 +131,10 @@ class Content extends Component {
         newSettings.map(e => {
             if (e.item === 'language') {
                 e.option.value = 'Изменить'
-                e.status = langs[user[e.item]]
+                e.status = langs[user.settings[e.item]]
             }
             else
-                e.option.value = user[e.item]
+                e.option.value = user.settings[e.item]
         })
         setTimeout(() => {
 
@@ -165,7 +165,7 @@ const mapStateToProps = state => {
         dialog: state.dialogsReducer.dialogs,
         currentRoom: state.messageReducer.currentRoom,
         currentChat: state.messageReducer.currentChat,
-        user: state.userReducer.user.user,
+        user: state.userReducer.user,
     };
 };
 const mapDispatchToProps = dispatch => ({

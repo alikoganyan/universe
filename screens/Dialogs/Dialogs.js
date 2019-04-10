@@ -44,9 +44,9 @@ class Dialogs extends Component {
   }
   componentDidMount() {
     const { user } = this.props;
-    socket.emit('dialogs', { userId: user.id });
-    socket.emit('news', { userId: user.id });
-    socket.emit('set dialogs', { userId: user.id, dialogId: 33 });
+    // socket.emit('dialogs', { userId: user.id });
+    // socket.emit('news', { userId: user.id });
+    // socket.emit('set dialogs', { userId: user.id, dialogId: 33 });
     socket.on('news', this.news);
     socket.on('get users', this.getUsers)
     socket.on('find', this.find)

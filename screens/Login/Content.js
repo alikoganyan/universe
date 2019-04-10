@@ -251,6 +251,6 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => ({
     setAuth: info => { dispatch(a_setAuth(info)) },
-    setUser: info => { dispatch(a_setUser(info)) },
+    setUser: info => { dispatch(setUser(info)) },
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)
