@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Image, TouchableOpacity, TextInput, Platform } from 'react-native'
-import helper from '../../utils/helper'
+import helper from '../../utils/helpers'
 import { Button } from '../../common'
 import styled from 'styled-components'
 import { IntroIcon } from '../../assets/index'

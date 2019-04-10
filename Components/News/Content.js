@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'react-native'
 import { CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
-import helper from '../../utils/helper'
+import helper from '../../utils/helpers'
 import { ImageComponent } from '../../common'
 const { borderRadius, Colors, fontSize, sidePadding } = helper;
 const { yellow, darkBlue2, grey2 } = Colors;

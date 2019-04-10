@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { View, Text, Image, TouchableOpacity } from 'react-native';
 import { ForwardIcon } from '../../assets/index';
 import styled from 'styled-components';
-import helper from '../../utils/helper';
+import helper from '../../utils/helpers';
 const { HeaderHeight, fontSize } = helper;
 
 const Header = styled(View)`

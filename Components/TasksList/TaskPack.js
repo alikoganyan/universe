@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionSheetIOS } from 'react-native'
 import styled from 'styled-components'
-import helper from '../../utils/helper'
+import helper from '../../utils/helpers'
 import { TasksIcon } from '../../assets/index'
 const { fontSize, PressDelay, sidePadding, Colors, sidePaddingNumber } = helper;
 const { purple, lightColor } = Colors;

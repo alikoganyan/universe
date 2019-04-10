@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS } from 'react
 import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import helper from '../../utils/helper'
+import helper from '../../utils/helpers'
 import { ImageComponent } from '../../common'
 const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
 const Header = styled(View)`

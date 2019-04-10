@@ -6,7 +6,7 @@ import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
 import { ImageComponent } from '../../common'
 import styled from 'styled-components'
-import helper from '../../utils/helper'
+import helper from '../../utils/helpers'
 const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight, borderRadius, socket } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;

@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, } from 'react-native'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import CheckboxFormX from 'react-native-checkbox-form';
-import helper from '../../utils/helper'
+import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
 import { Button } from '../../common'

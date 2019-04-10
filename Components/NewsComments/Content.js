@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView
 import { CommentIcon, HeartIcon, TriangleLeftIcon, TriangleRightIcon, CheckIcon } from '../../assets/index'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import styled from 'styled-components'
-import helper from '../../utils/helper'
+import helper from '../../utils/helpers'
 import { ImageComponent } from '../../common'
 const { HeaderHeightNumber, sidePadding, borderRadius, Colors, fontSize } = helper;
 const { yellow, black, darkBlue2, grey2 } = Colors;

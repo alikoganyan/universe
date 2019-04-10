@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS } from 'react-native'
 import { BackIcon, EllipsisVIcon } from '../../assets/index'
 import styled from 'styled-components'
-import helper from '../../utils/helper'
+import helper from '../../utils/helpers'
 import {
     ActionSheetProvider,
     connectActionSheet,

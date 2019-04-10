@@ -3,7 +3,7 @@ import { View, Text, FlatList, Dimensions, ScrollView } from 'react-native'
 import styled from 'styled-components'
 import { Header, Task, TaskPack } from './'
 import { SafeAreaView } from '../../common'
-import helper from '../../utils/helper'
+import helper from '../../utils/helpers'
 const { sidePaddingNumber, HeaderHeightNumber } = helper;
 const Wrapper = styled(View)`
   max-height: ${Dimensions.get('window').height - sidePaddingNumber}px;

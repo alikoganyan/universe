@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, FlatList, Dimensions, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import helper from '../../utils/helper'
+import helper from '../../utils/helpers'
 import { Header, Content } from './'
 import { SafeAreaView } from '../../common'
 const Outer = styled(View)`
