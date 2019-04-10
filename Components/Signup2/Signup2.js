@@ -3,7 +3,7 @@ import { View, Text, Dimensions } from 'react-native'
 import styled from 'styled-components'
 import { SafeAreaView } from '../../common'
 import { Header, Content } from './index'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 
 const { socket, HeaderHeight } = helper;
 const Wrapper = styled(View)`

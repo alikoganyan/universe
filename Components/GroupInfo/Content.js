@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'react-native'
 import { BackIcon, EllipsisVIcon, MessageIndicatorIcon } from '../../assets/index'
 import styled from 'styled-components'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 const { fontSize } = helper
 const Wrapper = styled(View)`
     padding-top: 0px;

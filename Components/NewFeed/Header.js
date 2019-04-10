@@ -3,7 +3,7 @@ import { View, Text, TextInput, Image, Platform, Dimensions, TouchableOpacity } 
 import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/index'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
 import Icon from 'react-native-vector-icons/FontAwesome';
 

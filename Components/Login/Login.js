@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity } from 'react-native'
 import { Header, Content } from './index'
 import styled from 'styled-components'
 import { SafeAreaView } from '../../common'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 const { socket, Colors, fontSize } = helper;
 const { lightColor, blue } = Colors;
 const Wrapper = styled(View)`

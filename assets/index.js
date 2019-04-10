@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 import styled from 'styled-components'
-import helper from '../Helper/helper'
+import helper from '../utils/helper'
 import SVG from './svg/'
 import SvgUri from 'react-native-svg-uri';
 

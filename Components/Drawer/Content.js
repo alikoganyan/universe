@@ -3,7 +3,7 @@ import { Text, View, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import { PapperPlaneIcon, GroupIcon, FeedIcon, TasksIcon, SettingsIcon } from '../../assets/'
 import { DrawerActions } from 'react-navigation-drawer';
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 const { sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
     flex: 7;

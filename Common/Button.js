@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
-import helper from '../Helper/helper'
+import helper from '../utils/helper'
 const { Colors } = helper;
 const { border, lightColor } = Colors;
 const Wrapper = styled(TouchableOpacity)`

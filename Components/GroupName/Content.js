@@ -4,7 +4,7 @@ import { BackIcon, EllipsisVIcon, MessageIndicatorIcon } from '../../assets/inde
 import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;

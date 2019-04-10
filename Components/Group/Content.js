@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ActionSheetIOS } from 'react-native'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 import { connect } from 'react-redux'
 import { TaskComponent, Message } from '../../common'
 const { HeaderHeightNumber, Colors, Feed, socket } = helper;

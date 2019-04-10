@@ -4,7 +4,7 @@ import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { setCurrentChat } from '../../actions/messageActions'
 import { SafeAreaView } from '../../common'
-import helper from '../../Helper/helper';
+import helper from '../../utils/helper';
 import { Header, Content, Input } from './'
 import { connect } from 'react-redux'
 const { socket, HeaderHeightNumber } = helper

@@ -5,7 +5,7 @@ import { Button } from '../../common';
 import { setRoom } from '../../actions/messageActions'
 import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 import { connect } from 'react-redux'
 
 const { sidePadding, sidePaddingNumber, Colors, HeaderHeightNumber, socket, fontSize } = helper;

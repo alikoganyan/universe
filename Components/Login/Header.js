@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'react-native'
 import { ForwardIcon, LocationIcon, SearchIcon } from '../../assets/index'
 import styled from 'styled-components'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 const { HeaderHeight, fontSize } = helper;
 const Header = styled(View)`
     width: 100%;

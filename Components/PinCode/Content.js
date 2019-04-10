@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, Image, TouchableOpacity, TextInput, AsyncStorage, Platform } from 'react-native'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 import styled from 'styled-components'
 import { setUser } from '../../actions/userActions'
 import { connect } from 'react-redux'

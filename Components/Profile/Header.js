@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, Dimensions, Platform, ActionSheetIOS } from 'react-native'
 import { BackIcon, LocationIcon, EditIcon } from '../../assets/index'
 import styled from 'styled-components'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 import { connect } from 'react-redux'
 const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
 const Header = styled(View)`

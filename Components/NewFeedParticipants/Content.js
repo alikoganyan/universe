@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 import RoundCheckbox from 'rn-round-checkbox';
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';

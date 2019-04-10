@@ -4,7 +4,7 @@ import { SmileIcon, FileIcon, CameraIcon, ImageIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 const { socket, sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
     background: white;

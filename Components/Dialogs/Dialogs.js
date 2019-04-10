@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 import { DrawerActions } from 'react-navigation';
 
 const { sidePaddingNumber, HeaderHeightNumber, socket } = helper;

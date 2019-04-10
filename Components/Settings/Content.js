@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, FlatList, TouchableOpacity } from 'react-nati
 import { BackIcon, EllipsisVIcon, MessageIndicatorIcon } from '../../assets/index'
 import styled from 'styled-components'
 import SwitchToggle from 'react-native-switch-toggle';
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 import { connect } from 'react-redux'
 const { Colors, sidePaddingNumber, fontSize, socket } = helper;
 const { lightGrey1, blue, lightBlue, grey2 } = Colors;

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'react-native'
 import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon } from '../../assets/index'
 import styled from 'styled-components'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 import { connect } from 'react-redux'
 import { ImageComponent } from '../../common'
 const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;

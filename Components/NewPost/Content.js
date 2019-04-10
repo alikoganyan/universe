@@ -3,7 +3,7 @@ import { View, Text, Image, Platform, Dimensions } from 'react-native'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
 import FloatingLabel from 'react-native-floating-labels'
-import helper from '../../Helper/helper'
+import helper from '../../utils/helper'
 import styled from 'styled-components'
 
 const { HeaderHeightNumber, HeaderHeight } = helper;
