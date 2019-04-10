@@ -6,6 +6,11 @@ import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
+import colors from '../../constants/colors'
+import { p_login } from '../../constants/api'
+import { a_setAuth } from '../../redux/Auth/actions'
+import { a_setUser } from '../../redux/User/actions'
+import sendRequest from '../../utils/request'
 const { Colors, fontSize, socket } = helper;
 const { lightColor, lightGrey1, blue } = Colors;
 const { large, text, sm } = fontSize;
@@ -68,7 +73,7 @@ const StyledInput = styled(TextInput)`
     ${({ style }) => style};
 `
 const Input = (props) => {
-    const { children, password = false, value, style, editable, inputStyle, labelStyle } = props;
+    const { onChangeText, children, password = false, value, style, editable, inputStyle, labelStyle } = props;
     return <FloatingLabel
         labelStyle={{
             fontSize: 15,
@@ -86,6 +91,7 @@ const Input = (props) => {
         value={value}
         style={{ ...style }}
         editable={editable}
+        onChangeText={onChangeText}
     >{children}</FloatingLabel>
 
 }
@@ -133,10 +139,14 @@ class Content extends Component {
         )
     }
     state = {
-        error: false,
-        password: '',
-        phone: '',
-        country: '+7'
+        country: '+380',
+        phone: '637072785',
+        phone_number: '',
+        password: '1111',
+        error: null,
+        invalidPassword: null,
+        invalidPhone: null,
+        loading: false,
     }
     componentDidMount = async () => {
 
@@ -186,23 +196,33 @@ class Content extends Component {
         const { country, phone, password } = this.state;
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
-        console.log(1);
-        if (value) {
-            this.setState({ phone: value.phone.slice(2) })
-            setUser({
-                ...value,
-                id: value.id,
-                image: value.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png'
-            })
-            socket.emit('update user', { id: value.id })
-            socket.on('update user', e => setUser({ ...e, image: e.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png', }))
-            console.log(2);
-
-            setTimeout(() => navigate('Dialogs'), 0)
-        } else {
-            socket.emit('login', { phone: country.concat(phone), password })
-
-        }
+        const phone_number = country.concat(phone)
+        sendRequest({
+            r_path: p_login,
+            method: 'post',
+            attr: {
+                phone_number,
+                password,
+            },
+            success: (res) => {
+                console.log(res)
+                const { setAuth, setUser, navigation } = this.props
+                const { access_token, data } = res
+                setAuth(access_token)
+                setUser(data)
+                this.setState({ loading: false })
+                navigate('Dialogs')
+            },
+            failFunc: (err) => {
+                console.log(err)
+                let { phone_number, password } = err
+                this.setState({
+                    loading: false,
+                    invalidPhone: phone_number || null,
+                    invalidPassword: password || null
+                })
+            }
+        })
     }
     signup = (e) => {
         const { navigate } = this.props;
@@ -216,7 +236,8 @@ class Content extends Component {
         e.length <= 10 && this.setState({ phone: e })
     }
     handleChangeCountry = (e) => {
-        e.length <= 3 && this.setState({ country: e })
+        console.log(e)
+        this.setState({ country: e })
     }
     componentWillMount() {
         console.log('unmounted');
@@ -229,6 +250,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = dispatch => ({
-    setUser: _ => dispatch(setUser(_)),
+    setAuth: info => { dispatch(a_setAuth(info)) },
+    setUser: info => { dispatch(a_setUser(info)) },
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

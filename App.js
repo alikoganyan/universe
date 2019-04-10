@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Dimensions, BackHandler } from 'react-native';
+import { View, Text, Dimensions, BackHandler, AsyncStorage } from 'react-native';
 import GlobalFont from 'react-native-global-font'
 import { Font } from 'expo';
 import {
@@ -33,7 +33,7 @@ import {
   NewFeedParticipants,
   ProfileEdit,
 
-} from './Components'
+} from './screens'
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
 import {
   createStore,
@@ -46,6 +46,7 @@ import {
   connectActionSheet,
 } from '@expo/react-native-action-sheet';
 console.disableYellowBox = true;
+
 const AppDrawerNavigator = createDrawerNavigator(
   {
     // Home: { screen: Login },
@@ -113,6 +114,8 @@ export default class AppComponent extends React.Component {
     await Font.loadAsync({
       'Roboto': require('./assets/fonts/Roboto-Medium.ttf'),
     });
+    await AsyncStorage.clear();
+
     GlobalFont.applyGlobal('Roboto')
     this.setState({ loaded: true })
 

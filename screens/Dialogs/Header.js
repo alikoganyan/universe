@@ -42,7 +42,7 @@ class HeaderComponent extends Component {
                 {this.state.focused ?
                     <CloseIcon onPress={this.onBlur} />
                     : <TouchableOpacity onPress={this.toProfile}>
-                        <ImageComponent source={{ uri: user.image }} />
+                        <ImageComponent source={{ uri: user }} />
                     </TouchableOpacity>}
             </Header>
         )

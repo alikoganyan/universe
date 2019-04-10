@@ -1,7 +1,7 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native';
 import io from 'socket.io-client';
 import { API_URL, API_PORT } from 'react-native-dotenv'
-// const socketUrl = `http://${API_URL}:${API_PORT}`
+const socketUrl = `http://80.93.191.147:3000`
 export default helper = {
     IconDarkColor: '#979897',
     IconLightColor: '#ABABAB',
@@ -29,7 +29,7 @@ export default helper = {
         lightGrey1: '#b1b9c2',
         lightGrey2: '#f7f7f7',
     },
-    // socket: io(socketUrl, { test: '123', transports: ['websocket'] }),
+    socket: io(socketUrl, { test: '123', transports: ['websocket'] }),
     sidePaddingNumber: Dimensions.get('window').width / 100 * 4.5,
     sidePadding: `4.5%`,
     HeaderHeightNumber: 50,
@@ -41,6 +41,8 @@ export default helper = {
         large: '20px',
         header: '15px',
         text: '12px',
+        sm: '10px',
+        md: '14px'
     },
     globalStyle: StyleSheet.create({
         droidSafeArea: {
@@ -49,7 +51,6 @@ export default helper = {
         },
     }),
 }
-
 export function widthPercentageToDP(widthPercent) {
     const elemWidth = parseFloat(widthPercent)
     return PixelRatio.roundToNearestPixel(width * elemWidth / 100)
