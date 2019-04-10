@@ -1,10 +1,10 @@
-import { SET_USERID, SET_ALL_USERS, REGISTER_USER, SET_USER, SET_AUTH } from '../actions/userActions'
+import { SET_USERID, SET_ALL_USERS, REGISTER_USER, SET_USER, SET_AUTH, SET_REGISTER_USER_NUMBER, SET_REGISTER_USER_SMS } from '../actions/userActions'
 
 const initialState = {
     user: {},
     auth: {},
     users: [],
-    register: { phone: '' }
+    register: { phone: '', sms: '' }
 }
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -16,8 +16,14 @@ const userReducer = (state = initialState, action) => {
             return { ...state, users: [1, 2] }
         case REGISTER_USER:
             return { ...state, register: { phone: action.payload } }
+        case SET_REGISTER_USER_NUMBER:
+            return { ...state, register: { ...state.register, phone: action.payload } }
+        case SET_REGISTER_USER_SMS:
+            return { ...state, register: { ...state.register, sms: action.payload } }
+        default:
+            return state
     }
-    return state;
+
 }
 
 export default userReducer

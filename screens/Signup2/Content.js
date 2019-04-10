@@ -4,7 +4,7 @@ import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { setUser } from '../../actions/userActions'
+import { setUser, setRegisterUserSms } from '../../actions/userActions'
 import { Button } from '../../common'
 const { Colors, fontSize, HeaderHeightNumber, socket } = helper;
 const { lightGrey1, blue } = Colors;
@@ -25,7 +25,7 @@ const SubTitle = styled(Text)`
     color: ${lightGrey1};
     text-align: center;
     margin-bottom: 30px;
-    font-size: ${fontSize.text}
+    font-size: ${fontSize.text};
 
 `
 const PhoneNumber = styled(View)`
@@ -43,7 +43,7 @@ const StyledInput = styled(TextInput)`
     padding-bottom: 10px;
     text-align: center;
     margin-bottom: 10px;
-    ${({ style }) => style}
+    ${({ style }) => style};
 `
 const Controls = styled(View)`
     align-self: center;
@@ -96,13 +96,15 @@ class Content extends Component {
     handleSMS = (e) => {
         const { asnwer, sms, error, tries } = this.state;
         if (error <= tries) {
-            sms.length < 4 && this.setState({ sms: e }, () => {
+            sms.length <= 4 && this.setState({ sms: e }, () => {
                 if (this.state.sms !== asnwer && this.state.sms.length === asnwer.length) {
                     let err = error
                     ++err
                     this.setState({ error: err, sms: '' })
                 }
                 if (this.state.sms === asnwer && this.state.sms.length === asnwer.length) {
+                    const { setRegisterUserSms } = this.props;
+                    setRegisterUserSms(this.state.sms);
                     this.props.forward()
 
                 }
@@ -118,5 +120,6 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
+    setRegisterUserSms: _ => dispatch(setRegisterUserSms(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

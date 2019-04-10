@@ -87,7 +87,7 @@ const Type = styled(Value)`
     color: #BABABA;
     min-width: 110px;
     flex: 0;
-    font-size: ${fontSize.sm}
+    font-size: ${fontSize.sm};
 `
 const PersonalData = styled(View)`
     border: 1px solid #E6E6E6;
@@ -100,11 +100,11 @@ class Content extends Component {
         const { UserData, userName, status } = this.state;
         const { user, currentRoom, currentChat, myProfile } = this.props;
         const { id, image, lastName, firstName, phone } = myProfile ? user : currentChat;
-        const name = firstName || lastName ? `${firstName} ${lastName}` : phone
+        const name = firstName || lastName ? `${firstName} ${lastName}` : phone;
         return (
             <Wrapper>
                 <User >
-                    <UserImage source={{ uri: image || 'https://facebook.github.io/react/logo-og.png' }} />
+                    <UserImage source={{ uri: image }} />
                     <UserInfo>
                         <UserName>
                             <Name>{name}</Name>
@@ -145,16 +145,16 @@ class Content extends Component {
     }
     componentDidMount() {
         const { myProfile, user, currentChat } = this.props
-        const { id, image, lastName, firstName, role, phone, department } = myProfile ? user : currentChat;
+        const { id, image, lastName, firstName, role, phone_number, department } = myProfile ? user : currentChat;
         const newUserData = [
             { type: 'Подразделение', value: department },
             { type: 'Должность', value: role },
-            { type: 'Личный', value: phone },
+            { type: 'Личный', value: phone_number },
             !myProfile ? { type: 'Задачи', value: '4', icon: <TaskIcon /> } : undefined,
             !myProfile ? { type: 'Общих групп', value: '32', icon: <GroupIcon /> } : undefined,
             !myProfile ? { type: 'Общих файлов', value: '10', icon: <FilesRedIcon /> } : undefined,
         ]
-        this.setState({UserData: newUserData})
+        this.setState({ UserData: newUserData })
     }
     toChat = () => {
         const { toChat, setRoom, user } = this.props

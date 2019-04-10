@@ -5,7 +5,8 @@ import styled from 'styled-components'
 import CheckboxFormX from 'react-native-checkbox-form';
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { setUser } from '../../actions/userActions'
+import { p_register } from '../../constants/api'
+import sendRequest from '../../utils/request'
 import { Button } from '../../common'
 import CheckBox from 'react-native-check-box'
 
@@ -131,7 +132,8 @@ class Content extends Component {
         const newAgreements = [...this.state.agreements];
         const item = newAgreements.filter((item) => e.linkText === item.linkText)[0];
         item.value = !item.value
-        this.setState({ agreements: newAgreements })
+        console.log(newAgreements)
+        this.setState({ agreements: [...newAgreements] })
     }
     proceed = (e) => {
         const { register } = this.props;
@@ -141,11 +143,30 @@ class Content extends Component {
         })
         const checked = !checkboxes.includes(false);
         if (checked) {
-            this.props.forward()
-            socket.emit('new user', {
-                "phone": register.phone
+            const { forward, register } = this.props;
+            const { phone, sms } = register;
+            forward()
+            console.log(register);
+            sendRequest({
+                r_path: p_register,
+                method: 'post',
+                attr: {
+                    phone_number: phone,
+                    password: sms
+                },
+                success: (res) => {
+                    console.log(res)
+                    forward();
+                },
+                failFunc: (err) => {
+                    console.log(err)
+                    let { phone_number } = err
+                    this.setState({
+                        invalidPhone: phone_number || null,
+                    })
+                }
             })
-        }else{
+        } else {
             console.log('unchecked')
         }
     }

@@ -4,7 +4,9 @@ import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { setUser, registerUser } from '../../actions/userActions'
+import { setUser, setRegisterUserNumber } from '../../actions/userActions'
+import sendRequest from '../../utils/request'
+import { p_get_sms } from '../../constants/api'
 import { Button } from '../../common'
 const { Colors, HeaderHeightNumber, socket, fontSize } = helper;
 const { lightGrey1, blue } = Colors;
@@ -24,14 +26,13 @@ const SubTitle = styled(Text)`
     width: 100%;
     color: ${lightGrey1};
     text-align: center;
-    font-size: ${fontSize.text}
+    font-size: ${fontSize.text};
 `
 const PhoneNumber = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     margin-bottom: 20px;
-
 `
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
@@ -41,7 +42,7 @@ const StyledInput = styled(TextInput)`
     text-align: center;
     margin-bottom: 10px;
     margin-left: 20px;
-    ${({ style }) => style}
+    ${({ style }) => style};
 `
 const ButtonBox = styled(View)`
     width: 170px;
@@ -105,28 +106,42 @@ class Content extends Component {
     state = {
         country: '+7',
         phone: '',
+        error: false,
+        invalidPhone: false,
     }
     componentDidMount() {
 
 
-        socket.on('user exists', e => {
-            console.log(e)
-        })
-        socket.on('check user', e => {
-            const { country, phone } = this.state;
-            const { registerUser } = this.props;
-            registerUser(country + phone)
-            this.props.forward()
-        })
 
     }
     proceed = (e) => {
         const { country, phone } = this.state;
-        const { registerUser } = this.props;
-        country && phone &&
-            socket.emit('check user', {
-                "phone": country + phone
+        const { setRegisterUserNumber, forward } = this.props;
+        console.log(this.props)
+        if (country && phone) {
+            phone_number = country.concat(phone)
+            setRegisterUserNumber(phone_number);
+            sendRequest({
+                r_path: p_get_sms,
+                method: 'post',
+                attr: {
+                    phone_number,
+                },
+                success: (res) => {
+                    console.log(res.msg)
+                    forward();
+                },
+                failFunc: (err) => {
+                    console.log(err)
+                    let { phone_number } = err
+                    this.setState({
+                        invalidPhone: phone_number || null,
+                    })
+                }
             })
+        } else {
+            this.setState({ error: true });
+        }
 
     }
     handleCountry = (e) => {
@@ -143,6 +158,6 @@ const mapStateToProps = state => {
 };
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
-    registerUser: _ => dispatch(registerUser(_))
+    setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)
