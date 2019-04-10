@@ -254,156 +254,156 @@ PODS:
   - yoga (0.57.1.React)
 
 DEPENDENCIES:
-  - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
-  - EXAdsAdMob (from `../node_modules/expo-ads-admob/ios`)
-  - EXAppAuth (from `../node_modules/expo-app-auth/ios`)
-  - EXAppLoaderProvider (from `../node_modules/expo-app-loader-provider/ios`)
-  - EXBackgroundFetch (from `../node_modules/expo-background-fetch/ios`)
-  - EXBarCodeScanner (from `../node_modules/expo-barcode-scanner/ios`)
-  - EXBarCodeScannerInterface (from `../node_modules/expo-barcode-scanner-interface/ios`)
-  - EXCamera (from `../node_modules/expo-camera/ios`)
-  - EXCameraInterface (from `../node_modules/expo-camera-interface/ios`)
-  - EXConstants (from `../node_modules/expo-constants/ios`)
-  - EXConstantsInterface (from `../node_modules/expo-constants-interface/ios`)
-  - EXContacts (from `../node_modules/expo-contacts/ios`)
-  - EXCore (from `../node_modules/expo-core/ios`)
-  - EXErrors (from `../node_modules/expo-errors/ios`)
-  - EXFaceDetectorInterface (from `../node_modules/expo-face-detector-interface/ios`)
-  - EXFileSystem (from `../node_modules/expo-file-system/ios`)
-  - EXFileSystemInterface (from `../node_modules/expo-file-system-interface/ios`)
-  - EXFont (from `../node_modules/expo-font/ios`)
-  - EXFontInterface (from `../node_modules/expo-font-interface/ios`)
-  - EXGL (from `../node_modules/expo-gl/ios`)
-  - EXGL-CPP (from `../node_modules/expo-gl-cpp/cpp`)
-  - EXGoogleSignIn (from `../node_modules/expo-google-sign-in/ios`)
-  - EXImageLoaderInterface (from `../node_modules/expo-image-loader-interface/ios`)
-  - EXLocalAuthentication (from `../node_modules/expo-local-authentication/ios`)
-  - EXLocalization (from `../node_modules/expo-localization/ios`)
-  - EXLocation (from `../node_modules/expo-location/ios`)
-  - EXMediaLibrary (from `../node_modules/expo-media-library/ios`)
-  - EXPermissions (from `../node_modules/expo-permissions/ios`)
-  - EXPermissionsInterface (from `../node_modules/expo-permissions-interface/ios`)
+  - DoubleConversion (from `.react-native/third-party-podspecs/DoubleConversion.podspec`)
+  - EXAdsAdMob (from `.expo-ads-admob/ios`)
+  - EXAppAuth (from `.expo-app-auth/ios`)
+  - EXAppLoaderProvider (from `.expo-app-loader-provider/ios`)
+  - EXBackgroundFetch (from `.expo-background-fetch/ios`)
+  - EXBarCodeScanner (from `.expo-barcode-scanner/ios`)
+  - EXBarCodeScannerInterface (from `.expo-barcode-scanner-interface/ios`)
+  - EXCamera (from `.expo-camera/ios`)
+  - EXCameraInterface (from `.expo-camera-interface/ios`)
+  - EXConstants (from `.expo-constants/ios`)
+  - EXConstantsInterface (from `.expo-constants-interface/ios`)
+  - EXContacts (from `.expo-contacts/ios`)
+  - EXCore (from `.expo-core/ios`)
+  - EXErrors (from `.expo-errors/ios`)
+  - EXFaceDetectorInterface (from `.expo-face-detector-interface/ios`)
+  - EXFileSystem (from `.expo-file-system/ios`)
+  - EXFileSystemInterface (from `.expo-file-system-interface/ios`)
+  - EXFont (from `.expo-font/ios`)
+  - EXFontInterface (from `.expo-font-interface/ios`)
+  - EXGL (from `.expo-gl/ios`)
+  - EXGL-CPP (from `.expo-gl-cpp/cpp`)
+  - EXGoogleSignIn (from `.expo-google-sign-in/ios`)
+  - EXImageLoaderInterface (from `.expo-image-loader-interface/ios`)
+  - EXLocalAuthentication (from `.expo-local-authentication/ios`)
+  - EXLocalization (from `.expo-localization/ios`)
+  - EXLocation (from `.expo-location/ios`)
+  - EXMediaLibrary (from `.expo-media-library/ios`)
+  - EXPermissions (from `.expo-permissions/ios`)
+  - EXPermissionsInterface (from `.expo-permissions-interface/ios`)
   - ExpoKit/Core (from `http://github.com/expo/expo.git`, tag `ios/2.10.2`)
-  - EXPrint (from `../node_modules/expo-print/ios`)
-  - EXReactNativeAdapter (from `../node_modules/expo-react-native-adapter/ios`)
-  - EXSegment (from `../node_modules/expo-analytics-segment/ios`)
-  - EXSensors (from `../node_modules/expo-sensors/ios`)
-  - EXSensorsInterface (from `../node_modules/expo-sensors-interface/ios`)
-  - EXSMS (from `../node_modules/expo-sms/ios`)
-  - EXTaskManager (from `../node_modules/expo-task-manager/ios`)
-  - EXTaskManagerInterface (from `../node_modules/expo-task-manager-interface/ios`)
-  - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
-  - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
-  - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
-  - React/ART (from `../node_modules/react-native`)
-  - React/Core (from `../node_modules/react-native`)
-  - React/CxxBridge (from `../node_modules/react-native`)
-  - React/DevSupport (from `../node_modules/react-native`)
-  - React/RCTActionSheet (from `../node_modules/react-native`)
-  - React/RCTAnimation (from `../node_modules/react-native`)
-  - React/RCTCameraRoll (from `../node_modules/react-native`)
-  - React/RCTGeolocation (from `../node_modules/react-native`)
-  - React/RCTImage (from `../node_modules/react-native`)
-  - React/RCTNetwork (from `../node_modules/react-native`)
-  - React/RCTText (from `../node_modules/react-native`)
-  - React/RCTVibration (from `../node_modules/react-native`)
-  - React/RCTWebSocket (from `../node_modules/react-native`)
-  - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
-  - TouchID (from `../node_modules/react-native-touch-id`)
-  - yoga (from `../node_modules/react-native/ReactCommon/yoga`)
+  - EXPrint (from `.expo-print/ios`)
+  - EXReactNativeAdapter (from `.expo-react-native-adapter/ios`)
+  - EXSegment (from `.expo-analytics-segment/ios`)
+  - EXSensors (from `.expo-sensors/ios`)
+  - EXSensorsInterface (from `.expo-sensors-interface/ios`)
+  - EXSMS (from `.expo-sms/ios`)
+  - EXTaskManager (from `.expo-task-manager/ios`)
+  - EXTaskManagerInterface (from `.expo-task-manager-interface/ios`)
+  - Folly (from `.react-native/third-party-podspecs/Folly.podspec`)
+  - glog (from `.react-native/third-party-podspecs/glog.podspec`)
+  - react-native-splash-screen (from `.react-native-splash-screen`)
+  - React/ART (from `.react-native`)
+  - React/Core (from `.react-native`)
+  - React/CxxBridge (from `.react-native`)
+  - React/DevSupport (from `.react-native`)
+  - React/RCTActionSheet (from `.react-native`)
+  - React/RCTAnimation (from `.react-native`)
+  - React/RCTCameraRoll (from `.react-native`)
+  - React/RCTGeolocation (from `.react-native`)
+  - React/RCTImage (from `.react-native`)
+  - React/RCTNetwork (from `.react-native`)
+  - React/RCTText (from `.react-native`)
+  - React/RCTVibration (from `.react-native`)
+  - React/RCTWebSocket (from `.react-native`)
+  - RNVectorIcons (from `.react-native-vector-icons`)
+  - TouchID (from `.react-native-touch-id`)
+  - yoga (from `.react-native/ReactCommon/yoga`)
 
 EXTERNAL SOURCES:
   DoubleConversion:
-    :podspec: ../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec
+    :podspec: .react-native/third-party-podspecs/DoubleConversion.podspec
   EXAdsAdMob:
-    :path: ../node_modules/expo-ads-admob/ios
+    :path: .expo-ads-admob/ios
   EXAppAuth:
-    :path: ../node_modules/expo-app-auth/ios
+    :path: .expo-app-auth/ios
   EXAppLoaderProvider:
-    :path: ../node_modules/expo-app-loader-provider/ios
+    :path: .expo-app-loader-provider/ios
   EXBackgroundFetch:
-    :path: ../node_modules/expo-background-fetch/ios
+    :path: .expo-background-fetch/ios
   EXBarCodeScanner:
-    :path: ../node_modules/expo-barcode-scanner/ios
+    :path: .expo-barcode-scanner/ios
   EXBarCodeScannerInterface:
-    :path: ../node_modules/expo-barcode-scanner-interface/ios
+    :path: .expo-barcode-scanner-interface/ios
   EXCamera:
-    :path: ../node_modules/expo-camera/ios
+    :path: .expo-camera/ios
   EXCameraInterface:
-    :path: ../node_modules/expo-camera-interface/ios
+    :path: .expo-camera-interface/ios
   EXConstants:
-    :path: ../node_modules/expo-constants/ios
+    :path: .expo-constants/ios
   EXConstantsInterface:
-    :path: ../node_modules/expo-constants-interface/ios
+    :path: .expo-constants-interface/ios
   EXContacts:
-    :path: ../node_modules/expo-contacts/ios
+    :path: .expo-contacts/ios
   EXCore:
-    :path: ../node_modules/expo-core/ios
+    :path: .expo-core/ios
   EXErrors:
-    :path: ../node_modules/expo-errors/ios
+    :path: .expo-errors/ios
   EXFaceDetectorInterface:
-    :path: ../node_modules/expo-face-detector-interface/ios
+    :path: .expo-face-detector-interface/ios
   EXFileSystem:
-    :path: ../node_modules/expo-file-system/ios
+    :path: .expo-file-system/ios
   EXFileSystemInterface:
-    :path: ../node_modules/expo-file-system-interface/ios
+    :path: .expo-file-system-interface/ios
   EXFont:
-    :path: ../node_modules/expo-font/ios
+    :path: .expo-font/ios
   EXFontInterface:
-    :path: ../node_modules/expo-font-interface/ios
+    :path: .expo-font-interface/ios
   EXGL:
-    :path: ../node_modules/expo-gl/ios
+    :path: .expo-gl/ios
   EXGL-CPP:
-    :path: ../node_modules/expo-gl-cpp/cpp
+    :path: .expo-gl-cpp/cpp
   EXGoogleSignIn:
-    :path: ../node_modules/expo-google-sign-in/ios
+    :path: .expo-google-sign-in/ios
   EXImageLoaderInterface:
-    :path: ../node_modules/expo-image-loader-interface/ios
+    :path: .expo-image-loader-interface/ios
   EXLocalAuthentication:
-    :path: ../node_modules/expo-local-authentication/ios
+    :path: .expo-local-authentication/ios
   EXLocalization:
-    :path: ../node_modules/expo-localization/ios
+    :path: .expo-localization/ios
   EXLocation:
-    :path: ../node_modules/expo-location/ios
+    :path: .expo-location/ios
   EXMediaLibrary:
-    :path: ../node_modules/expo-media-library/ios
+    :path: .expo-media-library/ios
   EXPermissions:
-    :path: ../node_modules/expo-permissions/ios
+    :path: .expo-permissions/ios
   EXPermissionsInterface:
-    :path: ../node_modules/expo-permissions-interface/ios
+    :path: .expo-permissions-interface/ios
   ExpoKit:
     :git: http://github.com/expo/expo.git
     :tag: ios/2.10.2
   EXPrint:
-    :path: ../node_modules/expo-print/ios
+    :path: .expo-print/ios
   EXReactNativeAdapter:
-    :path: ../node_modules/expo-react-native-adapter/ios
+    :path: .expo-react-native-adapter/ios
   EXSegment:
-    :path: ../node_modules/expo-analytics-segment/ios
+    :path: .expo-analytics-segment/ios
   EXSensors:
-    :path: ../node_modules/expo-sensors/ios
+    :path: .expo-sensors/ios
   EXSensorsInterface:
-    :path: ../node_modules/expo-sensors-interface/ios
+    :path: .expo-sensors-interface/ios
   EXSMS:
-    :path: ../node_modules/expo-sms/ios
+    :path: .expo-sms/ios
   EXTaskManager:
-    :path: ../node_modules/expo-task-manager/ios
+    :path: .expo-task-manager/ios
   EXTaskManagerInterface:
-    :path: ../node_modules/expo-task-manager-interface/ios
+    :path: .expo-task-manager-interface/ios
   Folly:
-    :podspec: ../node_modules/react-native/third-party-podspecs/Folly.podspec
+    :podspec: .react-native/third-party-podspecs/Folly.podspec
   glog:
-    :podspec: ../node_modules/react-native/third-party-podspecs/glog.podspec
+    :podspec: .react-native/third-party-podspecs/glog.podspec
   React:
-    :path: ../node_modules/react-native
+    :path: .react-native
   react-native-splash-screen:
-    :path: ../node_modules/react-native-splash-screen
+    :path: .react-native-splash-screen
   RNVectorIcons:
-    :path: ../node_modules/react-native-vector-icons
+    :path: .react-native-vector-icons
   TouchID:
-    :path: ../node_modules/react-native-touch-id
+    :path: .react-native-touch-id
   yoga:
-    :path: ../node_modules/react-native/ReactCommon/yoga
+    :path: .react-native/ReactCommon/yoga
 
 CHECKOUT OPTIONS:
   ExpoKit:

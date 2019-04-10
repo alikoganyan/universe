@@ -6215,7 +6215,7 @@
 				9B495F96D3F4D0A376B62FD110F22462 /* Support Files */,
 			);
 			name = "react-native-splash-screen";
-			path = "../../node_modules/react-native-splash-screen";
+			path = "../.react-native-splash-screen";
 			sourceTree = "<group>";
 		};
 		05D2C9F6CB709ABF9DEAFE71BFCB5F9F /* EXPermissionsInterface */ = {
@@ -6226,7 +6226,7 @@
 				C56058983EE3519898AA21B689D3EC38 /* Pod */,
 			);
 			name = EXPermissionsInterface;
-			path = "../../node_modules/expo-permissions-interface/ios";
+			path = "../.expo-permissions-interface/ios";
 			sourceTree = "<group>";
 		};
 		0986DEB6A83105210121603B6A24000F /* Support Files */ = {
@@ -6271,7 +6271,7 @@
 				48DF91916A9031ECC35F0D5F3261D980 /* Support Files */,
 			);
 			name = EXPermissions;
-			path = "../../node_modules/expo-permissions/ios";
+			path = "../.expo-permissions/ios";
 			sourceTree = "<group>";
 		};
 		0B54ACF543090A1804D219EBF79AB5DE /* EXReactNativeAdapter */ = {
@@ -6286,7 +6286,7 @@
 				20A653A0C3A1A057E387647CCE84064F /* Support Files */,
 			);
 			name = EXReactNativeAdapter;
-			path = "../../node_modules/expo-react-native-adapter/ios";
+			path = "../.expo-react-native-adapter/ios";
 			sourceTree = "<group>";
 		};
 		0DA8FDB21240D41447AD25DA7898FB19 /* yoga */ = {
@@ -6316,7 +6316,7 @@
 				B5E961EFE68CFDD874CEF1ED6D3659EE /* Support Files */,
 			);
 			name = yoga;
-			path = "../../node_modules/react-native/ReactCommon/yoga";
+			path = "../.react-native/ReactCommon/yoga";
 			sourceTree = "<group>";
 		};
 		0E0B9C905A93A206B51BA25D562E5FD9 /* iOS */ = {
@@ -6376,7 +6376,7 @@
 				1C14C294900ED82862E8CC88285A22DA /* Support Files */,
 			);
 			name = EXLocalAuthentication;
-			path = "../../node_modules/expo-local-authentication/ios";
+			path = "../.expo-local-authentication/ios";
 			sourceTree = "<group>";
 		};
 		183D2417E921098A5C7AF4A9190F7E58 /* AppAuth */ = {
@@ -6917,7 +6917,7 @@
 				E7B64AF6DC64D4E9EB7347561E693131 /* Support Files */,
 			);
 			name = TouchID;
-			path = "../../node_modules/react-native-touch-id";
+			path = "../.react-native-touch-id";
 			sourceTree = "<group>";
 		};
 		2DD9ADF1A712046018107E67841C67F0 /* Pod */ = {
@@ -6975,7 +6975,7 @@
 				E3D4A6D332FEA7E3D956D1A927447345 /* Support Files */,
 			);
 			name = EXMediaLibrary;
-			path = "../../node_modules/expo-media-library/ios";
+			path = "../.expo-media-library/ios";
 			sourceTree = "<group>";
 		};
 		31BB868F934FF480C7D75DD194AEC4CE /* Pod */ = {
@@ -7203,7 +7203,7 @@
 				0FB5C7E9A858E0D91536EA28F10B5369 /* Utilities */,
 			);
 			name = EXBarCodeScanner;
-			path = "../../node_modules/expo-barcode-scanner/ios";
+			path = "../.expo-barcode-scanner/ios";
 			sourceTree = "<group>";
 		};
 		43301E5F2BD5C91D355AFE37767838B2 /* SurfaceHostingView */ = {
@@ -7243,7 +7243,7 @@
 				D920947E3714018EA4C240C38E63B670 /* Support Files */,
 			);
 			name = EXConstants;
-			path = "../../node_modules/expo-constants/ios";
+			path = "../.expo-constants/ios";
 			sourceTree = "<group>";
 		};
 		46E5F76EC8AE1A522529F39319CF244D /* RCTText */ = {
@@ -7624,7 +7624,7 @@
 				77696B1A17376ACB5186DD5FFA5D1E84 /* Support Files */,
 			);
 			name = EXSMS;
-			path = "../../node_modules/expo-sms/ios";
+			path = "../.expo-sms/ios";
 			sourceTree = "<group>";
 		};
 		57173EB821A76777537182B8137DDA6D /* DevSupport */ = {
@@ -7680,7 +7680,7 @@
 				5F297B1F615AD5AC8D5B7E9248E725A5 /* Pod */,
 			);
 			name = EXConstantsInterface;
-			path = "../../node_modules/expo-constants-interface/ios";
+			path = "../.expo-constants-interface/ios";
 			sourceTree = "<group>";
 		};
 		5E88669731718BD75388847F686C2E57 /* Support Files */ = {
@@ -7707,7 +7707,7 @@
 				AA6ED1C5E94AD5D1B72DE8C2F99F17D7 /* Support Files */,
 			);
 			name = EXContacts;
-			path = "../../node_modules/expo-contacts/ios";
+			path = "../.expo-contacts/ios";
 			sourceTree = "<group>";
 		};
 		5F297B1F615AD5AC8D5B7E9248E725A5 /* Pod */ = {
@@ -8334,7 +8334,7 @@
 				7BDF4570B57BD7041A3086A5DD2FDF96 /* Support Files */,
 			);
 			name = EXLocalization;
-			path = "../../node_modules/expo-localization/ios";
+			path = "../.expo-localization/ios";
 			sourceTree = "<group>";
 		};
 		821812228222F8F258C5A8C9E6220D21 /* Amplitude-iOS */ = {
@@ -8384,7 +8384,7 @@
 				C9AB897838E23D5024B9C9BD16CECDAA /* Support Files */,
 			);
 			name = EXAppAuth;
-			path = "../../node_modules/expo-app-auth/ios";
+			path = "../.expo-app-auth/ios";
 			sourceTree = "<group>";
 		};
 		840869F907D9AC10F1EF3853996DA2C1 /* Core */ = {
@@ -9059,7 +9059,7 @@
 				7C5036EC07CB9E5C0303F9A0B002481B /* Support Files */,
 			);
 			name = EXFont;
-			path = "../../node_modules/expo-font/ios";
+			path = "../.expo-font/ios";
 			sourceTree = "<group>";
 		};
 		8E85F0D2BF9A6C51C2B50872F2388CD1 /* Google-Maps-iOS-Utils */ = {
@@ -9102,7 +9102,7 @@
 				37A10A4C90BAFA0DE394EED4D39DFFAA /* Pod */,
 			);
 			name = EXFaceDetectorInterface;
-			path = "../../node_modules/expo-face-detector-interface/ios";
+			path = "../.expo-face-detector-interface/ios";
 			sourceTree = "<group>";
 		};
 		92A503C7500FEA29C35E592C4646C43C /* TaskConsumers */ = {
@@ -9166,7 +9166,7 @@
 				D591BC9171AD0AB6DA2E5E8A8926E5C4 /* Pod */,
 			);
 			name = EXImageLoaderInterface;
-			path = "../../node_modules/expo-image-loader-interface/ios";
+			path = "../.expo-image-loader-interface/ios";
 			sourceTree = "<group>";
 		};
 		9703032DF0F4AA52B1075762150BDCDB /* EXCamera */ = {
@@ -9181,7 +9181,7 @@
 				1860A714EEBE1AA9075D1143826BBF2A /* Utilities */,
 			);
 			name = EXCamera;
-			path = "../../node_modules/expo-camera/ios";
+			path = "../.expo-camera/ios";
 			sourceTree = "<group>";
 		};
 		97C10376D171EAD728CB228BFD673B38 /* EXBarCodeScannerInterface */ = {
@@ -9192,7 +9192,7 @@
 				5192E2FBC95022BEFDBCFA3E4F1AE9D6 /* Pod */,
 			);
 			name = EXBarCodeScannerInterface;
-			path = "../../node_modules/expo-barcode-scanner-interface/ios";
+			path = "../.expo-barcode-scanner-interface/ios";
 			sourceTree = "<group>";
 		};
 		985746C26D1E4DB8971B31E8A3805E3C /* Core */ = {
@@ -9346,7 +9346,7 @@
 				036E142C5BA72CF037F7591B8D2BB5A5 /* Support Files */,
 			);
 			name = EXAppLoaderProvider;
-			path = "../../node_modules/expo-app-loader-provider/ios";
+			path = "../.expo-app-loader-provider/ios";
 			sourceTree = "<group>";
 		};
 		99621395DB02FFE38CE3BCF37B7E3F78 /* Singletons */ = {
@@ -9415,7 +9415,7 @@
 				0226D5EBAFFFD5AEA5AE98CA4719A2AF /* UEXGL */,
 			);
 			name = "EXGL-CPP";
-			path = "../../node_modules/expo-gl-cpp/cpp";
+			path = "../.expo-gl-cpp/cpp";
 			sourceTree = "<group>";
 		};
 		9E5C86B3658050C48330D4DB777B3550 /* Support Files */ = {
@@ -9651,7 +9651,7 @@
 				F918630E9D4880275FF193D06049497F /* Support Files */,
 			);
 			name = RNVectorIcons;
-			path = "../../node_modules/react-native-vector-icons";
+			path = "../.react-native-vector-icons";
 			sourceTree = "<group>";
 		};
 		B2A48E20B3742EC22FDB9786651A55CB /* RCTNetwork */ = {
@@ -9686,7 +9686,7 @@
 				54B3DA648401609EE3DD66EC9EA65649 /* Support Files */,
 			);
 			name = EXGoogleSignIn;
-			path = "../../node_modules/expo-google-sign-in/ios";
+			path = "../.expo-google-sign-in/ios";
 			sourceTree = "<group>";
 		};
 		B374B13B94CB3FFACFC275E2659FAB86 /* CxxBridge */ = {
@@ -9735,7 +9735,7 @@
 				BC598E87692C0FAAFBE0551FDC66C341 /* Support Files */,
 			);
 			name = EXFileSystem;
-			path = "../../node_modules/expo-file-system/ios";
+			path = "../.expo-file-system/ios";
 			sourceTree = "<group>";
 		};
 		B5E961EFE68CFDD874CEF1ED6D3659EE /* Support Files */ = {
@@ -9769,7 +9769,7 @@
 				8ABE7D084BBAA89DBBBA0794A3AC3FF8 /* Pod */,
 			);
 			name = EXCameraInterface;
-			path = "../../node_modules/expo-camera-interface/ios";
+			path = "../.expo-camera-interface/ios";
 			sourceTree = "<group>";
 		};
 		B88C9AD8E1409E14D80C11CAC5AB9B2E /* FBAudienceNetwork */ = {
@@ -9857,7 +9857,7 @@
 				0395BD56FEE2114A65C3C838CD87D1F4 /* Pod */,
 			);
 			name = EXFontInterface;
-			path = "../../node_modules/expo-font-interface/ios";
+			path = "../.expo-font-interface/ios";
 			sourceTree = "<group>";
 		};
 		BC598E87692C0FAAFBE0551FDC66C341 /* Support Files */ = {
@@ -10104,7 +10104,7 @@
 				58191767180FD6FB9E7642C694B59D4C /* Pod */,
 			);
 			name = EXTaskManagerInterface;
-			path = "../../node_modules/expo-task-manager-interface/ios";
+			path = "../.expo-task-manager-interface/ios";
 			sourceTree = "<group>";
 		};
 		C48722A3AC40D96F88691AA70E81C8EE /* Pod */ = {
@@ -10142,7 +10142,7 @@
 				2E254B1DE0428AF8FADF8ADB3995055D /* Support Files */,
 			);
 			name = EXCore;
-			path = "../../node_modules/expo-core/ios";
+			path = "../.expo-core/ios";
 			sourceTree = "<group>";
 		};
 		C62DF2A7BAA9DB53CAE786194E4ADAD0 /* Pod */ = {
@@ -10165,7 +10165,7 @@
 				92A503C7500FEA29C35E592C4646C43C /* TaskConsumers */,
 			);
 			name = EXLocation;
-			path = "../../node_modules/expo-location/ios";
+			path = "../.expo-location/ios";
 			sourceTree = "<group>";
 		};
 		C95450F2979A5B130BFB037AC2C8A48F /* RCTActionSheet */ = {
@@ -10214,7 +10214,7 @@
 				9E5C86B3658050C48330D4DB777B3550 /* Support Files */,
 			);
 			name = React;
-			path = "../../node_modules/react-native";
+			path = "../.react-native";
 			sourceTree = "<group>";
 		};
 		CB5C2835B8CB1F7B428D0BC42062618E /* Support Files */ = {
@@ -10328,7 +10328,7 @@
 				8614D7E63019F89310BC1132FF2F2354 /* Pod */,
 			);
 			name = EXSensorsInterface;
-			path = "../../node_modules/expo-sensors-interface/ios";
+			path = "../.expo-sensors-interface/ios";
 			sourceTree = "<group>";
 		};
 		D3415E5C7731A262D0C0D6A020C78FF0 /* Pod */ = {
@@ -10362,7 +10362,7 @@
 				31BB868F934FF480C7D75DD194AEC4CE /* Pod */,
 			);
 			name = EXFileSystemInterface;
-			path = "../../node_modules/expo-file-system-interface/ios";
+			path = "../.expo-file-system-interface/ios";
 			sourceTree = "<group>";
 		};
 		D474464CA777550BA828A5E3C71A0F16 /* Folly */ = {
@@ -10512,7 +10512,7 @@
 				6E196CD757EE8FF888E5370D9E464F1E /* Support Files */,
 			);
 			name = EXGL;
-			path = "../../node_modules/expo-gl/ios";
+			path = "../.expo-gl/ios";
 			sourceTree = "<group>";
 		};
 		E2778B9FD4BB038F917D4DB85919B6A2 /* Pod */ = {
@@ -10533,7 +10533,7 @@
 				3C9310AF00C54CD89FED77E3BF623AAA /* Support Files */,
 			);
 			name = EXSensors;
-			path = "../../node_modules/expo-sensors/ios";
+			path = "../.expo-sensors/ios";
 			sourceTree = "<group>";
 		};
 		E39D020F1276A0865A67516C9FA12FAE /* Crashlytics */ = {
@@ -10593,7 +10593,7 @@
 				50722ED1301A858E8CFCEC8A92DFEC43 /* Support Files */,
 			);
 			name = EXAdsAdMob;
-			path = "../../node_modules/expo-ads-admob/ios";
+			path = "../.expo-ads-admob/ios";
 			sourceTree = "<group>";
 		};
 		EC61E78312D9113F56D2B09CAB45FDBF /* Support Files */ = {
@@ -10638,7 +10638,7 @@
 				DA37C5F69C428EF0CAAA02EA4FF580EA /* Support Files */,
 			);
 			name = EXErrors;
-			path = "../../node_modules/expo-errors/ios";
+			path = "../.expo-errors/ios";
 			sourceTree = "<group>";
 		};
 		EF8AF9B60B5C8E64F10FF8D6273AB8B8 /* EXTaskManager */ = {
@@ -10656,7 +10656,7 @@
 				D14D9C2E04CA46B340AB93262609F2FB /* Support Files */,
 			);
 			name = EXTaskManager;
-			path = "../../node_modules/expo-task-manager/ios";
+			path = "../.expo-task-manager/ios";
 			sourceTree = "<group>";
 		};
 		EFC0B6D9B1ECAE30F79325E83810B898 /* EXSegment */ = {
@@ -10668,7 +10668,7 @@
 				76C524BF0AA49CD617CB5CD8FFA80A47 /* Support Files */,
 			);
 			name = EXSegment;
-			path = "../../node_modules/expo-analytics-segment/ios";
+			path = "../.expo-analytics-segment/ios";
 			sourceTree = "<group>";
 		};
 		F03E42529CFF3DAF20609FC8BD26D433 /* FBSDKLoginKit */ = {
@@ -10726,7 +10726,7 @@
 				EEE4F8192A5296F43609E4B184ABBE2B /* Support Files */,
 			);
 			name = EXBackgroundFetch;
-			path = "../../node_modules/expo-background-fetch/ios";
+			path = "../.expo-background-fetch/ios";
 			sourceTree = "<group>";
 		};
 		F55AB36579652C104BCB90B54D3B084C /* DevSupport */ = {
@@ -10780,7 +10780,7 @@
 				A806DD63D4A46545164EBFAA8B90DBB3 /* Support Files */,
 			);
 			name = EXPrint;
-			path = "../../node_modules/expo-print/ios";
+			path = "../.expo-print/ios";
 			sourceTree = "<group>";
 		};
 		F918630E9D4880275FF193D06049497F /* Support Files */ = {

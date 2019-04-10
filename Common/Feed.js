@@ -1,6 +1,6 @@
-import React, { Component } from './node_modules/react'
-import { Text, View, Image, TouchableOpacity } from './node_modules/react-native'
-import styled from './node_modules/styled-components'
+import React, { Component } from 'react'
+import { Text, View, Image, TouchableOpacity } from 'react-native'
+import styled from 'styled-components'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../assets'
 const { HeaderHeightNumber, Colors, fontSize } = helper;
 const { yellow, purple, red } = Colors;

@@ -1,6 +1,6 @@
-import React, { Component } from './node_modules/react'
-import { Text, View, TouchableOpacity } from './node_modules/react-native'
-import styled from './node_modules/styled-components'
+import React, { Component } from 'react'
+import { Text, View, TouchableOpacity } from 'react-native'
+import styled from 'styled-components'
 import helper from '../Helper/helper'
 const { Colors } = helper;
 const { border, lightColor } = Colors;

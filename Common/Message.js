@@ -1,8 +1,8 @@
-import React, { Component } from './node_modules/react'
-import { Text, View, Image } from './node_modules/react-native'
-import styled from './node_modules/styled-components'
+import React, { Component } from 'react'
+import { Text, View, Image } from 'react-native'
+import styled from 'styled-components'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../assets/index'
-import { connect } from './node_modules/react-redux'
+import { connect } from 'react-redux'
 const { HeaderHeightNumber, Colors } = helper;
 
 const MyMessage = styled(View)`
