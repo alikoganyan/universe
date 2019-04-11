@@ -56,11 +56,15 @@ class HeaderComponent extends Component {
                 </Left>
                 <Right>
                     <SearchIcon />
-                    {/* <AddIcon /> */}
-                    <ImageComponent source={{ uri: user.image }} style={{marginLeft: 10}}/>
+                    <AddIcon onPress={this.addContact} />
+                    <ImageComponent source={{ uri: user.image }} style={{ marginLeft: 10 }} />
                 </Right>
             </Header>
         )
+    }
+    addContact = e => {
+        const { navigate } = this.props;
+        navigate('NewContact')
     }
 }
 const mapStateToProps = state => {

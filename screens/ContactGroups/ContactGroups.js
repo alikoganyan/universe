@@ -25,7 +25,7 @@ export default class ContactGroups extends Component {
             <ActionSheetProvider>
                 <SafeAreaView>
                     <Wrapper>
-                        <Header back={this.navigateBack} />
+                        <Header back={this.navigateBack} navigate={this.props.navigation.navigate} />
                         <Content />
                         <Bottom>
                         </Bottom>

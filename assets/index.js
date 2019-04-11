@@ -439,11 +439,7 @@ export function AddIcon(props) {
     const { onPress, left, right } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
-            <SvgUri
-                width={IconSize}
-                height={IconSize}
-                source={SVG.Add}
-            />
+            <Icon name="plus" size={IconSizeLarge} color={IconDarkColor} />
         </StyledTouchableOpacity>
     )
 }
