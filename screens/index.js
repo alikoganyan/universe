@@ -7,6 +7,8 @@ import Signup2 from './Signup2/Signup2'
 import Signup3 from './Signup3/Signup3'
 import Login from './Login/Login'
 import Restore from './Restore/Restore'
+import Restore2 from './Restore2/Restore2'
+import Restore3 from './Restore3/Restore3'
 import GroupInfo from './GroupInfo/GroupInfo'
 import GroupName from './GroupName/GroupName'
 import Settings from './Settings/Settings'
@@ -38,6 +40,8 @@ export {
     Signup3,
     Login,
     Restore,
+    Restore2,
+    Restore3,
     GroupInfo,
     GroupName,
     Settings,

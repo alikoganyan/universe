@@ -12,6 +12,8 @@ import {
   PinCode,
   Login,
   Restore,
+  Restore2,
+  Restore3,
   GroupInfo,
   GroupName,
   Settings,
@@ -51,7 +53,6 @@ console.disableYellowBox = true;
 
 const AppDrawerNavigator = createDrawerNavigator(
   {
-    // Home: { screen: Login },
     Home: { screen: Dialogs },
   },
   {
@@ -83,6 +84,8 @@ const AppStackNavigator = createStackNavigator(
     Signup3: { screen: Signup3 },
     PinCode: { screen: PinCode },
     Restore: { screen: Restore },
+    Restore2: { screen: Restore2 },
+    Restore3: { screen: Restore3 },
     GroupInfo: { screen: GroupInfo },
     GroupName: { screen: GroupName },
     Settings: { screen: Settings },

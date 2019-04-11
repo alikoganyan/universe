@@ -2,8 +2,9 @@ import React, { Component } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import helper from '../utils/helpers'
-const { Colors } = helper;
+const { Colors, fontSize } = helper;
 const { border, lightColor } = Colors;
+const { text } = fontSize;
 const Wrapper = styled(TouchableOpacity)`
     display: flex;
     justify-content: center;
@@ -15,6 +16,7 @@ const Wrapper = styled(TouchableOpacity)`
 `
 const Inner = styled(Text)`
     color: ${({ color }) => color || lightColor};
+    font-size: ${text};
 `
 export default Button = (props) => {
     const { children, style, color, onPress } = props;

@@ -1,15 +1,12 @@
 import React, { Component } from 'react'
 import { View, Text, TouchableOpacity, TextInput, AsyncStorage } from 'react-native'
-import { Font } from 'expo'
 import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
-import colors from '../../constants/colors'
 import { p_login } from '../../constants/api'
 import { a_setAuth } from '../../redux/Auth/actions'
-import { a_setUser } from '../../redux/User/actions'
 import sendRequest from '../../utils/request'
 const { Colors, fontSize, socket } = helper;
 const { lightColor, lightGrey1, blue } = Colors;
@@ -73,7 +70,7 @@ const StyledInput = styled(TextInput)`
     ${({ style }) => style};
 `
 const Input = (props) => {
-    const { onChangeText, children, password = false, value, style, editable, inputStyle, labelStyle } = props;
+    const { keyboardType = 'default', onChangeText, children, password = false, value, style, editable, inputStyle, labelStyle } = props;
     return <FloatingLabel
         labelStyle={{
             fontSize: 15,
@@ -87,6 +84,7 @@ const Input = (props) => {
             display: 'flex',
             ...inputStyle
         }}
+        keyboardType={keyboardType}
         password={password}
         value={value}
         style={{ ...style }}
@@ -109,12 +107,14 @@ class Content extends Component {
             <PhoneNumber>
                 <Input style={{ width: '20%', }}
                     inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
+                    keyboardType={'phone-pad'}
                     value={country}
                     onChangeText={this.handleChangeCountry} />
                 <StyledInput password={true}
                     onChangeText={this.handleChangePhone}
                     value={phone}
                     placeholder={'XXX-XXX-XX-XX'}
+                    keyboardType={'phone-pad'}
                     style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10 }}
                 />
             </PhoneNumber>
@@ -126,7 +126,7 @@ class Content extends Component {
             />
 
             <ControlBar>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={this.restorePass}>
                     <ForgotPass>
                         забыли пароль?
                         </ForgotPass>
@@ -226,6 +226,10 @@ class Content extends Component {
     signup = (e) => {
         const { navigate } = this.props;
         navigate('Signup')
+    }
+    restorePass = e => {
+        const { navigate } = this.props;
+        navigate('Restore')
     }
     handleChangePassword = (e) => {
         this.setState({ password: e })

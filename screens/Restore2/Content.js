@@ -3,12 +3,13 @@ import { View, Text, TouchableOpacity, Dimensions, Platform } from 'react-native
 import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
 import {
     p_get_restore_password,
+    p_check_restore_password,
+    p_restore_password,
 } from '../../constants/api'
-import { setRegisterUserNumber, setRegisterUserSms } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
-import { connect } from 'react-redux'
 const { Colors, HeaderHeightNumber } = helper;
 const { blue, grey1 } = Colors;
 const Wrapper = styled(View)`
@@ -42,8 +43,21 @@ const Label = styled(Title)`
     color: ${grey1};
     margin-bottom: 0px;
 `
+const NoCode = styled(View)`
+    display: flex;
+    justify-content: center;
+`
+const NoCodeLabel = styled(Text)`
+    font-size: 11px;
+    color: ${grey1};
+    text-align: center;
+`
+const NoCodeTimer = styled(Text)`
+    font-size: 11px;
+    text-align: center;
+`
 const Input = (props) => {
-    const { keyboardType = 'number-pad', children, password = false, value, style, editable, onChangeText } = props;
+    const { autoFocus = 'false', keyboardType = 'number-pad', children, password = false, value, style, editable, onChangeText } = props;
     return <FloatingLabel
         labelStyle={{ fontSize: 11 }}
         inputStyle={{
@@ -51,67 +65,82 @@ const Input = (props) => {
             borderWidth: 0,
             borderBottomWidth: 1,
             display: 'flex',
+            textAlign: 'center',
+            paddingLeft: 0,
         }}
         keyboardType={keyboardType}
         password={password}
         value={value}
-        style={{ ...style }}
+        style={{
+            ...style
+        }}
         editable={editable}
         onChangeText={onChangeText}
+        autoFocus={autoFocus}
     >{children}</FloatingLabel>
 
 }
 class Content extends Component {
     render() {
-        const { country, phone } = this.state;
+        const { code } = this.state;
         return (
             <Wrapper>
                 <Title>
                     Восстановить пароль
                 </Title>
-                <Label>Телефон</Label>
+                <Label>Вам отправлено sms с временным паролем, {'\n'}введите его тут</Label>
                 <PhoneNumber>
-                    <Input style={{ width: '25%' }} value={country} onChangeText={this.handleChangeCountry} keyboardType={'phone-pad'} />
-                    <Input style={{ width: '75%' }} value={phone} onChangeText={this.handleChangePhone} />
+                    <Input autoFocus={'true'} style={{ width: '100%', textAlign: 'center' }} value={code} onChangeText={this.handleChangeCode} keyboardType={'phone-pad'} />
                 </PhoneNumber>
                 <ControlBar>
-                    <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>войти</Button>
+                    {code.length === 4 ? <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>войти</Button> :
+                        <NoCode>
+                            <NoCodeLabel>не получили смс?</NoCodeLabel>
+                            <NoCodeTimer>отправить sms повторно можно будет через 4:56</NoCodeTimer>
+                        </NoCode>}
                 </ControlBar>
             </Wrapper>
         )
     }
     state = {
         error: false,
-        country: '+380',
-        phone: '637072785',
+        code: '',
+        answer: '4444',
     }
-    handleChangeCountry = e => {
-        this.setState({ country: e });
+    componentDidMount() {
+        const { register } = this.props;
+        const { sms } = register;
+        this.setState({ answer: sms }, () => console.log(this.state.answer))
     }
-    handleChangePhone = e => {
-        this.setState({ phone: e });
+    handleChangeCode = e => {
+        const { answer } = this.state;
+        e.length <= answer.length && this.setState({ code: e });
     }
     proceed = e => {
-        this.getRestorePassword()
+        const { code, answer } = this.state;
+
+        if (code === answer) {
+            this.checkCode();
+        }
     }
-    getRestorePassword = e => {
-        const { country, phone } = this.state;
-        const { navigate, setRegisterUserNumber, setRegisterUserSms } = this.props;
-        const phone_number = country.concat(phone)
+    checkCode = e => {
+        const { navigate, register } = this.props;
+        const { code } = this.state;
+        console.log(register.phone);
+        const phone_number = register.phone;
         sendRequest({
-            r_path: p_get_restore_password,
+            r_path: p_check_restore_password,
             method: 'post',
             attr: {
                 phone_number,
+                password: code,
             },
             success: (res) => {
-                setRegisterUserNumber(phone_number);
-                setRegisterUserSms('1111');
-                setTimeout(() => navigate('Restore2'), 0)
+                navigate('Restore3');
             },
             failFunc: (err) => {
-                console.log(err)
-                let { phone_number, password } = err
+                console.log(err);
+                let { phone_number, password } = err;
                 this.setState({
                     loading: false,
                     invalidPhone: phone_number || null,
@@ -123,11 +152,9 @@ class Content extends Component {
 }
 const mapStateToProps = state => {
     return {
-        id: state.userReducer.id
+        register: state.userReducer.register,
     };
 };
 const mapDispatchToProps = dispatch => ({
-    setRegisterUserNumber: _ => { dispatch(setRegisterUserNumber(_)) },
-    setRegisterUserSms: _ => { dispatch(setRegisterUserSms(_)) },
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

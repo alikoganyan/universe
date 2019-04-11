@@ -21,5 +21,4 @@ export default class PinCode extends Component {
         )
     }
     navigate = (e) => this.props.navigation.navigate(e)
-
 }
