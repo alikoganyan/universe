@@ -32,6 +32,8 @@ export default helper = {
     socket: io(socketUrl, { test: '123', transports: ['websocket'] }),
     sidePaddingNumber: Dimensions.get('window').width / 100 * 4.5,
     sidePadding: `4.5%`,
+    topPaddingNumber: Dimensions.get('window').height / 100 * 5.6,
+    topPadding: `5.6%`,
     HeaderHeightNumber: 50,
     HeaderHeight: `50px`,
     PressDelay: 700,
