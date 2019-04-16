@@ -9,5 +9,4 @@ export default combineReducers({
     userReducer,
     drawerReducer,
     dialogsReducer,
-
 })

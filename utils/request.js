@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { store } from '../redux/store'
+import { store } from '../reducers/store'
 import { a_setAuth } from '../redux/Auth/actions'
 import { a_setError } from '../redux/Error/actions'
 import { disconnectFromSocket, socket } from '../utils/socket'
@@ -21,7 +21,7 @@ export default async function sendRequest({
 	attr = null,
 	config = {
 		headers: {
-			Authorization: 'Bearer ' + store.getState().auth
+			Authorization: 'Bearer ' + store.getState().userReducer.auth
 		}
 	},
 	success = (res) => console.log(res),
@@ -43,10 +43,9 @@ export default async function sendRequest({
 		}
 	} catch (err) {
 		const { response } = err
-		console.log(response.data)
+		// console.log(response.data)
 		// console.log(response)
 		console.log('error in path -->', r_path)
-		
 		if (!response || response.status === 500) {
 			store.dispatch(a_setError(true))
 			if (failFunc) {

@@ -71,7 +71,8 @@
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0",
-    "remote-redux-devtools": "^0.5.16"
+    "remote-redux-devtools": "^0.5.16",
+    "webpack-watchman-plugin": "^1.1.0"
   },
   "private": true
 }
