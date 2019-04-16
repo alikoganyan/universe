@@ -5,6 +5,7 @@ import { connect } from 'react-redux'
 import helper from '../../utils/helpers'
 import { Header, Content } from './'
 import { SafeAreaView } from '../../common'
+const { sidePaddingNumber, topPadding } = helper;
 const Outer = styled(View)`
   display: flex;
   padding-top: 10%;
@@ -14,6 +15,7 @@ const Outer = styled(View)`
 const Wrapper = styled(View)`
   height: ${Dimensions.get('window').height};
   background: white;
+  padding-left: ${sidePaddingNumber * 1.5}px;
 `
 class Drawer extends Component {
   render() {

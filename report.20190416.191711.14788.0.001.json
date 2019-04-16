@@ -1,0 +1,379 @@
+
+{
+  "header": {
+    "event": "Allocation failed - JavaScript heap out of memory",
+    "trigger": "FatalError",
+    "filename": "report.20190416.191711.14788.0.001.json",
+    "dumpEventTime": "2019-04-16T19:17:11Z",
+    "processId": 14788,
+    "cwd": "K:\\Проекты\\Андроид приложения\\Mobile-Front",
+    "commandLine": [
+      "C:\\Program Files\\nodejs\\node.exe",
+      "K:\\Проекты\\Андроид приложения\\Mobile-Front\\node_modules\\react-native\\local-cli\\cli.js",
+      "start",
+      "--port",
+      "19001",
+      "--customLogReporterPath",
+      "K:\\Проекты\\Андроид приложения\\Mobile-Front\\node_modules\\expo\\tools\\LogReporter.js",
+      "--assetExts",
+      "ttf"
+    ],
+    "nodejsVersion": "v11.14.0",
+    "wordSize": 64,
+    "arch": "x64",
+    "platform": "win32",
+    "componentVersions": {
+      "node": "11.14.0",
+      "v8": "7.0.276.38-node.18",
+      "uv": "1.27.0",
+      "zlib": "1.2.11",
+      "brotli": "1.0.7",
+      "ares": "1.15.0",
+      "modules": "67",
+      "nghttp2": "1.37.0",
+      "napi": "4",
+      "llhttp": "1.1.1",
+      "http_parser": "2.8.0",
+      "openssl": "1.1.1b",
+      "cldr": "34.0",
+      "icu": "63.1",
+      "tz": "2018e",
+      "unicode": "11.0"
+    },
+    "release": {
+      "name": "node",
+      "headersUrl": "https://nodejs.org/download/release/v11.14.0/node-v11.14.0-headers.tar.gz",
+      "sourceUrl": "https://nodejs.org/download/release/v11.14.0/node-v11.14.0.tar.gz",
+      "libUrl": "https://nodejs.org/download/release/v11.14.0/win-x64/node.lib"
+    },
+    "osName": "Windows_NT",
+    "osRelease": "10.0.17134",
+    "osVersion": "Windows 10 Home",
+    "osMachine": "x86_64",
+    "host": "DESKTOP-4069O5S"
+  },
+  "javascriptStack": {
+    "message": "No stack.",
+    "stack": [
+      "Unavailable."
+    ]
+  },
+  "nativeStack": [
+    {
+      "pc": "0x00007ff76c8ad24e",
+      "symbol": "std::basic_ios<char,std::char_traits<char> >::fill+16366"
+    },
+    {
+      "pc": "0x00007ff76c8ac0f9",
+      "symbol": "std::basic_ios<char,std::char_traits<char> >::fill+11929"
+    },
+    {
+      "pc": "0x00007ff76c8ab923",
+      "symbol": "std::basic_ios<char,std::char_traits<char> >::fill+9923"
+    },
+    {
+      "pc": "0x00007ff76c99c1d2",
+      "symbol": "uv_loop_fork+89362"
+    },
+    {
+      "pc": "0x00007ff76cdc454e",
+      "symbol": "v8::internal::FatalProcessOutOfMemory+798"
+    },
+    {
+      "pc": "0x00007ff76cdc4487",
+      "symbol": "v8::internal::FatalProcessOutOfMemory+599"
+    },
+    {
+      "pc": "0x00007ff76ce77f64",
+      "symbol": "v8::internal::Heap::RootIsImmortalImmovable+14068"
+    },
+    {
+      "pc": "0x00007ff76ce6dd72",
+      "symbol": "v8::internal::Heap::CollectGarbage+7234"
+    },
+    {
+      "pc": "0x00007ff76ce6c588",
+      "symbol": "v8::internal::Heap::CollectGarbage+1112"
+    },
+    {
+      "pc": "0x00007ff76ce75eb7",
+      "symbol": "v8::internal::Heap::RootIsImmortalImmovable+5703"
+    },
+    {
+      "pc": "0x00007ff76ce75f36",
+      "symbol": "v8::internal::Heap::RootIsImmortalImmovable+5830"
+    },
+    {
+      "pc": "0x00007ff76cfade01",
+      "symbol": "v8::internal::Factory::NewFillerObject+49"
+    },
+    {
+      "pc": "0x00007ff76d067cd6",
+      "symbol": "v8::internal::StoreBuffer::StoreBufferOverflow+27190"
+    },
+    {
+      "pc": "0x000003b954150481",
+      "symbol": ""
+    }
+  ],
+  "javascriptHeap": {
+    "totalMemory": 1490071552,
+    "totalCommittedMemory": 1490071552,
+    "usedMemory": 1433746368,
+    "availableMemory": 36962472,
+    "memoryLimit": 1526909922,
+    "heapSpaces": {
+      "read_only_space": {
+        "memorySize": 524288,
+        "committedMemory": 524288,
+        "capacity": 515584,
+        "used": 33520,
+        "available": 482064
+      },
+      "new_space": {
+        "memorySize": 2097152,
+        "committedMemory": 2097152,
+        "capacity": 1031168,
+        "used": 14208,
+        "available": 1016960
+      },
+      "old_space": {
+        "memorySize": 1181945856,
+        "committedMemory": 1181945856,
+        "capacity": 1132372712,
+        "used": 1131921360,
+        "available": 451352
+      },
+      "code_space": {
+        "memorySize": 2097152,
+        "committedMemory": 2097152,
+        "capacity": 1449536,
+        "used": 1449536,
+        "available": 0
+      },
+      "map_space": {
+        "memorySize": 2633728,
+        "committedMemory": 2633728,
+        "capacity": 1542960,
+        "used": 1542960,
+        "available": 0
+      },
+      "large_object_space": {
+        "memorySize": 300773376,
+        "committedMemory": 300773376,
+        "capacity": 333796880,
+        "used": 298784784,
+        "available": 35012096
+      },
+      "new_large_object_space": {
+        "memorySize": 0,
+        "committedMemory": 0,
+        "capacity": 0,
+        "used": 0,
+        "available": 0
+      }
+    }
+  },
+  "resourceUsage": {
+    "userCpuSeconds": 468.968,
+    "kernelCpuSeconds": 80.734,
+    "cpuConsumptionPercent": 75.821,
+    "maxRss": 1662902272,
+    "pageFaults": {
+      "IORequired": 8582273,
+      "IONotRequired": 0
+    },
+    "fsActivity": {
+      "reads": 501535,
+      "writes": 798
+    }
+  },
+  "libuv": [
+  ],
+  "environmentVariables": {
+    "=C:": "C:\\",
+    "ALLUSERSPROFILE": "C:\\ProgramData",
+    "APPDATA": "C:\\Users\\Hi\\AppData\\Roaming",
+    "ChocolateyInstall": "C:\\ProgramData\\chocolatey",
+    "ChocolateyLastPathUpdate": "131995675110320145",
+    "CommonProgramFiles": "C:\\Program Files\\Common Files",
+    "CommonProgramFiles(x86)": "C:\\Program Files (x86)\\Common Files",
+    "CommonProgramW6432": "C:\\Program Files\\Common Files",
+    "COMPUTERNAME": "DESKTOP-4069O5S",
+    "ComSpec": "C:\\Windows\\system32\\cmd.exe",
+    "DriverData": "C:\\Windows\\System32\\Drivers\\DriverData",
+    "ELECTRON_RUN_AS_NODE": "1",
+    "FPS_BROWSER_APP_PROFILE_STRING": "Internet Explorer",
+    "FPS_BROWSER_USER_PROFILE_STRING": "Default",
+    "HOMEDRIVE": "C:",
+    "HOMEPATH": "\\Users\\Hi",
+    "INIT_CWD": "K:\\Проекты\\Андроид приложения\\Mobile-Front",
+    "LOCALAPPDATA": "C:\\Users\\Hi\\AppData\\Local",
+    "LOGONSERVER": "\\\\DESKTOP-4069O5S",
+    "NODE": "C:\\Program Files\\nodejs\\node.exe",
+    "NODE_PATH": "null",
+    "npm_config_argv": "{\"remain\":[],\"cooked\":[\"run\",\"android\"],\"original\":[\"run\",\"android\"]}",
+    "npm_config_bin_links": "true",
+    "npm_config_ignore_optional": "",
+    "npm_config_ignore_scripts": "",
+    "npm_config_init_license": "MIT",
+    "npm_config_init_version": "1.0.0",
+    "npm_config_registry": "https://registry.yarnpkg.com",
+    "npm_config_save_prefix": "^",
+    "npm_config_strict_ssl": "true",
+    "npm_config_user_agent": "yarn/1.15.2 npm/? node/v11.14.0 win32 x64",
+    "npm_config_version_commit_hooks": "true",
+    "npm_config_version_git_message": "v%s",
+    "npm_config_version_git_sign": "",
+    "npm_config_version_git_tag": "true",
+    "npm_config_version_tag_prefix": "v",
+    "npm_execpath": "C:\\Users\\Hi\\AppData\\Roaming\\npm\\node_modules\\yarn\\bin\\yarn.js",
+    "npm_lifecycle_event": "android",
+    "npm_lifecycle_script": "expo start --android",
+    "npm_node_execpath": "C:\\Program Files\\nodejs\\node.exe",
+    "npm_package_dependencies_add": "^2.0.6",
+    "npm_package_dependencies_axios": "^0.18.0",
+    "npm_package_dependencies_babel_plugin_transform_decorators": "^6.24.1",
+    "npm_package_dependencies_babel_plugin_transform_decorators_legacy": "^1.3.5",
+    "npm_package_dependencies_dotenv": "^7.0.0",
+    "npm_package_dependencies_expo": "^32.0.0",
+    "npm_package_dependencies_expokit": "^32.0.7",
+    "npm_package_dependencies_i18n_js": "^3.2.1",
+    "npm_package_dependencies_install": "^0.12.2",
+    "npm_package_dependencies_moment": "^2.24.0",
+    "npm_package_dependencies_react": "16.5.0",
+    "npm_package_dependencies_react_native": "https://github.com/expo/react-native/archive/sdk-32.0.0.tar.gz",
+    "npm_package_dependencies_react_native_actionsheet": "^2.4.2",
+    "npm_package_dependencies_react_native_animated_flatlist": "^0.0.3",
+    "npm_package_dependencies_react_native_autogrow_textinput": "^5.2.0",
+    "npm_package_dependencies_react_native_checkBox": "^2.0.0",
+    "npm_package_dependencies_react_native_checkbox": "^2.0.0",
+    "npm_package_dependencies_react_native_checkbox_form": "^1.1.5",
+    "npm_package_dependencies_react_native_check_box": "^2.1.7",
+    "npm_package_dependencies_react_native_collapsible": "^1.4.0",
+    "npm_package_dependencies_react_native_config": "0.3.0",
+    "npm_package_dependencies_react_native_dotenv": "^0.2.0",
+    "npm_package_dependencies_react_native_drawer": "^2.5.1",
+    "npm_package_dependencies_react_native_easy_toast": "^1.2.0",
+    "npm_package_dependencies_react_native_floating_labels": "^1.1.9",
+    "npm_package_dependencies_react_native_global_font": "^1.0.2",
+    "npm_package_dependencies_react_native_keyboard_aware_scrollview": "^2.0.0",
+    "npm_package_dependencies_react_native_keyboard_aware_scroll_view": "^0.8.0",
+    "npm_package_dependencies_react_native_keyboard_spacer": "^0.4.1",
+    "npm_package_dependencies_react_native_options_menu": "^2.0.2",
+    "npm_package_dependencies_react_native_paper": "^2.12.0",
+    "npm_package_dependencies_react_native_pose": "^0.9.0",
+    "npm_package_dependencies_react_native_push_notification": "^3.1.2",
+    "npm_package_dependencies_react_native_root_modal": "^3.1.1",
+    "npm_package_dependencies_react_native_splash_screen": "^3.2.0",
+    "npm_package_dependencies_react_native_svg_uri": "^1.2.3",
+    "npm_package_dependencies_react_native_swipe_gestures": "^1.0.3",
+    "npm_package_dependencies_react_native_switch_toggle": "^1.0.8",
+    "npm_package_dependencies_react_native_tab_view": "^2.0.1",
+    "npm_package_dependencies_react_native_touch_id": "^4.4.1",
+    "npm_package_dependencies_react_native_vector_icons": "^6.3.0",
+    "npm_package_dependencies_react_navigation": "^3.3.2",
+    "npm_package_dependencies_react_navigation_redux_helpers": "^3.0.0",
+    "npm_package_dependencies_react_redux": "^6.0.1",
+    "npm_package_dependencies_redux": "^4.0.1",
+    "npm_package_dependencies_redux_connect_decorator": "^0.2.1",
+    "npm_package_dependencies_redux_devtools_extension": "^2.13.8",
+    "npm_package_dependencies_redux_persist": "^5.10.0",
+    "npm_package_dependencies_redux_thunk": "^2.3.0",
+    "npm_package_dependencies_rn_round_checkbox": "^0.3.4",
+    "npm_package_dependencies_socket_io": "^2.2.0",
+    "npm_package_dependencies_socket_io_client": "^2.2.0",
+    "npm_package_dependencies_styled_components": "^4.1.3",
+    "npm_package_dependencies_yarn": "^1.13.0",
+    "npm_package_dependencies__expo_react_native_action_sheet": "^2.1.0",
+    "npm_package_dependencies__haskkor_react_native_pincode": "^1.18.0",
+    "npm_package_devDependencies_babel_preset_expo": "^5.0.0",
+    "npm_package_devDependencies_remote_redux_devtools": "^0.5.16",
+    "npm_package_main": "node_modules/expo/AppEntry.js",
+    "npm_package_name": "",
+    "npm_package_private": "true",
+    "npm_package_readmeFilename": "README.md",
+    "npm_package_rnpm_assets_0": "./assets/fonts/",
+    "npm_package_scripts_android": "expo start --android",
+    "npm_package_scripts_eject": "expo eject",
+    "npm_package_scripts_ios": "expo start --ios",
+    "npm_package_scripts_start": "expo start",
+    "npm_package_version": "",
+    "NUMBER_OF_PROCESSORS": "8",
+    "OneDrive": "C:\\Users\\Hi\\OneDrive",
+    "OS": "Windows_NT",
+    "Path": "C:\\Users\\Hi\\AppData\\Local\\Temp\\yarn--1555430672168-0.1260842741564412;K:\\Проекты\\Андроид приложения\\Mobile-Front\\node_modules\\.bin;C:\\Users\\Hi\\AppData\\Local\\Yarn\\Data\\link\\node_modules\\.bin;C:\\Users\\Hi\\AppData\\Local\\Yarn\\bin;C:\\Program Files\\libexec\\lib\\node_modules\\npm\\bin\\node-gyp-bin;C:\\Program Files\\lib\\node_modules\\npm\\bin\\node-gyp-bin;C:\\Program Files\\nodejs\\node_modules\\npm\\bin\\node-gyp-bin;C:\\Python27\\;C:\\Python27\\Scripts;C:\\Windows\\system32;C:\\Windows;C:\\Windows\\System32\\Wbem;C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\;C:\\Windows\\System32\\OpenSSH\\;C:\\Program Files (x86)\\QuickTime\\QTSystem\\;C:\\Program Files (x86)\\Microsoft SQL Server\\100\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\100\\Tools\\Binn\\;C:\\Program Files\\Microsoft SQL Server\\100\\DTS\\Binn\\;C:\\Program Files\\nodejs\\;C:\\ProgramData\\chocolatey\\bin;C:\\Program Files\\Git\\cmd;C:\\Users\\Hi\\AppData\\Local\\Microsoft\\WindowsApps;C:\\Users\\Hi\\AppData\\Roaming\\npm;C:\\Program Files\\Genymobile\\Genymotion\\tools;",
+    "PATHEXT": ".COM;.EXE;.BAT;.CMD;.VBS;.VBE;.JSE;.WSF;.WSH;.MSC",
+    "PROCESSOR_ARCHITECTURE": "AMD64",
+    "PROCESSOR_IDENTIFIER": "AMD64 Family 23 Model 1 Stepping 1, AuthenticAMD",
+    "PROCESSOR_LEVEL": "23",
+    "PROCESSOR_REVISION": "0101",
+    "ProgramData": "C:\\ProgramData",
+    "ProgramFiles": "C:\\Program Files",
+    "ProgramFiles(x86)": "C:\\Program Files (x86)",
+    "ProgramW6432": "C:\\Program Files",
+    "PROMPT": "$P$G",
+    "PSModulePath": "C:\\Program Files\\WindowsPowerShell\\Modules;C:\\Windows\\system32\\WindowsPowerShell\\v1.0\\Modules",
+    "PUBLIC": "C:\\Users\\Public",
+    "REACT_NATIVE_APP_ROOT": "K:\\Проекты\\Андроид приложения\\Mobile-Front",
+    "SESSIONNAME": "Console",
+    "SystemDrive": "C:",
+    "SystemRoot": "C:\\Windows",
+    "TEMP": "C:\\Users\\Hi\\AppData\\Local\\Temp",
+    "TMP": "C:\\Users\\Hi\\AppData\\Local\\Temp",
+    "USERDOMAIN": "DESKTOP-4069O5S",
+    "USERDOMAIN_ROAMINGPROFILE": "DESKTOP-4069O5S",
+    "USERNAME": "Hi",
+    "USERPROFILE": "C:\\Users\\Hi",
+    "VBOX_MSI_INSTALL_PATH": "C:\\Program Files\\Oracle\\VirtualBox\\",
+    "windir": "C:\\Windows",
+    "YARN_WRAP_OUTPUT": "false"
+  },
+  "sharedObjects": [
+    "C:\\Program Files\\nodejs\\node.exe",
+    "C:\\Windows\\SYSTEM32\\ntdll.dll",
+    "C:\\Windows\\System32\\KERNEL32.DLL",
+    "C:\\Windows\\System32\\KERNELBASE.dll",
+    "C:\\Windows\\System32\\PSAPI.DLL",
+    "C:\\Windows\\System32\\WS2_32.dll",
+    "C:\\Windows\\System32\\RPCRT4.dll",
+    "C:\\Windows\\System32\\ADVAPI32.dll",
+    "C:\\Windows\\System32\\msvcrt.dll",
+    "C:\\Windows\\System32\\sechost.dll",
+    "C:\\Windows\\SYSTEM32\\dbghelp.dll",
+    "C:\\Windows\\System32\\USER32.dll",
+    "C:\\Windows\\System32\\ucrtbase.dll",
+    "C:\\Windows\\System32\\win32u.dll",
+    "C:\\Windows\\System32\\GDI32.dll",
+    "C:\\Windows\\System32\\gdi32full.dll",
+    "C:\\Windows\\System32\\msvcp_win.dll",
+    "C:\\Windows\\System32\\CRYPT32.dll",
+    "C:\\Windows\\System32\\MSASN1.dll",
+    "C:\\Windows\\SYSTEM32\\IPHLPAPI.DLL",
+    "C:\\Windows\\SYSTEM32\\USERENV.dll",
+    "C:\\Windows\\System32\\profapi.dll",
+    "C:\\Windows\\SYSTEM32\\bcrypt.dll",
+    "C:\\Windows\\SYSTEM32\\WINMM.dll",
+    "C:\\Windows\\SYSTEM32\\winmmbase.dll",
+    "C:\\Windows\\System32\\cfgmgr32.dll",
+    "C:\\Windows\\System32\\IMM32.DLL",
+    "C:\\Windows\\System32\\powrprof.dll",
+    "C:\\Windows\\system32\\uxtheme.dll",
+    "C:\\Windows\\System32\\combase.dll",
+    "C:\\Windows\\System32\\bcryptPrimitives.dll",
+    "C:\\Windows\\system32\\mswsock.dll",
+    "C:\\Windows\\System32\\kernel.appcore.dll",
+    "C:\\Windows\\system32\\napinsp.dll",
+    "C:\\Windows\\system32\\pnrpnsp.dll",
+    "C:\\Windows\\system32\\NLAapi.dll",
+    "C:\\Windows\\SYSTEM32\\DNSAPI.dll",
+    "C:\\Windows\\System32\\NSI.dll",
+    "C:\\Windows\\System32\\winrnr.dll",
+    "C:\\Windows\\System32\\wshbth.dll",
+    "C:\\Windows\\SYSTEM32\\CRYPTBASE.DLL",
+    "C:\\Windows\\SYSTEM32\\dhcpcsvc6.DLL",
+    "C:\\Windows\\SYSTEM32\\dhcpcsvc.DLL",
+    "C:\\Windows\\System32\\rasadhlp.dll",
+    "C:\\Windows\\System32\\fwpuclnt.dll"
+  ]
+}
