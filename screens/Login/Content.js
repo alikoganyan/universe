@@ -153,7 +153,6 @@ class Content extends Component {
         const { navigate, setUser } = this.props;
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
-        console.log(1);
         if (value) {
             this.setState({ phone: value.phone.slice(2) })
             setUser({
@@ -161,28 +160,8 @@ class Content extends Component {
                 id: value.id,
                 image: value.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png'
             })
-            socket.emit('update user', { id: value.id })
-            socket.on('update user', e => setUser({ ...e, image: e.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png', }))
-            console.log(2);
-
             setTimeout(() => navigate('Dialogs'), 0)
         }
-        socket.on('login success', async ({ result }) => {
-            const { image } = result;
-            const user = {
-                ...result,
-                image: image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
-            }
-            await AsyncStorage.setItem('user', JSON.stringify(user))
-            setUser(user)
-            this.storeUserData(JSON.stringify(user))
-            navigate('Dialogs')
-            console.log(3);
-
-        })
-        socket.on('login error', e => {
-            console.log(e)
-        })
     }
     storeUserData = async (user) => {
         try {

@@ -1,4 +1,4 @@
-import { SET_USERID, SET_ALL_USERS, REGISTER_USER, SET_USER, SET_AUTH, SET_REGISTER_USER_NUMBER, SET_REGISTER_USER_SMS } from '../actions/userActions'
+import { SET_CONTACTS, SET_ALL_USERS, REGISTER_USER, SET_USER, SET_AUTH, SET_REGISTER_USER_NUMBER, SET_REGISTER_USER_SMS } from '../actions/userActions'
 
 const initialState = {
     user: {},
@@ -20,6 +20,8 @@ const userReducer = (state = initialState, action) => {
             return { ...state, register: { ...state.register, phone: action.payload } }
         case SET_REGISTER_USER_SMS:
             return { ...state, register: { ...state.register, sms: action.payload } }
+        case SET_CONTACTS:
+            return { ...state, user: { ...state.user, contact: action.payload } }
         default:
             return state
     }

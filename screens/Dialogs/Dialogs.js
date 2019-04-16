@@ -135,7 +135,6 @@ class Dialogs extends Component {
   }
   toChat = e => {
     const { setRoom, navigation, user } = this.props
-    socket.emit('select chat', { chatId: e, userId: user.id })
     setRoom(e)
     navigation.navigate('Chat')
   }
