@@ -69,8 +69,7 @@ const Indicator = ({ delievered = false, read = false, color }) => {
 }
 function Message(props) {
     const { children, messages, myId } = props
-    const { text, sender } = messages;
-    console.log(myId, messages)
+    const { text, sender } = children;
     return (myId == sender ? (
         <View style={{ display: 'flex', flexDirection: 'row' }}>
             <MyMessage>
