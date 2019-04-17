@@ -99,8 +99,8 @@ class Content extends Component {
           <DialogText>
             <DialogTextInner>
               {title && <>
-                <DialogTitle>Константин Константинополевский</DialogTitle>
-                <DialogLastMessage numberOfLines={2} >Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика</DialogLastMessage>
+                <DialogTitle>{title}</DialogTitle>
+                <DialogLastMessage numberOfLines={2} >{last}</DialogLastMessage>
               </>
               }
               {phone && <>
@@ -110,7 +110,7 @@ class Content extends Component {
               </>}
             </DialogTextInner>
             <DialogDate>
-              <LastMessageDate>10:01</LastMessageDate>
+              <LastMessageDate>{dayOfTheWeek}</LastMessageDate>
               <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
                 {lastMessage && (!!lastMessage.length && <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{lastMessage.length}</NewMessages>)}
               </UnreadMessages>
