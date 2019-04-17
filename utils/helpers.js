@@ -1,7 +1,8 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native';
 import io from 'socket.io-client';
 import { API_URL, API_PORT } from 'react-native-dotenv'
-const socketUrl = `http://80.93.191.147:3000`
+import {socket, connectToSocket} from './socket' 
+connectToSocket()
 export default helper = {
     IconDarkColor: '#979897',
     IconLightColor: '#ABABAB',
@@ -29,7 +30,7 @@ export default helper = {
         lightGrey1: '#b1b9c2',
         lightGrey2: '#f7f7f7',
     },
-    socket: io(socketUrl, { test: '123', transports: ['websocket'] }),
+    socket: socket,
     sidePaddingNumber: Dimensions.get('window').width / 100 * 4.5,
     sidePadding: `4.5%`,
     topPaddingNumber: Dimensions.get('window').height / 100 * 5.6,

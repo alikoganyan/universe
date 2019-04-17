@@ -81,9 +81,10 @@ const NewMessages = styled(Text)`
 class Content extends Component {
   render() {
     const { children, title, user, lastMessage, item } = this.props;
-    const { phone, unreadMessage, id } = item;
+    const { phone, id } = item;
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const dayOfTheWeek = daysOfTheWeek[new Date(lastMessage).getDay() - 1]
+    const unreadMessage = lastMessage[lastMessage.length - 1].text
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={phone ? () => this.newDialog(id) : this.handleClick} onLongPress={this.handleHold}>
         <Wrapper>
@@ -92,7 +93,7 @@ class Content extends Component {
             <DialogTextInner>
               {title && <>
                 <DialogTitle>{title}</DialogTitle>
-                <DialogLastMessage numberOfLines={2} >{children}</DialogLastMessage>
+                <DialogLastMessage numberOfLines={2} >{lastMessage[lastMessage.length - 1].text}</DialogLastMessage>
               </>
               }
               {phone && <>

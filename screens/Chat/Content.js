@@ -28,19 +28,9 @@ class Content extends Component {
                         data={reversedMessages}
                         animated={true}
                         renderItem={({ item }) => {
-                            if (item.type === 'message') {
-                                return <TouchableOpacity onLongPress={this.handleHold}>
-                                    <Message>{item}</Message>
-                                </TouchableOpacity>
-
-                            }
-                            if (item.type === 'task') {
-                                return <TaskComponent>{item}</TaskComponent>
-                            }
-                            if (item.type === 'feed') {
-                                return <Feed>{item}</Feed>
-                            }
-
+                            return <TouchableOpacity onLongPress={this.handleHold}>
+                                <Message>{item}</Message>
+                            </TouchableOpacity>
                         }}
                         keyExtractor={(item, index) => index.toString()}
                     />

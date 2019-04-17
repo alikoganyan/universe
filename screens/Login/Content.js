@@ -162,6 +162,7 @@ class Content extends Component {
             })
             setTimeout(() => navigate('Dialogs'), 0)
         }
+        this.login()
     }
     storeUserData = async (user) => {
         try {

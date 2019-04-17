@@ -102,7 +102,7 @@ const ContactName = styled(Text)`
 `
 const ContactRole = styled(Text)`
     font-size: ${fontSize.sm};
-    color: ${grey2}
+    color: ${grey2};
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)`
     
@@ -233,7 +233,7 @@ class Content extends Component {
                 this.props.setContacts(res)
                 const newUsers = { ...this.state.users }
                 newUsers.department = res
-                this.setState({ users: newUsers }, () => console.log(this.state.users))
+                this.setState({ users: newUsers })
             },
             failFunc: (err) => {
                 console.log({ err })

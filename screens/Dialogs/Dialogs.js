@@ -32,7 +32,7 @@ class Dialogs extends Component {
             ref={(ref) => { this.flatList = ref; }}
             data={FlatListData}
             keyboardShouldPersistTaps={'handled'}
-            renderItem={({ item, index }) => <Dialog lastMessage={item.lastMessage} onClick={() => this.toChat(item.id)} title={item.title} item={item}>{item.text}</Dialog>}
+            renderItem={({ item, index }) => <Dialog lastMessage={item.messages} onClick={() => this.toChat(item)} title={item.title || item.room} item={item}>{item.text}</Dialog>}
             keyExtractor={(item, index) => index.toString()}
           />
         </Wrapper>
@@ -44,26 +44,16 @@ class Dialogs extends Component {
   }
   componentDidMount() {
     const { user } = this.props;
-    // socket.emit('dialogs', { userId: user.id });
-    // socket.emit('news', { userId: user.id });
-    // socket.emit('set dialogs', { userId: user.id, dialogId: 33 });
-    socket.on('news', this.news);
-    socket.on('get users', this.getUsers)
-    socket.on('find', this.find)
-    socket.on('chat message', this.chatMessage)
-    socket.on('new message', this.newMessage)
-    socket.on('dialogs', this.dialogs);
-    socket.on('select chat', this.selectChat)
-
+    socket.on('update_dialogs', e => {
+      const newFlatListData = [...e]
+      this.setState({
+        FlatListData: newFlatListData
+      })
+    })
+    socket.emit('get_dialogs', { id: 0 })
   }
   componentWillUnmount() {
-    socket.removeListener('news', this.news);
-    socket.removeListener('get users', this.getUsers);
-    socket.removeListener('find', this.find);
-    socket.removeListener('chat message', this.chatMessage);
-    socket.removeListener('dialogs', this.dialogs);
-    socket.removeListener('new message', this.newMessage);
-    socket.removeListener('select chat', this.selectChat);
+
   }
   toProfile = e => {
     this.props.navigation.navigate('Profile')
@@ -134,8 +124,9 @@ class Dialogs extends Component {
     this.setState({ FlatListData: newDialogs })
   }
   toChat = e => {
-    const { setRoom, navigation, user } = this.props
-    setRoom(e)
+    const { setRoom, navigation, getMessages } = this.props
+    setRoom(e.participants[0])
+    getMessages(e.messages);
     navigation.navigate('Chat')
   }
   toGroup = e => {
