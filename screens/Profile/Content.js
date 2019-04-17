@@ -134,18 +134,11 @@ class Content extends Component {
     state = {
         userName: 'Константин Константинопольский',
         status: 'В сети',
-        UserData: [
-            { type: 'Подразделение', value: 'Стандартный' },
-            { type: 'Должность', value: 'Главный инженер' },
-            { type: 'Личный', value: '+7(395)282-48-57' },
-            { type: 'Задачи', value: '4', icon: <TaskIcon /> },
-            { type: 'Общих групп', value: '32', icon: <GroupIcon /> },
-            { type: 'Общих файлов', value: '10', icon: <FilesRedIcon /> },
-        ]
+        UserData: []
     }
     componentDidMount() {
         const { myProfile, user, currentChat } = this.props
-        const { id, image, lastName, firstName, role, phone_number, department } = myProfile ? user : currentChat;
+        const { role, phone_number, department } = myProfile ? user : currentChat;
         const newUserData = [
             { type: 'Подразделение', value: department },
             { type: 'Должность', value: role },

@@ -1,8 +1,7 @@
 import io from 'socket.io-client'
 
-const socketServer = 'http://192.168.88.239:8000'
-const socketPath = ''
-
+const socketServer = 'http://ser.univ.team'
+const socketPath = '/socket.io'
 export var socket = null
 
 export const connectToSocket = () => {

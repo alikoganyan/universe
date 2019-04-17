@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, AsyncStorage } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, AsyncStorage, Platform } from 'react-native'
 import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
@@ -139,8 +139,8 @@ class Content extends Component {
         )
     }
     state = {
-        country: '+380',
-        phone: '637072785',
+        country: Platform.OS === 'ios' ? '+380' : '+7',
+        phone: Platform.OS === 'ios' ? '637072785' : '2222222222',
         phone_number: '',
         password: '1111',
         error: null,
@@ -162,6 +162,7 @@ class Content extends Component {
             })
             setTimeout(() => navigate('Dialogs'), 0)
         }
+        this.login() //remove
     }
     storeUserData = async (user) => {
         try {

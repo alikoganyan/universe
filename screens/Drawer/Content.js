@@ -20,6 +20,7 @@ const Link = styled(TouchableOpacity)`
     align-items: flex-start;
     justify-content: flex-start;
     padding: ${topPadding} ${sidePaddingNumber}px;
+    width: 100%;
 `
 const LinkText = styled(Text)`
     margin-left: 15px;
