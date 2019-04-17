@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, Dimensions, BackHandler, AsyncStorage } from 'react-native';
 import GlobalFont from 'react-native-global-font'
 import { Font } from 'expo';
+import { store } from './reducers/store'
 import {
   Group,
   Dialogs,
@@ -112,7 +113,6 @@ const AppStackNavigator = createStackNavigator(
 )
 
 const App = createAppContainer(AppStackNavigator)
-const store = createStore(reducers, composeWithDevTools(applyMiddleware(thunk), devToolsEnhancer()))
 @connectActionSheet
 export default class AppComponent extends React.Component {
   async componentDidMount() {

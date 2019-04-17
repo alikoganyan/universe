@@ -68,9 +68,10 @@ const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
 }
 function Message(props) {
-    const { children, myId } = props
-    const { text, senderId } = children;
-    return (myId == senderId ? (
+    const { children, messages, myId } = props
+    const { text, sender } = messages;
+    console.log(myId, messages)
+    return (myId == sender ? (
         <View style={{ display: 'flex', flexDirection: 'row' }}>
             <MyMessage>
                 <MyMessageText>
@@ -100,7 +101,7 @@ function Message(props) {
 const mapStateToProps = state => {
     return {
         messages: state.messageReducer.messages,
-        myId: state.userReducer.user.id
+        myId: state.userReducer.user._id
     };
 };
 export default connect(mapStateToProps)(Message)

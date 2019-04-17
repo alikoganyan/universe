@@ -2,13 +2,17 @@ import React, { Component } from 'react'
 import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native'
 import { BackIcon, GroupIconWhite, ArrowDownIcon } from '../../assets/index'
 import styled from 'styled-components'
-import FloatingLabel from 'react-native-floating-labels'
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
-import posed, { Transition } from 'react-native-pose';
-
+import posed from 'react-native-pose';
+import sendRequest from '../../utils/request'
+import { g_users } from '../../constants/api'
 import Collapsible from 'react-native-collapsible';
+import { connect } from 'react-redux'
+import { setContacts, setAllUsers } from '../../actions/userActions'
+
+import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
+import { setDialogs } from '../../actions/dialogsActions'
 const { Colors, HeaderHeightNumber, HeaderHeight, fontSize } = helper;
 const { green, black, grey2 } = Colors;
 const AnimatedScrollView = posed.View({
@@ -98,7 +102,7 @@ const ContactName = styled(Text)`
 `
 const ContactRole = styled(Text)`
     font-size: ${fontSize.sm};
-    color: ${grey2}
+    color: ${grey2};
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)`
     
@@ -127,7 +131,7 @@ const CreateDialogText = styled(Text)`
 const Padding = styled(View)`
     height: 30px;
 `
-export default class Settings extends Component {
+class Content extends Component {
     render() {
         const { users, collapsed, options, groups } = this.state;
         const { department } = users;
@@ -142,27 +146,29 @@ export default class Settings extends Component {
                             </CreateDialogText>
                         </CreateDialog>
                         <ContactList>
-                            {department.map((e, i) => (
-                                    <Box key={i} last={i === department.length - 1}>
-                                        <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                            <BoxItem title={true}>{e.title}</BoxItem>
-                                            <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                                                <ArrowDownIcon />
-                                            </ArrowWrapper>
-                                        </BoxTitle>
-                                        <Collapsible collapsed={collapsed[i] || false}>
-                                            <BoxInner>
-                                                {e.workers.map((e, i) => <BoxInnerItem key={i}>
-                                                        <ContactImage />
-                                                        <ContactInfo>
-                                                            <ContactName>{e.name}</ContactName>
-                                                            <ContactRole>{e.role}</ContactRole>
-                                                        </ContactInfo>
-                                                    </BoxInnerItem>)}
-                                            </BoxInner>
-                                        </Collapsible>
-                                    </Box>
-                                ))}
+                            {/* {department.map((e, i) => ( */}
+                            <Box last={true}>
+                                <BoxTitle onPress={() => collapsed[0] ? this.collapseDepartment(0) : this.showDepartment(0)}>
+                                    <BoxItem title={true}>No role</BoxItem>
+                                    <ArrowWrapper pose={collapsed[0] ? 'right' : 'down'}>
+                                        <ArrowDownIcon />
+                                    </ArrowWrapper>
+                                </BoxTitle>
+                                <Collapsible collapsed={collapsed[0] || false}>
+                                    <BoxInner>
+                                        {department.map((e, i) => <TouchableOpacity onPress={() => this.toChat(e._id)}>
+                                            <BoxInnerItem key={i}>
+                                            <ContactImage />
+                                            <ContactInfo>
+                                                <ContactName>{e.first_name || e.phone_number}</ContactName>
+                                                <ContactRole>{e.role || 'no role'}</ContactRole>
+                                            </ContactInfo>
+                                        </BoxInnerItem>
+                                        </TouchableOpacity>)}
+                                    </BoxInner>
+                                </Collapsible>
+                            </Box>
+                            {/* ))}  */}
                         </ContactList>
                         <ContactList>
                             <FlatList
@@ -190,22 +196,7 @@ export default class Settings extends Component {
         collapsed: [],
         users: {
             department: [
-                {
-                    title: 'Отдел длинных корпоративных названий',
-                    workers: [
-                        { name: "Константин Константинопольский", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Константин Константинопольский", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Константин Константинопольский", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                    ],
-                },
-                {
-                    title: 'Отдел коротких корпоративных названий',
-                    workers: [
-                        { name: "Константин Константинопольский", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Константин Константинопольский", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Константин Константинопольский", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                    ],
-                },
+
             ],
         },
         groups: [
@@ -235,10 +226,53 @@ export default class Settings extends Component {
             newDCollapsed.push(false)
         }
         this.setState({ collapsed: newDCollapsed })
+        sendRequest({
+            r_path: g_users,
+            method: 'get',
+            success: (res) => {
+                this.props.setContacts(res)
+                const newUsers = { ...this.state.users }
+                newUsers.department = res
+                this.setState({ users: newUsers })
+            },
+            failFunc: (err) => {
+                console.log({ err })
+            }
+        })
+
     }
     selectOption = (e) => {
         const newState = { ...this.state.options }
         newState.active = e;
         this.setState({ options: newState })
     }
+    toChat = (e) => {
+        const { setRoom, navigate, user } = this.props
+        setRoom(e)
+        navigate('Chat')
+        setRoom(e)
+        console.log(e)
+    }
 }
+
+const mapStateToProps = state => {
+    return {
+      messages: state.messageReducer,
+      dialog: state.dialogsReducer.dialogs,
+      currentRoom: state.messageReducer.currentRoom,
+      currentChat: state.messageReducer.currentChat,
+      user: state.userReducer.user,
+      users: state.userReducer
+    };
+  };
+  const mapDispatchToProps = dispatch => ({
+    getMessages: _ => dispatch(getMessages(_)),
+    setRoom: _ => dispatch(setRoom(_)),
+    setDialogs: _ => dispatch(setDialogs(_)),
+    addMessage: _ => dispatch(addMessage(_)),
+    setAllUsers: _ => dispatch(setAllUsers(_)),
+    setContacts: _ => dispatch(setContacts(_))
+
+  })
+  export default connect(mapStateToProps, mapDispatchToProps)(Content)
+  
