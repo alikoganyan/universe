@@ -64,6 +64,7 @@ const DialogDate = styled(View)`
   justify-content: flex-start;
   margin-bottom: 2px;
   text-align: center;
+  margin-left: -5px;
 `
 const UnreadMessages = styled(View)`
   display: flex;
@@ -81,7 +82,7 @@ const NewMessages = styled(Text)`
   height: 25px;
   border-radius: 12.5;
   margin-top: 5px;
-  margin-left: 5px;
+  margin-left: 7.5px;
 `
 class Content extends Component {
   render() {
