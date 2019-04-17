@@ -43,7 +43,7 @@ export default helper = {
         xs: '24px',
         large: '20px',
         header: '15px',
-        text: '12px',
+        text: '14px',
         sm: '10px',
         md: '14px'
     },

@@ -11,13 +11,13 @@ const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center; 
-  padding: 20px ${sidePadding};
+  padding: 15px ${sidePadding} 15px;
 `
 const DialogImage = styled(Image)`
   width: 50px;
   height: 50px;
   border-radius: 25px;
-  margin-right: ${sidePadding};
+  margin-top: 5px;
 `
 const DialogText = styled(View)`
   display: flex;
@@ -38,13 +38,13 @@ const DialogTitle = styled(Text)`
   width: ${Dimensions.get('window').width - 20}px;
   color: #000000;
   font-weight: 400;
-  padding-bottom: 5px;
+  padding-left: 10px;
 `
 const LastMessageDate = styled(Text)`
   color: ${lightColor};
   font-size: ${fontSize.text};
   text-align: left;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
 `
 const DialogLastMessage = styled(Text)`
   font-size: ${fontSize.text};
@@ -52,6 +52,8 @@ const DialogLastMessage = styled(Text)`
   padding-right: 20px;
   color: ${grey2};
   font-weight: 400;
+  padding-left: 10px;
+  padding-top: 2px;
 `
 const DialogDate = styled(View)`
   right: ${sidePadding};
@@ -60,7 +62,8 @@ const DialogDate = styled(View)`
   font-size: ${fontSize.sm};
   display: flex;
   justify-content: flex-start;
-  
+  margin-bottom: 2px;
+  text-align: center;
 `
 const UnreadMessages = styled(View)`
   display: flex;
@@ -71,12 +74,14 @@ const NewMessages = styled(Text)`
    color: white;
   font-size: ${fontSize.text};
   background: ${purple};
-  padding: 5px;
+  padding: 2.5px;
   overflow: hidden;
-  text-align: center;;
+  text-align: center;
   min-width: 25px;
   height: 25px;
   border-radius: 12.5;
+  margin-top: 5px;
+  margin-left: 5px;
 `
 class Content extends Component {
   render() {
@@ -89,12 +94,12 @@ class Content extends Component {
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={phone ? () => this.newDialog(id) : this.handleClick} onLongPress={this.handleHold}>
         <Wrapper>
-          <ImageComponent source={{ uri: user.image }} size={"large"} />
+          <DialogImage source={{ uri: user.image }} size={"large"} />
           <DialogText>
             <DialogTextInner>
               {title && <>
-                <DialogTitle>{title}</DialogTitle>
-                <DialogLastMessage numberOfLines={2} >{last}</DialogLastMessage>
+                <DialogTitle>Константин Константинополевский</DialogTitle>
+                <DialogLastMessage numberOfLines={2} >Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика</DialogLastMessage>
               </>
               }
               {phone && <>
@@ -104,7 +109,7 @@ class Content extends Component {
               </>}
             </DialogTextInner>
             <DialogDate>
-              <LastMessageDate>{dayOfTheWeek}</LastMessageDate>
+              <LastMessageDate>10:01</LastMessageDate>
               <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
                 {lastMessage && (!!lastMessage.length && <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{lastMessage.length}</NewMessages>)}
               </UnreadMessages>
