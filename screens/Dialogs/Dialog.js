@@ -84,7 +84,8 @@ class Content extends Component {
     const { phone, id } = item;
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const dayOfTheWeek = daysOfTheWeek[new Date(lastMessage).getDay() - 1]
-    const unreadMessage = lastMessage[lastMessage.length - 1].text
+    const last = lastMessage[lastMessage.length - 1].text
+    unreadMessage = [1,2]
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={phone ? () => this.newDialog(id) : this.handleClick} onLongPress={this.handleHold}>
         <Wrapper>
@@ -93,7 +94,7 @@ class Content extends Component {
             <DialogTextInner>
               {title && <>
                 <DialogTitle>{title}</DialogTitle>
-                <DialogLastMessage numberOfLines={2} >{lastMessage[lastMessage.length - 1].text}</DialogLastMessage>
+                <DialogLastMessage numberOfLines={2} >{last}</DialogLastMessage>
               </>
               }
               {phone && <>
@@ -105,7 +106,7 @@ class Content extends Component {
             <DialogDate>
               <LastMessageDate>{dayOfTheWeek}</LastMessageDate>
               <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-                {unreadMessage && (!!unreadMessage.length && <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{unreadMessage.length}</NewMessages>)}
+                {lastMessage && (!!lastMessage.length && <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{lastMessage.length}</NewMessages>)}
               </UnreadMessages>
             </DialogDate>
           </DialogText>

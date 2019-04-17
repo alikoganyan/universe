@@ -43,14 +43,16 @@ class Dialogs extends Component {
     FlatListData: []
   }
   componentDidMount() {
-    const { user } = this.props;
+    const { user, addMessage } = this.props;
     socket.on('update_dialogs', e => {
       const newFlatListData = [...e]
       this.setState({
         FlatListData: newFlatListData
       })
     })
-    socket.emit('get_dialogs', { id: 0 })
+    socket.emit('get_dialogs', { id: user._id })
+    socket.on('new_message', e => addMessage({...e, text: e.message, date: new Date()}))
+
   }
   componentWillUnmount() {
 
@@ -126,6 +128,7 @@ class Dialogs extends Component {
   toChat = e => {
     const { setRoom, navigation, getMessages } = this.props
     setRoom(e.participants[0])
+    console.log(e.participants)
     getMessages(e.messages);
     navigation.navigate('Chat')
   }
@@ -138,7 +141,7 @@ class Dialogs extends Component {
 
 const mapStateToProps = state => {
   return {
-    messages: state.messageReducer,
+    messages: state.messageReducer.messages,
     dialog: state.dialogsReducer.dialogs,
     currentRoom: state.messageReducer.currentRoom,
     currentChat: state.messageReducer.currentChat,
