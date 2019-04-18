@@ -44,13 +44,38 @@ class Dialogs extends Component {
   }
   componentDidMount() {
     const { user, addMessage } = this.props;
-    socket.on('update_dialogs', e =>  this.setState({FlatListData: [...e]}))
+    socket.on('update_dialogs', e => this.setState({ FlatListData: [...e] }))
     socket.emit('get_dialogs', { id: user._id })
-    socket.on('new_message', e => addMessage({...e, text: e.message, date: new Date()}))
+    socket.on('new_message', e => addMessage({ ...e, text: e.message, date: new Date() }))
     socket.on('new_dialog', e => {
-      console.log('new dialog', e, {id: user._id})
-      socket.emit('get_dialogs', {id: user._id})
+      console.log('new dialog', e, { id: user._id })
+      socket.emit('get_dialogs', { id: user._id })
     })
+    // this.toChat({
+    //   "_id": 37,
+    //   "created_at": "2019-04-18T09:42:41.484Z",
+    //   "creator": 4,
+    //   "isGroup": false,
+    //   "messages": [
+    //     {
+    //       "_id": "5cb84691c2b4af555450e9dc",
+    //       "data": "",
+    //       "date": "2019-04-18T09:14:23.314Z",
+    //       "is_task": false,
+    //       "sender": 4,
+    //       "type": "image",
+    //       "src": "https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/242ce817-97a3-48fe-9acd-b1bf97930b01/09-posterization-opt.jpg",
+    //       "viewers": [],
+    //     },
+    //   ],
+    //   "name": "",
+    //   "participants": [
+    //     0,
+    //   ],
+    //   "photo": "",
+    //   "room": "4_0",
+    //   "updated_at": "2019-04-18T13:55:06.091Z",
+    // })
   }
   componentWillUnmount() {
     socket.removeListener('update_dialogs');
@@ -128,6 +153,7 @@ class Dialogs extends Component {
   toChat = e => {
     const { setRoom, navigation, getMessages, user } = this.props
     const roomId = e.room.split('_').filter(e => e != user._id)[0]
+    console.log(e)
     setRoom(roomId)
     getMessages(e.messages);
     navigation.navigate('Chat')

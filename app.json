@@ -26,7 +26,13 @@
     "android": {
       "package": "com.team.amigo.media",
       "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
-      "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json"
+      "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json",
+      "permissions": [
+        "CAMERA",
+        "READ_INTERNAL_STORAGE",
+        "READ_EXTERNAL_STORAGE",
+        "WRITE_EXTERNAL_STORAGE"
+      ]
     },
     "scheme": "expffb10a7da95340f79e62cdd2cebeaebe"
   }

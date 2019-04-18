@@ -24,6 +24,8 @@ const MyMessageText = styled(Text)`
     padding: 10px;
     padding-bottom: 0;
     color: white;
+    flex:1;
+    align-items: stretch;
 `
 
 const InterlocutorsMessage = styled(MyMessage)`
@@ -63,38 +65,68 @@ const MessageInfo = styled(View)`
 const MessageDate = styled(Text)`
     color: ${({ color }) => color || '#ABABAB'};
 `
-
+const MyMessageImage = styled(Image)`
+    align-self: center;
+    height: ${({height}) => height || '100%'};
+    width: 100%;
+    resize-mode: cover;
+`
 const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
 }
 function Message(props) {
     const { children, messages, myId } = props
-    const { text, sender } = children;
-    return (myId == sender ? (
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <MyMessage>
-                <MyMessageText>
-                    {text}
-                </MyMessageText>
-                <MessageInfo>
-                    <MessageDate color={'white'}>1:40</MessageDate>
-                    <Indicator color={'white'} />
-                </MessageInfo>
-            </MyMessage>
-            <TriangleLeftIcon color={'#3776F9'} />
-        </ View>
-    ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <TriangleRightIcon color={'#F6F6F6'} />
-            <InterlocutorsMessage>
-                <InterlocutorsMessageText>
-                    {text}
-                </InterlocutorsMessageText>
-                <MessageInfo>
-                    <MessageDate>1:40</MessageDate>
-                </MessageInfo>
-            </InterlocutorsMessage>
-        </ View>
-    )
+    const { text, sender, src, type, width, height } = children;
+    console.log(children);
+    if (type === 'image') {
+        return (myId == sender ? (
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+                <MyMessage>
+                    <MyMessageImage source={{ uri: src }} width={width} height={height}/>
+                    <MessageInfo>
+                        <MessageDate color={'white'}>1:40</MessageDate>
+                        <Indicator color={'white'} />
+                    </MessageInfo>
+                </MyMessage>
+                <TriangleLeftIcon color={'#3776F9'} />
+            </ View>
+        ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
+                <TriangleRightIcon color={'#F6F6F6'} />
+                <InterlocutorsMessage>
+                    <MyMessageImage source={{ uri: src }} />
+                    <MessageInfo>
+                        <MessageDate>1:40</MessageDate>
+                    </MessageInfo>
+                </InterlocutorsMessage>
+            </ View>
+        )
+    } else {
+        return (myId == sender ? (
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+                <MyMessage>
+                    <MyMessageText>
+                        {text}
+                    </MyMessageText>
+                    <MessageInfo>
+                        <MessageDate color={'white'}>1:40</MessageDate>
+                        <Indicator color={'white'} />
+                    </MessageInfo>
+                </MyMessage>
+                <TriangleLeftIcon color={'#3776F9'} />
+            </ View>
+        ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
+                <TriangleRightIcon color={'#F6F6F6'} />
+                <InterlocutorsMessage>
+                    <InterlocutorsMessageText>
+                        {text}
+                    </InterlocutorsMessageText>
+                    <MessageInfo>
+                        <MessageDate>1:40</MessageDate>
+                    </MessageInfo>
+                </InterlocutorsMessage>
+            </ View>
+        )
+    }
 }
 
 const mapStateToProps = state => {

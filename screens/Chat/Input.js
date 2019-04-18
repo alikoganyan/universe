@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
+import { ImagePicker } from 'expo';
 
 const { socket, sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
@@ -59,7 +60,7 @@ class InputComponent extends Component {
                 </Left>
                 <Right>
                     <ImageIcon
-                        onpress={startSearch}
+                        onPress={this.pickImage}
                     />
                 </Right>
 
@@ -67,7 +68,9 @@ class InputComponent extends Component {
         )
     }
     state = {
-        text: '', height: 0
+        text: '',
+        height: 0,
+        image: null,
     }
     componentDidMount() {
         const { messages, addMessage } = this.props
@@ -84,6 +87,16 @@ class InputComponent extends Component {
     handleChange = (e) => {
         this.setState({ text: e })
     }
+    pickImage = async () => {
+        const { currentRoom, id, addMessage } = this.props;
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: true,
+        });
+        if (!result.cancelled) {
+            addMessage({ room: currentRoom, sender: id, date: new Date(), type: 'image', src: result.uri, width: result.width, height: result.height })
+            this.setState({ image: result.uri });
+        }
+    };
 }
 
 const mapStateToProps = state => {
