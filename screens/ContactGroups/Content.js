@@ -70,8 +70,7 @@ const BoxTitle = styled(TouchableOpacity)`
     align-items: flex-start;
 `
 const BoxInner = styled(AnimatedBox)`
-    padding: 20px 0;
-    padding-top: 20px;
+    padding-bottom: 20px;
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
