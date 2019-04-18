@@ -156,8 +156,8 @@ class Content extends Component {
                                 </BoxTitle>
                                 <Collapsible collapsed={collapsed[0] || false}>
                                     <BoxInner>
-                                        {department.map((e, i) => <TouchableOpacity onPress={() => this.toChat(e._id)}>
-                                            <BoxInnerItem key={i}>
+                                        {department.map((e, i) => <TouchableOpacity key={i} onPress={() => this.toChat(e._id)}>
+                                            <BoxInnerItem>
                                             <ContactImage />
                                             <ContactInfo>
                                                 <ContactName>{e.first_name || e.phone_number}</ContactName>

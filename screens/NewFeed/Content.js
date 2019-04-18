@@ -145,6 +145,10 @@ class Content extends Component {
         })
 
     }
+    componentWillUpdate(){
+        socket.removeListener('user exists');
+        socket.removeListener('user created');
+    }
     addParticipant = () => {
         const { addParticipant } = this.props
         addParticipant()

@@ -79,6 +79,9 @@ class HeaderComponent extends Component {
             setDialogs(result)
         })
     }
+    componentWillUpdate(){
+        socket.removeListener('find');
+    }
     handleInputChange = (e) => {
         this.setState({ input: e })
         e && socket.emit('find', { text: e })
@@ -95,6 +98,7 @@ class HeaderComponent extends Component {
         Keyboard.dismiss()
     }
 }
+
 
 const mapStateToProps = state => {
     return {

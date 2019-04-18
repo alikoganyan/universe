@@ -38,7 +38,7 @@ class HeaderComponent extends Component {
                 <BurgerIcon onPress={this.props.toggleDrawer} left right />
                 <Input value={input} onChangeText={this.handleInputChange}
                     onFocus={this.handleFocus}
-                    placeholder={'Поиск'} />
+                    placeholder={`Поиск ${this.state.focused}`} />
                 {this.state.focused ?
                     <CloseIcon onPress={this.onBlur} />
                     : <TouchableOpacity onPress={this.toProfile}>

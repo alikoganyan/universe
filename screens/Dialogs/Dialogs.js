@@ -47,10 +47,15 @@ class Dialogs extends Component {
     socket.on('update_dialogs', e =>  this.setState({FlatListData: [...e]}))
     socket.emit('get_dialogs', { id: user._id })
     socket.on('new_message', e => addMessage({...e, text: e.message, date: new Date()}))
-
+    socket.on('new_dialog', e => {
+      console.log('new dialog', e, {id: user._id})
+      socket.emit('get_dialogs', {id: user._id})
+    })
   }
   componentWillUnmount() {
-
+    socket.removeListener('update_dialogs');
+    socket.removeListener('new_message');
+    socket.removeListener('new_dialog');
   }
   toProfile = e => {
     this.props.navigation.navigate('Profile')
@@ -121,9 +126,9 @@ class Dialogs extends Component {
     this.setState({ FlatListData: newDialogs })
   }
   toChat = e => {
-    const { setRoom, navigation, getMessages } = this.props
-    setRoom(e.participants[0])
-    console.log(e.participants)
+    const { setRoom, navigation, getMessages, user } = this.props
+    const roomId = e.room.split('_').filter(e => e != user._id)[0]
+    setRoom(roomId)
     getMessages(e.messages);
     navigation.navigate('Chat')
   }

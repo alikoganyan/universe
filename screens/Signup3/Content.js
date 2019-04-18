@@ -128,6 +128,9 @@ class Content extends Component {
             console.log(e)
         })
     }
+    componentWillUpdate() {
+        socket.removeListener('user exists');
+    }
     setInputState = (e) => {
         const newAgreements = [...this.state.agreements];
         const item = newAgreements.filter((item) => e.linkText === item.linkText)[0];

@@ -46,10 +46,9 @@ class Chat extends Component {
         })
     }
     componentWillUnmount() {
-        socket.removeListener('get chat info')
         const { setCurrentChat } = this.props;
+        socket.removeListener('get chat info')
         setCurrentChat({ currentChat: null })
-        socket.emit('leave chat', {})
     }
     navigateBack = () => {
         const { currentRoom, navigation } = this.props;
