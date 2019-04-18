@@ -44,12 +44,7 @@ class Dialogs extends Component {
   }
   componentDidMount() {
     const { user, addMessage } = this.props;
-    socket.on('update_dialogs', e => {
-      const newFlatListData = [...e]
-      this.setState({
-        FlatListData: newFlatListData
-      })
-    })
+    socket.on('update_dialogs', e =>  this.setState({FlatListData: [...e]}))
     socket.emit('get_dialogs', { id: user._id })
     socket.on('new_message', e => addMessage({...e, text: e.message, date: new Date()}))
 

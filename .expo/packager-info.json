@@ -2,8 +2,8 @@
   "expoServerPort": 19000,
   "expoServerNgrokUrl": "https://bs-9fw.anonymous.mobile-front.exp.direct",
   "packagerNgrokUrl": "https://packager.bs-9fw.anonymous.mobile-front.exp.direct",
-  "ngrokPid": 4376,
+  "ngrokPid": 65333,
   "devToolsPort": 19002,
   "packagerPort": 19001,
-  "packagerPid": 14476
+  "packagerPid": 65320
 }

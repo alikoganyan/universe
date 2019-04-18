@@ -71,18 +71,22 @@ const UnreadMessages = styled(View)`
   justify-content: flex-start;
   align-items: flex-start;
 `
-const NewMessages = styled(Text)`
-   color: white;
-  font-size: ${fontSize.text};
+const NewMessages = styled(View)`
   background: ${purple};
   padding: 2.5px;
   overflow: hidden;
-  text-align: center;
   min-width: 25px;
   height: 25px;
   border-radius: 12.5;
   margin-top: 5px;
   margin-left: 7.5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+const NewMessagesText = styled(Text)`
+  color: white;
+  font-size: ${fontSize.text};
 `
 class Content extends Component {
   render() {
@@ -91,7 +95,7 @@ class Content extends Component {
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const dayOfTheWeek = daysOfTheWeek[new Date(lastMessage).getDay() - 1]
     const last = lastMessage[lastMessage.length - 1].text
-    unreadMessage = [1,2]
+    unreadMessage = [1, 2]
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={phone ? () => this.newDialog(id) : this.handleClick} onLongPress={this.handleHold}>
         <Wrapper>
@@ -112,7 +116,10 @@ class Content extends Component {
             <DialogDate>
               <LastMessageDate>{dayOfTheWeek}</LastMessageDate>
               <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-                {lastMessage && (!!lastMessage.length && <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{lastMessage.length}</NewMessages>)}
+                {lastMessage && (!!lastMessage.length &&
+                  <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>
+                    <NewMessagesText>{lastMessage.length}</NewMessagesText>
+                  </NewMessages>)}
               </UnreadMessages>
             </DialogDate>
           </DialogText>
