@@ -5,8 +5,9 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
-import { ImagePicker } from 'expo';
-
+import { ImagePicker, Permissions } from 'expo';
+import { p_send_file } from '../../constants/api'
+import sendRequest from '../../utils/request'
 const { socket, sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
     background: white;
@@ -80,7 +81,7 @@ class InputComponent extends Component {
         const { text } = this.state;
         if (text) {
             socket.emit('message', { sender: id, receiver: currentRoom, message: text })
-            addMessage({ room: currentRoom, sender: id, text, date: new Date() })
+            addMessage({ room: currentRoom, sender: id, text, date: new Date(), type: 'text' })
         }
         this.setState({ text: '' })
     }
@@ -88,11 +89,26 @@ class InputComponent extends Component {
         this.setState({ text: e })
     }
     pickImage = async () => {
+        const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         const { currentRoom, id, addMessage } = this.props;
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: true,
         });
         if (!result.cancelled) {
+            // sendRequest({
+            //     r_path: p_send_file,
+            //     method: 'post',
+            //     attr: {
+            //         file: result
+            //     },
+            //     success: (res) => {
+            //         console.log(res)
+            //         socket.emit('file', { room: currentRoom })
+            //     },
+            //     failFunc: (err) => {
+            //         console.log(err)
+            //     }
+            // })
             addMessage({ room: currentRoom, sender: id, date: new Date(), type: 'image', src: result.uri, width: result.width, height: result.height })
             this.setState({ image: result.uri });
         }

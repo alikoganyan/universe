@@ -21,7 +21,15 @@
       "supportsTablet": true,
       "bundleIdentifier": "team.amigo.media",
       "publishBundlePath": "ios/universes-mobile/Supporting/shell-app.bundle",
-      "publishManifestPath": "ios/universes-mobile/Supporting/shell-app-manifest.json"
+      "publishManifestPath": "ios/universes-mobile/Supporting/shell-app-manifest.json",
+      "infoPlist": {
+        "NSCameraUsageDescription": "Apperture uses the camera to add photos to albums and scan QR codes.",
+        "NSPhotoLibraryUsageDescription": "Apperture needs access to your photo library to let you add photos to an album.",
+        "NSLocationAlwaysUsageDescription": "Apperture needs to access your location to find devices and albums near you.",
+        "NSLocationUsageDescription": "Apperture needs to access your location to find devices and albums near you.",
+        "NSLocationWhenInUseUsageDescription": "Apperture needs to access your location to find devices and albums near you.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Apperture needs to access your location to find devices and albums near you."
+      }
     },
     "android": {
       "package": "com.team.amigo.media",

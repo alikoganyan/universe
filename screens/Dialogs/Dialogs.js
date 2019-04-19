@@ -8,7 +8,6 @@ import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
-import { DrawerActions } from 'react-navigation';
 
 const { sidePaddingNumber, HeaderHeightNumber, socket } = helper;
 const Wrapper = styled(View)`
@@ -42,13 +41,13 @@ class Dialogs extends Component {
   state = {
     FlatListData: []
   }
-  componentDidMount() {
+  async componentDidMount() {
     const { user, addMessage } = this.props;
     socket.on('update_dialogs', e => this.setState({ FlatListData: [...e] }))
     socket.emit('get_dialogs', { id: user._id })
     socket.on('new_message', e => addMessage({ ...e, text: e.message, date: new Date() }))
-    socket.on('new_dialog', e => {
-      console.log('new dialog', e, { id: user._id })
+    socket.on('need_update', e => {
+      console.log('new need_update', e, { id: user._id })
       socket.emit('get_dialogs', { id: user._id })
     })
     // this.toChat({
@@ -153,7 +152,6 @@ class Dialogs extends Component {
   toChat = e => {
     const { setRoom, navigation, getMessages, user } = this.props
     const roomId = e.room.split('_').filter(e => e != user._id)[0]
-    console.log(e)
     setRoom(roomId)
     getMessages(e.messages);
     navigation.navigate('Chat')

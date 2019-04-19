@@ -24,8 +24,6 @@ const MyMessageText = styled(Text)`
     padding: 10px;
     padding-bottom: 0;
     color: white;
-    flex:1;
-    align-items: stretch;
 `
 
 const InterlocutorsMessage = styled(MyMessage)`
@@ -65,11 +63,11 @@ const MessageInfo = styled(View)`
 const MessageDate = styled(Text)`
     color: ${({ color }) => color || '#ABABAB'};
 `
+
 const MyMessageImage = styled(Image)`
-    align-self: center;
-    height: ${({height}) => height || '100%'};
-    width: 100%;
-    resize-mode: cover;
+    height: 100px;
+    min-width: 100%;
+    resize-mode: contain;
 `
 const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
@@ -77,12 +75,12 @@ const Indicator = ({ delievered = false, read = false, color }) => {
 function Message(props) {
     const { children, messages, myId } = props
     const { text, sender, src, type, width, height } = children;
-    console.log(children);
+    console.log(text)
     if (type === 'image') {
         return (myId == sender ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <MyMessage>
-                    <MyMessageImage source={{ uri: src }} width={width} height={height}/>
+                    <MyMessageImage source={{ uri: src }} width={width} height={height} />
                     <MessageInfo>
                         <MessageDate color={'white'}>1:40</MessageDate>
                         <Indicator color={'white'} />
@@ -100,7 +98,8 @@ function Message(props) {
                 </InterlocutorsMessage>
             </ View>
         )
-    } else {
+    }
+    if (type === 'text') {
         return (myId == sender ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <MyMessage>
