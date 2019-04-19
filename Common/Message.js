@@ -75,12 +75,12 @@ const Indicator = ({ delievered = false, read = false, color }) => {
 function Message(props) {
     const { children, messages, myId } = props
     const { text, sender, src, type, width, height } = children;
-    console.log(text)
+    console.log(`http://ser.multiverse.plus/api${src}`)
     if (type === 'image') {
         return (myId == sender ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <MyMessage>
-                    <MyMessageImage source={{ uri: src }} width={width} height={height} />
+                    <MyMessageImage source={{ uri: `http://ser.multiverse.plus${src}` }} width={width} height={height} />
                     <MessageInfo>
                         <MessageDate color={'white'}>1:40</MessageDate>
                         <Indicator color={'white'} />
