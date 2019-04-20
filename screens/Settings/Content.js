@@ -45,7 +45,9 @@ const Link = styled(Text)`
     font-size: ${fontSize.text};
     color: ${blue};
 `
-const Policy = styled(View)``
+const Policy = styled(View)`
+    margin-top: 5%;
+`
 const PolicyLink = styled(Link)`
     padding: 10px 0 20px;
 `
@@ -118,10 +120,10 @@ class Content extends Component {
             ru: 'Русский'
         },
         settings: [
-            { item: 'language', label: 'язык', status: 'Русский', option: { type: 'link', value: 'изменить' } },
-            { item: 'notifications', label: 'уведомления', status: 'Включены', option: { type: 'toggle', value: 1 } },
-            { item: 'sound', label: 'звук', status: 'Включен', option: { type: 'toggle', value: 0 } },
-            { item: 'partition_contacts', label: 'контакты', status: 'По подразделениям', option: { type: 'toggle', value: 0 } },
+            { item: 'language', label: 'Язык', status: 'Русский', option: { type: 'link', value: 'изменить' } },
+            { item: 'notifications', label: 'Уведомления', status: 'Включены', option: { type: 'toggle', value: 1 } },
+            { item: 'sound', label: 'Звук', status: 'Включен', option: { type: 'toggle', value: 0 } },
+            { item: 'partition_contacts', label: 'Контакты', status: 'По подразделениям', option: { type: 'toggle', value: 0 } },
         ]
     }
     componentDidMount() {

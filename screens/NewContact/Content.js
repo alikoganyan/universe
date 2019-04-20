@@ -7,29 +7,28 @@ import { Button } from '../../common'
 import sendRequest from '../../utils/request'
 import { p_create_contact } from '../../constants/api'
 const { Colors, HeaderHeightNumber } = helper;
-const { green, lightGrey1, black, color } = Colors;
+const { green, lightGrey1, grey2, black, color } = Colors;
 
 const Wrapper = styled(View)`
-    padding: 0 10% 10%;
+    padding: 10% 10% 10%;
     display: flex;
     justify-content: center;
-    
     height: ${Dimensions.get('window').height - HeaderHeightNumber}px;
 `
 const PhoneNumber = styled(View)`
     display: flex;
     flex-direction: row;
-    margin-top: 30px;
+    margin-top: 10%;
     align-items: center;
     justify-content: space-between;
-
 `
 const InputLabel = styled(Text)`
-    margin-right: 10px;
+    margin-right: 20px;
     padding-bottom: 10px;
+    padding-right:1%;
     font-size: 13px; 
     text-align: right;
-    color: ${black};
+    color: ${grey2};
 `
 const Input = styled(TextInput)`
     border: 1px solid ${lightGrey1};
@@ -39,9 +38,10 @@ const Input = styled(TextInput)`
     padding-bottom: 10px;
     font-size: 13px; 
 `
+
 const ButtonBox = styled(View)`
     position: absolute;
-    bottom: 40px;
+    bottom: 15%;
     align-self: center;
 `
 export default class Content extends Component {
@@ -53,7 +53,7 @@ export default class Content extends Component {
                 <ScrollView style={{ height: '100%' }}>
                     <PhoneNumber>
                         <InputLabel style={{ flex: 4 }}>Телефон</InputLabel>
-                        <Input style={{ flex: 1, textAlign: 'center' }} onChangeText={this.handleChangeCountry} value={country} />
+                        <Input style={{ flex: 1, textAlign: 'center', paddingRight: 7, paddingLeft: 7 }} onChangeText={this.handleChangeCountry} value={country} />
                         <Input style={{ flex: 7 }} placeholder={'XXX XXX XX XX'} onChangeText={this.handleChangePhone} value={phone} />
                     </PhoneNumber>
                     <PhoneNumber>

@@ -68,7 +68,7 @@ class Content extends Component {
                     Регистрация
                 </Title>
                 <SubTitle>
-                    вам выслано sms с временным паролем, введите его тут
+                    Вам выслано sms с временным паролем, введите его тут
                 </SubTitle>
                 <PhoneNumber>
                     <StyledInput password={true}
@@ -79,8 +79,8 @@ class Content extends Component {
                     />
                 </PhoneNumber>
                 <Controls>
-                    <NoSMS>не получили sms?</NoSMS>
-                    <SendAgain>отправить sms повтороно можно будет через 5:00</SendAgain>
+                    <NoSMS>Не получили sms?</NoSMS>
+                    <SendAgain>Отправить sms повторно можно будет через 5:00</SendAgain>
                 </Controls>
             </Wrapper>
         )

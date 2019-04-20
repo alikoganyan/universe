@@ -128,7 +128,7 @@ class Content extends Component {
             <ControlBar>
                 <TouchableOpacity onPress={this.restorePass}>
                     <ForgotPass>
-                        забыли пароль?
+                        Забыли пароль?
                         </ForgotPass>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={navigateToDialogs}>
