@@ -140,7 +140,7 @@ class Content extends Component {
     }
     state = {
         country: Platform.OS === 'ios' ? '+380' : '+7',
-        phone: Platform.OS === 'ios' ? '637072785' : '9194274215',
+        phone: Platform.OS === 'ios' ? '637072785' : '9194274251',
         phone_number: '',
         password: '1111',
         error: null,

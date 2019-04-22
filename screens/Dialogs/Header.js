@@ -5,6 +5,8 @@ import { openDrawer } from '../../actions/drawerActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
 import { ImageComponent } from '../../common'
+import sendRequest from '../../utils/request'
+import { p_search_dialogs } from '../../constants/api'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight, borderRadius, socket } = helper;
@@ -63,7 +65,19 @@ class HeaderComponent extends Component {
     }
     handleInputChange = (e) => {
         this.setState({ input: e })
-        e && socket.emit('find', { text: e })
+        e && sendRequest({
+            r_path: p_search_dialogs,
+            method: 'post',
+            attr: {
+                name: e,
+            },
+            success: (res) => {
+                console.log(res)
+            },
+            failFunc: (err) => {
+                console.log(err)
+            }
+        })
 
     }
     handleFocus = () => {

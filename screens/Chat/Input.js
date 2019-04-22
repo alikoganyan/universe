@@ -96,20 +96,19 @@ class InputComponent extends Component {
             allowsEditing: false,
         });
         const form = new FormData();
-        form.append('name', 'photo')
         form.append("photo", { uri: result.uri, name: 'image', type: 'image/jpeg' })
-
+        console.log(form)
         if (!result.cancelled) {
             sendRequest({
                 r_path: p_send_file,
                 method: 'post',
                 attr: {
                     file: form,
-                    room: '4_0'
+                    room: '0_1'
                 },
                 config: {
                     headers: {
-                        'Content-Type': 'multipart/form-data'
+                        'Content-Type': 'multipart/form-data',
                     }
                 },
                 success: (res) => {

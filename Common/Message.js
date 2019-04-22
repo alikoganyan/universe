@@ -99,8 +99,7 @@ function Message(props) {
                 </InterlocutorsMessage>
             </ View>
         )
-    }
-    if (type === 'text') {
+    }else {
         return (myId == sender ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <MyMessage>

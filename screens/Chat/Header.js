@@ -4,7 +4,9 @@ import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/inde
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
+import sendRequest from '../../utils/request'
+import { p_search_messages } from '../../constants/api'
+import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { ImageComponent } from '../../common'
 const { sidePadding, sidePaddingNumber, HeaderHeight, Colors, fontSize } = helper;
@@ -114,16 +116,16 @@ class HeaderComponent extends Component {
                         ) : (
                                 <>
                                     <IconLeft name="search" />
-                                    <Input placeholder="123" />
+                                    <Input placeholder="поиск" onChangeText={this.find} />
                                 </>
                             )}
                     </Left>
                     <Right>
                         {!search ? (
                             <>
-                            <SearchIconContainer>
-                                <SearchIcon onPress={startSearch} /> 
-                            </SearchIconContainer>
+                                <SearchIconContainer>
+                                    <SearchIcon onPress={startSearch} />
+                                </SearchIconContainer>
                                 <LocationIcon />
                             </>
                         ) : <CloseIcon onPress={stopSearch} />}
@@ -142,15 +144,34 @@ class HeaderComponent extends Component {
             </Header>
         )
     }
+    find = (e) => {
+        const { getMessages, dialogs, currentRoom } = this.props;
+        e ? sendRequest({
+            r_path: p_search_messages,
+            method: 'post',
+            attr: {
+                text: e,
+            },
+            success: (res) => {
+                getMessages(res)
+            },
+            failFunc: (err) => {
+                console.log(err)
+            }
+        }) : getMessages(dialogs.filter(e => e.room.includes(currentRoom))[0].messages)
+    }
 }
 const mapStateToProps = state => {
     return {
-        search: state.messageReducer.search
+        search: state.messageReducer.search,
+        dialogs: state.dialogsReducer.dialogs,
+        currentRoom: state.messageReducer.currentRoom
     };
 };
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch()),
     stopSearch: _ => dispatch(stopSearch()),
+    getMessages: _ => dispatch(getMessages(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)

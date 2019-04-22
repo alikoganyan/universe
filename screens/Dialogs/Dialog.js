@@ -94,7 +94,7 @@ class Content extends Component {
     const { phone, id } = item;
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const dayOfTheWeek = daysOfTheWeek[new Date(lastMessage).getDay() - 1]
-    const last = lastMessage[lastMessage.length - 1].text
+    const last = lastMessage ? lastMessage[lastMessage.length - 1].text : ''
     unreadMessage = [1, 2]
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={phone ? () => this.newDialog(id) : this.handleClick} onLongPress={this.handleHold}>
