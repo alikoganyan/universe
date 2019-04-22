@@ -11,7 +11,7 @@ import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { connect } from 'react-redux'
-const { Colors, socket, sidePadding } = helper;
+const { Colors, socket, sidePadding, sidePaddingNumber } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
@@ -44,7 +44,7 @@ const AnimatedArrowWrapper = posed.View({
     right: { rotate: "-90deg", }
 });
 const Wrapper = styled(View)`
-    padding: 0;
+    padding: 0 ${sidePadding};
     background: white;
     margin-bottom: 40px;
     
@@ -52,8 +52,9 @@ const Wrapper = styled(View)`
 const ContactList = styled(ScrollView)`
     padding: 20px;
     padding-bottom: 10px;
-    max-width: ${Dimensions.get('window').width};
+    max-width: ${Dimensions.get('window').width - sidePaddingNumber*2}px;
     overflow: hidden;
+    margin-left: ${sidePaddingNumber}px;
     flex: 1;
 `
 const Box = styled(View)`
@@ -164,7 +165,7 @@ class Content extends Component {
                                         inverted={true}
                                         data={allUsers}
                                         renderItem={({ item }) => <Group>
-                                            <ImageComponent size={"xs"} style={{marginRight: sidePadding}} source={{uri: item.uri}}/>
+                                            <ImageComponent size={"xs"} style={{ marginRight: sidePadding }} source={{ uri: item.uri }} />
                                             <GroupInfo>
                                                 <GroupTitle numberOfLines={1}>{item.name}</GroupTitle>
                                             </GroupInfo>
@@ -199,7 +200,7 @@ class Content extends Component {
                                 </ContactList>
                                 <ContactList>
                                     <FlatList
-                                        style={{ paddingRight: 5, paddingLeft: 5, }}
+                                        style={{ paddingLeft: sidePadding, }}
                                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                                         inverted={true}
                                         data={groups}
