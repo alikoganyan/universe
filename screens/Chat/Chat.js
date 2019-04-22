@@ -37,17 +37,9 @@ class Chat extends Component {
     }
     componentDidMount() {
         const { currentRoom, id, setCurrentChat, currentChat } = this.props;
-        socket.emit('get chat info', { id: currentRoom, room: id })
-        socket.on('get chat info', e => {
-            setCurrentChat({ currentChat: e })
-            setTimeout(() => {
-                currentChat
-            }, 1000)
-        })
     }
     componentWillUnmount() {
         const { setCurrentChat } = this.props;
-        socket.removeListener('get chat info')
         setCurrentChat({ currentChat: null })
     }
     navigateBack = () => {

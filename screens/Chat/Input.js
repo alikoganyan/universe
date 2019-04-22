@@ -5,7 +5,9 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
-
+import { ImagePicker, Permissions } from 'expo';
+import { p_send_file } from '../../constants/api'
+import sendRequest from '../../utils/request'
 const { socket, sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
     background: white;
@@ -59,7 +61,7 @@ class InputComponent extends Component {
                 </Left>
                 <Right>
                     <ImageIcon
-                        onpress={startSearch}
+                        onPress={this.pickImage}
                     />
                 </Right>
 
@@ -67,7 +69,9 @@ class InputComponent extends Component {
         )
     }
     state = {
-        text: '', height: 0
+        text: '',
+        height: 0,
+        image: null,
     }
     componentDidMount() {
         const { messages, addMessage } = this.props
@@ -77,13 +81,55 @@ class InputComponent extends Component {
         const { text } = this.state;
         if (text) {
             socket.emit('message', { sender: id, receiver: currentRoom, message: text })
-            addMessage({ room: currentRoom, sender: id, text, date: new Date() })
+            addMessage({ room: currentRoom, sender: id, text, date: new Date(), type: 'text' })
         }
         this.setState({ text: '' })
     }
     handleChange = (e) => {
         this.setState({ text: e })
     }
+    pickImage = async () => {
+        const { image } = this.state
+        const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        const { currentRoom, id, addMessage } = this.props;
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: false,
+        });
+        const form = new FormData();
+        form.append('name', 'photo')
+        form.append("photo", { uri: result.uri, name: 'image', type: 'image/jpeg' })
+
+        if (!result.cancelled) {
+            sendRequest({
+                r_path: p_send_file,
+                method: 'post',
+                attr: {
+                    file: form,
+                    room: '4_0'
+                },
+                config: {
+                    headers: {
+                        'Content-Type': 'multipart/form-data'
+                    }
+                },
+                success: (res) => {
+                    console.log({ res })
+                    socket.emit('file', { room: currentRoom })
+                    addMessage({
+                        room: currentRoom,
+                        sender: id,
+                        date: new Date(),
+                        type: 'image',
+                        src: result.uri,
+                    })
+                },
+                failFunc: (err) => {
+                    console.log(err)
+                }
+            })
+
+        }
+    };
 }
 
 const mapStateToProps = state => {

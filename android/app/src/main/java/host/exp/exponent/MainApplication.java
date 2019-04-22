@@ -34,6 +34,7 @@ import expolib_v1.okhttp3.OkHttpClient;
 
 // Needed for `react-native link`
 // import com.facebook.react.ReactApplication;
+import com.imagepicker.ImagePickerPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.rnfingerprint.FingerprintAuthPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
@@ -56,6 +57,7 @@ public class MainApplication extends ExpoApplication implements AppLoaderPackage
 
         // Needed for `react-native link`
         // new MainReactPackage(),
+            new ImagePickerPackage(),
             new VectorIconsPackage(),
             new FingerprintAuthPackage(),
             new SplashScreenReactPackage(),

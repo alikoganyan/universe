@@ -117,7 +117,6 @@ class Content extends Component {
     proceed = (e) => {
         const { country, phone } = this.state;
         const { setRegisterUserNumber, forward } = this.props;
-        console.log(this.props)
         if (country && phone) {
             phone_number = country.concat(phone)
             setRegisterUserNumber(phone_number);

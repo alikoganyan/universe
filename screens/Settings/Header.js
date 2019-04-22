@@ -39,7 +39,6 @@ class HeaderComponent extends Component {
     render() {
         const { user, back } = this.props;
         // const { image } = user;
-        console.log({user})
         return (
             <Header>
                 <Left>
