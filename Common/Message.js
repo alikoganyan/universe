@@ -15,6 +15,7 @@ const MyMessage = styled(View)`
     border-radius: 3;
     max-width: 80%;
     margin-left: 20%;
+    position: relative;
 `
 
 const MyMessageText = styled(Text)`

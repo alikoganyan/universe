@@ -23,7 +23,7 @@ const Wrapper = styled(View)`
 `
 const Title = styled(Text)`
     width: 100%;
-    font-size: 15px;
+    font-size: 18px;
     text-align: center;
     margin-bottom: 20px;
 `
@@ -86,17 +86,17 @@ class Content extends Component {
         return (
             <Wrapper>
                 <Title>
-                    Восстановить пароль
+                    Восстановление пароля
                 </Title>
                 <Label>Вам отправлено sms с временным паролем, {'\n'}введите его тут</Label>
                 <PhoneNumber>
                     <Input autoFocus={'true'} style={{ width: '100%', textAlign: 'center' }} value={code} onChangeText={this.handleChangeCode} keyboardType={'phone-pad'} />
                 </PhoneNumber>
                 <ControlBar>
-                    {code.length === 4 ? <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>войти</Button> :
+                    {code.length === 4 ? <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>Отправить</Button> :
                         <NoCode>
-                            <NoCodeLabel>не получили смс?</NoCodeLabel>
-                            <NoCodeTimer>отправить sms повторно можно будет через 4:56</NoCodeTimer>
+                            <NoCodeLabel>Не получили смс?</NoCodeLabel>
+                            <NoCodeTimer>Отправить sms повторно можно будет через 4:56</NoCodeTimer>
                         </NoCode>}
                 </ControlBar>
             </Wrapper>

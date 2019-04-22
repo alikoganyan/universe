@@ -22,7 +22,7 @@ const Wrapper = styled(View)`
 `
 const Title = styled(Text)`
     width: 100%;
-    font-size: 15px;
+    font-size: 20px;
     text-align: center;
     margin-bottom: 20px;
 `
@@ -67,7 +67,7 @@ class Content extends Component {
         return (
             <Wrapper>
                 <Title>
-                    Восстановить пароль
+                    Восстановление пароля
                 </Title>
                 <Label>Телефон</Label>
                 <PhoneNumber>
@@ -75,7 +75,7 @@ class Content extends Component {
                     <Input style={{ width: '75%' }} value={phone} onChangeText={this.handleChangePhone} />
                 </PhoneNumber>
                 <ControlBar>
-                    <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>войти</Button>
+                    <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>Восстановить пароль</Button>
                 </ControlBar>
             </Wrapper>
         )
