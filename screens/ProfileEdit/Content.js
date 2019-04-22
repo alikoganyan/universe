@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, Dimensions } from 'react-native'
+import { View, Text, Image, Dimensions, TouchableOpacity } from 'react-native'
 import { TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
 import { Button } from '../../common';
 import { setRoom } from '../../actions/messageActions'
@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-
+import { ImagePicker } from 'expo';
 const { Colors, HeaderHeightNumber, socket, fontSize } = helper;
 const { grey2, blue } = Colors;
 const Wrapper = styled(View)`
@@ -63,7 +63,7 @@ const Bottom = styled(View)`
     background: white;
 `
 const ButtonText = styled(Text)`
-font-size: ${fontSize.text}
+    font-size: ${fontSize.text};
 `
 const Input = (props) => {
     const { style, value, children, onChange } = props;
@@ -74,7 +74,7 @@ const Input = (props) => {
             borderWidth: 0,
             borderBottomWidth: 1,
             display: 'flex',
-            flex: 1
+            flex: 1,
         }}
         value={value}
         style={{ flex: 2, width: "50%", ...style }}
@@ -90,29 +90,31 @@ class Content extends Component {
         return (
             <Wrapper>
                 <User >
-                    <UserImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
+                    <TouchableOpacity onPress={this.selectImage}>
+                        <UserImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
+                    </TouchableOpacity>
                     <UserInfo>
-                        <InputBox >
+                        <InputBox key={0}>
                             <InputLabel numberOfLines={1} >Фамилия</InputLabel>
-                            <Input value={lastName} onChange={(e) => this.handleChange(e, "lastName")} style={{fontSize: 12}}>Фамилия</Input>
+                            <Input value={lastName} onChange={(e) => this.handleChange(e, "lastName")}>Фамилия</Input>
                         </InputBox>
-                        <InputBox>
+                        <InputBox key={1}>
                             <InputLabel numberOfLines={1}>Имя</InputLabel>
                             <Input value={firstName} onChange={(e) => this.handleChange(e, "firstName")}>Имя</Input>
                         </InputBox>
-                        <InputBox>
+                        <InputBox key={2}>
                             <InputLabel numberOfLines={1}>Отчество</InputLabel>
                             <Input value={patronymic} onChange={(e) => this.handleChange(e, "patronymic")}>Отчество</Input>
                         </InputBox>
-                        <InputBox>
+                        <InputBox key={3}>
                             <InputLabel numberOfLines={1}>Email</InputLabel>
                             <Input value={email} onChange={(e) => this.handleChange(e, "email")}>Email</Input>
                         </InputBox>
-                        <InputBox>
+                        <InputBox key={4}>
                             <InputLabel numberOfLines={1}>Пароль</InputLabel>
                             <Input onChange={(e) => this.handleChange(e, "password")}>Пароль</Input>
                         </InputBox>
-                        <InputBox>
+                        <InputBox key={5}>
                             <InputLabel numberOfLines={1}>Повторите пароль</InputLabel>
                             <Input onChange={(e) => this.handleChange(e, "repassword")}>Повторите пароль</Input>
                         </InputBox>
@@ -120,7 +122,7 @@ class Content extends Component {
                 </User>
                 <Bottom>
                     <Button style={{ backgroundColor: blue }} color={'#fff'} onPress={this.apply}>
-                      <ButtonText>Сохранить изменения</ButtonText> 
+                        <ButtonText>Сохранить изменения</ButtonText>
                     </Button>
                 </Bottom>
             </Wrapper >
@@ -146,6 +148,12 @@ class Content extends Component {
         const { user } = this.props;
         this.setState({ user: { ...this.state.user, ...user } })
     }
+    selectImage = async (e) => {
+        console.log('select image')
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: false,
+        });
+    }
     handleChange = (e, unit) => {
         const { user } = this.state;
         const newUser = { ...user };
@@ -161,7 +169,7 @@ class Content extends Component {
     }
     apply = () => {
         const { user } = this.state
-        socket.emit('edit user', { ...this.props.user,  user })
+        socket.emit('edit user', { ...this.props.user, user })
     }
 }
 

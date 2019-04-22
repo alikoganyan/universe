@@ -1,14 +1,19 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, TextInput, ActionSheetIOS, Platform, Dimensions } from 'react-native'
+import { View, Text, SafeAreaView, Image, TextInput, ActionSheetIOS, Platform, Dimensions, TouchableOpacity } from 'react-native'
 import { SmileIcon, FileIcon, CameraIcon, ImageIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
-import { ImagePicker, Permissions } from 'expo';
+import { ImagePicker, DocumentPicker, Permissions } from 'expo';
 import { p_send_file } from '../../constants/api'
 import sendRequest from '../../utils/request'
-const { socket, sidePaddingNumber } = helper;
+import posed from 'react-native-pose'
+const { socket, sidePaddingNumber, borderRadius, HeaderHeightNumber } = helper;
+const FilePickerPosed = posed.View({
+    visible: { bottom: 10 },
+    hidden: { bottom: -250 }
+});
 const Wrapper = styled(View)`
     background: white;
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
@@ -42,40 +47,81 @@ const Right = styled(View)`
     display: flex;
     flex-direction: row;
 `
-
+const FilePicker = styled(FilePickerPosed)`
+    background: white;
+    width: 90%;
+    height: ${Dimensions.get('window').height * 0.3}px;
+    position: absolute;
+    margin: 0 5%;
+    bottom: 10px;
+    border-radius: ${borderRadius};
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    z-index: 4;
+`
+const Shadow = styled(TouchableOpacity)`
+    position: absolute;
+    width: ${Dimensions.get('window').width};
+    height: ${Dimensions.get('window').height};
+    background: rgba(5,5,5,.3);
+    top: -${Dimensions.get('window').height - HeaderHeightNumber - 3};
+    z-index: 2;
+`
 class InputComponent extends Component {
     render() {
-        const { text } = this.state;
+        const { text, pickerOpened } = this.state;
         const { startSearch, stopSearch } = this.props;
         return (
-            <Wrapper>
-                <Left>
-                    <Input
-                        placeholder='Написать сообщение'
-                        onChangeText={e => this.handleChange(e)}
-                        onSubmitEditing={this.sendMessage}
-                        value={text}
-                        blurOnSubmit={false}
-                        autoFocus={true}
-                    />
-                </Left>
-                <Right>
-                    <ImageIcon
-                        onPress={this.pickImage}
-                    />
-                </Right>
-
-            </Wrapper>
+            <>
+                {pickerOpened && <Shadow onPress={() => this.setState({ pickerOpened: false })}></Shadow>}
+                <Wrapper>
+                    <Left>
+                        <Input
+                            placeholder='Написать сообщение'
+                            onChangeText={e => this.handleChange(e)}
+                            onSubmitEditing={this.sendMessage}
+                            value={text}
+                            blurOnSubmit={false}
+                            autoFocus={true}
+                        />
+                    </Left>
+                    <Right>
+                        <ImageIcon
+                            onPress={this.pickImage}
+                        />
+                    </Right>
+                </Wrapper>
+                <FilePicker pose={pickerOpened ? 'visible' : 'hidden'}>
+                    <TouchableOpacity onPress={this.selectPhoto}><Text>Фото или видео</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={this.selectFile}><Text>Файл</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={this.selectGeo}><Text>Мою локацию</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={this.discardSelect}><Text>Отменить</Text></TouchableOpacity>
+                </FilePicker>
+            </>
         )
     }
     state = {
         text: '',
         height: 0,
         image: null,
+        pickerOpened: false,
     }
     componentDidMount() {
         const { messages, addMessage } = this.props
     }
+    selectPhoto = async (e) => {
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: false,
+        });
+        console.log(result)
+    }
+    selectFile = async (e) => {
+        let result = await DocumentPicker.getDocumentAsync({});
+        console.log(result)
+    }
+    selectGeo = (e) => { }
+    discardSelect = (e) => { }
     sendMessage = (event) => {
         const { currentRoom, id, addMessage } = this.props;
         const { text } = this.state;
@@ -92,11 +138,9 @@ class InputComponent extends Component {
         const { image } = this.state
         const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         const { currentRoom, id, addMessage } = this.props;
-        let result = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: false,
-        });
+        this.setState({ pickerOpened: true })
         const form = new FormData();
-        form.append("photo", { uri: result.uri, name: 'image', type: 'image/jpeg' })
+        form.append("photo", { uri: 'result.uri', name: 'image', type: 'image/jpeg' })
         console.log(form)
         if (!result.cancelled) {
             sendRequest({
