@@ -18,7 +18,6 @@ class Content extends Component {
         const reversedMessages = [...messages].sort((x, y) => {
             return x.timeSent < y.timeSent
         });
-        console.log(messages)
         return (
             <SafeAreaView>
                 <Wrapper search={search}>

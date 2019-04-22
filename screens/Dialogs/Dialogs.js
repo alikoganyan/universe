@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Header, Dialog } from './index'
 import { SafeAreaView } from '../../common'
 import { connect } from 'react-redux';
-import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
+import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/messageActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
@@ -51,6 +51,7 @@ class Dialogs extends Component {
     socket.on('need_update', e => {
       socket.emit('get_dialogs', { id: user._id })
     })
+    socket.on('dialog_opened', e => console.log(e))
   }
   componentWillUnmount() {
     socket.removeListener('update_dialogs');
@@ -127,10 +128,12 @@ class Dialogs extends Component {
     setDialogs(newDialogs)
   }
   toChat = e => {
-    const { setRoom, navigation, getMessages, user } = this.props
+    const { setRoom, setCurrentChat, navigation, getMessages, user } = this.props
     const roomId = e.room.split('_').filter(e => e != user._id)[0]
     setRoom(roomId)
+    setCurrentChat(e.room)
     getMessages(e.messages);
+    socket.emit('view', { room: e.room, viewer: roomId })
     navigation.navigate('Chat')
   }
   toGroup = e => {
@@ -153,6 +156,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   getMessages: _ => dispatch(getMessages(_)),
   setRoom: _ => dispatch(setRoom(_)),
+  setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   addMessage: _ => dispatch(addMessage(_)),
   setAllUsers: _ => dispatch(setAllUsers(_))
