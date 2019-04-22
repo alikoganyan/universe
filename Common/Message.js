@@ -4,14 +4,14 @@ import styled from 'styled-components'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../assets/index'
 import { connect } from 'react-redux'
 const { HeaderHeightNumber, Colors } = helper;
-
+const { myMessage, interlocatorMessage } = Colors
 const MyMessage = styled(View)`
     display: flex;
     justify-content: flex-end;
     text-align: right;
     margin: 5px 10px;
     align-self: stretch;
-    background: #3776F9;
+    background: ${({ background }) => background || myMessage};
     border-radius: 3;
     max-width: 80%;
     margin-left: 20%;
@@ -32,7 +32,7 @@ const InterlocutorsMessage = styled(MyMessage)`
     flex-direction: column;
     text-align: left;
     align-items: flex-start;
-    background: #F6F6F6;
+    background: ${({ background }) => background || interlocatorMessage};
     margin-left: 10px;
     position: relative;
     left: -10px;
@@ -74,24 +74,24 @@ const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
 }
 function Message(props) {
-    const { children, messages, myId } = props
+    const { children, messages, myId, background } = props
     const { text, sender, src, type, width, height } = children;
     console.log(`http://ser.multiverse.plus/api${src}`)
     if (type === 'image') {
         return (myId == sender ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <MyMessage>
+                <MyMessage background={background}>
                     <MyMessageImage source={{ uri: `http://ser.multiverse.plus${src}` }} width={width} height={height} />
                     <MessageInfo>
                         <MessageDate color={'white'}>1:40</MessageDate>
                         <Indicator color={'white'} />
                     </MessageInfo>
                 </MyMessage>
-                <TriangleLeftIcon color={'#3776F9'} />
+                <TriangleLeftIcon color={myMessage} />
             </ View>
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <TriangleRightIcon color={'#F6F6F6'} />
-                <InterlocutorsMessage>
+                <TriangleRightIcon color={interlocatorMessage} />
+                <InterlocutorsMessage background={background}>
                     <MyMessageImage source={{ uri: src }} />
                     <MessageInfo>
                         <MessageDate>1:40</MessageDate>
@@ -99,10 +99,10 @@ function Message(props) {
                 </InterlocutorsMessage>
             </ View>
         )
-    }else {
+    } else {
         return (myId == sender ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <MyMessage>
+                <MyMessage background={background}>
                     <MyMessageText>
                         {text}
                     </MyMessageText>
@@ -111,11 +111,11 @@ function Message(props) {
                         <Indicator color={'white'} />
                     </MessageInfo>
                 </MyMessage>
-                <TriangleLeftIcon color={'#3776F9'} />
+                <TriangleLeftIcon color={background || myMessage} />
             </ View>
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <TriangleRightIcon color={'#F6F6F6'} />
-                <InterlocutorsMessage>
+                <TriangleRightIcon color={background || interlocatorMessage} />
+                <InterlocutorsMessage background={background || interlocatorMessage}>
                     <InterlocutorsMessageText>
                         {text}
                     </InterlocutorsMessageText>

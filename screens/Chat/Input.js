@@ -28,7 +28,7 @@ const Wrapper = styled(View)`
     border-radius: 5;
     border-width: 1;
     border-color: #ddd;
-    border-bottom-width: 2;
+    border-bottom-width: 1;
 `
 const Input = styled(TextInput)`
     font-size: 15px;
@@ -49,10 +49,10 @@ const Right = styled(View)`
 `
 const FilePicker = styled(FilePickerPosed)`
     background: white;
-    width: 90%;
+    width: 94%;
     height: ${Dimensions.get('window').height * 0.3}px;
     position: absolute;
-    margin: 0 5%;
+    margin: 0 3%;
     bottom: 10px;
     border-radius: ${borderRadius};
     display: flex;
