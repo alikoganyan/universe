@@ -48,7 +48,7 @@ const Right = styled(View)`
     flex-direction: row;
     align-items: flex-end;
     justify-content: flex-end;
-    margin-right: ${sidePadding};
+    margin-left: ${sidePadding};
 `
 const Categories = styled(Header)`
     display: flex;

@@ -44,7 +44,7 @@ const AnimatedArrowWrapper = posed.View({
     right: { rotate: "-90deg", }
 });
 const Wrapper = styled(View)`
-    padding-top: 0px;
+    padding: 0;
     background: white;
     margin-bottom: 40px;
     
@@ -118,10 +118,10 @@ const Options = styled(View)`
 const Option = styled(Text)`
     color: ${({ active }) => active ? black : 'white'};
     background: ${({ active }) => active ? 'white' : 'transparent'};
-    min-width: 20%;
+    min-width: 30%;
     margin: 1px;
     border-radius: 10;
-    padding: 2px 10px;
+    padding: 3px 10px;
     overflow: hidden;
     text-align: center;
 `
