@@ -13,7 +13,6 @@ const { grey2, blue } = Colors;
 const Wrapper = styled(View)`
     padding-top: 30px;
     background: white;
-    height: ${Dimensions.get('window').height - HeaderHeightNumber}px;
 `
 const User = styled(View)`
     display: flex;
@@ -54,11 +53,11 @@ const InputLabel = styled(Text)`
     margin-right: 15px;
 `
 const Bottom = styled(View)`
-    bottom: 30;
+    margin-top: 30px;
+    margin-bottom: ${HeaderHeightNumber}px;
     width: 60%;
     display: flex;
     align-self: center;
-    position: absolute;
     justify-content: center;
     background: white;
 `
@@ -90,7 +89,7 @@ class Content extends Component {
         return (
             <Wrapper>
                 <User >
-                    <TouchableOpacity onPress={this.selectImage}>
+                    <TouchableOpacity onPress={(this.selectImage)}>
                         <UserImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
                     </TouchableOpacity>
                     <UserInfo>
@@ -149,10 +148,10 @@ class Content extends Component {
         this.setState({ user: { ...this.state.user, ...user } })
     }
     selectImage = async (e) => {
-        console.log('select image')
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
+        console.log({result})
     }
     handleChange = (e, unit) => {
         const { user } = this.state;

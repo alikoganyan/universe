@@ -25,7 +25,7 @@ const Shadow = styled(TouchableOpacity)`
     height: ${Dimensions.get('window').height};
     background: rgba(5,5,5,.3);
     top: -${HeaderHeightNumber - 3}px;
-    z-index: 1;
+    z-index: 4;
 `
 const MessageOptions = styled(MessageOptionsPosed)`
     background: white;
@@ -50,9 +50,9 @@ class Content extends Component {
         return (
             <>
                 <Wrapper search={search} >
-                    {selectedMessage && <Shadow onPress={this.unselect} style={{ zIndex: 2 }} />}
+                    {selectedMessage && <Shadow onPress={this.unselect}  />}
                     <Animated.FlatList
-                        style={{ paddingRight: 5, paddingLeft: 5, zIndex: 5 }}
+                        style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                         inverted={true}
                         data={reversedMessages}
