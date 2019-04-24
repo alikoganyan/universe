@@ -11,7 +11,7 @@ import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { connect } from 'react-redux'
-const { Colors, socket, sidePadding } = helper;
+const { Colors, socket, sidePadding, sidePaddingNumber } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
@@ -111,19 +111,29 @@ const Options = styled(View)`
     background: ${green};
     flex-direction: row;
     justify-content: space-between;
-    padding: 1px;
     border-radius: 13;
     overflow: hidden;
+    width: ${100 - sidePaddingNumber/2}%;
+    margin-left: ${sidePaddingNumber};
+    margin-right: ${sidePaddingNumber};
 `
 const Option = styled(Text)`
     color: ${({ active }) => active ? black : 'white'};
     background: ${({ active }) => active ? 'white' : 'transparent'};
-    min-width: 20%;
-    margin: 1px;
-    border-radius: 10;
-    padding: 2px 10px;
+    border: ${({ active }) => active ? '1px rgba(0, 0, 0, 0.1) solid' : '0'};
+    border:5px 10px 5px 10px;
+    border-color: ${({ active }) => active ? 'rgba(0, 0, 0, 0.1)' : 'transparent'};
+    border-style: solid;
+    min-width: 30%;
+    border-radius: 15;
+    padding: 4px 10px 3px;
     overflow: hidden;
     text-align: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    height: 28px;
 `
 const Group = styled(BoxInnerItem)`
     justify-content: flex-start;
