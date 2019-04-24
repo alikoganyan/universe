@@ -31,10 +31,12 @@ import {
   TasksList,
   NewContact,
   FirstInstall,
+  NewTask,
   NewFeed,
   SplashScreen,
   NewFeedParticipants,
   ProfileEdit,
+  NewTaskReceivers,
 
 } from './screens'
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
@@ -103,8 +105,10 @@ const AppStackNavigator = createStackNavigator(
     NewDialog: { screen: NewDialog },
     FirstInstall: { screen: FirstInstall },
     NewFeed: { screen: NewFeed },
+    NewTask: { screen: NewTask },
     NewFeedParticipants: { screen: NewFeedParticipants },
     ProfileEdit: { screen: ProfileEdit },
+    NewTaskReceivers: { screen: NewTaskReceivers },
   },
   {
     initialRouteName: 'Login',

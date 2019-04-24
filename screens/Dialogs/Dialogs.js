@@ -133,7 +133,7 @@ class Dialogs extends Component {
     setRoom(roomId)
     setCurrentChat(e.room)
     getMessages(e.messages);
-    socket.emit('view', { room: e.room, viewer: roomId })
+    socket.emit('view', { room: e.room, viewer: user._id })
     navigation.navigate('Chat')
   }
   toGroup = e => {

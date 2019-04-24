@@ -193,7 +193,7 @@ class Content extends Component {
                 navigate('Dialogs')
             },
             failFunc: (err) => {
-                console.log(err)
+                console.log({err})
                 let { phone_number, password } = err
                 this.setState({
                     loading: false,

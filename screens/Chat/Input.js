@@ -74,7 +74,7 @@ class InputComponent extends Component {
         const { startSearch, stopSearch } = this.props;
         return (
             <>
-                {pickerOpened && <Shadow onPress={() => this.setState({ pickerOpened: false })}></Shadow>}
+                {pickerOpened && <Shadow activeOpacity={1} onPress={this.unselect} />}
                 <Wrapper>
                     <Left>
                         <Input
@@ -109,6 +109,9 @@ class InputComponent extends Component {
     }
     componentDidMount() {
         const { messages, addMessage } = this.props
+    }
+    unselect = (e) => {
+        this.setState({ pickerOpened: false })
     }
     selectPhoto = async (e) => {
         let result = await ImagePicker.launchImageLibraryAsync({

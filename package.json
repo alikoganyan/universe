@@ -56,6 +56,7 @@
     "react-native-switch-toggle": "^1.0.8",
     "react-native-tab-view": "^2.0.1",
     "react-native-touch-id": "^4.4.1",
+    "react-native-ui-xg": "^0.0.6",
     "react-native-vector-icons": "^6.3.0",
     "react-navigation": "^3.3.2",
     "react-navigation-redux-helpers": "^3.0.0",

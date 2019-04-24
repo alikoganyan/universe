@@ -112,7 +112,7 @@ class Content extends Component {
         return (
             <SafeAreaView>
                 <Wrapper>
-                    {pickerOpened && <Shadow onPress={this.pickerClose}></Shadow>}
+                    {pickerOpened && <Shadow activeOpacity={1} onPress={this.pickerClose}></Shadow>}
                     <FlatList
                         style={{ paddingRight: 5, paddingLeft: 5, marginBottom: 10 }}
                         ListHeaderComponent={<View style={{ margin: 10, }} />}

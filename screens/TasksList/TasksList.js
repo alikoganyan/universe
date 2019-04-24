@@ -14,7 +14,7 @@ export default class Tasks extends Component {
     return (
       <SafeAreaView>
         <Wrapper>
-          <Header back={this.navigateBack}/>
+          <Header navigate={this.navigate} back={this.navigateBack} />
           <Content />
         </Wrapper>
       </SafeAreaView>
@@ -22,10 +22,12 @@ export default class Tasks extends Component {
   }
   navigateBack = () => {
     this.props.navigation.goBack()
-}
-  componentDidMount() { }
-  toChat = () => {
-    this.props.navigation.navigate('Chat')
+  }
+  componentDidMount() { 
+  }
+  navigate = (e) => {
+    console.log(e)
+    this.props.navigation.navigate(e)
   }
   toGroup = () => {
     this.props.navigation.navigate('Group')

@@ -10,6 +10,13 @@ import RoundCheckbox from 'rn-round-checkbox';
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import sendRequest from '../../utils/request'
+import { g_users } from '../../constants/api'
+import { setContacts, setAllUsers } from '../../actions/userActions'
+import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
+import { setDialogs } from '../../actions/dialogsActions'
+import { connect } from 'react-redux'
+
 
 const { Colors } = helper;
 const { green, black } = Colors;
@@ -130,7 +137,7 @@ const GroupInfo = styled(ContactInfo)``
 const GroupTitle = styled(ContactName)``
 const GroupParticipants = styled(ContactRole)``
 const GroupImage = styled(ContactImage)``
-export default class Settings extends Component {
+class Content extends Component {
     render() {
         const { users, collapsed, options, groups } = this.state;
         const { department } = users;
@@ -171,11 +178,11 @@ export default class Settings extends Component {
                                                 <Collapsible collapsed={collapsed[i] || false}>
                                                     <BoxInner>
                                                         {
-                                                            e.workers.map((e, i) => <BoxInnerItem key={i}>
+                                                            e.workers.map((e, i) => <BoxInnerItem key={e._id}>
                                                                 <ContactImage />
                                                                 <ContactInfo>
-                                                                    <ContactName>{e.name}</ContactName>
-                                                                    <ContactRole>{e.role}</ContactRole>
+                                                                    <ContactName>{e.name || e.phone_number}</ContactName>
+                                                                    <ContactRole>{e.role || 'no role'}</ContactRole>
                                                                 </ContactInfo>
                                                             </BoxInnerItem>)
                                                         }
@@ -215,19 +222,7 @@ export default class Settings extends Component {
             department: [
                 {
                     title: 'Отдел длинных корпоративных названий',
-                    workers: [
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                    ],
-                },
-                {
-                    title: 'Отдел коротких корпоративных названий',
-                    workers: [
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                    ],
+                    workers: [],
                 },
             ],
         },
@@ -249,6 +244,27 @@ export default class Settings extends Component {
             { title: 'длинное корпоративное название группы', participants: 15 },
             { title: 'длинное корпоративное название группы', participants: 15 },
         ]
+    }
+    componentDidMount() {
+        const newDCollapsed = [...this.state.collapsed]
+        for (let i = 0; i <= this.state.users.department.length; i++) {
+            newDCollapsed.push(false)
+        }
+        this.setState({ collapsed: newDCollapsed })
+        sendRequest({
+            r_path: g_users,
+            method: 'get',
+            success: (res) => {
+                this.props.setContacts(res)
+                const newUsers = { ...this.state.users }
+                newUsers.department[0].workers = res
+                this.setState({ users: newUsers })
+                console.log(newUsers)
+            },
+            failFunc: (err) => {
+                console.log({ err })
+            }
+        })
     }
     optionLeft = () => {
         const newState = { ...this.state.options }
@@ -274,16 +290,30 @@ export default class Settings extends Component {
         newDCollapsed[i] = true;
         this.setState({ collapsed: newDCollapsed })
     }
-    componentDidMount() {
-        const newDCollapsed = [...this.state.collapsed]
-        for (let i = 0; i <= this.state.users.department.length; i++) {
-            newDCollapsed.push(false)
-        }
-        this.setState({ collapsed: newDCollapsed })
-    }
     selectOption = (e) => {
         const newState = { ...this.state.options }
         newState.active = e;
         this.setState({ options: newState })
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        messages: state.messageReducer,
+        dialog: state.dialogsReducer.dialogs,
+        currentRoom: state.messageReducer.currentRoom,
+        currentChat: state.messageReducer.currentChat,
+        user: state.userReducer.user,
+        users: state.userReducer
+    };
+};
+const mapDispatchToProps = dispatch => ({
+    getMessages: _ => dispatch(getMessages(_)),
+    setRoom: _ => dispatch(setRoom(_)),
+    setDialogs: _ => dispatch(setDialogs(_)),
+    addMessage: _ => dispatch(addMessage(_)),
+    setAllUsers: _ => dispatch(setAllUsers(_)),
+    setContacts: _ => dispatch(setContacts(_))
+
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

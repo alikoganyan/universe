@@ -6,26 +6,34 @@ import FloatingLabel from 'react-native-floating-labels'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
-import { ImageComponent } from '../../common'
+import RoundCheckbox from 'rn-round-checkbox';
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
+import sendRequest from '../../utils/request'
+import { g_users } from '../../constants/api'
+import { setContacts, setAllUsers } from '../../actions/userActions'
+import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
+import { addReceiver, setReceivers } from '../../actions/tasksActions'
+import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
-const { Colors, socket, sidePadding, sidePaddingNumber } = helper;
+
+
+const { Colors } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
-        x: 0,
+        x: Dimensions.get('window').width,
         transition: { duration: 300, ease: 'easeOut' }
     },
     center: {
-        x: -Dimensions.get('window').width,
+        x: 0,
         transition: { duration: 300, ease: 'easeOut' },
     },
 
 
     right: {
-        x: -Dimensions.get('window').width * 2,
+        x: -Dimensions.get('window').width,
         transition: { duration: 300, ease: 'easeOut' }
     },
 
@@ -44,17 +52,16 @@ const AnimatedArrowWrapper = posed.View({
     right: { rotate: "-90deg", }
 });
 const Wrapper = styled(View)`
-    padding: 0 ${sidePadding};
+    padding-top: 0px;
     background: white;
-    margin-bottom: 40px;
+    margin-bottom: 110px;
     
 `
 const ContactList = styled(ScrollView)`
-    padding: 20px;
+    padding: 30px;
     padding-bottom: 10px;
-    max-width: ${Dimensions.get('window').width - sidePaddingNumber * 2}px;
+    max-width: ${Dimensions.get('window').width};
     overflow: hidden;
-    margin-left: ${sidePaddingNumber}px;
     flex: 1;
 `
 const Box = styled(View)`
@@ -71,7 +78,8 @@ const BoxTitle = styled(TouchableOpacity)`
     align-items: flex-start;
 `
 const BoxInner = styled(AnimatedBox)`
-    padding-bottom: 20px;
+    padding: 20px 0;
+    padding-top: 20px;
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
@@ -80,10 +88,9 @@ const BoxInner = styled(AnimatedBox)`
 const BoxItem = styled(Text)`
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     color: #A7B0BA;
-    flex: 1;
 `
 const BoxInnerItem = styled(View)`
-    padding: 20px 5px;
+    padding: 10px;
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     display: flex;
     flex-direction: row;
@@ -112,102 +119,92 @@ const Options = styled(View)`
     background: ${green};
     flex-direction: row;
     justify-content: space-between;
-    padding: 1px 2px;
-    border-radius: 14;
+    padding: 1px;
+    border-radius: 13;
     overflow: hidden;
 `
 const Option = styled(Text)`
     color: ${({ active }) => active ? black : 'white'};
     background: ${({ active }) => active ? 'white' : 'transparent'};
-    min-width: 30%;
-    margin: 1px 0;
-    border-radius: 13;
-    padding: 3px 10px;
+    min-width: 20%;
+    margin: 1px;
+    border-radius: 10;
+    padding: 2px 10px;
     overflow: hidden;
     text-align: center;
 `
-const Group = styled(BoxInnerItem)`
-    justify-content: flex-start;
-    flex: 1;
-    padding-left: 0;
-    padding-right: 0;
-`
-const GroupInfo = styled(ContactInfo)`
-    flex: 1;
-`
+const Group = styled(BoxInnerItem)``
+const GroupInfo = styled(ContactInfo)``
 const GroupTitle = styled(ContactName)``
 const GroupParticipants = styled(ContactRole)``
 const GroupImage = styled(ContactImage)``
 class Content extends Component {
     render() {
-        const { allUsers, users, collapsed, options, groups } = this.state;
+        const { users, collapsed, options, groups } = this.state;
         const { department } = users;
         const { active } = options;
         return (
             <SafeAreaView>
-                <Wrapper>
-                    <KeyboardAwareScrollView enableOnAndroid>
-                        <GestureRecognizer
-                            onSwipeLeft={this.optionLeft}
-                            onSwipeRight={this.optionRight}
-                        >
+                <GestureRecognizer
+                    onSwipeLeft={this.optionLeft}
+                    onSwipeRight={this.optionRight}
+                >
+
+                    <Wrapper>
+                        <KeyboardAwareScrollView enableOnAndroid>
                             <Options>
-                                {options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                                    <Option active={active % 3 === i}>{e}</Option>
-                                </TouchableOpacity>)
+                                {
+                                    options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+                                        <Option active={active % 3 === i}>{e}</Option>
+                                    </TouchableOpacity>)
                                 }
                             </Options>
                             <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
-                                <ContactList style={{ width: '100%' }}>
+                                <ContactList>
+                                    {
+                                        department.map((e, i) => (
+                                            <Box key={i} last={i === department.length - 1}>
+                                                <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
+                                                    <>
+                                                        <RoundCheckbox
+                                                            size={24}
+                                                            checked={this.state.isSelected}
+                                                        />
+                                                        <BoxItem title={true}>{e.title}</BoxItem>
+                                                    </>
+                                                    <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
+                                                        <ArrowDownIcon />
+                                                    </ArrowWrapper>
+                                                </BoxTitle>
+                                                <Collapsible collapsed={collapsed[i] || false}>
+                                                    <BoxInner>
+                                                        {
+                                                            e.workers.map((e, i) => <TouchableOpacity onPress={() => this.addReceiver(e)}>
+                                                                <BoxInnerItem key={e._id}>
+                                                                    <ContactImage />
+                                                                    <ContactInfo>
+                                                                        <ContactName>{e.name || e.phone_number}</ContactName>
+                                                                        <ContactRole>{e.role || 'no role'}</ContactRole>
+                                                                    </ContactInfo>
+                                                                </BoxInnerItem>
+                                                            </TouchableOpacity>)
+                                                        }
+                                                    </BoxInner>
+                                                </Collapsible>
+                                            </Box>
+                                        ))
+                                    }
+                                </ContactList>
+                                <ContactList>
                                     <FlatList
                                         style={{ paddingRight: 5, paddingLeft: 5, }}
-                                        ListHeaderComponent={<View style={{ margin: 35, }} />}
-                                        inverted={true}
-                                        data={allUsers}
-                                        renderItem={({ item }) => <Group>
-                                            <ImageComponent size={"xs"} style={{ marginRight: sidePadding }} source={{ uri: item.uri }} />
-                                            <GroupInfo>
-                                                <GroupTitle numberOfLines={1}>{item.name}</GroupTitle>
-                                            </GroupInfo>
-                                        </Group>
-                                        }
-                                        keyExtractor={(item, index) => index.toString()}
-                                    />
-                                </ContactList>
-                                <ContactList>
-                                    {department.map((e, i) => (
-                                        <Box key={i} last={i === department.length - 1}>
-                                            <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                                <BoxItem numberOfLines={1} title={true}>{e.title}</BoxItem>
-                                                <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                                                    <ArrowDownIcon />
-                                                </ArrowWrapper>
-                                            </BoxTitle>
-                                            <Collapsible collapsed={collapsed[i] || false}>
-                                                <BoxInner>
-                                                    {e.workers.map((e, i) => <BoxInnerItem key={i}>
-                                                        <ContactImage />
-                                                        <ContactInfo>
-                                                            <ContactName>{e.name}</ContactName>
-                                                            <ContactRole>{e.role}</ContactRole>
-                                                        </ContactInfo>
-                                                    </BoxInnerItem>)
-                                                    }
-                                                </BoxInner>
-                                            </Collapsible>
-                                        </Box>
-                                    ))}
-                                </ContactList>
-                                <ContactList>
-                                    <FlatList
-                                        style={{ paddingLeft: sidePadding, }}
                                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                                         inverted={true}
                                         data={groups}
                                         renderItem={({ item }) => <Group>
                                             <GroupImage />
                                             <GroupInfo>
-                                                <GroupTitle numberOfLines={1}>{item.title}</GroupTitle>
+                                                <GroupTitle>{item.title}</GroupTitle>
                                                 <GroupParticipants>{item.participants} участников</GroupParticipants>
                                             </GroupInfo>
                                         </Group>
@@ -216,9 +213,9 @@ class Content extends Component {
                                     />
                                 </ContactList>
                             </Animated>
-                        </GestureRecognizer>
-                    </KeyboardAwareScrollView>
-                </Wrapper>
+                        </KeyboardAwareScrollView>
+                    </Wrapper>
+                </GestureRecognizer>
             </SafeAreaView>
         )
     }
@@ -228,15 +225,7 @@ class Content extends Component {
             department: [
                 {
                     title: 'Отдел длинных корпоративных названий',
-                    workers: [
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                    ],
-                },
-                {
-                    title: 'Отдел коротких корпоративных названий',
-                    workers: [
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                    ],
+                    workers: [],
                 },
             ],
         },
@@ -250,33 +239,53 @@ class Content extends Component {
         },
         groups: [
             { title: 'длинное корпоративное название группы', participants: 15 },
-        ],
-        allUsers: [
-            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
+            { title: 'длинное корпоративное название группы', participants: 15 },
+            { title: 'длинное корпоративное название группы', participants: 15 },
+            { title: 'длинное корпоративное название группы', participants: 15 },
+            { title: 'длинное корпоративное название группы', participants: 15 },
+            { title: 'длинное корпоративное название группы', participants: 15 },
+            { title: 'длинное корпоративное название группы', participants: 15 },
+            { title: 'длинное корпоративное название группы', participants: 15 },
         ]
     }
     componentDidMount() {
-        const { user, users } = this.props;
-
-        socket.emit('get users', { id: user.id })
-
-        const newCollapsed = [...this.state.collapsed]
+        const newDCollapsed = [...this.state.collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
-            newCollapsed.push(false)
+            newDCollapsed.push(false)
         }
-        this.setState({ collapsed: newCollapsed })
+        this.setState({ collapsed: newDCollapsed })
+        sendRequest({
+            r_path: g_users,
+            method: 'get',
+            success: (res) => {
+                this.props.setContacts(res)
+                const newUsers = { ...this.state.users }
+                newUsers.department[0].workers = res
+                this.setState({ users: newUsers })
+            },
+            failFunc: (err) => {
+                console.log({ err })
+            }
+        })
     }
     optionLeft = () => {
         const newState = { ...this.state.options }
         const length = this.state.options.options.length
         newState.active = this.state.options.active < length - 1 ? this.state.options.active + 1 : 0;
         this.setState({ options: newState })
+
     }
     optionRight = () => {
         const newState = { ...this.state.options }
         const length = this.state.options.options.length
         newState.active = this.state.options.active > 0 ? this.state.options.active - 1 : length - 1;
         this.setState({ options: newState })
+
+    }
+    addReceiver = (e) => {
+        const { addReceiver, back } = this.props;
+        addReceiver(e)
+        back()
     }
     collapseDepartment = (i) => {
         const newDCollapsed = [...this.state.collapsed]
@@ -300,8 +309,9 @@ const mapStateToProps = state => {
         messages: state.messageReducer,
         dialog: state.dialogsReducer.dialogs,
         currentRoom: state.messageReducer.currentRoom,
+        currentChat: state.messageReducer.currentChat,
         user: state.userReducer.user,
-        users: state.userReducer,
+        users: state.userReducer
     };
 };
 const mapDispatchToProps = dispatch => ({
@@ -309,6 +319,10 @@ const mapDispatchToProps = dispatch => ({
     setRoom: _ => dispatch(setRoom(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
     addMessage: _ => dispatch(addMessage(_)),
-    setAllUsers: _ => dispatch(setAllUsers(_))
+    setAllUsers: _ => dispatch(setAllUsers(_)),
+    setContacts: _ => dispatch(setContacts(_)),
+    addReceiver: _ => dispatch(addReceiver(_)),
+    setReceivers: _ => dispatch(setReceivers(_)),
+
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)
