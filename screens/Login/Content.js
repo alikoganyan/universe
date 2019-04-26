@@ -65,7 +65,7 @@ const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
     border-width: 0;
     border-bottom-width: 1px;
-    padding-bottom: 10px;
+    padding-bottom: ${Platform.OS === 'ios' ? 11 : 6}px;
     text-align: center;
     margin-bottom: 10px;
     ${({ style }) => style};
@@ -106,7 +106,7 @@ class Content extends Component {
                 Номер телефона задан некорректно
                 </Error>}
             <PhoneNumber>
-                <Input style={{ width: '20%', }}
+                <Input style={{ width: '20%' }}
                     inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
                     keyboardType={'phone-pad'}
                     value={country}
@@ -163,7 +163,6 @@ class Content extends Component {
             })
             setTimeout(() => navigate('Dialogs'), 0)
         }
-        this.login() //remove
     }
     storeUserData = async (user) => {
         try {
@@ -194,10 +193,10 @@ class Content extends Component {
                 navigate('Dialogs')
             },
             failFunc: (err) => {
-                console.log({err})
                 let { phone_number, password } = err
                 this.setState({
                     loading: false,
+                    error: true,
                     invalidPhone: phone_number || null,
                     invalidPassword: password || null
                 })

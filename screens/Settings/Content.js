@@ -6,11 +6,13 @@ import SwitchToggle from 'react-native-switch-toggle';
 import helper from '../../utils/helpers'
 import posed from 'react-native-pose'
 import { connect } from 'react-redux'
+import { socket } from '../../utils/socket'
+
 const { Colors, sidePaddingNumber, fontSize, borderRadius, HeaderHeightNumber } = helper;
 const { lightGrey1, blue, lightBlue, grey2 } = Colors;
 const FilePickerPosed = posed.View({
-    visible: { bottom: -40 },
-    hidden: { bottom: -250 }
+    visible: { bottom: -230 },
+    hidden: { bottom: -500 }
 });
 const Wrapper = styled(View)`
     padding-top: 0px;
@@ -63,11 +65,11 @@ const FilePicker = styled(FilePickerPosed)`
     height: ${Dimensions.get('window').height * 0.3}px;
     position: absolute;
     margin: 0 3%;
-    bottom: 40px;
+    padding: 1% 7%;
     border-radius: ${borderRadius};
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-start;
     align-self: center;
     z-index: 4;
 `
@@ -108,7 +110,6 @@ class Content extends Component {
         const { settings, switchOn, pickerOpened, langs } = this.state;
         const { user } = this.props;
         const { sound, language, notifications, contacts } = user;
-        console.log(Object.values(langs))
         return (
             <SafeAreaView>
                 <Wrapper>
@@ -153,7 +154,7 @@ class Content extends Component {
             ru: 'Русский',
             en: 'Английский'
         },
-        pickerOpened: true,
+        pickerOpened: false,
         settings: [
             { item: 'language', label: 'Язык', status: 'Русский', option: { type: 'link', value: 'изменить' } },
             { item: 'notifications', label: 'Уведомления', status: 'Включены', option: { type: 'toggle', value: 1 } },
@@ -197,8 +198,8 @@ class Content extends Component {
         settings.map(e => {
             setting.push({ item: e.item, value: !!e.option.value })
         })
-        // socket.emit('change settings', { setting, id: user.id })
-        // socket.emit('update user', { id: user.id })
+        socket.emit('change settings', { setting, id: user.id })
+        socket.emit('update user', { id: user.id })
     }
 }
 

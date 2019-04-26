@@ -10,7 +10,9 @@ import {
     ActionSheetProvider,
     connectActionSheet,
 } from '@expo/react-native-action-sheet';
+import { socket } from '../../utils/socket'
 import { Header, Content } from './'
+
 const { Colors, fontSize } = helper
 const { red } = Colors;
 const Wrapper = styled(View)`
@@ -63,7 +65,7 @@ class Profile extends Component {
     }
     toChat = () => {
         const { currentChat, user } = this.props
-        // socket.emit('select chat', { chatId: currentChat.id, userId: user.id })
+        socket.emit('select chat', { chatId: currentChat.id, userId: user.id })
         this.props.navigation.navigate('Chat')
 
     }

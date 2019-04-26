@@ -137,17 +137,10 @@ class Content extends Component {
         text: ''
     }
     componentDidMount() {
-        // socket.on('user exists', e => {
-        //     console.log(e)
-        // })
-        // socket.on('user created', e => {
-        //     this.props.forward()
-        // })
 
     }
     componentWillUpdate(){
-        // socket.removeListener('user exists');
-        // socket.removeListener('user created');
+        
     }
     addParticipant = () => {
         const { addParticipant } = this.props

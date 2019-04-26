@@ -8,6 +8,8 @@ import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { ImagePicker } from 'expo';
+import { socket } from '../../utils/socket'
+
 const { Colors, HeaderHeightNumber, fontSize } = helper;
 const { grey2, blue } = Colors;
 const Wrapper = styled(View)`
@@ -162,13 +164,13 @@ class Content extends Component {
     toChat = () => {
         const { toChat, setRoom, user } = this.props
         const { id } = user
-        // socket.emit('select chat', { chatId: id, userId: id })
+        socket.emit('select chat', { chatId: id, userId: id })
         setRoom(id)
         toChat()
     }
     apply = () => {
         const { user } = this.state
-        // socket.emit('edit user', { ...this.props.user, user })
+        socket.emit('edit user', { ...this.props.user, user })
     }
 }
 

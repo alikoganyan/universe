@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
+import { socket } from '../../utils/socket'
 
 const { sidePadding, sidePaddingNumber, Colors, HeaderHeightNumber, fontSize } = helper;
 const { border } = Colors;
@@ -152,7 +153,7 @@ class Content extends Component {
     toChat = () => {
         const { toChat, setRoom, user } = this.props
         const { id } = user
-        // socket.emit('select chat', { chatId: id, userId: id })
+        socket.emit('select chat', { chatId: id, userId: id })
         setRoom(id)
         toChat()
     }

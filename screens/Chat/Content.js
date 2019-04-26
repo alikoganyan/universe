@@ -33,11 +33,12 @@ const MessageOptions = styled(MessageOptionsPosed)`
     height: ${Dimensions.get('window').height * 0.3}px;
     position: absolute;
     margin: 0 3%;
+    padding: 2% 7%;
     bottom: 10px;
     border-radius: ${borderRadius};
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-start;
     z-index: 9999;
 `
 class Content extends Component {
@@ -50,7 +51,7 @@ class Content extends Component {
         return (
             <>
                 <Wrapper search={search} >
-                    {selectedMessage && <Shadow onPress={this.unselect} activeOpacity={1}/>}
+                    {selectedMessage && <Shadow onPress={this.unselect} activeOpacity={1} />}
                     <Animated.FlatList
                         style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
                         ListHeaderComponent={<View style={{ margin: 35, }} />}
@@ -58,22 +59,24 @@ class Content extends Component {
                         data={reversedMessages}
                         animated={true}
                         renderItem={({ item, index }) => {
-                            const background = item.sender === user._id ? '#2A51AD' : '#AEAEAE';
                             return <TouchableOpacity key={index} onLongPress={() => this.handleHold(item._id)}>
-                                <Message background={selectedMessage && selectedMessage !== item._id && background}>{item}</Message>
+                                <Message>{item}</Message>
                             </TouchableOpacity>
                         }}
                         keyExtractor={(item, index) => index.toString()}
                     />
                 </Wrapper>
                 <MessageOptions pose={selectedMessage ? 'visible' : 'hidden'}>
-                    <Text>123</Text>
+                    <TouchableOpacity><Text>Сделать задачей</Text></TouchableOpacity>
+                    <TouchableOpacity><Text>Редактировать</Text></TouchableOpacity>
+                    <TouchableOpacity><Text>Переслать</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={this.unselect}><Text>Отменить</Text></TouchableOpacity>
                 </MessageOptions>
             </>
         )
     }
     state = {
-        selectedMessage: 18,
+        selectedMessage: null,
     }
     componentDidMount() { }
     unselect = (e) => {

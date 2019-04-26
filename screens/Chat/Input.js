@@ -54,11 +54,12 @@ const FilePicker = styled(FilePickerPosed)`
     height: ${Dimensions.get('window').height * 0.3}px;
     position: absolute;
     margin: 0 3%;
+    padding: 2% 7%;
     bottom: 10px;
     border-radius: ${borderRadius};
     display: flex;
     justify-content: space-around;
-    align-items: center;
+    align-items: flex-start;
     z-index: 4;
 `
 const Shadow = styled(TouchableOpacity)`
@@ -97,7 +98,7 @@ class InputComponent extends Component {
                     <TouchableOpacity onPress={this.selectPhoto}><Text>Фото или видео</Text></TouchableOpacity>
                     <TouchableOpacity onPress={this.selectFile}><Text>Файл</Text></TouchableOpacity>
                     <TouchableOpacity onPress={this.selectGeo}><Text>Мою локацию</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={this.discardSelect}><Text>Отменить</Text></TouchableOpacity>
+                    <TouchableOpacity onPress={this.unselect}><Text>Отменить</Text></TouchableOpacity>
                 </FilePicker>
             </>
         )
@@ -145,7 +146,6 @@ class InputComponent extends Component {
         this.setState({ pickerOpened: true })
         const form = new FormData();
         form.append("photo", { uri: 'result.uri', name: 'image', type: 'image/jpeg' })
-        console.log(form)
         if (!result.cancelled) {
             sendRequest({
                 r_path: p_send_file,
@@ -161,7 +161,7 @@ class InputComponent extends Component {
                 },
                 success: (res) => {
                     console.log({ res })
-                    // socket.emit('file', { room: currentRoom })
+                    socket.emit('file', { room: currentRoom })
                     addMessage({
                         room: currentRoom,
                         sender: id,
@@ -171,7 +171,7 @@ class InputComponent extends Component {
                     })
                 },
                 failFunc: (err) => {
-                    console.log(err)
+                    console.log({err})
                 }
             })
 
