@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { TaskComponent, Message } from '../../common'
-const { HeaderHeightNumber, Colors, Feed, socket } = helper;
+const { HeaderHeightNumber, Colors, Feed } = helper;
 const { lightColor } = Colors
 const Wrapper = styled(View)`
     background: white;

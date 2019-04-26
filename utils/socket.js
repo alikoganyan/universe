@@ -1,14 +1,17 @@
 import io from 'socket.io-client'
-
+import { store } from '../reducers/store'
 const socketServer = 'http://ser.univ.team'
 const socketPath = '/socket.io'
-export var socket = null
+export let socket = null
 
 export const connectToSocket = () => {
     socket = io(socketServer, {
         path: socketPath,
         transports: ['polling'],
-        secure: true
+        secure: true,
+        query: {
+            token: 'Bearer ' + store.getState().userReducer.auth
+        }
     })
     if (socket) {
         socket.on('disconnect', (reason) => {
@@ -17,10 +20,13 @@ export const connectToSocket = () => {
             }
         })
         socket.on('connect', () => {
-            console.log('connect')
+            // console.log('connect')
         })
         socket.on('disconnect', (data) => {
-            console.log('disconnect')
+            // console.log('disconnect')
+        })
+        socket.on('error', (data) => {
+            console.log(data)
         })
         socket.on('reconnect_attempt', () => {
             socket.io.opts.transports = ['polling']

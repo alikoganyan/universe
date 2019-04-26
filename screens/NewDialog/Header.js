@@ -7,7 +7,7 @@ import { ImageComponent } from '../../common'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight, socket } = helper;
+const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
     background-color: ${Colors.background};
@@ -75,26 +75,26 @@ class HeaderComponent extends Component {
     }
     componentDidMount() {
         const { setDialogs } = this.props;
-        socket.on('find', ({ result }) => {
-            setDialogs(result)
-        })
+        // socket.on('find', ({ result }) => {
+        //     setDialogs(result)
+        // })
     }
     componentWillUpdate(){
-        socket.removeListener('find');
+        // socket.removeListener('find');
     }
     handleInputChange = (e) => {
         this.setState({ input: e })
-        e && socket.emit('find', { text: e })
+        // e && socket.emit('find', { text: e })
 
     }
     handleFocus = () => {
-        socket.emit('find')
+        // socket.emit('find')
         this.setState({ focused: true });
     }
     onBlur = () => {
         const { user } = this.props
         this.setState({ focused: false });
-        socket.emit('dialogs', { userId: user.id });
+        // socket.emit('dialogs', { userId: user.id });
         Keyboard.dismiss()
     }
 }

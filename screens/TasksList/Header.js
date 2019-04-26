@@ -36,6 +36,9 @@ const Right = styled(Left)`
 // `
 const MarginRight = styled(View)`
     margin-right:${sidePaddingNumber};
+    display: flex;
+    flex-direction: row;
+    align-items: center;
 `
 
 class HeaderComponent extends Component {
@@ -51,8 +54,9 @@ class HeaderComponent extends Component {
                     <Text>Задачи</Text>
                 </Left>
                 <Right>
-                    <MarginRight>
-                        <SearchIcon right />
+                    <MarginRight inline={true}>
+                        <SearchIcon />
+                        <AddIcon onPress={this.addTask}/>
                     </MarginRight>
                     <TouchableOpacity onPress={toProfile}>
                         <ImageComponent source={{ uri: image }} />
@@ -60,6 +64,10 @@ class HeaderComponent extends Component {
                 </Right>
             </Header>
         )
+    }
+    addTask = (e) => {
+        const { navigate } = this.props;
+        navigate('NewTask')
     }
 }
 const mapStateToProps = state => {

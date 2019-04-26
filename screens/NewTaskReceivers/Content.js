@@ -14,6 +14,7 @@ import sendRequest from '../../utils/request'
 import { g_users } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
+import { addReceiver, setReceivers } from '../../actions/tasksActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
 
@@ -178,13 +179,15 @@ class Content extends Component {
                                                 <Collapsible collapsed={collapsed[i] || false}>
                                                     <BoxInner>
                                                         {
-                                                            e.workers.map((e, i) => <BoxInnerItem key={e._id}>
-                                                                <ContactImage />
-                                                                <ContactInfo>
-                                                                    <ContactName>{e.name || e.phone_number}</ContactName>
-                                                                    <ContactRole>{e.role || 'no role'}</ContactRole>
-                                                                </ContactInfo>
-                                                            </BoxInnerItem>)
+                                                            e.workers.map((e, i) => <TouchableOpacity onPress={() => this.addReceiver(e)}>
+                                                                <BoxInnerItem key={e._id}>
+                                                                    <ContactImage />
+                                                                    <ContactInfo>
+                                                                        <ContactName>{e.name || e.phone_number}</ContactName>
+                                                                        <ContactRole>{e.role || 'no role'}</ContactRole>
+                                                                    </ContactInfo>
+                                                                </BoxInnerItem>
+                                                            </TouchableOpacity>)
                                                         }
                                                     </BoxInner>
                                                 </Collapsible>
@@ -259,7 +262,6 @@ class Content extends Component {
                 const newUsers = { ...this.state.users }
                 newUsers.department[0].workers = res
                 this.setState({ users: newUsers })
-                console.log(newUsers)
             },
             failFunc: (err) => {
                 console.log({ err })
@@ -279,6 +281,11 @@ class Content extends Component {
         newState.active = this.state.options.active > 0 ? this.state.options.active - 1 : length - 1;
         this.setState({ options: newState })
 
+    }
+    addReceiver = (e) => {
+        const { addReceiver, back } = this.props;
+        addReceiver(e)
+        back()
     }
     collapseDepartment = (i) => {
         const newDCollapsed = [...this.state.collapsed]
@@ -313,7 +320,9 @@ const mapDispatchToProps = dispatch => ({
     setDialogs: _ => dispatch(setDialogs(_)),
     addMessage: _ => dispatch(addMessage(_)),
     setAllUsers: _ => dispatch(setAllUsers(_)),
-    setContacts: _ => dispatch(setContacts(_))
+    setContacts: _ => dispatch(setContacts(_)),
+    addReceiver: _ => dispatch(addReceiver(_)),
+    setReceivers: _ => dispatch(setReceivers(_)),
 
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

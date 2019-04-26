@@ -29,7 +29,8 @@ import NewFeed from './NewFeed/NewFeed'
 import SplashScreen from './SplashScreen/SplashScreen'
 import NewFeedParticipants from './NewFeedParticipants/NewFeedParticipants'
 import ProfileEdit from './ProfileEdit/ProfileEdit'
-
+import NewTask from './NewTask/NewTask'
+import NewTaskReceivers from './NewTaskReceivers/NewTaskReceivers'
 export {
     Group,
     Dialogs,
@@ -62,4 +63,6 @@ export {
     SplashScreen,
     NewFeedParticipants,
     ProfileEdit,
+    NewTask,
+    NewTaskReceivers,
 }

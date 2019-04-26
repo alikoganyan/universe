@@ -4,12 +4,13 @@ import styled from 'styled-components'
 import { Header, Dialog } from './index'
 import { SafeAreaView } from '../../common'
 import { connect } from 'react-redux';
-import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
+import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/messageActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
+import { socket } from '../../utils/socket'
 
-const { sidePaddingNumber, HeaderHeightNumber, socket } = helper;
+const { sidePaddingNumber, HeaderHeightNumber } = helper;
 const Wrapper = styled(View)`
   height: 100%;
 `
@@ -20,7 +21,7 @@ const StyledFlatList = styled(FlatList)`
 class Dialogs extends Component {
 
   render() {
-    const { user } = this.props
+    const { dialogs } = this.props
     const { FlatListData } = this.state;
     return (
       <SafeAreaView behavior={'padding'}>
@@ -29,9 +30,12 @@ class Dialogs extends Component {
           <StyledFlatList
             ListHeaderComponent={<View style={{ margin: 30, }} />}
             ref={(ref) => { this.flatList = ref; }}
-            data={FlatListData}
+            data={dialogs}
             keyboardShouldPersistTaps={'handled'}
-            renderItem={({ item, index }) => <Dialog lastMessage={item.messages} onClick={() => this.toChat(item)} title={item.title || item.room} item={item}>{item.text}</Dialog>}
+            renderItem={({ item }) => {
+              console.log(item)
+              return <Dialog lastMessage={item.messages} onClick={() => this.toChat(item)} title={item.title || item.room} item={item}>{item.text}</Dialog>
+            }}
             keyExtractor={(item, index) => index.toString()}
           />
         </Wrapper>
@@ -41,40 +45,26 @@ class Dialogs extends Component {
   state = {
     FlatListData: []
   }
-  async componentDidMount() {
-    const { user, addMessage } = this.props;
-    socket.on('update_dialogs', e => this.setState({ FlatListData: [...e] }))
+  componentDidMount() {
+    const { user, addMessage, setDialogs } = this.props;
+    socket.on('update_dialogs', e => {
+      setDialogs(e.dialogs)
+      console.log('update_dialogs', e.dialogs)
+    })
     socket.emit('get_dialogs', { id: user._id })
-    socket.on('new_message', e => addMessage({ ...e, text: e.message, date: new Date() }))
+    socket.on('new_message', e => {
+      console.log('new_message', e)
+
+      addMessage({ ...e, text: e.message, date: new Date() })
+    })
+    socket.on('new_dialogs', e => {
+      console.log('new_dialogs', e)
+    })
     socket.on('need_update', e => {
-      console.log('new need_update', e, { id: user._id })
+      console.log(e)
       socket.emit('get_dialogs', { id: user._id })
     })
-    // this.toChat({
-    //   "_id": 37,
-    //   "created_at": "2019-04-18T09:42:41.484Z",
-    //   "creator": 4,
-    //   "isGroup": false,
-    //   "messages": [
-    //     {
-    //       "_id": "5cb84691c2b4af555450e9dc",
-    //       "data": "",
-    //       "date": "2019-04-18T09:14:23.314Z",
-    //       "is_task": false,
-    //       "sender": 4,
-    //       "type": "image",
-    //       "src": "https://cloud.netlifyusercontent.com/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/242ce817-97a3-48fe-9acd-b1bf97930b01/09-posterization-opt.jpg",
-    //       "viewers": [],
-    //     },
-    //   ],
-    //   "name": "",
-    //   "participants": [
-    //     0,
-    //   ],
-    //   "photo": "",
-    //   "room": "4_0",
-    //   "updated_at": "2019-04-18T13:55:06.091Z",
-    // })
+    socket.on('dialog_opened', e => console.log(e))
   }
   componentWillUnmount() {
     socket.removeListener('update_dialogs');
@@ -93,17 +83,18 @@ class Dialogs extends Component {
     this.forceUpdate()
   }
   find = e => {
-    this.setState({ FlatListData: e.result })
+    setDialogs(e.result)
+
   }
   selectChat = e => {
     const { getMessages } = this.props;
     getMessages(e)
   }
   chatMessage = e => {
-    const { addMessage } = this.props
+    const { addMessage, dialogs } = this.props
     addMessage(e)
     const { FlatListData } = this.state
-    const newFlatListData = [...FlatListData]
+    const newFlatListData = [...dialogs]
     newFlatListData.sort((a, b) => {
       return new Date(a.lastMessage) - new Date(b.lastMessage)
     })
@@ -111,10 +102,10 @@ class Dialogs extends Component {
   }
   newMessage = e => {
     const { senderId, chatId } = e
-    const { user, currentChat } = this.props
+    const { user, currentChat, dialogs } = this.props
     const chat = chatId.split('room')[1].replace(/\_/, '').replace(senderId, '')
     const { FlatListData } = this.state
-    const newFlatListData = [...FlatListData]
+    const newFlatListData = [...dialogs]
     const index = newFlatListData.findIndex((event) => {
       return event.id === e.senderId
     })
@@ -128,7 +119,7 @@ class Dialogs extends Component {
     newFlatListData.sort((a, b) => {
       return new Date(b.lastMessage) - new Date(a.lastMessage)
     })
-    if (chat == user.id || senderId == user.id) this.setState({ FlatListData: newFlatListData })
+    if (chat == user.id || senderId == user.id) setDialogs(newFlatListData)
   }
   dialogs = e => {
     const { user } = this.props
@@ -147,13 +138,15 @@ class Dialogs extends Component {
     newDialogs.sort((x, y) => {
       return x.lastMessage < y.lastMessage
     });
-    this.setState({ FlatListData: newDialogs })
+    setDialogs(newDialogs)
   }
   toChat = e => {
-    const { setRoom, navigation, getMessages, user } = this.props
+    const { setRoom, setCurrentChat, navigation, getMessages, user } = this.props
     const roomId = e.room.split('_').filter(e => e != user._id)[0]
     setRoom(roomId)
+    setCurrentChat(e.room)
     getMessages(e.messages);
+    socket.emit('view', { room: e.room, viewer: user._id })
     navigation.navigate('Chat')
   }
   toGroup = e => {
@@ -166,7 +159,7 @@ class Dialogs extends Component {
 const mapStateToProps = state => {
   return {
     messages: state.messageReducer.messages,
-    dialog: state.dialogsReducer.dialogs,
+    dialogs: state.dialogsReducer.dialogs,
     currentRoom: state.messageReducer.currentRoom,
     currentChat: state.messageReducer.currentChat,
     user: state.userReducer.user,
@@ -176,6 +169,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => ({
   getMessages: _ => dispatch(getMessages(_)),
   setRoom: _ => dispatch(setRoom(_)),
+  setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   addMessage: _ => dispatch(addMessage(_)),
   setAllUsers: _ => dispatch(setAllUsers(_))

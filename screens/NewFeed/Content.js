@@ -8,7 +8,7 @@ import { setUser } from '../../actions/userActions'
 import { Button } from '../../common'
 import { ImageComponent } from '../../common'
 import { GroupIcon, CloseIcon } from '../../assets/'
-const { Colors, HeaderHeightNumber, socket, sidePadding } = helper;
+const { Colors, HeaderHeightNumber, sidePadding } = helper;
 const { lightGrey1, black, yellow } = Colors;
 const Wrapper = styled(View)`
     padding: 0 ${sidePadding};
@@ -137,17 +137,17 @@ class Content extends Component {
         text: ''
     }
     componentDidMount() {
-        socket.on('user exists', e => {
-            console.log(e)
-        })
-        socket.on('user created', e => {
-            this.props.forward()
-        })
+        // socket.on('user exists', e => {
+        //     console.log(e)
+        // })
+        // socket.on('user created', e => {
+        //     this.props.forward()
+        // })
 
     }
     componentWillUpdate(){
-        socket.removeListener('user exists');
-        socket.removeListener('user created');
+        // socket.removeListener('user exists');
+        // socket.removeListener('user created');
     }
     addParticipant = () => {
         const { addParticipant } = this.props

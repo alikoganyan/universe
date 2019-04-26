@@ -158,12 +158,12 @@ class Content extends Component {
                                     <BoxInner>
                                         {department.map((e, i) => <TouchableOpacity key={i} onPress={() => this.toChat(e._id)}>
                                             <BoxInnerItem>
-                                            <ContactImage />
-                                            <ContactInfo>
-                                                <ContactName>{e.first_name || e.phone_number}</ContactName>
-                                                <ContactRole>{e.role || 'no role'}</ContactRole>
-                                            </ContactInfo>
-                                        </BoxInnerItem>
+                                                <ContactImage />
+                                                <ContactInfo>
+                                                    <ContactName>{e.first_name || e.phone_number}</ContactName>
+                                                    <ContactRole>{e.role || 'no role'}</ContactRole>
+                                                </ContactInfo>
+                                            </BoxInnerItem>
                                         </TouchableOpacity>)}
                                     </BoxInner>
                                 </Collapsible>
@@ -232,7 +232,7 @@ class Content extends Component {
             success: (res) => {
                 this.props.setContacts(res)
                 const newUsers = { ...this.state.users }
-                newUsers.department = res
+                newUsers.department = res.users
                 this.setState({ users: newUsers })
             },
             failFunc: (err) => {
@@ -257,15 +257,15 @@ class Content extends Component {
 
 const mapStateToProps = state => {
     return {
-      messages: state.messageReducer,
-      dialog: state.dialogsReducer.dialogs,
-      currentRoom: state.messageReducer.currentRoom,
-      currentChat: state.messageReducer.currentChat,
-      user: state.userReducer.user,
-      users: state.userReducer
+        messages: state.messageReducer,
+        dialog: state.dialogsReducer.dialogs,
+        currentRoom: state.messageReducer.currentRoom,
+        currentChat: state.messageReducer.currentChat,
+        user: state.userReducer.user,
+        users: state.userReducer
     };
-  };
-  const mapDispatchToProps = dispatch => ({
+};
+const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
@@ -273,6 +273,5 @@ const mapStateToProps = state => {
     setAllUsers: _ => dispatch(setAllUsers(_)),
     setContacts: _ => dispatch(setContacts(_))
 
-  })
-  export default connect(mapStateToProps, mapDispatchToProps)(Content)
-  
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

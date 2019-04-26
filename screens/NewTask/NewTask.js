@@ -15,19 +15,19 @@ export default class Signup extends Component {
         return (
             <SafeAreaView behavior={'padding'}>
                 <Wrapper>
-                    <Header back={this.navigateBack}/>
-                    <Content forward={this.moveForward}/>
+                    <Header back={this.props.navigation.goBack}/>
+                    <Content addParticipants={this.addParticipants} forward={this.moveForward} />
                 </Wrapper>
             </SafeAreaView>
         )
-    }
-    navigateBack = () => {
-        this.props.navigation.goBack()
     }
     componentDidMount() {
 
     }
     moveForward = () => {
-        this.props.navigation.navigate('Signup3')
+        this.props.navigation.navigate('Tasks')
+    }
+    addParticipants = () => {
+        this.props.navigation.navigate('NewTaskReceivers')
     }
 }

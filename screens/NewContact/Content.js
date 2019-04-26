@@ -10,10 +10,11 @@ const { Colors, HeaderHeightNumber } = helper;
 const { green, lightGrey1, grey2, black, color } = Colors;
 
 const Wrapper = styled(View)`
-    padding: 10% 10% 10%;
+    padding: 10%;
+    padding-top: 0;
     display: flex;
     justify-content: center;
-    height: ${Dimensions.get('window').height - HeaderHeightNumber}px;
+    height: ${Dimensions.get('window').height}px;
 `
 const PhoneNumber = styled(View)`
     display: flex;
@@ -50,7 +51,7 @@ export default class Content extends Component {
         const { navigateToDialogs } = this.props;
         return (
             <Wrapper>
-                <ScrollView style={{ height: '100%' }}>
+                <ScrollView style={{ height: '100%', paddingTop: '10%' }}>
                     <PhoneNumber>
                         <InputLabel style={{ flex: 4 }}>Телефон</InputLabel>
                         <Input style={{ flex: 1, textAlign: 'center', paddingRight: 7, paddingLeft: 7 }} onChangeText={this.handleChangeCountry} value={country} />

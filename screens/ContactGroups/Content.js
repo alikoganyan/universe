@@ -11,7 +11,9 @@ import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { connect } from 'react-redux'
-const { Colors, socket, sidePadding, sidePaddingNumber } = helper;
+import { socket } from '../../utils/socket'
+
+const { Colors, sidePadding, sidePaddingNumber } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
@@ -44,7 +46,7 @@ const AnimatedArrowWrapper = posed.View({
     right: { rotate: "-90deg", }
 });
 const Wrapper = styled(View)`
-    padding-top: 0px;
+    padding: 0 ${sidePadding};
     background: white;
     margin-bottom: 40px;
     
@@ -52,8 +54,9 @@ const Wrapper = styled(View)`
 const ContactList = styled(ScrollView)`
     padding: 20px;
     padding-bottom: 10px;
-    max-width: ${Dimensions.get('window').width};
+    max-width: ${Dimensions.get('window').width - sidePaddingNumber * 2}px;
     overflow: hidden;
+    margin-left: ${sidePaddingNumber}px;
     flex: 1;
 `
 const Box = styled(View)`
@@ -174,7 +177,7 @@ class Content extends Component {
                                         inverted={true}
                                         data={allUsers}
                                         renderItem={({ item }) => <Group>
-                                            <ImageComponent size={"xs"} style={{marginRight: sidePadding}} source={{uri: item.uri}}/>
+                                            <ImageComponent size={"xs"} style={{ marginRight: sidePadding }} source={{ uri: item.uri }} />
                                             <GroupInfo>
                                                 <GroupTitle numberOfLines={1}>{item.name}</GroupTitle>
                                             </GroupInfo>
@@ -209,7 +212,7 @@ class Content extends Component {
                                 </ContactList>
                                 <ContactList>
                                     <FlatList
-                                        style={{ paddingRight: 5, paddingLeft: 5, }}
+                                        style={{ paddingLeft: sidePadding, }}
                                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                                         inverted={true}
                                         data={groups}
@@ -239,15 +242,11 @@ class Content extends Component {
                     title: 'Отдел длинных корпоративных названий',
                     workers: [
                         { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
                     ],
                 },
                 {
                     title: 'Отдел коротких корпоративных названий',
                     workers: [
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
                         { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
                     ],
                 },
@@ -263,22 +262,8 @@ class Content extends Component {
         },
         groups: [
             { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
         ],
         allUsers: [
-            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
             { name: 'Константин Константинопольский', uri: 'https://facebook.github.io/react/logo-og.png' },
         ]
     }
@@ -287,11 +272,11 @@ class Content extends Component {
 
         socket.emit('get users', { id: user.id })
 
-        const newDCollapsed = [...this.state.collapsed]
+        const newCollapsed = [...this.state.collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
-            newDCollapsed.push(false)
+            newCollapsed.push(false)
         }
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newCollapsed })
     }
     optionLeft = () => {
         const newState = { ...this.state.options }

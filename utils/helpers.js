@@ -1,8 +1,4 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native';
-import io from 'socket.io-client';
-import { API_URL, API_PORT } from 'react-native-dotenv'
-import {socket, connectToSocket} from './socket' 
-connectToSocket()
 export default helper = {
     IconDarkColor: '#979897',
     IconLightColor: '#ABABAB',
@@ -31,8 +27,10 @@ export default helper = {
         grey2: '#80868b',
         lightGrey1: '#b1b9c2',
         lightGrey2: '#f7f7f7',
+        myMessage: '#3776F9',
+        interlocatorMessage: '#F6F6F6',
     },
-    socket: socket,
+    opacity: 0.3,
     sidePaddingNumber: Dimensions.get('window').width / 100 * 4.5,
     sidePadding: `4.5%`,
     topPaddingNumber: Dimensions.get('window').height / 100 * 5.6,
@@ -74,14 +72,14 @@ export function copy(value, el) {
     const btn = el.currentTarget.lastElementChild
     let tmp = document.createElement('INPUT')
     let focus = document.activeElement
-    
+
     btn.classList.add('active')
     setTimeout(() => {
         btn.classList.remove('active')
     }, 500)
-    
+
     tmp.value = value
-    
+
     document.body.appendChild(tmp)
     tmp.select()
     document.execCommand('copy')

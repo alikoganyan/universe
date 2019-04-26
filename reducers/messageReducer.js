@@ -23,7 +23,7 @@ const messageReducer = (state = initialState, action) => {
         case STOP_SEARCH:
             return { ...state, search: false }
         case SET_CURRENT_CHAT:
-            return { ...state, currentChat: action.payload.currentChat }
+            return { ...state, currentChat: action.payload }
         case START_SEARCH:
             return { ...state, search: true }
 

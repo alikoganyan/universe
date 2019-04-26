@@ -10,7 +10,7 @@ import sendRequest from '../../utils/request'
 import { Button } from '../../common'
 import CheckBox from 'react-native-check-box'
 
-const { Colors, fontSize, HeaderHeightNumber, socket } = helper;
+const { Colors, fontSize, HeaderHeightNumber } = helper;
 const { lightGrey1, blue } = Colors;
 const Wrapper = styled(View)`
     padding: 0 5%;
@@ -124,12 +124,8 @@ class Content extends Component {
         ]
     }
     componentDidMount() {
-        socket.on('user exists', e => {
-            console.log(e)
-        })
     }
     componentWillUpdate() {
-        socket.removeListener('user exists');
     }
     setInputState = (e) => {
         const newAgreements = [...this.state.agreements];

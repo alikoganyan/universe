@@ -5,9 +5,13 @@ import { openDrawer } from '../../actions/drawerActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
 import { ImageComponent } from '../../common'
+import sendRequest from '../../utils/request'
+import { p_search_dialogs } from '../../constants/api'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight, borderRadius, socket } = helper;
+import { socket } from '../../utils/socket'
+
+const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight, borderRadius } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
     background-color: ${Colors.background};
@@ -53,7 +57,9 @@ class HeaderComponent extends Component {
     }
     componentDidMount() {
         const { setDialogs } = this.props;
+        console.log('find', '123')
         socket.on('find', ({ result }) => {
+            console.log('find', '123')
             setDialogs(result)
         })
     }
@@ -63,11 +69,22 @@ class HeaderComponent extends Component {
     }
     handleInputChange = (e) => {
         this.setState({ input: e })
-        e && socket.emit('find', { text: e })
+        e && e.length > 1 && sendRequest({
+            r_path: p_search_dialogs,
+            method: 'post',
+            attr: {
+                name: e,
+            },
+            success: (res) => {
+                console.log(res)
+            },
+            failFunc: (err) => {
+                console.log(err)
+            }
+        })
 
     }
     handleFocus = () => {
-        socket.emit('find')
         this.setState({ focused: true });
     }
     onBlur = () => {

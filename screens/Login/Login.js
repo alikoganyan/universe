@@ -4,7 +4,7 @@ import { Header, Content } from './index'
 import styled from 'styled-components'
 import { SafeAreaView } from '../../common'
 import helper from '../../utils/helpers'
-const { socket, Colors, fontSize } = helper;
+const { Colors, fontSize } = helper;
 const { lightColor, blue } = Colors;
 const Wrapper = styled(View)`
     height: 100%;
