@@ -6,7 +6,7 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setUser, setRegisterUserSms } from '../../actions/userActions'
 import { Button } from '../../common'
-const { Colors, fontSize, HeaderHeightNumber, socket } = helper;
+const { Colors, fontSize, HeaderHeightNumber } = helper;
 const { lightGrey1, blue } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;

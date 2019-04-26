@@ -9,7 +9,8 @@ import { ImagePicker, DocumentPicker, Permissions } from 'expo';
 import { p_send_file } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import posed from 'react-native-pose'
-const { socket, sidePaddingNumber, borderRadius, HeaderHeightNumber } = helper;
+import { socket } from '../../utils/socket'
+const { sidePaddingNumber, borderRadius, HeaderHeightNumber } = helper;
 const FilePickerPosed = posed.View({
     visible: { bottom: 10 },
     hidden: { bottom: -250 }
@@ -129,7 +130,7 @@ class InputComponent extends Component {
         const { currentRoom, id, addMessage } = this.props;
         const { text } = this.state;
         if (text) {
-            socket.emit('message', { sender: id, receiver: currentRoom, message: text })
+            socket.emit('message', { receiver: currentRoom, message: text })
             addMessage({ room: currentRoom, sender: id, text, date: new Date(), type: 'text' })
         }
         this.setState({ text: '' })
@@ -160,7 +161,7 @@ class InputComponent extends Component {
                 },
                 success: (res) => {
                     console.log({ res })
-                    socket.emit('file', { room: currentRoom })
+                    // socket.emit('file', { room: currentRoom })
                     addMessage({
                         room: currentRoom,
                         sender: id,

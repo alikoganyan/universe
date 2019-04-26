@@ -1,10 +1,10 @@
 {
-  "expoServerPort": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerPort": 19000,
+  "expoServerNgrokUrl": "https://d6-hek.anonymous.mobile-front.exp.direct",
+  "packagerNgrokUrl": "https://packager.d6-hek.anonymous.mobile-front.exp.direct",
+  "ngrokPid": 59507,
   "devToolsPort": 19002,
-  "packagerPort": null,
-  "packagerPid": null,
+  "packagerPort": 19001,
+  "packagerPid": 59491,
   "webpackServerPort": null
 }

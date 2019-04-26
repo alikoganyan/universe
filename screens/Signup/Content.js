@@ -8,7 +8,7 @@ import { setUser, setRegisterUserNumber } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
 import { p_get_sms } from '../../constants/api'
 import { Button } from '../../common'
-const { Colors, HeaderHeightNumber, socket, fontSize } = helper;
+const { Colors, HeaderHeightNumber, fontSize } = helper;
 const { lightGrey1, blue } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;

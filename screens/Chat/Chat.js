@@ -7,7 +7,7 @@ import { SafeAreaView } from '../../common'
 import helper from '../../utils/helpers';
 import { Header, Content, Input } from './'
 import { connect } from 'react-redux'
-const { socket, HeaderHeightNumber } = helper
+const { HeaderHeightNumber } = helper
 const Wrapper = styled(View)`
     height: 100%;
 `
@@ -40,7 +40,7 @@ class Chat extends Component {
     componentWillUnmount() {
         const { setCurrentChat, currentRoom, currentChat, user } = this.props;
         setCurrentChat({ currentChat: null })
-        socket.emit('leave', { room: currentRoom, viewer: user._id })
+        // socket.emit('leave', { room: currentRoom, viewer: user._id })
     }
     navigateBack = () => {
         const { currentRoom, navigation } = this.props;

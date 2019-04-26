@@ -5,7 +5,8 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
 import helper from '../../utils/helpers'
-const { socket, sidePaddingNumber } = helper;
+import { socket } from '../../utils/socket'
+const { sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
     background: white;
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;

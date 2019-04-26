@@ -11,7 +11,9 @@ import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { connect } from 'react-redux'
-const { Colors, socket, sidePadding, sidePaddingNumber } = helper;
+import { socket } from '../../utils/socket'
+
+const { Colors, sidePadding, sidePaddingNumber } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
     left: {

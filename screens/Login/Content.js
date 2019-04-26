@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, AsyncStorage, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, AsyncStorage, Platform, Dimensions } from 'react-native'
 import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
@@ -8,7 +8,8 @@ import { setUser } from '../../actions/userActions'
 import { p_login } from '../../constants/api'
 import { a_setAuth } from '../../redux/Auth/actions'
 import sendRequest from '../../utils/request'
-const { Colors, fontSize, socket } = helper;
+import { connectToSocket } from '../../utils/socket'
+const { Colors, fontSize } = helper;
 const { lightColor, lightGrey1, blue } = Colors;
 const { large, text, sm } = fontSize;
 const Wrapper = styled(View)`
@@ -139,8 +140,8 @@ class Content extends Component {
         )
     }
     state = {
-        country: Platform.OS === 'ios' ? '+380' : '+7',
-        phone: Platform.OS === 'ios' ? '637072785' : '9194274251',
+        country: Platform.OS === 'ios' && Dimensions.get('window').width === 320 ?  '+7' : '+380',
+        phone: Platform.OS === 'ios' && Dimensions.get('window').width === 320 ? '9194274251' : '637072785',
         phone_number: '',
         password: '1111',
         error: null,
@@ -149,7 +150,7 @@ class Content extends Component {
         loading: false,
     }
     componentDidMount = async () => {
-
+        connectToSocket()
         const { navigate, setUser } = this.props;
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
@@ -223,7 +224,7 @@ class Content extends Component {
         this.setState({ country: e })
     }
     componentWillMount() {
-        console.log('unmounted');
+        
     }
 }
 

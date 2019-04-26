@@ -76,7 +76,6 @@ const Indicator = ({ delievered = false, read = false, color }) => {
 function Message(props) {
     const { children, messages, myId, background } = props
     const { text, sender, src, type, width, height } = children;
-    console.log(`http://ser.multiverse.plus/api${src}`)
     if (type === 'image') {
         return (myId == sender ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>

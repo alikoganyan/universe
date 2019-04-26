@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
-const { socket, sidePaddingNumber, Colors} = helper;
+const { sidePaddingNumber, Colors} = helper;
 const { yellow } = Colors;
 const Wrapper = styled(View)`
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
@@ -72,7 +72,7 @@ class InputComponent extends Component {
     sendMessage = (event) => {
         const { currentRoom, id } = this.props;
         const { text } = this.state;
-        text && socket.emit('chat message', { text, senderId: id, type: 'message', chatId: currentRoom })
+        // text && socket.emit('chat message', { text, senderId: id, type: 'message', chatId: currentRoom })
         this.setState({ text: '' })
     }
     handleChange = (e) => {

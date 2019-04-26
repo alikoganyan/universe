@@ -2,7 +2,7 @@ import {
     SET_DIALOGS,
 } from '../actions/dialogsActions'
 const initialState = {
-    dialogs: [1, 2],
+    dialogs: [],
 }
 const dialogsReducer = (state = initialState, action) => {
     switch (action.type) {

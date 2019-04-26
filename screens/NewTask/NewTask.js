@@ -5,7 +5,7 @@ import { SafeAreaView } from '../../common'
 import { Header, Content } from './index'
 import helper from '../../utils/helpers'
 
-const { socket, HeaderHeight } = helper;
+const { HeaderHeight } = helper;
 const Wrapper = styled(View)`
     height: 100%;
     padding-bottom: ${HeaderHeight};

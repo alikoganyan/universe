@@ -1,8 +1,4 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native';
-import io from 'socket.io-client';
-import { API_URL, API_PORT } from 'react-native-dotenv'
-import { socket, connectToSocket } from './socket'
-connectToSocket()
 export default helper = {
     IconDarkColor: '#979897',
     IconLightColor: '#ABABAB',
@@ -33,7 +29,6 @@ export default helper = {
         interlocatorMessage: '#F6F6F6',
     },
     opacity: 0.3,
-    socket: socket,
     sidePaddingNumber: Dimensions.get('window').width / 100 * 4.5,
     sidePadding: `4.5%`,
     topPaddingNumber: Dimensions.get('window').height / 100 * 5.6,

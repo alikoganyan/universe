@@ -4,8 +4,9 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { ImageComponent } from '../../common'
+import { socket } from '../../utils/socket'
 
-const { fontSize, PressDelay, sidePadding, sidePaddingNumber, Colors, socket } = helper;
+const { fontSize, PressDelay, sidePadding, sidePaddingNumber, Colors } = helper;
 const { purple, lightColor, grey2 } = Colors;
 const Wrapper = styled(View)`
   display: flex;

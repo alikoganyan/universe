@@ -12,7 +12,7 @@ import sendRequest from '../../utils/request'
 import { ImageComponent } from '../../common'
 import { GroupIcon, CloseIcon } from '../../assets/'
 import DatePicker from 'react-native-datepicker'
-const { Colors, HeaderHeightNumber, socket, sidePadding } = helper;
+const { Colors, HeaderHeightNumber, sidePadding } = helper;
 const { lightGrey1, black, purple } = Colors;
 const Wrapper = styled(View)`
     padding: 0 ${sidePadding};

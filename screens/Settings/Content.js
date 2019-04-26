@@ -6,7 +6,7 @@ import SwitchToggle from 'react-native-switch-toggle';
 import helper from '../../utils/helpers'
 import posed from 'react-native-pose'
 import { connect } from 'react-redux'
-const { Colors, sidePaddingNumber, fontSize, socket, borderRadius, HeaderHeightNumber } = helper;
+const { Colors, sidePaddingNumber, fontSize, borderRadius, HeaderHeightNumber } = helper;
 const { lightGrey1, blue, lightBlue, grey2 } = Colors;
 const FilePickerPosed = posed.View({
     visible: { bottom: -40 },
@@ -197,8 +197,8 @@ class Content extends Component {
         settings.map(e => {
             setting.push({ item: e.item, value: !!e.option.value })
         })
-        socket.emit('change settings', { setting, id: user.id })
-        socket.emit('update user', { id: user.id })
+        // socket.emit('change settings', { setting, id: user.id })
+        // socket.emit('update user', { id: user.id })
     }
 }
 

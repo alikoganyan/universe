@@ -77,7 +77,6 @@ class Content extends Component {
     }
     componentDidMount() { }
     unselect = (e) => {
-        console.log('unselect')
         this.setState({ selectedMessage: null })
     }
     handleHold = (e) => {

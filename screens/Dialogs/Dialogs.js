@@ -8,8 +8,9 @@ import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/
 import { setDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
+import { socket } from '../../utils/socket'
 
-const { sidePaddingNumber, HeaderHeightNumber, socket } = helper;
+const { sidePaddingNumber, HeaderHeightNumber } = helper;
 const Wrapper = styled(View)`
   height: 100%;
 `
@@ -31,7 +32,10 @@ class Dialogs extends Component {
             ref={(ref) => { this.flatList = ref; }}
             data={dialogs}
             keyboardShouldPersistTaps={'handled'}
-            renderItem={({ item, index }) => <Dialog lastMessage={item.messages} onClick={() => this.toChat(item)} title={item.title || item.room} item={item}>{item.text}</Dialog>}
+            renderItem={({ item }) => {
+              console.log(item)
+              return <Dialog lastMessage={item.messages} onClick={() => this.toChat(item)} title={item.title || item.room} item={item}>{item.text}</Dialog>
+            }}
             keyExtractor={(item, index) => index.toString()}
           />
         </Wrapper>
@@ -41,14 +45,23 @@ class Dialogs extends Component {
   state = {
     FlatListData: []
   }
-  async componentDidMount() {
+  componentDidMount() {
     const { user, addMessage, setDialogs } = this.props;
     socket.on('update_dialogs', e => {
-      setDialogs(e)
+      setDialogs(e.dialogs)
+      console.log('update_dialogs', e.dialogs)
     })
     socket.emit('get_dialogs', { id: user._id })
-    socket.on('new_message', e => addMessage({ ...e, text: e.message, date: new Date() }))
+    socket.on('new_message', e => {
+      console.log('new_message', e)
+
+      addMessage({ ...e, text: e.message, date: new Date() })
+    })
+    socket.on('new_dialogs', e => {
+      console.log('new_dialogs', e)
+    })
     socket.on('need_update', e => {
+      console.log(e)
       socket.emit('get_dialogs', { id: user._id })
     })
     socket.on('dialog_opened', e => console.log(e))
