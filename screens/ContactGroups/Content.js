@@ -3,7 +3,6 @@ import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView
 import { BackIcon, EllipsisVIcon, ArrowDownIcon } from '../../assets/index'
 import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
 import { ImageComponent } from '../../common'
@@ -116,6 +115,7 @@ const Options = styled(View)`
     justify-content: space-between;
     border-radius: 13;
     overflow: hidden;
+    padding: 1px;
     width: ${100 - sidePaddingNumber/2}%;
     margin-left: ${sidePaddingNumber};
     margin-right: ${sidePaddingNumber};
@@ -124,19 +124,16 @@ const Option = styled(Text)`
     color: ${({ active }) => active ? black : 'white'};
     background: ${({ active }) => active ? 'white' : 'transparent'};
     border: ${({ active }) => active ? '1px rgba(0, 0, 0, 0.1) solid' : '0'};
-    border:5px 10px 5px 10px;
     border-color: ${({ active }) => active ? 'rgba(0, 0, 0, 0.1)' : 'transparent'};
     border-style: solid;
-    min-width: 30%;
-    border-radius: 15;
+    min-width: 25%;
+    border-radius: 13;
     padding: 4px 10px 3px;
     overflow: hidden;
     text-align: center;
     display: flex;
     flex-direction: row;
     justify-content: center;
-    align-items: center;
-    height: 28px;
 `
 const Group = styled(BoxInnerItem)`
     justify-content: flex-start;

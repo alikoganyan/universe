@@ -5,7 +5,6 @@ const initialState = {
 const drawerReducer = (state = initialState, action) => {
     switch (action.type) {
         case DRAWER_OPEN:
-
             return {
                 ...state,
                 open: true,

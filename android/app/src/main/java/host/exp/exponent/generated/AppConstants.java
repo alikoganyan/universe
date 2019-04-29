@@ -26,10 +26,16 @@ public class AppConstants {
     
         
         
+        
+        
+        
+        
+        
+        
         // ADD EMBEDDED RESPONSES HERE
         // START EMBEDDED RESPONSES
         embeddedResponses.add(new Constants.EmbeddedResponse("https://exp.host/@dr0kd3n/universes-mobile", "assets://shell-app-manifest.json", "application/json"));
-        embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40dr0kd3n%2Funiverses-mobile%2F1.0.0%2Fda54a66af0e8ac85d95f07151e9d901d-32.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
+        embeddedResponses.add(new Constants.EmbeddedResponse("https://d1wp6m56sqw74a.cloudfront.net/%40dr0kd3n%2Funiverses-mobile%2F2.0.1%2F3c8a167c4ca7c18bd603d3a0b4a68e7c-32.0.0-android.js", "assets://shell-app.bundle", "application/javascript"));
         // END EMBEDDED RESPONSES
     EMBEDDED_RESPONSES = embeddedResponses;
   }
