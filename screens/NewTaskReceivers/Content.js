@@ -179,8 +179,8 @@ class Content extends Component {
                                                 <Collapsible collapsed={collapsed[i] || false}>
                                                     <BoxInner>
                                                         {
-                                                            e.workers.map((e, i) => <TouchableOpacity onPress={() => this.addReceiver(e)}>
-                                                                <BoxInnerItem key={e._id}>
+                                                            e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
+                                                                <BoxInnerItem>
                                                                     <ContactImage />
                                                                     <ContactInfo>
                                                                         <ContactName>{e.name || e.phone_number}</ContactName>
@@ -201,7 +201,7 @@ class Content extends Component {
                                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                                         inverted={true}
                                         data={groups}
-                                        renderItem={({ item }) => <Group>
+                                        renderItem={({ item, index }) => <Group key={index}>
                                             <GroupImage />
                                             <GroupInfo>
                                                 <GroupTitle>{item.title}</GroupTitle>
@@ -260,7 +260,7 @@ class Content extends Component {
             success: (res) => {
                 this.props.setContacts(res)
                 const newUsers = { ...this.state.users }
-                newUsers.department[0].workers = res
+                newUsers.department[0].workers = res.users
                 this.setState({ users: newUsers })
             },
             failFunc: (err) => {

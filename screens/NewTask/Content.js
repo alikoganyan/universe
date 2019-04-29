@@ -75,7 +75,6 @@ const DeadlineTime = styled(View)`
 const ReceiverComponent = (props) => {
     const { children, last = false, onDelete } = props;
     const { image, phone_number, role } = children
-    console.log(children)
     return <Receiver last={last}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <ImageComponent source={{ uri: image || 'http://pluspng.com/img-png/user-png-icon-male-user-icon-512.png' }} />
@@ -92,7 +91,6 @@ const ReceiverComponent = (props) => {
 class Content extends Component {
     render() {
         const { receivers } = this.props;
-        console.log(receivers)
         const {
             taskName,
             taskText,
@@ -189,12 +187,17 @@ class Content extends Component {
     }
     componentWillUpdate() {
     }
+    jsCoreDateCreator = (dateString) => { 
+        // dateString *HAS* to be in this format "YYYY-MM-DD HH:MM:SS"  
+        let dateParam = dateString.split(/[\s-:]/)  
+        dateParam[1] = (parseInt(dateParam[1], 10) - 1).toString()  
+        return new Date(...dateParam)  
+      }
     deleteReceiver = (e) => {
         const { addReceiver, setReceivers, receivers } = this.props
         let newReceivers = [...receivers];
         newReceivers = newReceivers.filter(item => e._id !== item._id)
         setReceivers(newReceivers)
-        console.log(receivers)
     }
     addParticipant = () => {
         const { addParticipants } = this.props;
@@ -203,21 +206,21 @@ class Content extends Component {
     proceed = (e) => {
         const { receivers, moveForward } = this.props
         const { deadlineDate, deadlineTime, taskName, taskText } = this.state;
-        console.log(Date.parse(`${deadlineDate}:${deadlineTime}`))
-        // sendRequest({
-        //     r_path: p_create_task,
-        //     method: 'post',
-        //     attr: {
-        //         task: { name: taskName, description: taskText, deadline: Date.parse(`${deadlineDate}:${deadlineTime}`), performers: [receivers[0]._id]} 
-        //     },
-        //     success: (res) => {
-        //         console.log(res)
-        //         moveForward()
-        //     },
-        //     failFunc: (err) => {
-        //         console.log(err)
-        //     }
-        // })
+        const deadline = this.jsCoreDateCreator(`${deadlineDate}:${deadlineTime}`)
+        sendRequest({
+            r_path: p_create_task,
+            method: 'post',
+            attr: {
+                task: { name: taskName, description: taskText, deadline, performers: [receivers[0]._id]} 
+            },
+            success: (res) => {
+                console.log(res)
+                moveForward()
+            },
+            failFunc: (err) => {
+                console.log(err)
+            }
+        })
     }
     handleCountry = (e) => {
         this.setState({ country: e })
