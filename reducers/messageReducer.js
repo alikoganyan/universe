@@ -26,9 +26,9 @@ const messageReducer = (state = initialState, action) => {
             return { ...state, currentChat: action.payload }
         case START_SEARCH:
             return { ...state, search: true }
-
+        default:
+            return state
     }
-    return state;
 }
 
 export default messageReducer

@@ -3,6 +3,7 @@ import { Text, View, Image } from 'react-native'
 import styled from 'styled-components'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../assets/index'
 import { connect } from 'react-redux'
+import { ImageComponent } from './'
 const { HeaderHeightNumber, Colors } = helper;
 const { myMessage, interlocatorMessage } = Colors
 const MyMessage = styled(View)`
@@ -50,6 +51,7 @@ const InterlocutorsMessageText = styled(MyMessageText)`
     border-radius: 3;
     overflow: hidden;
     padding: 10px;
+    padding-bottom: 0;
     flex-wrap: wrap;
 `
 const MessageInfo = styled(View)`
@@ -70,12 +72,16 @@ const MyMessageImage = styled(Image)`
     min-width: 100%;
     resize-mode: contain;
 `
+const InterlocutorsName = styled(InterlocutorsMessageText)`
+    margin-bottom: 0;
+`
 const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
 }
 function Message(props) {
-    const { children, messages, myId, background } = props
+    const { children, messages, myId, background, withImage } = props
     const { text, sender, src, type, width, height } = children;
+    console.log(withImage)
     if (type === 'image') {
         return (myId == sender ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -113,15 +119,21 @@ function Message(props) {
                 <TriangleLeftIcon color={background || myMessage} />
             </ View>
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <TriangleRightIcon color={background || interlocatorMessage} />
-                <InterlocutorsMessage background={background || interlocatorMessage}>
-                    <InterlocutorsMessageText>
-                        {text}
-                    </InterlocutorsMessageText>
-                    <MessageInfo>
-                        <MessageDate>1:40</MessageDate>
-                    </MessageInfo>
-                </InterlocutorsMessage>
+                {withImage && <ImageComponent style={{alignSelf: 'flex-end', position: 'relative', top: -5}} size={30} source={{ uri: `http://simpleicon.com/wp-content/uploads/user1.png` }} />}
+                <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: -10 }}>
+                    <TriangleRightIcon color={background || interlocatorMessage} />
+                    <InterlocutorsMessage background={background || interlocatorMessage}>
+                        {withImage && <InterlocutorsName>
+                            Lol kek
+                        </InterlocutorsName>}
+                        <InterlocutorsMessageText>
+                            {text}
+                        </InterlocutorsMessageText>
+                        <MessageInfo>
+                            <MessageDate>1:40</MessageDate>
+                        </MessageInfo>
+                    </InterlocutorsMessage>
+                </View>
             </ View>
         )
     }

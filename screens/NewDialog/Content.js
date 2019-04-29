@@ -10,7 +10,6 @@ import { g_users } from '../../constants/api'
 import Collapsible from 'react-native-collapsible';
 import { connect } from 'react-redux'
 import { setContacts, setAllUsers } from '../../actions/userActions'
-
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
 import { setDialogs } from '../../actions/dialogsActions'
 const { Colors, HeaderHeightNumber, HeaderHeight, fontSize } = helper;
@@ -139,11 +138,9 @@ class Content extends Component {
             <SafeAreaView>
                 <Wrapper>
                     <KeyboardAwareScrollView enableOnAndroid>
-                        <CreateDialog>
+                        <CreateDialog onPress={this.newGroup}>
                             <GroupIconWhite />
-                            <CreateDialogText>
-                                Создать группу
-                            </CreateDialogText>
+                            <CreateDialogText>Создать группу</CreateDialogText>
                         </CreateDialog>
                         <ContactList>
                             {/* {department.map((e, i) => ( */}
@@ -201,19 +198,17 @@ class Content extends Component {
         },
         groups: [
             { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
         ]
     }
     collapseDepartment = (i) => {
         const newDCollapsed = [...this.state.collapsed]
         newDCollapsed[i] = false;
         this.setState({ collapsed: newDCollapsed })
+    }
+    newGroup = () => {
+        const { navigate } = this.props
+        console.log('123')
+        navigate('NewGroup')
     }
     showDepartment = (i) => {
         const newDCollapsed = [...this.state.collapsed]

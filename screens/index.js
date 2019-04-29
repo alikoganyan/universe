@@ -31,6 +31,8 @@ import NewFeedParticipants from './NewFeedParticipants/NewFeedParticipants'
 import ProfileEdit from './ProfileEdit/ProfileEdit'
 import NewTask from './NewTask/NewTask'
 import NewTaskReceivers from './NewTaskReceivers/NewTaskReceivers'
+import NewGroupParticipants from './NewGroupParticipants/NewGroupParticipants'
+import NewGroup from './NewGroup/NewGroup'
 export {
     Group,
     Dialogs,
@@ -65,4 +67,6 @@ export {
     ProfileEdit,
     NewTask,
     NewTaskReceivers,
+    NewGroupParticipants,
+    NewGroup,
 }

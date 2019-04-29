@@ -49,6 +49,7 @@ class Dialogs extends Component {
     })
     socket.emit('get_dialogs', { id: user._id })
     socket.on('new_message', e => {
+      console.log(e)
       addMessage({ ...e, text: e.message, date: new Date() })
     })
     socket.on('new_dialogs', e => {
@@ -57,11 +58,13 @@ class Dialogs extends Component {
       socket.emit('get_dialogs', { id: user._id })
     })
     socket.on('dialog_opened', e => console.log(e))
+    socket.on('new_group', e => console.log({ groupChats: e }))
   }
   componentWillUnmount() {
     socket.removeListener('update_dialogs');
     socket.removeListener('new_message');
     socket.removeListener('new_dialog');
+    socket.removeListener('new_group');
   }
   toProfile = e => {
     this.props.navigation.navigate('Profile')
@@ -135,11 +138,20 @@ class Dialogs extends Component {
   toChat = e => {
     const { setRoom, setCurrentChat, navigation, getMessages, user } = this.props
     const roomId = e.room.split('_').filter(e => e != user._id)[0]
-    setRoom(roomId)
-    setCurrentChat(e.room)
-    getMessages(e.messages);
-    socket.emit('view', { room: e.room, viewer: user._id })
-    navigation.navigate('Chat')
+    if (!e.isGroup) {
+      setRoom(roomId)
+      setCurrentChat(e.room)
+      getMessages(e.messages);
+      socket.emit('view', { room: e.room, viewer: user._id })
+      navigation.navigate('Chat')
+    }
+    if (e.isGroup) {
+      setRoom(roomId)
+      setCurrentChat(e.room)
+      getMessages(e.messages);
+      socket.emit('view', { room: e.room, viewer: user._id })
+      navigation.navigate('Group')
+    }
   }
   toGroup = e => {
     const { navigation } = this.props

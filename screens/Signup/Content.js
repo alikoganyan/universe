@@ -71,7 +71,8 @@ class Content extends Component {
     render() {
         const {
             country,
-            phone
+            phone,
+            error
         } = this.state
         return (
             <Wrapper>
@@ -91,7 +92,7 @@ class Content extends Component {
                         onChangeText={this.handlePhone}
                         value={phone}
                         placeholder={'XXX-XXX-XX-XX'}
-                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, }}
+                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? 'red' : null, borderColor: error ? 'red' : null }}
                     />
                 </PhoneNumber>
                 <ButtonBox>
@@ -127,7 +128,6 @@ class Content extends Component {
                     phone_number,
                 },
                 success: (res) => {
-                    console.log(res.msg)
                     forward();
                 },
                 failFunc: (err) => {
@@ -135,6 +135,7 @@ class Content extends Component {
                     let { phone_number } = err
                     this.setState({
                         invalidPhone: phone_number || null,
+                        error: true
                     })
                 }
             })

@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
-import { addReceiver, setReceivers } from '../../actions/tasksActions'
+import { addReceiver, setReceivers } from '../../actions/participantsActions'
 import { Button } from '../../common'
 import { p_create_task } from '../../constants/api/'
 import sendRequest from '../../utils/request'
@@ -241,7 +241,7 @@ class Content extends Component {
 const mapStateToProps = state => {
     return {
         user: state.userReducer.user,
-        receivers: state.tasksReducer.receivers,
+        receivers: state.participantsReducer.tasks.receivers,
     };
 };
 const mapDispatchToProps = dispatch => ({

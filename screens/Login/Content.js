@@ -68,6 +68,7 @@ const StyledInput = styled(TextInput)`
     padding-bottom: ${Platform.OS === 'ios' ? 11 : 6}px;
     text-align: center;
     margin-bottom: 10px;
+    color: black;
     ${({ style }) => style};
 `
 const Input = (props) => {
@@ -102,9 +103,6 @@ class Content extends Component {
             <Title>
                 Авторизация
                 </Title>
-            {error && <Error>
-                Номер телефона задан некорректно
-                </Error>}
             <PhoneNumber>
                 <Input style={{ width: '20%' }}
                     inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
@@ -116,7 +114,7 @@ class Content extends Component {
                     value={phone}
                     placeholder={'XXX-XXX-XX-XX'}
                     keyboardType={'phone-pad'}
-                    style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10 }}
+                    style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10, color: error ? 'red' : undefined, borderColor: error ? 'red' : lightGrey1 }}
                 />
             </PhoneNumber>
             <StyledInput password={true}
@@ -124,6 +122,7 @@ class Content extends Component {
                 value={password}
                 placeholder={'Пароль'}
                 secureTextEntry={true}
+                style={{ color: error ? 'red' : undefined, borderColor: error ? 'red' : lightGrey1 }}
             />
 
             <ControlBar>
@@ -140,10 +139,10 @@ class Content extends Component {
         )
     }
     state = {
-        country: Platform.OS === 'ios' && Dimensions.get('window').width === 320 ?  '+7' : '+380',
-        phone: Platform.OS === 'ios' && Dimensions.get('window').width === 320 ? '9194274251' : '637072785',
+        country: Dimensions.get('window').width === 375 ? '+7' :  Dimensions.get('window').width === 320 ? '+7' : '+380',
+        phone: Dimensions.get('window').width === 375 ? '9194274215' : Dimensions.get('window').width === 320 ? '9194274251' : '637072785',
         phone_number: '',
-        password: '1111',
+        password: Dimensions.get('window').width === 414 ? '11111' : '1111',
         error: null,
         invalidPassword: null,
         invalidPhone: null,
@@ -152,6 +151,7 @@ class Content extends Component {
     componentDidMount = async () => {
         connectToSocket()
         this.login()
+        console.log(Dimensions.get('window').width)
         const { navigate, setUser } = this.props;
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
@@ -224,7 +224,7 @@ class Content extends Component {
         this.setState({ country: e })
     }
     componentWillMount() {
-        
+
     }
 }
 

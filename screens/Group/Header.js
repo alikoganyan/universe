@@ -4,13 +4,16 @@ import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/inde
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
+import sendRequest from '../../utils/request'
+import { p_search_messages } from '../../constants/api'
+import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { ImageComponent } from '../../common'
 const { sidePadding, sidePaddingNumber, HeaderHeight, Colors, fontSize } = helper;
 const { border } = Colors;
 const Header = styled(View)`
-    width: 100%;
+    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
+    align-self: center;
     background: white;
     display: flex;
     flex-direction: column;
@@ -25,6 +28,7 @@ const HeaderUserImage = styled(Image)`
 `
 const Info = styled(View)`
     display: flex;
+    margin-left: 10px;
 `
 const InfoChatName = styled(Text)`
     color: black;
@@ -43,6 +47,8 @@ const Right = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
+    justify-content: flex-end;
+    margin-left: ${sidePadding};
 `
 const Categories = styled(Header)`
     display: flex;
@@ -81,38 +87,48 @@ const Input = styled(TextInput)`
 const IconLeft = styled(Icon)`
     margin-left: ${sidePadding};
 `
+const ToProfile = styled(TouchableOpacity)`
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px;
+`
+const SearchIconContainer = styled(View)`
+margin-right: 20px;
+`
 class HeaderComponent extends Component {
     render() {
-        const { back, search, startSearch, stopSearch } = this.props
+        const { back, search, startSearch, stopSearch, currentChat, toProfile } = this.props
         return (
             <Header>
                 <Top>
                     <Left>
                         {!search ? (
                             <>
-                                <BackIcon onPress={back} />
-                                <HeaderUserImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
-                                <Info>
-                                    <InfoChatName>lol</InfoChatName>
-                                    <InfoParticipants>5 участников</InfoParticipants>
-                                </Info>
+                                <BackIcon onPress={back} right />
+                                <ToProfile onPress={toProfile}>
+                                    <ImageComponent source={{ uri: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
+                                    <Info>
+                                        <InfoChatName>{currentChat && currentChat.phone}</InfoChatName>
+                                        <InfoParticipants>5 участников</InfoParticipants>
+                                    </Info>
+                                </ToProfile>
                             </>
                         ) : (
                                 <>
                                     <IconLeft name="search" />
-                                    <Input placeholder="123" />
+                                    <Input placeholder="поиск" onChangeText={this.find} />
                                 </>
                             )}
                     </Left>
                     <Right>
                         {!search ? (
                             <>
-                                <SearchIcon onPress={startSearch} />
+                                <SearchIconContainer>
+                                    <SearchIcon onPress={startSearch} />
+                                </SearchIconContainer>
                                 <LocationIcon />
                             </>
-                        ) : <>
-                                <CloseIcon onPress={stopSearch} />
-                            </>}
+                        ) : <CloseIcon onPress={stopSearch} />}
                     </Right>
                 </Top>
                 {search && (
@@ -128,15 +144,34 @@ class HeaderComponent extends Component {
             </Header>
         )
     }
+    find = (e) => {
+        const { getMessages, dialogs, currentRoom } = this.props;
+        e ? sendRequest({
+            r_path: p_search_messages,
+            method: 'post',
+            attr: {
+                text: e,
+            },
+            success: (res) => {
+                getMessages(res)
+            },
+            failFunc: (err) => {
+                console.log(err)
+            }
+        }) : getMessages(dialogs.filter(e => e.room.includes(currentRoom))[0].messages)
+    }
 }
 const mapStateToProps = state => {
     return {
-        search: state.messageReducer.search
+        search: state.messageReducer.search,
+        dialogs: state.dialogsReducer.dialogs,
+        currentRoom: state.messageReducer.currentRoom
     };
 };
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch()),
     stopSearch: _ => dispatch(stopSearch()),
+    getMessages: _ => dispatch(getMessages(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)

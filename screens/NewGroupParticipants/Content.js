@@ -14,7 +14,7 @@ import sendRequest from '../../utils/request'
 import { g_users } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
-import { addTaskReceiver, setTaskReceivers } from '../../actions/participantsActions'
+import { addDialogParticipant } from '../../actions/participantsActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
 
@@ -311,7 +311,8 @@ const mapStateToProps = state => {
         currentRoom: state.messageReducer.currentRoom,
         currentChat: state.messageReducer.currentChat,
         user: state.userReducer.user,
-        users: state.userReducer
+        users: state.userReducer,
+        participants: state.participantsReducer.dialog.participants
     };
 };
 const mapDispatchToProps = dispatch => ({
@@ -321,8 +322,8 @@ const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     setAllUsers: _ => dispatch(setAllUsers(_)),
     setContacts: _ => dispatch(setContacts(_)),
-    addReceiver: _ => dispatch(addTaskReceiver(_)),
-    setReceivers: _ => dispatch(setTaskReceivers(_)),
+    addReceiver: _ => dispatch(addDialogParticipant(_)),
+    setReceivers: _ => dispatch(setReceivers(_)),
 
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

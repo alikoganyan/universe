@@ -57,7 +57,7 @@ const NoCodeTimer = styled(Text)`
     text-align: center;
 `
 const Input = (props) => {
-    const { autoFocus = 'false', keyboardType = 'number-pad', children, password = false, value, style, editable, onChangeText } = props;
+    const { autoFocus = 'false', keyboardType = 'number-pad', children, password = false, value, style, editable, onChangeText, inputStyle } = props;
     return <FloatingLabel
         labelStyle={{ fontSize: 11 }}
         inputStyle={{
@@ -67,6 +67,7 @@ const Input = (props) => {
             display: 'flex',
             textAlign: 'center',
             paddingLeft: 0,
+            ...inputStyle
         }}
         keyboardType={keyboardType}
         password={password}
@@ -82,7 +83,8 @@ const Input = (props) => {
 }
 class Content extends Component {
     render() {
-        const { code } = this.state;
+        const { code, error } = this.state;
+        console.log(error)
         return (
             <Wrapper>
                 <Title>
@@ -90,7 +92,9 @@ class Content extends Component {
                 </Title>
                 <Label>Вам отправлено sms с временным паролем, {'\n'}введите его тут</Label>
                 <PhoneNumber>
-                    <Input autoFocus={'true'} style={{ width: '100%', textAlign: 'center' }} value={code} onChangeText={this.handleChangeCode} keyboardType={'phone-pad'} />
+                    <Input autoFocus={'true'} style={{
+                        width: '100%', textAlign: 'center',
+                    }} inputStyle={{ color: error ? 'red' : undefined, borderColor: error ? 'red' : undefined }} value={code} onChangeText={this.handleChangeCode} keyboardType={'phone-pad'} />
                 </PhoneNumber>
                 <ControlBar>
                     {code.length === 4 ? <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>Отправить</Button> :
@@ -121,6 +125,8 @@ class Content extends Component {
 
         if (code === answer) {
             this.checkCode();
+        } else {
+            this.setState({ error: true })
         }
     }
     checkCode = e => {
@@ -140,12 +146,7 @@ class Content extends Component {
             },
             failFunc: (err) => {
                 console.log(err);
-                let { phone_number, password } = err;
-                this.setState({
-                    loading: false,
-                    invalidPhone: phone_number || null,
-                    invalidPassword: password || null
-                })
+                this.setState({ error: true })
             }
         })
     }

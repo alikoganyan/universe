@@ -9,8 +9,9 @@ const drawerReducer = (state = initialState, action) => {
                 ...state,
                 open: true,
             }
+        default:
+            return state
     }
-    return state;
 }
 
 export default drawerReducer;
