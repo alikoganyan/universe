@@ -151,7 +151,6 @@ class Content extends Component {
     componentDidMount = async () => {
         connectToSocket()
         this.login()
-        console.log(Dimensions.get('window').width)
         const { navigate, setUser } = this.props;
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);

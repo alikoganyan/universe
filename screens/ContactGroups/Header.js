@@ -43,7 +43,6 @@ margin-right: ${sidePaddingNumber};
 class HeaderComponent extends Component {
     render() {
         const { user } = this.props;
-        console.log(user.image)
         return (
             <Header>
                 <Left>

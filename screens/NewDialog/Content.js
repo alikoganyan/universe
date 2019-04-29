@@ -207,7 +207,6 @@ class Content extends Component {
     }
     newGroup = () => {
         const { navigate } = this.props
-        console.log('123')
         navigate('NewGroup')
     }
     showDepartment = (i) => {
