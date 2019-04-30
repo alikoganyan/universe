@@ -1,4 +1,8 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native';
+import CryptoJS from 'crypto-js'
+const encrypt = (e) => {
+    const chipertext = CryptoJS.AES.encrypt(JSON.stringify(data), 'key').toString()
+}
 export default helper = {
     IconDarkColor: '#979897',
     IconLightColor: '#ABABAB',
@@ -36,16 +40,16 @@ export default helper = {
     topPaddingNumber: Dimensions.get('window').height / 100 * 5.6,
     topPadding: `5.6%`,
     HeaderHeightNumber: 50,
-    HeaderHeight: `50px`,
+    HeaderHeight: 50,
     PressDelay: 700,
     fontSize: {
-        xl: '30px',
-        xs: '24px',
-        large: '20px',
-        header: '15px',
-        text: '14px',
-        sm: '10px',
-        md: '14px'
+        xl: 30,
+        xs: 24,
+        large: 20,
+        header: 15,
+        text: 14,
+        sm: 10,
+        md: 14
     },
     globalStyle: StyleSheet.create({
         droidSafeArea: {
@@ -53,6 +57,7 @@ export default helper = {
             paddingTop: Platform.OS === 'android' ? 25 : 0,
         },
     }),
+    encrypt,
 }
 export function widthPercentageToDP(widthPercent) {
     const elemWidth = parseFloat(widthPercent)
