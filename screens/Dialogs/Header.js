@@ -24,7 +24,7 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
     position: absolute;
-    padding-right: ${sidePadding};
+    padding: 0 ${sidePadding};
     z-index: 2;
     top: 1%;
     left: ${sidePadding};
@@ -39,7 +39,7 @@ class HeaderComponent extends Component {
         const { input } = this.state;
         return (
             <Header>
-                <BurgerIcon onPress={this.props.toggleDrawer} left right />
+                <BurgerIcon onPress={this.props.toggleDrawer} right />
                 <Input value={input} onChangeText={this.handleInputChange}
                     onFocus={this.handleFocus}
                     placeholder={`Поиск`} />

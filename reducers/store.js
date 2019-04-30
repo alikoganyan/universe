@@ -11,7 +11,7 @@ import thunk from 'redux-thunk';
 
 const persistConfig = {
 	key: 'root',
-	timeout: 100,
+	timeout: 0,
 	storage,
 	blacklist: ['error']
 }

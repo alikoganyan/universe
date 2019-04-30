@@ -1,9 +1,10 @@
-import { SET_CONTACTS, SET_ALL_USERS, REGISTER_USER, SET_USER, SET_AUTH, SET_REGISTER_USER_NUMBER, SET_REGISTER_USER_SMS } from '../actions/userActions'
+import { SET_CONTACTS, SET_ERROR, SET_ALL_USERS, REGISTER_USER, SET_USER, SET_AUTH, SET_REGISTER_USER_NUMBER, SET_REGISTER_USER_SMS } from '../actions/userActions'
 
 const initialState = {
     user: {},
-    auth: {},
+    auth: '',
     users: [],
+    error: false,
     register: { phone: '', sms: '' }
 }
 const userReducer = (state = initialState, action) => {
@@ -12,6 +13,8 @@ const userReducer = (state = initialState, action) => {
             return { ...state, user: { ...action.payload, image: "http://pluspng.com/img-png/user-png-icon-male-user-icon-512.png" }, }
         case SET_AUTH:
             return { ...state, auth: action.payload }
+        case SET_ERROR:
+            return { ...state, error: action.payload }
         case SET_ALL_USERS:
             return { ...state, users: [1, 2] }
         case REGISTER_USER:

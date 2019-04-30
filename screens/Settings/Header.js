@@ -42,9 +42,7 @@ class HeaderComponent extends Component {
         return (
             <Header>
                 <Left>
-                    <MarginRight>
-                        <BackIcon noPadding onPress={back} />
-                    </MarginRight>
+                    <BackIcon right onPress={back} />
                     <Text>
                         Настройки
                     </Text>

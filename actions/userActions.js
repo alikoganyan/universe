@@ -7,6 +7,7 @@ export const SET_AUTH = 'SET_AUTH'
 export const SET_REGISTER_USER_NUMBER = 'SET_REGISTER_USER_NUMBER'
 export const SET_REGISTER_USER_SMS = 'SET_REGISTER_USER_SMS'
 export const SET_CONTACTS = 'SET_CONTACTS'
+export const SET_ERROR = 'SET_ERROR'
 export const setUser = (payload) => ({
     type: SET_USER,
     payload
@@ -21,6 +22,10 @@ export const registerUser = (payload) => ({
 })
 export const setAuth = payload => ({
     type: SET_AUTH,
+    payload
+})
+export const setError = payload => ({
+    type: SET_ERROR,
     payload
 })
 export const setRegisterUserNumber = payload => ({

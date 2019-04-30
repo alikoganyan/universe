@@ -95,15 +95,11 @@ class HeaderComponent extends Component {
             <Header>
                 <Top>
                     <Left>
-                        <MarginRight>
-                            <BackIcon onPress={back} right />
-                        </MarginRight>
+                        <BackIcon onPress={back} right />
                         <Text>Новости</Text>
                     </Left>
                     <Right>
-                        <MarginRight>
-                            <SearchIcon onPress={startSearch} />
-                        </MarginRight>
+                        <SearchIcon onPress={startSearch} right/>
                         <ImageComponent source={{ uri: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
                     </Right>
                 </Top>

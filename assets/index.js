@@ -1,5 +1,5 @@
 import React from 'react'
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { View, Text, TouchableOpacity, Image, Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 import styled from 'styled-components'
@@ -16,8 +16,8 @@ const { IconDarkColor,
     sidePadding } = helper;
 
 const StyledTouchableOpacity = styled(TouchableOpacity)`
-    margin-left: ${({ left }) => left ? sidePadding : 0};
-    margin-right: ${({ right }) => right ? sidePadding : 0};
+    margin-left: ${({ left }) => left ? Dimensions.get('window').width*0.085 : 0};
+    margin-right: ${({ right }) => right ? Dimensions.get('window').width*0.085 : 0};
     padding: 2px;
 `
 const Left = styled(StyledTouchableOpacity)`
@@ -185,6 +185,7 @@ export function BurgerIcon(props) {
 
 export function SearchIcon(props) {
     const { onPress, left, right } = props;
+    console.log(left, right)
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             <SvgUri
@@ -436,10 +437,15 @@ export function SettingsIcon(props) {
     )
 }
 export function AddIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, size } = props;
+    console.log(left, right)    
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
-            <Icon name="plus" size={IconSizeLarge} color={IconDarkColor} />
+            <SvgUri
+                width={size || IconSize}
+                height={size || IconSize}
+                source={SVG.Add}
+            />
         </StyledTouchableOpacity>
     )
 }

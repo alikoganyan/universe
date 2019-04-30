@@ -62,20 +62,25 @@ const TaskDate = styled(View)`
 `
 const UnreadMessages = styled(View)`
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-end;
+  justify-content: center;
+  align-items: center;
   flex: 1;
 `
 const NewMessages = styled(Text)`
   color: white;
   font-size: ${fontSize.text};
   background: ${purple};
-  padding: 5px;
   overflow: hidden;
+  padding: 5px;
+  padding-top: 0px;
   text-align: center;;
   min-width: 25px;
   height: 25px;
   border-radius: 12.5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
 `
 const TaskStatusTextContainer = styled(View)`
   border: 1px solid ${lightColor};

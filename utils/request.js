@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { store } from '../reducers/store'
-import { a_setAuth } from '../redux/Auth/actions'
-import { a_setError } from '../redux/Error/actions'
+import { setAuth, setError } from '../actions/userActions'
+
 import { disconnectFromSocket, socket } from '../utils/socket'
 import NavigationProvider from './NavigationProvider'
 const SERVER_URL = 'http://ser.multiverse.plus/api'
@@ -47,12 +47,12 @@ export default async function sendRequest({
 		// console.log(response)
 		console.log('error in path -->', r_path)
 		if (!response || response.status === 500) {
-			store.dispatch(a_setError(true))
+			store.dispatch(setError(true))
 			if (failFunc) {
 				failFunc('Server error')
 			}
 		} else if (response.status === 401) {
-			store.dispatch(a_setAuth(null))
+			store.dispatch(setAuth(null))
 			NavigationProvider.logoutNavigation()
 		} else {
 			if (failFunc) {

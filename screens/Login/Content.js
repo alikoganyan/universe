@@ -4,9 +4,8 @@ import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { setUser } from '../../actions/userActions'
+import { setUser, setAuth } from '../../actions/userActions'
 import { p_login } from '../../constants/api'
-import { a_setAuth } from '../../redux/Auth/actions'
 import sendRequest from '../../utils/request'
 import { connectToSocket } from '../../utils/socket'
 const { Colors, fontSize } = helper;
@@ -142,7 +141,7 @@ class Content extends Component {
         country: Dimensions.get('window').width === 375 ? '+7' :  Dimensions.get('window').width === 320 ? '+7' : '+380',
         phone: Dimensions.get('window').width === 375 ? '9194274215' : Dimensions.get('window').width === 320 ? '9194274251' : '637072785',
         phone_number: '',
-        password: Dimensions.get('window').width === 414 ? '11111' : '1111',
+        password: '1111',
         error: null,
         invalidPassword: null,
         invalidPhone: null,
@@ -233,7 +232,7 @@ const mapStateToProps = state => {
     };
 };
 const mapDispatchToProps = dispatch => ({
-    setAuth: info => { dispatch(a_setAuth(info)) },
+    setAuth: info => { dispatch(setAuth(info)) },
     setUser: info => { dispatch(setUser(info)) },
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

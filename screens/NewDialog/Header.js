@@ -55,9 +55,7 @@ class HeaderComponent extends Component {
         return (
             <Header>
                 <Left>
-                <MarginRight>
                     <BackIcon right onPress={back} />
-                    </MarginRight>
                     <Text>Новый диалог</Text>
                 </Left>
                 <Right>

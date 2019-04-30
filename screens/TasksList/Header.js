@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, Image, Dimensions, TouchableOpacity } from 'react-native'
 import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
@@ -35,7 +35,7 @@ const Right = styled(Left)`
 //     margin-left:${sidePaddingNumber};
 // `
 const MarginRight = styled(View)`
-    margin-right:${sidePaddingNumber};
+    margin-right: ${Dimensions.get('window').width*0.085};
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -48,16 +48,12 @@ class HeaderComponent extends Component {
         return (
             <Header>
                 <Left>
-                    <MarginRight>
-                        <BackIcon onPress={back} />
-                    </MarginRight>
+                    <BackIcon onPress={back} right/>
                     <Text>Задачи</Text>
                 </Left>
                 <Right>
-                    <MarginRight inline={true}>
-                        <SearchIcon />
-                        <AddIcon onPress={this.addTask}/>
-                    </MarginRight>
+                    <SearchIcon right/>
+                    <AddIcon onPress={this.addTask} right/>
                     <TouchableOpacity onPress={toProfile}>
                         <ImageComponent source={{ uri: image }} />
                     </TouchableOpacity>

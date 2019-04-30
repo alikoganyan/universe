@@ -123,9 +123,7 @@ class HeaderComponent extends Component {
                     <Right>
                         {!search ? (
                             <>
-                                <SearchIconContainer>
-                                    <SearchIcon onPress={startSearch} />
-                                </SearchIconContainer>
+                                <SearchIcon onPress={startSearch} right/>
                                 <LocationIcon />
                             </>
                         ) : <CloseIcon onPress={stopSearch} />}

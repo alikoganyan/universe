@@ -20,12 +20,6 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
 `
-const HeaderUserImage = styled(Image)`
-    border-radius: 15;
-    height: 30px;
-    width: 30px;
-    margin-right: 10px;
-`
 const Info = styled(View)`
     display: flex;
     margin-left: 10px;
@@ -123,10 +117,8 @@ class HeaderComponent extends Component {
                     <Right>
                         {!search ? (
                             <>
-                                <SearchIconContainer>
-                                    <SearchIcon onPress={startSearch} />
-                                </SearchIconContainer>
-                                <LocationIcon />
+                                <SearchIcon onPress={startSearch} right/>
+                                <LocationIcon/>
                             </>
                         ) : <CloseIcon onPress={stopSearch} />}
                     </Right>

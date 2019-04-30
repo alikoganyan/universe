@@ -46,16 +46,14 @@ class HeaderComponent extends Component {
         return (
             <Header>
                 <Left>
-                    <MarginRight>
-                        <BackIcon onPress={this.props.back} />
-                    </MarginRight>
+                    <BackIcon onPress={this.props.back} right/>
                     <Text>
                         Контакты
                     </Text>
                 </Left>
                 <Right>
-                    <SearchIcon />
-                    <AddIcon onPress={this.addContact} />
+                    <SearchIcon right/>
+                    <AddIcon onPress={this.addContact} right/>
                     <ImageComponent source={{ uri: user.image }} style={{ marginLeft: 10 }} />
                 </Right>
             </Header>

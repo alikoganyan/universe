@@ -30,6 +30,7 @@ class Content extends Component {
               return <Task key={i} title={e.name}>{e.description}</Task>
             })
           }
+          <View style={{height: 20, width: '100%'}}/>
         </StyledScrollView>
       </Wrapper>
     )
