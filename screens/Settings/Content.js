@@ -7,12 +7,13 @@ import helper from '../../utils/helpers'
 import posed from 'react-native-pose'
 import { connect } from 'react-redux'
 import { socket } from '../../utils/socket'
-
+import sendRequest from '../../utils/request'
+import { p_settings } from '../../constants/api'
 const { Colors, sidePaddingNumber, fontSize, borderRadius, HeaderHeightNumber } = helper;
 const { lightGrey1, blue, lightBlue, grey2 } = Colors;
 const FilePickerPosed = posed.View({
-    visible: { bottom: -230 },
-    hidden: { bottom: -500 }
+    visible: { bottom: -100 },
+    hidden: { bottom: -300 }
 });
 const Wrapper = styled(View)`
     padding-top: 0px;
@@ -141,7 +142,7 @@ class Content extends Component {
                         <PolicyLink>Условия использования</PolicyLink>
                     </Policy>
                     <FilePicker pose={pickerOpened ? 'visible' : 'hidden'}>
-                        {Object.values(langs).map((e,i) => <TouchableOpacity><Text style={{ color: i === 0 ? blue : 'black' }}>{e}</Text></TouchableOpacity>)}
+                        {Object.values(langs).map((e, i) => <TouchableOpacity><Text style={{ color: i === 0 ? blue : 'black' }}>{e}</Text></TouchableOpacity>)}
                         <TouchableOpacity onPress={this.pickerClose}><Text>Отменить</Text></TouchableOpacity>
                     </FilePicker>
                 </Wrapper>
@@ -151,8 +152,8 @@ class Content extends Component {
     state = {
         switchOn: true,
         langs: {
-            ru: 'Русский',
-            en: 'Английский'
+            'Русский': 'Русский',
+            'Английский': 'Английский'
         },
         pickerOpened: false,
         settings: [
@@ -168,6 +169,7 @@ class Content extends Component {
         const newSettings = [...settings]
         newSettings.map(e => {
             if (e.item === 'language') {
+                console.log(langs, user.settings, e.item)
                 e.option.value = 'Изменить'
                 e.status = langs[user.settings[e.item]]
             }
@@ -180,7 +182,7 @@ class Content extends Component {
         }, 0)
     }
     pickerClose = (e) => {
-        this.setState({pickerOpened: false})
+        this.setState({ pickerOpened: false })
     }
     handleToggle = (e) => {
         const { settings } = this.state;
@@ -193,13 +195,26 @@ class Content extends Component {
     }
     componentWillUnmount() {
         const { settings } = this.state;
-        const { user } = this.props;
-        const setting = []
-        settings.map(e => {
-            setting.push({ item: e.item, value: !!e.option.value })
+        const reqBody = {
+            language: '',
+            notifications: '',
+            sound: '',
+            partition_contacts: '',
+        }
+        settings.map(e => reqBody[e.item] = e.item === 'language' ? e.status : e.option.value)
+        sendRequest({
+            r_path: p_settings,
+            method: 'patch',
+            attr: {
+                settings: reqBody,
+            },
+            success: (res) => {
+                console.log({res})
+            },
+            failFunc: (err) => {
+                console.log({err})
+            }
         })
-        socket.emit('change settings', { setting, id: user.id })
-        socket.emit('update user', { id: user.id })
     }
 }
 

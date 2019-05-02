@@ -17,6 +17,7 @@ const Wrapper = styled(TouchableOpacity)`
 const Inner = styled(Text)`
     color: ${({ color }) => color || lightColor};
     font-size: ${text};
+    text-align: center;
 `
 export default Button = (props) => {
     const { children, style, color, onPress } = props;

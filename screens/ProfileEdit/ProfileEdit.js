@@ -23,15 +23,13 @@ class ProfileEdit extends Component {
     render() {
         return (
             <ActionSheetProvider>
-                <SafeAreaView>
-                    <Wrapper>
-                        <Header back={this.navigateBack} />
-                        <KeyboardAvoidingView behavior={'padding'}>
+                <SafeAreaView behavior={'padding'}>
+                        <Wrapper>
+                            <Header back={this.navigateBack} />
                             <ScrollView>
                                 <Content />
-                            </ScrollView>
-                        </KeyboardAvoidingView>
-                    </Wrapper>
+                            </ScrollView> 
+                        </Wrapper>
                 </SafeAreaView>
             </ActionSheetProvider>
         )

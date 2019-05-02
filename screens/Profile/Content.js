@@ -100,8 +100,8 @@ class Content extends Component {
     render() {
         const { UserData, userName, status } = this.state;
         const { user, currentRoom, currentChat, myProfile } = this.props;
-        const { id, image, lastName, firstName, phone } = myProfile ? user : currentChat;
-        const name = firstName || lastName ? `${firstName} ${lastName}` : phone;
+        const { id, image, last_name, first_name, phone_number } = myProfile ? user : currentChat;
+        const name = first_name || last_name ? `${first_name} ${last_name}` : phone_number;
         return (
             <Wrapper>
                 <User >
@@ -141,9 +141,9 @@ class Content extends Component {
         const { myProfile, user, currentChat } = this.props
         const { role, phone_number, department } = myProfile ? user : currentChat;
         const newUserData = [
-            { type: 'Подразделение', value: department },
-            { type: 'Должность', value: role },
-            { type: 'Личный', value: phone_number },
+            { type: 'Подразделение', value: department || 'без подразделения' },
+            { type: 'Должность', value: role || 'без должности' },
+            { type: 'Личный', value: phone_number || 'без номера' },
             !myProfile ? { type: 'Задачи', value: '4', icon: <TaskIcon /> } : undefined,
             !myProfile ? { type: 'Общих групп', value: '32', icon: <GroupIcon /> } : undefined,
             !myProfile ? { type: 'Общих файлов', value: '10', icon: <FilesRedIcon /> } : undefined,

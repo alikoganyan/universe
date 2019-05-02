@@ -9,7 +9,8 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { ImagePicker } from 'expo';
 import { socket } from '../../utils/socket'
-
+import { p_profile } from '../../constants/api'
+import sendRequest from '../../utils/request'
 const { Colors, HeaderHeightNumber, fontSize } = helper;
 const { grey2, blue } = Colors;
 const Wrapper = styled(View)`
@@ -65,6 +66,10 @@ const Bottom = styled(View)`
 `
 const ButtonText = styled(Text)`
     font-size: ${fontSize.text};
+    text-align: center;
+    display: flex;
+    align-self: center;
+    justify-content: center;
 `
 const Input = (props) => {
     const { style, value, children, onChange } = props;
@@ -87,7 +92,7 @@ class Content extends Component {
 
     render() {
         const { user } = this.state;
-        const { firstName, lastName, patronymic, email } = user || {};
+        const { first_name, last_name, middle_name, email } = user || {};
         return (
             <Wrapper>
                 <User >
@@ -97,15 +102,15 @@ class Content extends Component {
                     <UserInfo>
                         <InputBox key={0}>
                             <InputLabel numberOfLines={1} >Фамилия</InputLabel>
-                            <Input value={lastName} onChange={(e) => this.handleChange(e, "lastName")}>Фамилия</Input>
+                            <Input value={last_name} onChange={(e) => this.handleChange(e, "last_name")}>Фамилия</Input>
                         </InputBox>
                         <InputBox key={1}>
                             <InputLabel numberOfLines={1}>Имя</InputLabel>
-                            <Input value={firstName} onChange={(e) => this.handleChange(e, "firstName")}>Имя</Input>
+                            <Input value={first_name} onChange={(e) => this.handleChange(e, "first_name")}>Имя</Input>
                         </InputBox>
                         <InputBox key={2}>
                             <InputLabel numberOfLines={1}>Отчество</InputLabel>
-                            <Input value={patronymic} onChange={(e) => this.handleChange(e, "patronymic")}>Отчество</Input>
+                            <Input value={middle_name} onChange={(e) => this.handleChange(e, "middle_name")}>Отчество</Input>
                         </InputBox>
                         <InputBox key={3}>
                             <InputLabel numberOfLines={1}>Email</InputLabel>
@@ -122,7 +127,7 @@ class Content extends Component {
                     </UserInfo>
                 </User>
                 <Bottom>
-                    <Button style={{ backgroundColor: blue }} color={'#fff'} onPress={this.apply}>
+                    <Button style={{ backgroundColor: blue, flex: 1 }} color={'#fff'} onPress={this.apply}>
                         <ButtonText>Сохранить изменения</ButtonText>
                     </Button>
                 </Bottom>
@@ -132,6 +137,10 @@ class Content extends Component {
     }
     state = {
         user: {
+            email:'',
+            first_name:'',
+            middle_name:'',
+            last_name:'',
             password: '',
             repassword: '',
         },
@@ -147,13 +156,13 @@ class Content extends Component {
     }
     componentDidMount() {
         const { user } = this.props;
-        this.setState({ user: { ...this.state.user, ...user } })
+        this.setState({ user: { ...this.state.user, ...user } }, () => console.log(this.state))
     }
     selectImage = async (e) => {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
-        console.log({result})
+        console.log({ result })
     }
     handleChange = (e, unit) => {
         const { user } = this.state;
@@ -170,7 +179,29 @@ class Content extends Component {
     }
     apply = () => {
         const { user } = this.state
-        socket.emit('edit user', { ...this.props.user, user })
+        const userRedux = this.props.user
+        const { first_name, last_name, middle_name, email, password, repassword } = user
+        sendRequest({
+            r_path: p_profile,
+            method: 'patch',
+            attr: {
+                user: {
+                    email: email || userRedux.email,
+                    first_name: first_name || userRedux.firstName,
+                    middle_name: middle_name || userRedux.patronymic,
+                    last_name: last_name || userRedux.lastName, 
+                    new_password: password || userRedux.password, 
+                    repeat_password: repassword || userRedux.repassword,
+                }
+            },
+            success: (res) => {
+                console.log('pa_profile',{ res })
+            },
+            failFunc: (err) => {
+                console.log('pa_profile', { err })
+            }
+        })
+        
     }
 }
 

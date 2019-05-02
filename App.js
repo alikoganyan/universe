@@ -112,7 +112,7 @@ const AppStackNavigator = createStackNavigator(
     ProfileEdit: { screen: ProfileEdit },
     NewTaskReceivers: { screen: NewTaskReceivers },
     NewGroupParticipants: { screen: NewGroupParticipants },
-    NewGroup: {screen: NewGroup },
+    NewGroup: { screen: NewGroup },
   },
   {
     initialRouteName: 'Login',
