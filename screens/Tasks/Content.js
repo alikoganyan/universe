@@ -3,6 +3,7 @@ import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'rea
 import { CommentIcon, HeartIcon } from '../../assets/index'
 import { TaskComponent } from '../../common'
 import styled from 'styled-components'
+import { connect } from 'react-redux'
 import helper from '../../utils/helpers'
 const { sidePadding, Colors } = helper;
 const { yellow, green, purple, red, black } = Colors;
@@ -49,10 +50,11 @@ const UserImage = styled(Image)`
     margin-bottom: ${sidePadding};
     align-self: flex-end;
 `
-export default class Content extends Component {
+class Content extends Component {
     render() {
         const { taskList, options } = this.state;
         const { active } = options;
+        const { tasks } = this.props
         return (
             <SafeAreaView>
                 <Wrapper>
@@ -63,8 +65,8 @@ export default class Content extends Component {
                             </TouchableOpacity>)
                         }
                     </Options>
-                    <TaskList
-                        data={taskList}
+                    {tasks.tasks && <TaskList
+                        data={tasks.tasks}
                         ListFooterComponent={<View style={{ margin: 40, }} />}
                         renderItem={({ item, index }) => <TaskWrapper>
                             {index !== 1 && <UserImage />}
@@ -77,7 +79,7 @@ export default class Content extends Component {
                                 }}>{item}</TaskComponent>
                         </TaskWrapper>}
                         keyExtractor={(item, index) => index.toString()}
-                    />
+                    />}
                 </Wrapper>
             </SafeAreaView>
         )
@@ -102,27 +104,6 @@ export default class Content extends Component {
                 performers: [1, 2, 3],
                 stage: 1,
             },
-            {
-                type: 'task',
-                title: 'Title',
-                author: 1,
-                text: 'Elit cupidatat Lorem nisi dolore aute ullamco ipsum aute. Ipsum commodo pariatur sit eiusmod ex dolore adipisicing sunt tempor laborum proident nostrud anim. Est fugiat reprehenderit velit laboris eiusmod consequat sit reprehenderit magna minim.',
-                created: 1552297002599,
-                deadline: 1552297012599,
-                performers: [1, 2, 3],
-                stage: 1,
-            },
-            {
-                type: 'task',
-                title: 'Title',
-                author: 1,
-                text: 'Elit cupidatat Lorem nisi dolore aute ullamco ipsum aute. Ipsum commodo pariatur sit eiusmod ex dolore adipisicing sunt tempor laborum proident nostrud anim. Est fugiat reprehenderit velit laboris eiusmod consequat sit reprehenderit magna minim.',
-                created: 1552297002599,
-                deadline: 1552297012599,
-                performers: [1, 2, 3],
-                stage: 1,
-            },
-
         ]
     }
     selectOption = (e) => {
@@ -131,3 +112,12 @@ export default class Content extends Component {
         this.setState({ options })
     }
 }
+
+const mapStateToProps = state => {
+    return {
+        tasks: state.tasksReducer.tasks,
+    };
+};
+const mapDispatchToProps = dispatch => ({
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

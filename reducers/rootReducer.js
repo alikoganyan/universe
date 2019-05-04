@@ -5,6 +5,7 @@ import drawerReducer from './drawerReducer'
 import userReducer from './userReducer'
 import messageReducer from './messageReducer'
 import participantsReducer from './participantsReducer'
+import tasksReducer from './tasksReducer'
 
 export default combineReducers({
     dialogsReducer,
@@ -12,4 +13,5 @@ export default combineReducers({
     userReducer, 
     messageReducer,
     participantsReducer,
+    tasksReducer,
 })

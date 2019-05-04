@@ -8,11 +8,11 @@ const sizes = {
     large: 48,
 }
 const StyledImage = styled(Image)`
+    borderColor: black;
     width: ${({ size }) => typeof size === 'number' ? size : sizes[size]};
     height: ${({ size }) => typeof size === 'number' ? size : sizes[size]};
     border-radius: ${({ size }) => typeof size === 'number' ? size/2 : sizes[size]/2};
     overflow: hidden;
-    border: 1px solid black;
 `
 export default function ImageComponent(props) {
     const { source, style, size = "medium" } = props;

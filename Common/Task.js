@@ -93,11 +93,19 @@ const TaskPostTimeText = styled(MessageDate)`
 const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
 }
-export default function TaskComponent({ children, style, triangleLeft, triangleRight, creator }) {
-    const item = children;
-    const { stage, author, created, deadline, text, title } = item;
+export default function TaskComponent({ children, style, triangleLeft, triangleRight }) {
+    const { name, description, status, deadline, created_at, creator, created, text, title } = children;
     const statuses = ['Прочитано', 'Принял в работу', 'Выполнена', 'Принята',]
     const colors = [red, yellow, green, purple];
+    let stat = ''
+    switch (status) {
+        case 'set':
+            stat = 1;
+            break;
+        case 'done':
+            stat = 2;
+            break;
+    }
     return (<Wrapper style={{ alignSelf: triangleRight ? 'flex-end' : 'flex-start', }}>
         {triangleLeft && <TriangleRightIcon style={{
             position: 'relative',
@@ -111,21 +119,20 @@ export default function TaskComponent({ children, style, triangleLeft, triangleR
             borderBottomRightRadius: triangleRight ? 0 : borderRadius,
         }}>
             <Status>
-                <StatusText>{statuses[stage]}</StatusText>
+                <StatusText>{statuses[stat]}</StatusText>
                 <StatusStage>
-                    {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= stage} color={colors[i]} />)}
+                    {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= stat} color={colors[i]} />)}
                 </StatusStage>
             </Status>
             <TaskTitle>
-                <Text>{title}</Text>
+                <Text>{name}</Text>
             </TaskTitle>
             <TaskBody>
-                <TaskBodyText>{text}</TaskBodyText>
+                <TaskBodyText>{description}</TaskBodyText>
             </TaskBody>
             <TaskFooter>
                 <TaskDeadline>
                     <TaskDeadlineLabel numberOfLines={1}>Делайн: <TaskDeadlineValue>25 января 2017 16:16</TaskDeadlineValue></TaskDeadlineLabel>
-                    {creator && <TaskDeadlineLabel numberOfLines={1}>Поставил: <TaskDeadlineValue>Константин Константинопольский</TaskDeadlineValue></TaskDeadlineLabel>}
                 </TaskDeadline>
                 <TaskPostTime>
                     <TaskPostTimeText>1:40</TaskPostTimeText>

@@ -1,48 +1,128 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, Platform } from 'react-native'
-import { BackIcon, LocationIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon } from '../../assets/index'
+import { View, Text, TextInput, Image, Platform, Dimensions, TouchableOpacity } from 'react-native'
+import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/index'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-const { sidePadding, HeaderHeight } = helper;
-
+import sendRequest from '../../utils/request'
+import { p_search_messages } from '../../constants/api'
+import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
+import Icon from 'react-native-vector-icons/FontAwesome';
+import { ImageComponent } from '../../common'
+const { sidePadding, sidePaddingNumber, HeaderHeight, Colors, fontSize } = helper;
+const { border } = Colors;
 const Header = styled(View)`
-    width: 100%;
+    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
+    align-self: center;
     background: white;
-    height: ${HeaderHeight}; 
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+`
+const HeaderUserImage = styled(Image)`
+    border-radius: 15;
+    height: 30px;
+    width: 30px;
+    margin-right: 10px;
+`
+const Info = styled(View)`
+    display: flex;
+    margin-left: 10px;
+`
+const InfoChatName = styled(Text)`
+    color: black;
+    font-size: ${fontSize.text};
+`
+const InfoParticipants = styled(Text)`
+    color: #5F7991;
+    font-size: ${fontSize.sm};
 `
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
 `
-const Center = styled(View)``
-const Right = styled(Left)``
-const UserIcon = styled(Image)`
-    background: red;
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    margin-right: ${sidePadding};
+const Right = styled(View)`
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
+    justify-content: flex-end;
+    margin-left: ${sidePadding};
 `
+const Categories = styled(Header)`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
+`
+const Top = styled(View)`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    height: ${HeaderHeight}; 
+    width: 100%;
 
-export default class HeaderComponent extends Component {
+`
+const Bottom = styled(Top)`
+    border: 1px solid ${border};
+    border-width: 0;
+    border-top-width: 1px;
+    margin: 0 ${sidePadding};
+    min-height: 0; 
+    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
+`
+const Category = styled(Text)`
+    display: flex;
+    flex:1;
+    justify-content: center;
+    font-size: 11px;
+    text-align: center;
+    padding: 10px 0;
+`
+const Input = styled(TextInput)`
+`
+const IconLeft = styled(Icon)`
+    margin-left: ${sidePadding};
+`
+const ToProfile = styled(TouchableOpacity)`
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px;
+`
+const SearchIconContainer = styled(View)`
+margin-right: 20px;
+`
+class HeaderComponent extends Component {
     render() {
-        const { back } = this.props
+        const { back, tasksReducer, toProfile } = this.props
+        const { first_name, last_name, phone_number, tasks, image } = tasksReducer
         return (
             <Header>
                 <Left>
-                    <BackIcon  onPress={back}/>
-                    <Text>Все входящие задачи</Text>
+                    <BackIcon onPress={back} right />
+                        <ToProfile onPress={toProfile}>
+                            <ImageComponent source={{ uri: image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
+                            <Info>
+                                <InfoChatName>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
+                                <InfoParticipants>{tasks.length} задач</InfoParticipants>
+                            </Info>
+                    </ToProfile>
                 </Left>
                 <Right>
-                    <SearchIcon />
-                    <UserIcon />
+                    <SearchIcon onPress={startSearch}/>
                 </Right>
             </Header>
         )
     }
 }
+const mapStateToProps = state => {
+    return {
+        tasksReducer: state.tasksReducer.tasks,
+    };
+};
+const mapDispatchToProps = dispatch => ({
+})
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)

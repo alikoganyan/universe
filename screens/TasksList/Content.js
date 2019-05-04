@@ -27,7 +27,7 @@ class Content extends Component {
           <TaskPack title={'Все исходящие задачи'} last>task</TaskPack>
           {
             FlatListData.map((e, i) => {
-              return <Task key={i} title={e.name}>{e.description}</Task>
+              return <Task onPress={this.toTasks} key={i}>{e}</Task>
             })
           }
           <View style={{height: 20, width: '100%'}}/>
@@ -39,33 +39,29 @@ class Content extends Component {
     FlatListData: []
   }
   componentDidMount() {
-    const { user, setAllUsers } = this.props
-    // this.setState({FlatListData: user.tasks})
     sendRequest({
       r_path: g_users,
       method: 'get',
       success: ({ users }) => {
         const tasksList = []
-        users.map(({ tasks }) => {
-          tasks && tasks.map((e) => {
-            if (e.creator === user._id || e.performers.includes(user._id)) {
-              tasksList.push(e)
+        users.map(user => {
+          const { tasks } = user
+          tasks && tasks.map((e, i) => {
+            if (i === 0 && (e.creator === user._id || e.performers.includes(user._id))) {
+              tasksList.push(user)
             }
           })
         })
-        setTimeout(() => this.setState({ FlatListData: tasksList }), 0)
-        // console.log(tasksList)
+        setTimeout(() => this.setState({ FlatListData: [...tasksList] }), 0)
       },
       failFunc: (err) => {
         console.log({ err })
       }
     })
   }
-  toChat = () => {
-    this.props.navigation.navigate('Chat')
-  }
-  toGroup = () => {
-    this.props.navigation.navigate('Group')
+  toTasks = () => {
+    const { navigate } = this.props
+    navigate('Tasks')
   }
 }
 

@@ -3,7 +3,8 @@ import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionShe
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { TasksIcon } from '../../assets/index'
-
+import { setTasks } from '../../actions/tasksActions'
+import { connect } from 'react-redux'
 const { fontSize, PressDelay, sidePadding, sidePaddingNumber, Colors } = helper;
 const { purple, lightColor, grey2 } = Colors;
 
@@ -82,7 +83,7 @@ const TaskStatus = styled(View)`
 `
 const TaskStatusTextContainer = styled(View)`
   border: 1px solid ${lightColor};
-  border-radius: 15px; 
+  border-radius: 15px;
   padding: 2px 8px;
   margin-right: 5px;
   display: flex;
@@ -94,34 +95,44 @@ const TaskStatusText = styled(Text)`
 const TaskStatusAdditional = styled(Text)`
   color: ${lightColor};
 `
-export default class Content extends Component {
+class Tasks extends Component {
   render() {
-    const { children, title, onClick } = this.props;
-    const { height, width } = this.state;
+    const { children, onClick } = this.props;
+    const {first_name, last_name, phone_number, image, tasks } = children
+    let stat = ''
+    switch(tasks[0].status){
+      case 'set':
+        stat = 'В работе';
+        break;
+      case 'done':
+        stat = 'Выполнена';
+        break;
+    }
+    const day = new Date(tasks[0].created_at).getDay()
+    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     return (
-      <TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}>
+      <TouchableHighlight underlayColor='#2B7DE2' onPress={() => this.handleClick(children)} onLongPress={this.handleHold}>
         <Wrapper>
-          <TaskImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
+          <TaskImage source={{ uri: image || 'https://facebook.github.io/react/logo-og.png' }} />
           <TaskText>
             <TaskTextInner>
-              <TaskTitle>{title}</TaskTitle>
-              <TaskLastMessage numberOfLines={1} >{children}</TaskLastMessage>
+              <TaskTitle>{first_name ? `${first_name} ${last_name}` : phone_number}</TaskTitle>
+              <TaskLastMessage numberOfLines={1} >{tasks[0].description}</TaskLastMessage>
               <TaskStatus>
                 <TaskStatusTextContainer>
                   <TasksIcon />
-                  <TaskStatusText>в работе</TaskStatusText>
+                  <TaskStatusText>{stat}</TaskStatusText>
                 </TaskStatusTextContainer>
-                <TaskStatusAdditional>+4 задачи</TaskStatusAdditional>
+                <TaskStatusAdditional>+{tasks.length - 1} задачи</TaskStatusAdditional>
               </TaskStatus>
             </TaskTextInner>
             <TaskDate >
-              <LastMessageDate>Thu</LastMessageDate>
+              <LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
               <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-                <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>2</NewMessages>
+                <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{tasks.length - 1}</NewMessages>
               </UnreadMessages>
             </TaskDate>
           </TaskText>
-
         </Wrapper >
       </TouchableHighlight >
     );
@@ -138,13 +149,14 @@ export default class Content extends Component {
       },
       (buttonIndex) => {
         if (buttonIndex === 1) {
-          /* destructive action */
         }
       },
     );
   }
-  handleClick = () => {
-    onClick()
+  handleClick = (tasks) => {
+    const { setTasks, onPress } = this.props
+    setTasks(tasks)
+    onPress()
   }
   getUnreadMessageHeight = (e) => {
     this.setState({ height: e.nativeEvent.layout.height })
@@ -153,3 +165,12 @@ export default class Content extends Component {
     this.setState({ width: e.nativeEvent.layout.width })
   }
 }
+
+const mapStateToProps = state => {
+  return {
+  };
+};
+const mapDispatchToProps = dispatch => ({
+  setTasks: _ => dispatch(setTasks(_)),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Tasks)
