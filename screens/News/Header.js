@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, Image, Platform, Dimensions, TouchableOpacity } from 'react-native'
-import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/index'
+import { BackIcon, AddIcon, SearchIcon, CloseIcon } from '../../assets/index'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
@@ -100,18 +100,21 @@ class HeaderComponent extends Component {
                     </Left>
                     <Right>
                         <SearchIcon onPress={startSearch} right/>
+                        <AddIcon onPress={this.createFeed} right/>
                         <ImageComponent source={{ uri: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
                     </Right>
                 </Top>
             </Header>
         )
     }
+    createFeed = () => {
+        const { navigate } = this.props
+        navigate('NewFeed')
+    }
 }
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         search: state.messageReducer.search
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch()),

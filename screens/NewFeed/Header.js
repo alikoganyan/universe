@@ -104,11 +104,8 @@ class HeaderComponent extends Component {
         )
     }
 }
-const mapStateToProps = state => {
-    return {
-
-    };
-};
+const mapStateToProps = state => ({
+})
 const mapDispatchToProps = dispatch => ({
 
 })

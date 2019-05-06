@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 import styled from 'styled-components'
 import { CheckIcon, TriangleLeftIcon, TriangleRightIcon } from '../assets'
-const { HeaderHeightNumber, Colors } = helper;
+const { HeaderHeightNumber, Colors, fontSize } = helper;
 const { red, yellow, green, purple, grey1 } = Colors;
 const borderRadius = 5;
 const Wrapper = styled(View)`
@@ -63,12 +63,12 @@ const TaskDeadline = styled(View)`
     display: flex;
     flex-direction: column;
     width: 100%;
-    flex: 6;
+    flex: 5;
 `
 const TaskDeadlineLabel = styled(Text)`
     color: ${grey1};
     flex: 1;
-    
+    font-size: ${fontSize.sl};
 `
 const TaskDeadlineValue = styled(Text)`
     color: ${purple};
@@ -80,7 +80,7 @@ const TaskPostTime = styled(View)`
     justify-content: flex-end;
     padding: 0;
     width: 100%;
-    flex: 1;
+    flex: 2;
 `
 const TaskFooter = styled(View)`
     display: flex;
@@ -96,6 +96,7 @@ const Indicator = ({ delievered = false, read = false, color }) => {
 export default function TaskComponent({ children, style, triangleLeft, triangleRight }) {
     const { name, description, status, deadline, created_at, creator, created, text, title } = children;
     const statuses = ['Прочитано', 'Принял в работу', 'Выполнена', 'Принята',]
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec',];
     const colors = [red, yellow, green, purple];
     let stat = ''
     switch (status) {
@@ -106,6 +107,10 @@ export default function TaskComponent({ children, style, triangleLeft, triangleR
             stat = 2;
             break;
     }
+    const deadlineDate = new Date(deadline)
+    const creationDate = new Date(created_at)
+    console.log(`
+    ${creationDate.getHours()}:${creationDate.getMinutes() >= 10 || '0'+creationDate.getMinutes() }`)
     return (<Wrapper style={{ alignSelf: triangleRight ? 'flex-end' : 'flex-start', }}>
         {triangleLeft && <TriangleRightIcon style={{
             position: 'relative',
@@ -132,11 +137,20 @@ export default function TaskComponent({ children, style, triangleLeft, triangleR
             </TaskBody>
             <TaskFooter>
                 <TaskDeadline>
-                    <TaskDeadlineLabel numberOfLines={1}>Делайн: <TaskDeadlineValue>25 января 2017 16:16</TaskDeadlineValue></TaskDeadlineLabel>
+                    <TaskDeadlineLabel numberOfLines={1}>Делайн: {' '}
+                        <TaskDeadlineValue>
+                                {deadlineDate.getDate()}{' '}
+                                {months[deadlineDate.getMonth()]}{' '}
+                                {deadlineDate.getFullYear()}{' '}
+                                {deadlineDate.getHours()}:{deadlineDate.getMinutes()} 
+                        </TaskDeadlineValue>
+                    </TaskDeadlineLabel>
                 </TaskDeadline>
                 <TaskPostTime>
-                    <TaskPostTimeText>1:40</TaskPostTimeText>
-                    <Indicator />
+                    <TaskPostTimeText>
+                        {creationDate.getHours()}:{creationDate.getMinutes() < 10 ? `0${creationDate.getMinutes()}`: creationDate.getMinutes() }
+                    </TaskPostTimeText>
+                    {triangleRight && <Indicator />}
                 </TaskPostTime>
             </TaskFooter>
         </Task>
@@ -145,6 +159,6 @@ export default function TaskComponent({ children, style, triangleLeft, triangleR
             left: -11,
             top: -10,
             zIndex: 99,
-        }} hollow={true} color={purple} />}
+        }} hollow color={purple} />}
     </Wrapper>)
 }

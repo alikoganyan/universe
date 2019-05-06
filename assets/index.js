@@ -32,17 +32,17 @@ const Right = styled(StyledTouchableOpacity)`
 `
 // ${({ color }) => color || IconLightColor}
 const TriangleLeft = styled(View)`
-    width: 0;
-    height: 0;
+    width: 0px;
+    height: 0px;
     border-style: solid;
     border-width: 0;
-    border-top-width: 15px;
-    border-left-width: 15px;
+    border-right-width: 15px;
+    border-bottom-width: 15px;
     border-color: transparent;
-    border-left-color: ${({ color }) => color || IconLightColor};
+    border-bottom-color: ${({ color }) => color || IconLightColor};    
     position: relative;
     align-self: flex-end;
-    left: -15px;
+    left: 5px;
     top: -5px;
     line-height: 0px;
     ${({ style }) => style};

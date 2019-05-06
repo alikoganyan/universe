@@ -226,11 +226,9 @@ class Content extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         id: state.userReducer.id
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     setAuth: info => { dispatch(setAuth(info)) },
     setUser: info => { dispatch(setUser(info)) },

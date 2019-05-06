@@ -99,14 +99,12 @@ class Content extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         messages: state.messageReducer.messages,
         search: state.messageReducer.search,
         currentRoom: state.messageReducer.currentRoom,
         user: state.userReducer.user,
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
 
 })

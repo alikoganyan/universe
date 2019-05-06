@@ -238,12 +238,10 @@ class Content extends Component {
         this.setState({ deadlineTime: e })
     }
 }
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         user: state.userReducer.user,
         receivers: state.participantsReducer.tasks.receivers,
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
     addReceiver: _ => dispatch(addReceiver(_)),

@@ -113,12 +113,10 @@ const Options = styled(View)`
     background: ${green};
     flex-direction: row;
     justify-content: space-between;
-    border-radius: 13;
-    overflow: hidden;
+    border-radius: 14;
     padding: 1px;
-    width: ${100 - sidePaddingNumber/2}%;
-    margin-left: ${sidePaddingNumber};
-    margin-right: ${sidePaddingNumber};
+    overflow: hidden;
+    width: 90%;
 `
 const Option = styled(Text)`
     color: ${({ active }) => active ? black : 'white'};
@@ -126,7 +124,7 @@ const Option = styled(Text)`
     border: ${({ active }) => active ? '1px rgba(0, 0, 0, 0.1) solid' : '0'};
     border-color: ${({ active }) => active ? 'rgba(0, 0, 0, 0.1)' : 'transparent'};
     border-style: solid;
-    min-width: 25%;
+    min-width: 30%;
     border-radius: 13;
     padding: 4px 10px 3px;
     overflow: hidden;
@@ -304,15 +302,13 @@ class Content extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         messages: state.messageReducer,
         dialog: state.dialogsReducer.dialogs,
         currentRoom: state.messageReducer.currentRoom,
         user: state.userReducer.user,
         users: state.userReducer,
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),

@@ -118,11 +118,9 @@ class HeaderComponent extends Component {
         )
     }
 }
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         tasksReducer: state.tasksReducer.tasks,
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
 })
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)

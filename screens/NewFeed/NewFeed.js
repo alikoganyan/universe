@@ -28,6 +28,6 @@ export default class Signup extends Component {
         this.props.navigation.navigate('Login')
     }
     addParticipant = () => {
-        this.props.navigation.navigate('NewFeedParticipants')
+        this.props.navigation.navigate('NewFeedReceivers')
     }
 }

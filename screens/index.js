@@ -27,7 +27,7 @@ import NewContact from './NewContact/NewContact'
 import FirstInstall from './FirstInstall/FirstInstall'
 import NewFeed from './NewFeed/NewFeed'
 import SplashScreen from './SplashScreen/SplashScreen'
-import NewFeedParticipants from './NewFeedParticipants/NewFeedParticipants'
+import NewFeedReceivers from './NewFeedReceivers/NewFeedReceivers'
 import ProfileEdit from './ProfileEdit/ProfileEdit'
 import NewTask from './NewTask/NewTask'
 import NewTaskReceivers from './NewTaskReceivers/NewTaskReceivers'
@@ -63,7 +63,7 @@ export {
     FirstInstall,
     NewFeed,
     SplashScreen,
-    NewFeedParticipants,
+    NewFeedReceivers,
     ProfileEdit,
     NewTask,
     NewTaskReceivers,

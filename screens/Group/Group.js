@@ -55,14 +55,12 @@ class Chat extends Component {
 }
 
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         messages: state.messageReducer.messages,
         currentRoom: state.messageReducer.currentRoom,
         currentChat: state.messageReducer.currentChat,
         user: state.userReducer.user
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),

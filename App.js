@@ -34,7 +34,7 @@ import {
   NewTask,
   NewFeed,
   SplashScreen,
-  NewFeedParticipants,
+  NewFeedReceivers,
   ProfileEdit,
   NewTaskReceivers,
   NewGroupParticipants,
@@ -48,7 +48,6 @@ import {
 } from 'redux';
 import thunk from 'redux-thunk';
 import { Provider } from 'react-redux';
-import reducers from './reducers/'
 import devToolsEnhancer from 'remote-redux-devtools';
 import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction';
 import {
@@ -108,7 +107,7 @@ const AppStackNavigator = createStackNavigator(
     FirstInstall: { screen: FirstInstall },
     NewFeed: { screen: NewFeed },
     NewTask: { screen: NewTask },
-    NewFeedParticipants: { screen: NewFeedParticipants },
+    NewFeedReceivers: { screen: NewFeedReceivers },
     ProfileEdit: { screen: ProfileEdit },
     NewTaskReceivers: { screen: NewTaskReceivers },
     NewGroupParticipants: { screen: NewGroupParticipants },

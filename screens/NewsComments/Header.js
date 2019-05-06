@@ -111,11 +111,9 @@ class HeaderComponent extends Component {
         )
     }
 }
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         search: state.messageReducer.search
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch()),

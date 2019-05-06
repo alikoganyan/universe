@@ -7,7 +7,7 @@ import {
     ActionSheetProvider,
     connectActionSheet,
 } from '@expo/react-native-action-sheet';
-import { Header, Content } from './'
+import { Header, Content } from '.'
 const Wrapper = styled(View)`
     height: 100%;
 `
@@ -19,14 +19,14 @@ const Bottom = styled(View)`
     
 `
 
-export default class NewFeedParticipants extends Component {
+export default class NewFeedReceivers extends Component {
     render() {
         return (
             <ActionSheetProvider>
                 <SafeAreaView>
                     <Wrapper>
                         <Header back={this.navigateBack} />
-                        <Content />
+                        <Content back={this.navigateBack}/>
                         <Bottom>
                         </Bottom>
                     </Wrapper>

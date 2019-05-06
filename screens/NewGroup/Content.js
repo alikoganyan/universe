@@ -33,10 +33,10 @@ const ButtonBox = styled(View)`
     position: absolute;
     bottom: 30px;
 `
-const Recievers = styled(View)`
+const Receivers = styled(View)`
     margin: 40px 0;
 `
-const Reciever = styled(View)`
+const Receiver = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -44,7 +44,7 @@ const Reciever = styled(View)`
     margin-top: 20px;
     
 `
-const RecieverInfo = styled(View)`
+const ReceiverInfo = styled(View)`
     display: flex;
     justify-content: space-between;
 `
@@ -58,24 +58,24 @@ const DialogsLabel = styled(View)`
     justify-content: flex-start;
     margin-top: 20px;
 `
-const AddReciever = styled(Text)`
+const AddReceiver = styled(Text)`
     color: ${green};
 `
-const RecieverComponent = (props) => {
+const ReceiverComponent = (props) => {
     const { children, last = false } = props;
     const { info, title, image, role, first_name, last_name, phone_number } = children
-    return <Reciever last={last}>
+    return <Receiver last={last}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <ImageComponent source={{ uri: image }} />
             <View style={{ flex: 1 }}>
-                <RecieverInfo>
+                <ReceiverInfo>
                     <Text numberOfLines={1}>{first_name || phone_number}</Text>
                     <Department numberOfLines={1}>{role || 'no role'}</Department>
-                </RecieverInfo>
+                </ReceiverInfo>
             </View>
             <CloseIcon />
         </View>
-    </Reciever>
+    </Receiver>
 }
 class Content extends Component {
     render() {
@@ -93,22 +93,22 @@ class Content extends Component {
                     placeholder={'Новая группа'}
                     multiline={true}
                     style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
-                <Recievers>
+                <Receivers>
                     <DialogsLabel>
                         <GroupIcon />
                         <Text>Участники</Text>
                     </DialogsLabel>
                     <ScrollView style={{ maxHeight: 150 }}>
                         {participants.map((e, i) => (
-                            <RecieverComponent key={i} last={i === participants.length}>{e}</RecieverComponent>
+                            <ReceiverComponent key={i} last={i === participants.length}>{e}</ReceiverComponent>
                         ))}
                     </ScrollView>
                     <DialogsLabel>
                         <TouchableOpacity onPress={this.addParticipant}>
-                            <AddReciever>Добавить</AddReciever>
+                            <AddReceiver>Добавить</AddReceiver>
                         </TouchableOpacity>
                     </DialogsLabel>
-                </Recievers>
+                </Receivers>
                 <ButtonBox>
                     <Button
                         onPress={this.proceed}
@@ -146,12 +146,10 @@ class Content extends Component {
         this.setState({ text: e })
     }
 }
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         id: state.userReducer.user.id,
         participants: state.participantsReducer.dialog.participants
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
 })

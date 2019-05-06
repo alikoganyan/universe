@@ -64,11 +64,9 @@ class HeaderComponent extends Component {
         navigate('NewContact')
     }
 }
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         user: state.userReducer.user
-    };
-};
+});
 const mapDispatchToProps = dispatch => ({
     setDialogs: _ => dispatch(setDialogs(_))
 })

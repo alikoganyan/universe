@@ -153,13 +153,11 @@ class HeaderComponent extends Component {
         }) : getMessages(dialogs.filter(e => e.room.includes(currentRoom))[0].messages)
     }
 }
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         search: state.messageReducer.search,
         dialogs: state.dialogsReducer.dialogs,
         currentRoom: state.messageReducer.currentRoom
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch()),

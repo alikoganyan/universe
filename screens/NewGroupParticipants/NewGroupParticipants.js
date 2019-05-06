@@ -19,7 +19,7 @@ const Bottom = styled(View)`
     
 `
 
-export default class NewFeedParticipants extends Component {
+export default class NewFeedReceivers extends Component {
     render() {
         return (
             <ActionSheetProvider>

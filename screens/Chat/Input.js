@@ -179,13 +179,11 @@ class InputComponent extends Component {
     };
 }
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         messages: state.messageReducer.messages,
         currentRoom: state.messageReducer.currentRoom,
         id: state.userReducer.user._id
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch()),

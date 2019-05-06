@@ -6,6 +6,7 @@ import userReducer from './userReducer'
 import messageReducer from './messageReducer'
 import participantsReducer from './participantsReducer'
 import tasksReducer from './tasksReducer'
+import newsReducer from './newsReducer'
 
 export default combineReducers({
     dialogsReducer,
@@ -14,4 +15,5 @@ export default combineReducers({
     messageReducer,
     participantsReducer,
     tasksReducer,
+    newsReducer,
 })

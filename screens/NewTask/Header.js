@@ -29,7 +29,7 @@ const Info = styled(View)`
     display: flex;
     margin-left: 10px;
 `
-const InfoChatName = styled(Text)`
+const InfoTaskName = styled(Text)`
     color: black;
     font-size: ${fontSize.text};
 `
@@ -93,7 +93,7 @@ class HeaderComponent extends Component {
                     <Left>
                         <CloseIcon right onPress={this.back}/>
                         <Info>
-                            <InfoChatName>Создание новости</InfoChatName>
+                            <InfoTaskName>Создание задачи</InfoTaskName>
                         </Info>
                     </Left>
                     <Right>
@@ -106,11 +106,8 @@ class HeaderComponent extends Component {
         this.props.back()
     }
 }
-const mapStateToProps = state => {
-    return {
-
-    };
-};
+const mapStateToProps = state => ({
+})
 const mapDispatchToProps = dispatch => ({
 
 })

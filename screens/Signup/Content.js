@@ -151,11 +151,9 @@ class Content extends Component {
         e.length <= 10 && this.setState({ phone: e })
     }
 }
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         id: state.userReducer.id
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
     setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_))

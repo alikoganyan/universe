@@ -66,11 +66,9 @@ class HeaderComponent extends Component {
         navigate('NewTask')
     }
 }
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         user: state.userReducer.user
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
 })
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)

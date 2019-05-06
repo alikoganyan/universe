@@ -14,6 +14,7 @@ import sendRequest from '../../utils/request'
 import { g_users } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
+import { addFeedReceiver, setTaskReceivers } from '../../actions/participantsActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
 
@@ -148,7 +149,6 @@ class Content extends Component {
                     onSwipeLeft={this.optionLeft}
                     onSwipeRight={this.optionRight}
                 >
-
                     <Wrapper>
                         <KeyboardAwareScrollView enableOnAndroid>
                             <Options>
@@ -178,13 +178,15 @@ class Content extends Component {
                                                 <Collapsible collapsed={collapsed[i] || false}>
                                                     <BoxInner>
                                                         {
-                                                            e.workers.map((e, i) => <BoxInnerItem key={e._id}>
-                                                                <ContactImage />
-                                                                <ContactInfo>
-                                                                    <ContactName>{e.name || e.phone_number}</ContactName>
-                                                                    <ContactRole>{e.role || 'no role'}</ContactRole>
-                                                                </ContactInfo>
-                                                            </BoxInnerItem>)
+                                                            e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
+                                                                <BoxInnerItem>
+                                                                    <ContactImage />
+                                                                    <ContactInfo>
+                                                                        <ContactName>{e.name || e.phone_number}</ContactName>
+                                                                        <ContactRole>{e.role || 'no role'}</ContactRole>
+                                                                    </ContactInfo>
+                                                                </BoxInnerItem>
+                                                            </TouchableOpacity>)
                                                         }
                                                     </BoxInner>
                                                 </Collapsible>
@@ -198,7 +200,7 @@ class Content extends Component {
                                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                                         inverted={true}
                                         data={groups}
-                                        renderItem={({ item }) => <Group>
+                                        renderItem={({ item, index }) => <Group key={index}>
                                             <GroupImage />
                                             <GroupInfo>
                                                 <GroupTitle>{item.title}</GroupTitle>
@@ -257,9 +259,8 @@ class Content extends Component {
             success: (res) => {
                 this.props.setContacts(res)
                 const newUsers = { ...this.state.users }
-                newUsers.department[0].workers = res
+                newUsers.department[0].workers = res.users
                 this.setState({ users: newUsers })
-                console.log(newUsers)
             },
             failFunc: (err) => {
                 console.log({ err })
@@ -280,6 +281,16 @@ class Content extends Component {
         this.setState({ options: newState })
 
     }
+    addReceiver = (e) => {
+        const { addReceiver, back, receivers } = this.props;
+        const includes = receivers.filter(item => {
+            return item._id === e._id
+        }).length
+        if(!includes){
+            addReceiver(e)
+            back()
+        }
+    }
     collapseDepartment = (i) => {
         const newDCollapsed = [...this.state.collapsed]
         newDCollapsed[i] = false;
@@ -297,23 +308,24 @@ class Content extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         messages: state.messageReducer,
         dialog: state.dialogsReducer.dialogs,
+        receivers: state.participantsReducer.news.receivers,
         currentRoom: state.messageReducer.currentRoom,
         currentChat: state.messageReducer.currentChat,
         user: state.userReducer.user,
         users: state.userReducer
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
     addMessage: _ => dispatch(addMessage(_)),
     setAllUsers: _ => dispatch(setAllUsers(_)),
-    setContacts: _ => dispatch(setContacts(_))
+    setContacts: _ => dispatch(setContacts(_)),
+    addReceiver: _ => dispatch(addFeedReceiver(_)),
+    setReceivers: _ => dispatch(setTaskReceivers(_)),
 
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

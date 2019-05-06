@@ -22,10 +22,11 @@ const Options = styled(View)`
     align-self: center;
     background: ${green};
     flex-direction: row;
+    border-radius: 14;
     padding: 1px;
-    border-radius: 13;
     overflow: hidden;
-    margin-bottom: 10px;
+    margin: 10px 0;
+    max-width: 85%;
 `
 const Option = styled(Text)`
     color: ${({ active }) => active ? black : 'white'};
@@ -34,21 +35,13 @@ const Option = styled(Text)`
     border-radius: 10;
     padding: 2px 0;
     overflow: hidden;
-    min-width: 50px;
+    min-width: 30%;
     text-align: center;
 `
 const TaskWrapper = styled(View)`
     display: flex;
     align-items: flex-end;
     flex-direction: row;
-`
-const UserImage = styled(Image)`
-    background: red;
-    width: 40px;
-    height: 40px;
-    border-radius: 20;
-    margin-bottom: ${sidePadding};
-    align-self: flex-end;
 `
 class Content extends Component {
     render() {
@@ -69,7 +62,6 @@ class Content extends Component {
                         data={tasks.tasks}
                         ListFooterComponent={<View style={{ margin: 40, }} />}
                         renderItem={({ item, index }) => <TaskWrapper>
-                            {index !== 1 && <UserImage />}
                             <TaskComponent
                                 triangleLeft={index !== 1}
                                 triangleRight={index === 1}
@@ -93,18 +85,7 @@ class Content extends Component {
                 'Дедлайн'
             ]
         },
-        taskList: [
-            {
-                type: 'task',
-                title: 'Title',
-                author: 1,
-                text: 'Elit cupidatat Lorem nisi dolore aute ullamco ipsum aute. Ipsum commodo pariatur sit eiusmod ex dolore adipisicing sunt tempor laborum proident nostrud anim. Est fugiat reprehenderit velit laboris eiusmod consequat sit reprehenderit magna minim.',
-                created: 1552297002599,
-                deadline: 1552297012599,
-                performers: [1, 2, 3],
-                stage: 1,
-            },
-        ]
+        taskList: []
     }
     selectOption = (e) => {
         const options = { ...this.state.options };
@@ -113,11 +94,9 @@ class Content extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         tasks: state.tasksReducer.tasks,
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

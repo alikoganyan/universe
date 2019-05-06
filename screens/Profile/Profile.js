@@ -80,11 +80,9 @@ class Profile extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         user: state.userReducer.user,
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
 })

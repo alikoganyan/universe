@@ -304,8 +304,7 @@ class Content extends Component {
     }
 }
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         messages: state.messageReducer,
         dialog: state.dialogsReducer.dialogs,
         currentRoom: state.messageReducer.currentRoom,
@@ -313,8 +312,7 @@ const mapStateToProps = state => {
         user: state.userReducer.user,
         users: state.userReducer,
         participants: state.participantsReducer.dialog.participants
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),

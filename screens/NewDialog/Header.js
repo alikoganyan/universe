@@ -100,15 +100,13 @@ class HeaderComponent extends Component {
 }
 
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         dialogs: state.dialogsReducer.dialogs,
         messages: state.messageReducer.messages,
         search: state.messageReducer.search,
         drawer: state.drawerReducer.open,
         user: state.userReducer.user
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     setDialogs: _ => dispatch(setDialogs(_))
 })

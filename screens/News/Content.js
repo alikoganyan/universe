@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'react-native'
 import { CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
+import { setFeed } from '../../actions/newsActions'
 import helper from '../../utils/helpers'
+import { connect } from 'react-redux'
 import { ImageComponent } from '../../common'
 const { borderRadius, Colors, fontSize, sidePadding } = helper;
 const { yellow, darkBlue2, grey2 } = Colors;
@@ -79,15 +81,14 @@ const Reactionsext = styled(Text)`
     font-size: ${fontSize.sm};
 `
 
-export default class Content extends Component {
+class Content extends Component {
     render() {
-        const { newsList } = this.state;
-        const { proceed } = this.props;
+        const { news } = this.props;
         return (
             <SafeAreaView>
                 <Wrapper>
                     <NewsList
-                        data={newsList}
+                        data={news}
                         ListFooterComponent={<View style={{ margin: 10, }} />}
                         renderItem={({ item }) => <NewsItem>
                             <Sender>
@@ -102,7 +103,7 @@ export default class Content extends Component {
                             <NewsText numberOfLines={2}>{item.text}</NewsText>
                             <NewsItemInfo>
                                 <ShowAll>
-                                    <TouchableOpacity onPress={proceed}><HashTag>Читать далее</HashTag></TouchableOpacity>
+                                    <TouchableOpacity onPress={() => this.proceed(item)}><HashTag>Читать далее</HashTag></TouchableOpacity>
                                 </ShowAll>
 
                                 <Reactions>
@@ -118,92 +119,20 @@ export default class Content extends Component {
         )
     }
     state = {
-        newsList: [
-            {
-                sender: {
-                    img: 'https://facebook.github.io/react/logo-og.png',
-                    name: 'Константин Константинопольский'
-                },
-                text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
-                hashtags: [
-                    '#Константин Константинопольский',
-                    '#kek'
-                ],
-                likes: 10,
-                shares: 2,
-                timeSent: '16 января 2018 17:17'
-            },
-            {
-                sender: {
-                    img: 'https://facebook.github.io/react/logo-og.png',
-                    name: 'Константин Константинопольский'
-                },
-                text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
-                hashtags: [
-                    '#Константин Константинопольский',
-                    '#kek'
-                ],
-                likes: 10,
-                shares: 2,
-                timeSent: '16 января 2018 17:17'
-            },
-            {
-                sender: {
-                    img: 'https://facebook.github.io/react/logo-og.png',
-                    name: 'Константин Константинопольский'
-                },
-                text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
-                hashtags: [
-                    '#Константин Константинопольский',
-                    '#kek'
-                ],
-                likes: 10,
-                shares: 2,
-                timeSent: '16 января 2018 17:17'
-            },
-            {
-                sender: {
-                    img: 'https://facebook.github.io/react/logo-og.png',
-                    name: 'Константин Константинопольский'
-                },
-                text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
-                hashtags: [
-                    '#Константин Константинопольский',
-                    '#kek'
-                ],
-                likes: 10,
-                shares: 2,
-                timeSent: '16 января 2018 17:17'
-            },
-            {
-                sender: {
-                    img: 'https://facebook.github.io/react/logo-og.png',
-                    name: 'Константин Константинопольский'
-                },
-                text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
-                hashtags: [
-                    '#Константин Константинопольский',
-                    '#kek'
-                ],
-                likes: 10,
-                shares: 2,
-                timeSent: '16 января 2018 17:17'
-            },
-            {
-                sender: {
-                    img: 'https://facebook.github.io/react/logo-og.png',
-                    name: 'Константин Константинопольский'
-                },
-                text: 'Добавлю, что восприятие сотворчества готично начинает этикет. Семиотика Добавлю, что восприятие сотворчества',
-                hashtags: [
-                    '#Константин Константинопольский',
-                    '#kek'
-                ],
-                likes: 10,
-                shares: 2,
-                timeSent: '16 января 2018 17:17'
-            },
-
-        ]
+    }
+    componentDidMount(){
+    }
+    proceed = (e) => {
+        const {proceed, setFeed} = this.props
+        setFeed(e)
+        proceed()
     }
 }
+
+const mapStateToProps = state => ({
+        news: state.newsReducer.news,
+})
+const mapDispatchToProps = dispatch => ({
+    setFeed: _ => dispatch(setFeed(_)),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

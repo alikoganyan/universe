@@ -48,6 +48,7 @@ export default helper = {
         large: 20,
         header: 15,
         text: 14,
+        sl: 12,
         sm: 10,
         md: 14
     },

@@ -54,15 +54,13 @@ class HeaderComponent extends Component {
         )
     }
 }
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         messages: state.messageReducer,
         dialog: state.dialogsReducer.dialogs,
         currentRoom: state.messageReducer.currentRoom,
         currentChat: state.messageReducer.currentChat,
         user: state.userReducer.user,
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
     setCurrentChat: _ => dispatch(setCurrentChat(_)),
 })

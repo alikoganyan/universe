@@ -127,11 +127,9 @@ class Content extends Component {
         })
     }
 }
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         register: state.userReducer.register,
-    };
-};
+})
 const mapDispatchToProps = dispatch => ({
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

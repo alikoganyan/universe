@@ -6,6 +6,8 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
 import { Button } from '../../common'
+import sendRequest from '../../utils/request'
+import { news } from '../../constants/api'
 import { ImageComponent } from '../../common'
 import { GroupIcon, CloseIcon } from '../../assets/'
 const { Colors, HeaderHeightNumber, sidePadding } = helper;
@@ -62,14 +64,14 @@ const AddReciever = styled(Text)`
 `
 const RecieverComponent = (props) => {
     const { children, last = false } = props;
-    const { info, title, image } = children
+    const { image, first_name, last_name, phone_number, department } = children
     return <Reciever last={last}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <ImageComponent source={{ uri: image }} />
-            <View style={{ flex: 1 }}>
+            <View style={{ flex: 1, marginLeft: 10 }}>
                 <RecieverInfo>
-                    <Text numberOfLines={1}>{title}</Text>
-                    <Department numberOfLines={1}>{info}</Department>
+                    <Text numberOfLines={1}>{first_name ? `${first_name} ${last_name}` : phone_number}</Text>
+                    <Department numberOfLines={1}>{department || 'без департамента'}</Department>
                 </RecieverInfo>
             </View>
             <CloseIcon />
@@ -81,6 +83,9 @@ class Content extends Component {
         const {
             text
         } = this.state
+        const {
+            receivers
+        } = this.props
         return (
             <Wrapper>
                 <StyledInput password={true}
@@ -95,8 +100,8 @@ class Content extends Component {
                         <Text>диалоги</Text>
                     </DialogsLabel>
                     <ScrollView>
-                        {this.state.recievers.map((e, i) => (
-                                <RecieverComponent key={i} last={i === this.state.recievers.length}>{e}</RecieverComponent>
+                        {receivers.map((e, i) => (
+                                <RecieverComponent key={i} last={i === receivers.length}>{e}</RecieverComponent>
                             ))}
                     </ScrollView>
                     <DialogsLabel>
@@ -114,30 +119,12 @@ class Content extends Component {
             </Wrapper>)
             }
     state = {
-        recievers: [
-            {
-                id: 0,
-                image: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
-                info: 'менеджер по продажам',
-                title: 'Константи константинопольский'
-            },
-            {
-                id: 1,
-                image: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
-                info: 'ме',
-                title: 'Ко'
-            },
-            {
-                id: 2,
-                image: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
-                info: 'менеджер по продажам',
-                title: 'Константи константинопольский'
-            }
-        ],
+        receivers: [],
         text: ''
     }
     componentDidMount() {
-
+        const { receivers } = this.props;
+        console.log({receivers})
     }
     componentWillUpdate(){
         
@@ -147,13 +134,26 @@ class Content extends Component {
         addParticipant()
     }
     proceed = (e) => {
-        const { id } = this.props;
-        const { text, recievers } = this.state;
+        const { id, receivers } = this.props;
+        const { text } = this.state;
         let idList = []
-        recievers.map((e) => {
-            idList = [...idList, e.id]
+        receivers.map((e) => {
+            idList = [...idList, e._id]
         })
-
+        if(text && receivers.length) sendRequest({
+            r_path: news,
+            method: 'post',
+            attr: {
+                text, 
+                receivers: idList
+            },
+            success: (res) => {
+                console.log({res})
+            },
+            failFunc: (err) => {
+                console.log({err})
+            }
+        })
     }
     handleCountry = (e) => {
         this.setState({ country: e })
@@ -162,11 +162,10 @@ class Content extends Component {
         this.setState({ text: e })
     }
 }
-const mapStateToProps = state => {
-    return {
-        id: state.userReducer.user.id
-    };
-};
+const mapStateToProps = state => ({
+        id: state.userReducer.user.id,
+        receivers: state.participantsReducer.news.receivers
+})
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
 })
