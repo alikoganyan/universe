@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, Platform } from 'react-native'
 import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { SafeAreaView } from '../../common'
@@ -19,7 +19,7 @@ const Bottom = styled(View)`
 export default class NewsComments extends Component {
     render() {
         return (
-            <SafeAreaView>
+            <SafeAreaView behavior={Platform.OS === 'ios' ? 'height' : 'padding'}>
                 <Wrapper>
                     <Header back={this.navigateBack} />
                     <Content />

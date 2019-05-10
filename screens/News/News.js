@@ -17,8 +17,8 @@ class News extends Component {
         return (
             <SafeAreaView>
                 <Wrapper>
-                    <Header back={this.navigateBack} navigate={this.navigate}/>
-                    <Content proceed={this.proceed}/>
+                    <Header back={this.navigateBack} navigate={this.navigate} />
+                    <Content proceed={this.proceed} />
                 </Wrapper>
             </SafeAreaView>
         )
@@ -29,9 +29,7 @@ class News extends Component {
             r_path: '/news',
             method: 'get',
             success: (res) => {
-                console.log(res)
                 setNews(res.news)
-                // setTimeout(() => console.log(res, news), 1000)
             },
             failFunc: (err) => {
                 console.log(err)
