@@ -84,20 +84,28 @@ const Reactionsext = styled(Text)`
 class Content extends Component {
     render() {
         const { news } = this.props;
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec',];
         return (
             <SafeAreaView>
                 <Wrapper>
                     <NewsList
                         data={news}
                         ListFooterComponent={<View style={{ margin: 10, }} />}
-                        renderItem={({ item }) => <NewsItem>
+                        renderItem={({ item }) => {
+                        const date = new Date(item.created_at)
+                        return <NewsItem>
                             <Sender>
-                                <ImageComponent source={{ uri: item.sender.img }} size={"xs"} style={{
+                                <ImageComponent source={{ uri: item.creator.image }} size={"xs"} style={{
                                     marginRight: 10
                                 }} />
                                 <SenderInfo>
-                                    <SenderName numberOfLines={1}>{item.sender.name}</SenderName>
-                                    <TimeSent>{item.timeSent}</TimeSent>
+                                    <SenderName numberOfLines={1}>{item.creator.first_name}</SenderName>
+                                    <TimeSent>
+                                        {date.getDate()}{' '}
+                                        {months[date.getMonth()]}{' '}
+                                        {date.getFullYear()}{' '}
+                                        {date.getHours()}:{date.getMinutes()} 
+                                    </TimeSent>
                                 </SenderInfo>
                             </Sender>
                             <NewsText numberOfLines={2}>{item.text}</NewsText>
@@ -107,11 +115,12 @@ class Content extends Component {
                                 </ShowAll>
 
                                 <Reactions>
-                                    <HeartIcon /><Reactionsext>12</Reactionsext>
-                                    <CommentIcon left /><Reactionsext>12</Reactionsext>
+                                    <HeartIcon /><Reactionsext>{item.likes_сount}</Reactionsext>
+                                    <CommentIcon left /><Reactionsext>{item.comments.length}</Reactionsext>
                                 </Reactions>
                             </NewsItemInfo>
                         </NewsItem>}
+                        }
                         keyExtractor={(item, index) => index.toString()}
                     />
                 </Wrapper>

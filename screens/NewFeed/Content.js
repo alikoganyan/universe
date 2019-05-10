@@ -144,8 +144,10 @@ class Content extends Component {
             r_path: news,
             method: 'post',
             attr: {
-                text, 
-                receivers: idList
+                news: {
+                    text, 
+                    receivers: idList
+                }
             },
             success: (res) => {
                 console.log({res})

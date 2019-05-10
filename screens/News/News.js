@@ -24,13 +24,14 @@ class News extends Component {
         )
     }
     componentDidMount() {
-        const { setNews } = this.props
+        const { setNews, news } = this.props
         sendRequest({
-            r_path: news,
+            r_path: '/news',
             method: 'get',
             success: (res) => {
-                res.length && setNews(res)
-                console.log({res})
+                console.log(res)
+                setNews(res.news)
+                // setTimeout(() => console.log(res, news), 1000)
             },
             failFunc: (err) => {
                 console.log(err)
@@ -48,6 +49,7 @@ class News extends Component {
     }
 }
 const mapStateToProps = state => ({
+    news: state.newsReducer.news
 });
 const mapDispatchToProps = dispatch => ({
     setNews: _ => dispatch(setNews(_)),
