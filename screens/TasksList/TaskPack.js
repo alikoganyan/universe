@@ -26,12 +26,11 @@ const TaskText = styled(View)`
 const TaskTextInner = styled(View)`
   display: flex;
   flex-direction: column;
-  max-width: 90%;
 `
 const TaskTitle = styled(Text)`
   font-size: ${fontSize.header};
   font-weight: 500;
-  max-width: 90%;  
+  flex: 1;  
   margin-bottom: 5px;
 `
 const LastMessageDate = styled(Text)`
@@ -72,14 +71,14 @@ const NewMessages = styled(Text)`
   background: ${purple};
   overflow: hidden;
   padding: 5px;
-  padding-top: 0px;
+  padding-top: 2px;
   text-align: center;;
   min-width: 25px;
   height: 25px;
   border-radius: 12.5;
   display: flex;
-  justify-content: center;
-  align-items: center;
+  justify-content: flex-end;
+  align-items: flex-end;
   align-self: center;
 `
 const TaskStatusTextContainer = styled(View)`
@@ -103,36 +102,66 @@ const TaskStatusAdditional = styled(Text)`
 `
 export default class TaskPack extends Component {
   render() {
-    const { children, title, onClick, last } = this.props;
+    const { children, title, onClick, last, tasks } = this.props;
+    const { taskPack } = this.state
+    const user = {_id: 1}
+    const packItems = []
+    let stat = ''
+    let day = ''
+    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    if(tasks.length){
+      tasks.map(taskUser => {
+        if(taskUser.tasks.length){
+          taskUser.tasks.map(task => {
+            if(task.creator === user._id){
+              const packItemUser = {...taskUser}
+              packItemUser.tasks = packItemUser.tasks.filter(e => e.creator === user._id)
+              packItems.push(packItemUser)
+            }
+          })
+        }
+      })
+      day = new Date(packItems[0].tasks[0].created_at).getDay()
+      switch(packItems[0].tasks[0].status){
+        case 'set':
+        stat = 'В работе';
+        break;
+        case 'done':
+        stat = 'Выполнена';
+        break;
+      }
+    }
+    console.log(packItems)
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}>
         <Wrapper last={last}>
           <TaskText>
             <TaskTextInner>
               <TaskTitle>{title}</TaskTitle>
-              <TaskLastMessage numberOfLines={1} >{children}Labore quis nulla velit sit occaecat deserunt cillum occaecat dolor et elit duis. Dolore laboris nostrud esse ullamco irure cupidatat mollit nisi nostrud in irure aliquip adipisicing proident. Eu aliquip consectetur velit quis pariatur velit sint esse incididunt laborum aute aliqua. Laboris laboris aliqua magna laborum reprehenderit nostrud aliquip consectetur proident aliquip commodo elit officia.</TaskLastMessage>
+              <TaskLastMessage numberOfLines={1}>{packItems[0].tasks[0].description}</TaskLastMessage>
               <TaskStatus>
                 <TaskStatusTextContainer>
                   <TasksIcon/>
-                  <TaskStatusText>в работе</TaskStatusText>
+                  <TaskStatusText>{stat}</TaskStatusText>
                 </TaskStatusTextContainer>
-                <TaskStatusAdditional>+4 задачи</TaskStatusAdditional>
+                <TaskStatusAdditional>+{packItems[0].tasks.length-1} задач</TaskStatusAdditional>
               </TaskStatus>
             </TaskTextInner>
             <TaskDate>
-              <LastMessageDate>Thu</LastMessageDate>
+              <LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
               <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-                <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>2</NewMessages>
+                <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{packItems.length}</NewMessages>
               </UnreadMessages>
             </TaskDate>
           </TaskText>
 
         </Wrapper >
       </TouchableHighlight >
-    );
+    ) ;
   }
   state = {
-    size: null
+    size: null,
+    taskPack: []
   }
   handleHold = () => {
     ActionSheetIOS.showActionSheetWithOptions(

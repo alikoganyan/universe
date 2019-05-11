@@ -20,20 +20,19 @@ const StyledScrollView = styled(ScrollView)`
 class Content extends Component {
   render() {
     const { FlatListData } = this.state;
-    return (
+    const { user } = this.props;
+    return (FlatListData.length) ? (
       <Wrapper>
         <StyledScrollView>
-          <TaskPack title={'Все исходящие задачи'}>task</TaskPack>
-          <TaskPack title={'Все исходящие задачи'} last>task</TaskPack>
+          <TaskPack title={'Все исходящие задачи'} tasks={FlatListData}/>
+          <TaskPack title={'Все входящие задачи'} tasks={FlatListData} last />
           {
-            FlatListData.map((e, i) => {
-              return <Task onPress={this.toTasks} key={i}>{e}</Task>
-            })
+            FlatListData.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>)
           }
-          <View style={{height: 20, width: '100%'}}/>
+          <View style={{ height: 20, width: '100%' }} />
         </StyledScrollView>
       </Wrapper>
-    )
+    ) : <View />
   }
   state = {
     FlatListData: []

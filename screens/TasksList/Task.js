@@ -63,8 +63,8 @@ const UnreadMessages = styled(View)`
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-bottom: 2px;
   background: ${purple};
-  min-width: 25px;
   width: 25px;
   height: 25px;
   border-radius: 12.5;

@@ -109,8 +109,6 @@ export default function TaskComponent({ children, style, triangleLeft, triangleR
     }
     const deadlineDate = new Date(deadline)
     const creationDate = new Date(created_at)
-    console.log(`
-    ${creationDate.getHours()}:${creationDate.getMinutes() >= 10 || '0'+creationDate.getMinutes() }`)
     return (<Wrapper style={{ alignSelf: triangleRight ? 'flex-end' : 'flex-start', }}>
         {triangleLeft && <TriangleRightIcon style={{
             position: 'relative',

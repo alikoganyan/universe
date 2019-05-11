@@ -41,6 +41,7 @@ const Option = styled(Text)`
 const TaskWrapper = styled(View)`
     display: flex;
     align-items: flex-end;
+    justify-content: flex-start;
     flex-direction: row;
 `
 class Content extends Component {
@@ -66,8 +67,8 @@ class Content extends Component {
                                 triangleLeft={index !== 1}
                                 triangleRight={index === 1}
                                 style={{
-                                    marginRight: index === 1 ? 10 : 50,
-                                    marginLeft: index === 1 ? 50 : 10,
+                                    marginRight: index === 1 ? 10 : 70,
+                                    marginLeft: index === 1 ? 70 : 10,
                                 }}>{item}</TaskComponent>
                         </TaskWrapper>}
                         keyExtractor={(item, index) => index.toString()}
@@ -80,9 +81,9 @@ class Content extends Component {
         options: {
             active: 1,
             options: [
-                'Создание',
-                'Статус',
-                'Дедлайн'
+                'Все',
+                'В работе',
+                'Не в работе'
             ]
         },
         taskList: []

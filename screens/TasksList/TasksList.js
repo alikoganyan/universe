@@ -23,10 +23,7 @@ export default class Tasks extends Component {
   navigateBack = () => {
     this.props.navigation.goBack()
   }
-  componentDidMount() { 
-  }
   navigate = (e) => {
-    console.log(e)
     this.props.navigation.navigate(e)
   }
 }
