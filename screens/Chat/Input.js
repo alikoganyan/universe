@@ -119,11 +119,9 @@ class InputComponent extends Component {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
-        console.log(result)
     }
     selectFile = async (e) => {
         let result = await DocumentPicker.getDocumentAsync({});
-        console.log(result)
     }
     selectGeo = (e) => { }
     discardSelect = (e) => { }
@@ -160,7 +158,6 @@ class InputComponent extends Component {
                     }
                 },
                 success: (res) => {
-                    console.log({ res })
                     socket.emit('file', { room: currentRoom })
                     addMessage({
                         room: currentRoom,

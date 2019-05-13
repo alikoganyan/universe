@@ -181,7 +181,6 @@ class Content extends Component {
 			const { first_name, image, _id } = creator
 			const myId = user._id;
 			const date = new Date(created_at)
-			console.log(children)
 			return myId === _id ? 
 			<View style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
 				<MyMessage>
