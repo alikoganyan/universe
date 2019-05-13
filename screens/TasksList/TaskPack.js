@@ -109,6 +109,7 @@ export default class TaskPack extends Component {
     let stat = ''
     let day = ''
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    let packItems0Tasks0 = null;
     if(tasks.length){
       tasks.map(taskUser => {
         if(taskUser.tasks.length){
@@ -121,36 +122,42 @@ export default class TaskPack extends Component {
           })
         }
       })
-      day = new Date(packItems[0].tasks[0].created_at).getDay()
-      switch(packItems[0].tasks[0].status){
-        case 'set':
-        stat = 'В работе';
-        break;
-        case 'done':
-        stat = 'Выполнена';
-        break;
+      packItems0Tasks = packItems && packItems[0] && packItems[0].tasks && packItems[0].tasks ? packItems[0].tasks : null;
+      if (packItems0Tasks) {
+        day = packItems0Tasks[0] && packItems0Tasks[0].created_at ? new Date(packItems[0].tasks[0].created_at).getDay() : '';
+        if (packItems0Tasks[0] && packItems0Tasks[0].status) {
+          switch (packItems0Tasks[0].status){
+            case 'set':
+            stat = 'В работе';
+            break;
+            case 'done':
+            stat = 'Выполнена';
+            break;
+          }
+        }
       }
     }
-    console.log(packItems)
+    const packItemsDescription = packItems0Tasks && packItems0Tasks[0] ? packItems0Tasks[0].description : '';
+    const packItemsLength = packItems0Tasks && packItems0Tasks.length ? packItems0Tasks.length - 1 : 0;
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}>
         <Wrapper last={last}>
           <TaskText>
             <TaskTextInner>
               <TaskTitle>{title}</TaskTitle>
-              <TaskLastMessage numberOfLines={1}>{packItems[0].tasks[0].description}</TaskLastMessage>
+              <TaskLastMessage numberOfLines={1}>{packItemsDescription}</TaskLastMessage>
               <TaskStatus>
                 <TaskStatusTextContainer>
                   <TasksIcon/>
                   <TaskStatusText>{stat}</TaskStatusText>
                 </TaskStatusTextContainer>
-                <TaskStatusAdditional>+{packItems[0].tasks.length-1} задач</TaskStatusAdditional>
+                <TaskStatusAdditional>+{packItemsLength} задач</TaskStatusAdditional>
               </TaskStatus>
             </TaskTextInner>
             <TaskDate>
               <LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
               <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-                <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{packItems.length}</NewMessages>
+                <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{packItems && packItems.length}</NewMessages>
               </UnreadMessages>
             </TaskDate>
           </TaskText>
