@@ -126,7 +126,13 @@ export default class AppComponent extends React.Component {
     await Font.loadAsync({
       'Roboto': require('./assets/fonts/Roboto-Medium.ttf'),
     });
-    await AsyncStorage.clear();
+    
+    try {
+      await AsyncStorage.clear();
+      console.log('AsyncStorage.clear success')
+    } catch (error) {
+      console.log('AsyncStorage.clear error: ', error)
+    }
 
     GlobalFont.applyGlobal('Roboto')
     this.setState({ loaded: true })
