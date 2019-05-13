@@ -139,7 +139,7 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-        news: state.newsReducer.news,
+    news: state.newsReducer.news,
 })
 const mapDispatchToProps = dispatch => ({
     setFeed: _ => dispatch(setFeed(_)),

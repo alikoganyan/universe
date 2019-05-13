@@ -21,7 +21,7 @@ const StyledFlatList = styled(FlatList)`
 class Dialogs extends Component {
 
 	render() {
-		const { dialogs } = this.props
+		const { dialogs, user } = this.props
 		const { FlatListData } = this.state;
 		return (
 			<SafeAreaView behavior={'padding'}>
@@ -32,7 +32,14 @@ class Dialogs extends Component {
 						ref={(ref) => { this.flatList = ref; }}
 						data={dialogs}
 						keyboardShouldPersistTaps={'handled'}
-						renderItem={({ item }) => <Dialog lastMessage={item.messages} onClick={() => this.toChat(item)} title={item.title || item.room} item={item}>{item.text}</Dialog>}
+						renderItem={(dialog) => {
+							const { item } = dialog
+							const { creator, participants, messages, name, text, isGroup, room } = item
+							const chatName = !isGroup ?
+								user._id === creator ? user.phone_number : 
+								participants[0].phone_number : (name || room)
+							return <Dialog lastMessage={messages} onClick={() => this.toChat(item)} title={chatName} item={item}>{text}</Dialog>
+						}}
 						keyExtractor={(item, index) => index.toString()}
 					/>
 				</Wrapper>
@@ -43,7 +50,6 @@ class Dialogs extends Component {
 		FlatListData: []
 	}
 	componentDidMount() {
-		this.props.navigation.navigate('TasksList')
 		const { user, addMessage, setDialogs } = this.props;
 		socket.on('update_dialogs', e => {
 			setDialogs(e.dialogs)

@@ -161,14 +161,14 @@ export default class TaskPack extends Component {
 				this.setState({taskPack: packItems})
 			}, 0)
 			// day = new Date(packItems[0].tasks[0].created_at).getDay()
-			// switch (packItems[0].tasks[0].status) {
-			// 	case 'set':
-			// 		this.setState({stat: 'В работе'});
-			// 		break;
-			// 	case 'done':
-			// 		this.setState({stat: 'Выполнена'});
-			// 		break;
-			// }
+			switch (packItems[0].tasks[0].status) {
+				case 'set':
+					this.setState({stat: 'В работе'});
+					break;
+				case 'done':
+					this.setState({stat: 'Выполнена'});
+					break;
+			}
 		}
 	}
 	handleHold = () => {

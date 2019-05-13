@@ -138,17 +138,20 @@ class Content extends Component {
         )
     }
     state = {
-        country: Dimensions.get('window').width === 375 ? '+7' :  Dimensions.get('window').width === 320 ? '+7' : '+380',
-        phone: Dimensions.get('window').width === 375 ? '9194274215' : Dimensions.get('window').width === 320 ? '9194274251' : '637072785',
+        country: Dimensions.get('window').width === 375 ? '+7' :  Dimensions.get('window').width === 320 ? '+7' : '+380', // restore
+        phone: Dimensions.get('window').width === 375 ? '9194274215' : Dimensions.get('window').width === 320 ? '9194274251' : '637072785', // restore
+        password: '1111', // restore
+        // country: '',
+        // phone: '',
+        // password: '',
         phone_number: '',
-        password: '1111',
         error: null,
         invalidPassword: null,
         invalidPhone: null,
         loading: false,
     }
     componentDidMount = async () => {
-        this.login()
+        // this.login() // restore
         const { navigate, setUser } = this.props;
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);

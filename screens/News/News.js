@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { SafeAreaView } from '../../common'
 import sendRequest from '../../utils/request'
 import { connect } from 'react-redux'
-import { news } from '../../constants/api'
+import { p_news } from '../../constants/api'
 import { Header, Content, Input } from './'
 import { setNews } from '../../actions/newsActions'
 const Wrapper = styled(View)`
@@ -15,7 +15,7 @@ const Wrapper = styled(View)`
 class News extends Component {
     render() {
         return (
-            <SafeAreaView>
+            <SafeAreaView behavior={'padding'}>
                 <Wrapper>
                     <Header back={this.navigateBack} navigate={this.navigate} />
                     <Content proceed={this.proceed} />
@@ -26,7 +26,7 @@ class News extends Component {
     componentDidMount() {
         const { setNews, news } = this.props
         sendRequest({
-            r_path: '/news',
+            r_path: p_news,
             method: 'get',
             success: (res) => {
                 setNews(res.news)

@@ -91,6 +91,7 @@ class HeaderComponent extends Component {
             method: 'post',
             attr: {
                 text: e,
+                withUser: true,
             },
             success: ({ users }) => {
                 const tasksList = []
@@ -124,8 +125,10 @@ class HeaderComponent extends Component {
                     })
                 })
                 setTimeout(() => {
+                    const { setTasks } = this.props
                     this.setState({ FlatListData: [...tasksList] })
-                    setTasks(tasksList)
+                    // setTasks([])
+                    console.log('123')
                 }, 0)
             },
             failFunc: (err) => {
