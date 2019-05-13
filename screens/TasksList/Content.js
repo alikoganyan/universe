@@ -6,7 +6,7 @@ import { SafeAreaView } from '../../common'
 import helper from '../../utils/helpers'
 import sendRequest from '../../utils/request'
 import { g_tasks, g_users } from '../../constants/api'
-import { setAllUsers } from '../../actions/userActions'
+import { setTasks } from '../../actions/tasksActions'
 import { connect } from 'react-redux'
 const { sidePaddingNumber, HeaderHeightNumber } = helper;
 const Wrapper = styled(View)`
@@ -20,14 +20,14 @@ const StyledScrollView = styled(ScrollView)`
 class Content extends Component {
   render() {
     const { FlatListData } = this.state;
-    const { user } = this.props;
-    return (FlatListData.length) ? (
+    const { tasks } = this.props;
+    return (tasks.length) ? (
       <Wrapper>
         <StyledScrollView>
-          <TaskPack title={'Все исходящие задачи'} tasks={FlatListData}/>
-          <TaskPack title={'Все входящие задачи'} tasks={FlatListData} last />
+          <TaskPack title={'Все исходящие задачи'} tasks={tasks} />
+          <TaskPack title={'Все входящие задачи'} tasks={tasks} last />
           {
-            FlatListData.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>)
+            tasks.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>)
           }
           <View style={{ height: 20, width: '100%' }} />
         </StyledScrollView>
@@ -38,6 +38,7 @@ class Content extends Component {
     FlatListData: []
   }
   componentDidMount() {
+    const { setTasks } = this.props
     sendRequest({
       r_path: g_users,
       method: 'get',
@@ -51,7 +52,10 @@ class Content extends Component {
             }
           })
         })
-        setTimeout(() => this.setState({ FlatListData: [...tasksList] }), 0)
+        setTimeout(() => {
+          this.setState({ FlatListData: [...tasksList] })
+          setTasks(tasksList)
+        }, 0)
       },
       failFunc: (err) => {
         console.log({ err })
@@ -67,12 +71,10 @@ class Content extends Component {
 const mapStateToProps = state => {
   return {
     user: state.userReducer.user,
+    tasks: state.tasksReducer.tasks,
   };
 };
 const mapDispatchToProps = dispatch => ({
-  setUser: _ => dispatch(setUser(_)),
-  addReceiver: _ => dispatch(addReceiver(_)),
-  setReceivers: _ => dispatch(setReceivers(_)),
-  setContacts: _ => dispatch(setContacts(_))
+  setTasks: _ => dispatch(setTasks(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

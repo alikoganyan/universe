@@ -148,7 +148,6 @@ class Content extends Component {
         loading: false,
     }
     componentDidMount = async () => {
-        connectToSocket()
         this.login()
         const { navigate, setUser } = this.props;
         let value = await AsyncStorage.getItem('user');
@@ -188,6 +187,7 @@ class Content extends Component {
                 const { access_token, data } = res
                 setAuth(access_token)
                 setUser(data)
+                connectToSocket()
                 this.setState({ loading: false })
                 navigate('Dialogs')
             },

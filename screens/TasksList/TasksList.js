@@ -10,20 +10,20 @@ const Wrapper = styled(View)`
 `
 
 export default class Tasks extends Component {
-  render() {
-    return (
-      <SafeAreaView>
-        <Wrapper>
-          <Header navigate={this.navigate} back={this.navigateBack} />
-          <Content navigate={this.navigate}/>
-        </Wrapper>
-      </SafeAreaView>
-    )
-  }
-  navigateBack = () => {
-    this.props.navigation.goBack()
-  }
-  navigate = (e) => {
-    this.props.navigation.navigate(e)
-  }
+	render() {
+		return (
+			<SafeAreaView behavior={'padding'}>
+				<Wrapper>
+					<Header navigate={this.navigate} back={this.navigateBack} />
+					<Content navigate={this.navigate} />
+				</Wrapper>
+			</SafeAreaView>
+		)
+	}
+	navigateBack = () => {
+		this.props.navigation.goBack()
+	}
+	navigate = (e) => {
+		this.props.navigation.navigate(e)
+	}
 }

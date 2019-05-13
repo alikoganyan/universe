@@ -83,7 +83,6 @@ class Content extends Component {
         this.setState({ selectedMessage: null })
     }
     handleHold = (e) => {
-        console.log(e)
         this.setState({ selectedMessage: e })
         Platform.os === 'ios' && ActionSheetIOS.showActionSheetWithOptions(
             {
