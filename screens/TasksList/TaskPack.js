@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionSheetIOS } from 'react-native'
+import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionSheetIOS, Platform } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { TasksIcon } from '../../assets/index'
@@ -26,7 +26,7 @@ const TaskText = styled(View)`
 const TaskTextInner = styled(View)`
 	display: flex;
 	flex-direction: column;
-	padding-left: ${sidePadding*2};
+	padding-left: ${sidePadding};
 `
 const TaskTitle = styled(Text)`
 	font-size: ${fontSize.header};
@@ -41,6 +41,7 @@ const LastMessageDate = styled(Text)`
 	display: flex;
 	justify-content: center;
 	align-self: center;
+	text-align: left;
 	margin-bottom: 5px;
 `
 const TaskLastMessage = styled(Text)`
@@ -57,6 +58,7 @@ const TaskDate = styled(View)`
 	display: flex;
 	justify-content: flex-start;
 	align-items: flex-start;
+	height: 50px;
 `
 const UnreadMessages = styled(View)`
 	display: flex;
@@ -70,7 +72,7 @@ const NewMessages = styled(Text)`
 	background: ${purple};
 	overflow: hidden;
 	padding: 5px;
-	padding-top: 2px;
+	padding-top: ${Platform.OS === 'ios' ? 4 : 2}px;
 	text-align: center;;
 	min-width: 25px;
 	height: 25px;
@@ -124,7 +126,7 @@ export default class TaskPack extends Component {
 						<TaskDate>
 							<LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
 							<UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-								<NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{taskPack.length}</NewMessages>
+								<NewMessages>{taskPack.length}</NewMessages>
 							</UnreadMessages>
 						</TaskDate>
 					</TaskText>

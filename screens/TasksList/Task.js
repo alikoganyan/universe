@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionSheetIOS } from 'react-native'
+import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionSheetIOS, Platform } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { TasksIcon } from '../../assets/index'
@@ -72,6 +72,7 @@ const NewMessages = styled(Text)`
   color: white;
   font-size: ${fontSize.text};
   text-align: center;
+	padding-top: ${Platform.OS === 'ios' ? 2 : 0}px;
 `
 
 const TaskStatus = styled(View)`
@@ -129,7 +130,7 @@ class Tasks extends Component {
             <TaskDate>
               <LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
               <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-                <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{tasks.length - 1}</NewMessages>
+                <NewMessages>{tasks.length - 1}</NewMessages>
               </UnreadMessages>
             </TaskDate>
           </TaskText>
