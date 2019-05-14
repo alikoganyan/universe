@@ -151,7 +151,7 @@ class Content extends Component {
         loading: false,
     }
     componentDidMount = async () => {
-        // this.login() // restore
+        this.login() // restore
         const { navigate, setUser } = this.props;
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
@@ -190,18 +190,13 @@ class Content extends Component {
                 const { access_token, data } = res
                 setAuth(access_token)
                 setUser(data)
+                console.log(`can't login`)
                 connectToSocket()
                 this.setState({ loading: false })
                 navigate('Dialogs')
             },
             failFunc: (err) => {
-                let { phone_number, password } = err
-                this.setState({
-                    loading: false,
-                    error: true,
-                    invalidPhone: phone_number || null,
-                    invalidPassword: password || null
-                })
+                console.log(err,`can't login`)
             }
         })
     }
