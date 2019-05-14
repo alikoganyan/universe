@@ -7,7 +7,9 @@ const tasksReducer = (state = initialState, action) => {
         case SET_TASKS:
             return {
                 ...state,
-                tasks: [...action.payload],
+                // FIXME:
+                // tasks: [...action.payload],
+                tasks: Array.isArray(action.payload) ? [...action.payload] : [action.payload],
             }
         default:
             return state
