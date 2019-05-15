@@ -85,11 +85,10 @@ const BoxInnerItem = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-
 `
 const ContactImage = styled(Image)`
-    width: 24px;
-    height: 24px;
+    width: 27px;
+    height: 27px;
     border-radius: 14;
     background: red;
     margin-right: 8px;
@@ -100,7 +99,7 @@ const ContactName = styled(Text)`
     color: ${black};
 `
 const ContactRole = styled(Text)`
-    font-size: ${fontSize.sm};
+    font-size: ${fontSize.sl};
     color: ${grey2};
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)`
@@ -109,23 +108,27 @@ const ArrowWrapper = styled(AnimatedArrowWrapper)`
 const Group = styled(BoxInnerItem)``
 const GroupInfo = styled(ContactInfo)``
 const GroupTitle = styled(ContactName)``
-const GroupParticipants = styled(ContactRole)``
+const GroupParticipants = styled(ContactRole)`
+
+`
 const GroupImage = styled(ContactImage)``
 const CreateDialog = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    align-self: center;
+    align-self: flex-start;
     background: ${green};
     padding: 15px 30px;
+    margin-left: 30px;
     border-radius: 50000px;
-    margin-top: 30px;
+    margin-top: 10px;
 
 `
 const CreateDialogText = styled(Text)`
     margin-left: 10px;
     color: white;
+    font-size: ${fontSize.header};
 `
 const Padding = styled(View)`
     height: 30px;
@@ -155,10 +158,13 @@ class Content extends Component {
                                     <BoxInner>
                                         {department.map((e, i) => <TouchableOpacity key={i} onPress={() => this.toChat(e._id)}>
                                             <BoxInnerItem>
-                                                <ContactImage />
+                                                <ContactImage source={{uri: `http://simpleicon.com/wp-content/uploads/user1.png`}}/>
                                                 <ContactInfo>
-                                                    <ContactName>{e.first_name || e.phone_number}</ContactName>
-                                                    <ContactRole>{e.role || 'no role'}</ContactRole>
+                                                    <ContactName>
+                                                        {/* {e.first_name || e.phone_number} */}
+                                                        Константин Константинопольский
+                                                    </ContactName>
+                                                    <ContactRole>{'no role'}</ContactRole>
                                                 </ContactInfo>
                                             </BoxInnerItem>
                                         </TouchableOpacity>)}
@@ -250,12 +256,12 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer,
-        dialog: state.dialogsReducer.dialogs,
-        currentRoom: state.messageReducer.currentRoom,
-        currentChat: state.messageReducer.currentChat,
-        user: state.userReducer.user,
-        users: state.userReducer
+    messages: state.messageReducer,
+    dialog: state.dialogsReducer.dialogs,
+    currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
+    user: state.userReducer.user,
+    users: state.userReducer
 })
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),

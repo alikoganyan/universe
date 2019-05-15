@@ -91,7 +91,9 @@ margin-right: 20px;
 `
 class HeaderComponent extends Component {
     render() {
-        const { back, search, startSearch, stopSearch, currentChat, toProfile } = this.props
+        const { back, search, startSearch, stopSearch, currentChat, toProfile, currentDialog } = this.props
+        console.log(currentDialog)
+        const { first_name, last_name, phone_number, image } = currentDialog
         return (
             <Header>
                 <Top>
@@ -100,9 +102,9 @@ class HeaderComponent extends Component {
                             <>
                                 <BackIcon onPress={back} right />
                                 <ToProfile onPress={toProfile}>
-                                    <ImageComponent source={{ uri: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
+                                    <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
                                     <Info>
-                                        <InfoChatName>{currentChat && currentChat.phone}</InfoChatName>
+                                        <InfoChatName>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
                                         <InfoParticipants>был последний раз вчера</InfoParticipants>
                                     </Info>
                                 </ToProfile>
@@ -117,8 +119,8 @@ class HeaderComponent extends Component {
                     <Right>
                         {!search ? (
                             <>
-                                <SearchIcon onPress={startSearch} right/>
-                                <LocationIcon/>
+                                <SearchIcon onPress={startSearch} right />
+                                <LocationIcon />
                             </>
                         ) : <CloseIcon onPress={stopSearch} />}
                     </Right>
@@ -154,9 +156,10 @@ class HeaderComponent extends Component {
     }
 }
 const mapStateToProps = state => ({
-        search: state.messageReducer.search,
-        dialogs: state.dialogsReducer.dialogs,
-        currentRoom: state.messageReducer.currentRoom
+    search: state.messageReducer.search,
+    dialogs: state.dialogsReducer.dialogs,
+    currentRoom: state.messageReducer.currentRoom,
+    currentDialog: state.dialogsReducer.currentDialog
 })
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),

@@ -92,14 +92,15 @@ class Content extends Component {
                         data={news}
                         ListFooterComponent={<View style={{ margin: 10, }} />}
                         renderItem={({ item }) => {
+                            console.log('\n\n\n\n', item)
                         const date = new Date(item.created_at)
                         return <NewsItem>
                             <Sender>
-                                <ImageComponent source={{ uri: item.creator.image }} size={"xs"} style={{
+                                <ImageComponent source={{ uri: item.creator.image ? `http://ser.univ.team${item.creator.image}` : 'https://facebook.github.io/react/logo-og.png' }} size={"xs"} style={{
                                     marginRight: 10
                                 }} />
                                 <SenderInfo>
-                                    <SenderName numberOfLines={1}>{item.creator.first_name}</SenderName>
+                                    <SenderName numberOfLines={1}>{item.creator.first_name} {item.creator.last_name}</SenderName>
                                     <TimeSent>
                                         {date.getDate()}{' '}
                                         {months[date.getMonth()]}{' '}

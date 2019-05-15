@@ -46,7 +46,7 @@ export default helper = {
         xl: 30,
         xs: 24,
         large: 20,
-        header: 15,
+        header: 17,
         text: 14,
         sl: 12,
         sm: 10,

@@ -12,6 +12,7 @@ const Wrapper = styled(View)`
 	padding: ${sidePaddingNumber}px 0;
 	border: 0.3px solid ${lightGrey1};
 	border-width: 0;
+ 	width: ${Dimensions.get('window').width - sidePaddingNumber*2};
 	border-top-width: 0.3px;
 	border-bottom-width: ${({ last }) => last ? 0.3 : 0}px;
 `
@@ -109,7 +110,15 @@ export default class TaskPack extends Component {
 		let day = taskPack[0] ? new Date(taskPack[0].created_at).getDay() : ''
 		const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 		return taskPack.length ? (
-			<TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}>
+			<TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}
+			style={{
+				width: '100%',
+				paddingLeft: sidePadding,
+				paddingRight: sidePadding,
+				display: 'flex',
+				alignItems: 'center',
+			}}
+			>
 				<Wrapper last={last}>
 					<TaskText>
 						<TaskTextInner>

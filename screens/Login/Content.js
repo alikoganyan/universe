@@ -138,8 +138,8 @@ class Content extends Component {
         )
     }
     state = {
-        country: Dimensions.get('window').width === 375 ? '+7' :  Dimensions.get('window').width === 320 ? '+7' : '+380', // restore
-        phone: Dimensions.get('window').width === 375 ? '9194274215' : Dimensions.get('window').width === 320 ? '9194274251' : '637072785', // restore
+        country: '+7', // restore
+        phone: Dimensions.get('window').width === 375 ? '9123456780' : Dimensions.get('window').width === 320 ? '9123456781' : '9123456782', // restore
         password: '1111', // restore
         // country: '',
         // phone: '',

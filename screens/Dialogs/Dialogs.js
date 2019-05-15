@@ -5,7 +5,7 @@ import { Header, Dialog } from './index'
 import { SafeAreaView } from '../../common'
 import { connect } from 'react-redux';
 import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/messageActions'
-import { setDialogs } from '../../actions/dialogsActions'
+import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
@@ -36,9 +36,13 @@ class Dialogs extends Component {
 							const { item } = dialog
 							const { creator, participants, messages, name, text, isGroup, room } = item
 							const chatName = !isGroup ?
-								user._id === creator ? user.phone_number : 
-								participants[0].phone_number : (name || room)
-							return <Dialog lastMessage={messages} onClick={() => this.toChat(item)} title={chatName} item={item}>{text}</Dialog>
+								user._id !== creator._id ?
+									(creator.first_name ? `${creator.first_name} ${creator.last_name}` : creator.phone_number) :
+									(participants[0].first_name ? `${participants[0].first_name} ${participants[0].last_name}` : participants[0].phone_number) :
+								(name || room)
+							const image = !isGroup ?
+								(user._id === creator ? user.image : participants[0].image) : '';
+							return <Dialog lastMessage={messages} onClick={() => this.toChat(item)} image={image} title={chatName} item={item}>{text}</Dialog>
 						}}
 						keyExtractor={(item, index) => index.toString()}
 					/>
@@ -50,7 +54,7 @@ class Dialogs extends Component {
 		FlatListData: []
 	}
 	componentDidMount() {
-		this.props.navigation.navigate('TasksList')
+		// this.props.navigation.navigate('NewDialog')
 		const { user, addMessage, setDialogs } = this.props;
 		socket.on('update_dialogs', e => {
 			setDialogs(e.dialogs)
@@ -146,10 +150,12 @@ class Dialogs extends Component {
 		setDialogs(newDialogs)
 	}
 	toChat = e => {
-		const { setRoom, setCurrentChat, navigation, getMessages, user } = this.props
+		const { setRoom, setCurrentChat, navigation, getMessages, user, setCurrentDialogs } = this.props
 		const roomId = e.room.split('_').filter(e => e != user._id)[0]
 		setRoom(roomId)
 		setCurrentChat(e.room)
+		console.log(e.creator, e.participants)
+		setCurrentDialogs(user._id === e.creator._id ? e.participants.filter(e => e._id !== user._id)[0] : e.creator)
 		getMessages(e.messages);
 		socket.emit('view', { room: e.room, viewer: user._id })
 		navigation.navigate(e.isGroup ? 'Group' : 'Chat')
@@ -177,6 +183,7 @@ const mapDispatchToProps = dispatch => ({
 	setCurrentChat: _ => dispatch(setCurrentChat(_)),
 	setDialogs: _ => dispatch(setDialogs(_)),
 	addMessage: _ => dispatch(addMessage(_)),
-	setAllUsers: _ => dispatch(setAllUsers(_))
+	setAllUsers: _ => dispatch(setAllUsers(_)),
+	setCurrentDialogs: _ => dispatch(setCurrentDialogs(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)

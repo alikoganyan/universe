@@ -8,7 +8,7 @@ import { p_news_search, g_users } from '../../constants/api'
 import { ImageComponent } from '../../common'
 import { setNews } from '../../actions/newsActions'
 import sendRequest from '../../utils/request'
-const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
+const { sidePadding, HeaderHeight, sidePaddingNumber, fontSize } = helper;
 
 const Header = styled(View)`
     width: 100%;
@@ -25,10 +25,13 @@ const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+` 
 const Center = styled(View)``
 const Input = styled(TextInput)`
     margin-left: ${Dimensions.get('window').width * 0.085};
+`
+const HeaderText = styled(Text)`
+    font-size: ${fontSize.header};
 `
 const Right = styled(Left)`
     justify-content: flex-end;
@@ -58,7 +61,7 @@ class HeaderComponent extends Component {
                     {!search ?
                         <>
                             <BackIcon onPress={back} right />
-                            <Text>Задачи</Text>
+                            <HeaderText>Новости</HeaderText>
                         </> :
                         <>
                             <SearchIcon />

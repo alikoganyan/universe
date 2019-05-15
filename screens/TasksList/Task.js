@@ -12,7 +12,10 @@ const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  padding: ${sidePadding} 0;
+  display:flex;
+  align-items: center;
+  padding: ${sidePadding} 0 ${sidePaddingNumber*2}px;
+  width: ${Dimensions.get('window').width - sidePaddingNumber * 2};
 `
 const TaskImage = styled(Image)`
   width: 50px;
@@ -51,127 +54,134 @@ const TaskLastMessage = styled(Text)`
 
 `
 const TaskDate = styled(View)`
-  right: ${sidePadding};
-  color: ${lightGrey1};
-  font-size: ${fontSize.text};
-  display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+	right: ${sidePadding};
+	color: ${lightGrey1};
+	font-size: ${fontSize.text};
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
 `
 const UnreadMessages = styled(View)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-bottom: 2px;
-  background: ${purple};
-  width: 25px;
-  height: 25px;
-  border-radius: 12.5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding-bottom: 2px;
+	background: ${purple};
+	width: 25px;
+	height: 25px;
+	border-radius: 12.5;
 `
 const NewMessages = styled(Text)`
-  color: white;
-  font-size: ${fontSize.text};
-  text-align: center;
+	color: white;
+	font-size: ${fontSize.text};
+	text-align: center;
 	padding-top: ${Platform.OS === 'ios' ? 2 : 0}px;
 `
 
 const TaskStatus = styled(View)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 1px;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	margin-top: 1px;
 `
 const TaskStatusTextContainer = styled(View)`
-  border: 1px solid ${lightGrey1};
-  border-radius: 15px;
-  padding: 2px 8px;
-  margin-right: 5px;
-  display: flex;
-  flex-direction: row;
+	border: 1px solid ${lightGrey1};
+	border-radius: 15px;
+	padding: 2px 8px;
+	margin-right: 5px;
+	display: flex;
+	flex-direction: row;
 `
 const TaskStatusText = styled(Text)`
-  color: ${lightGrey1};
+	color: ${lightGrey1};
 `
 const TaskStatusAdditional = styled(Text)`
-  color: ${lightGrey1};
+	color: ${lightGrey1};
 `
 class Tasks extends Component {
-  render() {
-    const { children, onClick } = this.props;
-    const {first_name, last_name, phone_number, image, tasks } = children
-    let stat = ''
-    switch(tasks[0].status){
-      case 'set':
-        stat = 'В работе';
-        break;
-      case 'done':
-        stat = 'Выполнена';
-        break;
-    }
-    const day = new Date(tasks[0].created_at).getDay()
-    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    console.log(image)
-    return (
-      <TouchableHighlight underlayColor='#2B7DE2' onPress={() => this.handleClick(children)} onLongPress={this.handleHold}>
-        <Wrapper>
-          <TaskImage source={{ uri: image ? `http://ser.univ.team${image}` : 'https://facebook.github.io/react/logo-og.png' }} />
-          <TaskText>
-            <TaskTextInner>
-              <TaskTitle>{first_name ? `${first_name} ${last_name}` : phone_number}</TaskTitle>
-              <TaskLastMessage numberOfLines={1} >{tasks[0].description}</TaskLastMessage>
-              <TaskStatus>
-                <TaskStatusTextContainer>
-                  <TasksIcon />
-                  <TaskStatusText>{stat}</TaskStatusText>
-                </TaskStatusTextContainer>
-                <TaskStatusAdditional>+{tasks.length - 1} задачи</TaskStatusAdditional>
-              </TaskStatus>
-            </TaskTextInner>
-            <TaskDate>
-              <LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
-              <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-                <NewMessages>{tasks.length - 1}</NewMessages>
-              </UnreadMessages>
-            </TaskDate>
-          </TaskText>
-        </Wrapper >
-      </TouchableHighlight >
-    );
-  }
-  state = {
-    size: null
-  }
-  handleHold = () => {
-    ActionSheetIOS.showActionSheetWithOptions(
-      {
-        options: ['Cancel', 'Remove'],
-        destructiveButtonIndex: 1,
-        cancelButtonIndex: 0,
-      },
-      (buttonIndex) => {
-        if (buttonIndex === 1) {
-        }
-      },
-    );
-  }
-  handleClick = (tasks) => {
-    const { setTasks, onPress } = this.props
-    setTasks(tasks)
-    onPress()
-  }
-  getUnreadMessageHeight = (e) => {
-    this.setState({ height: e.nativeEvent.layout.height })
-  }
-  getUnreadMessageWidth = (e) => {
-    this.setState({ width: e.nativeEvent.layout.width })
-  }
+	render() {
+		const { children, onClick } = this.props;
+		const { first_name, last_name, phone_number, image, tasks } = children
+		let stat = ''
+		switch (tasks[0].status) {
+			case 'set':
+				stat = 'В работе';
+				break;
+			case 'done':
+				stat = 'Выполнена';
+				break;
+		}
+		const day = new Date(tasks[0].created_at).getDay()
+		const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+		return (
+			<TouchableHighlight underlayColor='#2B7DE2' onPress={() => this.handleClick(children)} onLongPress={this.handleHold}
+				style={{
+					width: '100%',
+					paddingLeft: sidePadding,
+					paddingRight: sidePadding,
+					display: 'flex',
+					alignItems: 'center',
+				}}
+			>
+				<Wrapper>
+					<TaskImage source={{ uri: image ? `http://ser.univ.team${image}` : 'https://facebook.github.io/react/logo-og.png' }} />
+					<TaskText>
+						<TaskTextInner>
+							<TaskTitle>{first_name ? `${first_name} ${last_name}` : phone_number}</TaskTitle>
+							<TaskLastMessage numberOfLines={1} >{tasks[0].description}</TaskLastMessage>
+							<TaskStatus>
+								<TaskStatusTextContainer>
+									<TasksIcon />
+									<TaskStatusText>{stat}</TaskStatusText>
+								</TaskStatusTextContainer>
+								<TaskStatusAdditional>+{tasks.length - 1} задачи</TaskStatusAdditional>
+							</TaskStatus>
+						</TaskTextInner>
+						<TaskDate>
+							<LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
+							<UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
+								<NewMessages>{tasks.length - 1}</NewMessages>
+							</UnreadMessages>
+						</TaskDate>
+					</TaskText>
+				</Wrapper >
+			</TouchableHighlight >
+		);
+	}
+	state = {
+		size: null
+	}
+	handleHold = () => {
+		ActionSheetIOS.showActionSheetWithOptions(
+			{
+				options: ['Cancel', 'Remove'],
+				destructiveButtonIndex: 1,
+				cancelButtonIndex: 0,
+			},
+			(buttonIndex) => {
+				if (buttonIndex === 1) {
+				}
+			},
+		);
+	}
+	handleClick = (tasks) => {
+		const { setTasks, onPress } = this.props
+		setTasks(tasks)
+		onPress()
+	}
+	getUnreadMessageHeight = (e) => {
+		this.setState({ height: e.nativeEvent.layout.height })
+	}
+	getUnreadMessageWidth = (e) => {
+		this.setState({ width: e.nativeEvent.layout.width })
+	}
 }
 
 const mapStateToProps = state => {
-  return {
-  };
+	return {
+	};
 };
 const mapDispatchToProps = dispatch => ({
-  setTasks: _ => dispatch(setTasks(_)),
+	setTasks: _ => dispatch(setTasks(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Tasks)
