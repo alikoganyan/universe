@@ -311,15 +311,15 @@ export function CommentIcon(props) {
 }
 
 export function CloseIcon(props) {
-    const { onPress, style } = props
+    const { onPress, style, left, right } = props
     return (
-        <TouchableOpacity onPress={onPress} style={style}>
+        <StyledTouchableOpacity onPress={onPress} style={style} left={left} right={right}>
             <SvgUri
                 width={IconSize}
                 height={IconSize}
                 source={SVG.Close}
             />
-        </TouchableOpacity>
+        </StyledTouchableOpacity>
     )
 }
 

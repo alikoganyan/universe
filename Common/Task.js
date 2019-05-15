@@ -21,7 +21,7 @@ const Task = styled(View)`
     padding: 10px;
     padding-bottom: 5px;
     background: #fff;
-    border: 1px solid ${purple};
+    border: 1px solid ${({borderColor}) => borderColor || purple};
     border-radius: ${borderRadius};
     align-self: flex-end;
 `
@@ -93,7 +93,7 @@ const TaskPostTimeText = styled(MessageDate)`
 const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
 }
-export default function TaskComponent({ children, style, triangleLeft, triangleRight }) {
+export default function TaskComponent({ children, style, triangleLeft, triangleRight, borderColor }) {
     const { name, description, status, deadline, created_at, creator, created, text, title } = children;
     const statuses = ['Прочитано', 'Принял в работу', 'Выполнена', 'Принята',]
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec',];
@@ -115,12 +115,14 @@ export default function TaskComponent({ children, style, triangleLeft, triangleR
             left: 11,
             top: -10,
             zIndex: 99,
-        }} hollow color={purple} />}
+        }} hollow color={borderColor} />}
         <Task style={{
             ...style,
             borderBottomLeftRadius: triangleLeft ? 0 : borderRadius,
             borderBottomRightRadius: triangleRight ? 0 : borderRadius,
-        }}>
+        }}
+        borderColor={borderColor}
+        >
             <Status>
                 <StatusText>{statuses[stat]}</StatusText>
                 <StatusStage>
@@ -157,6 +159,6 @@ export default function TaskComponent({ children, style, triangleLeft, triangleR
             left: -11,
             top: -10,
             zIndex: 99,
-        }} hollow color={purple} />}
+        }} hollow color={borderColor} />}
     </Wrapper>)
 }

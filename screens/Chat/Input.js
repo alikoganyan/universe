@@ -159,6 +159,7 @@ class InputComponent extends Component {
                 },
                 success: (res) => {
                     socket.emit('file', { room: currentRoom })
+                    this.unselect()
                     addMessage({
                         room: currentRoom,
                         sender: id,

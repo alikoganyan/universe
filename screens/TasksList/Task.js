@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionShe
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { TasksIcon } from '../../assets/index'
-import { setTasks } from '../../actions/tasksActions'
+import { setTask } from '../../actions/tasksActions'
 import { connect } from 'react-redux'
 const { fontSize, PressDelay, sidePadding, sidePaddingNumber, Colors } = helper;
 const { purple, lightColor, grey2, lightGrey1 } = Colors;
@@ -37,7 +37,6 @@ const TaskTextInner = styled(View)`
 `
 const TaskTitle = styled(Text)`
   font-size: ${fontSize.header};
-  font-weight: 500;
   margin-bottom: 1px;
 `
 const LastMessageDate = styled(Text)`
@@ -165,8 +164,8 @@ class Tasks extends Component {
 		);
 	}
 	handleClick = (tasks) => {
-		const { setTasks, onPress } = this.props
-		setTasks(tasks)
+		const { setTask, onPress } = this.props
+		setTask(tasks)
 		onPress()
 	}
 	getUnreadMessageHeight = (e) => {
@@ -182,6 +181,6 @@ const mapStateToProps = state => {
 	};
 };
 const mapDispatchToProps = dispatch => ({
-	setTasks: _ => dispatch(setTasks(_)),
+	setTask: _ => dispatch(setTask(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Tasks)

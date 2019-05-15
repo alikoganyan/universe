@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import helper from '../../utils/helpers'
 const { sidePadding, Colors } = helper;
-const { yellow, green, purple, red, black } = Colors;
+const { yellow, green, purple, red, black, pink } = Colors;
 const Wrapper = styled(View)`
     margin-bottom: 50px;   
     background: white;
@@ -20,7 +20,7 @@ const TaskList = styled(FlatList)`
 const Options = styled(View)`
     display: flex;
     align-self: center;
-    background: ${green};
+    background: ${purple};
     flex-direction: row;
     border-radius: 14;
     padding: 1px;
@@ -48,7 +48,7 @@ class Content extends Component {
     render() {
         const { taskList, options } = this.state;
         const { active } = options;
-        const { tasks } = this.props
+        const { currentTask, user } = this.props
         return (
             <SafeAreaView>
                 <Wrapper>
@@ -59,18 +59,21 @@ class Content extends Component {
                             </TouchableOpacity>)
                         }
                     </Options>
-                    {tasks.tasks && <TaskList
-                        data={tasks.tasks}
+                    {currentTask.tasks && <TaskList
+                        data={currentTask.tasks}
                         ListFooterComponent={<View style={{ margin: 40, }} />}
-                        renderItem={({ item, index }) => <TaskWrapper>
+                        renderItem={({ item, index }) => {
+                        const myTask = item.creator._id === user._id;
+                        return <TaskWrapper>
                             <TaskComponent
-                                triangleLeft={index !== 1}
-                                triangleRight={index === 1}
+                                triangleLeft={!myTask}
+                                triangleRight={myTask}
+                                borderColor={myTask ? purple : pink }
                                 style={{
-                                    marginRight: index === 1 ? 10 : 70,
-                                    marginLeft: index === 1 ? 70 : 10,
+                                    marginRight: myTask ? 10 : 70,
+                                    marginLeft: myTask ? 70 : 10,
                                 }}>{item}</TaskComponent>
-                        </TaskWrapper>}
+                        </TaskWrapper>}}
                         keyExtractor={(item, index) => index.toString()}
                     />}
                 </Wrapper>
@@ -96,7 +99,8 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-        tasks: state.tasksReducer.tasks,
+    currentTask: state.tasksReducer.currentTask,
+    user: state.userReducer.user
 })
 const mapDispatchToProps = dispatch => ({
 })

@@ -16,12 +16,11 @@ const { Colors, HeaderHeightNumber, sidePadding } = helper;
 const { lightGrey1, black, purple } = Colors;
 const Wrapper = styled(View)`
     padding: 0 ${sidePadding};
+    display: flex;
     justify-content: center;
-    flex-grow: 1;
-    height: 100%;
+    align-items: center;
 `
 const StyledScrollView = styled(ScrollView)`
-    flex: 1;
 `
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
@@ -99,7 +98,13 @@ class Content extends Component {
         } = this.state
         return (
             <Wrapper>
-                <StyledScrollView>
+                <StyledScrollView
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                        display: 'flex',
+                        justifyContent: 'center',
+                    }}
+                >
                     <StyledInput password={true}
                         onChangeText={this.handleTaskName}
                         value={taskName}

@@ -31,7 +31,6 @@ const TaskTextInner = styled(View)`
 `
 const TaskTitle = styled(Text)`
 	font-size: ${fontSize.header};
-	font-weight: 500;
 	flex: 1;  
 	margin-bottom: 5px;
 `
@@ -47,7 +46,7 @@ const LastMessageDate = styled(Text)`
 `
 const TaskLastMessage = styled(Text)`
 	font-size: ${fontSize.text};
-	color: ${grey2};
+	color: ${lightGrey1};
 	margin-bottom: 5px;
 	max-width: 90%;
 `

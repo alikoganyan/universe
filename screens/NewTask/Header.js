@@ -1,114 +1,94 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Image, Platform, Dimensions, TouchableOpacity } from 'react-native'
-import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/index'
-import { connect } from 'react-redux'
+import { View, Text, SafeAreaView, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native'
+import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon, CloseIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { connect } from 'react-redux'
+import { p_tasks_search, g_users } from '../../constants/api'
 import { ImageComponent } from '../../common'
-const { sidePadding, sidePaddingNumber, HeaderHeight, Colors, fontSize } = helper;
-const { border } = Colors;
+import sendRequest from '../../utils/request'
+const { sidePadding, HeaderHeight, sidePaddingNumber, fontSize } = helper;
+
 const Header = styled(View)`
-    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
-    align-self: center;
+    width: 100%;
     background: white;
+    height: ${HeaderHeight}; 
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
-`
-const HeaderUserImage = styled(Image)`
-    border-radius: 15;
-    height: 30px;
-    width: 30px;
-    margin-right: 10px;
-`
-const Info = styled(View)`
-    display: flex;
-    margin-left: 10px;
-`
-const InfoTaskName = styled(Text)`
-    color: black;
-    font-size: ${fontSize.text};
-`
-const InfoParticipants = styled(Text)`
-    color: #5F7991;
-    font-size: ${fontSize.sm};
+    padding-right: ${sidePadding};
+    padding-left: ${sidePadding};
 `
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
 `
-const Right = styled(View)`
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
+const Center = styled(View)``
+const Input = styled(TextInput)`
+    margin-left: ${Dimensions.get('window').width * 0.085};
+`
+const Right = styled(Left)`
     justify-content: flex-end;
 `
-const Categories = styled(Header)`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
-    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
-`
-const Top = styled(View)`
+// const UserImage = styled(Image)`
+//     background: red;
+//     width: 30px;
+//     height: 30px;
+//     border-radius: 15px;
+//     margin-left:${sidePaddingNumber};
+// `
+const MarginRight = styled(View)`
+    margin-right: ${Dimensions.get('window').width * 0.085};
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    height: ${HeaderHeight}; 
-    width: 100%;
-
 `
-const Bottom = styled(Top)`
-    border: 1px solid ${border};
-    border-width: 0;
-    border-top-width: 1px;
-    margin: 0 ${sidePadding};
-    min-height: 0; 
-    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
-`
-const Category = styled(Text)`
-    display: flex;
-    flex:1;
-    justify-content: center;
-    font-size: 11px;
-    text-align: center;
-    padding: 10px 0;
-`
-const Input = styled(TextInput)`
-`
-const IconLeft = styled(Icon)`
-    margin-left: ${sidePadding};
+const HeaderText = styled(Text)`
+    font-size: ${fontSize.header};
 `
 class HeaderComponent extends Component {
     render() {
+        const { back, user, toProfile } = this.props;
+        const { search, find } = this.state
+        const { image } = user;
         return (
             <Header>
-                <Top>
-                    <Left>
-                        <CloseIcon right onPress={this.back}/>
-                        <Info>
-                            <InfoTaskName>Создание задачи</InfoTaskName>
-                        </Info>
-                    </Left>
-                    <Right>
-                    </Right>
-                </Top>
+                <Left>
+                    <CloseIcon onPress={back} right />
+                    <HeaderText>Создание Задачи</HeaderText>
+                </Left>
             </Header>
         )
     }
-    back = () => {
-        this.props.back()
+    state = {
+        search: false,
+        find: ''
+    }
+    find = (e) => {
+        
+    }
+    startSearch = () => {
+        this.setState({ search: true })
+    }
+    stopSearch = () => {
+        this.setState({ search: false })
+    }
+    addTask = (e) => {
+        const { navigate } = this.props;
+        navigate('NewTask')
     }
 }
-const mapStateToProps = state => ({
-})
-const mapDispatchToProps = dispatch => ({
 
+const mapStateToProps = state => {
+    return {
+        user: state.userReducer.user,
+        tasks: state.tasksReducer.tasks,
+    };
+};
+const mapDispatchToProps = dispatch => ({
+    setTasks: _ => dispatch(setTasks(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
+
