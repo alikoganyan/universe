@@ -108,7 +108,6 @@ class Content extends Component {
       lastType = green;
       break;
     }
-    // lastMessage === 'text' ? lastMessage[lastMessage.length - 1].text : purple
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={phone ? () => this.newDialog(id) : this.handleClick} onLongPress={this.handleHold}>
         <Wrapper>

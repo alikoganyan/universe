@@ -68,8 +68,7 @@ const BoxTitle = styled(TouchableOpacity)`
     align-items: flex-start;
 `
 const BoxInner = styled(AnimatedBox)`
-    padding: 20px 0;
-    padding-top: 10px;
+    padding: 0 0 20px;
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
@@ -80,17 +79,16 @@ const BoxItem = styled(Text)`
     color: #A7B0BA;
 `
 const BoxInnerItem = styled(View)`
-    padding: 10px 0;
+    padding: 20px 0;
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     display: flex;
     flex-direction: row;
     align-items: center;
 `
 const ContactImage = styled(Image)`
-    width: 27px;
-    height: 27px;
+    width: 33px;
+    height: 33px;
     border-radius: 14;
-    background: red;
     margin-right: 8px;
 `
 const ContactInfo = styled(View)``
@@ -99,7 +97,7 @@ const ContactName = styled(Text)`
     color: ${black};
 `
 const ContactRole = styled(Text)`
-    font-size: ${fontSize.sl};
+    font-size: ${fontSize.text-1};
     color: ${grey2};
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)`
@@ -128,7 +126,7 @@ const CreateDialog = styled(TouchableOpacity)`
 const CreateDialogText = styled(Text)`
     margin-left: 10px;
     color: white;
-    font-size: ${fontSize.header};
+    font-size: ${fontSize.header-1};
 `
 const Padding = styled(View)`
     height: 30px;
@@ -149,7 +147,7 @@ class Content extends Component {
                             {/* {department.map((e, i) => ( */}
                             <Box last={true}>
                                 <BoxTitle onPress={() => collapsed[0] ? this.collapseDepartment(0) : this.showDepartment(0)}>
-                                    <BoxItem title={true}>No role</BoxItem>
+                                    <BoxItem title={true}>Нет департамента</BoxItem>
                                     <ArrowWrapper pose={collapsed[0] ? 'right' : 'down'}>
                                         <ArrowDownIcon />
                                     </ArrowWrapper>
@@ -157,16 +155,15 @@ class Content extends Component {
                                 <Collapsible collapsed={collapsed[0] || false}>
                                     <BoxInner>
                                         {department.map((e, i) => <TouchableOpacity key={i} onPress={() => this.toChat(e._id)}>
-                                            <BoxInnerItem>
-                                                <ContactImage source={{uri: `http://simpleicon.com/wp-content/uploads/user1.png`}}/>
-                                                <ContactInfo>
-                                                    <ContactName>
-                                                        {/* {e.first_name || e.phone_number} */}
-                                                        Константин Константинопольский
-                                                    </ContactName>
-                                                    <ContactRole>{'no role'}</ContactRole>
-                                                </ContactInfo>
-                                            </BoxInnerItem>
+                                                <BoxInnerItem>
+                                                    <ContactImage source={{ uri: e.image ? `http://ser.univ.team${e.image}` : `http://simpleicon.com/wp-content/uploads/user1.png` }} />
+                                                    <ContactInfo>
+                                                        <ContactName>
+                                                            {e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}
+                                                        </ContactName>
+                                                        <ContactRole>{e.role.length ? e.role[0] : 'нет роли'}</ContactRole>
+                                                    </ContactInfo>
+                                                </BoxInnerItem>
                                         </TouchableOpacity>)}
                                     </BoxInner>
                                 </Collapsible>

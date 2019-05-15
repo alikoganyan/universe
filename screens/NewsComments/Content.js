@@ -36,7 +36,6 @@ const NewsItem = styled(View)`
     border: 0.5px solid ${yellow};
     border-radius: ${borderRadius};
     margin: 0 ${sidePadding};
-    margin-bottom: 10px;
 `;
 const Sender = styled(View)`
     display: flex;
@@ -201,7 +200,7 @@ class Content extends Component {
 				<ImageComponent
 					style={{ position: 'relative', left: 5, bottom: 5 }}
 					source={{
-						uri: image || 'https://cdn.pixabay.com/photo/2016/06/18/17/42/image-1465348_960_720.jpg',
+						uri: `http://ser.univ.team${image}`,
 					}}
 				/>
 				<TriangleRightIcon color={'#fff1dd'} />
@@ -249,7 +248,8 @@ class Content extends Component {
 				</NewsItem>
 				<FlatList
 					style={{ paddingRight: 5, paddingLeft: 5 }}
-					ListHeaderComponent={<View style={{ margin: 35 }} />}
+					ListHeaderComponent={<View style={{ margin: 95 }} />}
+					ListFooterComponent={<View style={{ margin: 5 }} />}
 					contentContainerStyle={{ alignItems: 'stretch' }}
 					inverted={true}
 					data={reversedCommnets}

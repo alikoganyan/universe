@@ -18,7 +18,7 @@ const NewsList = styled(FlatList)`
     flex-grow: 1;
     padding-bottom: 20px;
 `
-const NewsItem = styled(View)`
+const NewsItem = styled(TouchableOpacity)`
     background: white;
     padding: 20px;
     padding-bottom: 10px;
@@ -94,7 +94,7 @@ class Content extends Component {
                         renderItem={({ item }) => {
                             console.log('\n\n\n\n', item)
                         const date = new Date(item.created_at)
-                        return <NewsItem>
+                        return <NewsItem onPress={() => this.proceed(item)}>
                             <Sender>
                                 <ImageComponent source={{ uri: item.creator.image ? `http://ser.univ.team${item.creator.image}` : 'https://facebook.github.io/react/logo-og.png' }} size={"xs"} style={{
                                     marginRight: 10
@@ -112,7 +112,7 @@ class Content extends Component {
                             <NewsText numberOfLines={2}>{item.text}</NewsText>
                             <NewsItemInfo>
                                 <ShowAll>
-                                    <TouchableOpacity onPress={() => this.proceed(item)}><HashTag>Читать далее</HashTag></TouchableOpacity>
+                                    <HashTag>ЧИТАТЬ ДАЛЕЕ</HashTag>
                                 </ShowAll>
 
                                 <Reactions>

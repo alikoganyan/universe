@@ -48,9 +48,8 @@ const LastMessageDate = styled(Text)`
 const TaskLastMessage = styled(Text)`
 	font-size: ${fontSize.text};
 	color: ${grey2};
-	padding-right: 20px;
 	margin-bottom: 5px;
-
+	max-width: 90%;
 `
 const TaskDate = styled(View)`
 	right: ${sidePadding};
@@ -123,7 +122,7 @@ export default class TaskPack extends Component {
 					<TaskText>
 						<TaskTextInner>
 							<TaskTitle>{title}</TaskTitle>
-							<TaskLastMessage numberOfLines={1}>{taskPack[0].tasks[0].description}</TaskLastMessage>
+							<TaskLastMessage numberOfLines={1}>{taskPack[0].tasks[0].name}</TaskLastMessage>
 							<TaskStatus>
 								<TaskStatusTextContainer>
 									<TasksIcon />

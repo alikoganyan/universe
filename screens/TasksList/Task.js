@@ -50,7 +50,7 @@ const TaskLastMessage = styled(Text)`
   margin-bottom: 2px;
   font-size: ${fontSize.text};
   color: ${lightGrey1};
-  padding-right: 20px;
+  max-width: 90%;
 
 `
 const TaskDate = styled(View)`
@@ -128,7 +128,7 @@ class Tasks extends Component {
 					<TaskText>
 						<TaskTextInner>
 							<TaskTitle>{first_name ? `${first_name} ${last_name}` : phone_number}</TaskTitle>
-							<TaskLastMessage numberOfLines={1} >{tasks[0].description}</TaskLastMessage>
+							<TaskLastMessage numberOfLines={1} >{tasks[0].name}</TaskLastMessage>
 							<TaskStatus>
 								<TaskStatusTextContainer>
 									<TasksIcon />

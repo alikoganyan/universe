@@ -62,9 +62,7 @@ class HeaderComponent extends Component {
                     <HeaderText>Новый диалог</HeaderText>
                 </Left>
                 <Right>
-                    <MarginRight>
-                        <SearchIcon right />
-                    </MarginRight>
+                    <SearchIcon right />
                     <TouchableOpacity onPress={toProfile}>
                         <ImageComponent source={{ uri: user.image }} />
                     </TouchableOpacity>

@@ -20,6 +20,7 @@ export default helper = {
         green: '#70d0af',
         yellow: '#fdb557',
         yellow2: '#fff1dd',
+        orange: '#fdb557',
         red: '#70d0af',
         blue: '#4a83fa',
         lightBlue: '#dbe5fd',
