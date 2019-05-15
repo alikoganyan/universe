@@ -7,7 +7,7 @@ import { ImageComponent } from '../../common'
 import { socket } from '../../utils/socket'
 
 const { fontSize, PressDelay, sidePadding, sidePaddingNumber, Colors } = helper;
-const { purple, lightColor, grey2 } = Colors;
+const { purple, lightColor, grey2, blue, green, } = Colors;
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
@@ -73,7 +73,7 @@ const UnreadMessages = styled(View)`
   align-items: flex-start;
 `
 const NewMessages = styled(View)`
-  background: ${purple};
+  background: ${({color}) => color || purple};
   padding: 2.5px;
   overflow: hidden;
   min-width: 25px;
@@ -96,6 +96,19 @@ class Content extends Component {
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const dayOfTheWeek = daysOfTheWeek[new Date(lastMessage).getDay() - 1]
     const last = lastMessage ? lastMessage[lastMessage.length - 1].text : ''
+    let lastType = ''
+    switch(lastMessage[lastMessage.length - 1].type){
+      case 'text' :
+      lastType = blue;
+      break;
+      case 'task' :
+      lastType = purple;
+      break;
+      case 'geo' :
+      lastType = green;
+      break;
+    }
+    // lastMessage === 'text' ? lastMessage[lastMessage.length - 1].text : purple
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={phone ? () => this.newDialog(id) : this.handleClick} onLongPress={this.handleHold}>
         <Wrapper>
@@ -115,9 +128,9 @@ class Content extends Component {
             </DialogTextInner>
             <DialogDate>
               <LastMessageDate>{dayOfTheWeek}</LastMessageDate>
-              <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
+              <UnreadMessages>
                 {lastMessage && (!!lastMessage.length &&
-                  <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>
+                  <NewMessages color={lastType}>
                     <NewMessagesText>{lastMessage.length}</NewMessagesText>
                   </NewMessages>)}
               </UnreadMessages>
