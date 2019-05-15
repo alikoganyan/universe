@@ -11,16 +11,16 @@ import sendRequest from '../../utils/request'
 import { p_settings } from '../../constants/api'
 const { Colors, sidePaddingNumber, fontSize, borderRadius, HeaderHeightNumber } = helper;
 const { lightGrey1, blue, lightBlue, grey2 } = Colors;
-const FilePickerPosed = posed.View({
-    visible: { bottom: -100 },
-    hidden: { bottom: -300 }
+const LangPickerPosed = posed.View({
+    visible: { bottom: 170 },
+    hidden: { bottom: -Dimensions.get('window').height }
 });
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
     margin-bottom: 110px;
     padding: 0 ${sidePaddingNumber}px;
-    
+    height: 100%;
 `
 const Box = styled(View)`
     display: flex;
@@ -60,9 +60,10 @@ const PolicyLink = styled(Link)`
     padding: 10px 0 20px;
 `
 
-const FilePicker = styled(FilePickerPosed)`
+const LangPicker = styled(LangPickerPosed)`
     background: white;
     width: 94%;
+    bottom: 0;
     height: ${Dimensions.get('window').height * 0.3}px;
     position: absolute;
     margin: 0 3%;
@@ -141,10 +142,10 @@ class Content extends Component {
                         <PolicyLink>Политика соглашения</PolicyLink>
                         <PolicyLink>Условия использования</PolicyLink>
                     </Policy>
-                    <FilePicker pose={pickerOpened ? 'visible' : 'hidden'}>
-                        {Object.values(langs).map((e, i) => <TouchableOpacity><Text style={{ color: i === 0 ? blue : 'black' }}>{e}</Text></TouchableOpacity>)}
+                    <LangPicker pose={pickerOpened ? 'visible' : 'hidden'}>
+                        {Object.values(langs).map((e, i) => <TouchableOpacity key={i}><Text style={{ color: i === 0 ? blue : 'black' }}>{e}</Text></TouchableOpacity>)}
                         <TouchableOpacity onPress={this.pickerClose}><Text>Отменить</Text></TouchableOpacity>
-                    </FilePicker>
+                    </LangPicker>
                 </Wrapper>
             </SafeAreaView>
         )
@@ -152,8 +153,8 @@ class Content extends Component {
     state = {
         switchOn: true,
         langs: {
-            'Русский': 'Русский',
-            'Английский': 'Английский'
+            'ru': 'Русский',
+            'en': 'English'
         },
         pickerOpened: false,
         settings: [
@@ -209,7 +210,6 @@ class Content extends Component {
                 settings: reqBody,
             },
             success: (res) => {
-                console.log({res})
             },
             failFunc: (err) => {
                 console.log({err})
