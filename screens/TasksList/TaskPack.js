@@ -128,14 +128,14 @@ export default class TaskPack extends Component {
 									<TasksIcon />
 									<TaskStatusText>{stat}</TaskStatusText>
 								</TaskStatusTextContainer>
-								<TaskStatusAdditional>+{taskPack[0].tasks.length - 1} задач</TaskStatusAdditional>
+								{(taskPack[0].tasks.length - 1) > 0 && <TaskStatusAdditional>+{taskPack[0].tasks.length - 1}>задач</TaskStatusAdditional>}
 							</TaskStatus>
 						</TaskTextInner>
 						<TaskDate>
 							<LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
-							<UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
+							{taskPack.length && <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
 								<NewMessages>{taskPack.length}</NewMessages>
-							</UnreadMessages>
+							</UnreadMessages>}
 						</TaskDate>
 					</TaskText>
 				</Wrapper >

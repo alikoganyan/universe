@@ -134,14 +134,14 @@ class Tasks extends Component {
 									<TasksIcon />
 									<TaskStatusText>{stat}</TaskStatusText>
 								</TaskStatusTextContainer>
-								<TaskStatusAdditional>+{tasks.length - 1} задачи</TaskStatusAdditional>
+								{(tasks.length - 1) > 0 && <TaskStatusAdditional>+{tasks.length - 1} задачи</TaskStatusAdditional>}
 							</TaskStatus>
 						</TaskTextInner>
 						<TaskDate>
 							<LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
-							<UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-								<NewMessages>{tasks.length - 1}</NewMessages>
-							</UnreadMessages>
+							{tasks.length > 0 && <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
+								<NewMessages>{tasks.length}</NewMessages>
+							</UnreadMessages>}
 						</TaskDate>
 					</TaskText>
 				</Wrapper >
