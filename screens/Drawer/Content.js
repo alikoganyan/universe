@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
-import { PapperPlaneIcon, GroupIcon, FeedIcon, TasksIcon, SettingsIcon } from '../../assets/'
+import { PapperPlaneIcon, GroupIcon, FeedIcon, TasksIcon, SettingsIcon, DialogsIcon } from '../../assets/'
 import { DrawerActions } from 'react-navigation-drawer';
 import helper from '../../utils/helpers'
 const { sidePaddingNumber, topPadding } = helper;
@@ -35,7 +35,7 @@ export default function ContentComponent(props) {
                     dispatch(DrawerActions.closeDrawer())
                     navigate('Dialogs')
                 }}>
-                    <PapperPlaneIcon />
+                    <DialogsIcon />
                     <LinkText>
                         Диалоги
                     </LinkText>

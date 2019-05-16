@@ -18,7 +18,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
+      "supportsTablet": false,
       "bundleIdentifier": "team.universe.media",
       "publishBundlePath": "ios/universes-mobile/Supporting/shell-app.bundle",
       "publishManifestPath": "ios/universes-mobile/Supporting/shell-app-manifest.json",

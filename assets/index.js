@@ -362,6 +362,18 @@ export function TaskIcon(props) {
         </StyledTouchableOpacity>
     )
 }
+export function DialogsIcon(props) {
+    const { onPress, left, right } = props;
+    return (
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Dialog}
+            />
+        </StyledTouchableOpacity>
+    )
+}
 
 export function CheckIcon(props) {
     const { onPress, left, right } = props;

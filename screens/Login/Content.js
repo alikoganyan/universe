@@ -138,11 +138,11 @@ class Content extends Component {
         )
     }
     state = {
-        country: '+7', 
-        phone: Dimensions.get('window').width === 375 ? '9123456780' : Dimensions.get('window').width === 320 ? '9123456781' : '9123456782', // restore
-        password: '1111', // restore
-        // phone: '',
-        // password: '',
+        country: '+7',
+        // phone: Dimensions.get('window').width === 375 ? '9123456780' : Dimensions.get('window').width === 320 ? '9123456781' : '9123456782', // restore
+        // password: '1111', // restore
+        phone: '',
+        password: '',
         phone_number: '',
         error: null,
         invalidPassword: null,
@@ -151,22 +151,17 @@ class Content extends Component {
     }
     componentDidMount = async () => {
         // this.login() // restore
-        const { navigate, setUser } = this.props;
+        const { navigation, setUser } = this.props;
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
         if (value) {
-            this.setState({ phone: value.phone.slice(2) })
-            setUser({
-                ...value,
-                id: value.id,
-                image: value.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png'
-            })
-            setTimeout(() => navigate('Dialogs'), 0)
+            console.log(value.password)
+            this.setState({ phone: value.phone_number.slice(2) , password: value.password})
         }
     }
     storeUserData = async (user) => {
         try {
-            await AsyncStorage.setItem('user', user);
+            await AsyncStorage.setItem('user', JSON.stringify(user));
         } catch (error) {
             // Error saving data
         }
@@ -190,11 +185,12 @@ class Content extends Component {
                 setAuth(access_token)
                 setUser(data)
                 connectToSocket()
+                this.storeUserData({...data, password})
                 this.setState({ loading: false })
                 navigate('Dialogs')
             },
             failFunc: (err) => {
-                console.log({err})
+                console.log({ err })
             }
         })
     }
@@ -223,7 +219,7 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-        id: state.userReducer.id
+    id: state.userReducer.id
 })
 const mapDispatchToProps = dispatch => ({
     setAuth: info => { dispatch(setAuth(info)) },
