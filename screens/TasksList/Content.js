@@ -20,7 +20,7 @@ class Content extends Component {
   render() {
     const { FlatListData } = this.state;
     const { tasks } = this.props;
-    return (tasks.length) ? (
+    return (tasks && tasks.length) ? (
       <Wrapper>
         <StyledScrollView>
           <TaskPack title={'Все исходящие задачи'} tasks={tasks} />

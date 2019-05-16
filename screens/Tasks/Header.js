@@ -107,7 +107,7 @@ class HeaderComponent extends Component {
                             <ImageComponent size={30} source={{ uri: `http://ser.univ.team${image}` || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
                             <Info>
                                 <InfoChatName>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
-                                <InfoParticipants>{tasks.length} задач</InfoParticipants>
+                                <InfoParticipants>{tasks && tasks.length ? tasks.length : ''} задач</InfoParticipants>
                             </Info>
                     </ToProfile>
                 </Left>
