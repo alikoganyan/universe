@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "2.0.1",
+    "version": "2.0.2",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
@@ -20,8 +20,6 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "team.universe.media",
-      "publishBundlePath": "ios/universes-mobile/Supporting/shell-app.bundle",
-      "publishManifestPath": "ios/universes-mobile/Supporting/shell-app-manifest.json",
       "infoPlist": {
         "NSCameraUsageDescription": "Apperture uses the camera to add photos to albums and scan QR codes.",
         "NSPhotoLibraryUsageDescription": "Apperture needs access to your photo library to let you add photos to an album.",
@@ -33,8 +31,6 @@
     },
     "android": {
       "package": "com.team.universe.media",
-      "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
-      "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json",
       "permissions": [
         "CAMERA",
         "READ_INTERNAL_STORAGE",
