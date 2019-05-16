@@ -53,8 +53,7 @@ const Controls = styled(View)`
 const SendAgain = styled(Text)`
     text-align: center;
     font-size: ${fontSize.text};
-    width: 100%;
-
+    max-width: 90%;
 `
 const NoSMS = styled(SendAgain)`
     color: ${lightGrey1};
@@ -62,6 +61,8 @@ const NoSMS = styled(SendAgain)`
 
 class Content extends Component {
     render() {
+        const { deadline } = this.state
+
         return (
             <Wrapper>
                 <Title>
@@ -80,7 +81,7 @@ class Content extends Component {
                 </PhoneNumber>
                 <Controls>
                     <NoSMS>Не получили sms?</NoSMS>
-                    <SendAgain>Отправить sms повторно можно будет через 5:00</SendAgain>
+                    <SendAgain>Отправить sms повторно можно будет через {deadline}</SendAgain>
                 </Controls>
             </Wrapper>
         )
@@ -89,9 +90,15 @@ class Content extends Component {
         sms: '',
         asnwer: '1111',
         error: 0,
-        tries: 3
+        deadline: 10,
     }
     componentDidMount() {
+        const countdown = setInterval(() => {
+            this.setState({ deadline: this.state.deadline - 1 })
+            if(this.state.deadline === 0)
+                clearInterval(countdown)
+        }, 1000)
+        
     }
     handleSMS = (e) => {
         const { asnwer, sms, error, tries } = this.state;
@@ -114,7 +121,7 @@ class Content extends Component {
     }
 }
 const mapStateToProps = state => ({
-        id: state.userReducer.id
+    id: state.userReducer.id
 })
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),

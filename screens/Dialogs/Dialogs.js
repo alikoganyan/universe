@@ -54,7 +54,7 @@ class Dialogs extends Component {
 		FlatListData: []
 	}
 	componentDidMount() {
-		const { user, addMessage, setDialogs } = this.props;
+		const { user, addMessage, setDialogs, navigation } = this.props;
 		socket.on('update_dialogs', e => {
 			setDialogs(e.dialogs)
 		})
