@@ -31,6 +31,15 @@ export default function ContentComponent(props) {
     return (
         <Wrapper>
             <Content>
+            <Link onPress={() => {
+                    dispatch(DrawerActions.closeDrawer())
+                    navigate('Dialogs')
+                }}>
+                    <PapperPlaneIcon />
+                    <LinkText>
+                        Диалоги
+                    </LinkText>
+                </Link>
                 <Link onPress={() => {
                     dispatch(DrawerActions.closeDrawer())
                     navigate('NewDialog')

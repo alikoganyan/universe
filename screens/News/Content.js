@@ -92,7 +92,6 @@ class Content extends Component {
                         data={news}
                         ListFooterComponent={<View style={{ margin: 10, }} />}
                         renderItem={({ item }) => {
-                            console.log('\n\n\n\n', item)
                         const date = new Date(item.created_at)
                         return <NewsItem onPress={() => this.proceed(item)}>
                             <Sender>

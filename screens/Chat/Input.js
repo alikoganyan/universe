@@ -116,9 +116,42 @@ class InputComponent extends Component {
         this.setState({ pickerOpened: false })
     }
     selectPhoto = async (e) => {
+        this.unselect()
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
+        const form = new FormData();
+        form.append("photo", { uri: 'result.uri', name: 'image', type: 'image/jpeg' })
+        if (!result.cancelled) {
+            sendRequest({
+                r_path: p_send_file,
+                method: 'post',
+                attr: {
+                    file: form,
+                    room: currentChat
+                },
+                // config: {
+                //     headers: {
+                //         'Content-Type': 'multipart/form-data'
+                //     }
+                // },
+                success: (res) => {
+                    console.log({ res })
+                    socket.emit('file', { room: currentChat })
+                    addMessage({
+                        room: currentChat,
+                        sender: id,
+                        date: new Date(),
+                        type: 'image',
+                        src: result.uri,
+                    })
+                },
+                failFunc: (err) => {
+                    console.log({ err })
+                }
+            })
+
+        }
     }
     selectFile = async (e) => {
         let result = await DocumentPicker.getDocumentAsync({});
@@ -140,47 +173,17 @@ class InputComponent extends Component {
     pickImage = async () => {
         const { image } = this.state
         const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        const { currentRoom, id, addMessage } = this.props;
+        const { currentRoom, currentChat, id, addMessage } = this.props;
         this.setState({ pickerOpened: true })
-        const form = new FormData();
-        form.append("photo", { uri: 'result.uri', name: 'image', type: 'image/jpeg' })
-        if (!result.cancelled) {
-            sendRequest({
-                r_path: p_send_file,
-                method: 'post',
-                attr: {
-                    file: form,
-                    room: '0_1'
-                },
-                config: {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    }
-                },
-                success: (res) => {
-                    socket.emit('file', { room: currentRoom })
-                    this.unselect()
-                    addMessage({
-                        room: currentRoom,
-                        sender: id,
-                        date: new Date(),
-                        type: 'image',
-                        src: result.uri,
-                    })
-                },
-                failFunc: (err) => {
-                    console.log({err})
-                }
-            })
 
-        }
     };
 }
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer.messages,
-        currentRoom: state.messageReducer.currentRoom,
-        id: state.userReducer.user._id
+    messages: state.messageReducer.messages,
+    currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
+    id: state.userReducer.user._id
 })
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),

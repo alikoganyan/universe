@@ -70,7 +70,6 @@ class Dialogs extends Component {
 		socket.on('dialog_opened', e => console.log(e))
 		socket.on('new_group', e => {
 			// socket.emit('subscribe_to_group', {room: e.room})
-			console.log({ groupChats: e })
 		})
 	}
 	componentWillUnmount() {
@@ -88,7 +87,6 @@ class Dialogs extends Component {
 	getUsers = e => {
 		const { setAllUsers } = this.props;
 		setAllUsers(e);
-		this.forceUpdate()
 	}
 	find = e => {
 		setDialogs(e.result)
@@ -153,7 +151,6 @@ class Dialogs extends Component {
 		const roomId = e.room.split('_').filter(e => e != user._id)[0]
 		setRoom(roomId)
 		setCurrentChat(e.room)
-		console.log(e.creator, e.participants)
 		setCurrentDialogs(user._id === e.creator._id ? e.participants.filter(e => e._id !== user._id)[0] : e.creator)
 		getMessages(e.messages);
 		socket.emit('view', { room: e.room, viewer: user._id })

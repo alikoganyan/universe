@@ -129,7 +129,6 @@ class HeaderComponent extends Component {
                     const { setTasks } = this.props
                     this.setState({ FlatListData: [...tasksList] })
                     // setTasks([])
-                    console.log('123')
                 }, 0)
             },
             failFunc: (err) => {

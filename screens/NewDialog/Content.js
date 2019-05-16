@@ -97,7 +97,7 @@ const ContactName = styled(Text)`
     color: ${black};
 `
 const ContactRole = styled(Text)`
-    font-size: ${fontSize.text-1};
+    font-size: ${fontSize.text - 1};
     color: ${grey2};
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)`
@@ -126,7 +126,7 @@ const CreateDialog = styled(TouchableOpacity)`
 const CreateDialogText = styled(Text)`
     margin-left: 10px;
     color: white;
-    font-size: ${fontSize.header-1};
+    font-size: ${fontSize.header - 1};
 `
 const Padding = styled(View)`
     height: 30px;
@@ -155,15 +155,15 @@ class Content extends Component {
                                 <Collapsible collapsed={collapsed[0] || false}>
                                     <BoxInner>
                                         {department.map((e, i) => <TouchableOpacity key={i} onPress={() => this.toChat(e._id)}>
-                                                <BoxInnerItem>
-                                                    <ContactImage source={{ uri: e.image ? `http://ser.univ.team${e.image}` : `http://simpleicon.com/wp-content/uploads/user1.png` }} />
-                                                    <ContactInfo>
-                                                        <ContactName>
-                                                            {e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}
-                                                        </ContactName>
-                                                        <ContactRole>{e.role.length ? e.role[0] : 'нет роли'}</ContactRole>
-                                                    </ContactInfo>
-                                                </BoxInnerItem>
+                                            <BoxInnerItem>
+                                                <ContactImage source={{ uri: e.image ? `http://ser.univ.team${e.image}` : `http://simpleicon.com/wp-content/uploads/user1.png` }} />
+                                                <ContactInfo>
+                                                    <ContactName>
+                                                        {e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}
+                                                    </ContactName>
+                                                    <ContactRole>{e.role.length ? e.role[0] : 'нет роли'}</ContactRole>
+                                                </ContactInfo>
+                                            </BoxInnerItem>
                                         </TouchableOpacity>)}
                                     </BoxInner>
                                 </Collapsible>
@@ -218,6 +218,7 @@ class Content extends Component {
         this.setState({ collapsed: newDCollapsed })
     }
     componentDidMount() {
+        const { setContacts } = this.props
         const newDCollapsed = [...this.state.collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
             newDCollapsed.push(false)
@@ -227,7 +228,7 @@ class Content extends Component {
             r_path: g_users,
             method: 'get',
             success: (res) => {
-                this.props.setContacts(res)
+                setContacts(res.users)
                 const newUsers = { ...this.state.users }
                 newUsers.department = res.users
                 this.setState({ users: newUsers })

@@ -92,7 +92,6 @@ margin-right: 20px;
 class HeaderComponent extends Component {
     render() {
         const { back, search, startSearch, stopSearch, currentChat, toProfile, currentDialog } = this.props
-        console.log(currentDialog)
         const { first_name, last_name, phone_number, image } = currentDialog
         return (
             <Header>

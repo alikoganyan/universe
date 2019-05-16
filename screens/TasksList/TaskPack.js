@@ -8,6 +8,7 @@ const { purple, lightColor, lightGrey1, grey2 } = Colors;
 const Wrapper = styled(View)`
 	display: flex;
 	flex-direction: row;
+	align-self: center;
 	align-items: center;
 	padding: ${sidePaddingNumber}px 0;
 	border: 0.3px solid ${lightGrey1};

@@ -139,10 +139,10 @@ class Content extends Component {
     }
     state = {
         country: '+7', 
-        // phone: Dimensions.get('window').width === 375 ? '9123456780' : Dimensions.get('window').width === 320 ? '9123456781' : '9123456782', // restore
-        // password: '1111', // restore
-        phone: '',
-        password: '',
+        phone: Dimensions.get('window').width === 375 ? '9123456780' : Dimensions.get('window').width === 320 ? '9123456781' : '9123456782', // restore
+        password: '1111', // restore
+        // phone: '',
+        // password: '',
         phone_number: '',
         error: null,
         invalidPassword: null,
@@ -189,13 +189,12 @@ class Content extends Component {
                 const { access_token, data } = res
                 setAuth(access_token)
                 setUser(data)
-                console.log(`can't login`)
                 connectToSocket()
                 this.setState({ loading: false })
                 navigate('Dialogs')
             },
             failFunc: (err) => {
-                console.log(err,`can't login`)
+                console.log({err})
             }
         })
     }
