@@ -68,8 +68,7 @@ const BoxTitle = styled(TouchableOpacity)`
     align-items: flex-start;
 `
 const BoxInner = styled(AnimatedBox)`
-    padding: 20px 0;
-    padding-top: 10px;
+    padding: 0 0 20px;
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
@@ -80,18 +79,16 @@ const BoxItem = styled(Text)`
     color: #A7B0BA;
 `
 const BoxInnerItem = styled(View)`
-    padding: 10px 0;
+    padding: 20px 0;
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     display: flex;
     flex-direction: row;
     align-items: center;
-
 `
 const ContactImage = styled(Image)`
-    width: 24px;
-    height: 24px;
+    width: 33px;
+    height: 33px;
     border-radius: 14;
-    background: red;
     margin-right: 8px;
 `
 const ContactInfo = styled(View)``
@@ -100,7 +97,7 @@ const ContactName = styled(Text)`
     color: ${black};
 `
 const ContactRole = styled(Text)`
-    font-size: ${fontSize.sm};
+    font-size: ${fontSize.text - 1};
     color: ${grey2};
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)`
@@ -109,23 +106,27 @@ const ArrowWrapper = styled(AnimatedArrowWrapper)`
 const Group = styled(BoxInnerItem)``
 const GroupInfo = styled(ContactInfo)``
 const GroupTitle = styled(ContactName)``
-const GroupParticipants = styled(ContactRole)``
+const GroupParticipants = styled(ContactRole)`
+
+`
 const GroupImage = styled(ContactImage)``
 const CreateDialog = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    align-self: center;
+    align-self: flex-start;
     background: ${green};
     padding: 15px 30px;
+    margin-left: 30px;
     border-radius: 50000px;
-    margin-top: 30px;
+    margin-top: 10px;
 
 `
 const CreateDialogText = styled(Text)`
     margin-left: 10px;
     color: white;
+    font-size: ${fontSize.header - 1};
 `
 const Padding = styled(View)`
     height: 30px;
@@ -146,7 +147,7 @@ class Content extends Component {
                             {/* {department.map((e, i) => ( */}
                             <Box last={true}>
                                 <BoxTitle onPress={() => collapsed[0] ? this.collapseDepartment(0) : this.showDepartment(0)}>
-                                    <BoxItem title={true}>No role</BoxItem>
+                                    <BoxItem title={true}>Нет департамента</BoxItem>
                                     <ArrowWrapper pose={collapsed[0] ? 'right' : 'down'}>
                                         <ArrowDownIcon />
                                     </ArrowWrapper>
@@ -155,10 +156,12 @@ class Content extends Component {
                                     <BoxInner>
                                         {department.map((e, i) => <TouchableOpacity key={i} onPress={() => this.toChat(e._id)}>
                                             <BoxInnerItem>
-                                                <ContactImage />
+                                                <ContactImage source={{ uri: e.image ? `http://ser.univ.team${e.image}` : `http://simpleicon.com/wp-content/uploads/user1.png` }} />
                                                 <ContactInfo>
-                                                    <ContactName>{e.first_name || e.phone_number}</ContactName>
-                                                    <ContactRole>{e.role || 'no role'}</ContactRole>
+                                                    <ContactName>
+                                                        {e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}
+                                                    </ContactName>
+                                                    <ContactRole>{e.role.length ? e.role[0] : 'нет роли'}</ContactRole>
                                                 </ContactInfo>
                                             </BoxInnerItem>
                                         </TouchableOpacity>)}
@@ -215,6 +218,7 @@ class Content extends Component {
         this.setState({ collapsed: newDCollapsed })
     }
     componentDidMount() {
+        const { setContacts } = this.props
         const newDCollapsed = [...this.state.collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
             newDCollapsed.push(false)
@@ -224,7 +228,7 @@ class Content extends Component {
             r_path: g_users,
             method: 'get',
             success: (res) => {
-                this.props.setContacts(res)
+                setContacts(res.users)
                 const newUsers = { ...this.state.users }
                 newUsers.department = res.users
                 this.setState({ users: newUsers })
@@ -250,12 +254,12 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer,
-        dialog: state.dialogsReducer.dialogs,
-        currentRoom: state.messageReducer.currentRoom,
-        currentChat: state.messageReducer.currentChat,
-        user: state.userReducer.user,
-        users: state.userReducer
+    messages: state.messageReducer,
+    dialog: state.dialogsReducer.dialogs,
+    currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
+    user: state.userReducer.user,
+    users: state.userReducer
 })
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),

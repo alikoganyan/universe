@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Dimensions, BackHandler, AsyncStorage } from 'react-native';
 import GlobalFont from 'react-native-global-font'
-import { Font } from 'expo';
+import { Font, Asset } from 'expo';
 import { store } from './reducers/store'
 import {
   Group,
@@ -122,15 +122,6 @@ const AppStackNavigator = createStackNavigator(
 const App = createAppContainer(AppStackNavigator)
 @connectActionSheet
 export default class AppComponent extends React.Component {
-  async componentDidMount() {
-    await Font.loadAsync({
-      'Roboto': require('./assets/fonts/Roboto-Medium.ttf'),
-    });
-    GlobalFont.applyGlobal('Roboto')
-    this.setState({ loaded: true })
-
-    BackHandler.addEventListener("hardwareBackPress", () => { })
-  }
   render() {
     return (
       <Provider store={store}>
@@ -141,4 +132,34 @@ export default class AppComponent extends React.Component {
   state = {
     loaded: false
   }
+  async componentDidMount() {
+    await this._loadResourcesAsync()
+    // await Font.loadAsync({
+    //   'Roboto': require('./assets/fonts/Roboto-Medium.ttf'),
+    // });
+    GlobalFont.applyGlobal('Roboto')
+    this.setState({ loaded: true })
+
+    BackHandler.addEventListener("hardwareBackPress", () => { })
+  }
+  _loadResourcesAsync = async () => {
+    return Promise.all([
+      Asset.loadAsync([
+        require('./assets/svg/Add.svg'),
+        require('./assets/svg/Arrow_back.svg'),
+        require('./assets/svg/Arrow_down_light.svg'),
+        require('./assets/svg/Close.svg'),
+        require('./assets/svg/Edit.svg'),
+        require('./assets/svg/Like.svg'),
+        require('./assets/svg/Likes.svg'),
+        require('./assets/svg/Menu.svg'),
+        require('./assets/svg/News.svg'),
+        require('./assets/svg/Settings.svg'),
+        require('./assets/svg/Tasks.svg'),
+      ]),
+      Font.loadAsync({
+        'Roboto': require('./assets/fonts/Roboto-Medium.ttf'),
+      }),
+    ]);
+  };
 }

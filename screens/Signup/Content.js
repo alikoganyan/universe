@@ -92,7 +92,7 @@ class Content extends Component {
                         onChangeText={this.handlePhone}
                         value={phone}
                         placeholder={'XXX-XXX-XX-XX'}
-                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? 'red' : null, borderColor: error ? 'red' : null }}
+                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? 'red' : null, borderColor: error ? 'red' : lightGrey1 }}
                     />
                 </PhoneNumber>
                 <ButtonBox>

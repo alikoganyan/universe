@@ -16,11 +16,12 @@ const { Colors, HeaderHeightNumber, sidePadding } = helper;
 const { lightGrey1, black, purple } = Colors;
 const Wrapper = styled(View)`
     padding: 0 ${sidePadding};
+    display: flex;
     justify-content: center;
-    flex-grow: 1;
-    height: 100%;
+    align-items: center;
 `
-
+const StyledScrollView = styled(ScrollView)`
+`
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
     border-width: 0;
@@ -32,8 +33,6 @@ const StyledInput = styled(TextInput)`
 `
 const ButtonBox = styled(View)`
     align-self: center;
-    position: absolute;
-    bottom: 30px;
 `
 const Receivers = styled(View)`
     margin: 60px 0;
@@ -99,83 +98,92 @@ class Content extends Component {
         } = this.state
         return (
             <Wrapper>
-                <StyledInput password={true}
-                    onChangeText={this.handleTaskName}
-                    value={taskName}
-                    placeholder={'Новая задача'}
-                    multiline={true}
-                    style={{ marginBottom: 30, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
-                <StyledInput password={true}
-                    onChangeText={this.handleTaskText}
-                    value={taskText}
-                    placeholder={'Текст задачи'}
-                    multiline={true}
-                    style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
-                <DeadLine>
-                    <DialogsLabel>
-                        <GroupIcon />
-                        <Text>Дедлайн</Text>
-                    </DialogsLabel>
-                    <DeadlineTime>
-                        <DatePicker
-                            date={deadlineDate}
-                            mode="date"
-                            placeholder="25 января 2017"
-                            confirmBtnText="Подтвердить"
-                            format="YYYY-MM-DD"
-                            cancelBtnText="Отменить"
-                            customStyles={{
-                                dateIcon: {
-                                    width: 0,
-                                    height: 0,
-                                },
-                                dateInput: {
-                                    borderWidth: 0,
-                                    borderBottomWidth: 1
-                                }
-                            }}
-                            onDateChange={e => this.setState({ deadlineDate: e })}
-                        />
-                        <DatePicker
-                            date={deadlineTime}
-                            mode="time"
-                            placeholder="11:12"
-                            confirmBtnText="Подтвердить"
-                            cancelBtnText="Отменить"
-                            customStyles={{
-                                dateIcon: {
-                                    width: 0,
-                                    height: 0,
-                                },
-                                dateInput: {
-                                    borderWidth: 0,
-                                    borderBottomWidth: 1
-                                }
-                            }}
-                            onDateChange={e => this.setState({ deadlineTime: e })}
-                        />
-                    </DeadlineTime>
-                </DeadLine>
-                <Receivers>
-                    <DialogsLabel>
-                        <GroupIcon />
-                        <Text>Исполнитель</Text>
-                    </DialogsLabel>
-                    {receivers.length > 0 ? receivers.map((e, i) => (
-                        <ReceiverComponent key={i} last={i === receivers.length} onDelete={() => this.deleteReceiver(e)}>{e}</ReceiverComponent>
-                    )) : <DialogsLabel>
-                            <TouchableOpacity onPress={this.addParticipant}>
-                                <AddReceiver>Добавить</AddReceiver>
-                            </TouchableOpacity>
-                        </DialogsLabel>}
-                </Receivers>
-                <ButtonBox>
-                    <Button
-                        onPress={this.proceed}
-                        style={{ background: purple }}
-                        color={'white'}>Создать задачу</Button>
-                </ButtonBox>
-            </Wrapper>)
+                <StyledScrollView
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                        display: 'flex',
+                        justifyContent: 'center',
+                    }}
+                >
+                    <StyledInput password={true}
+                        onChangeText={this.handleTaskName}
+                        value={taskName}
+                        placeholder={'Новая задача'}
+                        multiline={true}
+                        style={{ marginBottom: 30, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
+                    <StyledInput password={true}
+                        onChangeText={this.handleTaskText}
+                        value={taskText}
+                        placeholder={'Текст задачи'}
+                        multiline={true}
+                        style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
+                    <DeadLine>
+                        <DialogsLabel>
+                            <GroupIcon />
+                            <Text>Дедлайн</Text>
+                        </DialogsLabel>
+                        <DeadlineTime>
+                            <DatePicker
+                                date={deadlineDate}
+                                mode="date"
+                                placeholder="25 января 2017"
+                                confirmBtnText="Подтвердить"
+                                format="YYYY-MM-DD"
+                                cancelBtnText="Отменить"
+                                customStyles={{
+                                    dateIcon: {
+                                        width: 0,
+                                        height: 0,
+                                    },
+                                    dateInput: {
+                                        borderWidth: 0,
+                                        borderBottomWidth: 1
+                                    }
+                                }}
+                                onDateChange={e => this.setState({ deadlineDate: e })}
+                            />
+                            <DatePicker
+                                date={deadlineTime}
+                                mode="time"
+                                placeholder="11:12"
+                                confirmBtnText="Подтвердить"
+                                cancelBtnText="Отменить"
+                                customStyles={{
+                                    dateIcon: {
+                                        width: 0,
+                                        height: 0,
+                                    },
+                                    dateInput: {
+                                        borderWidth: 0,
+                                        borderBottomWidth: 1
+                                    }
+                                }}
+                                onDateChange={e => this.setState({ deadlineTime: e })}
+                            />
+                        </DeadlineTime>
+                    </DeadLine>
+                    <Receivers>
+                        <DialogsLabel>
+                            <GroupIcon />
+                            <Text>Исполнитель</Text>
+                        </DialogsLabel>
+                        {receivers.length > 0 ? receivers.map((e, i) => (
+                            <ReceiverComponent key={i} last={i === receivers.length} onDelete={() => this.deleteReceiver(e)}>{e}</ReceiverComponent>
+                        )) : <DialogsLabel>
+                                <TouchableOpacity onPress={this.addParticipant}>
+                                    <AddReceiver>Добавить</AddReceiver>
+                                </TouchableOpacity>
+                            </DialogsLabel>}
+                    </Receivers>
+                    <ButtonBox>
+                        <Button
+                            onPress={this.proceed}
+                            style={{ background: purple }}
+                            color={'white'}>Создать задачу</Button>
+                    </ButtonBox>
+                </StyledScrollView>
+            </Wrapper>
+        )
     }
     state = {
         taskName: '',
@@ -187,12 +195,12 @@ class Content extends Component {
     }
     componentWillUpdate() {
     }
-    jsCoreDateCreator = (dateString) => { 
+    jsCoreDateCreator = (dateString) => {
         // dateString *HAS* to be in this format "YYYY-MM-DD HH:MM:SS"  
-        let dateParam = dateString.split(/[\s-:]/)  
-        dateParam[1] = (parseInt(dateParam[1], 10) - 1).toString()  
-        return new Date(...dateParam)  
-      }
+        let dateParam = dateString.split(/[\s-:]/)
+        dateParam[1] = (parseInt(dateParam[1], 10) - 1).toString()
+        return new Date(...dateParam)
+    }
     deleteReceiver = (e) => {
         const { addReceiver, setReceivers, receivers } = this.props
         let newReceivers = [...receivers];
@@ -207,20 +215,25 @@ class Content extends Component {
         const { receivers, moveForward } = this.props
         const { deadlineDate, deadlineTime, taskName, taskText } = this.state;
         const deadline = this.jsCoreDateCreator(`${deadlineDate}:${deadlineTime}`)
-        sendRequest({
-            r_path: p_create_task,
-            method: 'post',
-            attr: {
-                task: { name: taskName, description: taskText, deadline, performers: [receivers[0]._id]} 
-            },
-            success: (res) => {
-                console.log(res)
-                moveForward()
-            },
-            failFunc: (err) => {
-                console.log(err)
+        console.log(
+            {
+                task: { name: taskName, description: taskText, deadline, performers: [receivers[0]._id] }
             }
-        })
+        )
+        // sendRequest({
+        //     r_path: p_create_task,
+        //     method: 'post',
+        //     attr: {
+        //         task: { name: taskName, description: taskText, deadline, performers: [receivers[0]._id] }
+        //     },
+        //     success: (res) => {
+        //         console.log(res)
+        //         moveForward()
+        //     },
+        //     failFunc: (err) => {
+        //         console.log(err)
+        //     }
+        // })
     }
     handleCountry = (e) => {
         this.setState({ country: e })
@@ -239,8 +252,8 @@ class Content extends Component {
     }
 }
 const mapStateToProps = state => ({
-        user: state.userReducer.user,
-        receivers: state.participantsReducer.tasks.receivers,
+    user: state.userReducer.user,
+    receivers: state.participantsReducer.tasks.receivers,
 })
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),

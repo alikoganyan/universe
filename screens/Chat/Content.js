@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Dimensions, TouchableOpacity, TouchableWithoutFeedback, ActionSheetIOS, Platform, Animated } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, Dimensions, TouchableOpacity, TouchableWithoutFeedback, ActionSheetIOS, Platform, Animated, ScrollView } from 'react-native'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
@@ -57,6 +57,7 @@ class Content extends Component {
                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                         inverted={true}
                         data={reversedMessages}
+                        keyboardDismissMode={'on-drag'}
                         animated={true}
                         renderItem={({ item, index }) => {
                             return <TouchableOpacity key={index} onLongPress={() => this.handleHold(item._id)}>
@@ -99,10 +100,10 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer.messages,
-        search: state.messageReducer.search,
-        currentRoom: state.messageReducer.currentRoom,
-        user: state.userReducer.user,
+    messages: state.messageReducer.messages,
+    search: state.messageReducer.search,
+    currentRoom: state.messageReducer.currentRoom,
+    user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({
 

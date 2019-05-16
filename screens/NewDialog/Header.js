@@ -42,6 +42,9 @@ const Left = styled(View)`
     align-items: center;
     justify-content: flex-start;
 `
+const HeaderText = styled(Text)`
+    font-size: ${fontSize.header};
+`
 const Right = styled(Left)`
     justify-content: flex-end;
 `
@@ -56,12 +59,10 @@ class HeaderComponent extends Component {
             <Header>
                 <Left>
                     <BackIcon right onPress={back} />
-                    <Text>Новый диалог</Text>
+                    <HeaderText>Новый диалог</HeaderText>
                 </Left>
                 <Right>
-                    <MarginRight>
-                        <SearchIcon right />
-                    </MarginRight>
+                    <SearchIcon right />
                     <TouchableOpacity onPress={toProfile}>
                         <ImageComponent source={{ uri: user.image }} />
                     </TouchableOpacity>

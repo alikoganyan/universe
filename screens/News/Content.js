@@ -18,7 +18,7 @@ const NewsList = styled(FlatList)`
     flex-grow: 1;
     padding-bottom: 20px;
 `
-const NewsItem = styled(View)`
+const NewsItem = styled(TouchableOpacity)`
     background: white;
     padding: 20px;
     padding-bottom: 10px;
@@ -93,13 +93,13 @@ class Content extends Component {
                         ListFooterComponent={<View style={{ margin: 10, }} />}
                         renderItem={({ item }) => {
                         const date = new Date(item.created_at)
-                        return <NewsItem>
+                        return <NewsItem onPress={() => this.proceed(item)}>
                             <Sender>
-                                <ImageComponent source={{ uri: item.creator.image }} size={"xs"} style={{
+                                <ImageComponent source={{ uri: item.creator.image ? `http://ser.univ.team${item.creator.image}` : 'https://facebook.github.io/react/logo-og.png' }} size={"xs"} style={{
                                     marginRight: 10
                                 }} />
                                 <SenderInfo>
-                                    <SenderName numberOfLines={1}>{item.creator.first_name}</SenderName>
+                                    <SenderName numberOfLines={1}>{item.creator.first_name} {item.creator.last_name}</SenderName>
                                     <TimeSent>
                                         {date.getDate()}{' '}
                                         {months[date.getMonth()]}{' '}
@@ -111,7 +111,7 @@ class Content extends Component {
                             <NewsText numberOfLines={2}>{item.text}</NewsText>
                             <NewsItemInfo>
                                 <ShowAll>
-                                    <TouchableOpacity onPress={() => this.proceed(item)}><HashTag>Читать далее</HashTag></TouchableOpacity>
+                                    <HashTag>ЧИТАТЬ ДАЛЕЕ</HashTag>
                                 </ShowAll>
 
                                 <Reactions>
@@ -139,7 +139,7 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-        news: state.newsReducer.news,
+    news: state.newsReducer.news,
 })
 const mapDispatchToProps = dispatch => ({
     setFeed: _ => dispatch(setFeed(_)),

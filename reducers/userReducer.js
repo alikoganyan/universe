@@ -2,6 +2,7 @@ import { SET_CONTACTS, SET_ERROR, SET_ALL_USERS, REGISTER_USER, SET_USER, SET_AU
 
 const initialState = {
     user: {},
+    contacts: [],
     auth: '',
     users: [],
     error: false,
@@ -24,7 +25,7 @@ const userReducer = (state = initialState, action) => {
         case SET_REGISTER_USER_SMS:
             return { ...state, register: { ...state.register, sms: action.payload } }
         case SET_CONTACTS:
-            return { ...state, user: { ...state.user, contact: action.payload } }
+            return { ...state, contacts: [ ...action.payload ] }
         default:
             return state
     }

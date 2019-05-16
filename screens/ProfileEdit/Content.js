@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native'
 import { TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
 import { Button } from '../../common';
 import { setRoom } from '../../actions/messageActions'
@@ -12,7 +12,7 @@ import { socket } from '../../utils/socket'
 import { p_profile } from '../../constants/api'
 import sendRequest from '../../utils/request'
 const { Colors, HeaderHeightNumber, fontSize } = helper;
-const { grey2, blue } = Colors;
+const { grey2, blue, lightGrey1 } = Colors;
 const Wrapper = styled(View)`
     padding-top: 30px;
     background: white;
@@ -51,8 +51,8 @@ const InputLabel = styled(Text)`
     text-align: right;
     color: ${grey2};
     z-index: 20;
-    margin-bottom: 15px;
-    font-size: ${fontSize.sm};
+    margin-bottom: 13px;
+    font-size: ${fontSize.sl};
     margin-right: 15px;
 `
 const Bottom = styled(View)`
@@ -71,58 +71,62 @@ const ButtonText = styled(Text)`
     align-self: center;
     justify-content: center;
 `
+const StyledInput = styled(TextInput)`
+    flex: 2;
+    width: 50%;
+    border: 0.3px solid ${lightGrey1};
+    border-width: 0;
+    border-bottom-width: 0.3px;
+    padding-bottom: 12px;
+    font-size: ${fontSize.sl};
+`
 const Input = (props) => {
-    const { style, value, children, onChange } = props;
-    return <FloatingLabel
-        labelStyle={{ fontSize: 13 }}
-        inputStyle={{
-            fontSize: 15,
-            borderWidth: 0,
-            borderBottomWidth: 1,
-            display: 'flex',
-            flex: 1,
-        }}
+    const { style, value, children, onChange, pass } = props;
+    return <StyledInput
         value={value}
-        style={{ flex: 2, width: "50%", ...style }}
+        style={{ ...style }}
         multiline={false}
         onChange={onChange}
-    >{children}</FloatingLabel>
+        placeholder={children}
+        secureTextEntry={pass}
+        placeholderTextColor={lightGrey1}
+    />
 }
 class Content extends Component {
 
     render() {
         const { user } = this.state;
-        const { first_name, last_name, middle_name, email } = user || {};
+        const { first_name, last_name, middle_name, email, image } = user || {};
         return (
             <Wrapper>
                 <User >
                     <TouchableOpacity onPress={(this.selectImage)}>
-                        <UserImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
+                        <UserImage source={{ uri: image }} />
                     </TouchableOpacity>
                     <UserInfo>
                         <InputBox key={0}>
                             <InputLabel numberOfLines={1} >Фамилия</InputLabel>
-                            <Input value={last_name} onChange={(e) => this.handleChange(e, "last_name")}>Фамилия</Input>
+                            <Input value={last_name} onChange={(e) => this.handleChange(e, "last_name")} />
                         </InputBox>
                         <InputBox key={1}>
                             <InputLabel numberOfLines={1}>Имя</InputLabel>
-                            <Input value={first_name} onChange={(e) => this.handleChange(e, "first_name")}>Имя</Input>
+                            <Input value={first_name} onChange={(e) => this.handleChange(e, "first_name")} />
                         </InputBox>
                         <InputBox key={2}>
                             <InputLabel numberOfLines={1}>Отчество</InputLabel>
-                            <Input value={middle_name} onChange={(e) => this.handleChange(e, "middle_name")}>Отчество</Input>
+                            <Input value={middle_name} onChange={(e) => this.handleChange(e, "middle_name")} />
                         </InputBox>
                         <InputBox key={3}>
                             <InputLabel numberOfLines={1}>Email</InputLabel>
-                            <Input value={email} onChange={(e) => this.handleChange(e, "email")}>Email</Input>
+                            <Input value={email} onChange={(e) => this.handleChange(e, "email")}>example@gmail.com</Input>
                         </InputBox>
                         <InputBox key={4}>
                             <InputLabel numberOfLines={1}>Пароль</InputLabel>
-                            <Input onChange={(e) => this.handleChange(e, "password")}>Пароль</Input>
+                            <Input pass={true} onChange={(e) => this.handleChange(e, "password")}>Пароль</Input>
                         </InputBox>
                         <InputBox key={5}>
                             <InputLabel numberOfLines={1}>Повторите пароль</InputLabel>
-                            <Input onChange={(e) => this.handleChange(e, "repassword")}>Повторите пароль</Input>
+                            <Input pass={true} onChange={(e) => this.handleChange(e, "repassword")}>Повторите пароль</Input>
                         </InputBox>
                     </UserInfo>
                 </User>
@@ -137,10 +141,10 @@ class Content extends Component {
     }
     state = {
         user: {
-            email:'',
-            first_name:'',
-            middle_name:'',
-            last_name:'',
+            email: '',
+            first_name: '',
+            middle_name: '',
+            last_name: '',
             password: '',
             repassword: '',
         },
@@ -189,28 +193,28 @@ class Content extends Component {
                     email: email || userRedux.email,
                     first_name: first_name || userRedux.firstName,
                     middle_name: middle_name || userRedux.patronymic,
-                    last_name: last_name || userRedux.lastName, 
-                    new_password: password || userRedux.password, 
+                    last_name: last_name || userRedux.lastName,
+                    new_password: password || userRedux.password,
                     repeat_password: repassword || userRedux.repassword,
                 }
             },
             success: (res) => {
-                console.log('pa_profile',{ res })
+                console.log('pa_profile', { res })
             },
             failFunc: (err) => {
                 console.log('pa_profile', { err })
             }
         })
-        
+
     }
 }
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer,
-        dialog: state.dialogsReducer.dialogs,
-        currentRoom: state.messageReducer.currentRoom,
-        currentChat: state.messageReducer.currentChat,
-        user: state.userReducer.user,
+    messages: state.messageReducer,
+    dialog: state.dialogsReducer.dialogs,
+    currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
+    user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),

@@ -101,7 +101,6 @@ const ContactImage = styled(Image)`
     width: 36px;
     height: 36px;
     border-radius: 18;
-    background: red;
     margin-right: 10px;
 `
 const ContactInfo = styled(View)``
@@ -181,10 +180,10 @@ class Content extends Component {
                                                         {
                                                             e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
                                                                 <BoxInnerItem>
-                                                                    <ContactImage />
+                                                                    <ContactImage source={{uri: `http://ser.univ.team${e.image}`}}/>
                                                                     <ContactInfo>
-                                                                        <ContactName>{e.name || e.phone_number}</ContactName>
-                                                                        <ContactRole>{e.role || 'no role'}</ContactRole>
+                                                                        <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
+                                                                        <ContactRole>{e.role.length ? e.role[0] : 'no role'}</ContactRole>
                                                                     </ContactInfo>
                                                                 </BoxInnerItem>
                                                             </TouchableOpacity>)

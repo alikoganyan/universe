@@ -1,104 +1,105 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionSheetIOS } from 'react-native'
+import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionSheetIOS, Platform } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { TasksIcon } from '../../assets/index'
 const { fontSize, PressDelay, sidePadding, Colors, sidePaddingNumber } = helper;
-const { purple, lightColor } = Colors;
+const { purple, lightColor, lightGrey1, grey2 } = Colors;
 const Wrapper = styled(View)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  padding: ${sidePaddingNumber}px 0;
-  border: 1px solid ${lightColor};
-  border-width: 0;
-  border-top-width: 1px;
-  border-bottom-width: ${({ last }) => last ? 1 : 0}px;
+	display: flex;
+	flex-direction: row;
+	align-self: center;
+	align-items: center;
+	padding: ${sidePaddingNumber}px 0;
+	border: 0.3px solid ${lightGrey1};
+	border-width: 0;
+ 	width: ${Dimensions.get('window').width - sidePaddingNumber*2};
+	border-top-width: 0.3px;
+	border-bottom-width: ${({ last }) => last ? 0.3 : 0}px;
 `
 const TaskText = styled(View)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  flex: 1;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	justify-content: space-between;
+	flex: 1;
 `
 
 const TaskTextInner = styled(View)`
-  display: flex;
-  flex-direction: column;
+	display: flex;
+	flex-direction: column;
+	padding-left: ${sidePadding};
 `
 const TaskTitle = styled(Text)`
-  font-size: ${fontSize.header};
-  font-weight: 500;
-  flex: 1;  
-  margin-bottom: 5px;
+	font-size: ${fontSize.header};
+	flex: 1;  
+	margin-bottom: 5px;
 `
 const LastMessageDate = styled(Text)`
-  color: ${lightColor};
-  font-size: ${fontSize.text};
-  text-align: center;
-  display: flex;
-  justify-content: center;
-  align-self: center;
-  margin-bottom: 5px;
+	color: ${lightGrey1};
+	font-size: ${fontSize.text};
+	text-align: center;
+	display: flex;
+	justify-content: center;
+	align-self: center;
+	text-align: left;
+	margin-bottom: 5px;
 `
 const TaskLastMessage = styled(Text)`
-  font-size: ${fontSize.text};
-  color: ${lightColor};
-  padding-right: 20px;
-  margin-bottom: 5px;
-
+	font-size: ${fontSize.text};
+	color: ${lightGrey1};
+	margin-bottom: 5px;
+	max-width: 90%;
 `
 const TaskDate = styled(View)`
-  right: ${sidePadding};
-  color: ${lightColor};
-  font-size: ${fontSize.text};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  max-width: 10%;
-  
+	right: ${sidePadding};
+	color: ${lightGrey1};
+	font-size: ${fontSize.text};
+	display: flex;
+	justify-content: flex-start;
+	align-items: flex-start;
+	height: 50px;
 `
 const UnreadMessages = styled(View)`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex: 1;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	flex: 1;
 `
 const NewMessages = styled(Text)`
-  color: white;
-  font-size: ${fontSize.text};
-  background: ${purple};
-  overflow: hidden;
-  padding: 5px;
-  padding-top: 2px;
-  text-align: center;;
-  min-width: 25px;
-  height: 25px;
-  border-radius: 12.5;
-  display: flex;
-  justify-content: flex-end;
-  align-items: flex-end;
-  align-self: center;
+	color: white;
+	font-size: ${fontSize.text};
+	background: ${purple};
+	overflow: hidden;
+	padding: 5px;
+	padding-top: ${Platform.OS === 'ios' ? 4 : 2}px;
+	text-align: center;;
+	min-width: 25px;
+	height: 25px;
+	border-radius: 12.5;
+	display: flex;
+	justify-content: center;
+	align-items: flex-end;
+	align-self: center;
 `
 const TaskStatusTextContainer = styled(View)`
-  border: 1px solid ${lightColor};
-  border-radius: 15px; 
-  padding: 2px 8px;
-  margin-right: 5px;
-  display: flex;
-  flex-direction: row;
+	border: 1px solid ${lightGrey1};
+	border-radius: 15px; 
+	padding: 2px 8px;
+	margin-right: 5px;
+	display: flex;
+	flex-direction: row;
 `
 const TaskStatus = styled(View)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+	display: flex;
+	flex-direction: row;
+	align-items: center;
 `
 const TaskStatusText = styled(Text)`
-  color: ${lightColor};
+	color: ${lightGrey1};
 `
 const TaskStatusAdditional = styled(Text)`
-  color: ${lightColor};
+	color: ${lightGrey1};
 `
 export default class TaskPack extends Component {
   render() {

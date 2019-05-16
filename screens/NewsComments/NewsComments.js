@@ -19,7 +19,7 @@ const Bottom = styled(View)`
 export default class NewsComments extends Component {
     render() {
         return (
-            <SafeAreaView behavior={Platform.OS === 'ios' ? 'height' : 'padding'}>
+            <SafeAreaView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
                 <Wrapper>
                     <Header back={this.navigateBack} />
                     <Content />

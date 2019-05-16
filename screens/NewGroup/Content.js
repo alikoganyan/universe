@@ -83,7 +83,6 @@ class Content extends Component {
             text
         } = this.state
         const { participants } = this.props
-        console.log(participants)
         return (
             <Wrapper>
                 <ImageComponent style={{ alignSelf: 'center', marginBottom: 20 }} size={70} source={{ uri: 'http://simpleicon.com/wp-content/uploads/user1.png' }} />

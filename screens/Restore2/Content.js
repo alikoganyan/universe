@@ -11,7 +11,7 @@ import {
 } from '../../constants/api'
 import sendRequest from '../../utils/request'
 const { Colors, HeaderHeightNumber } = helper;
-const { blue, grey1 } = Colors;
+const { blue, grey1, lightGrey1 } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
     padding-bottom: 10%;
@@ -57,13 +57,14 @@ const NoCodeTimer = styled(Text)`
     text-align: center;
 `
 const Input = (props) => {
-    const { autoFocus = 'false', keyboardType = 'number-pad', children, password = false, value, style, editable, onChangeText, inputStyle } = props;
+    const { autoFocus = false, keyboardType = 'number-pad', children, password = false, value, style, editable, onChangeText, inputStyle } = props;
     return <FloatingLabel
         labelStyle={{ fontSize: 11 }}
         inputStyle={{
             fontSize: 11,
             borderWidth: 0,
             borderBottomWidth: 1,
+            borderBottomColor: lightGrey1,
             display: 'flex',
             textAlign: 'center',
             paddingLeft: 0,
@@ -92,8 +93,8 @@ class Content extends Component {
                 </Title>
                 <Label>Вам отправлено sms с временным паролем, {'\n'}введите его тут</Label>
                 <PhoneNumber>
-                    <Input autoFocus={'true'} style={{
-                        width: '100%', textAlign: 'center',
+                    <Input autoFocus={true} style={{
+                        width: '100%'
                     }} inputStyle={{ color: error ? 'red' : undefined, borderColor: error ? 'red' : undefined }} value={code} onChangeText={this.handleChangeCode} keyboardType={'phone-pad'} />
                 </PhoneNumber>
                 <ControlBar>
@@ -123,7 +124,7 @@ class Content extends Component {
     proceed = e => {
         const { code, answer } = this.state;
 
-        if (code === answer) {
+        if (code.length === 4) {
             this.checkCode();
         } else {
             this.setState({ error: true })
@@ -152,7 +153,7 @@ class Content extends Component {
     }
 }
 const mapStateToProps = state => ({
-        register: state.userReducer.register,
+    register: state.userReducer.register,
 })
 const mapDispatchToProps = dispatch => ({
 })

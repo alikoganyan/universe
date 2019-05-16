@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { ImageComponent } from '../../common'
-const { HeaderHeight, sidePadding, sidePaddingNumber } = helper;
+const { HeaderHeight, sidePadding, sidePaddingNumber, fontSize } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -37,7 +37,10 @@ const UserImage = styled(Image)`
     margin-left:${sidePaddingNumber};
 `
 const MarginRight = styled(View)`
-margin-right: ${sidePaddingNumber};
+    margin-right: ${sidePaddingNumber};
+`
+const HeaderText = styled(Text)`
+    font-size: ${fontSize.header};
 `
 
 class HeaderComponent extends Component {
@@ -47,9 +50,9 @@ class HeaderComponent extends Component {
             <Header>
                 <Left>
                     <BackIcon onPress={this.props.back} right/>
-                    <Text>
+                    <HeaderText>
                         Контакты
-                    </Text>
+                    </HeaderText>
                 </Left>
                 <Right>
                     <SearchIcon right/>

@@ -22,7 +22,7 @@ const Bottom = styled(View)`
 class Chat extends Component {
     render() {
         return (
-            <SafeAreaView behavior={Platform.OS === 'ios' ? 'height' : 'padding'}>
+            <SafeAreaView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
                 <Wrapper>
                     <Header toProfile={this.toProfile} back={this.navigateBack} currentChat={this.props.currentChat} />
                     <Content />

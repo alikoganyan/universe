@@ -82,10 +82,10 @@ function Message(props) {
     const { children, messages, myId, background, withImage } = props
     const { text, sender, src, type, width, height } = children;
     if (type === 'image') {
-        return (myId == sender ? (
+        return (myId == sender._id ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <MyMessage background={background}>
-                    <MyMessageImage source={{ uri: `http://ser.multiverse.plus${src}` }} width={width} height={height} />
+                    <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} />
                     <MessageInfo>
                         <MessageDate color={'white'}>1:40</MessageDate>
                         <Indicator color={'white'} />
@@ -96,7 +96,7 @@ function Message(props) {
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <TriangleRightIcon color={interlocatorMessage} />
                 <InterlocutorsMessage background={background}>
-                    <MyMessageImage source={{ uri: src }} />
+                    <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height}/>
                     <MessageInfo>
                         <MessageDate>1:40</MessageDate>
                     </MessageInfo>
@@ -119,7 +119,7 @@ function Message(props) {
             </ View>
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
                 {withImage && <ImageComponent style={{alignSelf: 'flex-end', position: 'relative', top: -5}} size={30} source={{ uri: `http://simpleicon.com/wp-content/uploads/user1.png` }} />}
-                <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: -10 }}>
+                <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -10 : 0 }}>
                     <TriangleRightIcon color={background || interlocatorMessage} />
                     <InterlocutorsMessage background={background || interlocatorMessage}>
                         {withImage && <InterlocutorsName>

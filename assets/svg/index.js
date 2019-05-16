@@ -1,6 +1,7 @@
 import Add from './Add.svg'
 import Arrow_back from './Arrow_back.svg'
 import Arrow_down_light from './Arrow_down_light.svg'
+import Dialog from './Dialog.svg'
 import Close from './Close.svg'
 import Close_light from './Close_light.svg'
 import Comments from './Comments.svg'
@@ -36,6 +37,7 @@ export default {
     Add,
     Arrow_back,
     Arrow_down_light,
+    Dialog,
     Close,
     Close_light,
     Comments,

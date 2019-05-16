@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, Dimensions, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, Dimensions, Platform, TextInput } from 'react-native'
 import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
@@ -10,7 +10,7 @@ import { setRegisterUserNumber, setRegisterUserSms } from '../../actions/userAct
 import sendRequest from '../../utils/request'
 import { connect } from 'react-redux'
 const { Colors, HeaderHeightNumber } = helper;
-const { blue, grey1 } = Colors;
+const { blue, grey1, lightGrey1 } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
     padding-bottom: 10%;
@@ -18,7 +18,6 @@ const Wrapper = styled(View)`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
 `
 const Title = styled(Text)`
     width: 100%;
@@ -29,41 +28,52 @@ const Title = styled(Text)`
 const ControlBar = styled(View)`
     display: flex;
     justify-content: center;
-    width: 100%;
+    min-width: 250px;
     align-items: center;
 `
 const PhoneNumber = styled(View)`
     display: flex;
     flex-direction: row;
-    margin-bottom: 30px;
+    align-items: flex-end;
+    margin-bottom: 20px;
+`
+const StyledInput = styled(TextInput)`
+    border: 1px solid ${lightGrey1};
+    border-width: 0;
+    border-bottom-width: 1px;
+    padding-bottom: 10px;
+    text-align: center;
+    margin-bottom: 10px;
+    margin-left: 20px;
+    ${({ style }) => style};
 `
 const Label = styled(Title)`
-    font-size: 13px;
-    color: ${grey1};
+    font-size: 15px;
+    color: ${lightGrey1};
     margin-bottom: 0px;
 `
 const Input = (props) => {
-    const { keyboardType = 'number-pad', children, password = false, value, style, editable, onChangeText } = props;
+    const { children, password = false, value, style, editable, inputStyle, labelStyle } = props;
     return <FloatingLabel
-        labelStyle={{ fontSize: 11 }}
+        labelStyle={{ fontSize: 15, ...labelStyle }}
         inputStyle={{
-            fontSize: 11,
+            fontSize: 15,
             borderWidth: 0,
             borderBottomWidth: 1,
             display: 'flex',
+            borderColor: lightGrey1,
+            ...inputStyle
         }}
-        keyboardType={keyboardType}
         password={password}
         value={value}
         style={{ ...style }}
         editable={editable}
-        onChangeText={onChangeText}
     >{children}</FloatingLabel>
 
 }
 class Content extends Component {
     render() {
-        const { country, phone } = this.state;
+        const { country, phone, error } = this.state;
         return (
             <Wrapper>
                 <Title>
@@ -71,24 +81,32 @@ class Content extends Component {
                 </Title>
                 <Label>Телефон</Label>
                 <PhoneNumber>
-                    <Input style={{ width: '25%' }} value={country} onChangeText={this.handleChangeCountry} keyboardType={'phone-pad'} />
-                    <Input style={{ width: '75%' }} value={phone} onChangeText={this.handleChangePhone} />
+                    <Input
+                        value={country} onPress={this.handleCountry}
+                        style={{ width: '20%' }}
+                        inputStyle={{ paddingLeft: 0, textAlign: 'center' }} />
+                    <StyledInput password={true}
+                        onChangeText={this.handlePhone}
+                        value={phone}
+                        placeholder={'XXX-XXX-XX-XX'}
+                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? 'red' : null, borderColor: error ? 'red' : lightGrey1 }}
+                    />
                 </PhoneNumber>
                 <ControlBar>
-                    <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>Восстановить пароль</Button>
+                    <Button onPress={this.proceed} style={{ backgroundColor: blue, width: '100%' }} color={'#fff'}>Восстановить пароль</Button>
                 </ControlBar>
             </Wrapper>
         )
     }
     state = {
         error: false,
-        country: '+380',
-        phone: '637072785',
+        country: '+7',
+        phone: '',
     }
-    handleChangeCountry = e => {
+    handleCountry = e => {
         this.setState({ country: e });
     }
-    handleChangePhone = e => {
+    handlePhone = e => {
         this.setState({ phone: e });
     }
     proceed = e => {
@@ -113,6 +131,7 @@ class Content extends Component {
                 console.log(err)
                 let { phone_number, password } = err
                 this.setState({
+                    error: true,
                     loading: false,
                     invalidPhone: phone_number || null,
                     invalidPassword: password || null

@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { p_tasks_search, g_users } from '../../constants/api'
 import { ImageComponent } from '../../common'
 import sendRequest from '../../utils/request'
-const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
+const { sidePadding, HeaderHeight, sidePaddingNumber, fontSize } = helper;
 
 const Header = styled(View)`
     width: 100%;
@@ -45,7 +45,9 @@ const MarginRight = styled(View)`
     flex-direction: row;
     align-items: center;
 `
-
+const HeaderText = styled(Text)`
+    font-size: ${fontSize.header};
+`
 class HeaderComponent extends Component {
     render() {
         const { back, user, toProfile } = this.props;
@@ -57,7 +59,7 @@ class HeaderComponent extends Component {
                     {!search ?
                         <>
                             <BackIcon onPress={back} right />
-                            <Text>Задачи</Text>
+                            <HeaderText>Задачи</HeaderText>
                         </> :
                         <>
                             <SearchIcon />
@@ -91,6 +93,7 @@ class HeaderComponent extends Component {
             method: 'post',
             attr: {
                 text: e,
+                withUser: true,
             },
             success: ({ users }) => {
                 const tasksList = []
@@ -124,8 +127,10 @@ class HeaderComponent extends Component {
                     })
                 })
                 setTimeout(() => {
+                    const { setTasks } = this.props
                     this.setState({ FlatListData: [...tasksList] })
-                    setTasks(tasksList)
+                    // setTasks([])
+                    console.log('123')
                 }, 0)
             },
             failFunc: (err) => {

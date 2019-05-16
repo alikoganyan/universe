@@ -11,6 +11,9 @@ import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { connect } from 'react-redux'
 import { socket } from '../../utils/socket'
+import sendRequest from '../../utils/request'
+import { g_users } from '../../constants/api'
+import { setContacts, setAllUsers } from '../../actions/userActions'
 
 const { Colors, sidePadding, sidePaddingNumber } = helper;
 const { green, black } = Colors;
@@ -95,7 +98,6 @@ const ContactImage = styled(Image)`
     width: 36px;
     height: 36px;
     border-radius: 18;
-    background: red;
     margin-right: 10px;
 `
 const ContactInfo = styled(View)``
@@ -124,14 +126,11 @@ const Option = styled(Text)`
     border: ${({ active }) => active ? '1px rgba(0, 0, 0, 0.1) solid' : '0'};
     border-color: ${({ active }) => active ? 'rgba(0, 0, 0, 0.1)' : 'transparent'};
     border-style: solid;
-    min-width: 30%;
+    min-width: 27%;
     border-radius: 13;
     padding: 4px 10px 3px;
     overflow: hidden;
     text-align: center;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
 `
 const Group = styled(BoxInnerItem)`
     justify-content: flex-start;
@@ -148,6 +147,7 @@ const GroupImage = styled(ContactImage)``
 class Content extends Component {
     render() {
         const { allUsers, users, collapsed, options, groups } = this.state;
+        const { contacts } = this.props;
         const { department } = users;
         const { active } = options;
         return (
@@ -168,15 +168,18 @@ class Content extends Component {
                                 <ContactList style={{ width: '100%' }}>
                                     <FlatList
                                         style={{ paddingRight: 5, paddingLeft: 5, }}
-                                        ListHeaderComponent={<View style={{ margin: 35, }} />}
-                                        inverted={true}
-                                        data={allUsers}
-                                        renderItem={({ item }) => <Group>
-                                            <ImageComponent size={"xs"} style={{ marginRight: sidePadding }} source={{ uri: item.uri }} />
-                                            <GroupInfo>
-                                                <GroupTitle numberOfLines={1}>{item.name}</GroupTitle>
-                                            </GroupInfo>
-                                        </Group>
+                                        data={contacts}
+                                        renderItem={({ item, index }) => {
+                                            const { image, first_name, last_name, phone_number, role } = item
+                                            const name = first_name ? `${first_name} ${last_name}` : phone_number
+                                            return item ? <BoxInnerItem key={index}>
+                                                <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                                <ContactInfo>
+                                                    <ContactName>{name}</ContactName>
+                                                    <ContactRole>{role.length ? role[0] : 'без роли'}</ContactRole>
+                                                </ContactInfo>
+                                            </BoxInnerItem> : null
+                                        }
                                         }
                                         keyExtractor={(item, index) => index.toString()}
                                     />
@@ -192,32 +195,38 @@ class Content extends Component {
                                             </BoxTitle>
                                             <Collapsible collapsed={collapsed[i] || false}>
                                                 <BoxInner>
-                                                    {e.workers.map((e, i) => <BoxInnerItem key={i}>
-                                                        <ContactImage />
-                                                        <ContactInfo>
-                                                            <ContactName>{e.name}</ContactName>
-                                                            <ContactRole>{e.role}</ContactRole>
-                                                        </ContactInfo>
-                                                    </BoxInnerItem>)
+                                                    {contacts.map((e, i) => {
+                                                        const { image, first_name, last_name, phone_number, role } = e
+                                                        const name = first_name ? `${first_name} ${last_name}` : phone_number
+                                                        return <BoxInnerItem key={i}>
+                                                            <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                                            <ContactInfo>
+                                                                <ContactName>{name}</ContactName>
+                                                                <ContactRole>{role.length ? role[0] : 'без роли'}</ContactRole>
+                                                            </ContactInfo>
+                                                        </BoxInnerItem>
+                                                    })
                                                     }
                                                 </BoxInner>
                                             </Collapsible>
                                         </Box>
                                     ))}
                                 </ContactList>
-                                <ContactList>
+                                <ContactList style={{ width: '100%' }}>
                                     <FlatList
-                                        style={{ paddingLeft: sidePadding, }}
-                                        ListHeaderComponent={<View style={{ margin: 35, }} />}
-                                        inverted={true}
-                                        data={groups}
-                                        renderItem={({ item }) => <Group>
-                                            <GroupImage />
-                                            <GroupInfo>
-                                                <GroupTitle numberOfLines={1}>{item.title}</GroupTitle>
-                                                <GroupParticipants>{item.participants} участников</GroupParticipants>
-                                            </GroupInfo>
-                                        </Group>
+                                        style={{ paddingRight: 5, paddingLeft: 5, }}
+                                        data={contacts}
+                                        renderItem={({ item, index }) => {
+                                            const { image, first_name, last_name, phone_number, role } = item
+                                            const name = first_name ? `${first_name} ${last_name}` : phone_number
+                                            return item ? <BoxInnerItem key={index}>
+                                                <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                                <ContactInfo>
+                                                    <ContactName>{name}</ContactName>
+                                                    <ContactRole>{role.length ? role[0] : 'без роли'}</ContactRole>
+                                                </ContactInfo>
+                                            </BoxInnerItem> : null
+                                        }
                                         }
                                         keyExtractor={(item, index) => index.toString()}
                                     />
@@ -235,12 +244,6 @@ class Content extends Component {
             department: [
                 {
                     title: 'Отдел длинных корпоративных названий',
-                    workers: [
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                    ],
-                },
-                {
-                    title: 'Отдел коротких корпоративных названий',
                     workers: [
                         { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
                     ],
@@ -263,14 +266,21 @@ class Content extends Component {
         ]
     }
     componentDidMount() {
-        const { user, users } = this.props;
-
-        socket.emit('get users', { id: user.id })
-
+        const { user, users, setContacts } = this.props;
         const newCollapsed = [...this.state.collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
             newCollapsed.push(false)
         }
+        sendRequest({
+            r_path: g_users,
+            method: 'get',
+            success: (res) => {
+                setContacts(res.users)
+            },
+            failFunc: (err) => {
+                console.log(err)
+            }
+        })
         this.setState({ collapsed: newCollapsed })
     }
     optionLeft = () => {
@@ -303,17 +313,19 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer,
-        dialog: state.dialogsReducer.dialogs,
-        currentRoom: state.messageReducer.currentRoom,
-        user: state.userReducer.user,
-        users: state.userReducer,
+    messages: state.messageReducer,
+    dialog: state.dialogsReducer.dialogs,
+    currentRoom: state.messageReducer.currentRoom,
+    user: state.userReducer.user,
+    users: state.userReducer,
+    contacts: state.userReducer.contacts,
 })
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
     addMessage: _ => dispatch(addMessage(_)),
-    setAllUsers: _ => dispatch(setAllUsers(_))
+    setAllUsers: _ => dispatch(setAllUsers(_)),
+    setContacts: _ => dispatch(setContacts(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

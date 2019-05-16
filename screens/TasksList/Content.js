@@ -11,10 +11,13 @@ import { connect } from 'react-redux'
 const { sidePaddingNumber, HeaderHeightNumber } = helper;
 const Wrapper = styled(View)`
   max-height: ${Dimensions.get('window').height - sidePaddingNumber}px;
-  `
+  display: flex;
+  align-self: center;
+  align-items: center;
+  justify-content: center;
+`
 const StyledScrollView = styled(ScrollView)`
   height: ${Dimensions.get('window').height - HeaderHeightNumber - 20}px;
-  padding: 0  ${sidePaddingNumber}px;
 `
 
 class Content extends Component {

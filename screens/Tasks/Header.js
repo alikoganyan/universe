@@ -97,14 +97,14 @@ margin-right: 20px;
 `
 class HeaderComponent extends Component {
     render() {
-        const { back, tasksReducer, toProfile } = this.props
-        const { first_name, last_name, phone_number, tasks, image } = tasksReducer
+        const { back, currentTask, toProfile } = this.props
+        const { first_name, last_name, phone_number, tasks, image } = currentTask
         return (
             <Header>
                 <Left>
                     <BackIcon onPress={back} right />
                         <ToProfile onPress={toProfile}>
-                            <ImageComponent source={{ uri: image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
+                            <ImageComponent size={30} source={{ uri: `http://ser.univ.team${image}` || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
                             <Info>
                                 <InfoChatName>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
                                 <InfoParticipants>{tasks && tasks.length ? tasks.length : ''} задач</InfoParticipants>
@@ -119,7 +119,7 @@ class HeaderComponent extends Component {
     }
 }
 const mapStateToProps = state => ({
-        tasksReducer: state.tasksReducer.tasks,
+    currentTask: state.tasksReducer.currentTask,
 })
 const mapDispatchToProps = dispatch => ({
 })

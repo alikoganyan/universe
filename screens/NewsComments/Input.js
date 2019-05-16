@@ -10,7 +10,8 @@ import { p_send_file, p_news_add_comment } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import posed from 'react-native-pose'
 import { socket } from '../../utils/socket'
-const { sidePaddingNumber, borderRadius, HeaderHeightNumber } = helper;
+const { sidePaddingNumber, borderRadius, HeaderHeightNumber, Colors } = helper;
+const { orange, grey2 } = Colors;
 const FilePickerPosed = posed.View({
     visible: { bottom: 10 },
     hidden: { bottom: -250 }
@@ -28,7 +29,7 @@ const Wrapper = styled(View)`
     align-items: center;
     border-radius: 5;
     border-width: 1;
-    border-color: #ddd;
+    border-color: ${orange};
     border-bottom-width: 1;
 `
 const Input = styled(TextInput)`
@@ -86,13 +87,9 @@ class InputComponent extends Component {
                             value={text}
                             blurOnSubmit={false}
                             autoFocus={true}
+                            placeholderTextColor={grey2}
                         />
                     </Left>
-                    <Right>
-                        <ImageIcon
-                            onPress={this.pickImage}
-                        />
-                    </Right>
                 </Wrapper>
                 <FilePicker pose={pickerOpened ? 'visible' : 'hidden'}>
                     <TouchableOpacity onPress={this.selectPhoto}><Text>Фото или видео</Text></TouchableOpacity>
