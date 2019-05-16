@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "universes-mobile",
-    "slug": "universes-mobile",
+    "name": "Universe-messenger",
+    "slug": "universe-messenger",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -18,8 +18,9 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "team.universe.media",
+      "buildNumber": "3",
+      "supportsTablet": false,
+      "bundleIdentifier": "team.amigo.media",
       "publishBundlePath": "ios/universes-mobile/Supporting/shell-app.bundle",
       "publishManifestPath": "ios/universes-mobile/Supporting/shell-app-manifest.json",
       "infoPlist": {
@@ -33,6 +34,7 @@
     },
     "android": {
       "package": "com.team.universe.media",
+      "versionCode": 1,
       "publishBundlePath": "android/app/src/main/assets/shell-app.bundle",
       "publishManifestPath": "android/app/src/main/assets/shell-app-manifest.json",
       "permissions": [
