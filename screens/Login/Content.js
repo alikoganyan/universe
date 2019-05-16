@@ -144,7 +144,7 @@ class Content extends Component {
         phone: '',
         password: '',
         phone_number: '',
-        error: null,
+        error: false,
         invalidPassword: null,
         invalidPhone: null,
         loading: false,
@@ -191,6 +191,7 @@ class Content extends Component {
             },
             failFunc: (err) => {
                 console.log({ err })
+                this.setState({error: true})
             }
         })
     }
