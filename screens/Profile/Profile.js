@@ -14,13 +14,13 @@ import { socket } from '../../utils/socket'
 import { Header, Content } from './'
 
 const { Colors, fontSize } = helper
-const { red } = Colors;
+const { pink } = Colors;
 const Wrapper = styled(View)`
     height: ${Dimensions.get('window').height};
 `
 const Bottom = styled(View)`
     position: absolute;
-    bottom: 0;
+    bottom: ${Dimensions.get('window').height === 812 ? 20 :0};
     width: 100%;
     background: white;
     z-index: 20;
@@ -35,15 +35,15 @@ const Logout = styled(TouchableOpacity)`
     align-items: center;
 `
 const LogoutText = styled(Text)`
-    color: ${red};
+    color: ${pink};
     padding: 20px;
-    font-size: ${fontSize.sm}
+    font-size: ${fontSize.sm};
 `
 class Profile extends Component {
     render() {
         const { currentChat, user } = this.props;
-        const myProfile = currentChat ? currentChat.id === user.id : true
-
+        const myProfile = !currentChat
+        console.log(Dimensions.get('window').height)
         return (
             <ActionSheetProvider>
                 <SafeAreaView>
@@ -81,7 +81,8 @@ class Profile extends Component {
 }
 
 const mapStateToProps = state => ({
-        user: state.userReducer.user,
+    user: state.userReducer.user,
+    currentChat: state.messageReducer.currentChat
 })
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),

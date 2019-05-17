@@ -7,7 +7,7 @@ import { ImageComponent } from './'
 import MapView from 'react-native-maps';
 
 const { HeaderHeightNumber, Colors, fontSize } = helper;
-const { myMessage, interlocatorMessage } = Colors
+const { myMessage, interlocatorMessage, pink } = Colors
 const MyMessage = styled(View)`
     display: flex;
     justify-content: center;
@@ -208,7 +208,7 @@ function Message(props) {
             alignItems: 'flex-end',
             flexDirection: 'column'
         }}>
-            <InterlocutorsMessage style={{ height: 150, marginLeft: 20 }}>
+            <InterlocutorsMessage style={{ height: 150, marginLeft: 20 }} background={pink}>
                 <MapView
                     style={{ width: '99%', height: '98%', alignSelf: 'center' }}
                     region={{

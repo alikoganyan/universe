@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, AsyncStorage, Platform, Dimensions } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, AsyncStorage, Platform, Dimensions, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
@@ -98,43 +98,47 @@ class Content extends Component {
     render() {
         const { error, country, phone, password } = this.state;
         const { navigateToDialogs } = this.props;
-        return (<Wrapper>
-            <Title>
-                Авторизация
-                </Title>
-            <PhoneNumber>
-                <Input style={{ width: '20%' }}
-                    inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
-                    keyboardType={'phone-pad'}
-                    value={country}
-                    onChangeText={this.handleChangeCountry} />
-                <StyledInput password={true}
-                    onChangeText={this.handleChangePhone}
-                    value={phone}
-                    placeholder={'XXX-XXX-XX-XX'}
-                    keyboardType={'phone-pad'}
-                    style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10, color: error ? 'red' : undefined, borderColor: error ? 'red' : lightGrey1 }}
-                />
-            </PhoneNumber>
-            <StyledInput password={true}
-                onChangeText={this.handleChangePassword}
-                value={password}
-                placeholder={'Пароль'}
-                secureTextEntry={true}
-                style={{ color: error ? 'red' : undefined, borderColor: error ? 'red' : lightGrey1 }}
-            />
+        return (
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <Wrapper onPress={Keyboard.dismiss}>
+                    <Title>
+                        Авторизация
+            </Title>
+                    <PhoneNumber>
+                        <Input style={{ width: '20%' }}
+                            inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
+                            keyboardType={'phone-pad'}
+                            value={country}
+                            onChangeText={this.handleChangeCountry} />
+                        <StyledInput password={true}
+                            onChangeText={this.handleChangePhone}
+                            value={phone}
+                            placeholder={'XXX-XXX-XX-XX'}
+                            keyboardType={'phone-pad'}
+                            maxLength={10}
+                            style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10, color: error ? 'red' : undefined, borderColor: error ? 'red' : lightGrey1 }}
+                        />
+                    </PhoneNumber>
+                    <StyledInput password={true}
+                        onChangeText={this.handleChangePassword}
+                        value={password}
+                        placeholder={'Пароль'}
+                        secureTextEntry={true}
+                        style={{ color: error ? 'red' : undefined, borderColor: error ? 'red' : lightGrey1 }}
+                    />
 
-            <ControlBar>
-                <TouchableOpacity onPress={this.restorePass}>
-                    <ForgotPass>
-                        Забыли пароль?
+                    <ControlBar>
+                        <TouchableOpacity onPress={this.restorePass}>
+                            <ForgotPass>
+                                Забыли пароль?
                         </ForgotPass>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={navigateToDialogs}>
-                    <Button onPress={this.login} style={{ backgroundColor: blue }} color={'#fff'}>войти</Button>
-                </TouchableOpacity>
-            </ControlBar>
-        </Wrapper >
+                        </TouchableOpacity>
+                        <TouchableOpacity onPress={navigateToDialogs}>
+                            <Button onPress={this.login} style={{ backgroundColor: blue }} color={'#fff'}>войти</Button>
+                        </TouchableOpacity>
+                    </ControlBar>
+                </Wrapper >
+            </TouchableWithoutFeedback>
         )
     }
     state = {
@@ -156,7 +160,7 @@ class Content extends Component {
         value = JSON.parse(value);
         if (value) {
             console.log(value.password)
-            this.setState({ phone: value.phone_number.slice(2) , password: value.password})
+            this.setState({ phone: value.phone_number.slice(2), password: value.password })
         }
     }
     storeUserData = async (user) => {
@@ -185,13 +189,13 @@ class Content extends Component {
                 setAuth(access_token)
                 setUser(data)
                 connectToSocket()
-                this.storeUserData({...data, password})
+                this.storeUserData({ ...data, password })
                 this.setState({ loading: false })
                 navigate('Dialogs')
             },
             failFunc: (err) => {
                 console.log({ err })
-                this.setState({error: true})
+                this.setState({ error: true })
             }
         })
     }
@@ -208,7 +212,7 @@ class Content extends Component {
 
     }
     handleChangePhone = (e) => {
-        e.length <= 10 && this.setState({ phone: e })
+        this.setState({ phone: e })
     }
     handleChangeCountry = (e) => {
         console.log(e)

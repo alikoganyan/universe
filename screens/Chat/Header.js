@@ -91,7 +91,7 @@ margin-right: 20px;
 `
 class HeaderComponent extends Component {
     render() {
-        const { back, search, startSearch, stopSearch, currentChat, toProfile, currentDialog } = this.props
+        const { back, search, startSearch, stopSearch, currentChat, currentDialog } = this.props
         const { first_name, last_name, phone_number, image } = currentDialog
         return (
             <Header>
@@ -100,7 +100,7 @@ class HeaderComponent extends Component {
                         {!search ? (
                             <>
                                 <BackIcon onPress={back} right />
-                                <ToProfile onPress={toProfile}>
+                                <ToProfile onPress={this.toProfile}>
                                     <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
                                     <Info>
                                         <InfoChatName>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
@@ -136,6 +136,10 @@ class HeaderComponent extends Component {
                 )}
             </Header>
         )
+    }
+    toProfile = () => {
+        const { toProfile } = this.props;
+        toProfile()
     }
     find = (e) => {
         const { getMessages, dialogs, currentRoom } = this.props;

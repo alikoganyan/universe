@@ -6,6 +6,8 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setUser, setRegisterUserSms } from '../../actions/userActions'
 import { Button } from '../../common'
+import sendRequest from '../../utils/request'
+import { p_check_restore_password } from '../../constants/api'
 const { Colors, fontSize, HeaderHeightNumber } = helper;
 const { lightGrey1, blue } = Colors;
 const Wrapper = styled(View)`
@@ -61,7 +63,7 @@ const NoSMS = styled(SendAgain)`
 
 class Content extends Component {
     render() {
-        const { deadline } = this.state
+        const { deadline, sms } = this.state
 
         return (
             <Wrapper>
@@ -74,9 +76,10 @@ class Content extends Component {
                 <PhoneNumber>
                     <StyledInput password={true}
                         onChangeText={this.handleSMS}
-                        placeholder={'**********'}
-                        value={this.state.sms}
+                        placeholder={'******'}
+                        value={sms}
                         style={{ margin: 0, flex: 1, textAlign: 'center', paddingLeft: 10, }}
+                        maxLength={6}
                     />
                 </PhoneNumber>
                 <Controls>
@@ -88,32 +91,39 @@ class Content extends Component {
     }
     state = {
         sms: '',
-        asnwer: '1111',
         error: 0,
         deadline: 10,
+        tries: 5,
     }
     componentDidMount() {
         const countdown = setInterval(() => {
             this.setState({ deadline: this.state.deadline - 1 })
-            if(this.state.deadline === 0)
+            if (this.state.deadline === 0)
                 clearInterval(countdown)
         }, 1000)
-        
+
     }
     handleSMS = (e) => {
-        const { asnwer, sms, error, tries } = this.state;
+        const { sms, error, tries } = this.state;
         if (error <= tries) {
-            sms.length <= 4 && this.setState({ sms: e }, () => {
-                if (this.state.sms !== asnwer && this.state.sms.length === asnwer.length) {
-                    let err = error
-                    ++err
-                    this.setState({ error: err, sms: '' })
-                }
-                if (this.state.sms === asnwer && this.state.sms.length === asnwer.length) {
-                    const { setRegisterUserSms } = this.props;
-                    setRegisterUserSms(this.state.sms);
-                    this.props.forward()
-
+            this.setState({ sms: e }, () => {
+                if (this.state.sms.length === 6) {
+                    sendRequest({
+                        r_path: p_check_restore_password,
+                        method: 'post',
+                        attr: {
+                            phone_number,
+                            password: this.state.sms,
+                        },
+                        success: (res) => {
+                            console.log(res)
+                            navigate('Restore3');
+                        },
+                        failFunc: (err) => {
+                            console.log(err);
+                            this.setState({ error: true })
+                        }
+                    })
                 }
             })
         }

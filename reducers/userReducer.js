@@ -11,7 +11,7 @@ const initialState = {
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
         case SET_USER:
-            return { ...state, user: { ...action.payload, image: "http://pluspng.com/img-png/user-png-icon-male-user-icon-512.png" }, }
+            return { ...state, user: { ...action.payload }, }
         case SET_AUTH:
             return { ...state, auth: action.payload }
         case SET_ERROR:

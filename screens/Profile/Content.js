@@ -99,18 +99,19 @@ const SendMessage = styled(Button)``
 class Content extends Component {
     render() {
         const { UserData, userName, status } = this.state;
-        const { user, currentRoom, currentChat, myProfile } = this.props;
-        const { id, image, last_name, first_name, phone_number } = myProfile ? user : currentChat;
-        const name = first_name || last_name ? `${first_name} ${last_name}` : phone_number;
+        const { user, currentRoom, currentChat, myProfile, currentDialog } = this.props;
+
+        const { _id, image, last_name, first_name, phone_number } = myProfile ? user : currentDialog;
+        const name = first_name ? `${first_name} ${last_name}` : phone_number;
         return (
             <Wrapper>
                 <User >
-                    <UserImage source={{ uri: image }} />
+                    <UserImage source={{ uri: `http://ser.univ.team${image}` }} />
                     <UserInfo>
                         <UserName>
                             <Name>{name}</Name>
                         </UserName>
-                        <UserStatus>{status}</UserStatus>
+                        {!myProfile && <UserStatus>{status}</UserStatus>}
                         {!myProfile && <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>}
                     </UserInfo>
                 </User>
@@ -138,11 +139,11 @@ class Content extends Component {
         UserData: []
     }
     componentDidMount() {
-        const { myProfile, user, currentChat } = this.props
-        const { role, phone_number, department } = myProfile ? user : currentChat;
+        const { myProfile, user, currentChat, currentDialog } = this.props
+        const { role, phone_number, department } = myProfile ? user : currentDialog;
         const newUserData = [
             { type: 'Подразделение', value: department || 'без подразделения' },
-            { type: 'Должность', value: role || 'без должности' },
+            { type: 'Должность', value: role.lenght ? role[0] : 'без должности' },
             { type: 'Личный', value: phone_number || 'без номера' },
             !myProfile ? { type: 'Задачи', value: '4', icon: <TaskIcon /> } : undefined,
             !myProfile ? { type: 'Общих групп', value: '32', icon: <GroupIcon /> } : undefined,
@@ -160,11 +161,12 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer,
-        dialog: state.dialogsReducer.dialogs,
-        currentRoom: state.messageReducer.currentRoom,
-        currentChat: state.messageReducer.currentChat,
-        user: state.userReducer.user,
+    messages: state.messageReducer,
+    dialog: state.dialogsReducer.dialogs,
+    currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
+    currentDialog: state.dialogsReducer.currentDialog,
+    user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
