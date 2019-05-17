@@ -16,8 +16,8 @@ const { IconDarkColor,
     sidePadding } = helper;
 
 const StyledTouchableOpacity = styled(TouchableOpacity)`
-    margin-left: ${({ left }) => left ? Dimensions.get('window').width*0.085 : 0};
-    margin-right: ${({ right }) => right ? Dimensions.get('window').width*0.085 : 0};
+    margin-left: ${({ left }) => left ? Dimensions.get('window').width * 0.085 : 0};
+    margin-right: ${({ right }) => right ? Dimensions.get('window').width * 0.085 : 0};
     padding: 2px;
 `
 const Left = styled(StyledTouchableOpacity)`
@@ -42,7 +42,7 @@ const TriangleLeft = styled(View)`
     border-bottom-color: ${({ color }) => color || IconLightColor};    
     position: relative;
     align-self: flex-end;
-    left: 5px;
+    left: -15px;
     top: -5px;
     line-height: 0px;
     ${({ style }) => style};
@@ -61,7 +61,7 @@ const TriangleRight = styled(View)`
     border-bottom-color: ${({ color }) => color || IconLightColor};    
     position: relative;
     align-self: flex-end;
-    left: 5px;
+    left: 0px;
     top: -5px;
     line-height: 0px;
     ${({ style }) => style};
@@ -198,31 +198,33 @@ export function SearchIcon(props) {
 }
 
 
-export function TriangleLeftIcon({ color, style, hollow }) {
+export function TriangleLeftIcon({ color, colorInner = "#fff", style, hollow, styleInner }) {
     return (
         <TriangleLeft color={color || IconDarkColor} style={{ ...style }}>
-            {hollow && <TriangleLeftInner color={'#fff'} style={{
+            {hollow && <TriangleLeftInner color={colorInner} style={{
                 ...style,
                 position: 'relative',
                 borderRightWidth: 15,
                 borderTopWidth: 15,
                 top: -16,
                 left: 12.5,
+                ...styleInner,
             }} />}
         </TriangleLeft>
     )
 }
 
-export function TriangleRightIcon({ color, style, hollow }) {
+export function TriangleRightIcon({ color, colorInner = "#fff", style, hollow, styleInner }) {
     return (
         <TriangleRight color={color || IconDarkColor} style={{ ...style }}>
-            {hollow && <TriangleRightInner color={'#fff'} style={{
+            {hollow && <TriangleRightInner color={colorInner} style={{
                 ...style,
                 position: 'relative',
                 borderLeftWidth: 15,
                 borderBottomWidth: 15,
                 top: -1,
-                left: 2,
+                left: 2.5,
+                ...styleInner
             }} />}
         </TriangleRight>
     )
@@ -450,7 +452,7 @@ export function SettingsIcon(props) {
 }
 export function AddIcon(props) {
     const { onPress, left, right, size } = props;
-    console.log(left, right)    
+    console.log(left, right)
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             <SvgUri

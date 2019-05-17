@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { ImageComponent } from './'
 import MapView from 'react-native-maps';
 
-const { HeaderHeightNumber, Colors } = helper;
+const { HeaderHeightNumber, Colors, fontSize } = helper;
 const { myMessage, interlocatorMessage } = Colors
 const MyMessage = styled(View)`
     display: flex;
@@ -36,7 +36,7 @@ const InterlocutorsMessage = styled(MyMessage)`
     text-align: left;
     align-items: flex-start;
     background: ${({ background }) => background || interlocatorMessage};
-    margin-left: 10px;
+    margin-left: 5px;
     position: relative;
     left: -10px;
     
@@ -76,6 +76,32 @@ const MyMessageImage = styled(Image)`
 `
 const InterlocutorsName = styled(InterlocutorsMessageText)`
     margin-bottom: 0;
+`
+const MapViewStreet = styled(View)`
+    height: 30;
+    width: 99%;
+    align-self: center;
+    background: rgba(0,0,0,0.3);
+    position: absolute;
+    top: 120;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px 10px;
+    font-size: ${fontSize.sm};
+`
+const MapViewStreetText = styled(Text)`
+    color: white;
+`
+const MapViewStreetInfo = styled(View)`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+`
+const MapViewStreetTime = styled(Text)`
+    color: white;
 `
 const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
@@ -144,9 +170,9 @@ function Message(props) {
             display: 'flex',
             alignItems: 'flex-end'
         }}>
-            <MyMessage style={{ height: 300, borderBottomRightRadius: 0, }}>
+            <MyMessage style={{ height: 150 }}>
                 <MapView
-                    style={{ width: '98%', height: '98%', alignSelf: 'center' }}
+                    style={{ width: '99%', height: '98%', alignSelf: 'center' }}
                     region={{
                         latitude,
                         longitude,
@@ -164,16 +190,22 @@ function Message(props) {
                         tracksViewChanges={false}
                     />
                 </MapView>
+                <MapViewStreet>
+                    <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
+                    <MapViewStreetInfo>
+                        <MapViewStreetTime>4:10</MapViewStreetTime>
+                        <Indicator />
+                    </MapViewStreetInfo>
+                </MapViewStreet>
             </MyMessage>
-            <TriangleLeftIcon color={background || myMessage} style={{ top: -20 }} />
         </View>) : (<View style={{
             display: 'flex',
             alignItems: 'flex-end',
             flexDirection: 'column'
         }}>
-            <InterlocutorsMessage style={{ height: 300, borderBottomLeftRadius: 0, marginLeft: 25 }}>
+            <InterlocutorsMessage style={{ height: 150, marginLeft: 20 }}>
                 <MapView
-                    style={{ width: '98%', height: '98%', alignSelf: 'center' }}
+                    style={{ width: '99%', height: '98%', alignSelf: 'center' }}
                     region={{
                         latitude,
                         longitude,
@@ -191,8 +223,11 @@ function Message(props) {
                         tracksViewChanges={false}
                     />
                 </MapView>
+                <MapViewStreet>
+                    <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
+                </MapViewStreet>
             </InterlocutorsMessage>
-            <TriangleRightIcon color={interlocatorMessage} style={{alignSelf: 'flex-start', top: -20, left: 0}}/>
+           
         </View>))
     }
 }
