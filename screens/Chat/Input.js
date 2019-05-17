@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
-import { ImagePicker, DocumentPicker, Permissions } from 'expo';
+import { ImagePicker, DocumentPicker, Permissions, Location } from 'expo';
 import { p_send_file } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import posed from 'react-native-pose'
@@ -37,7 +37,6 @@ const Input = styled(TextInput)`
     display: flex;
     flex-direction: column;
     width: 85%;
-    z-index: 50;
     overflow: hidden;
 `
 const Left = styled(View)`
@@ -108,6 +107,7 @@ class InputComponent extends Component {
         height: 0,
         image: null,
         pickerOpened: false,
+        location: null, 
     }
     componentDidMount() {
         const { messages, addMessage } = this.props
@@ -156,7 +156,17 @@ class InputComponent extends Component {
     selectFile = async (e) => {
         let result = await DocumentPicker.getDocumentAsync({});
     }
-    selectGeo = (e) => { }
+    selectGeo = async () => {
+        const { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+          this.setState({
+            errorMessage: 'Permission to access location was denied',
+          });
+        }
+        const location = await Location.getCurrentPositionAsync({});
+        this.setState({ location });
+        console.log(location)
+      };
     discardSelect = (e) => { }
     sendMessage = (event) => {
         const { currentRoom, id, addMessage } = this.props;

@@ -4,11 +4,13 @@ import styled from 'styled-components'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../assets/index'
 import { connect } from 'react-redux'
 import { ImageComponent } from './'
+import MapView from 'react-native-maps';
+
 const { HeaderHeightNumber, Colors } = helper;
 const { myMessage, interlocatorMessage } = Colors
 const MyMessage = styled(View)`
     display: flex;
-    justify-content: flex-end;
+    justify-content: center;
     text-align: right;
     margin: 5px 10px;
     align-self: stretch;
@@ -29,7 +31,7 @@ const MyMessageText = styled(Text)`
 `
 
 const InterlocutorsMessage = styled(MyMessage)`
-    justify-content: flex-start;
+    justify-content: center;
     flex-direction: column;
     text-align: left;
     align-items: flex-start;
@@ -80,7 +82,7 @@ const Indicator = ({ delievered = false, read = false, color }) => {
 }
 function Message(props) {
     const { children, messages, myId, background, withImage } = props
-    const { text, sender, src, type, width, height } = children;
+    const { text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, } = children;
     if (type === 'image') {
         return (myId == sender._id ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -96,14 +98,15 @@ function Message(props) {
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <TriangleRightIcon color={interlocatorMessage} />
                 <InterlocutorsMessage background={background}>
-                    <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height}/>
+                    <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} />
                     <MessageInfo>
                         <MessageDate>1:40</MessageDate>
                     </MessageInfo>
                 </InterlocutorsMessage>
             </ View>
         )
-    } else {
+    }
+    if (type === 'text') {
         return (myId == sender ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <MyMessage background={background}>
@@ -118,7 +121,7 @@ function Message(props) {
                 <TriangleLeftIcon color={background || myMessage} />
             </ View>
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
-                {withImage && <ImageComponent style={{alignSelf: 'flex-end', position: 'relative', top: -5}} size={30} source={{ uri: `http://simpleicon.com/wp-content/uploads/user1.png` }} />}
+                {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://simpleicon.com/wp-content/uploads/user1.png` }} />}
                 <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -10 : 0 }}>
                     <TriangleRightIcon color={background || interlocatorMessage} />
                     <InterlocutorsMessage background={background || interlocatorMessage}>
@@ -135,6 +138,62 @@ function Message(props) {
                 </View>
             </ View>
         )
+    }
+    if (type === 'geo') {
+        return (myId === sender._id ? (<View style={{
+            display: 'flex',
+            alignItems: 'flex-end'
+        }}>
+            <MyMessage style={{ height: 300, borderBottomRightRadius: 0, }}>
+                <MapView
+                    style={{ width: '98%', height: '98%', alignSelf: 'center' }}
+                    region={{
+                        latitude,
+                        longitude,
+                        latitudeDelta,
+                        longitudeDelta,
+                    }}
+                    tracksViewChanges={false} >
+                    <MapView.Marker
+                        coordinate={{
+                            latitude,
+                            longitude,
+                            latitudeDelta,
+                            longitudeDelta,
+                        }}
+                        tracksViewChanges={false}
+                    />
+                </MapView>
+            </MyMessage>
+            <TriangleLeftIcon color={background || myMessage} style={{ top: -20 }} />
+        </View>) : (<View style={{
+            display: 'flex',
+            alignItems: 'flex-end',
+            flexDirection: 'column'
+        }}>
+            <InterlocutorsMessage style={{ height: 300, borderBottomLeftRadius: 0, marginLeft: 25 }}>
+                <MapView
+                    style={{ width: '98%', height: '98%', alignSelf: 'center' }}
+                    region={{
+                        latitude,
+                        longitude,
+                        latitudeDelta,
+                        longitudeDelta,
+                    }}
+                    tracksViewChanges={false} >
+                    <MapView.Marker
+                        coordinate={{
+                            latitude,
+                            longitude,
+                            latitudeDelta,
+                            longitudeDelta,
+                        }}
+                        tracksViewChanges={false}
+                    />
+                </MapView>
+            </InterlocutorsMessage>
+            <TriangleRightIcon color={interlocatorMessage} style={{alignSelf: 'flex-start', top: -20, left: 0}}/>
+        </View>))
     }
 }
 
