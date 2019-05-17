@@ -64,7 +64,7 @@ class HeaderComponent extends Component {
                 <Right>
                     <SearchIcon right />
                     <TouchableOpacity onPress={toProfile}>
-                        <ImageComponent source={{ uri: user.image }} />
+                        <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} />
                     </TouchableOpacity>
                 </Right>
             </Header>

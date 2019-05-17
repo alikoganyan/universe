@@ -10,8 +10,8 @@ import { g_users } from '../../constants/api'
 import Collapsible from 'react-native-collapsible';
 import { connect } from 'react-redux'
 import { setContacts, setAllUsers } from '../../actions/userActions'
-import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
-import { setDialogs } from '../../actions/dialogsActions'
+import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/messageActions'
+import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 const { Colors, HeaderHeightNumber, HeaderHeight, fontSize } = helper;
 const { green, black, grey2 } = Colors;
 const AnimatedScrollView = posed.View({
@@ -154,7 +154,7 @@ class Content extends Component {
                                 </BoxTitle>
                                 <Collapsible collapsed={collapsed[0] || false}>
                                     <BoxInner>
-                                        {department.map((e, i) => <TouchableOpacity key={i} onPress={() => this.toChat(e._id)}>
+                                        {department.map((e, i) => <TouchableOpacity key={i} onPress={() => this.toChat(e)}>
                                             <BoxInnerItem>
                                                 <ContactImage source={{ uri: e.image ? `http://ser.univ.team${e.image}` : `http://simpleicon.com/wp-content/uploads/user1.png` }} />
                                                 <ContactInfo>
@@ -244,12 +244,10 @@ class Content extends Component {
         newState.active = e;
         this.setState({ options: newState })
     }
-    toChat = (e) => {
-        const { setRoom, navigate, user } = this.props
-        setRoom(e)
+    toChat = e => {
+        const { setCurrentDialogs, navigate } = this.props
+        setCurrentDialogs(e)
         navigate('Chat')
-        setRoom(e)
-        console.log(e)
     }
 }
 
@@ -267,7 +265,9 @@ const mapDispatchToProps = dispatch => ({
     setDialogs: _ => dispatch(setDialogs(_)),
     addMessage: _ => dispatch(addMessage(_)),
     setAllUsers: _ => dispatch(setAllUsers(_)),
-    setContacts: _ => dispatch(setContacts(_))
+    setContacts: _ => dispatch(setContacts(_)),
+    setCurrentChat: _ => dispatch(setCurrentChat(_)),
+    setCurrentDialogs: _ => dispatch(setCurrentDialogs(_))
 
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

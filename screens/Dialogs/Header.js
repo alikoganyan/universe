@@ -46,7 +46,7 @@ class HeaderComponent extends Component {
                 {this.state.focused ?
                     <CloseIcon onPress={this.onBlur} />
                     : <TouchableOpacity onPress={this.toProfile}>
-                        <ImageComponent source={{ uri: user.image }} />
+                        <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} />
                     </TouchableOpacity>}
             </Header>
         )
@@ -94,11 +94,11 @@ class HeaderComponent extends Component {
 }
 
 const mapStateToProps = state => ({
-        dialogs: state.dialogsReducer.dialogs,
-        messages: state.messageReducer.messages,
-        search: state.messageReducer.search,
-        drawer: state.drawerReducer.open,
-        user: state.userReducer.user
+    dialogs: state.dialogsReducer.dialogs,
+    messages: state.messageReducer.messages,
+    search: state.messageReducer.search,
+    drawer: state.drawerReducer.open,
+    user: state.userReducer.user
 })
 const mapDispatchToProps = dispatch => ({
     setDialogs: _ => dispatch(setDialogs(_))

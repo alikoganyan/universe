@@ -72,7 +72,7 @@ class HeaderComponent extends Component {
                             <SearchIcon right onPress={this.startSearch} />
                             <AddIcon onPress={this.addTask} right />
                             <TouchableOpacity onPress={toProfile}>
-                                <ImageComponent source={{ uri: image }} />
+                                <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
                             </TouchableOpacity>
                         </> :
                         <CloseIcon onPress={this.stopSearch} />

@@ -101,7 +101,7 @@ class Content extends Component {
             <Wrapper>
                 <User >
                     <TouchableOpacity onPress={(this.selectImage)}>
-                        <UserImage source={{ uri: image }} />
+                        <UserImage source={{ uri: `http://ser.univ.team${image}` }} />
                     </TouchableOpacity>
                     <UserInfo>
                         <InputBox key={0}>

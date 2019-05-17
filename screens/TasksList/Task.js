@@ -123,7 +123,7 @@ class Tasks extends Component {
 				}}
 			>
 				<Wrapper>
-					<TaskImage source={{ uri: image ? `http://ser.univ.team${image}` : 'https://facebook.github.io/react/logo-og.png' }} />
+					<TaskImage source={{ uri: `http://ser.univ.team${image}` }} />
 					<TaskText>
 						<TaskTextInner>
 							<TaskTitle>{first_name ? `${first_name} ${last_name}` : phone_number}</TaskTitle>

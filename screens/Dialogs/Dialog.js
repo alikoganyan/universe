@@ -111,7 +111,7 @@ class Content extends Component {
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={phone ? () => this.newDialog(id) : this.handleClick} onLongPress={this.handleHold}>
         <Wrapper>
-          <DialogImage source={{ uri: image ? `http://ser.univ.team${image}` : user.image }} size={"large"} />
+          <DialogImage source={{ uri: `http://ser.univ.team${image}` }} size={"large"} />
           <DialogText>
             <DialogTextInner>
               {title && <>

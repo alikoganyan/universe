@@ -14,7 +14,8 @@ import { socket } from '../../utils/socket'
 import sendRequest from '../../utils/request'
 import { g_users } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
-
+import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/messageActions'
+import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 const { Colors, sidePadding, sidePaddingNumber } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
@@ -86,7 +87,7 @@ const BoxItem = styled(Text)`
     color: #A7B0BA;
     flex: 1;
 `
-const BoxInnerItem = styled(View)`
+const BoxInnerItem = styled(TouchableOpacity)`
     padding: 20px 5px;
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     display: flex;
@@ -170,9 +171,9 @@ class Content extends Component {
                                         style={{ paddingRight: 5, paddingLeft: 5, }}
                                         data={contacts}
                                         renderItem={({ item, index }) => {
-                                            const { image, first_name, last_name, phone_number, role } = item
+                                            const { image, first_name, last_name, phone_number, role, _id } = item
                                             const name = first_name ? `${first_name} ${last_name}` : phone_number
-                                            return item ? <BoxInnerItem key={index}>
+                                            return item ? <BoxInnerItem key={index} onPress={() => this.toChat(_id)}>
                                                 <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
                                                 <ContactInfo>
                                                     <ContactName>{name}</ContactName>
@@ -198,7 +199,7 @@ class Content extends Component {
                                                     {contacts.map((e, i) => {
                                                         const { image, first_name, last_name, phone_number, role } = e
                                                         const name = first_name ? `${first_name} ${last_name}` : phone_number
-                                                        return <BoxInnerItem key={i}>
+                                                        return <BoxInnerItem key={i} onPress={() => this.toChat(e)}>
                                                             <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
                                                             <ContactInfo>
                                                                 <ContactName>{name}</ContactName>
@@ -219,7 +220,7 @@ class Content extends Component {
                                         renderItem={({ item, index }) => {
                                             const { image, first_name, last_name, phone_number, role } = item
                                             const name = first_name ? `${first_name} ${last_name}` : phone_number
-                                            return item ? <BoxInnerItem key={index}>
+                                            return item ? <BoxInnerItem key={index} onPress={() => this.toChat(item)}>
                                                 <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
                                                 <ContactInfo>
                                                     <ContactName>{name}</ContactName>
@@ -310,6 +311,11 @@ class Content extends Component {
         newState.active = e;
         this.setState({ options: newState })
     }
+    toChat = e => {
+        const { setCurrentDialogs, navigate } = this.props
+        setCurrentDialogs(e)
+        navigate('Chat')
+    }
 }
 
 const mapStateToProps = state => ({
@@ -326,6 +332,8 @@ const mapDispatchToProps = dispatch => ({
     setDialogs: _ => dispatch(setDialogs(_)),
     addMessage: _ => dispatch(addMessage(_)),
     setAllUsers: _ => dispatch(setAllUsers(_)),
-    setContacts: _ => dispatch(setContacts(_))
+    setContacts: _ => dispatch(setContacts(_)),
+    setCurrentChat: _ => dispatch(setCurrentChat(_)),
+    setCurrentDialogs: _ => dispatch(setCurrentDialogs(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

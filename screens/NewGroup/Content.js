@@ -66,7 +66,7 @@ const ReceiverComponent = (props) => {
     const { info, title, image, role, first_name, last_name, phone_number } = children
     return <Receiver last={last}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <ImageComponent source={{ uri: image }} />
+            <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
             <View style={{ flex: 1 }}>
                 <ReceiverInfo>
                     <Text numberOfLines={1}>{first_name || phone_number}</Text>

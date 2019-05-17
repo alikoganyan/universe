@@ -57,7 +57,7 @@ class HeaderComponent extends Component {
                 <Right>
                     <SearchIcon right/>
                     <AddIcon onPress={this.addContact} right/>
-                    <ImageComponent source={{ uri: user.image }} style={{ marginLeft: 10 }} />
+                    <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} style={{ marginLeft: 10 }} />
                 </Right>
             </Header>
         )

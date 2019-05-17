@@ -49,22 +49,6 @@ class Content extends Component {
         const reversedMessages = [...messages].sort((x, y) => {
             return x.timeSent < y.timeSent
         });
-        const reversedMessagess = [{
-            type: 'geo',
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-            sender: { _id: 2 },
-        },
-        {
-            type: 'geo',
-            latitude: 37.78825,
-            longitude: -122.4324,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-            sender: { _id: 1 },
-        }, ...reversedMessages]
         return (
             <>
                 <Wrapper search={search} >
@@ -73,7 +57,7 @@ class Content extends Component {
                         style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
                         ListHeaderComponent={<View style={{ margin: 35, }} />}
                         inverted={true}
-                        data={reversedMessagess}
+                        data={reversedMessages}
                         keyboardDismissMode={'on-drag'}
                         animated={true}
                         renderItem={({ item, index }) => {

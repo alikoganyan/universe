@@ -76,7 +76,7 @@ const ReceiverComponent = (props) => {
     const { image, phone_number, role } = children
     return <Receiver last={last}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <ImageComponent source={{ uri: image || 'http://pluspng.com/img-png/user-png-icon-male-user-icon-512.png' }} />
+            <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
             <View style={{ flex: 1, marginLeft: 5 }}>
                 <ReceiverInfo>
                     <Text numberOfLines={1}>{phone_number || 'no name'}</Text>
