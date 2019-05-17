@@ -108,14 +108,19 @@ const Indicator = ({ delievered = false, read = false, color }) => {
 }
 function Message(props) {
     const { children, messages, myId, background, withImage } = props
-    const { text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, } = children;
+    const { text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at } = children;
+    const date = new Date(created_at);
+    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const day = daysOfTheWeek[date.getDay()]
+    const time = `${date.getHours()}:${date.getMinutes()}`
+    const finalTime = Math.abs(date - new Date())/(1000 * 60 * 60 * 24) > 1 ? day : time
     if (type === 'image') {
         return (myId == sender._id ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <MyMessage background={background}>
                     <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} />
                     <MessageInfo>
-                        <MessageDate color={'white'}>1:40</MessageDate>
+                        <MessageDate color={'white'}>{finalTime}</MessageDate>
                         <Indicator color={'white'} />
                     </MessageInfo>
                 </MyMessage>
@@ -126,7 +131,7 @@ function Message(props) {
                 <InterlocutorsMessage background={background}>
                     <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} />
                     <MessageInfo>
-                        <MessageDate>1:40</MessageDate>
+                        <MessageDate>{finalTime}</MessageDate>
                     </MessageInfo>
                 </InterlocutorsMessage>
             </ View>
@@ -140,7 +145,7 @@ function Message(props) {
                         {text}
                     </MyMessageText>
                     <MessageInfo>
-                        <MessageDate color={'white'}>1:40</MessageDate>
+                        <MessageDate color={'white'}>{finalTime}</MessageDate>
                         <Indicator color={'white'} />
                     </MessageInfo>
                 </MyMessage>
@@ -158,7 +163,7 @@ function Message(props) {
                             {text}
                         </InterlocutorsMessageText>
                         <MessageInfo>
-                            <MessageDate>1:40</MessageDate>
+                            <MessageDate>{finalTime}</MessageDate>
                         </MessageInfo>
                     </InterlocutorsMessage>
                 </View>
