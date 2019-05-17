@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "universe",
-    "slug": "universe",
+    "name": "Universe",
+    "slug": "Universe",
     "privacy": "public",
     "sdkVersion": "32.0.0",
     "platforms": [
@@ -18,8 +18,9 @@
       "**/*"
     ],
     "ios": {
+      "buildNumber": "3",
       "supportsTablet": false,
-      "bundleIdentifier": "team.universe.media",
+      "bundleIdentifier": "team.amigo.media",
       "infoPlist": {
         "NSCameraUsageDescription": "Apperture uses the camera to add photos to albums and scan QR codes.",
         "NSPhotoLibraryUsageDescription": "Apperture needs access to your photo library to let you add photos to an album.",
@@ -31,6 +32,7 @@
     },
     "android": {
       "package": "com.team.universe.media",
+      "versionCode": 1,
       "permissions": [
         "CAMERA",
         "READ_INTERNAL_STORAGE",
