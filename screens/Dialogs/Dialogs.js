@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, Dimensions, StatusBar } from 'react-native'
+import { View, Text, FlatList, Dimensions, StatusBar, BackHandler } from 'react-native'
 import styled from 'styled-components'
 import { Header, Dialog } from './index'
 import { SafeAreaView } from '../../common'
@@ -55,14 +55,17 @@ class Dialogs extends Component {
 	}
 	componentDidMount() {
 		const { user, addMessage, setDialogs, navigation } = this.props;
+		BackHandler.addEventListener('hardwareBackPress', () => true)
 		socket.on('update_dialogs', e => {
 			setDialogs(e.dialogs)
 		})
 		socket.emit('get_dialogs', { id: user._id })
 		socket.on('new_message', e => {
-			addMessage({ ...e, text: e.message, created_at: new Date(), sender: {
-				_id: e.sender._id
-			} })
+			addMessage({
+				...e, text: e.message, created_at: new Date(), sender: {
+					_id: e.sender._id
+				}
+			})
 		})
 		socket.on('new_dialogs', e => {
 		})
