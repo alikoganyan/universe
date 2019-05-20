@@ -79,8 +79,8 @@ const Input = (props) => {
         }}
         inputStyle={{
             fontSize: 15,
-            borderColor: lightGrey1,
             borderWidth: 0,
+            borderBottomColor: lightGrey1,
             borderBottomWidth: 1,
             display: 'flex',
             ...inputStyle
@@ -159,7 +159,6 @@ class Content extends Component {
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
         if (value) {
-            console.log(value.password)
             this.setState({ phone: value.phone_number.slice(2), password: value.password })
         }
     }

@@ -60,7 +60,9 @@ class Dialogs extends Component {
 		})
 		socket.emit('get_dialogs', { id: user._id })
 		socket.on('new_message', e => {
-			addMessage({ ...e, text: e.message, created_at: new Date() })
+			addMessage({ ...e, text: e.message, created_at: new Date(), sender: {
+				_id: e.sender._id
+			} })
 		})
 		socket.on('new_dialogs', e => {
 		})

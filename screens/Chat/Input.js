@@ -107,7 +107,7 @@ class InputComponent extends Component {
         height: 0,
         image: null,
         pickerOpened: false,
-        location: null, 
+        location: null,
     }
     componentDidMount() {
         const { messages, addMessage } = this.props
@@ -159,21 +159,21 @@ class InputComponent extends Component {
     selectGeo = async () => {
         const { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
-          this.setState({
-            errorMessage: 'Permission to access location was denied',
-          });
+            this.setState({
+                errorMessage: 'Permission to access location was denied',
+            });
         }
         const location = await Location.getCurrentPositionAsync({});
         this.setState({ location });
-        console.log(location)
-      };
+    };
     discardSelect = (e) => { }
     sendMessage = (event) => {
-        const { currentRoom, id, addMessage } = this.props;
+        const { currentRoom, user, addMessage } = this.props;
         const { text } = this.state;
+        console.log(user._id)
         if (text) {
             socket.emit('message', { receiver: currentRoom, message: text })
-            addMessage({ room: currentRoom, sender: id, text, date: new Date(), type: 'text' })
+            addMessage({ room: currentRoom, sender: { _id: user._id }, text, created_at: new Date(), type: 'text' })
         }
         this.setState({ text: '' })
     }
@@ -193,7 +193,7 @@ const mapStateToProps = state => ({
     messages: state.messageReducer.messages,
     currentRoom: state.messageReducer.currentRoom,
     currentChat: state.messageReducer.currentChat,
-    id: state.userReducer.user._id
+    user: state.userReducer.user
 })
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),

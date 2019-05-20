@@ -137,8 +137,8 @@ function Message(props) {
             </ View>
         )
     }
-    if (type === 'text') {
-        return (myId == sender ? (
+    if (type === 'text' || !type) {
+        return (myId == sender._id ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <MyMessage background={background}>
                     <MyMessageText>
@@ -150,7 +150,7 @@ function Message(props) {
                     </MessageInfo>
                 </MyMessage>
                 <TriangleLeftIcon color={background || myMessage} />
-            </ View>
+            </View>
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
                 {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://simpleicon.com/wp-content/uploads/user1.png` }} />}
                 <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -10 : 0 }}>
