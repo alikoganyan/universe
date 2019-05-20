@@ -143,7 +143,7 @@ class Content extends Component {
         const { role, phone_number, department } = myProfile ? user : currentDialog;
         const newUserData = [
             { type: 'Подразделение', value: department || 'без подразделения' },
-            { type: 'Должность', value: role.length ? role[0] : 'без должности' },
+            { type: 'Должность', value: role ? role.length ? role[0] : 'без должности' : 'без должности' },
             { type: 'Личный', value: phone_number || 'без номера' },
             !myProfile ? { type: 'Задачи', value: '4', icon: <TaskIcon /> } : undefined,
             !myProfile ? { type: 'Общих групп', value: '32', icon: <GroupIcon /> } : undefined,
