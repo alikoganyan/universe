@@ -1,8 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, TouchableOpacity, } from 'react-native'
-import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
-import CheckboxFormX from 'react-native-checkbox-form';
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { p_register } from '../../constants/api'
@@ -116,7 +114,7 @@ class Content extends Component {
                 linkComp: 'linkComp'
             },
             {
-                value: false,
+                value: true,
                 label: 'согласен на',
                 linkText: 'использование персональных данные',
                 linkComp: 'linkComp'
@@ -131,48 +129,25 @@ class Content extends Component {
         const newAgreements = [...this.state.agreements];
         const item = newAgreements.filter((item) => e.linkText === item.linkText)[0];
         item.value = !item.value
-        console.log(newAgreements)
         this.setState({ agreements: [...newAgreements] })
     }
     proceed = (e) => {
-        const { register } = this.props;
         const checkboxes = [];
         Object.values(this.state.agreements).map((e, i) => {
             checkboxes.push(e.value);
         })
         const checked = !checkboxes.includes(false);
         if (checked) {
-            const { forward, register } = this.props;
-            const { phone, sms } = register;
+            const { forward } = this.props;
             forward()
-            console.log(register);
-            sendRequest({
-                r_path: p_register,
-                method: 'post',
-                attr: {
-                    phone_number: phone,
-                    password: sms
-                },
-                success: (res) => {
-                    console.log(res)
-                    forward();
-                },
-                failFunc: (err) => {
-                    console.log(err)
-                    let { phone_number } = err
-                    this.setState({
-                        invalidPhone: phone_number || null,
-                    })
-                }
-            })
         } else {
             console.log('unchecked')
         }
     }
 }
 const mapStateToProps = state => ({
-        id: state.userReducer.id,
-        register: state.userReducer.register
+    id: state.userReducer.id,
+    register: state.userReducer.register
 })
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),

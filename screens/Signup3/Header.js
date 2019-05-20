@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'react-native'
-import { BackIcon, LocationIcon, SearchIcon } from '../../assets/index'
+import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
@@ -33,9 +33,7 @@ export default class HeaderComponent extends Component {
         return (
             <Header>
                 <Left>
-                    <MarginLeft>
-                        <BackIcon onPress={back} />
-                    </MarginLeft>
+                    <BackIcon onPress={back} />
                 </Left>
                 <Right onPress={this.moveForward}>
                 </Right>

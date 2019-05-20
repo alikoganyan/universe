@@ -10,7 +10,7 @@ export default function SafeAreaViewComponent(props) {
       <KeyboardAvoidingView
         scrollEnabled={true}
         behavior={behavior || 'position'}
-        style={{paddingBottom: Platform.OS === 'ios' ? 10 : 0}}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 30} 
       >
         {children}
       </KeyboardAvoidingView>

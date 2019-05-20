@@ -184,7 +184,7 @@ class Content extends Component {
                 password,
             },
             success: (res) => {
-                const { setAuth, setUser, navigation } = this.props
+                const { setAuth, setUser, navigate } = this.props
                 const { access_token, data } = res
                 setAuth(access_token)
                 setUser(data)

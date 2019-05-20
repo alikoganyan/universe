@@ -3,10 +3,8 @@ import { View, Text, TouchableOpacity, Dimensions, Platform, TextInput } from 'r
 import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
-import {
-    p_get_restore_password,
-} from '../../constants/api'
-import { setRegisterUserNumber, setRegisterUserSms } from '../../actions/userActions'
+import { p_get_restore_password } from '../../constants/api'
+import { setRegisterUserNumber } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
 import { connect } from 'react-redux'
 const { Colors, HeaderHeightNumber } = helper;
@@ -114,7 +112,7 @@ class Content extends Component {
     }
     getRestorePassword = e => {
         const { country, phone } = this.state;
-        const { navigate, setRegisterUserNumber, setRegisterUserSms } = this.props;
+        const { navigate, setRegisterUserNumber } = this.props;
         const phone_number = country.concat(phone)
         sendRequest({
             r_path: p_get_restore_password,
@@ -124,7 +122,6 @@ class Content extends Component {
             },
             success: (res) => {
                 setRegisterUserNumber(phone_number);
-                setRegisterUserSms('1111');
                 setTimeout(() => navigate('Restore2'), 0)
             },
             failFunc: (err) => {
@@ -141,10 +138,9 @@ class Content extends Component {
     }
 }
 const mapStateToProps = state => ({
-        id: state.userReducer.id
+    id: state.userReducer.id
 })
 const mapDispatchToProps = dispatch => ({
     setRegisterUserNumber: _ => { dispatch(setRegisterUserNumber(_)) },
-    setRegisterUserSms: _ => { dispatch(setRegisterUserSms(_)) },
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

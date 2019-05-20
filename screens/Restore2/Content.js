@@ -133,7 +133,6 @@ class Content extends Component {
     checkCode = e => {
         const { navigate, register } = this.props;
         const { code } = this.state;
-        console.log(register.phone);
         const phone_number = register.phone;
         sendRequest({
             r_path: p_check_restore_password,

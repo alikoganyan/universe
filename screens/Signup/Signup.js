@@ -13,7 +13,7 @@ const Wrapper = styled(View)`
 export default class Signup extends Component {
     render() {
         return (
-            <SafeAreaView behavior={'height'}>
+            <SafeAreaView behavior={'padding'}>
                 <Wrapper>
                     <Header back={this.navigateBack}/>
                     <Content  forward={this.moveForward}/>

@@ -1,15 +1,13 @@
 import React, { Component } from 'react'
 import { View, Text, TextInput, Dimensions } from 'react-native'
-import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setUser, setRegisterUserSms } from '../../actions/userActions'
-import { Button } from '../../common'
 import sendRequest from '../../utils/request'
-import { p_check_restore_password } from '../../constants/api'
+import { p_register } from '../../constants/api'
 const { Colors, fontSize, HeaderHeightNumber } = helper;
-const { lightGrey1, blue } = Colors;
+const { lightGrey1, blue, pink } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
     justify-content: center;
@@ -78,7 +76,7 @@ class Content extends Component {
                         onChangeText={this.handleSMS}
                         placeholder={'******'}
                         value={sms}
-                        style={{ margin: 0, flex: 1, textAlign: 'center', paddingLeft: 10, }}
+                        style={{ margin: 0, flex: 1, textAlign: 'center', paddingLeft: 10, borderBottomColor: err ? lightGrey1 : pink}}
                         maxLength={6}
                     />
                 </PhoneNumber>
@@ -94,6 +92,7 @@ class Content extends Component {
         error: 0,
         deadline: 10,
         tries: 5,
+        err: false,
     }
     componentDidMount() {
         const countdown = setInterval(() => {
@@ -105,23 +104,28 @@ class Content extends Component {
     }
     handleSMS = (e) => {
         const { sms, error, tries } = this.state;
+        const { forward, register } = this.props
         if (error <= tries) {
             this.setState({ sms: e }, () => {
                 if (this.state.sms.length === 6) {
                     sendRequest({
-                        r_path: p_check_restore_password,
+                        r_path: p_register,
                         method: 'post',
                         attr: {
-                            phone_number,
-                            password: this.state.sms,
+                            phone_number: register.phone,
+                            password: sms
                         },
                         success: (res) => {
-                            console.log(res)
-                            navigate('Restore3');
+                            console.log({ res })
+                            forward();
                         },
                         failFunc: (err) => {
-                            console.log(err);
-                            this.setState({ error: true })
+                            console.log(err)
+                            let { phone_number } = err
+                            this.setState({
+                                invalidPhone: phone_number || null,
+                                err: true,
+                            })
                         }
                     })
                 }
@@ -131,7 +135,8 @@ class Content extends Component {
     }
 }
 const mapStateToProps = state => ({
-    id: state.userReducer.id
+    id: state.userReducer.user._id,
+    register: state.userReducer.register
 })
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
