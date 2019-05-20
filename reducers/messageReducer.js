@@ -5,11 +5,13 @@ import {
     STOP_SEARCH,
     SET_ROOM,
     SET_CURRENT_CHAT,
+    SET_CURRENT_ROOM_ID,
 } from '../actions/messageActions'
 const initialState = {
     search: false,
     currentRoom: null,
     currentChat: null,
+    currentRoomId: null,
     messages: [],
 }
 const messageReducer = (state = initialState, action) => {
@@ -24,6 +26,8 @@ const messageReducer = (state = initialState, action) => {
             return { ...state, search: false }
         case SET_CURRENT_CHAT:
             return { ...state, currentChat: action.payload }
+        case SET_CURRENT_ROOM_ID:
+            return { ...state, currentRoomId: action.payload }
         case START_SEARCH:
             return { ...state, search: true }
         default:

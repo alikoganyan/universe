@@ -14,7 +14,7 @@ import sendRequest from '../../utils/request'
 import { g_users } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
-import { addFeedReceiver, setTaskReceivers } from '../../actions/participantsActions'
+import { addFeedReceiver, setFeedReceivers } from '../../actions/participantsActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
 
@@ -101,7 +101,6 @@ const ContactImage = styled(Image)`
     width: 36px;
     height: 36px;
     border-radius: 18;
-    background: red;
     margin-right: 10px;
 `
 const ContactInfo = styled(View)``
@@ -149,6 +148,7 @@ class Content extends Component {
                     onSwipeLeft={this.optionLeft}
                     onSwipeRight={this.optionRight}
                 >
+
                     <Wrapper>
                         <KeyboardAwareScrollView enableOnAndroid>
                             <Options>
@@ -180,10 +180,10 @@ class Content extends Component {
                                                         {
                                                             e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
                                                                 <BoxInnerItem>
-                                                                    <ContactImage />
+                                                                    <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
                                                                     <ContactInfo>
-                                                                        <ContactName>{e.name || e.phone_number}</ContactName>
-                                                                        <ContactRole>{e.role || 'no role'}</ContactRole>
+                                                                        <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
+                                                                        <ContactRole>{e.role.length ? e.role[0] : 'no role'}</ContactRole>
                                                                     </ContactInfo>
                                                                 </BoxInnerItem>
                                                             </TouchableOpacity>)
@@ -257,7 +257,7 @@ class Content extends Component {
             r_path: g_users,
             method: 'get',
             success: (res) => {
-                this.props.setContacts(res)
+                this.props.setContacts(res.users)
                 const newUsers = { ...this.state.users }
                 newUsers.department[0].workers = res.users
                 this.setState({ users: newUsers })
@@ -282,14 +282,9 @@ class Content extends Component {
 
     }
     addReceiver = (e) => {
-        const { addReceiver, back, receivers } = this.props;
-        const includes = receivers.filter(item => {
-            return item._id === e._id
-        }).length
-        if(!includes){
-            addReceiver(e)
-            back()
-        }
+        const { addReceiver, back } = this.props;
+        addReceiver(e)
+        back()
     }
     collapseDepartment = (i) => {
         const newDCollapsed = [...this.state.collapsed]
@@ -309,13 +304,12 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer,
-        dialog: state.dialogsReducer.dialogs,
-        receivers: state.participantsReducer.news.receivers,
-        currentRoom: state.messageReducer.currentRoom,
-        currentChat: state.messageReducer.currentChat,
-        user: state.userReducer.user,
-        users: state.userReducer
+    messages: state.messageReducer,
+    dialog: state.dialogsReducer.dialogs,
+    currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
+    user: state.userReducer.user,
+    users: state.userReducer
 })
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
@@ -325,7 +319,7 @@ const mapDispatchToProps = dispatch => ({
     setAllUsers: _ => dispatch(setAllUsers(_)),
     setContacts: _ => dispatch(setContacts(_)),
     addReceiver: _ => dispatch(addFeedReceiver(_)),
-    setReceivers: _ => dispatch(setTaskReceivers(_)),
+    setReceivers: _ => dispatch(setFeedReceivers(_)),
 
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

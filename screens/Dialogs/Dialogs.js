@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Header, Dialog } from './index'
 import { SafeAreaView } from '../../common'
 import { connect } from 'react-redux';
-import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/messageActions'
+import { getMessages, setRoom, addMessage, setCurrentChat, setCurrentRoomId } from '../../actions/messageActions'
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
@@ -72,7 +72,7 @@ class Dialogs extends Component {
 		socket.on('need_update', e => {
 			socket.emit('get_dialogs', { id: user._id })
 		})
-		socket.on('dialog_opened', e => {})
+		socket.on('dialog_opened', e => { })
 		socket.on('new_group', e => {
 			// socket.emit('subscribe_to_group', {room: e.room})
 		})
@@ -152,9 +152,10 @@ class Dialogs extends Component {
 		setDialogs(newDialogs)
 	}
 	toChat = e => {
-		const { setRoom, setCurrentChat, navigation, getMessages, user, setCurrentDialogs } = this.props
+		const { setRoom, setCurrentChat, navigation, getMessages, user, setCurrentDialogs, setCurrentRoomId } = this.props
 		const roomId = e.room.split('_').filter(e => e != user._id)[0]
 		setRoom(roomId)
+		setCurrentRoomId(e._id);
 		setCurrentChat(e.room)
 		setCurrentDialogs(user._id === e.creator._id ? e.participants.filter(e => e._id !== user._id)[0] : e.creator)
 		getMessages(e.messages);
@@ -185,6 +186,7 @@ const mapDispatchToProps = dispatch => ({
 	setDialogs: _ => dispatch(setDialogs(_)),
 	addMessage: _ => dispatch(addMessage(_)),
 	setAllUsers: _ => dispatch(setAllUsers(_)),
-	setCurrentDialogs: _ => dispatch(setCurrentDialogs(_))
+	setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
+	setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)

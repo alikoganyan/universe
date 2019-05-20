@@ -122,7 +122,7 @@ class HeaderComponent extends Component {
     }
     addTask = (e) => {
         const { navigate } = this.props;
-        navigate('NewTask')
+        navigate('NewFeed')
     }
 }
 

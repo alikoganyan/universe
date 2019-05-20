@@ -7,7 +7,7 @@ import {
     ActionSheetProvider,
     connectActionSheet,
 } from '@expo/react-native-action-sheet';
-import { Header, Content } from '.'
+import { Header, Content } from './'
 const Wrapper = styled(View)`
     height: 100%;
 `

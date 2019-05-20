@@ -50,13 +50,13 @@ const HeaderText = styled(Text)`
 `
 class HeaderComponent extends Component {
     render() {
-        const { back, user, toProfile } = this.props;
+        const { user, toProfile } = this.props;
         const { search, find } = this.state
         const { image } = user;
         return (
             <Header>
                 <Left>
-                    <CloseIcon onPress={back} right />
+                    <CloseIcon onPress={this.back} right />
                     <HeaderText>Создание Задачи</HeaderText>
                 </Left>
             </Header>
@@ -67,7 +67,7 @@ class HeaderComponent extends Component {
         find: ''
     }
     find = (e) => {
-        
+
     }
     startSearch = () => {
         this.setState({ search: true })
@@ -78,6 +78,10 @@ class HeaderComponent extends Component {
     addTask = (e) => {
         const { navigate } = this.props;
         navigate('NewTask')
+    }
+    back = () => {
+        const { back } = this.props;
+        back()
     }
 }
 

@@ -5,6 +5,7 @@ export const STOP_SEARCH = 'STOP_SEARCH'
 export const GET_MESSAGES = 'GET_MESSAGES'
 export const SET_ROOM = 'SET_ROOM'
 export const SET_CURRENT_CHAT = 'SET_CURRENT_CHAT'
+export const SET_CURRENT_ROOM_ID = 'SET_CURRENT_ROOM_ID'
 export const addMessage = (payload) => {
     return ({
         type: ADD_MESSAGE,
@@ -39,6 +40,13 @@ export const setRoom = (payload) => {
 export const setCurrentChat = (payload) => {
     return ({
         type: SET_CURRENT_CHAT,
+        payload
+    })
+}
+
+export const setCurrentRoomId = (payload) => {
+    return ({
+        type: SET_CURRENT_ROOM_ID,
         payload
     })
 }

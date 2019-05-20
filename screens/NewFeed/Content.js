@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
 import { Button } from '../../common'
 import sendRequest from '../../utils/request'
-import { news } from '../../constants/api'
+import { p_news } from '../../constants/api'
 import { ImageComponent } from '../../common'
 import { GroupIcon, CloseIcon } from '../../assets/'
 const { Colors, HeaderHeightNumber, sidePadding } = helper;
@@ -74,7 +74,7 @@ const RecieverComponent = (props) => {
                     <Department numberOfLines={1}>{department || 'без департамента'}</Department>
                 </RecieverInfo>
             </View>
-            <CloseIcon />
+            <CloseIcon onPress={undefined} />
         </View>
     </Reciever>
 }
@@ -93,7 +93,7 @@ class Content extends Component {
                     value={text}
                     placeholder={'Текст новости'}
                     multiline={true}
-                    style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }}/>
+                    style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
                 <Recievers>
                     <DialogsLabel>
                         <GroupIcon />
@@ -101,8 +101,8 @@ class Content extends Component {
                     </DialogsLabel>
                     <ScrollView>
                         {receivers.map((e, i) => (
-                                <RecieverComponent key={i} last={i === receivers.length}>{e}</RecieverComponent>
-                            ))}
+                            <RecieverComponent key={i} last={i === receivers.length}>{e}</RecieverComponent>
+                        ))}
                     </ScrollView>
                     <DialogsLabel>
                         <TouchableOpacity onPress={this.addParticipant}>
@@ -117,43 +117,50 @@ class Content extends Component {
                         color={black}>Продолжить</Button>
                 </ButtonBox>
             </Wrapper>)
-            }
+    }
     state = {
         receivers: [],
-        text: ''
+        text: '',
+        err: false
     }
     componentDidMount() {
     }
-    componentWillUpdate(){
-        
+    componentWillUpdate() {
+
     }
     addParticipant = () => {
         const { addParticipant } = this.props
         addParticipant()
     }
     proceed = (e) => {
-        const { id, receivers } = this.props;
+        const { id, receivers, forward } = this.props;
         const { text } = this.state;
         let idList = []
         receivers.map((e) => {
             idList = [...idList, e._id]
         })
-        if(text && receivers.length) sendRequest({
-            r_path: news,
-            method: 'post',
-            attr: {
-                news: {
-                    text, 
-                    receivers: idList
+        if (text && receivers.length) {
+            sendRequest({
+                r_path: p_news,
+                method: 'post',
+                attr: {
+                    news: {
+                        text,
+                        receivers: idList
+                    }
+                },
+                success: (res) => {
+                    console.log({ res })
+                    forward()
+                },
+                failFunc: (err) => {
+                    console.log({ err })
                 }
-            },
-            success: (res) => {
-                console.log({res})
-            },
-            failFunc: (err) => {
-                console.log({err})
-            }
-        })
+            })
+        } else {
+            this.setState({ err: true })
+        }
+
     }
     handleCountry = (e) => {
         this.setState({ country: e })
@@ -163,8 +170,8 @@ class Content extends Component {
     }
 }
 const mapStateToProps = state => ({
-        id: state.userReducer.user.id,
-        receivers: state.participantsReducer.news.receivers
+    id: state.userReducer.user.id,
+    receivers: state.participantsReducer.news.receivers
 })
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),

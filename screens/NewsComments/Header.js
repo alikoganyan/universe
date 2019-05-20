@@ -1,122 +1,138 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Image, Platform, Dimensions, TouchableOpacity } from 'react-native'
-import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/index'
-import { connect } from 'react-redux'
+import { View, Text, SafeAreaView, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native'
+import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon, CloseIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
-import Icon from 'react-native-vector-icons/FontAwesome';
-
+import { connect } from 'react-redux'
+import { p_news_search, g_users } from '../../constants/api'
 import { ImageComponent } from '../../common'
-const { sidePadding, sidePaddingNumber, HeaderHeight, Colors, fontSize } = helper;
-const { border } = Colors;
+import { setNews } from '../../actions/newsActions'
+import sendRequest from '../../utils/request'
+const { sidePadding, HeaderHeight, sidePaddingNumber, fontSize } = helper;
+
 const Header = styled(View)`
-    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
-    align-self: center;
+    width: 100%;
     background: white;
+    height: ${HeaderHeight}; 
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
     justify-content: space-between;
-`
-const HeaderUserImage = styled(Image)`
-    border-radius: 15;
-    height: 30px;
-    width: 30px;
-    margin-right: 10px;
-`
-const Info = styled(View)`
-    display: flex;
-    margin-left: 10px;
-`
-const InfoChatName = styled(Text)`
-    color: black;
-    font-size:  ${fontSize.text};
-`
-const InfoParticipants = styled(Text)`
-    color: #5F7991;
-    font-size: ${fontSize.sm};
+    padding-right: ${sidePadding};
+    padding-left: ${sidePadding};
 `
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
 `
-const Right = styled(View)`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
+const Center = styled(View)``
+const Input = styled(TextInput)`
+    margin-left: ${Dimensions.get('window').width * 0.085};
+`
+const HeaderText = styled(Text)`
+    font-size: ${fontSize.header};
+`
+const Right = styled(Left)`
     justify-content: flex-end;
 `
-const Categories = styled(Header)`
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: flex-end;
-    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
-`
-const Top = styled(View)`
+// const UserImage = styled(Image)`
+//     background: red;
+//     width: 30px;
+//     height: 30px;
+//     border-radius: 15px;
+//     margin-left:${sidePaddingNumber};
+// `
+const MarginRight = styled(View)`
+    margin-right: ${Dimensions.get('window').width * 0.085};
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
-    height: ${HeaderHeight}; 
-    width: 100%;
+`
 
-`
-const Bottom = styled(Top)`
-    border: 1px solid ${border};
-    border-width: 0;
-    border-top-width: 1px;
-    margin: 0 ${sidePadding};
-    min-height: 0; 
-    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
-`
-const Category = styled(Text)`
-    display: flex;
-    flex:1;
-    justify-content: center;
-    font-size: 11px;
-    text-align: center;
-    padding: 10px 0;
-`
-const Input = styled(TextInput)`
-`
-const IconLeft = styled(Icon)`
-    margin-left: ${sidePadding};
-`
-const MarginRight = styled(View)`
-    margin-right: ${sidePaddingNumber};
-`
 class HeaderComponent extends Component {
     render() {
-        const { back, search, startSearch, stopSearch, currentChat } = this.props
+        const { back, user, toProfile } = this.props;
+        const { search, find } = this.state
+        const { image } = user;
         return (
             <Header>
-                <Top>
-                    <Left>
-                        <MarginRight>
+                <Left>
+                    {!search ?
+                        <>
                             <BackIcon onPress={back} right />
-                        </MarginRight>
-                        <Text>Новости</Text>
-                    </Left>
-                    <Right>
-                        <MarginRight>
-                            <SearchIcon onPress={startSearch} />
-                        </MarginRight>
-                        <ImageComponent source={{ uri: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
-                    </Right>
-                </Top>
+                            <HeaderText>Новости</HeaderText>
+                        </> :
+                        <>
+                            <SearchIcon />
+                            <Input placeholder="поиск" value={find} onChangeText={this.find} />
+                        </>
+                    }
+                </Left>
+                <Right>
+                    {!search ?
+                        <>
+                            <SearchIcon right onPress={this.startSearch} />
+                            <TouchableOpacity onPress={toProfile}>
+                                <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
+                            </TouchableOpacity>
+                        </> :
+                        <CloseIcon onPress={this.stopSearch} />
+                    }
+                </Right>
             </Header>
         )
     }
+    state = {
+        search: false,
+        find: ''
+    }
+    find = (e) => {
+        this.setState({ find: e })
+        e ? sendRequest({
+            r_path: p_news_search,
+            method: 'post',
+            attr: {
+                text: e,
+                withUser: true,
+            },
+            success: (res) => {
+                console.log({ res })
+            },
+            failFunc: (err) => {
+                console.log(err)
+            }
+        }) : sendRequest({
+            r_path: news,
+            method: 'get',
+            success: (res) => {
+                setNews(res.news)
+            },
+            failFunc: (err) => {
+                console.log(err)
+            }
+        })
+    }
+    startSearch = () => {
+        this.setState({ search: true })
+    }
+    stopSearch = () => {
+        this.setState({ search: false })
+    }
+    addTask = (e) => {
+        const { navigate } = this.props;
+        navigate('NewFeed')
+    }
 }
-const mapStateToProps = state => ({
-        search: state.messageReducer.search
-})
+
+const mapStateToProps = state => {
+    return {
+        user: state.userReducer.user,
+        tasks: state.tasksReducer.tasks,
+    };
+};
 const mapDispatchToProps = dispatch => ({
-    addMessage: _ => dispatch(addMessage(_)),
-    startSearch: _ => dispatch(startSearch()),
-    stopSearch: _ => dispatch(stopSearch()),
+    setNews: _ => dispatch(setNews(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
+

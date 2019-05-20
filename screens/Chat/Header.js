@@ -142,15 +142,16 @@ class HeaderComponent extends Component {
         toProfile()
     }
     find = (e) => {
-        const { getMessages, dialogs, currentRoom } = this.props;
+        const { getMessages, dialogs, currentRoom, currentChat, currentRoomId } = this.props;
         e ? sendRequest({
             r_path: p_search_messages,
             method: 'post',
             attr: {
                 text: e,
+                dialog_id: currentRoomId
             },
             success: (res) => {
-                getMessages(res)
+                getMessages(res.messages)
             },
             failFunc: (err) => {
                 console.log(err)
@@ -162,6 +163,8 @@ const mapStateToProps = state => ({
     search: state.messageReducer.search,
     dialogs: state.dialogsReducer.dialogs,
     currentRoom: state.messageReducer.currentRoom,
+    currentRoomId: state.messageReducer.currentRoomId,
+    currentChat: state.messageReducer.currentChat,
     currentDialog: state.dialogsReducer.currentDialog
 })
 const mapDispatchToProps = dispatch => ({

@@ -47,7 +47,6 @@ const Sendermage = styled(Image)`
     width: 30;
     height: 30;
     border-radius: 15;
-    background: red;
     margin-right: 10px;
 `;
 const SenderName = styled(Text)`
@@ -168,7 +167,8 @@ const LikeText = styled(Text)`
 class Content extends Component {
 	render() {
 		const { feed } = this.props;
-		const { comments, likes } = feed;
+		const { comments, likes, creator } = feed;
+		const { first_name, last_name, image, _id } = creator
 		const reversedCommnets = [...comments].reverse();
 		const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 		const date = new Date(feed.created_at);
@@ -176,54 +176,54 @@ class Content extends Component {
 		const Message = props => {
 			const { children } = props;
 			const { user } = this.props;
-			const { creator, created_at, likes_сount, text } = children;
-			const { first_name, image, _id } = creator
+			const { creator, created_at, likes_сount, text, _id } = children;
 			const myId = user._id;
 			const date = new Date(created_at)
-			return myId === _id ? 
-			<View style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-				<MyMessage>
-					<MyMessageText>
-						{text}
-					</MyMessageText>
-					<MessageInfo>
-						<HeartIcon style={{ paddingRight: 5 }} />
-						<LikeText color={darkBlue2}>{likes_сount}</LikeText>
-						<MessageDate color={darkBlue2}>
-							{date.getHours()}:{date.getMinutes()}
-						</MessageDate>
-					</MessageInfo>
-				</MyMessage>
-				<TriangleLeftIcon color={yellow} />
-			</View> : 
-			<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
-				<ImageComponent
-					style={{ position: 'relative', left: 5, bottom: 5 }}
-					source={{
-						uri: `http://ser.univ.team${image}`,
-					}}
-				/>
-				<TriangleRightIcon color={'#fff1dd'} />
-				<InterlocutorsMessage>
-					<InterlocutorsMessageName>{first_name}</InterlocutorsMessageName>
-					<InterlocutorsMessageText>{text}</InterlocutorsMessageText>
-					<MessageInfo>
-						<HeartIcon style={{ paddingRight: 5 }} /><LikeText>{likes_сount}</LikeText>
-						<MessageDate>
-							{date.getHours()}:{date.getMinutes()}
-						</MessageDate>
-					</MessageInfo>
-				</InterlocutorsMessage>
-			</View>
+			console.log(myId, _id, text)
+			return myId === _id ?
+				<View style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
+					<MyMessage>
+						<MyMessageText>
+							{text}
+						</MyMessageText>
+						<MessageInfo>
+							<HeartIcon style={{ paddingRight: 5 }} />
+							<LikeText color={darkBlue2}>{likes_сount}</LikeText>
+							<MessageDate color={darkBlue2}>
+								{date.getHours()}:{date.getMinutes()}
+							</MessageDate>
+						</MessageInfo>
+					</MyMessage>
+					<TriangleLeftIcon color={yellow} />
+				</View> :
+				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
+					<ImageComponent
+						style={{ position: 'relative', left: 5, bottom: 5 }}
+						source={{
+							uri: `http://ser.univ.team${image}`,
+						}}
+					/>
+					<TriangleRightIcon color={'#fff1dd'} />
+					<InterlocutorsMessage>
+						<InterlocutorsMessageName>{first_name}</InterlocutorsMessageName>
+						<InterlocutorsMessageText>{text}</InterlocutorsMessageText>
+						<MessageInfo>
+							<HeartIcon style={{ paddingRight: 5 }} /><LikeText>{likes_сount}</LikeText>
+							<MessageDate>
+								{date.getHours()}:{date.getMinutes()}
+							</MessageDate>
+						</MessageInfo>
+					</InterlocutorsMessage>
+				</View>
 		};
-
+		console.log(creator, image)
 		return (
 			<Wrapper>
 				<NewsItem onLayout={e => this.getUnreadMessageHeight(e)}>
 					<Sender>
-						<Sendermage />
+						<Sendermage source={{ uri: `http://ser.univ.team${image}` }} />
 						<SenderInfo>
-							<SenderName>{feed.creator.first_name}</SenderName>
+							<SenderName>{first_name} {last_name}</SenderName>
 							<TimeSent>
 								{date.getDate()}{' '}
 								{months[date.getMonth()]}{' '}
