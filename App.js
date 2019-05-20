@@ -144,19 +144,19 @@ export default class AppComponent extends React.Component {
   }
   _loadResourcesAsync = async () => {
     return Promise.all([
-      Asset.loadAsync([
-        require('./assets/svg/Add.svg'),
-        require('./assets/svg/Arrow_back.svg'),
-        require('./assets/svg/Arrow_down_light.svg'),
-        require('./assets/svg/Close.svg'),
-        require('./assets/svg/Edit.svg'),
-        require('./assets/svg/Like.svg'),
-        require('./assets/svg/Likes.svg'),
-        require('./assets/svg/Menu.svg'),
-        require('./assets/svg/News.svg'),
-        require('./assets/svg/Settings.svg'),
-        require('./assets/svg/Tasks.svg'),
-      ]),
+      // Asset.loadAsync([
+      //   require('./assets/svg/Add.svg'),
+      //   require('./assets/svg/Arrow_back.svg'),
+      //   require('./assets/svg/Arrow_down_light.svg'),
+      //   require('./assets/svg/Close.svg'),
+      //   require('./assets/svg/Edit.svg'),
+      //   require('./assets/svg/Like.svg'),
+      //   require('./assets/svg/Likes.svg'),
+      //   require('./assets/svg/Menu.svg'),
+      //   require('./assets/svg/News.svg'),
+      //   require('./assets/svg/Settings.svg'),
+      //   require('./assets/svg/Tasks.svg'),
+      // ]),
       Font.loadAsync({
         'Roboto': require('./assets/fonts/Roboto-Medium.ttf'),
       }),

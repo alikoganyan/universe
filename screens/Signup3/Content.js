@@ -141,7 +141,6 @@ class Content extends Component {
             const { forward } = this.props;
             forward()
         } else {
-            console.log('unchecked')
         }
     }
 }

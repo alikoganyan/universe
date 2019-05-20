@@ -161,7 +161,7 @@ class Content extends Component {
     }
     componentDidMount() {
         const { user } = this.props;
-        this.setState({ user: { ...this.state.user, ...user } }, () => console.log(this.state))
+        this.setState({ user: { ...this.state.user, ...user } })
     }
     selectImage = async (e) => {
         let result = await ImagePicker.launchImageLibraryAsync({

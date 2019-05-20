@@ -129,8 +129,6 @@ class HeaderComponent extends Component {
                 setTimeout(() => {
                     const { setTasks } = this.props
                     this.setState({ FlatListData: [...tasksList] })
-                    // setTasks([])
-                    console.log('123')
                 }, 0)
             },
             failFunc: (err) => {

@@ -70,8 +70,8 @@ class Content extends Component {
                     Восстановить пароль
                 </Title>
                 <PhoneNumber>
-                    <Input autoFocus={'true'} style={{ minWidth: '100%' }} value={pass} onChangeText={this.handleChangePass} password={true}>Новый пароль</Input>
-                    <Input style={{ minWidth: '100%' }} value={repass} onChangeText={this.handleChangeRepass} password={true}>Повторите пароль</Input>
+                    <Input autoFocus={'true'} style={{ minWidth: '100%' }} value={pass} onChangeText={this.handleChangePass} password={true} keyboardType={'phone-pad'}>Новый пароль</Input>
+                    <Input style={{ minWidth: '100%' }} value={repass} onChangeText={this.handleChangeRepass} password={true} keyboardType={'phone-pad'}>Повторите пароль</Input>
                 </PhoneNumber>
                 <ControlBar>
                     <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>Сохранить и войти</Button>
@@ -128,7 +128,7 @@ class Content extends Component {
     }
 }
 const mapStateToProps = state => ({
-        register: state.userReducer.register,
+    register: state.userReducer.register,
 })
 const mapDispatchToProps = dispatch => ({
 })

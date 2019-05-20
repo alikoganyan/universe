@@ -49,7 +49,7 @@ const ButtonBox = styled(View)`
     align-self: center;
 `
 const Input = (props) => {
-    const { children, password = false, value, style, editable, inputStyle, labelStyle } = props;
+    const { children, password = false, value, style, editable, inputStyle, labelStyle, keyboardType } = props;
     return <FloatingLabel
         labelStyle={{ fontSize: 15, ...labelStyle }}
         inputStyle={{
@@ -62,6 +62,7 @@ const Input = (props) => {
         }}
         password={password}
         value={value}
+        keyboardType={keyboardType}
         style={{ ...style }}
         editable={editable}
     >{children}</FloatingLabel>
@@ -87,13 +88,14 @@ class Content extends Component {
                         value={country} onPress={this.handleCountry}
                         style={{ width: '20%' }}
                         value='+7'
-                        inputStyle={{ paddingLeft: 0, textAlign: 'center' }} />
+                        inputStyle={{ paddingLeft: 0, textAlign: 'center' }} 
+                        keyboardType={'phone-pad'}/>
                     <StyledInput password={true}
                         onChangeText={this.handlePhone}
                         value={phone}
                         placeholder={'XXX-XXX-XX-XX'}
                         style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? 'red' : null, borderColor: error ? 'red' : lightGrey1 }}
-                    />
+                        keyboardType={'phone-pad'}/>
                 </PhoneNumber>
                 <ButtonBox>
                     <Button
@@ -110,11 +112,7 @@ class Content extends Component {
         error: false,
         invalidPhone: false,
     }
-    componentDidMount() {
-
-
-
-    }
+    componentDidMount() { }
     proceed = (e) => {
         const { country, phone } = this.state;
         const { setRegisterUserNumber, forward } = this.props;
@@ -152,7 +150,7 @@ class Content extends Component {
     }
 }
 const mapStateToProps = state => ({
-        id: state.userReducer.id
+    id: state.userReducer.id
 })
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),

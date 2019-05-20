@@ -116,11 +116,9 @@ class InputComponent extends Component {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
-        console.log(result)
     }
     selectFile = async (e) => {
         let result = await DocumentPicker.getDocumentAsync({});
-        console.log(result)
     }
     selectGeo = (e) => { }
     discardSelect = (e) => { }

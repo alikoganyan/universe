@@ -215,25 +215,20 @@ class Content extends Component {
         const { receivers, moveForward } = this.props
         const { deadlineDate, deadlineTime, taskName, taskText } = this.state;
         const deadline = this.jsCoreDateCreator(`${deadlineDate}:${deadlineTime}`)
-        console.log(
-            {
+        sendRequest({
+            r_path: p_create_task,
+            method: 'post',
+            attr: {
                 task: { name: taskName, description: taskText, deadline, performers: [receivers[0]._id] }
+            },
+            success: (res) => {
+                console.log(res)
+                moveForward()
+            },
+            failFunc: (err) => {
+                console.log(err)
             }
-        )
-        // sendRequest({
-        //     r_path: p_create_task,
-        //     method: 'post',
-        //     attr: {
-        //         task: { name: taskName, description: taskText, deadline, performers: [receivers[0]._id] }
-        //     },
-        //     success: (res) => {
-        //         console.log(res)
-        //         moveForward()
-        //     },
-        //     failFunc: (err) => {
-        //         console.log(err)
-        //     }
-        // })
+        })
     }
     handleCountry = (e) => {
         this.setState({ country: e })

@@ -43,7 +43,6 @@ class Profile extends Component {
     render() {
         const { currentChat, user } = this.props;
         const myProfile = !currentChat
-        console.log(Dimensions.get('window').height)
         return (
             <ActionSheetProvider>
                 <SafeAreaView>

@@ -1,10 +1,9 @@
 {
   "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://d6-hek.dr0kd3n.mobile-front.exp.direct",
-  "packagerNgrokUrl": "https://packager.d6-hek.dr0kd3n.mobile-front.exp.direct",
-  "ngrokPid": 5485,
+  "expoServerNgrokUrl": "https://qj-i56.dr0kd3n.mobile-front.exp.direct",
+  "packagerNgrokUrl": "https://packager.qj-i56.dr0kd3n.mobile-front.exp.direct",
+  "ngrokPid": 14697,
   "devToolsPort": 19002,
-  "packagerPort": 19001,
-  "packagerPid": 5453,
-  "webpackServerPort": null
+  "packagerPort": 19003,
+  "packagerPid": 14677
 }

@@ -170,7 +170,6 @@ class InputComponent extends Component {
     sendMessage = (event) => {
         const { currentRoom, user, addMessage } = this.props;
         const { text } = this.state;
-        console.log(user._id)
         if (text) {
             socket.emit('message', { receiver: currentRoom, message: text })
             addMessage({ room: currentRoom, sender: { _id: user._id }, text, created_at: new Date(), type: 'text' })

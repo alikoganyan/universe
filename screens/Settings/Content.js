@@ -170,7 +170,6 @@ class Content extends Component {
         const newSettings = [...settings]
         newSettings.map(e => {
             if (e.item === 'language') {
-                console.log(langs, user.settings, e.item)
                 e.option.value = 'Изменить'
                 e.status = langs[user.settings[e.item]]
             }

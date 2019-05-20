@@ -51,7 +51,7 @@ const Label = styled(Title)`
     margin-bottom: 0px;
 `
 const Input = (props) => {
-    const { children, password = false, value, style, editable, inputStyle, labelStyle } = props;
+    const { children, password = false, value, style, editable, inputStyle, labelStyle, keyboardType } = props;
     return <FloatingLabel
         labelStyle={{ fontSize: 15, ...labelStyle }}
         inputStyle={{
@@ -62,6 +62,7 @@ const Input = (props) => {
             borderColor: lightGrey1,
             ...inputStyle
         }}
+        keyboardType={keyboardType}
         password={password}
         value={value}
         style={{ ...style }}
@@ -82,16 +83,17 @@ class Content extends Component {
                     <Input
                         value={country} onPress={this.handleCountry}
                         style={{ width: '20%' }}
-                        inputStyle={{ paddingLeft: 0, textAlign: 'center' }} />
+                        inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
+                        keyboardType={'phone-pad'} />
                     <StyledInput password={true}
                         onChangeText={this.handlePhone}
                         value={phone}
                         placeholder={'XXX-XXX-XX-XX'}
                         style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? 'red' : null, borderColor: error ? 'red' : lightGrey1 }}
-                    />
+                        keyboardType={'phone-pad'} />
                 </PhoneNumber>
                 <ControlBar>
-                    <Button onPress={this.proceed} style={{ backgroundColor: blue, width: '100%' }} color={'#fff'}>Восстановить пароль</Button>
+                    <Button onPress={this.proceed} style={{ backgroundColor: blue, width: '100%' }} color={'#fff'} >Восстановить пароль</Button>
                 </ControlBar>
             </Wrapper>
         )

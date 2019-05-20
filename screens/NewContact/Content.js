@@ -136,9 +136,9 @@ export default class Content extends Component {
         sendRequest({
             r_path: p_create_contact,
             method: 'post',
-            attr: {contact},
+            attr: { contact },
             success: (res) => {
-                console.log(res.msg)
+                console.log({res})
             },
             failFunc: (err) => {
                 console.log(err)

@@ -123,8 +123,6 @@ class Content extends Component {
         text: ''
     }
     componentDidMount() {
-        const { receivers } = this.props;
-        console.log({receivers})
     }
     componentWillUpdate(){
         

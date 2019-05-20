@@ -72,7 +72,7 @@ class Dialogs extends Component {
 		socket.on('need_update', e => {
 			socket.emit('get_dialogs', { id: user._id })
 		})
-		socket.on('dialog_opened', e => console.log(e))
+		socket.on('dialog_opened', e => {})
 		socket.on('new_group', e => {
 			// socket.emit('subscribe_to_group', {room: e.room})
 		})

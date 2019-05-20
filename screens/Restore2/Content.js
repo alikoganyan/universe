@@ -115,7 +115,7 @@ class Content extends Component {
     componentDidMount() {
         const { register } = this.props;
         const { sms } = register;
-        this.setState({ answer: sms }, () => console.log(this.state.answer))
+        this.setState({ answer: sms })
     }
     handleChangeCode = e => {
         const { answer } = this.state;
