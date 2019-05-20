@@ -3,6 +3,7 @@ import { View, Text, Image, Dimensions, TouchableOpacity, TextInput } from 'reac
 import { TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
 import { Button } from '../../common';
 import { setRoom } from '../../actions/messageActions'
+import { alterUser } from '../../actions/userActions'
 import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../utils/helpers'
@@ -166,7 +167,6 @@ class Content extends Component {
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
-        console.log({ result })
     }
     handleChange = (e, unit) => {
         const { user } = this.state;
@@ -183,6 +183,7 @@ class Content extends Component {
     }
     apply = () => {
         const { user } = this.state
+        const { back, alterUser } = this.props
         const userRedux = this.props.user
         const { first_name, last_name, middle_name, email, password, repassword } = user
         sendRequest({
@@ -200,6 +201,13 @@ class Content extends Component {
             },
             success: (res) => {
                 console.log('pa_profile', { res })
+                alterUser({
+                    email: email || userRedux.email,
+                    first_name: first_name || userRedux.firstName,
+                    middle_name: middle_name || userRedux.patronymic,
+                    last_name: last_name || userRedux.lastName,
+                })
+                back()
             },
             failFunc: (err) => {
                 console.log('pa_profile', { err })
@@ -220,6 +228,7 @@ const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
-    addMessage: _ => dispatch(addMessage(_))
+    addMessage: _ => dispatch(addMessage(_)),
+    alterUser: _ => dispatch(alterUser(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

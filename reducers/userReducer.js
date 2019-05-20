@@ -1,4 +1,14 @@
-import { SET_CONTACTS, SET_ERROR, SET_ALL_USERS, REGISTER_USER, SET_USER, SET_AUTH, SET_REGISTER_USER_NUMBER, SET_REGISTER_USER_SMS } from '../actions/userActions'
+import {
+    SET_CONTACTS,
+    SET_ERROR,
+    SET_ALL_USERS,
+    REGISTER_USER,
+    SET_USER,
+    SET_AUTH,
+    SET_REGISTER_USER_NUMBER,
+    SET_REGISTER_USER_SMS,
+    ALTER_USER
+} from '../actions/userActions'
 
 const initialState = {
     user: {},
@@ -6,7 +16,10 @@ const initialState = {
     auth: '',
     users: [],
     error: false,
-    register: { phone: '', sms: '' }
+    register: {
+        phone: '',
+        sms: ''
+    }
 }
 const userReducer = (state = initialState, action) => {
     switch (action.type) {
@@ -25,7 +38,10 @@ const userReducer = (state = initialState, action) => {
         case SET_REGISTER_USER_SMS:
             return { ...state, register: { ...state.register, sms: action.payload } }
         case SET_CONTACTS:
-            return { ...state, contacts: [ ...action.payload ] }
+            return { ...state, contacts: [...action.payload] }
+        case ALTER_USER:
+            const { email, first_name, last_name, middle_name } = action.payload
+            return { ...state, user: { ...state.user, email, first_name, last_name, middle_name } }
         default:
             return state
     }

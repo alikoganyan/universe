@@ -27,7 +27,7 @@ class ProfileEdit extends Component {
                         <Wrapper>
                             <Header back={this.navigateBack} />
                             <ScrollView>
-                                <Content />
+                                <Content back={this.navigateBack}/>
                             </ScrollView> 
                         </Wrapper>
                 </SafeAreaView>
