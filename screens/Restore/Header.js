@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'react-native'
-import { ForwardIcon, LocationIcon, SearchIcon } from '../../assets/index'
+import { BackIcon, LocationIcon, SearchIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 const { sidePadding, HeaderHeight } = helper;
@@ -8,6 +8,7 @@ const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
+    padding: 0 ${sidePadding};
     height: ${HeaderHeight}; 
     display: flex;
     flex-direction: row;
@@ -46,10 +47,12 @@ export default class HeaderComponent extends Component {
     render() {
         return (
             <Header>
+                <BackIcon onPress={this.back} />
             </Header>
         )
     }
-    moveForward = () => {
-        this.props.back()
+    back = () => {
+        const { back } = this.props
+        back()
     }
 }

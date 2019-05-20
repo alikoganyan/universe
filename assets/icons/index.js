@@ -5,6 +5,7 @@ const Dialog = require('./Dialog.png');
 const Close = require('./Close.png');
 const Close_light = require('./Close_light.png');
 const Comments = require('./Comments.png');
+const Contacts = require('./Contacts.png');
 const Contacts_grey = require('./Contacts_grey.png');
 const Contacts_white = require('./Contacts_white.png');
 const Edit = require('./Edit.png');
@@ -41,6 +42,7 @@ export default {
     Close,
     Close_light,
     Comments,
+    Contacts,
     Contacts_grey,
     Contacts_white,
     Edit,

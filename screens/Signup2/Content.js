@@ -61,7 +61,7 @@ const NoSMS = styled(SendAgain)`
 
 class Content extends Component {
     render() {
-        const { deadline, sms } = this.state
+        const { deadline, sms, err } = this.state
 
         return (
             <Wrapper>
@@ -76,7 +76,7 @@ class Content extends Component {
                         onChangeText={this.handleSMS}
                         placeholder={'******'}
                         value={sms}
-                        style={{ margin: 0, flex: 1, textAlign: 'center', paddingLeft: 10, borderBottomColor: err ? lightGrey1 : pink}}
+                        style={{ margin: 0, flex: 1, textAlign: 'center', paddingLeft: 10, borderBottomColor: !err ? lightGrey1 : pink}}
                         maxLength={6}
                     />
                 </PhoneNumber>

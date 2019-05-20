@@ -73,14 +73,14 @@ const DeadlineTime = styled(View)`
 `
 const ReceiverComponent = (props) => {
     const { children, last = false, onDelete } = props;
-    const { image, phone_number, role } = children
+    const { image, phone_number, role, first_name, last_name } = children
     return <Receiver last={last}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
             <View style={{ flex: 1, marginLeft: 5 }}>
                 <ReceiverInfo>
-                    <Text numberOfLines={1}>{phone_number || 'no name'}</Text>
-                    <Department numberOfLines={1}>{role || 'no role'}</Department>
+                    <Text numberOfLines={1}>{first_name ? `${first_name} ${last_name}` : phone_number}</Text>
+                    <Department numberOfLines={1}>{role[0] || 'no role'}</Department>
                 </ReceiverInfo>
             </View>
             <CloseIcon onPress={() => onDelete()} />
@@ -212,7 +212,7 @@ class Content extends Component {
         addParticipants()
     }
     proceed = (e) => {
-        const { receivers, moveForward } = this.props
+        const { receivers, forward } = this.props
         const { deadlineDate, deadlineTime, taskName, taskText } = this.state;
         const deadline = this.jsCoreDateCreator(`${deadlineDate}:${deadlineTime}`)
         sendRequest({
@@ -223,7 +223,7 @@ class Content extends Component {
             },
             success: (res) => {
                 console.log(res)
-                moveForward()
+                forward()
             },
             failFunc: (err) => {
                 console.log(err)

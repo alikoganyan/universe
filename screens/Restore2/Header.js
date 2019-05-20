@@ -49,7 +49,4 @@ export default class HeaderComponent extends Component {
             </Header>
         )
     }
-    moveForward = () => {
-        this.props.back()
-    }
 }

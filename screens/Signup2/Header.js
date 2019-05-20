@@ -31,15 +31,8 @@ export default class HeaderComponent extends Component {
         const { back } = this.props
         return (
             <Header>
-                <Left>
-                    <BackIcon onPress={back} />
-                </Left>
-                <Right onPress={this.moveForward}>
-                </Right>
+                <BackIcon onPress={back} />
             </Header>
         )
-    }
-    moveForward = () => {
-        this.props.forward()
     }
 }

@@ -100,7 +100,7 @@ export function BackIcon(props) {
                 source={SVG.Arrow_back}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Arrow_back}
             />
@@ -149,7 +149,7 @@ export function FileIcon(props) {
                 source={SVG.File}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.File}
             />
@@ -166,7 +166,7 @@ export function FilesRedIcon(props) {
                 source={SVG.Files_red}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Files_red}
             />
@@ -196,7 +196,7 @@ export function BurgerIcon(props) {
                 source={SVG.Menu}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Menu}
             />
@@ -215,7 +215,7 @@ export function SearchIcon(props) {
                 source={SVG.Search}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Search}
             />
@@ -266,7 +266,7 @@ export function LocationIcon(props) {
                 source={SVG.Geolocation}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Geolocation}
             />
@@ -284,7 +284,7 @@ export function ImageIcon(props) {
                 source={SVG.Files_white}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Files_white}
             />
@@ -311,7 +311,7 @@ export function EditIcon(props) {
                 source={SVG.Edit}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Edit}
             />
@@ -337,7 +337,7 @@ export function HeartIcon(props) {
                 source={SVG.Likes}
             /> */}
             <Image
-                style={{width: IconSizeSmall, height: IconSizeSmall}}
+                style={{ width: IconSizeSmall, height: IconSizeSmall }}
                 resizeMode={'contain'}
                 source={ICONS.Likes}
             />
@@ -355,7 +355,7 @@ export function CommentIcon(props) {
                 source={SVG.Comments}
             /> */}
             <Image
-                style={{width: IconSizeSmall, height: IconSizeSmall}}
+                style={{ width: IconSizeSmall, height: IconSizeSmall }}
                 resizeMode={'contain'}
                 source={ICONS.Comments}
             />
@@ -373,14 +373,13 @@ export function CloseIcon(props) {
                 source={SVG.Close}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Close}
             />
         </StyledTouchableOpacity>
     )
 }
-
 export function GroupIcon(props) {
     const { onPress, left, right } = props;
     return (
@@ -391,9 +390,9 @@ export function GroupIcon(props) {
                 source={SVG.Contacts_grey}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
-                source={ICONS.Contacts_grey}
+                source={ICONS.Contacts}
             />
         </StyledTouchableOpacity>
     )
@@ -410,7 +409,7 @@ export function GroupIconWhite(props) {
                 source={SVG.Contacts_white}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Contacts_white}
             />
@@ -428,7 +427,7 @@ export function TaskIcon(props) {
                 source={SVG.Tasks}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Tasks}
             />
@@ -445,7 +444,7 @@ export function DialogsIcon(props) {
                 source={SVG.Dialog}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Dialog}
             />
@@ -463,7 +462,7 @@ export function CheckIcon(props) {
                 source={SVG.Message_delivered}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Message_delivered}
             />
@@ -481,7 +480,7 @@ export function CheckAllIcon(props) {
                 source={SVG.Message_read}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Message_read}
             />
@@ -498,7 +497,7 @@ export function PapperPlaneIcon(props) {
                 source={SVG.New_dialog}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.New_dialog}
             />
@@ -515,7 +514,7 @@ export function FeedIcon(props) {
                 source={SVG.News}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.News}
             />
@@ -532,7 +531,7 @@ export function TasksIcon(props) {
                 source={SVG.Tasks}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Tasks}
             />
@@ -549,7 +548,7 @@ export function SettingsIcon(props) {
                 source={SVG.Settings}
             /> */}
             <Image
-                style={{width: IconSize, height: IconSize}}
+                style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Settings}
             />
@@ -567,7 +566,7 @@ export function AddIcon(props) {
                 source={SVG.Add}
             /> */}
             <Image
-                style={{width: size || IconSize, height: size || IconSize}}
+                style={{ width: size || IconSize, height: size || IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Add}
             />
@@ -585,7 +584,7 @@ export function IntroIcon(props) {
                 source={SVG.Intro}
             /> */}
             <Image
-                style={{width: size || IconSize, height: size || IconSize}}
+                style={{ width: size || IconSize, height: size || IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Intro}
             />

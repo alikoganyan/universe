@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'rea
 import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
+const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -12,6 +12,8 @@ const Header = styled(View)`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    padding: 0 ${sidePadding};
+
 `
 const Left = styled(View)`
     display: flex;
@@ -24,7 +26,6 @@ const Right = styled(TouchableOpacity)`
     align-items: center;
 `
 const MarginLeft = styled(View)`
-    margin-left:${sidePaddingNumber};
 `
 
 export default class HeaderComponent extends Component {
@@ -32,15 +33,8 @@ export default class HeaderComponent extends Component {
         const { back } = this.props
         return (
             <Header>
-                <Left>
-                    {/* <BackIcon onPress={back} /> */}
-                </Left>
-                <Right onPress={this.moveForward}>
-                </Right>
+                <BackIcon onPress={back} />
             </Header>
         )
-    }
-    moveForward = () => {
-        this.props.forward()
     }
 }

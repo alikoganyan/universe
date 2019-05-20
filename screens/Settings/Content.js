@@ -121,19 +121,22 @@ class Content extends Component {
                         ListHeaderComponent={<View style={{ margin: 10, }} />}
                         data={settings}
                         scrollEnabled={false}
-                        renderItem={({ item, index }) => <Box key={index} last={index === settings.length - 1}>
-                            <Label>{item.label}</Label>
-                            <Status>{item.status}</Status>
-                            <Option>
-                                {item.option.type === 'toggle' && <Toggle
-                                    onPress={() => this.handleToggle(item.label)}
-                                    switchOn={!!item.option.value}
-                                />}
-                                {item.option.type === 'link' && <TouchableOpacity onPress={this.selectOption}>
-                                    <Link>{item.option.value}</Link>
-                                </TouchableOpacity>}
-                            </Option>
-                        </Box>
+                        renderItem={({ item, index }) => {
+                            // console.log(index, item)
+                            return <Box key={index} last={index === settings.length - 1}>
+                                <Label>{item.label}</Label>
+                                <Status>{item.status || item.language}</Status>
+                                <Option>
+                                    {item.option.type === 'toggle' && <Toggle
+                                        onPress={() => this.handleToggle(item.label)}
+                                        switchOn={!!item.option.value}
+                                    />}
+                                    {item.option.type === 'link' && <TouchableOpacity onPress={this.selectOption}>
+                                        <Link>{item.option.value}</Link>
+                                    </TouchableOpacity>}
+                                </Option>
+                            </Box>
+                        }
                         }
                         keyExtractor={(item, index) => index.toString()}
                     />
@@ -153,8 +156,8 @@ class Content extends Component {
     state = {
         switchOn: true,
         langs: {
-            'ru': 'Русский',
-            'en': 'English'
+            'Русский': 'Русский',
+            'English': 'English'
         },
         pickerOpened: false,
         settings: [
@@ -211,18 +214,18 @@ class Content extends Component {
             success: (res) => {
             },
             failFunc: (err) => {
-                console.log({err})
+                console.log({ err })
             }
         })
     }
 }
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer,
-        dialog: state.dialogsReducer.dialogs,
-        currentRoom: state.messageReducer.currentRoom,
-        currentChat: state.messageReducer.currentChat,
-        user: state.userReducer.user,
+    messages: state.messageReducer,
+    dialog: state.dialogsReducer.dialogs,
+    currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
+    user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),

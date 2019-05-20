@@ -180,7 +180,7 @@ class Content extends Component {
                                                         {
                                                             e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
                                                                 <BoxInnerItem>
-                                                                    <ContactImage source={{uri: `http://ser.univ.team${e.image}`}}/>
+                                                                    <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
                                                                     <ContactInfo>
                                                                         <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
                                                                         <ContactRole>{e.role.length ? e.role[0] : 'no role'}</ContactRole>
@@ -257,7 +257,7 @@ class Content extends Component {
             r_path: g_users,
             method: 'get',
             success: (res) => {
-                this.props.setContacts(res)
+                this.props.setContacts(res.users)
                 const newUsers = { ...this.state.users }
                 newUsers.department[0].workers = res.users
                 this.setState({ users: newUsers })
@@ -304,12 +304,12 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer,
-        dialog: state.dialogsReducer.dialogs,
-        currentRoom: state.messageReducer.currentRoom,
-        currentChat: state.messageReducer.currentChat,
-        user: state.userReducer.user,
-        users: state.userReducer
+    messages: state.messageReducer,
+    dialog: state.dialogsReducer.dialogs,
+    currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
+    user: state.userReducer.user,
+    users: state.userReducer
 })
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
