@@ -206,7 +206,6 @@ export function BurgerIcon(props) {
 
 export function SearchIcon(props) {
     const { onPress, left, right } = props;
-    console.log(left, right)
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             {/* <SvgUri
@@ -557,7 +556,6 @@ export function SettingsIcon(props) {
 }
 export function AddIcon(props) {
     const { onPress, left, right, size } = props;
-    console.log(left, right)
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             {/* <SvgUri

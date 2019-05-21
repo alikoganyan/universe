@@ -167,23 +167,26 @@ class Content extends Component {
                             </Options>
                             <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
                                 <ContactList style={{ width: '100%' }}>
-                                    {/* <FlatList
+                                    <FlatList
                                         style={{ paddingRight: 5, paddingLeft: 5, }}
-                                        data={contacts}
+                                        data={dialogs}
                                         renderItem={({ item, index }) => {
-                                            const { image, first_name, last_name, phone_number, role, _id } = item
-                                            const name = first_name ? `${first_name} ${last_name}` : phone_number
+                                            const { participants, creator, _id, name, isGroup } = item
+                                            const chatItem = creator._id === user._id ? participants[0] : creator
+                                            const { first_name, last_name, phone_number, role, image } = chatItem
+                                            const chatName = isGroup ?
+                                                name :
+                                                first_name ? `${first_name} ${last_name}` : phone_number
                                             return item ? <BoxInnerItem key={index} onPress={() => this.toChat(_id)}>
-                                                <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                                <ContactImage source={{ uri: `http://ser.univ.team${image || creator.image}` }} />
                                                 <ContactInfo>
-                                                    <ContactName>{name}</ContactName>
-                                                    <ContactRole>{role.length ? role[0] : 'без роли'}</ContactRole>
+                                                    <ContactName>{chatName}</ContactName>
+                                                    <ContactRole>{isGroup ? `${participants.length + 1} участника` : role && role[0] || 'без роли'}</ContactRole>
                                                 </ContactInfo>
                                             </BoxInnerItem> : null
-                                        }
-                                        }
+                                        }}
                                         keyExtractor={(item, index) => index.toString()}
-                                    /> */}
+                                    />
                                 </ContactList>
                                 <ContactList>
                                     {department.map((e, i) => (
@@ -217,19 +220,19 @@ class Content extends Component {
                                 <ContactList style={{ width: '100%' }}>
                                     <FlatList
                                         style={{ paddingRight: 5, paddingLeft: 5, }}
-                                        data={contacts}
+                                        data={dialogs}
                                         renderItem={({ item, index }) => {
-                                            const { image, first_name, last_name, phone_number, role } = item
-                                            const name = first_name ? `${first_name} ${last_name}` : phone_number
-                                            return item ? <BoxInnerItem key={index} onPress={() => this.toChat(item)}>
-                                                <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                            const { participants, creator, _id, name, isGroup } = item
+                                            const chatItem = creator._id === user._id ? participants[0] : creator
+                                            const { first_name, last_name, phone_number, role, image } = chatItem
+                                            return isGroup ? <BoxInnerItem key={index} onPress={() => this.toChat(_id)}>
+                                                <ContactImage source={{ uri: `http://ser.univ.team${image || creator.image}` }} />
                                                 <ContactInfo>
                                                     <ContactName>{name}</ContactName>
-                                                    <ContactRole>{role.length ? role[0] : 'без роли'}</ContactRole>
+                                                    <ContactRole>{participants.length + 1} участника</ContactRole>
                                                 </ContactInfo>
                                             </BoxInnerItem> : null
-                                        }
-                                        }
+                                        }}
                                         keyExtractor={(item, index) => index.toString()}
                                     />
                                 </ContactList>
@@ -273,8 +276,6 @@ class Content extends Component {
         for (let i = 0; i <= this.state.users.department.length; i++) {
             newCollapsed.push(false)
         }
-
-        console.log(dialogs)
         sendRequest({
             r_path: g_users,
             method: 'get',
@@ -321,7 +322,7 @@ class Content extends Component {
         const { image, first_name, last_name, phone_number, post } = item
         console.log(e)
         getMessages(e.messages)
-        setCurrentDialogs({...e, ...item })
+        setCurrentDialogs({ ...e, ...item })
         navigate('Chat')
     }
 }
