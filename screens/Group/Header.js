@@ -20,12 +20,6 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
 `
-const HeaderUserImage = styled(Image)`
-    border-radius: 15;
-    height: 30px;
-    width: 30px;
-    margin-right: 10px;
-`
 const Info = styled(View)`
     display: flex;
     margin-left: 10px;
@@ -97,7 +91,8 @@ margin-right: 20px;
 `
 class HeaderComponent extends Component {
     render() {
-        const { back, search, startSearch, stopSearch, currentChat, toProfile } = this.props
+        const { back, search, startSearch, stopSearch, currentChat, currentDialog } = this.props
+        const { name, creator, participants } = currentDialog
         return (
             <Header>
                 <Top>
@@ -105,11 +100,11 @@ class HeaderComponent extends Component {
                         {!search ? (
                             <>
                                 <BackIcon onPress={back} right />
-                                <ToProfile onPress={toProfile}>
-                                    <ImageComponent source={{ uri: 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
+                                <ToProfile onPress={this.toProfile}>
+                                    <ImageComponent source={{ uri: `http://ser.univ.team${creator.image}` }} />
                                     <Info>
-                                        <InfoChatName>{currentChat && currentChat.phone}</InfoChatName>
-                                        <InfoParticipants>5 участников</InfoParticipants>
+                                        <InfoChatName>{name}</InfoChatName>
+                                        <InfoParticipants>{participants.length+1} участника</InfoParticipants>
                                     </Info>
                                 </ToProfile>
                             </>
@@ -123,7 +118,7 @@ class HeaderComponent extends Component {
                     <Right>
                         {!search ? (
                             <>
-                                <SearchIcon onPress={startSearch} right/>
+                                <SearchIcon onPress={startSearch} right />
                                 <LocationIcon />
                             </>
                         ) : <CloseIcon onPress={stopSearch} />}
@@ -142,16 +137,21 @@ class HeaderComponent extends Component {
             </Header>
         )
     }
+    toProfile = () => {
+        const { toProfile } = this.props;
+        toProfile()
+    }
     find = (e) => {
-        const { getMessages, dialogs, currentRoom } = this.props;
+        const { getMessages, dialogs, currentRoom, currentChat, currentRoomId } = this.props;
         e ? sendRequest({
             r_path: p_search_messages,
             method: 'post',
             attr: {
                 text: e,
+                dialog_id: currentRoomId
             },
             success: (res) => {
-                getMessages(res)
+                getMessages(res.messages)
             },
             failFunc: (err) => {
                 console.log(err)
@@ -160,9 +160,12 @@ class HeaderComponent extends Component {
     }
 }
 const mapStateToProps = state => ({
-        search: state.messageReducer.search,
-        dialogs: state.dialogsReducer.dialogs,
-        currentRoom: state.messageReducer.currentRoom
+    search: state.messageReducer.search,
+    dialogs: state.dialogsReducer.dialogs,
+    currentRoom: state.messageReducer.currentRoom,
+    currentRoomId: state.messageReducer.currentRoomId,
+    currentChat: state.messageReducer.currentChat,
+    currentDialog: state.dialogsReducer.currentDialog
 })
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),

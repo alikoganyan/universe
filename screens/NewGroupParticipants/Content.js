@@ -258,7 +258,7 @@ class Content extends Component {
             r_path: g_users,
             method: 'get',
             success: (res) => {
-                this.props.setContacts(res)
+                this.props.setContacts(res.users)
                 const newUsers = { ...this.state.users }
                 newUsers.department[0].workers = res.users
                 this.setState({ users: newUsers })

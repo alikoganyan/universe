@@ -70,7 +70,7 @@ const ReceiverComponent = (props) => {
             <View style={{ flex: 1 }}>
                 <ReceiverInfo>
                     <Text numberOfLines={1}>{first_name || phone_number}</Text>
-                    <Department numberOfLines={1}>{role || 'no role'}</Department>
+                    <Department numberOfLines={1}>{role[0] || 'no role'}</Department>
                 </ReceiverInfo>
             </View>
             <CloseIcon />

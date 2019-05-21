@@ -55,7 +55,7 @@ class Dialogs extends Component {
 	}
 	componentDidMount() {
 		const { user, addMessage, setDialogs, navigation } = this.props;
-		navigation.navigate('ContactGroups'); // restore
+		// navigation.navigate('ContactGroups'); // restore
 		BackHandler.addEventListener('hardwareBackPress', () => true)
 		socket.on('update_dialogs', e => {
 			setDialogs(e.dialogs)
@@ -154,11 +154,14 @@ class Dialogs extends Component {
 	}
 	toChat = e => {
 		const { setRoom, setCurrentChat, navigation, getMessages, user, setCurrentDialogs, setCurrentRoomId } = this.props
+		const { isGroup } = e
 		const roomId = e.room.split('_').filter(e => e != user._id)[0]
 		setRoom(roomId)
 		setCurrentRoomId(e._id);
 		setCurrentChat(e.room)
-		setCurrentDialogs(user._id === e.creator._id ? e.participants.filter(e => e._id !== user._id)[0] : e.creator)
+		setCurrentDialogs(isGroup ?
+			e :
+			user._id === e.creator._id ? e.participants[0] : e.creator)
 		getMessages(e.messages);
 		socket.emit('view', { room: e.room, viewer: user._id })
 		navigation.navigate(e.isGroup ? 'Group' : 'Chat')
