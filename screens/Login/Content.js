@@ -154,12 +154,12 @@ class Content extends Component {
         loading: false,
     }
     componentDidMount = async () => {
-        // this.login() // restore
         const { navigation, setUser } = this.props;
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
         if (value) {
             this.setState({ phone: value.phone_number.slice(2), password: value.password })
+            this.login() // restore
         }
     }
     storeUserData = async (user) => {

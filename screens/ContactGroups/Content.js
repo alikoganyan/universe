@@ -148,7 +148,7 @@ const GroupImage = styled(ContactImage)``
 class Content extends Component {
     render() {
         const { allUsers, users, collapsed, options, groups } = this.state;
-        const { contacts } = this.props;
+        const { contacts, user, dialogs } = this.props;
         const { department } = users;
         const { active } = options;
         return (
@@ -167,7 +167,7 @@ class Content extends Component {
                             </Options>
                             <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
                                 <ContactList style={{ width: '100%' }}>
-                                    <FlatList
+                                    {/* <FlatList
                                         style={{ paddingRight: 5, paddingLeft: 5, }}
                                         data={contacts}
                                         renderItem={({ item, index }) => {
@@ -183,7 +183,7 @@ class Content extends Component {
                                         }
                                         }
                                         keyExtractor={(item, index) => index.toString()}
-                                    />
+                                    /> */}
                                 </ContactList>
                                 <ContactList>
                                     {department.map((e, i) => (
@@ -196,18 +196,19 @@ class Content extends Component {
                                             </BoxTitle>
                                             <Collapsible collapsed={collapsed[i] || false}>
                                                 <BoxInner>
-                                                    {contacts.map((e, i) => {
-                                                        const { image, first_name, last_name, phone_number, role } = e
+                                                    {dialogs.map((e, i) => {
+                                                        const { creator, participants, isGroup } = e
+                                                        let item = creator._id === user._id ? participants[0] : creator
+                                                        const { image, first_name, last_name, phone_number, post } = item
                                                         const name = first_name ? `${first_name} ${last_name}` : phone_number
-                                                        return <BoxInnerItem key={i} onPress={() => this.toChat(e)}>
+                                                        return !isGroup && <BoxInnerItem key={i} onPress={() => this.toChat(e)}>
                                                             <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
                                                             <ContactInfo>
                                                                 <ContactName>{name}</ContactName>
-                                                                <ContactRole>{role.length ? role[0] : 'без роли'}</ContactRole>
+                                                                <ContactRole>{'без роли'}</ContactRole>
                                                             </ContactInfo>
                                                         </BoxInnerItem>
-                                                    })
-                                                    }
+                                                    })}
                                                 </BoxInner>
                                             </Collapsible>
                                         </Box>
@@ -267,11 +268,13 @@ class Content extends Component {
         ]
     }
     componentDidMount() {
-        const { user, users, setContacts } = this.props;
+        const { user, users, setContacts, dialogs } = this.props;
         const newCollapsed = [...this.state.collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
             newCollapsed.push(false)
         }
+
+        console.log(dialogs)
         sendRequest({
             r_path: g_users,
             method: 'get',
@@ -312,15 +315,20 @@ class Content extends Component {
         this.setState({ options: newState })
     }
     toChat = e => {
-        const { setCurrentDialogs, navigate } = this.props
-        setCurrentDialogs(e)
+        const { setCurrentDialogs, navigate, user, getMessages } = this.props
+        const { creator, participants, isGroup } = e
+        let item = creator._id === user._id ? participants[0] : creator
+        const { image, first_name, last_name, phone_number, post } = item
+        console.log(e)
+        getMessages(e.messages)
+        setCurrentDialogs({...e, ...item })
         navigate('Chat')
     }
 }
 
 const mapStateToProps = state => ({
     messages: state.messageReducer,
-    dialog: state.dialogsReducer.dialogs,
+    dialogs: state.dialogsReducer.dialogs,
     currentRoom: state.messageReducer.currentRoom,
     user: state.userReducer.user,
     users: state.userReducer,

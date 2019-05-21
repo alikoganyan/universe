@@ -55,6 +55,7 @@ class Dialogs extends Component {
 	}
 	componentDidMount() {
 		const { user, addMessage, setDialogs, navigation } = this.props;
+		navigation.navigate('ContactGroups'); // restore
 		BackHandler.addEventListener('hardwareBackPress', () => true)
 		socket.on('update_dialogs', e => {
 			setDialogs(e.dialogs)
