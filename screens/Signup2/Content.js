@@ -3,9 +3,10 @@ import { View, Text, TextInput, Dimensions } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
+import { Button } from '../../common'
 import { setUser, setRegisterUserSms } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
-import { p_register } from '../../constants/api'
+import { p_register, p_get_sms } from '../../constants/api'
 const { Colors, fontSize, HeaderHeightNumber } = helper;
 const { lightGrey1, blue, pink } = Colors;
 const Wrapper = styled(View)`
@@ -58,7 +59,9 @@ const SendAgain = styled(Text)`
 const NoSMS = styled(SendAgain)`
     color: ${lightGrey1};
 `
-
+const SendAgainButton = styled(Button)`
+    background: green;
+`
 class Content extends Component {
     render() {
         const { deadline, sms, err } = this.state
@@ -82,7 +85,14 @@ class Content extends Component {
                 </PhoneNumber>
                 <Controls>
                     <NoSMS>Не получили sms?</NoSMS>
-                    <SendAgain>Отправить sms повторно можно будет через {deadline}</SendAgain>
+                    {deadline ?
+                        <SendAgain>Отправить sms повторно можно будет через {deadline}</SendAgain> :
+
+                        <Button
+                            onPress={this.sendAgain}
+                            style={{ background: blue, marginTop: 10 }}
+                            color={'white'}>Отправить</Button>
+                    }
                 </Controls>
             </Wrapper>
         )
@@ -90,7 +100,7 @@ class Content extends Component {
     state = {
         sms: '',
         error: 0,
-        deadline: 10,
+        deadline: 1,
         tries: 5,
         err: false,
     }
@@ -132,6 +142,35 @@ class Content extends Component {
             })
         }
 
+    }
+    sendAgain = () => {
+        const { register } = this.props;
+        const { phone } = register;
+        this.setState({ deadline: 10 }, () => {
+            sendRequest({
+                r_path: p_get_sms,
+                method: 'post',
+                attr: {
+                    phone_number: phone,
+                },
+                success: (res) => {
+                    forward();
+                },
+                failFunc: (err) => {
+                    console.log(err)
+                    let { phone_number } = err
+                    this.setState({
+                        invalidPhone: phone_number || null,
+                        error: true
+                    })
+                }
+            })
+            const countdown = setInterval(() => {
+                this.setState({ deadline: this.state.deadline - 1 })
+                if (this.state.deadline === 0)
+                    clearInterval(countdown)
+            }, 1000)
+        })
     }
 }
 const mapStateToProps = state => ({
