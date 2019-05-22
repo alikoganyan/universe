@@ -36,6 +36,8 @@ const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
+    max-width: 200px;
+    background: red;
 `
 const Right = styled(View)`
     display: flex;

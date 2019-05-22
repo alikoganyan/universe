@@ -31,16 +31,18 @@ const Shadow = styled(TouchableOpacity)`
 const MessageOptions = styled(MessageOptionsPosed)`
     background: white;
     width: 94%;
-    height: ${Dimensions.get('window').height * 0.3}px;
     position: absolute;
     margin: 0 3%;
-    padding: 2% 7%;
+    padding: 30px 7% 0;
     bottom: 10px;
     border-radius: ${borderRadius};
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
     z-index: 9999;
+`
+const MessageOption = styled(TouchableOpacity)`
+    padding-bottom: 30px;
 `
 class Content extends Component {
     render() {
@@ -52,7 +54,7 @@ class Content extends Component {
         return (
             <>
                 <Wrapper search={search} >
-                    {selectedMessage && <Shadow onPress={this.unselect} activeOpacity={1} />}
+                    {selectedMessage._id && <Shadow onPress={this.unselect} activeOpacity={1} />}
                     <Animated.FlatList
                         style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
                         ListHeaderComponent={<View style={{ margin: 35, }} />}
@@ -68,26 +70,29 @@ class Content extends Component {
                         keyExtractor={(item, index) => index.toString()}
                     />
                 </Wrapper>
-                <MessageOptions pose={selectedMessage ? 'visible' : 'hidden'}>
-                    <TouchableOpacity><Text>Сделать задачей</Text></TouchableOpacity>
-                    <TouchableOpacity><Text>Редактировать</Text></TouchableOpacity>
-                    <TouchableOpacity><Text>Переслать</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={this.unselect}><Text>Отменить</Text></TouchableOpacity>
+                <MessageOptions pose={selectedMessage._id ? 'visible' : 'hidden'}>
+                    {
+                        selectedMessage._id && selectedMessage.sender._id === user._id && <>
+                            <MessageOption><Text>Сделать задачей</Text></MessageOption>
+                            <MessageOption><Text>Редактировать</Text></MessageOption>
+                        </>
+                    }
+                    <MessageOption><Text>Переслать</Text></MessageOption>
+                    <MessageOption onPress={this.unselect}><Text>Отменить</Text></MessageOption>
                 </MessageOptions>
             </>
         )
     }
     state = {
-        selectedMessage: null,
+        selectedMessage: {},
     }
     componentDidMount() { }
     unselect = (e) => {
-        this.setState({ selectedMessage: null })
+        this.setState({ selectedMessage: {} })
     }
     handleHold = (e) => {
         const { user } = this.props
-        this.setState({ selectedMessage: e._id })
-        console.log(e.sender._id === user._id, e.sender, user._id)
+        this.setState({ selectedMessage: e })
         Platform.os === 'ios' && ActionSheetIOS.showActionSheetWithOptions(
             {
                 options: e.sender._id === user._id ? ['Отменить', 'Ответить', 'Копировать', 'Изменить', 'Удалить'] : ['Отменить', 'Ответить', 'Копировать'],
