@@ -13,7 +13,7 @@ const Wrapper = styled(View)`
 	padding: ${sidePaddingNumber}px 0;
 	border: 0.3px solid ${lightGrey1};
 	border-width: 0;
- 	width: ${Dimensions.get('window').width - sidePaddingNumber*2};
+ 	width: ${Dimensions.get('window').width - sidePaddingNumber * 2};
 	border-top-width: 0.3px;
 	border-bottom-width: ${({ last }) => last ? 0.3 : 0}px;
 `
@@ -105,18 +105,18 @@ export default class TaskPack extends Component {
   render() {
     const { children, title, onClick, last, tasks } = this.props;
     const { taskPack } = this.state
-    const user = {_id: 1}
+    const user = { _id: 1 }
     const packItems = []
     let stat = ''
     let day = ''
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     let packItems0Tasks0 = null;
-    if(tasks.length){
+    if (tasks.length) {
       tasks.map(taskUser => {
-        if(taskUser.tasks.length){
+        if (taskUser.tasks.length) {
           taskUser.tasks.map(task => {
-            if(task.creator === user._id){
-              const packItemUser = {...taskUser}
+            if (task.creator === user._id) {
+              const packItemUser = { ...taskUser }
               packItemUser.tasks = packItemUser.tasks.filter(e => e.creator === user._id)
               packItems.push(packItemUser)
             }
@@ -127,19 +127,20 @@ export default class TaskPack extends Component {
       if (packItems0Tasks) {
         day = packItems0Tasks[0] && packItems0Tasks[0].created_at ? new Date(packItems[0].tasks[0].created_at).getDay() : '';
         if (packItems0Tasks[0] && packItems0Tasks[0].status) {
-          switch (packItems0Tasks[0].status){
+          switch (packItems0Tasks[0].status) {
             case 'set':
-            stat = 'В работе';
-            break;
+              stat = 'В работе';
+              break;
             case 'done':
-            stat = 'Выполнена';
-            break;
+              stat = 'Выполнена';
+              break;
           }
         }
       }
     }
     const packItemsDescription = packItems0Tasks && packItems0Tasks[0] ? packItems0Tasks[0].description : '';
     const packItemsLength = packItems0Tasks && packItems0Tasks.length ? packItems0Tasks.length - 1 : 0;
+    console.log(packItemsLength)
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}>
         <Wrapper last={last}>
@@ -149,10 +150,10 @@ export default class TaskPack extends Component {
               <TaskLastMessage numberOfLines={1}>{packItemsDescription}</TaskLastMessage>
               <TaskStatus>
                 <TaskStatusTextContainer>
-                  <TasksIcon/>
+                  <TasksIcon noPadding />
                   <TaskStatusText>{stat}</TaskStatusText>
                 </TaskStatusTextContainer>
-                <TaskStatusAdditional>+{packItemsLength} задач</TaskStatusAdditional>
+                <TaskStatusAdditional>{packItemsLength ? `+${packItemsLength}` : packItemsLength} задач</TaskStatusAdditional>
               </TaskStatus>
             </TaskTextInner>
             <TaskDate>
@@ -165,7 +166,7 @@ export default class TaskPack extends Component {
 
         </Wrapper >
       </TouchableHighlight >
-    ) ;
+    );
   }
   state = {
     size: null,

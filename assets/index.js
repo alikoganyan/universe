@@ -19,7 +19,7 @@ const { IconDarkColor,
 const StyledTouchableOpacity = styled(TouchableOpacity)`
     margin-left: ${({ left }) => left ? Dimensions.get('window').width * 0.085 : 0};
     margin-right: ${({ right }) => right ? Dimensions.get('window').width * 0.085 : 0};
-    padding: 2px;
+    padding: ${({ noPadding }) => noPadding ? 0 : 8 }px;
 `
 const Left = styled(StyledTouchableOpacity)`
     margin-right: ${({ noPadding }) => noPadding ? 0 : 10}px;
@@ -521,9 +521,9 @@ export function FeedIcon(props) {
     )
 }
 export function TasksIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, noPadding } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPadding={noPadding}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}

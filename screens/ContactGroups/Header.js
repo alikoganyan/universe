@@ -5,7 +5,8 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { ImageComponent } from '../../common'
-const { HeaderHeight, sidePadding, sidePaddingNumber, fontSize } = helper;
+const { HeaderHeight, sidePadding, sidePaddingNumber, fontSize, Colors } = helper;
+const { green } = Colors
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -49,14 +50,14 @@ class HeaderComponent extends Component {
         return (
             <Header>
                 <Left>
-                    <BackIcon onPress={this.props.back} right/>
+                    <BackIcon onPress={this.props.back} right />
                     <HeaderText>
                         Контакты
                     </HeaderText>
                 </Left>
                 <Right>
-                    <SearchIcon right/>
-                    <AddIcon onPress={this.addContact} right/>
+                    <SearchIcon right />
+                    <AddIcon onPress={this.addContact} right />
                     <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} style={{ marginLeft: 10 }} />
                 </Right>
             </Header>
@@ -68,7 +69,7 @@ class HeaderComponent extends Component {
     }
 }
 const mapStateToProps = state => ({
-        user: state.userReducer.user
+    user: state.userReducer.user
 });
 const mapDispatchToProps = dispatch => ({
     setDialogs: _ => dispatch(setDialogs(_))

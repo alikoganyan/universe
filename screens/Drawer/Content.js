@@ -17,7 +17,7 @@ const Content = styled(View)``
 const Link = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
-    align-items: flex-start;
+    align-items: center;
     justify-content: flex-start;
     padding: ${topPadding} ${sidePaddingNumber}px;
     width: 100%;

@@ -117,7 +117,7 @@ class Content extends Component {
             <DialogTextInner>
               {title && <>
                 <DialogTitle>{title}</DialogTitle>
-                <DialogLastMessage numberOfLines={2} >{last || 'no messages yet'}</DialogLastMessage>
+                <DialogLastMessage numberOfLines={1} >{last || 'no messages yet'}</DialogLastMessage>
               </>
               }
               {phone && <>

@@ -21,7 +21,7 @@ const Wrapper = styled(View)`
     left: 0;
     bottom: 10px;
     align-self: center;
-    padding: 10px;
+    padding: 0 10px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -29,15 +29,18 @@ const Wrapper = styled(View)`
     border-radius: 5;
     border-width: 1;
     border-color: #ddd;
+    align-items: center;
     border-bottom-width: 1;
+    min-height: 50px;
+    max-height: 70px;
 `
 const Input = styled(TextInput)`
     font-size: 15px;
-    height: 30px;
     display: flex;
     flex-direction: column;
-    width: 85%;
+    width: 95%;
     overflow: hidden;
+    min-height: 30px;
 `
 const Left = styled(View)`
     display: flex;
@@ -84,7 +87,8 @@ class InputComponent extends Component {
                             onSubmitEditing={this.sendMessage}
                             value={text}
                             blurOnSubmit={false}
-                            autoFocus={true}
+                            multiline={true}
+                            showsHorizontalScrollIndicator={false}
                         />
                     </Left>
                     <Right>

@@ -61,7 +61,7 @@ class Content extends Component {
                         keyboardDismissMode={'on-drag'}
                         animated={true}
                         renderItem={({ item, index }) => {
-                            return <TouchableOpacity key={index} onLongPress={() => this.handleHold(item._id)}>
+                            return <TouchableOpacity key={index} onLongPress={() => this.handleHold(item)}>
                                 <Message>{item}</Message>
                             </TouchableOpacity>
                         }}
@@ -85,10 +85,12 @@ class Content extends Component {
         this.setState({ selectedMessage: null })
     }
     handleHold = (e) => {
-        this.setState({ selectedMessage: e })
+        const { user } = this.props
+        this.setState({ selectedMessage: e._id })
+        console.log(e.sender._id === user._id, e.sender, user._id)
         Platform.os === 'ios' && ActionSheetIOS.showActionSheetWithOptions(
             {
-                options: ['Отменить', 'Ответить', 'Копировать', 'Изменить', 'Удалить'],
+                options: e.sender._id === user._id ? ['Отменить', 'Ответить', 'Копировать', 'Изменить', 'Удалить'] : ['Отменить', 'Ответить', 'Копировать'],
                 cancelButtonIndex: 0,
             },
             (buttonIndex) => {

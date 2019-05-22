@@ -10,6 +10,7 @@ import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 
 const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight } = helper;
+const { blue } = Colors;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
     background-color: ${Colors.background};
@@ -80,7 +81,7 @@ class HeaderComponent extends Component {
             setDialogs(result)
         })
     }
-    componentWillUpdate(){
+    componentWillUpdate() {
         socket.removeListener('find');
     }
     handleInputChange = (e) => {
@@ -102,11 +103,11 @@ class HeaderComponent extends Component {
 
 
 const mapStateToProps = state => ({
-        dialogs: state.dialogsReducer.dialogs,
-        messages: state.messageReducer.messages,
-        search: state.messageReducer.search,
-        drawer: state.drawerReducer.open,
-        user: state.userReducer.user
+    dialogs: state.dialogsReducer.dialogs,
+    messages: state.messageReducer.messages,
+    search: state.messageReducer.search,
+    drawer: state.drawerReducer.open,
+    user: state.userReducer.user
 })
 const mapDispatchToProps = dispatch => ({
     setDialogs: _ => dispatch(setDialogs(_))

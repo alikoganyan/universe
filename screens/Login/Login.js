@@ -13,14 +13,14 @@ const NoAccount = styled(View)`
     display: flex;
     justify-content: center;
     align-items: center;
-    position: absolute;
-    bottom: 10px;
+    /* position: absolute; */
+    bottom: 10;
     width: 100%;
     align-self: center;
 `
 const Label = styled(Text)`
     color: ${lightColor};
-    font-size: ${fontSize.sm};
+    font-size: ${fontSize.text};
 `
 const SingUp = styled(Text)`
     color: ${blue};
@@ -28,23 +28,21 @@ const SingUp = styled(Text)`
 export default class PinCode extends Component {
     render() {
         return (
-            <>
-                <SafeAreaView behavior={'padding'}>
-                    <Wrapper>
-                        <Content navigate={this.navigate} />
-                    </Wrapper>
-                </SafeAreaView>
-                <NoAccount>
-                    <Label>
-                        Нет аккаунта?
-                    </Label>
-                    <TouchableOpacity onPress={this.signup}>
-                        <SingUp>
-                            Зарегистрироваться
-                        </SingUp>
-                    </TouchableOpacity>
-                </NoAccount>
-            </>
+            <SafeAreaView behavior={'padding'}>
+                <Wrapper>
+                    <Content navigate={this.navigate} />
+                    <NoAccount>
+                        <Label>
+                            Нет аккаунта?
+                        </Label>
+                        <TouchableOpacity onPress={this.signup}>
+                            <SingUp>
+                                Зарегистрироваться
+                            </SingUp>
+                        </TouchableOpacity>
+                    </NoAccount>
+                </Wrapper>
+            </SafeAreaView>
         )
     }
     navigate = (e) => this.props.navigation.navigate(e)

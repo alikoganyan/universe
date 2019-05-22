@@ -130,13 +130,14 @@ class Content extends Component {
         addParticipant()
     }
     proceed = (e) => {
-        const { participants } = this.props;
+        const { participants, forward } = this.props;
         const { text } = this.state
         let idList = []
         participants.map((e) => {
             idList = [...idList, e._id]
         })
         socket.emit('new_group', { name: text, participants: idList })
+        forward()
     }
     handleCountry = (e) => {
         this.setState({ country: e })
@@ -146,8 +147,8 @@ class Content extends Component {
     }
 }
 const mapStateToProps = state => ({
-        id: state.userReducer.user.id,
-        participants: state.participantsReducer.dialog.participants
+    id: state.userReducer.user.id,
+    participants: state.participantsReducer.dialog.participants
 })
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),

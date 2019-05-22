@@ -112,8 +112,8 @@ function Message(props) {
     const date = new Date(created_at);
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const day = daysOfTheWeek[date.getDay()]
-    const time = `${date.getHours()}:${date.getMinutes()}`
-    const finalTime = Math.abs(date - new Date())/(1000 * 60 * 60 * 24) > 1 ? day : time
+    const time = `${date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`
+    const finalTime = Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time
     if (type === 'image') {
         return (myId == sender._id ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -123,9 +123,9 @@ function Message(props) {
                         <MessageDate color={'white'}>{finalTime}</MessageDate>
                         <Indicator color={'white'} />
                     </MessageInfo>
-                </MyMessage>
+                </MyMessage >
                 <TriangleLeftIcon color={myMessage} />
-            </ View>
+            </ View >
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <TriangleRightIcon color={interlocatorMessage} />
                 <InterlocutorsMessage background={background}>
@@ -232,7 +232,7 @@ function Message(props) {
                     <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
                 </MapViewStreet>
             </InterlocutorsMessage>
-           
+
         </View>))
     }
 }

@@ -76,7 +76,7 @@ class Content extends Component {
                         onChangeText={this.handleSMS}
                         placeholder={'******'}
                         value={sms}
-                        style={{ margin: 0, flex: 1, textAlign: 'center', paddingLeft: 10, borderBottomColor: !err ? lightGrey1 : pink}}
+                        style={{ margin: 0, flex: 1, textAlign: 'center', paddingLeft: 10, borderBottomColor: !err ? lightGrey1 : pink }}
                         maxLength={6}
                     />
                 </PhoneNumber>
@@ -113,7 +113,7 @@ class Content extends Component {
                         method: 'post',
                         attr: {
                             phone_number: register.phone,
-                            password: sms
+                            password: this.state.sms
                         },
                         success: (res) => {
                             console.log({ res })

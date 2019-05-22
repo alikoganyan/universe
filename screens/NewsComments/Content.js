@@ -248,7 +248,7 @@ class Content extends Component {
 				</NewsItem>
 				<FlatList
 					style={{ paddingRight: 5, paddingLeft: 5 }}
-					ListHeaderComponent={<View style={{ margin: 95 }} />}
+					ListHeaderComponent={<View style={{ margin: 135 }} />}
 					ListFooterComponent={<View style={{ margin: 5 }} />}
 					contentContainerStyle={{ alignItems: 'stretch' }}
 					inverted={true}

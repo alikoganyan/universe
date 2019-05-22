@@ -144,10 +144,10 @@ class Content extends Component {
         const { active } = options;
         return (
             <SafeAreaView>
-                <GestureRecognizer
+                {/* <GestureRecognizer
                     onSwipeLeft={this.optionLeft}
                     onSwipeRight={this.optionRight}
-                >
+                > */}
 
                     <Wrapper>
                         <KeyboardAwareScrollView enableOnAndroid>
@@ -214,7 +214,7 @@ class Content extends Component {
                             </Animated>
                         </KeyboardAwareScrollView>
                     </Wrapper>
-                </GestureRecognizer>
+                {/* </GestureRecognizer> */}
             </SafeAreaView>
         )
     }

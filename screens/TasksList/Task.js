@@ -130,7 +130,7 @@ class Tasks extends Component {
 							<TaskLastMessage numberOfLines={1} >{tasks[0].name}</TaskLastMessage>
 							<TaskStatus>
 								<TaskStatusTextContainer>
-									<TasksIcon />
+									<TasksIcon noPadding/>
 									<TaskStatusText>{stat}</TaskStatusText>
 								</TaskStatusTextContainer>
 								{(tasks.length - 1) > 0 && <TaskStatusAdditional>+{tasks.length - 1} задачи</TaskStatusAdditional>}

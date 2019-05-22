@@ -45,14 +45,15 @@ const InputBox = styled(View)`
     flex-direction: row;
     align-items: flex-end;
     justify-content: center;
-    height: 60px;
+    height: 40px;
+    margin-bottom: ${({ err }) => err ? 0 : 28};
 `
 const InputLabel = styled(Text)`
     flex: 1;
     text-align: right;
     color: ${grey2};
     z-index: 20;
-    margin-bottom: 13px;
+    margin-bottom: 15px;
     font-size: ${fontSize.sl};
     margin-right: 15px;
 `
@@ -78,8 +79,19 @@ const StyledInput = styled(TextInput)`
     border: 0.3px solid ${lightGrey1};
     border-width: 0;
     border-bottom-width: 0.3px;
-    padding-bottom: 12px;
+    padding-bottom: 15px;
     font-size: ${fontSize.sl};
+`
+const Error = styled(View)`
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+    margin-bottom: 8px;
+`
+const ErrorText = styled(Text)`
+    font-size: ${fontSize.sm};
+    text-align: center;
 `
 const Input = (props) => {
     const { style, value, children, onChange, pass } = props;
@@ -96,7 +108,7 @@ const Input = (props) => {
 class Content extends Component {
 
     render() {
-        const { user } = this.state;
+        const { user, lastNameError, firstNameError, middleNameError, emailError, passwordError, repasswordError } = this.state;
         const { first_name, last_name, middle_name, email, image } = user || {};
         return (
             <Wrapper>
@@ -105,30 +117,48 @@ class Content extends Component {
                         <UserImage source={{ uri: `http://ser.univ.team${image}` }} />
                     </TouchableOpacity>
                     <UserInfo>
-                        <InputBox key={0}>
+                        <InputBox key={0} err={!!lastNameError}>
                             <InputLabel numberOfLines={1} >Фамилия</InputLabel>
                             <Input value={last_name} onChange={(e) => this.handleChange(e, "last_name")} />
                         </InputBox>
-                        <InputBox key={1}>
+                        {!!lastNameError && <Error>
+                            <ErrorText>{lastNameError}</ErrorText>
+                        </Error>}
+                        <InputBox key={1} err={!!firstNameError}>
                             <InputLabel numberOfLines={1}>Имя</InputLabel>
                             <Input value={first_name} onChange={(e) => this.handleChange(e, "first_name")} />
                         </InputBox>
-                        <InputBox key={2}>
+                        {!!firstNameError && <Error>
+                            <ErrorText>{firstNameError}</ErrorText>
+                        </Error>}
+                        <InputBox key={2} err={!!middleNameError}>
                             <InputLabel numberOfLines={1}>Отчество</InputLabel>
                             <Input value={middle_name} onChange={(e) => this.handleChange(e, "middle_name")} />
                         </InputBox>
-                        <InputBox key={3}>
+                        {!!middleNameError && <Error>
+                            <ErrorText>{middleNameError}</ErrorText>
+                        </Error>}
+                        <InputBox key={3} err={!!emailError}>
                             <InputLabel numberOfLines={1}>Email</InputLabel>
                             <Input value={email} onChange={(e) => this.handleChange(e, "email")}>example@gmail.com</Input>
                         </InputBox>
-                        <InputBox key={4}>
+                        {!!emailError && <Error>
+                            <ErrorText>{emailError}</ErrorText>
+                        </Error>}
+                        <InputBox key={4} err={!!passwordError}>
                             <InputLabel numberOfLines={1}>Пароль</InputLabel>
                             <Input pass={true} onChange={(e) => this.handleChange(e, "password")}>Пароль</Input>
                         </InputBox>
-                        <InputBox key={5}>
+                        {!!passwordError && <Error>
+                            <ErrorText>{passwordError}</ErrorText>
+                        </Error>}
+                        <InputBox key={5} err={!!repasswordError}>
                             <InputLabel numberOfLines={1}>Повторите пароль</InputLabel>
                             <Input pass={true} onChange={(e) => this.handleChange(e, "repassword")}>Повторите пароль</Input>
                         </InputBox>
+                        {!!repasswordError && <Error>
+                            <ErrorText>{repasswordError}</ErrorText>
+                        </Error>}
                     </UserInfo>
                 </User>
                 <Bottom>
@@ -141,6 +171,12 @@ class Content extends Component {
         )
     }
     state = {
+        lastNameError: false,
+        firstNameError: false,
+        middleNameError: false,
+        emailError: false,
+        passwordError: false,
+        repasswordError: false,
         user: {
             email: '',
             first_name: '',
@@ -162,6 +198,14 @@ class Content extends Component {
     componentDidMount() {
         const { user } = this.props;
         this.setState({ user: { ...this.state.user, ...user } })
+        // setInterval(() => this.setState({
+        //     lastNameError: !this.state.lastNameError,
+        //     firstNameError: !this.state.firstNameError,
+        //     middleNameError: !this.state.middleNameError,
+        //     emailError: !this.state.emailError,
+        //     passwordError: !this.state.passwordError,
+        //     repasswordError: !this.state.repasswordError
+        // }), 2000)
     }
     selectImage = async (e) => {
         let result = await ImagePicker.launchImageLibraryAsync({
@@ -186,33 +230,42 @@ class Content extends Component {
         const { back, alterUser } = this.props
         const userRedux = this.props.user
         const { first_name, last_name, middle_name, email, password, repassword } = user
-        sendRequest({
-            r_path: p_profile,
-            method: 'patch',
-            attr: {
-                user: {
-                    email: email || userRedux.email,
-                    first_name: first_name || userRedux.firstName,
-                    middle_name: middle_name || userRedux.patronymic,
-                    last_name: last_name || userRedux.lastName,
-                    new_password: password || userRedux.password,
-                    repeat_password: repassword || userRedux.repassword,
-                }
-            },
-            success: (res) => {
-                console.log('pa_profile', { res })
-                alterUser({
-                    email: email || userRedux.email,
-                    first_name: first_name || userRedux.firstName,
-                    middle_name: middle_name || userRedux.patronymic,
-                    last_name: last_name || userRedux.lastName,
-                })
-                back()
-            },
-            failFunc: (err) => {
-                console.log('pa_profile', { err })
-            }
+        console.log(first_name, last_name, middle_name, email)
+        this.setState({
+            lastNameError: !last_name ? 'Не менее 2х символов' : '',
+            firstNameError: !first_name ? 'Не менее 2х символов' : '',
+            middleNameError: !middle_name ? 'Не менее 2х символов' : '',
+            emailError: !email ? 'Email не валиден' : '',
+            passwordError: !password ? 'Не менее 6 символов' : '',
+            repasswordError: repassword !== password ? 'Пароли не совпадают' : ''
         })
+        // sendRequest({
+        //     r_path: p_profile,
+        //     method: 'patch',
+        //     attr: {
+        //         user: {
+        //             email: email || userRedux.email,
+        //             first_name: first_name || userRedux.firstName,
+        //             middle_name: middle_name || userRedux.patronymic,
+        //             last_name: last_name || userRedux.lastName,
+        //             new_password: password || userRedux.password,
+        //             repeat_password: repassword || userRedux.repassword,
+        //         }
+        //     },
+        //     success: (res) => {
+        //         console.log('pa_profile', { res })
+        //         alterUser({
+        //             email: email || userRedux.email,
+        //             first_name: first_name || userRedux.firstName,
+        //             middle_name: middle_name || userRedux.patronymic,
+        //             last_name: last_name || userRedux.lastName,
+        //         })
+        //         back()
+        //     },
+        //     failFunc: (err) => {
+        //         console.log('pa_profile', { err })
+        //     }
+        // })
 
     }
 }
