@@ -36,8 +36,7 @@ const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    max-width: 200px;
-    background: red;
+    max-width: 100%;
 `
 const Right = styled(View)`
     display: flex;
@@ -79,6 +78,7 @@ const Category = styled(Text)`
     padding: 10px 0;
 `
 const Input = styled(TextInput)`
+    flex:1;
 `
 const IconLeft = styled(Icon)`
     margin-left: ${sidePadding};
@@ -86,10 +86,11 @@ const IconLeft = styled(Icon)`
 const ToProfile = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
+    justify-content: flex-start;
     margin-right: 20px;
 `
 const SearchIconContainer = styled(View)`
-margin-right: 20px;
+    margin-right: 20px;
 `
 class HeaderComponent extends Component {
     render() {
@@ -105,8 +106,8 @@ class HeaderComponent extends Component {
                                 <ToProfile onPress={this.toProfile}>
                                     <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
                                     <Info>
-                                        <InfoChatName>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
-                                        <InfoParticipants>был последний раз вчера</InfoParticipants>
+                                        <InfoChatName numberOfLines={1}>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
+                                        <InfoParticipants numberOfLines={1}>был последний раз вчера</InfoParticipants>
                                     </Info>
                                 </ToProfile>
                             </>

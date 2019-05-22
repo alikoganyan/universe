@@ -33,7 +33,6 @@ const UserImage = styled(Image)`
     width: 30px;
     height: 30px;
     border-radius: 15px;
-    background: red;
     margin-left:${sidePaddingNumber};
 `
 const MarginRight = styled(View)`

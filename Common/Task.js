@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import { CheckIcon, TriangleLeftIcon, TriangleRightIcon } from '../assets'
+import { connect } from 'react-redux'
+import { setTasks } from '../actions/tasksActions'
 const { HeaderHeightNumber, Colors, fontSize } = helper;
 const { red, yellow, green, purple, grey1 } = Colors;
 const borderRadius = 5;
@@ -21,7 +23,7 @@ const Task = styled(View)`
     padding: 10px;
     padding-bottom: 5px;
     background: #fff;
-    border: 1px solid ${({borderColor}) => borderColor || purple};
+    border: 1px solid ${({ borderColor }) => borderColor || purple};
     border-radius: ${borderRadius};
     align-self: flex-end;
 `
@@ -30,7 +32,7 @@ const Status = styled(View)`
     flex-direction: column;
     margin-bottom: 20px;
 `
-const StatusItem = styled(View)`
+const StatusItem = styled(TouchableOpacity)`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -93,72 +95,106 @@ const TaskPostTimeText = styled(MessageDate)`
 const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
 }
-export default function TaskComponent({ children, style, triangleLeft, triangleRight, borderColor }) {
-    const { name, description, status, deadline, created_at, creator, created, text, title } = children;
-    const statuses = ['Прочитано', 'Принял в работу', 'Выполнена', 'Принята',]
-    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec',];
-    const colors = [red, yellow, green, purple];
-    let stat = ''
-    switch (status) {
-        case 'set':
-            stat = 1;
-            break;
-        case 'done':
-            stat = 2;
-            break;
-    }
-    const deadlineDate = new Date(deadline)
-    const creationDate = new Date(created_at)
-    return (<Wrapper style={{ alignSelf: triangleRight ? 'flex-end' : 'flex-start', }}>
-        {triangleLeft && <TriangleRightIcon style={{
-            position: 'relative',
-            left: 11,
-            top: -10,
-            zIndex: 99,
-        }} hollow color={borderColor} />}
-        <Task style={{
-            ...style,
-            borderBottomLeftRadius: triangleLeft ? 0 : borderRadius,
-            borderBottomRightRadius: triangleRight ? 0 : borderRadius,
-        }}
-        borderColor={borderColor}
-        >
-            <Status>
-                <StatusText>{statuses[stat]}</StatusText>
-                <StatusStage>
-                    {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= stat} color={colors[i]} />)}
-                </StatusStage>
-            </Status>
-            <TaskTitle>
-                <Text>{name}</Text>
-            </TaskTitle>
-            <TaskBody>
-                <TaskBodyText>{description}</TaskBodyText>
-            </TaskBody>
-            <TaskFooter>
-                <TaskDeadline>
-                    <TaskDeadlineLabel numberOfLines={1}>Делайн: {' '}
-                        <TaskDeadlineValue>
+class TaskComponent extends Component {
+    render() {
+        const { children, style, triangleLeft, triangleRight, borderColor } = this.props
+        const { name, description, status, deadline, created_at, creator, created, text, title } = children;
+        const statuses = ['Прочитано', 'Принял в работу', 'Выполнена', 'Принята',]
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec',];
+        const colors = [red, yellow, green, purple];
+        let stat = ''
+        switch (status) {
+            case 'set':
+                stat = 1;
+                break;
+            case 'done':
+                stat = 2;
+                break;
+        }
+        const deadlineDate = new Date(deadline)
+        const creationDate = new Date(created_at)
+        return (<Wrapper style={{ alignSelf: triangleRight ? 'flex-end' : 'flex-start', }}>
+            {triangleLeft && <TriangleRightIcon style={{
+                position: 'relative',
+                left: 11,
+                top: -10,
+                zIndex: 99,
+            }} hollow color={borderColor} />}
+            <Task style={{
+                ...style,
+                borderBottomLeftRadius: triangleLeft ? 0 : borderRadius,
+                borderBottomRightRadius: triangleRight ? 0 : borderRadius,
+            }}
+                borderColor={borderColor}
+            >
+                <Status>
+                    <StatusText>{statuses[stat]}</StatusText>
+                    <StatusStage>
+                        {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= stat} color={colors[i]} onPress={() => this.changeState(i)} />)}
+                    </StatusStage>
+                </Status>
+                <TaskTitle>
+                    <Text>{name}</Text>
+                </TaskTitle>
+                <TaskBody>
+                    <TaskBodyText>{description}</TaskBodyText>
+                </TaskBody>
+                <TaskFooter>
+                    <TaskDeadline>
+                        <TaskDeadlineLabel numberOfLines={1}>Делайн: {' '}
+                            <TaskDeadlineValue>
                                 {deadlineDate.getDate()}{' '}
                                 {months[deadlineDate.getMonth()]}{' '}
                                 {deadlineDate.getFullYear()}{' '}
-                                {deadlineDate.getHours()}:{deadlineDate.getMinutes()} 
-                        </TaskDeadlineValue>
-                    </TaskDeadlineLabel>
-                </TaskDeadline>
-                <TaskPostTime>
-                    <TaskPostTimeText>
-                        {creationDate.getHours()}:{creationDate.getMinutes() < 10 ? `0${creationDate.getMinutes()}`: creationDate.getMinutes() }
-                    </TaskPostTimeText>
-                    {triangleRight && <Indicator />}
-                </TaskPostTime>
-            </TaskFooter>
-        </Task>
-        {triangleRight && <TriangleLeftIcon style={{
-            position: 'relative',
-            left: -11,
-            top: -10,
-            zIndex: 99,
-        }} hollow color={borderColor} />}
-    </Wrapper>)
+                                {deadlineDate.getHours()}:{deadlineDate.getMinutes()}
+                            </TaskDeadlineValue>
+                        </TaskDeadlineLabel>
+                    </TaskDeadline>
+                    <TaskPostTime>
+                        <TaskPostTimeText>
+                            {creationDate.getHours()}:{creationDate.getMinutes() < 10 ? `0${creationDate.getMinutes()}` : creationDate.getMinutes()}
+                        </TaskPostTimeText>
+                        {triangleRight && <Indicator />}
+                    </TaskPostTime>
+                </TaskFooter>
+            </Task>
+            {triangleRight && <TriangleLeftIcon style={{
+                position: 'relative',
+                left: -11,
+                top: -10,
+                zIndex: 99,
+            }} hollow color={borderColor} />}
+        </Wrapper>)
+    }
+    changeState = (e) => {
+        const { children, user, tasks } = this.props;
+        // console.log(e, children)
+        const newTask = { ...children }
+        let stat = ''
+        switch (e) {
+            case 0:
+                stat = '0';
+                break;
+            case 1:
+                stat = 'set';
+                break;
+            case 2:
+                stat = '2';
+                break;
+            case 3:
+                stat = 'done';
+                break;
+        }
+        newTask.status = stat;
+        currentTask = tasks.filter(e => e.tasks.filter(e => e._id !== newTask._id)[0])[0]
+    }
 }
+
+const mapStateToProps = state => ({
+    tasks: state.tasksReducer.tasks,
+    user: state.userReducer.user
+});
+const mapDispatchToProps = dispatch => ({
+    setTasks: _ => dispatch(setTasks(_)),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(TaskComponent)
