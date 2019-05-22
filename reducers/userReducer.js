@@ -7,7 +7,8 @@ import {
     SET_AUTH,
     SET_REGISTER_USER_NUMBER,
     SET_REGISTER_USER_SMS,
-    ALTER_USER
+    ALTER_USER,
+    SET_SETTINGS,
 } from '../actions/userActions'
 
 const initialState = {
@@ -42,6 +43,8 @@ const userReducer = (state = initialState, action) => {
         case ALTER_USER:
             const { email, first_name, last_name, middle_name } = action.payload
             return { ...state, user: { ...state.user, email, first_name, last_name, middle_name } }
+        case SET_SETTINGS:
+            return { ...state, user: { ...state.user, settings: { ...action.payload } } }
         default:
             return state
     }

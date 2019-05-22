@@ -9,6 +9,7 @@ import { connect } from 'react-redux'
 import { socket } from '../../utils/socket'
 import sendRequest from '../../utils/request'
 import { p_settings } from '../../constants/api'
+import { setSettings } from '../../actions/userActions'
 const { Colors, sidePaddingNumber, fontSize, borderRadius, HeaderHeightNumber } = helper;
 const { lightGrey1, blue, lightBlue, grey2 } = Colors;
 const LangPickerPosed = posed.View({
@@ -198,6 +199,7 @@ class Content extends Component {
     }
     componentWillUnmount() {
         const { settings } = this.state;
+        const { setSettings } = this.props;
         const reqBody = {
             language: '',
             notifications: '',
@@ -212,6 +214,8 @@ class Content extends Component {
                 settings: reqBody,
             },
             success: (res) => {
+                console.log({ res })
+                setSettings(reqBody)
             },
             failFunc: (err) => {
                 console.log({ err })
@@ -231,6 +235,7 @@ const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
-    addMessage: _ => dispatch(addMessage(_))
+    addMessage: _ => dispatch(addMessage(_)),
+    setSettings: _ => dispatch(setSettings(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)
