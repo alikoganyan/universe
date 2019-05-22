@@ -145,11 +145,14 @@ class Content extends Component {
                     />
                     <ControlBar>
                         <TouchableOpacity onPress={this.restorePass}>
-                            {invalidPassword && <ErrorText>
+                            {invalidPassword ? <ErrorText>
                                 Неверный пароль. <ForgotPass>
                                     Восстановить пароль?
                                 </ForgotPass>
-                            </ErrorText>}
+                            </ErrorText> : <ForgotPass>
+                                    Забыли пароль?
+                        </ForgotPass>
+                            }
                         </TouchableOpacity>
                         <TouchableOpacity onPress={navigateToDialogs}>
                             <Button onPress={this.login} style={{ backgroundColor: blue }} color={'#fff'}>войти</Button>
