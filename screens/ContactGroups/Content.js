@@ -343,6 +343,7 @@ const mapDispatchToProps = dispatch => ({
     setAllUsers: _ => dispatch(setAllUsers(_)),
     setContacts: _ => dispatch(setContacts(_)),
     setCurrentChat: _ => dispatch(setCurrentChat(_)),
-    setCurrentDialogs: _ => dispatch(setCurrentDialogs(_))
+    setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
+
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

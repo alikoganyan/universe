@@ -2,7 +2,9 @@ import React, { Component } from 'react'
 import { View, Text, Image, TouchableHighlight, Dimensions, StatusBar, ActionSheetIOS, Platform } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
+import { connect } from 'react-redux'
 import { TasksIcon } from '../../assets/index'
+import { setIncTasks, setOutTasks } from '../../actions/tasksActions'
 const { fontSize, PressDelay, sidePadding, Colors, sidePaddingNumber } = helper;
 const { purple, lightColor, lightGrey1, grey2 } = Colors;
 const Wrapper = styled(View)`
@@ -101,9 +103,9 @@ const TaskStatusText = styled(Text)`
 const TaskStatusAdditional = styled(Text)`
 	color: ${lightGrey1};
 `
-export default class TaskPack extends Component {
+class TaskPack extends Component {
   render() {
-    const { children, title, onClick, last, tasks } = this.props;
+    const { children, title, onClick, last, tasks, onPress, setIncTasks, setOutTasks } = this.props;
     const { taskPack } = this.state
     const user = { _id: 1 }
     const packItems = []
@@ -115,9 +117,14 @@ export default class TaskPack extends Component {
       tasks.map(taskUser => {
         if (taskUser.tasks.length) {
           taskUser.tasks.map(task => {
-            if (task.creator === user._id) {
+            if (task.creator === user._id && title === 'inc') {
               const packItemUser = { ...taskUser }
               packItemUser.tasks = packItemUser.tasks.filter(e => e.creator === user._id)
+              packItems.push(packItemUser)
+            }
+            if (task.creator !== user._id && title === 'out') {
+              const packItemUser = { ...taskUser }
+              packItemUser.tasks = packItemUser.tasks.filter(e => e.creator !== user._id)
               packItems.push(packItemUser)
             }
           })
@@ -138,15 +145,15 @@ export default class TaskPack extends Component {
         }
       }
     }
+    // title === 'inc' ? setIncTasks(packItems) : setOutTasks(packItems)
     const packItemsDescription = packItems0Tasks && packItems0Tasks[0] ? packItems0Tasks[0].description : '';
     const packItemsLength = packItems0Tasks && packItems0Tasks.length ? packItems0Tasks.length - 1 : 0;
-    console.log(packItemsLength)
     return (
-      <TouchableHighlight underlayColor='#2B7DE2' onPress={this.handleClick} onLongPress={this.handleHold}>
+      <TouchableHighlight underlayColor='#2B7DE2' onPress={onPress} onLongPress={this.handleHold}>
         <Wrapper last={last}>
           <TaskText>
             <TaskTextInner>
-              <TaskTitle>{title}</TaskTitle>
+              <TaskTitle>{title === 'inc' ? 'Все входящие задачи' : 'Все исходящие задачи'}</TaskTitle>
               <TaskLastMessage numberOfLines={1}>{packItemsDescription}</TaskLastMessage>
               <TaskStatus>
                 <TaskStatusTextContainer>
@@ -195,3 +202,12 @@ export default class TaskPack extends Component {
     this.setState({ width: e.nativeEvent.layout.width })
   }
 }
+const mapStateToProps = state => ({
+  tasks: state.tasksReducer.tasks,
+  user: state.userReducer.user
+});
+const mapDispatchToProps = dispatch => ({
+  setIncTasks: _ => dispatch(setIncTasks(_)),
+  setOutTasks: _ => dispatch(setOutTasks(_)),
+})
+export default connect(mapStateToProps, mapDispatchToProps)(TaskPack)

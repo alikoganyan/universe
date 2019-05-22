@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, FlatList, Dimensions, ScrollView } from 'react-native'
 import styled from 'styled-components'
-import { Header, Task, TaskPack } from './'
+import { Header, Task } from './'
 import { SafeAreaView } from '../../common'
 import helper from '../../utils/helpers'
 import sendRequest from '../../utils/request'
@@ -23,12 +23,10 @@ const StyledScrollView = styled(ScrollView)`
 class Content extends Component {
   render() {
     const { FlatListData } = this.state;
-    const { tasks, navigate } = this.props;
+    const { tasks } = this.props;
     return (tasks && tasks.length) ? (
       <Wrapper>
         <StyledScrollView>
-          <TaskPack title={'inc'} tasks={tasks} onPress={() => navigate('TasksInc')} />
-          <TaskPack title={'out'} tasks={tasks} onPress={() => navigate('TasksOut')} last />
           {
             tasks.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>)
           }

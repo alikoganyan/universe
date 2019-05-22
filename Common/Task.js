@@ -186,7 +186,8 @@ class TaskComponent extends Component {
                 break;
         }
         newTask.status = stat;
-        currentTask = tasks.filter(e => e.tasks.filter(e => e._id !== newTask._id)[0])[0]
+        currentTask = tasks.map(e => e.tasks.filter(e => e._id !== children._id)[0])
+        console.log(currentTask)
     }
 }
 

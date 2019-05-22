@@ -245,8 +245,9 @@ class Content extends Component {
         this.setState({ options: newState })
     }
     toChat = e => {
-        const { setCurrentDialogs, navigate } = this.props
+        const { setCurrentDialogs, navigate, getMessages } = this.props
         setCurrentDialogs(e)
+        getMessages([])
         navigate('Chat')
     }
 }

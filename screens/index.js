@@ -22,6 +22,8 @@ import ContactGroups from './ContactGroups/ContactGroups'
 import NewsComments from './NewsComments/NewsComments'
 import NewDialog from './NewDialog/NewDialog'
 import Tasks from './Tasks/Tasks'
+import TasksInc from './TasksInc/TasksInc'
+import TasksOut from './TasksOut/TasksOut'
 import TasksList from './TasksList/TasksList'
 import NewContact from './NewContact/NewContact'
 import FirstInstall from './FirstInstall/FirstInstall'
@@ -58,6 +60,8 @@ export {
     NewsComments,
     NewDialog,
     Tasks,
+    TasksInc,
+    TasksOut,
     TasksList,
     NewContact,
     FirstInstall,

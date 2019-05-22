@@ -20,7 +20,7 @@ const Wrapper = styled(View)`
 `
 const Bottom = styled(View)`
     position: absolute;
-    bottom: ${Dimensions.get('window').height === 812 ? 20 :0};
+    bottom: ${Dimensions.get('window').height === 812 ? 20 : 0};
     width: 100%;
     background: white;
     z-index: 20;
@@ -45,7 +45,7 @@ class Profile extends Component {
         const myProfile = !currentChat
         return (
             <ActionSheetProvider>
-                <SafeAreaView>
+                <SafeAreaView behavior={'padding'}>
                     <Wrapper>
                         <Header edit={this.edit} back={this.navigateBack} myProfile={myProfile} />
                         <Content toChat={this.toChat} myProfile={myProfile} />
