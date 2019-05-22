@@ -167,10 +167,6 @@ class Content extends Component {
                                         <Box key={i} last={i === department.length - 1}>
                                             <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
                                                 <>
-                                                    <RoundCheckbox
-                                                        size={24}
-                                                        checked={this.state.isSelected}
-                                                    />
                                                     <BoxItem title={true}>{e.title}</BoxItem>
                                                 </>
                                                 <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>

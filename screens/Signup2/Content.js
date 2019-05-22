@@ -101,7 +101,7 @@ class Content extends Component {
         sms: '',
         error: 0,
         deadline: 1,
-        tries: 5,
+        tries: 30,
         err: false,
     }
     componentDidMount() {
@@ -146,7 +146,7 @@ class Content extends Component {
     sendAgain = () => {
         const { register } = this.props;
         const { phone } = register;
-        this.setState({ deadline: 10 }, () => {
+        this.setState({ deadline: 30 }, () => {
             sendRequest({
                 r_path: p_get_sms,
                 method: 'post',

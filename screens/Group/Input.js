@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, TextInput, ActionSheetIOS, Platform, Dimensions, TouchableOpacity } from 'react-native'
-import { SmileIcon, FileIcon, CameraIcon, ImageIcon } from '../../assets/index'
+import { SmileIcon, FileIcon, CameraIcon, ImageIcon, PapperPlaneIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
@@ -33,16 +33,16 @@ const Wrapper = styled(View)`
 `
 const Input = styled(TextInput)`
     font-size: 15px;
-    height: 30px;
     display: flex;
     flex-direction: column;
-    width: 85%;
-    z-index: 50;
+    width: 100%;
     overflow: hidden;
+    min-height: 30px;
 `
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
+    width: 90%;
 `
 const Right = styled(View)` 
     display: flex;
@@ -82,15 +82,14 @@ class InputComponent extends Component {
                         <Input
                             placeholder='Написать сообщение'
                             onChangeText={e => this.handleChange(e)}
-                            onSubmitEditing={this.sendMessage}
                             value={text}
                             blurOnSubmit={false}
                         />
                     </Left>
                     <Right>
-                        <ImageIcon
+                        {text ? <PapperPlaneIcon onPress={this.sendMessage} /> : <ImageIcon
                             onPress={this.pickImage}
-                        />
+                        />}
                     </Right>
                 </Wrapper>
                 <FilePicker pose={pickerOpened ? 'visible' : 'hidden'}>
@@ -170,7 +169,7 @@ class InputComponent extends Component {
                     })
                 },
                 failFunc: (err) => {
-                    console.log({err})
+                    console.log({ err })
                 }
             })
 
@@ -179,10 +178,10 @@ class InputComponent extends Component {
 }
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer.messages,
-        currentRoom: state.messageReducer.currentRoom,
-        currentChat: state.messageReducer.currentChat,
-        id: state.userReducer.user._id
+    messages: state.messageReducer.messages,
+    currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
+    id: state.userReducer.user._id
 })
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
