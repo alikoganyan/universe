@@ -197,7 +197,8 @@ class Content extends Component {
     }
     componentDidMount() {
         const { user } = this.props;
-        this.setState({ user: { ...this.state.user, ...user } })
+        console.log(user)
+        this.setState({ user: { ...this.state.user, ...user, password: '' } })
         // setInterval(() => this.setState({
         //     lastNameError: !this.state.lastNameError,
         //     firstNameError: !this.state.firstNameError,
@@ -230,42 +231,41 @@ class Content extends Component {
         const { back, alterUser } = this.props
         const userRedux = this.props.user
         const { first_name, last_name, middle_name, email, password, repassword } = user
-        console.log(first_name, last_name, middle_name, email)
         this.setState({
             lastNameError: !last_name ? 'Не менее 2х символов' : '',
             firstNameError: !first_name ? 'Не менее 2х символов' : '',
             middleNameError: !middle_name ? 'Не менее 2х символов' : '',
             emailError: !email ? 'Email не валиден' : '',
-            passwordError: !password ? 'Не менее 6 символов' : '',
-            repasswordError: repassword !== password ? 'Пароли не совпадают' : ''
         })
-        // sendRequest({
-        //     r_path: p_profile,
-        //     method: 'patch',
-        //     attr: {
-        //         user: {
-        //             email: email || userRedux.email,
-        //             first_name: first_name || userRedux.firstName,
-        //             middle_name: middle_name || userRedux.patronymic,
-        //             last_name: last_name || userRedux.lastName,
-        //             new_password: password || userRedux.password,
-        //             repeat_password: repassword || userRedux.repassword,
-        //         }
-        //     },
-        //     success: (res) => {
-        //         console.log('pa_profile', { res })
-        //         alterUser({
-        //             email: email || userRedux.email,
-        //             first_name: first_name || userRedux.firstName,
-        //             middle_name: middle_name || userRedux.patronymic,
-        //             last_name: last_name || userRedux.lastName,
-        //         })
-        //         back()
-        //     },
-        //     failFunc: (err) => {
-        //         console.log('pa_profile', { err })
-        //     }
-        // })
+        if (first_name && last_name && middle_name && email) {
+            sendRequest({
+                r_path: p_profile,
+                method: 'patch',
+                attr: {
+                    user: {
+                        email: email || userRedux.email,
+                        first_name: first_name || userRedux.firstName,
+                        middle_name: middle_name || userRedux.patronymic,
+                        last_name: last_name || userRedux.lastName,
+                        new_password: password || userRedux.password,
+                        repeat_password: repassword || userRedux.repassword,
+                    }
+                },
+                success: (res) => {
+                    console.log('pa_profile', { res })
+                    alterUser({
+                        email: email || userRedux.email,
+                        first_name: first_name || userRedux.firstName,
+                        middle_name: middle_name || userRedux.patronymic,
+                        last_name: last_name || userRedux.lastName,
+                    })
+                    back()
+                },
+                failFunc: (err) => {
+                    console.log('pa_profile', { err })
+                }
+            })
+        }
 
     }
 }

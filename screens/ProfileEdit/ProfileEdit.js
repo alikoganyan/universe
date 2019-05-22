@@ -24,12 +24,12 @@ class ProfileEdit extends Component {
         return (
             <ActionSheetProvider>
                 <SafeAreaView behavior={'padding'}>
-                        <Wrapper>
-                            <Header back={this.navigateBack} />
-                            <ScrollView>
-                                <Content back={this.navigateBack}/>
-                            </ScrollView> 
-                        </Wrapper>
+                    <Wrapper>
+                        <Header back={this.navigateBack} />
+                        <ScrollView>
+                            <Content back={this.navigateBack} />
+                        </ScrollView>
+                    </Wrapper>
                 </SafeAreaView>
             </ActionSheetProvider>
         )
@@ -38,10 +38,9 @@ class ProfileEdit extends Component {
         this.props.navigation.goBack()
     }
     toChat = () => {
-        const { currentChat, user } = this.props
+        const { currentChat, user, navigation } = this.props
         socket.emit('select chat', { chatId: currentChat.id, userId: user.id })
-        this.props.navigation.navigate('Chat')
-
+        navigation.navigate('Chat')
     }
     logout = async () => {
         const { navigation } = this.props
@@ -52,11 +51,11 @@ class ProfileEdit extends Component {
 }
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer,
-        dialog: state.dialogsReducer.dialogs,
-        currentRoom: state.messageReducer.currentRoom,
-        currentChat: state.messageReducer.currentChat,
-        user: state.userReducer.user,
+    messages: state.messageReducer,
+    dialog: state.dialogsReducer.dialogs,
+    currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
+    user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({
     setCurrentChat: _ => dispatch(setCurrentChat(_)),
