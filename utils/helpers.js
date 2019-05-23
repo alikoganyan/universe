@@ -7,7 +7,7 @@ export default helper = {
     IconDarkColor: '#979897',
     IconLightColor: '#ABABAB',
     IconBlueColor: '#2B5275',
-    IconSize: 15,
+    IconSize: 20,
     IconSizeSmall: 11,
     IconSizeLarge: 20,
     borderRadius: 7,
@@ -38,7 +38,7 @@ export default helper = {
     },
     opacity: 0.3,
     sidePaddingNumber: Dimensions.get('window').width / 100 * 4.5,
-    sidePadding: 16,
+    sidePadding: Dimensions.get('window').height >= 1080 ? 48 : 16,
     topPaddingNumber: Dimensions.get('window').height / 100 * 5.6,
     topPadding: `5.6%`,
     HeaderHeight: Dimensions.get('window').height >= 1080 ? 168 : 56,
@@ -51,7 +51,7 @@ export default helper = {
         header: 17,
         text: 14,
         sl: 12,
-        sm: 10,
+        sm: 11,
         md: 14
     },
     globalStyle: StyleSheet.create({

@@ -18,7 +18,7 @@ const Header = styled(View)`
     border: 1px solid ${Colors.border};
     border-radius: ${borderRadius};
     font-size: ${fontSize.header};
-    height: ${HeaderHeight}; 
+    height: ${44}; 
     display: flex;
     flex-direction: row;
     align-items: center;

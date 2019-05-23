@@ -17,9 +17,9 @@ const { IconDarkColor,
     sidePadding } = helper;
 
 const StyledTouchableOpacity = styled(TouchableOpacity)`
-    margin-left: ${({ left }) => left ? Dimensions.get('window').width * 0.035 : 0};
-    margin-right: ${({ right }) => right ? Dimensions.get('window').width * 0.035 : 0};
-    padding: ${({ noPadding }) => noPadding ? 0 : 6 }px;
+    margin-left: ${({ left }) => left ? Dimensions.get('window').height >= 1080 ? 30 : 24 : 0}px;
+    margin-right: ${({ right }) => right ? Dimensions.get('window').height >= 1080 ? 30 : 24 : 0}px;
+    padding: ${({ noPadding }) => noPadding ? 0 : 0}px;
 `
 const Left = styled(StyledTouchableOpacity)`
     margin-right: ${({ noPadding }) => noPadding ? 0 : 10}px;

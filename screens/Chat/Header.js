@@ -26,10 +26,12 @@ const Header = styled(View)`
 const Info = styled(View)`
     display: flex;
     margin-left: 10px;
+    width: 90%;
 `
 const InfoChatName = styled(Text)`
     color: black;
-    font-size: ${fontSize.text};
+    font-size: ${fontSize.sl};
+    max-width: 150px;
 `
 const InfoParticipants = styled(Text)`
     color: #5F7991;
@@ -90,7 +92,9 @@ const ToProfile = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    margin-right: 20px;
+    align-items: center;
+    max-width: 150px;
+    overflow: hidden;
 `
 const SearchIconContainer = styled(View)`
     margin-right: 20px;
@@ -110,7 +114,7 @@ class HeaderComponent extends Component {
                                     <ImageComponent size={'medium'} source={{ uri: `http://ser.univ.team${image}` }} />
                                     <Info>
                                         <InfoChatName numberOfLines={1}>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
-                                        <InfoParticipants numberOfLines={1}>был последний раз вчера</InfoParticipants>
+                                        <InfoParticipants numberOfLines={1}>был вчера</InfoParticipants>
                                     </Info>
                                 </ToProfile>
                             </>
