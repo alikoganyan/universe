@@ -24,7 +24,7 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
     position: absolute;
-    padding: 0 ${sidePadding}px;
+    padding: 10px ${sidePadding}px;
     z-index: 2;
     top: 1%;
     left: ${sidePadding}px;
@@ -32,6 +32,9 @@ const Header = styled(View)`
 const Input = styled(TextInput)`
     flex: 1;
     height: ${HeaderHeight};
+    position: relative;
+    left: -4px;
+    font-size: ${fontSize.sm};
 `
 class HeaderComponent extends Component {
     render() {

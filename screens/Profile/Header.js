@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - sidePadding * 2}px;
-    margin: ${sidePadding}px 0;
+    margin: 0;
     align-self: center;
     background: white;
     height: ${HeaderHeight}; 

@@ -32,6 +32,8 @@ const Input = styled(TextInput)`
 `
 const HeaderText = styled(Text)`
     font-size: ${fontSize.header};
+    position: relative;
+    left: -10px;
 `
 const Right = styled(Left)`
     justify-content: flex-end;

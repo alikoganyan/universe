@@ -10,7 +10,6 @@ const Wrapper = styled(View)`
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
-    
 `
 const Content = styled(View)``
 
@@ -20,6 +19,7 @@ const Link = styled(TouchableOpacity)`
     align-items: center;
     justify-content: flex-start;
     padding: ${topPadding} ${sidePadding}px;
+    padding-left: 0;
     width: 100%;
 `
 const LinkText = styled(Text)`
@@ -31,7 +31,7 @@ export default function ContentComponent(props) {
     return (
         <Wrapper>
             <Content>
-            <Link onPress={() => {
+                <Link onPress={() => {
                     dispatch(DrawerActions.closeDrawer())
                     navigate('Dialogs')
                 }}>
