@@ -3,11 +3,11 @@ import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'rea
 import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
+const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
-    padding: 0 ${sidePadding};
+    padding: 0 ${sidePadding}px;
     height: ${HeaderHeight}; 
     display: flex;
     flex-direction: row;

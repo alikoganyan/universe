@@ -195,8 +195,9 @@ class Content extends Component {
         let value = await AsyncStorage.getItem('user');
         value = JSON.parse(value);
         const phone_number = country.concat(phone)
-        !phone && this.setState({ invalidPhone: true })
-        !password || password.length < 4 && this.setState({ invalidPassword: true })
+        if (!phone || !phone.length) this.setState({ invalidPhone: true })
+        if (!password || password.length < 4) this.setState({ invalidPassword: true })
+        setTimeout(() => this.setState({ invalidPhone: false, invalidPassword: false }), 2000)
         sendRequest({
             r_path: p_login,
             method: 'post',

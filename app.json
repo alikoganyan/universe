@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "2.0.8",
+    "version": "2.0.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
@@ -18,7 +18,7 @@
       "./assets/*/**"
     ],
     "ios": {
-      "buildNumber": "3",
+      "buildNumber": "4",
       "supportsTablet": false,
       "bundleIdentifier": "team.amigo.media",
       "infoPlist": {
@@ -32,7 +32,7 @@
     },
     "android": {
       "package": "com.team.universe.media",
-      "versionCode": 1,
+      "versionCode": 4,
       "permissions": [
         "CAMERA",
         "READ_INTERNAL_STORAGE",

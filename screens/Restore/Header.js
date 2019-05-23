@@ -8,7 +8,7 @@ const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
-    padding: 0 ${sidePadding};
+    padding: 0 ${sidePadding}px;
     height: ${HeaderHeight}; 
     display: flex;
     flex-direction: row;

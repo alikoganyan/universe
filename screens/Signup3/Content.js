@@ -8,7 +8,7 @@ import sendRequest from '../../utils/request'
 import { Button } from '../../common'
 import CheckBox from 'react-native-check-box'
 
-const { Colors, fontSize, HeaderHeightNumber } = helper;
+const { Colors, fontSize, HeaderHeight } = helper;
 const { lightGrey1, blue } = Colors;
 const Wrapper = styled(View)`
     padding: 0 5%;
@@ -102,19 +102,19 @@ class Content extends Component {
     state = {
         agreements: [
             {
-                value: true,
+                value: false,
                 label: 'согласен с',
                 linkText: 'условиями пользования',
                 linkComp: 'linkComp'
             },
             {
-                value: true,
+                value: false,
                 label: 'ознакомился с',
                 linkText: 'пользовательским соглашением',
                 linkComp: 'linkComp'
             },
             {
-                value: true,
+                value: false,
                 label: 'согласен на',
                 linkText: 'использование персональных данные',
                 linkComp: 'linkComp'

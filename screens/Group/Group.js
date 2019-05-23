@@ -8,7 +8,7 @@ import helper from '../../utils/helpers';
 import { Header, Content, Input } from './'
 import { connect } from 'react-redux'
 import { socket } from '../../utils/socket'
-const { HeaderHeightNumber } = helper
+const { HeaderHeight } = helper
 const Wrapper = styled(View)`
     height: 100%;
 `

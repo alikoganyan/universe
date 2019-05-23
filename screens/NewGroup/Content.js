@@ -9,10 +9,10 @@ import { Button } from '../../common'
 import { ImageComponent } from '../../common'
 import { GroupIcon, CloseIcon } from '../../assets/'
 import { socket } from '../../utils/socket'
-const { Colors, HeaderHeightNumber, sidePadding } = helper;
+const { Colors, HeaderHeight, sidePadding } = helper;
 const { lightGrey1, black, green } = Colors;
 const Wrapper = styled(View)`
-    padding: 0 ${sidePadding};
+    padding: 0 ${sidePadding}px;
     justify-content: center;
     flex-grow: 1;
     height: 100%;

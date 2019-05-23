@@ -4,10 +4,10 @@ import { BackIcon, LocationIcon, EditIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
+const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
-    width: ${Dimensions.get('window').width - sidePaddingNumber * 2}px;
-    margin: ${sidePadding} 0;
+    width: ${Dimensions.get('window').width - sidePadding * 2}px;
+    margin: ${sidePadding}px 0;
     align-self: center;
     background: white;
     height: ${HeaderHeight}; 

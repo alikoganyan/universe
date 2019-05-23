@@ -12,10 +12,10 @@ import sendRequest from '../../utils/request'
 import { ImageComponent } from '../../common'
 import { GroupIcon, CloseIcon } from '../../assets/'
 import DatePicker from 'react-native-datepicker'
-const { Colors, HeaderHeightNumber, sidePadding } = helper;
+const { Colors, HeaderHeight, sidePadding } = helper;
 const { lightGrey1, black, purple } = Colors;
 const Wrapper = styled(View)`
-    padding: 0 ${sidePadding};
+    padding: 0 ${sidePadding}px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -96,6 +96,7 @@ class Content extends Component {
             deadlineDate,
             deadlineTime
         } = this.state
+        const date = new Date();
         return (
             <Wrapper>
                 <StyledScrollView
@@ -110,13 +111,13 @@ class Content extends Component {
                         value={taskName}
                         placeholder={'Новая задача'}
                         multiline={true}
-                        style={{ marginBottom: 30, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
+                        style={{ flex: 1, marginBottom: 30, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
                     <StyledInput password={true}
                         onChangeText={this.handleTaskText}
                         value={taskText}
                         placeholder={'Текст задачи'}
                         multiline={true}
-                        style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
+                        style={{ flex: 1, marginBottom: 30, textAlign: 'left', padding: 0, maxHeight: 130 }} />
                     <DeadLine>
                         <DialogsLabel>
                             <GroupIcon />
@@ -126,7 +127,7 @@ class Content extends Component {
                             <DatePicker
                                 date={deadlineDate}
                                 mode="date"
-                                placeholder="25 января 2017"
+                                placeholder={`${date.getDay()} ${'Мая'} ${date.getFullYear()}`}
                                 confirmBtnText="Подтвердить"
                                 format="YYYY-MM-DD"
                                 cancelBtnText="Отменить"

@@ -5,17 +5,17 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { TasksIcon } from '../../assets/index'
 import { setIncTasks, setOutTasks } from '../../actions/tasksActions'
-const { fontSize, PressDelay, sidePadding, Colors, sidePaddingNumber } = helper;
+const { fontSize, PressDelay, sidePadding, Colors } = helper;
 const { purple, lightColor, lightGrey1, grey2 } = Colors;
 const Wrapper = styled(View)`
 	display: flex;
 	flex-direction: row;
 	align-self: center;
 	align-items: center;
-	padding: ${sidePaddingNumber}px 0;
+	padding: ${sidePadding}px 0;
 	border: 0.3px solid ${lightGrey1};
 	border-width: 0;
- 	width: ${Dimensions.get('window').width - sidePaddingNumber * 2};
+ 	width: ${Dimensions.get('window').width - sidePadding * 2};
 	border-top-width: 0.3px;
 	border-bottom-width: ${({ last }) => last ? 0.3 : 0}px;
 `
@@ -30,7 +30,7 @@ const TaskText = styled(View)`
 const TaskTextInner = styled(View)`
 	display: flex;
 	flex-direction: column;
-	padding-left: ${sidePadding};
+	padding-left: ${sidePadding}px;
 `
 const TaskTitle = styled(Text)`
 	font-size: ${fontSize.header};
@@ -54,7 +54,7 @@ const TaskLastMessage = styled(Text)`
 	max-width: 90%;
 `
 const TaskDate = styled(View)`
-	right: ${sidePadding};
+	right: ${sidePadding}px;
 	color: ${lightGrey1};
 	font-size: ${fontSize.text};
 	display: flex;
@@ -117,12 +117,12 @@ class TaskPack extends Component {
       tasks.map(taskUser => {
         if (taskUser.tasks.length) {
           taskUser.tasks.map(task => {
-            if (task.creator === user._id && title === 'inc') {
+            if (task.creator === user._id && title === 'out') {
               const packItemUser = { ...taskUser }
               packItemUser.tasks = packItemUser.tasks.filter(e => e.creator === user._id)
               packItems.push(packItemUser)
             }
-            if (task.creator !== user._id && title === 'out') {
+            if (task.creator !== user._id && title === 'inc') {
               const packItemUser = { ...taskUser }
               packItemUser.tasks = packItemUser.tasks.filter(e => e.creator !== user._id)
               packItems.push(packItemUser)
@@ -160,7 +160,7 @@ class TaskPack extends Component {
                   <TasksIcon noPadding />
                   <TaskStatusText>{stat}</TaskStatusText>
                 </TaskStatusTextContainer>
-                <TaskStatusAdditional>{packItemsLength ? `+${packItemsLength}` : packItemsLength} задач</TaskStatusAdditional>
+                <TaskStatusAdditional>{packItemsLength ? `+${packItemsLength + 1}` : packItemsLength} задач</TaskStatusAdditional>
               </TaskStatus>
             </TaskTextInner>
             <TaskDate>

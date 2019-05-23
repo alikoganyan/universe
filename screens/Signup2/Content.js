@@ -7,7 +7,7 @@ import { Button } from '../../common'
 import { setUser, setRegisterUserSms } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
 import { p_register, p_get_sms } from '../../constants/api'
-const { Colors, fontSize, HeaderHeightNumber } = helper;
+const { Colors, fontSize, HeaderHeight } = helper;
 const { lightGrey1, blue, pink } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;

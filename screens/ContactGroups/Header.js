@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { ImageComponent } from '../../common'
-const { HeaderHeight, sidePadding, sidePaddingNumber, fontSize, Colors } = helper;
+const { HeaderHeight, sidePadding, fontSize, Colors } = helper;
 const { green } = Colors
 const Header = styled(View)`
     width: 100%;
@@ -15,8 +15,8 @@ const Header = styled(View)`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding-right: ${sidePadding};
-    padding-left: ${sidePadding};
+    padding-right: ${sidePadding}px;
+    padding-left: ${sidePadding}px;
 `
 const Left = styled(View)`
     display: flex;
@@ -34,10 +34,10 @@ const UserImage = styled(Image)`
     width: 30px;
     height: 30px;
     border-radius: 15px;
-    margin-left:${sidePaddingNumber};
+    margin-left:${sidePadding}px;
 `
 const MarginRight = styled(View)`
-    margin-right: ${sidePaddingNumber};
+    margin-right: ${sidePadding}px;
 `
 const HeaderText = styled(Text)`
     font-size: ${fontSize.header};

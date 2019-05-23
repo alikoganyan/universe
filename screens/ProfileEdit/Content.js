@@ -12,7 +12,7 @@ import { ImagePicker } from 'expo';
 import { socket } from '../../utils/socket'
 import { p_profile } from '../../constants/api'
 import sendRequest from '../../utils/request'
-const { Colors, HeaderHeightNumber, fontSize } = helper;
+const { Colors, HeaderHeight, fontSize } = helper;
 const { grey2, blue, lightGrey1 } = Colors;
 const Wrapper = styled(View)`
     padding-top: 30px;
@@ -59,7 +59,7 @@ const InputLabel = styled(Text)`
 `
 const Bottom = styled(View)`
     margin-top: 30px;
-    margin-bottom: ${HeaderHeightNumber}px;
+    margin-bottom: ${HeaderHeight}px;
     width: 60%;
     display: flex;
     align-self: center;
@@ -79,7 +79,7 @@ const StyledInput = styled(TextInput)`
     border: 0.3px solid ${lightGrey1};
     border-width: 0;
     border-bottom-width: 0.3px;
-    padding-bottom: 15px;
+    padding-bottom: 10px;
     font-size: ${fontSize.sl};
 `
 const Error = styled(View)`

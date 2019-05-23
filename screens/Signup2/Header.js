@@ -3,7 +3,7 @@ import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'rea
 import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
+const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -24,7 +24,7 @@ const Right = styled(TouchableOpacity)`
     align-items: center;
 `
 const MarginLeft = styled(View)`
-    margin-left:${sidePaddingNumber};
+    margin-left:${sidePadding}px;
 `
 export default class HeaderComponent extends Component {
     render() {

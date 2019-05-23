@@ -12,7 +12,7 @@ import { connect } from 'react-redux'
 import { setContacts, setAllUsers } from '../../actions/userActions'
 import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/messageActions'
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
-const { Colors, HeaderHeightNumber, HeaderHeight, fontSize } = helper;
+const { Colors, HeaderHeight, fontSize } = helper;
 const { green, black, grey2 } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
@@ -43,7 +43,7 @@ const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
     margin-bottom: 110px;
-    height: ${Dimensions.get('window').height - HeaderHeightNumber}px;
+    height: ${Dimensions.get('window').height - HeaderHeight}px;
     margin-top: ${HeaderHeight};
 `
 const ContactList = styled(ScrollView)`
@@ -245,8 +245,9 @@ class Content extends Component {
         this.setState({ options: newState })
     }
     toChat = e => {
-        const { setCurrentDialogs, navigate, getMessages } = this.props
+        const { setCurrentDialogs, navigate, getMessages, setRoom } = this.props
         setCurrentDialogs(e)
+        setRoom(e._id)
         getMessages([])
         navigate('Chat')
     }

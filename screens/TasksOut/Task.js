@@ -5,7 +5,7 @@ import helper from '../../utils/helpers'
 import { TasksIcon } from '../../assets/index'
 import { setTask } from '../../actions/tasksActions'
 import { connect } from 'react-redux'
-const { fontSize, PressDelay, sidePadding, sidePaddingNumber, Colors } = helper;
+const { fontSize, PressDelay, sidePadding, Colors } = helper;
 const { purple, lightColor, grey2, lightGrey1 } = Colors;
 
 const Wrapper = styled(View)`
@@ -14,14 +14,14 @@ const Wrapper = styled(View)`
   align-items: center;
   display:flex;
   align-items: center;
-  padding: ${sidePadding} 0 ${sidePaddingNumber*2}px;
-  width: ${Dimensions.get('window').width - sidePaddingNumber * 2};
+  padding: ${sidePadding}px 0 ${sidePadding*2}px;
+  width: ${Dimensions.get('window').width - sidePadding * 2};
 `
 const TaskImage = styled(Image)`
   width: 50px;
   height: 50px;
   border-radius: 25px;
-  margin-right: ${sidePadding};
+  margin-right: ${sidePadding}px;
 `
 const TaskText = styled(View)`
   display: flex;
@@ -53,7 +53,7 @@ const TaskLastMessage = styled(Text)`
 
 `
 const TaskDate = styled(View)`
-	right: ${sidePadding};
+	right: ${sidePadding}px;
 	color: ${lightGrey1};
 	font-size: ${fontSize.text};
 	display: flex;

@@ -10,7 +10,7 @@ import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 
-const { sidePaddingNumber, HeaderHeightNumber } = helper;
+const { sidePadding, HeaderHeight } = helper;
 const Wrapper = styled(View)`
   height: 100%;
 `
@@ -35,11 +35,10 @@ class Dialogs extends Component {
 						renderItem={(dialog) => {
 							const { item } = dialog
 							const { creator, participants, messages, name, text, isGroup, room } = item
-							console.log({ test: participants[0].first_name })
 							const chatName = !isGroup ?
 								user._id !== creator._id ?
 									(creator.first_name ? `${creator.first_name} ${creator.last_name}` : creator.phone_number) :
-									(participants[0].first_name ? `${participants[0].first_name} ${participants[0].last_name}` : participants[0].phone_number) :
+									(participants[0] && participants[0].first_name ? `${participants[0].first_name} ${participants[0].last_name}` : participants[0].phone_number) :
 								(name || room)
 							const image = !isGroup ?
 								(user._id === creator ? user.image : participants[0].image) : '';

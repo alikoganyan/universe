@@ -4,7 +4,7 @@ import { BackIcon, LocationIcon, EditIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-const { sidePadding, HeaderHeight, sidePaddingNumber } = helper;
+const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -13,8 +13,8 @@ const Header = styled(View)`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding-right: ${sidePadding};
-    padding-left: ${sidePadding};
+    padding-right: ${sidePadding}px;
+    padding-left: ${sidePadding}px;
 `
 const Left = styled(View)`
     display: flex;
@@ -29,7 +29,7 @@ const Right = styled(View)`
     justify-content: flex-start;
 `
 const MarginRight = styled(View)`
-    margin-right: ${sidePaddingNumber};
+    margin-right: ${sidePadding}px;
 `
 export default class HeaderComponent extends Component {
     render() {

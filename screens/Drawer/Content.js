@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { PapperPlaneIcon, GroupIcon, FeedIcon, TasksIcon, SettingsIcon, DialogsIcon } from '../../assets/'
 import { DrawerActions } from 'react-navigation-drawer';
 import helper from '../../utils/helpers'
-const { sidePaddingNumber, topPadding } = helper;
+const { sidePadding, topPadding } = helper;
 const Wrapper = styled(View)`
     flex: 7;
     display: flex;
@@ -19,7 +19,7 @@ const Link = styled(TouchableOpacity)`
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-    padding: ${topPadding} ${sidePaddingNumber}px;
+    padding: ${topPadding} ${sidePadding}px;
     width: 100%;
 `
 const LinkText = styled(Text)`

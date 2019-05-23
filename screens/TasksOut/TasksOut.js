@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import { Header, Content } from './'
 import { SafeAreaView } from '../../common'
 import helper from '../../utils/helpers'
-const { sidePaddingNumber } = helper;
+const { sidePadding } = helper;
 const Wrapper = styled(View)`
-  max-height: ${Dimensions.get('window').height - sidePaddingNumber}px;
+  max-height: ${Dimensions.get('window').height - sidePadding}px;
 `
 
 export default class Tasks extends Component {

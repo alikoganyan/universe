@@ -13,7 +13,7 @@ const Wrapper = styled(View)`
     background: white;
 `
 const NewsList = styled(FlatList)`
-    padding: ${sidePadding};
+    padding: ${sidePadding}px;
     display: flex;
     flex-grow: 1;
     padding-bottom: 20px;

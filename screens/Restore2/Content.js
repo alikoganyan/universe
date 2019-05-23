@@ -10,7 +10,7 @@ import {
     p_restore_password,
 } from '../../constants/api'
 import sendRequest from '../../utils/request'
-const { Colors, HeaderHeightNumber } = helper;
+const { Colors, HeaderHeight } = helper;
 const { blue, grey1, lightGrey1 } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;

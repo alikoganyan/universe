@@ -9,10 +9,10 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 
-const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight } = helper;
+const { Colors, sidePadding, fontSize, HeaderHeight } = helper;
 const { blue } = Colors;
 const Header = styled(View)`
-    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
+    width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
     background-color: ${Colors.background};
     border-radius: 3;
     font-size: ${fontSize.header};
@@ -25,7 +25,7 @@ const Header = styled(View)`
     
     z-index: 2;
     top: 1%;
-    left: ${sidePadding};
+    left: ${sidePadding}px;
 `
 const UserImage = styled(Image)`
     width: 30px;
@@ -50,7 +50,7 @@ const Right = styled(Left)`
     justify-content: flex-end;
 `
 const MarginRight = styled(View)`
-margin-right: ${sidePaddingNumber};
+margin-right: ${sidePadding}px;
 `
 class HeaderComponent extends Component {
     render() {

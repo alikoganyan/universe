@@ -9,12 +9,12 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { socket } from '../../utils/socket'
 
-const { sidePadding, sidePaddingNumber, Colors, HeaderHeightNumber, fontSize } = helper;
+const { sidePadding, Colors, HeaderHeight, fontSize } = helper;
 const { border } = Colors;
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
-    height: ${Dimensions.get('window').height - HeaderHeightNumber}px;
+    height: ${Dimensions.get('window').height - HeaderHeight}px;
 `
 const User = styled(View)`
     display: flex;
@@ -63,7 +63,7 @@ const UserStatus = styled(Name)`
 `
 
 const Info = styled(View)`
-    padding: 0 ${sidePadding};
+    padding: 0 ${sidePadding}px;
     flex: 1;
 `
 const Data = styled(View)`
@@ -72,9 +72,9 @@ const Data = styled(View)`
     align-items: flex-end;
     justify-content: flex-start;
     border: 1px solid ${border};
-    padding: ${sidePaddingNumber}px 0;
+    padding: ${sidePadding}px 0;
     border-width: 0;
-    border-top-width: 1px;
+    border-top-width: 1px; 
 `
 const Value = styled(Text)`
     font-size: 13px;

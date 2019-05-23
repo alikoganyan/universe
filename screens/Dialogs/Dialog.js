@@ -6,13 +6,13 @@ import { connect } from 'react-redux'
 import { ImageComponent } from '../../common'
 import { socket } from '../../utils/socket'
 
-const { fontSize, PressDelay, sidePadding, sidePaddingNumber, Colors } = helper;
+const { fontSize, PressDelay, sidePadding, Colors } = helper;
 const { purple, lightColor, grey2, blue, green, } = Colors;
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center; 
-  padding: 15px ${sidePadding} 15px;
+  padding: 15px ${sidePadding}px 15px;
 `
 const DialogImage = styled(Image)`
   width: 50px;
@@ -57,7 +57,7 @@ const DialogLastMessage = styled(Text)`
   padding-top: 2px;
 `
 const DialogDate = styled(View)`
-  right: ${sidePadding};
+  right: ${sidePadding}px;
   color: ${lightColor};
   flex: 1;
   font-size: ${fontSize.sm};

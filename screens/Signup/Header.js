@@ -12,7 +12,7 @@ const Header = styled(View)`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding: 0 ${sidePadding};
+    padding: 0 ${sidePadding}px;
 
 `
 const Left = styled(View)`

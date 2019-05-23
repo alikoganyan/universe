@@ -8,10 +8,10 @@ import { addMessage, startSearch, stopSearch } from '../../actions/messageAction
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { ImageComponent } from '../../common'
-const { sidePadding, sidePaddingNumber, HeaderHeight, Colors, fontSize } = helper;
+const { sidePadding, HeaderHeight, Colors, fontSize } = helper;
 const { border } = Colors;
 const Header = styled(View)`
-    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
+    width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
     align-self: center;
     background: white;
     display: flex;
@@ -53,7 +53,7 @@ const Categories = styled(Header)`
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
-    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
+    width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
 `
 const Top = styled(View)`
     display: flex;
@@ -68,9 +68,9 @@ const Bottom = styled(Top)`
     border: 1px solid ${border};
     border-width: 0;
     border-top-width: 1px;
-    margin: 0 ${sidePadding};
+    margin: 0 ${sidePadding}px;
     min-height: 0; 
-    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
+    width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
 `
 const Category = styled(Text)`
     display: flex;
@@ -83,7 +83,7 @@ const Category = styled(Text)`
 const Input = styled(TextInput)`
 `
 const IconLeft = styled(Icon)`
-    margin-left: ${sidePadding};
+    margin-left: ${sidePadding}px;
 `
 class HeaderComponent extends Component {
     render() {

@@ -16,7 +16,7 @@ import { g_users } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
 import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/messageActions'
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
-const { Colors, sidePadding, sidePaddingNumber } = helper;
+const { Colors, sidePadding } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
@@ -49,7 +49,7 @@ const AnimatedArrowWrapper = posed.View({
     right: { rotate: "-90deg", }
 });
 const Wrapper = styled(View)`
-    padding: 0 ${sidePadding};
+    padding: 0 ${sidePadding}px;
     background: white;
     margin-bottom: 40px;
     
@@ -57,9 +57,9 @@ const Wrapper = styled(View)`
 const ContactList = styled(ScrollView)`
     padding: 20px;
     padding-bottom: 10px;
-    max-width: ${Dimensions.get('window').width - sidePaddingNumber * 2}px;
+    max-width: ${Dimensions.get('window').width - sidePadding * 2}px;
     overflow: hidden;
-    margin-left: ${sidePaddingNumber}px;
+    margin-left: ${sidePadding}px;
     flex: 1;
 `
 const Box = styled(View)`

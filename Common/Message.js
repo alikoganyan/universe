@@ -6,7 +6,7 @@ import { connect } from 'react-redux'
 import { ImageComponent } from './'
 import MapView from 'react-native-maps';
 
-const { HeaderHeightNumber, Colors, fontSize } = helper;
+const { HeaderHeight, Colors, fontSize } = helper;
 const { myMessage, interlocatorMessage, pink } = Colors
 const MyMessage = styled(View)`
     display: flex;

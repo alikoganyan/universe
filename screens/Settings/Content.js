@@ -10,7 +10,7 @@ import { socket } from '../../utils/socket'
 import sendRequest from '../../utils/request'
 import { p_settings } from '../../constants/api'
 import { setSettings } from '../../actions/userActions'
-const { Colors, sidePaddingNumber, fontSize, borderRadius, HeaderHeightNumber } = helper;
+const { Colors, sidePadding, fontSize, borderRadius, HeaderHeight } = helper;
 const { lightGrey1, blue, lightBlue, grey2 } = Colors;
 const LangPickerPosed = posed.View({
     visible: { bottom: 170 },
@@ -20,7 +20,7 @@ const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
     margin-bottom: 110px;
-    padding: 0 ${sidePaddingNumber}px;
+    padding: 0 ${sidePadding}px;
     height: 100%;
 `
 const Box = styled(View)`
@@ -81,7 +81,7 @@ const Shadow = styled(TouchableOpacity)`
     width: ${Dimensions.get('window').width};
     height: ${Dimensions.get('window').height};
     background: rgba(5,5,5,.3);
-    top: -${HeaderHeightNumber};
+    top: -${HeaderHeight};
     z-index: 2;
 `
 const Toggle = (props) => {

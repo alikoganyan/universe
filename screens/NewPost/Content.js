@@ -6,9 +6,9 @@ import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../utils/helpers'
 import styled from 'styled-components'
 
-const { HeaderHeightNumber, HeaderHeight } = helper;
+const { HeaderHeight } = helper;
 const Wrapper = styled(View)`
-    height: ${Dimensions.get('window').height - HeaderHeightNumber};
+    height: ${Dimensions.get('window').height - HeaderHeight};
 `
 const Author = styled(View)`
     display: flex;

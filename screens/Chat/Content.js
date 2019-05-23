@@ -14,10 +14,10 @@ const MessageOptionsPosed = posed.View({
     visible: { bottom: 10 },
     hidden: { bottom: -250 }
 });
-const { HeaderHeightNumber, borderRadius } = helper;
+const { HeaderHeight, borderRadius } = helper;
 const Wrapper = styled(View)`
     background: white;
-    margin-bottom: ${({ search }) => search ? HeaderHeightNumber * 2 : HeaderHeightNumber};
+    margin-bottom: ${({ search }) => search ? HeaderHeight * 2 : HeaderHeight};
     z-index: 1;
 `
 const Shadow = styled(TouchableOpacity)`
@@ -25,7 +25,7 @@ const Shadow = styled(TouchableOpacity)`
     width: ${Dimensions.get('window').width};
     height: ${Dimensions.get('window').height};
     background: rgba(5,5,5,.3);
-    top: -${HeaderHeightNumber - 3}px;
+    top: -${HeaderHeight - 3}px;
     z-index: 4;
 `
 const MessageOptions = styled(MessageOptionsPosed)`

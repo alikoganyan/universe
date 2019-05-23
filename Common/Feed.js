@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, Image, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../assets'
-const { HeaderHeightNumber, Colors, fontSize } = helper;
+const { HeaderHeight, Colors, fontSize } = helper;
 const { yellow, purple, red } = Colors;
 const Feed = styled(View)`
     padding: 10px;

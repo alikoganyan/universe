@@ -16,7 +16,7 @@ import helper from '../../utils/helpers';
 import { ImageComponent } from '../../common';
 import { connect } from 'react-redux';
 const {
-	HeaderHeightNumber,
+	HeaderHeight,
 	sidePadding,
 	borderRadius,
 	Colors,
@@ -26,7 +26,7 @@ const { yellow, black, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`
     margin-bottom: 50px;   
     background: white;
-    /* padding: 0 ${sidePadding}; */
+    /* padding: 0 ${sidePadding}px; */
     display: flex;
 `;
 const NewsItem = styled(View)`
@@ -35,7 +35,7 @@ const NewsItem = styled(View)`
     padding-bottom: 10px;
     border: 0.5px solid ${yellow};
     border-radius: ${borderRadius};
-    margin: 0 ${sidePadding};
+    margin: 0 ${sidePadding}px;
 `;
 const Sender = styled(View)`
     display: flex;

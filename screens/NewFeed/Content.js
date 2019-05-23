@@ -10,10 +10,10 @@ import sendRequest from '../../utils/request'
 import { p_news } from '../../constants/api'
 import { ImageComponent } from '../../common'
 import { GroupIcon, CloseIcon } from '../../assets/'
-const { Colors, HeaderHeightNumber, sidePadding } = helper;
+const { Colors, HeaderHeight, sidePadding } = helper;
 const { lightGrey1, black, yellow } = Colors;
 const Wrapper = styled(View)`
-    padding: 0 ${sidePadding};
+    padding: 0 ${sidePadding}px;
     justify-content: center;
     flex-grow: 1;
     height: 100%;

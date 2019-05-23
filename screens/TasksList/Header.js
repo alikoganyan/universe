@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { p_tasks_search, g_users } from '../../constants/api'
 import { ImageComponent } from '../../common'
 import sendRequest from '../../utils/request'
-const { sidePadding, HeaderHeight, sidePaddingNumber, fontSize } = helper;
+const { sidePadding, HeaderHeight, fontSize, HeaderHeightInner } = helper;
 
 const Header = styled(View)`
     width: 100%;
@@ -17,13 +17,16 @@ const Header = styled(View)`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding-right: ${sidePadding};
-    padding-left: ${sidePadding};
+    padding-top: ${(HeaderHeightInner - sidePadding) / 2}px;
+    padding-bottom: ${(HeaderHeightInner - sidePadding) / 2}px;
+    padding-right: ${sidePadding}px;
+    padding-left: ${sidePadding}px;
 `
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
+    height: ${HeaderHeightInner};
 `
 const Center = styled(View)``
 const Input = styled(TextInput)`
@@ -37,7 +40,7 @@ const Right = styled(Left)`
 //     width: 30px;
 //     height: 30px;
 //     border-radius: 15px;
-//     margin-left:${sidePaddingNumber};
+//     margin-left:${sidePadding}px;
 // `
 const MarginRight = styled(View)`
     margin-right: ${Dimensions.get('window').width * 0.085};
@@ -73,7 +76,7 @@ class HeaderComponent extends Component {
                             <SearchIcon right onPress={this.startSearch} />
                             <AddIcon onPress={this.addTask} right />
                             <TouchableOpacity onPress={toProfile}>
-                                <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
+                                <ImageComponent size={'medium'} source={{ uri: `http://ser.univ.team${image}` }} />
                             </TouchableOpacity>
                         </> :
                         <CloseIcon onPress={this.stopSearch} />

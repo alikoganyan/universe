@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { CheckIcon, TriangleLeftIcon, TriangleRightIcon } from '../assets'
 import { connect } from 'react-redux'
 import { setTasks } from '../actions/tasksActions'
-const { HeaderHeightNumber, Colors, fontSize } = helper;
+const { HeaderHeight, Colors, fontSize } = helper;
 const { red, yellow, green, purple, grey1 } = Colors;
 const borderRadius = 5;
 const Wrapper = styled(View)`

@@ -28,7 +28,7 @@ const Bottom = styled(View)`
 `
 const Logout = styled(TouchableOpacity)`
     /* position: absolute; */
-    bottom: 20;
+    bottom: 30;
     z-index: 21;
     width: 100%;
     display: flex;
@@ -37,7 +37,7 @@ const Logout = styled(TouchableOpacity)`
 const LogoutText = styled(Text)`
     color: ${pink};
     padding: 20px;
-    font-size: ${fontSize.sm};
+    font-size: ${fontSize.sl};
 `
 class Profile extends Component {
     render() {

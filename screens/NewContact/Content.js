@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { Button } from '../../common'
 import sendRequest from '../../utils/request'
 import { p_create_contact } from '../../constants/api'
-const { Colors, HeaderHeightNumber } = helper;
+const { Colors, HeaderHeight } = helper;
 const { green, lightGrey1, grey2, black, color } = Colors;
 
 const Wrapper = styled(View)`

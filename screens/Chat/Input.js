@@ -10,14 +10,14 @@ import { p_send_file } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import posed from 'react-native-pose'
 import { socket } from '../../utils/socket'
-const { sidePaddingNumber, borderRadius, HeaderHeightNumber } = helper;
+const { sidePadding, borderRadius, HeaderHeight } = helper;
 const FilePickerPosed = posed.View({
     visible: { bottom: 10 },
     hidden: { bottom: -250 }
 });
 const Wrapper = styled(View)`
     background: white;
-    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
+    width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
     left: 0;
     bottom: 10px;
     align-self: center;
@@ -70,7 +70,7 @@ const Shadow = styled(TouchableOpacity)`
     width: ${Dimensions.get('window').width};
     height: ${Dimensions.get('window').height};
     background: rgba(5,5,5,.3);
-    top: -${Dimensions.get('window').height - HeaderHeightNumber - 3};
+    top: -${Dimensions.get('window').height - HeaderHeight - 3};
     z-index: 2;
 `
 class InputComponent extends Component {
@@ -174,8 +174,8 @@ class InputComponent extends Component {
         const { currentRoom, user, addMessage } = this.props;
         const { text } = this.state;
         if (text) {
-            socket.emit('message', { receiver: currentRoom, message: text })
-            addMessage({ room: currentRoom, sender: { _id: user._id }, text, created_at: new Date(), type: 'text' })
+            socket.emit('message', { receiver: currentRoom, message: text.trim() })
+            addMessage({ room: currentRoom, sender: { _id: user._id }, text: text.trim(), created_at: new Date(), type: 'text' })
         }
         this.setState({ text: '' })
     }

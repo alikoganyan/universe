@@ -11,9 +11,9 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 
-const { Colors, sidePadding, sidePaddingNumber, fontSize, HeaderHeight, borderRadius } = helper;
+const { Colors, sidePadding, fontSize, HeaderHeight, borderRadius } = helper;
 const Header = styled(View)`
-    width: ${Dimensions.get('window').width - (sidePaddingNumber * 2)}px;
+    width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
     background-color: ${Colors.background};
     border: 1px solid ${Colors.border};
     border-radius: ${borderRadius};
@@ -24,10 +24,10 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
     position: absolute;
-    padding: 0 ${sidePadding};
+    padding: 0 ${sidePadding}px;
     z-index: 2;
     top: 1%;
-    left: ${sidePadding};
+    left: ${sidePadding}px;
 `
 const Input = styled(TextInput)`
     flex: 1;

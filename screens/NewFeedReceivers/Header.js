@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { p_tasks_search, g_users } from '../../constants/api'
 import { ImageComponent } from '../../common'
 import sendRequest from '../../utils/request'
-const { sidePadding, HeaderHeight, sidePaddingNumber, fontSize } = helper;
+const { sidePadding, HeaderHeight, fontSize } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -16,8 +16,8 @@ const Header = styled(View)`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding-right: ${sidePadding};
-    padding-left: ${sidePadding};
+    padding-right: ${sidePadding}px;
+    padding-left: ${sidePadding}px;
 `
 const Left = styled(View)`
     display: flex;
@@ -36,7 +36,7 @@ const Right = styled(Left)`
 //     width: 30px;
 //     height: 30px;
 //     border-radius: 15px;
-//     margin-left:${sidePaddingNumber};
+//     margin-left:${sidePadding}px;
 // `
 const MarginRight = styled(View)`
     margin-right: ${Dimensions.get('window').width * 0.085};

@@ -8,16 +8,16 @@ import sendRequest from '../../utils/request'
 import { g_tasks, g_users } from '../../constants/api'
 import { setTasks } from '../../actions/tasksActions'
 import { connect } from 'react-redux'
-const { sidePaddingNumber, HeaderHeightNumber } = helper;
+const { sidePadding, HeaderHeight } = helper;
 const Wrapper = styled(View)`
-  max-height: ${Dimensions.get('window').height - sidePaddingNumber}px;
+  max-height: ${Dimensions.get('window').height - sidePadding}px;
   display: flex;
   align-self: center;
   align-items: center;
   justify-content: center;
 `
 const StyledScrollView = styled(ScrollView)`
-  height: ${Dimensions.get('window').height - HeaderHeightNumber - 20}px;
+  height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
 `
 
 class Content extends Component {
