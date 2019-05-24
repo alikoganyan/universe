@@ -380,7 +380,7 @@ export function CloseIcon(props) {
     )
 }
 export function GroupIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, size } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             {/* <SvgUri
@@ -389,7 +389,7 @@ export function GroupIcon(props) {
                 source={SVG.Contacts_grey}
             /> */}
             <Image
-                style={{ width: IconSize, height: IconSize }}
+                style={{ width: size || IconSize, height: size || IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Contacts}
             />
@@ -434,7 +434,7 @@ export function TaskIcon(props) {
     )
 }
 export function DialogsIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, size } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             {/* <SvgUri
@@ -443,7 +443,7 @@ export function DialogsIcon(props) {
                 source={SVG.Dialog}
             /> */}
             <Image
-                style={{ width: IconSize, height: IconSize }}
+                style={{ width: size || IconSize, height: size || IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Dialog}
             />
@@ -487,7 +487,7 @@ export function CheckAllIcon(props) {
     )
 }
 export function PapperPlaneIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, size } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             {/* <SvgUri
@@ -496,7 +496,7 @@ export function PapperPlaneIcon(props) {
                 source={SVG.New_dialog}
             /> */}
             <Image
-                style={{ width: IconSize, height: IconSize }}
+                style={{ width: size || IconSize, height: size || IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.New_dialog}
             />
@@ -504,7 +504,7 @@ export function PapperPlaneIcon(props) {
     )
 }
 export function FeedIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, size } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             {/* <SvgUri
@@ -513,7 +513,7 @@ export function FeedIcon(props) {
                 source={SVG.News}
             /> */}
             <Image
-                style={{ width: IconSize, height: IconSize }}
+                style={{ width: size || IconSize, height: size || IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.News}
             />
@@ -521,7 +521,7 @@ export function FeedIcon(props) {
     )
 }
 export function TasksIcon(props) {
-    const { onPress, left, right, noPadding } = props;
+    const { onPress, left, right, noPadding, size } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPadding={noPadding}>
             {/* <SvgUri
@@ -530,7 +530,7 @@ export function TasksIcon(props) {
                 source={SVG.Tasks}
             /> */}
             <Image
-                style={{ width: IconSize, height: IconSize }}
+                style={{ width: size || IconSize, height: size || IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Tasks}
             />
@@ -538,7 +538,7 @@ export function TasksIcon(props) {
     )
 }
 export function SettingsIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, size } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             {/* <SvgUri
@@ -547,7 +547,7 @@ export function SettingsIcon(props) {
                 source={SVG.Settings}
             /> */}
             <Image
-                style={{ width: IconSize, height: IconSize }}
+                style={{ width: size || IconSize, height: size || IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Settings}
             />
@@ -589,6 +589,25 @@ export function IntroIcon(props) {
         </StyledTouchableOpacity>
     )
 }
+
+export function LogoText(props) {
+    const { onPress, left, right, size } = props;
+    return (
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            {/* <SvgUri
+                width={size || IconSize}
+                height={size || IconSize}
+                source={SVG.Intro}
+            /> */}
+            <Image
+                style={{ width: size || IconSize, height: size || IconSize }}
+                resizeMode={'contain'}
+                source={ICONS.logo_blue}
+            />
+        </StyledTouchableOpacity>
+    )
+}
+
 
 export function ArrowDownIcon(props) {
     return (

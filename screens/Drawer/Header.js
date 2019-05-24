@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
+import { LogoText } from '../../assets/'
 const { sidePadding, Colors } = helper;
 const { blue } = Colors
 const Wrapper = styled(View)`
@@ -18,7 +19,7 @@ const Header = styled(Text)`
 export default function HeaderComponent(props) {
     return (
         <Wrapper>
-            <Header>Universe</Header>
+            <LogoText size={85}/>
         </Wrapper>
     )
 }

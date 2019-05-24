@@ -108,11 +108,11 @@ const Indicator = ({ delievered = false, read = false, color }) => {
 }
 function Message(props) {
     const { children, messages, myId, background, withImage } = props
-    const { text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at } = children;
+    const { text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename } = children;
     const date = new Date(created_at);
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const day = daysOfTheWeek[date.getDay()]
-    const time = `${date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`
+    const time = `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`
     const finalTime = Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time
     if (type === 'image') {
         return (myId == sender._id ? (
@@ -234,6 +234,39 @@ function Message(props) {
             </InterlocutorsMessage>
 
         </View>))
+    }
+    if (type === 'file') {
+        return (myId == sender._id ? (
+            <View style={{ display: 'flex', flexDirection: 'row' }}>
+                <MyMessage background={background}>
+                    <MyMessageText>
+                        {text}
+                    </MyMessageText>
+                    <MessageInfo>
+                        <MessageDate color={'white'}>{finalTime}</MessageDate>
+                        <Indicator color={'white'} />
+                    </MessageInfo>
+                </MyMessage>
+                <TriangleLeftIcon color={background || myMessage} />
+            </View>
+        ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
+                {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://simpleicon.com/wp-content/uploads/user1.png` }} />}
+                <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -10 : 0 }}>
+                    <TriangleRightIcon color={background || interlocatorMessage} />
+                    <InterlocutorsMessage background={background || interlocatorMessage}>
+                        {withImage && <InterlocutorsName>
+                            Lol Kek
+                        </InterlocutorsName>}
+                        <InterlocutorsMessageText>
+                            {filename}
+                        </InterlocutorsMessageText>
+                        <MessageInfo>
+                            <MessageDate>{finalTime}</MessageDate>
+                        </MessageInfo>
+                    </InterlocutorsMessage>
+                </View>
+            </ View>
+        )
     }
 }
 

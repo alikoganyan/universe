@@ -8,7 +8,7 @@ import { SafeAreaView } from '../../common'
 const { sidePadding, topPadding } = helper;
 const Outer = styled(View)`
   display: flex;
-  padding-top: 10%;
+  padding-top: 15px;
   height: ${Dimensions.get('window').height};
 
 `
