@@ -92,7 +92,7 @@ class HeaderComponent extends Component {
             <Header>
                 <Top>
                     <Left>
-                        <CloseIcon right />
+                        <CloseIcon right onPress={this.back}/>
                         <Info>
                             <InfoChatName>Создание новости</InfoChatName>
                         </Info>
@@ -102,6 +102,10 @@ class HeaderComponent extends Component {
                 </Top>
             </Header>
         )
+    }
+    back = () => {
+        const { back } = this.props
+        back()
     }
 }
 const mapStateToProps = state => ({

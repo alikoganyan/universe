@@ -13,7 +13,7 @@ import { GroupIcon, CloseIcon } from '../../assets/'
 const { Colors, HeaderHeight, sidePadding } = helper;
 const { lightGrey1, black, yellow } = Colors;
 const Wrapper = styled(View)`
-    padding: 0 ${sidePadding}px;
+    padding: 0 ${sidePadding * 2}px;
     justify-content: center;
     flex-grow: 1;
     height: 100%;
@@ -98,8 +98,8 @@ class Content extends Component {
                         style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
                     <Recievers>
                         <DialogsLabel>
-                            <GroupIcon />
-                            <Text>диалоги</Text>
+                            <GroupIcon right />
+                            <Text>Получатели</Text>
                         </DialogsLabel>
                         <ScrollView>
                             {receivers.map((e, i) => (

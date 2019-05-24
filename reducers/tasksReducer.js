@@ -1,9 +1,10 @@
 import {
-    SET_TASKS, SET_TASK, SET_INC_TASK, SET_OUT_TASK
+    SET_TASKS, SET_TASK, SET_INC_TASK, SET_OUT_TASK, SET_ACTIVE_TASK
 } from '../actions/tasksActions'
 const initialState = {
     tasks: [],
     currentTask: {},
+    activeTask: {},
     incTasks: [],
     outTasks: [],
 }
@@ -30,6 +31,11 @@ const tasksReducer = (state = initialState, action) => {
             return {
                 ...state,
                 outTasks: [...action.payload]
+            }
+        case SET_ACTIVE_TASK:
+            return {
+                ...state,
+                activeTask: { ...action.payload }
             }
         default:
             return state

@@ -29,6 +29,8 @@ const StyledInput = styled(TextInput)`
     padding-bottom: 10px;
     text-align: center;
     margin-bottom: 50px;
+    height: 40px;
+    max-height: 40px;
     ${({ style }) => style}
 `
 const ButtonBox = styled(View)`
@@ -111,13 +113,13 @@ class Content extends Component {
                         value={taskName}
                         placeholder={'Новая задача'}
                         multiline={true}
-                        style={{ flex: 1, marginBottom: 30, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
+                        style={{ flex: 1, marginBottom: 30, textAlign: 'left', paddingLeft: 10}} />
                     <StyledInput password={true}
                         onChangeText={this.handleTaskText}
                         value={taskText}
                         placeholder={'Текст задачи'}
                         multiline={true}
-                        style={{ flex: 1, marginBottom: 30, textAlign: 'left', padding: 0, maxHeight: 130 }} />
+                        style={{ flex: 1, marginBottom: 30, textAlign: 'left', padding: 0}} />
                     <DeadLine>
                         <DialogsLabel>
                             <GroupIcon />

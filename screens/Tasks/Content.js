@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, ScrollView, FlatList, Image, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, Dimensions, FlatList, Image, TouchableOpacity } from 'react-native'
 import { CommentIcon, HeartIcon } from '../../assets/index'
 import { TaskComponent } from '../../common'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import { setActiveTask } from '../../actions/tasksActions'
 import helper from '../../utils/helpers'
-const { sidePadding, Colors } = helper;
+const { sidePadding, Colors, HeaderHeight } = helper;
 const { yellow, green, purple, red, black, pink } = Colors;
 const Wrapper = styled(View)`
     margin-bottom: 50px;   
@@ -16,6 +17,7 @@ const TaskList = styled(FlatList)`
     display: flex;
     flex-grow: 1;
     padding-bottom: 20px;
+    z-index: 5;
 `
 const Options = styled(View)`
     display: flex;
@@ -44,14 +46,25 @@ const TaskWrapper = styled(View)`
     justify-content: flex-start;
     flex-direction: row;
 `
+const Shadow = styled(TouchableOpacity)`
+    background: black;
+    opacity: 0.1;
+    z-index: 0;
+    height: ${Dimensions.get('window').height};
+    width: ${Dimensions.get('window').width};
+    position: absolute;
+    top: -${HeaderHeight};
+    left: 0;
+`
 class Content extends Component {
     render() {
         const { taskList, options } = this.state;
         const { active } = options;
-        const { currentTask, user } = this.props
+        const { currentTask, user, activeTask } = this.props
         return (
             <SafeAreaView>
-                <ScrollView contentContainerStyle={{ flexGrow: 1 }}
+                {/* {activeTask._id && <Shadow onPress={this.unselect}></Shadow>} */}
+                <ScrollView contentContainerStyle={{ flexGrow: 1, zIndex: 2 }}
                     keyboardShouldPersistTaps='handled'>
                     <Wrapper>
                         <Options>
@@ -67,14 +80,15 @@ class Content extends Component {
                             renderItem={({ item, index }) => {
                                 const myTask = item.creator._id === user._id;
                                 return <TaskWrapper>
-                                    <TaskComponent
+                                    <TouchableOpacity style={{ flex: 1 }} onLongPress={e => this.handleHold(item)}><TaskComponent
                                         triangleLeft={!myTask}
                                         triangleRight={myTask}
                                         borderColor={myTask ? purple : pink}
                                         style={{
-                                            marginRight: myTask ? 10 : 70,
-                                            marginLeft: myTask ? 70 : 10,
-                                        }}>{item}</TaskComponent>
+                                            zIndex: activeTask._id === item._id ? 5 : 1,
+                                            // marginRight: myTask ? 10 : 70,
+                                            // marginLeft: myTask ? 70 : 10,
+                                        }}>{item}</TaskComponent></TouchableOpacity>
                                 </TaskWrapper>
                             }}
                             keyExtractor={(item, index) => index.toString()}
@@ -95,17 +109,30 @@ class Content extends Component {
         },
         taskList: []
     }
+    unselect = () => {
+        const { setActiveTask } = this.props
+        setActiveTask({})
+    }
+    handleHold = (e) => {
+        const { setActiveTask } = this.props
+        setActiveTask(e)
+    }
     selectOption = (e) => {
         const options = { ...this.state.options };
         options.active = e;
         this.setState({ options })
     }
+    componentWillUnmount(){
+        this.unselect()
+    }
 }
 
 const mapStateToProps = state => ({
     currentTask: state.tasksReducer.currentTask,
+    activeTask: state.tasksReducer.activeTask,
     user: state.userReducer.user
 })
 const mapDispatchToProps = dispatch => ({
+    setActiveTask: _ => dispatch(setActiveTask(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)
