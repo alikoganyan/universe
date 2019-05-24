@@ -58,15 +58,24 @@ class Dialogs extends Component {
 		// navigation.navigate('TasksList') // restore 
 		BackHandler.addEventListener('hardwareBackPress', () => true)
 		socket.on('update_dialogs', e => {
+			console.log('update_dialog')
 			setDialogs(e.dialogs)
 		})
 		socket.emit('get_dialogs', { id: user._id })
 		socket.on('new_message', e => {
-			addMessage({
-				...e, text: e.message, created_at: new Date(), sender: {
+			const { dialogs, currentRoom } = this.props
+			const message = {
+				...e, text: e.message, type: 'text', created_at: new Date(), sender: {
 					_id: e.sender._id
 				}
-			})
+			}
+			const newDialogs = [...dialogs]
+			const newDialog = newDialogs.filter(event => event.room === e.room)[0]
+			newDialog.messages.push(message)
+			newDialogs[newDialogs.findIndex(event => event.room === e.room)] = newDialog
+			console.log('new message', e)
+			setDialogs(newDialogs)
+			addMessage(message)
 		})
 		socket.on('new_dialogs', e => {
 		})

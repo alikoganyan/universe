@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
 import { ImagePicker, DocumentPicker, Permissions, Location } from 'expo';
 import { p_send_file } from '../../constants/api'
+import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import posed from 'react-native-pose'
 import { socket } from '../../utils/socket'
@@ -170,12 +171,23 @@ class InputComponent extends Component {
         this.setState({ location });
     };
     discardSelect = (e) => { }
-    sendMessage = (event) => {
-        const { currentRoom, user, addMessage } = this.props;
+    sendMessage = (e) => {
+        const { currentRoom, user, addMessage, setDialogs } = this.props;
         const { text } = this.state;
+        // console.log(e)
         if (text) {
+            const { dialogs, currentChat } = this.props;
+            const message = { room: currentRoom, sender: { _id: user._id }, text: text.trim(), created_at: new Date(), type: 'text' }
+            // console.log(dialogs)
+            const newDialogs = [...dialogs]
+            const newDialog = {...newDialogs.filter(event => event.room === currentChat)[0]}
+            newDialog.messages = [...newDialog.messages, message]
+            newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog
+   
+   
             socket.emit('message', { receiver: currentRoom, message: text.trim() })
-            addMessage({ room: currentRoom, sender: { _id: user._id }, text: text.trim(), created_at: new Date(), type: 'text' })
+            addMessage(message)
+            setDialogs(newDialogs)
         }
         this.setState({ text: '' })
     }
@@ -195,11 +207,13 @@ const mapStateToProps = state => ({
     messages: state.messageReducer.messages,
     currentRoom: state.messageReducer.currentRoom,
     currentChat: state.messageReducer.currentChat,
-    user: state.userReducer.user
+    user: state.userReducer.user,
+    dialogs: state.dialogsReducer.dialogs,
 })
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch()),
     stopSearch: _ => dispatch(stopSearch()),
+	setDialogs: _ => dispatch(setDialogs(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(InputComponent)
