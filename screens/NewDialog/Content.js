@@ -137,58 +137,60 @@ class Content extends Component {
         const { department } = users;
         return (
             <SafeAreaView>
-                <Wrapper>
-                    <KeyboardAwareScrollView enableOnAndroid>
-                        <CreateDialog onPress={this.newGroup}>
-                            <GroupIconWhite />
-                            <CreateDialogText>Создать группу</CreateDialogText>
-                        </CreateDialog>
-                        <ContactList>
-                            {/* {department.map((e, i) => ( */}
-                            <Box last={true}>
-                                <BoxTitle onPress={() => collapsed[0] ? this.collapseDepartment(0) : this.showDepartment(0)}>
-                                    <BoxItem title={true}>Нет департамента</BoxItem>
-                                    <ArrowWrapper pose={collapsed[0] ? 'right' : 'down'}>
-                                        <ArrowDownIcon />
-                                    </ArrowWrapper>
-                                </BoxTitle>
-                                <Collapsible collapsed={collapsed[0] || false}>
-                                    <BoxInner>
-                                        {department.map((e, i) => <TouchableOpacity key={i} onPress={() => this.toChat(e)}>
-                                            <BoxInnerItem>
-                                                <ContactImage source={{ uri: e.image ? `http://ser.univ.team${e.image}` : `http://simpleicon.com/wp-content/uploads/user1.png` }} />
-                                                <ContactInfo>
-                                                    <ContactName>
-                                                        {e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}
-                                                    </ContactName>
-                                                    <ContactRole>{e.role.length ? e.role[0] : 'нет роли'}</ContactRole>
-                                                </ContactInfo>
-                                            </BoxInnerItem>
-                                        </TouchableOpacity>)}
-                                    </BoxInner>
-                                </Collapsible>
-                            </Box>
-                            {/* ))}  */}
-                        </ContactList>
-                        <ContactList>
-                            <FlatList
-                                style={{ paddingRight: 5, paddingLeft: 5, }}
-                                ListHeaderComponent={<View style={{ margin: 35, }} />}
-                                inverted={true}
-                                data={groups}
-                                renderItem={({ item }) => <Group>
-                                    <GroupImage />
-                                    <GroupInfo>
-                                        <GroupTitle>{item.title}</GroupTitle>
-                                        <GroupParticipants>{item.participants} участников</GroupParticipants>
-                                    </GroupInfo>
-                                </Group>
-                                }
-                                keyExtractor={(item, index) => index.toString()}
-                            />
-                        </ContactList>
-                    </KeyboardAwareScrollView>
-                </Wrapper>
+                <ScrollView keyboardShouldPersistTaps={'handled'}>
+                    <Wrapper>
+                        <KeyboardAwareScrollView enableOnAndroid>
+                            <CreateDialog onPress={this.newGroup}>
+                                <GroupIconWhite />
+                                <CreateDialogText>Создать группу</CreateDialogText>
+                            </CreateDialog>
+                            <ContactList>
+                                {/* {department.map((e, i) => ( */}
+                                <Box last={true}>
+                                    <BoxTitle onPress={() => collapsed[0] ? this.collapseDepartment(0) : this.showDepartment(0)}>
+                                        <BoxItem title={true}>Нет департамента</BoxItem>
+                                        <ArrowWrapper pose={collapsed[0] ? 'right' : 'down'}>
+                                            <ArrowDownIcon />
+                                        </ArrowWrapper>
+                                    </BoxTitle>
+                                    <Collapsible collapsed={collapsed[0] || false}>
+                                        <BoxInner>
+                                            {department.map((e, i) => <TouchableOpacity key={i} onPress={() => this.toChat(e)}>
+                                                <BoxInnerItem>
+                                                    <ContactImage source={{ uri: e.image ? `http://ser.univ.team${e.image}` : `http://simpleicon.com/wp-content/uploads/user1.png` }} />
+                                                    <ContactInfo>
+                                                        <ContactName>
+                                                            {e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}
+                                                        </ContactName>
+                                                        <ContactRole>{e.role.length ? e.role[0] : 'нет роли'}</ContactRole>
+                                                    </ContactInfo>
+                                                </BoxInnerItem>
+                                            </TouchableOpacity>)}
+                                        </BoxInner>
+                                    </Collapsible>
+                                </Box>
+                                {/* ))}  */}
+                            </ContactList>
+                            <ContactList>
+                                <FlatList
+                                    style={{ paddingRight: 5, paddingLeft: 5, }}
+                                    ListHeaderComponent={<View style={{ margin: 35, }} />}
+                                    inverted={true}
+                                    data={groups}
+                                    renderItem={({ item }) => <Group>
+                                        <GroupImage />
+                                        <GroupInfo>
+                                            <GroupTitle>{item.title}</GroupTitle>
+                                            <GroupParticipants>{item.participants} участников</GroupParticipants>
+                                        </GroupInfo>
+                                    </Group>
+                                    }
+                                    keyExtractor={(item, index) => index.toString()}
+                                />
+                            </ContactList>
+                        </KeyboardAwareScrollView>
+                    </Wrapper>
+                </ScrollView>
             </SafeAreaView>
         )
     }

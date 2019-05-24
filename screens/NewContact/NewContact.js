@@ -10,7 +10,7 @@ const Wrapper = styled(View)`
 export default class NewContact extends Component {
     render() {
         return (
-            <SafeAreaView behavior={'height'}>
+            <SafeAreaView behavior={'padding'}>
                 <Wrapper>
                     <Header back={this.navigateBack} />
                     <Content navigateToDialogs={this.navigateToDialogs} />

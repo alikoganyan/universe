@@ -84,37 +84,40 @@ class Content extends Component {
         } = this.state
         const { participants } = this.props
         return (
-            <Wrapper>
-                <ImageComponent style={{ alignSelf: 'center', marginBottom: 20 }} size={70} source={{ uri: 'http://simpleicon.com/wp-content/uploads/user1.png' }} />
-                <StyledInput password={true}
-                    onChangeText={this.handleChange}
-                    value={text}
-                    placeholder={'Новая группа'}
-                    multiline={true}
-                    style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
-                <Receivers>
-                    <DialogsLabel>
-                        <GroupIcon />
-                        <Text>Участники</Text>
-                    </DialogsLabel>
-                    <ScrollView style={{ maxHeight: 150 }}>
-                        {participants.map((e, i) => (
-                            <ReceiverComponent key={i} last={i === participants.length}>{e}</ReceiverComponent>
-                        ))}
-                    </ScrollView>
-                    <DialogsLabel>
-                        <TouchableOpacity onPress={this.addParticipant}>
-                            <AddReceiver>Добавить</AddReceiver>
-                        </TouchableOpacity>
-                    </DialogsLabel>
-                </Receivers>
-                <ButtonBox>
-                    <Button
-                        onPress={this.proceed}
-                        style={{ background: green }}
-                        color={black}>Продолжить</Button>
-                </ButtonBox>
-            </Wrapper>)
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}
+                keyboardShouldPersistTaps='handled'>
+                <Wrapper>
+                    <ImageComponent style={{ alignSelf: 'center', marginBottom: 20 }} size={70} source={{ uri: 'http://simpleicon.com/wp-content/uploads/user1.png' }} />
+                    <StyledInput password={true}
+                        onChangeText={this.handleChange}
+                        value={text}
+                        placeholder={'Новая группа'}
+                        multiline={true}
+                        style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
+                    <Receivers>
+                        <DialogsLabel>
+                            <GroupIcon />
+                            <Text>Участники</Text>
+                        </DialogsLabel>
+                        <ScrollView style={{ maxHeight: 150 }}>
+                            {participants.map((e, i) => (
+                                <ReceiverComponent key={i} last={i === participants.length}>{e}</ReceiverComponent>
+                            ))}
+                        </ScrollView>
+                        <DialogsLabel>
+                            <TouchableOpacity onPress={this.addParticipant}>
+                                <AddReceiver>Добавить</AddReceiver>
+                            </TouchableOpacity>
+                        </DialogsLabel>
+                    </Receivers>
+                    <ButtonBox>
+                        <Button
+                            onPress={this.proceed}
+                            style={{ background: green }}
+                            color={black}>Продолжить</Button>
+                    </ButtonBox>
+                </Wrapper>
+            </ScrollView>)
     }
     state = {
         text: ''

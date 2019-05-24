@@ -50,38 +50,41 @@ export default class Content extends Component {
         const { error, phone, country, lastName, firstName, patronymic, post, email } = this.state;
         const { navigateToDialogs } = this.props;
         return (
-            <Wrapper>
-                <ScrollView style={{ height: '100%', paddingTop: '10%' }}>
-                    <PhoneNumber>
-                        <InputLabel style={{ flex: 4 }}>Телефон</InputLabel>
-                        <Input style={{ flex: 1, textAlign: 'center', paddingRight: 7, paddingLeft: 7 }} onChangeText={this.handleChangeCountry} value={country} />
-                        <Input style={{ flex: 7 }} placeholder={'XXX XXX XX XX'} onChangeText={this.handleChangePhone} value={phone} />
-                    </PhoneNumber>
-                    <PhoneNumber>
-                        <InputLabel style={{ flex: 4 }}>Фамилия</InputLabel>
-                        <Input style={{ flex: 9 }} placeholder={'Фамилия'} onChangeText={this.handleChangeLastName} value={lastName} />
-                    </PhoneNumber>
-                    <PhoneNumber>
-                        <InputLabel style={{ flex: 4 }}>Имя</InputLabel>
-                        <Input style={{ flex: 9 }} placeholder={'Имя'} onChangeText={this.handleChangeFirstName} value={firstName} />
-                    </PhoneNumber>
-                    <PhoneNumber>
-                        <InputLabel style={{ flex: 4 }}>Отчество</InputLabel>
-                        <Input style={{ flex: 9 }} placeholder={'Отчество'} onChangeText={this.handleChangePatronymic} value={patronymic} />
-                    </PhoneNumber>
-                    <PhoneNumber>
-                        <InputLabel style={{ flex: 4 }}>Должность</InputLabel>
-                        <Input style={{ flex: 9 }} placeholder={'Должность'} onChangeText={this.handleChangePost} value={post} />
-                    </PhoneNumber>
-                    <PhoneNumber>
-                        <InputLabel style={{ flex: 4 }}>Email</InputLabel>
-                        <Input style={{ flex: 9 }} placeholder={'Email'} onChangeText={this.handleChangeEmail} value={email} />
-                    </PhoneNumber>
-                </ScrollView>
-                <ButtonBox>
-                    <Button onPress={this.proceed} style={{ background: green }} color={'white'}>Добавить контакт</Button>
-                </ButtonBox>
-            </Wrapper>
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}
+                keyboardShouldPersistTaps='handled'>
+                <Wrapper>
+                    <ScrollView style={{ height: '100%', paddingTop: '10%' }}>
+                        <PhoneNumber>
+                            <InputLabel style={{ flex: 4 }}>Телефон</InputLabel>
+                            <Input style={{ flex: 1, textAlign: 'center', paddingRight: 7, paddingLeft: 7 }} onChangeText={this.handleChangeCountry} value={country} />
+                            <Input style={{ flex: 7 }} placeholder={'XXX XXX XX XX'} onChangeText={this.handleChangePhone} value={phone} />
+                        </PhoneNumber>
+                        <PhoneNumber>
+                            <InputLabel style={{ flex: 4 }}>Фамилия</InputLabel>
+                            <Input style={{ flex: 9 }} placeholder={'Фамилия'} onChangeText={this.handleChangeLastName} value={lastName} />
+                        </PhoneNumber>
+                        <PhoneNumber>
+                            <InputLabel style={{ flex: 4 }}>Имя</InputLabel>
+                            <Input style={{ flex: 9 }} placeholder={'Имя'} onChangeText={this.handleChangeFirstName} value={firstName} />
+                        </PhoneNumber>
+                        <PhoneNumber>
+                            <InputLabel style={{ flex: 4 }}>Отчество</InputLabel>
+                            <Input style={{ flex: 9 }} placeholder={'Отчество'} onChangeText={this.handleChangePatronymic} value={patronymic} />
+                        </PhoneNumber>
+                        <PhoneNumber>
+                            <InputLabel style={{ flex: 4 }}>Должность</InputLabel>
+                            <Input style={{ flex: 9 }} placeholder={'Должность'} onChangeText={this.handleChangePost} value={post} />
+                        </PhoneNumber>
+                        <PhoneNumber>
+                            <InputLabel style={{ flex: 4 }}>Email</InputLabel>
+                            <Input style={{ flex: 9 }} placeholder={'Email'} onChangeText={this.handleChangeEmail} value={email} />
+                        </PhoneNumber>
+                    </ScrollView>
+                    <ButtonBox>
+                        <Button onPress={this.proceed} style={{ background: green }} color={'white'}>Добавить контакт</Button>
+                    </ButtonBox>
+                </Wrapper>
+            </ScrollView>
         )
     }
     state = {
@@ -138,7 +141,7 @@ export default class Content extends Component {
             method: 'post',
             attr: { contact },
             success: (res) => {
-                console.log({res})
+                console.log({ res })
             },
             failFunc: (err) => {
                 console.log(err)

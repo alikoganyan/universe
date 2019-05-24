@@ -8,7 +8,6 @@ import helper from '../../utils/helpers'
 const { HeaderHeight } = helper;
 const Wrapper = styled(View)`
     height: 100%;
-    padding-bottom: ${HeaderHeight};
 `
 export default class Signup extends Component {
     render() {

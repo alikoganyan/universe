@@ -87,36 +87,39 @@ class Content extends Component {
             receivers
         } = this.props
         return (
-            <Wrapper>
-                <StyledInput password={true}
-                    onChangeText={this.handleChange}
-                    value={text}
-                    placeholder={'Текст новости'}
-                    multiline={true}
-                    style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
-                <Recievers>
-                    <DialogsLabel>
-                        <GroupIcon />
-                        <Text>диалоги</Text>
-                    </DialogsLabel>
-                    <ScrollView>
-                        {receivers.map((e, i) => (
-                            <RecieverComponent key={i} last={i === receivers.length}>{e}</RecieverComponent>
-                        ))}
-                    </ScrollView>
-                    <DialogsLabel>
-                        <TouchableOpacity onPress={this.addParticipant}>
-                            <AddReciever>Добавить</AddReciever>
-                        </TouchableOpacity>
-                    </DialogsLabel>
-                </Recievers>
-                <ButtonBox>
-                    <Button
-                        onPress={this.proceed}
-                        style={{ background: yellow }}
-                        color={black}>Продолжить</Button>
-                </ButtonBox>
-            </Wrapper>)
+            <ScrollView contentContainerStyle={{ flexGrow: 1 }}
+                keyboardShouldPersistTaps='handled'>
+                <Wrapper>
+                    <StyledInput password={true}
+                        onChangeText={this.handleChange}
+                        value={text}
+                        placeholder={'Текст новости'}
+                        multiline={true}
+                        style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
+                    <Recievers>
+                        <DialogsLabel>
+                            <GroupIcon />
+                            <Text>диалоги</Text>
+                        </DialogsLabel>
+                        <ScrollView>
+                            {receivers.map((e, i) => (
+                                <RecieverComponent key={i} last={i === receivers.length}>{e}</RecieverComponent>
+                            ))}
+                        </ScrollView>
+                        <DialogsLabel>
+                            <TouchableOpacity onPress={this.addParticipant}>
+                                <AddReciever>Добавить</AddReciever>
+                            </TouchableOpacity>
+                        </DialogsLabel>
+                    </Recievers>
+                    <ButtonBox>
+                        <Button
+                            onPress={this.proceed}
+                            style={{ background: yellow }}
+                            color={black}>Продолжить</Button>
+                    </ButtonBox>
+                </Wrapper>
+            </ScrollView>)
     }
     state = {
         receivers: [],

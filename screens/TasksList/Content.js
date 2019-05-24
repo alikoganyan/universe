@@ -26,7 +26,8 @@ class Content extends Component {
     const { tasks, navigate } = this.props;
     return (tasks && tasks.length) ? (
       <Wrapper>
-        <StyledScrollView>
+        <StyledScrollView contentContainerStyle={{ flexGrow: 1 }}
+          keyboardShouldPersistTaps='handled'>
           <TaskPack title={'inc'} tasks={tasks} onPress={() => navigate('TasksInc')} />
           <TaskPack title={'out'} tasks={tasks} onPress={() => navigate('TasksOut')} last />
           {

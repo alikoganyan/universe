@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, FlatList, Image, TouchableOpacity } from 'react-native'
 import { CommentIcon, HeartIcon } from '../../assets/index'
 import { TaskComponent } from '../../common'
 import styled from 'styled-components'
@@ -51,32 +51,36 @@ class Content extends Component {
         const { currentTask, user } = this.props
         return (
             <SafeAreaView>
-                <Wrapper>
-                    <Options>
-                        {
-                            options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                                <Option active={active === i}>{e}</Option>
-                            </TouchableOpacity>)
-                        }
-                    </Options>
-                    {currentTask.tasks && <TaskList
-                        data={currentTask.tasks}
-                        ListFooterComponent={<View style={{ margin: 40, }} />}
-                        renderItem={({ item, index }) => {
-                        const myTask = item.creator._id === user._id;
-                        return <TaskWrapper>
-                            <TaskComponent
-                                triangleLeft={!myTask}
-                                triangleRight={myTask}
-                                borderColor={myTask ? purple : pink }
-                                style={{
-                                    marginRight: myTask ? 10 : 70,
-                                    marginLeft: myTask ? 70 : 10,
-                                }}>{item}</TaskComponent>
-                        </TaskWrapper>}}
-                        keyExtractor={(item, index) => index.toString()}
-                    />}
-                </Wrapper>
+                <ScrollView contentContainerStyle={{ flexGrow: 1 }}
+                    keyboardShouldPersistTaps='handled'>
+                    <Wrapper>
+                        <Options>
+                            {
+                                options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+                                    <Option active={active === i}>{e}</Option>
+                                </TouchableOpacity>)
+                            }
+                        </Options>
+                        {currentTask.tasks && <TaskList
+                            data={currentTask.tasks}
+                            ListFooterComponent={<View style={{ margin: 40, }} />}
+                            renderItem={({ item, index }) => {
+                                const myTask = item.creator._id === user._id;
+                                return <TaskWrapper>
+                                    <TaskComponent
+                                        triangleLeft={!myTask}
+                                        triangleRight={myTask}
+                                        borderColor={myTask ? purple : pink}
+                                        style={{
+                                            marginRight: myTask ? 10 : 70,
+                                            marginLeft: myTask ? 70 : 10,
+                                        }}>{item}</TaskComponent>
+                                </TaskWrapper>
+                            }}
+                            keyExtractor={(item, index) => index.toString()}
+                        />}
+                    </Wrapper>
+                </ScrollView>
             </SafeAreaView>
         )
     }
