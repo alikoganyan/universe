@@ -9,7 +9,7 @@ import { Button } from '../../common'
 import CheckBox from 'react-native-check-box'
 
 const { Colors, fontSize, HeaderHeight } = helper;
-const { lightGrey1, blue } = Colors;
+const { lightGrey1, blue, blueDisabled, pink } = Colors;
 const Wrapper = styled(View)`
     padding: 0 5%;
     justify-content: center;
@@ -24,7 +24,7 @@ const Title = styled(Text)`
 `
 const SubTitle = styled(Text)`
     width: 100%;
-    color: ${lightGrey1};
+    color: ${({ error }) => error ? pink : lightGrey1};
     text-align: center;
     margin-bottom: 30px;
     font-size: ${fontSize.text};
@@ -65,13 +65,14 @@ const LinkText = styled(Text)`
 `
 class Content extends Component {
     render() {
+        const { btnDisabled } = this.state
         return (
             <Wrapper>
                 <Title>
                     Регистрация
                 </Title>
-                <SubTitle>
-                    Поздравляем, вы зарегистрированы
+                <SubTitle error={btnDisabled}>
+                    Примите пользовательские соглашения
                 </SubTitle>
                 <PhoneNumber>
                     {this.state.agreements.map((e, i) => {
@@ -93,13 +94,14 @@ class Content extends Component {
                 <ButtonBox>
                     <Button
                         onPress={this.proceed}
-                        style={{ background: blue }}
+                        style={{ background: !btnDisabled ? blue : blueDisabled }}
                         color={'white'}>зарегистрироваться</Button>
                 </ButtonBox>
             </Wrapper>
         )
     }
     state = {
+        btnDisabled: false,
         agreements: [
             {
                 value: false,
@@ -129,14 +131,11 @@ class Content extends Component {
         const newAgreements = [...this.state.agreements];
         const item = newAgreements.filter((item) => e.linkText === item.linkText)[0];
         item.value = !item.value
-        this.setState({ agreements: [...newAgreements] })
+        this.setState({ agreements: [...newAgreements], btnDisabled: false })
     }
     proceed = (e) => {
-        const checkboxes = [];
-        Object.values(this.state.agreements).map((e, i) => {
-            checkboxes.push(e.value);
-        })
-        const checked = !checkboxes.includes(false);
+        const checked = !this.state.agreements.filter(e => e.value === false)[0];
+        this.setState({ btnDisabled: !checked })
         if (checked) {
             const { forward } = this.props;
             forward()

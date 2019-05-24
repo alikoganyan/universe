@@ -7,7 +7,6 @@ import { connect } from 'react-redux'
 import { TaskComponent, Message, Feed } from '../../common'
 import posed from 'react-native-pose'
 
-var Color = require('color');
 const { Colors } = helper
 const { myMessage, interlocatorMessage } = Colors
 const MessageOptionsPosed = posed.View({

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, Dimensions, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, Dimensions, Platform, TextInput } from 'react-native'
 import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
@@ -11,7 +11,7 @@ import {
 } from '../../constants/api'
 import sendRequest from '../../utils/request'
 const { Colors, HeaderHeight } = helper;
-const { blue, grey1, lightGrey1 } = Colors;
+const { blue, grey1, lightGrey1, pink } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
     padding-bottom: 10%;
@@ -52,12 +52,25 @@ const NoCodeLabel = styled(Text)`
     color: ${grey1};
     text-align: center;
 `
+const NoCodeLabelLink = styled(NoCodeLabel)`
+    color: ${blue};
+`
 const NoCodeTimer = styled(Text)`
     font-size: 11px;
     text-align: center;
 `
+const StyledInput = styled(TextInput)`
+    border-width: 0;
+    border-bottom-width: 1;
+    border-bottom-color: ${lightGrey1};
+    display: flex;
+    text-align: center;
+    padding-left: 0;
+    width: 100%;
+    padding-bottom: 10px;
+`
 const Input = (props) => {
-    const { autoFocus = false, keyboardType = 'number-pad', children, password = false, value, style, editable, onChangeText, inputStyle } = props;
+    const { autoFocus = false, keyboardType = 'number-pad', children, password = false, value, style, editable, onChangeText, inputStyle, maxLength } = props;
     return <FloatingLabel
         labelStyle={{ fontSize: 11 }}
         inputStyle={{
@@ -78,14 +91,14 @@ const Input = (props) => {
         }}
         editable={editable}
         onChangeText={onChangeText}
+        maxLength={maxLength}
         autoFocus={autoFocus}
     >{children}</FloatingLabel>
 
 }
 class Content extends Component {
     render() {
-        const { code, error } = this.state;
-        console.log(error)
+        const { code, error, deadline } = this.state;
         return (
             <Wrapper>
                 <Title>
@@ -93,15 +106,21 @@ class Content extends Component {
                 </Title>
                 <Label>Вам отправлено sms с временным паролем, {'\n'}введите его тут</Label>
                 <PhoneNumber>
-                    <Input autoFocus={true} style={{
-                        width: '100%'
-                    }} inputStyle={{ color: error ? 'red' : undefined, borderColor: error ? 'red' : undefined }} value={code} onChangeText={this.handleChangeCode} keyboardType={'phone-pad'} />
+                    <StyledInput
+                        autoFocus={true}
+                        style={{ color: error ? pink : 'black', borderBottomColor: error ? pink : lightGrey1 }}
+                        value={code}
+                        maxLength={6}
+                        onChangeText={this.handleChangeCode}
+                        keyboardType={'phone-pad'} />
                 </PhoneNumber>
                 <ControlBar>
-                    {code.length === 4 ? <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>Отправить</Button> :
+                    {(this.state.code.length === 6 && !error) ? <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>Отправить</Button> :
                         <NoCode>
-                            <NoCodeLabel>Не получили смс?</NoCodeLabel>
-                            <NoCodeTimer>Отправить sms повторно можно будет через 4:56</NoCodeTimer>
+                            {error &&
+                                <TouchableOpacity onPress={this.sendAgain}><NoCodeLabel>Неверный пароль, <NoCodeLabelLink>отправить sms повторно?</NoCodeLabelLink></NoCodeLabel></TouchableOpacity>}
+                            {(deadline > 0 && !error) && <NoCodeTimer>Отправить sms повторно можно будет через 0:{deadline >= 10 ? deadline : `0${deadline}`}</NoCodeTimer>}
+                            {(deadline === 0 && !error) && <TouchableOpacity onPress={this.sendAgain}><NoCodeLabelLink>Отправить sms повторно</NoCodeLabelLink></TouchableOpacity>}
                         </NoCode>}
                 </ControlBar>
             </Wrapper>
@@ -111,20 +130,26 @@ class Content extends Component {
         error: false,
         code: '',
         answer: '4444',
+        deadline: 2,
     }
     componentDidMount() {
         const { register } = this.props;
         const { sms } = register;
         this.setState({ answer: sms })
+        const countdown = setInterval(() => {
+            this.setState({ deadline: this.state.deadline - 1 })
+            if (this.state.deadline === 0)
+                clearInterval(countdown)
+        }, 1000)
+
     }
     handleChangeCode = e => {
-        const { answer } = this.state;
-        e.length <= answer.length && this.setState({ code: e });
+        this.setState({ code: e, error: false });
     }
     proceed = e => {
         const { code, answer } = this.state;
 
-        if (code.length === 4) {
+        if (this.state.code.length === 4) {
             this.checkCode();
         } else {
             this.setState({ error: true })
@@ -148,6 +173,30 @@ class Content extends Component {
                 console.log(err);
                 this.setState({ error: true })
             }
+        })
+    }
+    sendAgain = e => {
+        const { register } = this.props;
+        const { phone } = register;
+        this.setState({ deadline: 30 }, () => {
+            // sendRequest({
+            //     r_path: p_get_restore_password,
+            //     method: 'post',
+            //     attr: {
+            //         phone_number: phone,
+            //     },
+            //     success: (res) => {
+            //         console.log(res)
+            //     },
+            //     failFunc: (err) => {
+            //         console.log(err)
+            //     }
+            // })
+            const countdown = setInterval(() => {
+                this.setState({ deadline: this.state.deadline - 1 })
+                if (this.state.deadline === 0)
+                    clearInterval(countdown)
+            }, 1000)
         })
     }
 }

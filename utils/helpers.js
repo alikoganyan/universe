@@ -24,6 +24,7 @@ export default helper = {
         pink: '#f96281',
         red: '#70d0af',
         blue: '#4a83fa',
+        blueDisabled: '#80a6f8',
         lightBlue: '#dbe5fd',
         black: '#000000',
         barkBlue1: '#222222',

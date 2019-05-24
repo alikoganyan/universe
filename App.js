@@ -118,7 +118,7 @@ const AppStackNavigator = createStackNavigator(
     NewGroup: { screen: NewGroup },
   },
   {
-    initialRouteName: 'Login',
+    initialRouteName: 'Signup3',
     headerMode: 'none',
   }
 )

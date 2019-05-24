@@ -31,7 +31,7 @@ class Dialogs extends Component {
 						ListHeaderComponent={<View style={{ margin: 30, }} />}
 						ref={(ref) => { this.flatList = ref; }}
 						data={dialogs}
-						keyboardShouldPersistTaps={'handled'}
+						keyboardShouldPersistTaps={'always'}
 						renderItem={(dialog) => {
 							const { item } = dialog
 							const { creator, participants, messages, name, text, isGroup, room } = item

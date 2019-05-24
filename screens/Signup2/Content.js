@@ -86,7 +86,7 @@ class Content extends Component {
                 <Controls>
                     <NoSMS>Не получили sms?</NoSMS>
                     {deadline ?
-                        <SendAgain>Отправить sms повторно можно будет через {deadline}</SendAgain> :
+                        <SendAgain>Отправить sms повторно можно будет через 0:{deadline >= 10 ? deadline : `0${deadline}`}</SendAgain> :
 
                         <Button
                             onPress={this.sendAgain}
@@ -100,7 +100,7 @@ class Content extends Component {
     state = {
         sms: '',
         error: 0,
-        deadline: 1,
+        deadline: 30,
         tries: 30,
         err: false,
     }

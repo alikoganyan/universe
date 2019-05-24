@@ -15,8 +15,8 @@ export default class Signup extends Component {
         return (
             <SafeAreaView behavior={'padding'}>
                 <Wrapper>
-                    <Header back={this.navigateBack}/>
-                    <Content  forward={this.moveForward}/>
+                    <Header back={this.navigateBack} />
+                    <Content forward={this.moveForward} navigate={this.navigate} />
                 </Wrapper>
             </SafeAreaView>
         )
@@ -29,5 +29,8 @@ export default class Signup extends Component {
     }
     moveForward = () => {
         this.props.navigation.navigate('Signup2')
+    }
+    navigate = (e) => {
+        this.props.navigation.navigate(e)
     }
 }

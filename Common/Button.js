@@ -12,7 +12,7 @@ const Wrapper = styled(TouchableOpacity)`
     border: 1px solid ${border};
     padding: 10px 35px;
     border-radius: 30;
-    ${({ style }) => style}
+    ${({ style }) => style};
 `
 const Inner = styled(Text)`
     color: ${({ color }) => color || lightColor};
@@ -20,9 +20,9 @@ const Inner = styled(Text)`
     text-align: center;
 `
 export default Button = (props) => {
-    const { children, style, color, onPress } = props;
+    const { children, style, color, onPress, disabled } = props;
     return (
-        <Wrapper style={{ ...style }} onPress={onPress}>
+        <Wrapper style={{ ...style }} onPress={onPress} disabled={disabled}>
             <Inner color={color}>{children}</Inner>
         </Wrapper>
     )

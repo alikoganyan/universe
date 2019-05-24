@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions } from 'react-native'
+import { View, Text, TextInput, Dimensions, TouchableOpacity } from 'react-native'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
@@ -9,7 +9,7 @@ import sendRequest from '../../utils/request'
 import { p_get_sms } from '../../constants/api'
 import { Button } from '../../common'
 const { Colors, HeaderHeight, fontSize } = helper;
-const { lightGrey1, blue } = Colors;
+const { lightGrey1, blue, pink } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
     justify-content: center;
@@ -32,7 +32,6 @@ const PhoneNumber = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    margin-bottom: 20px;
 `
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
@@ -47,6 +46,14 @@ const StyledInput = styled(TextInput)`
 const ButtonBox = styled(View)`
     width: 170px;
     align-self: center;
+    margin-top: 20px;
+`
+const ErrorText = styled(Text)`
+    font-size: ${fontSize.sm};
+    text-align: center;
+`
+const ErrorTextLink = styled(ErrorText)`
+    color: ${blue};
 `
 const Input = (props) => {
     const { children, password = false, value, style, editable, inputStyle, labelStyle, keyboardType } = props;
@@ -75,6 +82,7 @@ class Content extends Component {
             phone,
             error
         } = this.state
+        console.log(error)
         return (
             <Wrapper>
                 <Title>
@@ -88,16 +96,19 @@ class Content extends Component {
                         value={country} onPress={this.handleCountry}
                         style={{ width: '20%' }}
                         value='+7'
-                        inputStyle={{ paddingLeft: 0, textAlign: 'center' }} 
-                        keyboardType={'phone-pad'}/>
+                        inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
+                        keyboardType={'phone-pad'} />
                     <StyledInput password={true}
                         onChangeText={this.handlePhone}
                         value={phone}
                         placeholder={'XXX-XXX-XX-XX'}
                         maxLength={10}
-                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? 'red' : null, borderColor: error ? 'red' : lightGrey1 }}
-                        keyboardType={'phone-pad'}/>
+                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? pink : 'black', borderColor: error ? pink : lightGrey1 }}
+                        keyboardType={'phone-pad'} />
                 </PhoneNumber>
+                {
+                    error ? <View>{error}</View> : null
+                }
                 <ButtonBox>
                     <Button
                         onPress={this.proceed}
@@ -117,8 +128,15 @@ class Content extends Component {
     proceed = (e) => {
         const { country, phone } = this.state;
         const { setRegisterUserNumber, forward } = this.props;
-        if (country && phone) {
-            phone_number = country.concat(phone)
+        phone_number = country.concat(phone)
+        if (!phone) {
+            this.setState({ error: <ErrorText>Введите телефон</ErrorText> })
+        }
+        if (phone && phone.length < 9) {
+            this.setState({ error: <ErrorText>Проверьте правильность введенного номера</ErrorText> })
+        }
+        console.log(phone_number, phone, phone.length >= 9)
+        if (phone_number && phone && phone.length >= 9) {
             setRegisterUserNumber(phone_number);
             sendRequest({
                 r_path: p_get_sms,
@@ -134,20 +152,23 @@ class Content extends Component {
                     let { phone_number } = err
                     this.setState({
                         invalidPhone: phone_number || null,
-                        error: true
+                        error: <TouchableOpacity onPress={this.login}><ErrorText>Телефон уже зарегестрирован в системе. <ErrorTextLink>Авторизируйтесь</ErrorTextLink></ErrorText></TouchableOpacity>
                     })
                 }
             })
-        } else {
-            this.setState({ error: true });
+
         }
 
     }
+    login = (e) => {
+        const { navigate } = this.props;
+        navigate('Login')
+    }
     handleCountry = (e) => {
-        this.setState({ country: e })
+        this.setState({ country: e, error: false })
     }
     handlePhone = (e) => {
-        e.length <= 10 && this.setState({ phone: e })
+        this.setState({ phone: e, error: false })
     }
 }
 const mapStateToProps = state => ({

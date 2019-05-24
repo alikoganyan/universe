@@ -7,8 +7,8 @@ import { p_get_restore_password } from '../../constants/api'
 import { setRegisterUserNumber } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
 import { connect } from 'react-redux'
-const { Colors, HeaderHeight } = helper;
-const { blue, grey1, lightGrey1 } = Colors;
+const { Colors, HeaderHeight, fontSize } = helper;
+const { blue, grey1, lightGrey1, pink } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
     padding-bottom: 10%;
@@ -29,12 +29,12 @@ const ControlBar = styled(View)`
     justify-content: center;
     min-width: 250px;
     align-items: center;
+    margin-top: 20px;
 `
 const PhoneNumber = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-    margin-bottom: 20px;
 `
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
@@ -50,6 +50,17 @@ const Label = styled(Title)`
     font-size: 15px;
     color: ${lightGrey1};
     margin-bottom: 0px;
+`
+const Error = styled(Text)`
+    font-size: ${fontSize.sm};
+`
+
+const ErrorText = styled(Text)`
+    font-size: ${fontSize.sm};
+    text-align: center;
+`
+const ErrorTextLink = styled(ErrorText)`
+    color: ${blue};
 `
 const Input = (props) => {
     const { children, password = false, value, style, editable, inputStyle, labelStyle, keyboardType } = props;
@@ -91,9 +102,12 @@ class Content extends Component {
                         value={phone}
                         placeholder={'XXX-XXX-XX-XX'}
                         maxLength={10}
-                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? 'red' : null, borderColor: error ? 'red' : lightGrey1 }}
+                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? pink : 'black', borderColor: error ? pink : lightGrey1 }}
                         keyboardType={'phone-pad'} />
                 </PhoneNumber>
+                {
+                    error ? <View>{error}</View> : null
+                }
                 <ControlBar>
                     <Button onPress={this.proceed} style={{ backgroundColor: blue, width: '100%' }} color={'#fff'} >Восстановить пароль</Button>
                 </ControlBar>
@@ -106,10 +120,10 @@ class Content extends Component {
         phone: '',
     }
     handleCountry = e => {
-        this.setState({ country: e });
+        this.setState({ country: e, error: false });
     }
     handlePhone = e => {
-        this.setState({ phone: e });
+        this.setState({ phone: e, error: false });
     }
     proceed = e => {
         this.getRestorePassword()
@@ -118,7 +132,13 @@ class Content extends Component {
         const { country, phone } = this.state;
         const { navigate, setRegisterUserNumber } = this.props;
         const phone_number = country.concat(phone)
-        sendRequest({
+        if (!phone) {
+            this.setState({ error: <Error>Введите телефон</Error> })
+        }
+        if (phone && phone.length < 9) {
+            this.setState({ error: <Error>Проверьте правильность введенного номера</Error> })
+        }
+        (phone_number && phone && phone.length >= 9) && sendRequest({
             r_path: p_get_restore_password,
             method: 'post',
             attr: {
@@ -132,13 +152,17 @@ class Content extends Component {
                 console.log(err)
                 let { phone_number, password } = err
                 this.setState({
-                    error: true,
+                    error: <TouchableOpacity onPress={this.signup}><ErrorText>Телефона нет в системе. <ErrorTextLink>Зарегистрируйтесь</ErrorTextLink></ErrorText></TouchableOpacity>,
                     loading: false,
                     invalidPhone: phone_number || null,
                     invalidPassword: password || null
                 })
             }
         })
+    }
+    signup = () => {
+        const { navigate } = this.props;
+        navigate('Signup')
     }
 }
 const mapStateToProps = state => ({
