@@ -10,7 +10,7 @@ import { p_search_dialogs } from '../../constants/api'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
-
+import { SearchShadow } from '../../assets/'
 const { Colors, sidePadding, fontSize, HeaderHeight, borderRadius } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
@@ -41,7 +41,18 @@ class HeaderComponent extends Component {
         const { user } = this.props
         const { input } = this.state;
         return (
-            <Header>
+            <Header
+                style={{
+                    shadowColor: Platform.OS === 'ios' ? '#191e5aca' : 'white',
+                    shadowOffset: {
+                        width: 0,
+                        height: Platform.OS === 'ios' ? 1 : 25,
+                    },
+                    shadowOpacity: Platform.OS === 'ios' ? 0.1 : 1,
+                    shadowRadius: 4,
+
+                    elevation: Platform.OS === 'ios' ? 1 : 4,
+                }}>
                 <BurgerIcon onPress={this.props.toggleDrawer} right />
                 <Input value={input} onChangeText={this.handleInputChange}
                     onFocus={this.handleFocus}

@@ -607,6 +607,16 @@ export function LogoText(props) {
         </StyledTouchableOpacity>
     )
 }
+export function SearchShadow(props) {
+    const { size } = props;
+    return (
+        <Image
+            style={{ width: size || IconSize, height: size || IconSize }}
+            resizeMode={'contain'}
+            source={ICONS.logo_blue}
+        />
+    )
+}
 
 
 export function ArrowDownIcon(props) {
