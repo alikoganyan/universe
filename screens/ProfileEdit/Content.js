@@ -94,7 +94,7 @@ const ErrorText = styled(Text)`
     text-align: center;
 `
 const Input = (props) => {
-    const { style, value, children, onChange, pass } = props;
+    const { style, value, children, onChange, pass, keyboardType } = props;
     return <StyledInput
         value={value}
         style={{ ...style }}
@@ -103,6 +103,7 @@ const Input = (props) => {
         placeholder={children}
         secureTextEntry={pass}
         placeholderTextColor={lightGrey1}
+        keyboardType={keyboardType}
     />
 }
 class Content extends Component {
@@ -140,7 +141,7 @@ class Content extends Component {
                         </Error>}
                         <InputBox key={3} err={!!emailError}>
                             <InputLabel numberOfLines={1}>Email</InputLabel>
-                            <Input value={email} onChange={(e) => this.handleChange(e, "email")}>example@gmail.com</Input>
+                            <Input value={email} keyboardType={'email-address'} onChange={(e) => this.handleChange(e, "email")}>example@gmail.com</Input>
                         </InputBox>
                         {!!emailError && <Error>
                             <ErrorText>{emailError}</ErrorText>
