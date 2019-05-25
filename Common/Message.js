@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, Image, ImageBackground } from 'react-native'
 import styled from 'styled-components'
-import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CheckAllIcon, CommentIcon, HeartIcon } from '../assets/index'
+import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CheckAllIcon, CommentIcon, HeartIcon, ImageIcon, ImageIconBlue } from '../assets/index'
 import { connect } from 'react-redux'
 import { ImageComponent } from './'
 import MapView from 'react-native-maps';
@@ -25,7 +25,7 @@ const MyMessageText = styled(Text)`
     display: flex;
     justify-content: flex-end;
     text-align: left;
-    padding: 10px;
+    padding: ${({ noPadding }) => noPadding ? 0 : 10}px;
     padding-bottom: 0;
     color: white;
 `
@@ -52,7 +52,6 @@ const InterlocutorsMessageText = styled(MyMessageText)`
     color: #54585D;    
     border-radius: 3;
     overflow: hidden;
-    padding: 10px;
     padding-bottom: 0;
     flex-wrap: wrap;
 `
@@ -105,18 +104,47 @@ const MapViewStreetInfo = styled(View)`
 const MapViewStreetTime = styled(Text)`
     color: white;
 `
+const FileInfoWrapper = styled(View)`
+    display: flex;
+    flex-direction: row;
+    padding: 10px;
+    padding-bottom: 0;
+    align-items: center;
+`
+const FileIcon = styled(View)`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background: ${({ background }) => background || 'white'};
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    margin-right: 10px;
+    overflow: hidden;
+`
+const FileInfo = styled(View)`
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+`
+const FileSize = styled(Text)`
+    color: ${({ color }) => color || 'white'};
+`
 const Indicator = ({ read = false, color }) => {
     console.log(read)
     return read ? <CheckAllIcon color={color} /> : <CheckIcon color={color} />
 }
 function Message(props) {
     const { children, messages, myId, background, withImage } = props
-    const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename } = children;
+    const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename, size } = children;
     const date = new Date(created_at);
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const day = daysOfTheWeek[date.getDay()]
     const time = `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`
     const finalTime = Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time
+    const fileSize = size / 1024 > 1024 ? `${(size / (1024 * 2)).toFixed(1)}МБ` : `${(size / 1024).toFixed(1)}КБ`
     if (type === 'image') {
         return (myId == sender._id ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -150,7 +178,7 @@ function Message(props) {
                     </MyMessageText>
                     <MessageInfo>
                         <MessageDate color={'white'}>{finalTime}</MessageDate>
-                        <Indicator color={'white'} read={!!viewers.length}/>
+                        <Indicator color={'white'} read={!!viewers.length} />
                     </MessageInfo>
                 </MyMessage>
                 <TriangleLeftIcon color={background || myMessage} />
@@ -203,7 +231,7 @@ function Message(props) {
                     <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
                     <MapViewStreetInfo>
                         <MapViewStreetTime>4:10</MapViewStreetTime>
-                        <Indicator read={!!viewers.length}/>
+                        <Indicator read={!!viewers.length} />
                     </MapViewStreetInfo>
                 </MapViewStreet>
             </MyMessage>
@@ -243,12 +271,20 @@ function Message(props) {
         return (myId == sender._id ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <MyMessage background={background}>
-                    <MyMessageText>
-                        {text}
-                    </MyMessageText>
+                    <FileInfoWrapper>
+                        <FileIcon>
+                            <ImageIconBlue />
+                        </FileIcon>
+                        <FileInfo>
+                            <MyMessageText noPadding>
+                                {filename}
+                            </MyMessageText>
+                            <FileSize>{fileSize}</FileSize>
+                        </FileInfo>
+                    </FileInfoWrapper>
                     <MessageInfo>
                         <MessageDate color={'white'}>{finalTime}</MessageDate>
-                        <Indicator color={'white'} read={!!viewers.length}/>
+                        <Indicator color={'white'} read={!!viewers.length} />
                     </MessageInfo>
                 </MyMessage>
                 <TriangleLeftIcon color={background || myMessage} />
@@ -261,9 +297,17 @@ function Message(props) {
                         {withImage && <InterlocutorsName>
                             Lol Kek
                         </InterlocutorsName>}
-                        <InterlocutorsMessageText>
-                            {filename}
-                        </InterlocutorsMessageText>
+                        <FileInfoWrapper>
+                            <FileIcon background={pink}>
+                                <ImageIcon />
+                            </FileIcon>
+                            <FileInfo>
+                                <InterlocutorsMessageText noPadding>
+                                    {filename}
+                                </InterlocutorsMessageText>
+                                <FileSize color={pink}>{fileSize}</FileSize>
+                            </FileInfo>
+                        </FileInfoWrapper>
                         <MessageInfo>
                             <MessageDate>{finalTime}</MessageDate>
                         </MessageInfo>

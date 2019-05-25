@@ -291,6 +291,25 @@ export function ImageIcon(props) {
     )
 }
 
+
+export function ImageIconBlue(props) {
+    const { onPress, left, right } = props;
+    return (
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            {/* <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Files_white}
+            /> */}
+            <Image
+                style={{ width: IconSize, height: IconSize }}
+                resizeMode={'contain'}
+                source={ICONS.Files}
+            />
+        </StyledTouchableOpacity>
+    )
+}
+
 export function MessageIndicatorIcon(props) {
     return (
         <Text>
