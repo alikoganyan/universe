@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, Dimensions } from 'react-native'
 import { CommentIcon, HeartIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { setFeed } from '../../actions/newsActions'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { ImageComponent } from '../../common'
-const { borderRadius, Colors, fontSize, sidePadding } = helper;
+const { borderRadius, Colors, fontSize, sidePadding, HeaderHeight } = helper;
 const { yellow, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`
     padding-bottom: 20px;   
     background: white;
+    height: ${Dimensions.get('window').height - HeaderHeight};
 `
 const NewsList = styled(FlatList)`
     padding: ${sidePadding}px;

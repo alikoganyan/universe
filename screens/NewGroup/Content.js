@@ -8,6 +8,7 @@ import { setUser } from '../../actions/userActions'
 import { Button } from '../../common'
 import { ImageComponent } from '../../common'
 import { GroupIcon, CloseIcon } from '../../assets/'
+import { addDialogParticipant, setDialogParticipants } from '../../actions/participantsActions'
 import { socket } from '../../utils/socket'
 const { Colors, HeaderHeight, sidePadding } = helper;
 const { lightGrey1, black, green } = Colors;
@@ -133,12 +134,13 @@ class Content extends Component {
         addParticipant()
     }
     proceed = (e) => {
-        const { participants, forward } = this.props;
+        const { participants, forward, setParticipants } = this.props;
         const { text } = this.state
         let idList = []
         participants.map((e) => {
             idList = [...idList, e._id]
         })
+        setParticipants([])
         socket.emit('new_group', { name: text, participants: idList })
         forward()
     }
@@ -155,5 +157,6 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
+    setParticipants: _ => dispatch(setDialogParticipants(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

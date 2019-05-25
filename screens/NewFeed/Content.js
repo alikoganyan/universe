@@ -5,10 +5,10 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
-import { Button } from '../../common'
+import { addFeed } from '../../actions/newsActions'
+import { Button, ImageComponent } from '../../common'
 import sendRequest from '../../utils/request'
 import { p_news } from '../../constants/api'
-import { ImageComponent } from '../../common'
 import { GroupIcon, CloseIcon } from '../../assets/'
 const { Colors, HeaderHeight, sidePadding } = helper;
 const { lightGrey1, black, yellow } = Colors;
@@ -136,12 +136,24 @@ class Content extends Component {
         addParticipant()
     }
     proceed = (e) => {
-        const { id, receivers, forward } = this.props;
+        const { id, receivers, forward, addFeed, user } = this.props;
         const { text } = this.state;
         let idList = []
         receivers.map((e) => {
             idList = [...idList, e._id]
         })
+        const newFeed = {
+            receivers: [...idList],
+            tags: [],
+            likes_сount: 0,
+            likes: [],
+            text,
+            comments: [],
+            creator: {...user},
+            created_at: new Date(),
+            updated_at: new Date(),
+        }
+        addFeed(newFeed)
         if (text && receivers.length) {
             sendRequest({
                 r_path: p_news,
@@ -173,10 +185,11 @@ class Content extends Component {
     }
 }
 const mapStateToProps = state => ({
-    id: state.userReducer.user.id,
+    user: state.userReducer.user,
     receivers: state.participantsReducer.news.receivers
 })
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
+    addFeed: _ => dispatch(addFeed(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)
