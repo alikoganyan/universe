@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import { Text, View, Image } from 'react-native'
+import { Text, View, Image, ImageBackground } from 'react-native'
 import styled from 'styled-components'
-import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../assets/index'
+import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CheckAllIcon, CommentIcon, HeartIcon } from '../assets/index'
 import { connect } from 'react-redux'
 import { ImageComponent } from './'
 import MapView from 'react-native-maps';
@@ -69,10 +69,12 @@ const MessageDate = styled(Text)`
     color: ${({ color }) => color || '#ABABAB'};
 `
 
-const MyMessageImage = styled(Image)`
-    height: 100px;
-    min-width: 100%;
-    resize-mode: contain;
+const MyMessageImage = styled(ImageBackground)`
+    /* min-height: 300px; */
+    /* min-width: 100%; */
+    /* resize-mode: contain; */
+    /* top: 5px; */
+    flex: 1;
 `
 const InterlocutorsName = styled(InterlocutorsMessageText)`
     margin-bottom: 0;
@@ -103,12 +105,13 @@ const MapViewStreetInfo = styled(View)`
 const MapViewStreetTime = styled(Text)`
     color: white;
 `
-const Indicator = ({ delievered = false, read = false, color }) => {
-    return <CheckIcon color={color} />
+const Indicator = ({ read = false, color }) => {
+    console.log(read)
+    return read ? <CheckAllIcon color={color} /> : <CheckIcon color={color} />
 }
 function Message(props) {
     const { children, messages, myId, background, withImage } = props
-    const { text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename } = children;
+    const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename } = children;
     const date = new Date(created_at);
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const day = daysOfTheWeek[date.getDay()]
@@ -117,12 +120,13 @@ function Message(props) {
     if (type === 'image') {
         return (myId == sender._id ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <MyMessage background={background}>
-                    <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} />
-                    <MessageInfo>
-                        <MessageDate color={'white'}>{finalTime}</MessageDate>
-                        <Indicator color={'white'} />
-                    </MessageInfo>
+                <MyMessage background={background} style={{ padding: 0 }}>
+                    <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'center'}>
+                        <MessageInfo>
+                            <MessageDate color={'white'}>{finalTime}</MessageDate>
+                            <Indicator color={'white'} read={!!viewers.length} />
+                        </MessageInfo>
+                    </MyMessageImage>
                 </MyMessage >
                 <TriangleLeftIcon color={myMessage} />
             </ View >
@@ -146,7 +150,7 @@ function Message(props) {
                     </MyMessageText>
                     <MessageInfo>
                         <MessageDate color={'white'}>{finalTime}</MessageDate>
-                        <Indicator color={'white'} />
+                        <Indicator color={'white'} read={!!viewers.length}/>
                     </MessageInfo>
                 </MyMessage>
                 <TriangleLeftIcon color={background || myMessage} />
@@ -199,7 +203,7 @@ function Message(props) {
                     <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
                     <MapViewStreetInfo>
                         <MapViewStreetTime>4:10</MapViewStreetTime>
-                        <Indicator />
+                        <Indicator read={!!viewers.length}/>
                     </MapViewStreetInfo>
                 </MapViewStreet>
             </MyMessage>
@@ -244,7 +248,7 @@ function Message(props) {
                     </MyMessageText>
                     <MessageInfo>
                         <MessageDate color={'white'}>{finalTime}</MessageDate>
-                        <Indicator color={'white'} />
+                        <Indicator color={'white'} read={!!viewers.length}/>
                     </MessageInfo>
                 </MyMessage>
                 <TriangleLeftIcon color={background || myMessage} />
