@@ -6,10 +6,10 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
 import { addReceiver, setReceivers } from '../../actions/participantsActions'
-import { Button } from '../../common'
+import { Button, ImageComponent } from '../../common'
 import { p_create_task } from '../../constants/api/'
 import sendRequest from '../../utils/request'
-import { ImageComponent } from '../../common'
+import { setTasks } from '../../actions/tasksActions'
 import { GroupIcon, CloseIcon } from '../../assets/'
 import DatePicker from 'react-native-datepicker'
 const { Colors, HeaderHeight, sidePadding } = helper;
@@ -113,13 +113,13 @@ class Content extends Component {
                         value={taskName}
                         placeholder={'Новая задача'}
                         multiline={true}
-                        style={{ flex: 1, marginBottom: 30, textAlign: 'left', paddingLeft: 10}} />
+                        style={{ flex: 1, marginBottom: 30, textAlign: 'left', paddingLeft: 10 }} />
                     <StyledInput password={true}
                         onChangeText={this.handleTaskText}
                         value={taskText}
                         placeholder={'Текст задачи'}
                         multiline={true}
-                        style={{ flex: 1, marginBottom: 30, textAlign: 'left', padding: 0}} />
+                        style={{ flex: 1, marginBottom: 30, textAlign: 'left', padding: 0 }} />
                     <DeadLine>
                         <DialogsLabel>
                             <GroupIcon />
@@ -215,23 +215,49 @@ class Content extends Component {
         addParticipants()
     }
     proceed = (e) => {
-        const { receivers, forward } = this.props
+        const { receivers, forward, setTasks, user, tasks } = this.props
         const { deadlineDate, deadlineTime, taskName, taskText } = this.state;
         const deadline = this.jsCoreDateCreator(`${deadlineDate}:${deadlineTime}`)
-        sendRequest({
-            r_path: p_create_task,
-            method: 'post',
-            attr: {
-                task: { name: taskName, description: taskText, deadline, performers: [receivers[0]._id] }
-            },
-            success: (res) => {
-                console.log(res)
-                forward()
-            },
-            failFunc: (err) => {
-                console.log(err)
-            }
-        })
+        const newTaskUser = tasks.filter(e => e._id === user._id)[0]
+        const newTask = {
+            _id: Math.floor(Math.random()*10000),
+            name: taskName,
+            description: taskText,
+            deadline,
+            performers: [receivers[0]._id],
+            creator: { ...user },
+            created_at: new Date(),
+            updated_at: new Date(),
+            status: 'set',
+        }
+        if (newTaskUser) {
+            const newTasks = [...tasks]
+            newTaskUser.tasks = [...newTaskUser.tasks, newTask]
+            const index = newTasks.findIndex(e => e._id === user._id)
+            newTasks[index] = newTaskUser
+            setTasks(newTasks)
+        } else {
+            const newTasks = [...tasks, {
+                ...user,
+                tasks: [...user.tasks, newTask]
+            }]
+            setTasks(newTasks)
+        }
+        forward()
+        // sendRequest({
+        //     r_path: p_create_task,
+        //     method: 'post',
+        //     attr: {
+        //         task: { name: taskName, description: taskText, deadline, performers: [receivers[0]._id] }
+        //     },
+        //     success: (res) => {
+        //         console.log(res)
+        //         forward()
+        //     },
+        //     failFunc: (err) => {
+        //         console.log(err)
+        //     }
+        // })
     }
     handleCountry = (e) => {
         this.setState({ country: e })
@@ -252,10 +278,12 @@ class Content extends Component {
 const mapStateToProps = state => ({
     user: state.userReducer.user,
     receivers: state.participantsReducer.tasks.receivers,
+    tasks: state.tasksReducer.tasks,
 })
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
     addReceiver: _ => dispatch(addReceiver(_)),
     setReceivers: _ => dispatch(setReceivers(_)),
+    setTasks: _ => dispatch(setTasks(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

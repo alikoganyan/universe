@@ -166,6 +166,7 @@ class TaskComponent extends Component {
         const creationDate = new Date(created_at)
         const rightControl = activeTask._id === _id;
         const leftControl = activeTask._id === _id;
+        console.log(activeTask._id, rightControl, leftControl)
         return (
             <OuterWrapper style={{ justifyContent: triangleRight ? 'flex-end' : 'flex-start', }}>
                 {triangleRight && <ControlBar style={{ alignItems: 'flex-end' }}>
@@ -191,7 +192,7 @@ class TaskComponent extends Component {
                         borderColor={borderColor}
                     >
                         <Status>
-                            <StatusText>{statuses[this.stat]} {this.stat}</StatusText>
+                            <StatusText>{statuses[this.stat]}</StatusText>
                             <StatusStage>
                                 {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= this.stat} color={colors[i]} onPress={() => this.changeState(i)} />)}
                             </StatusStage>
@@ -287,7 +288,7 @@ class TaskComponent extends Component {
     unselect = () => {
         const { setActiveTask } = this.props;
         setActiveTask({})
-        this.changeState('set')
+        // this.changeState('set')
         console.log('unselect')
     }
     componentDidMount() {
