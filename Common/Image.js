@@ -7,7 +7,6 @@ const sizes = {
     xs: 40,
     large: 48,
 }
-console.log(Dimensions.get('window').height)
 const StyledImage = styled(Image)`
     /* border-color: black; */
     width: ${({ size }) => typeof size === 'number' ? size : sizes[size]};

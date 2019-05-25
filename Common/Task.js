@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
-import { CheckIcon, TriangleLeftIcon, TriangleRightIcon } from '../assets'
+import { CheckIcon, CloseTaskIcon, TriangleLeftIcon, TriangleRightIcon, RedoIcon, DoneIcon, StartIcon } from '../assets'
 import { connect } from 'react-redux'
 import { setTasks, setActiveTask } from '../actions/tasksActions'
 import sendRequest from '../utils/request'
@@ -101,17 +101,24 @@ const ControlBar = styled(View)`
     display: flex;
     padding: 10px 0;
     flex: 1;
-    justify-content: space-between;
+    justify-content: flex-end;
 `
 const OuterWrapper = styled(View)`
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
 `
+const ExitPlaceholder = styled(View)`
+    height: 40px;
+    width: 40px;
+    border-radius: 20;
+    margin-top: 10px;
+`
 const Exit = styled(TouchableOpacity)`
     height: 40px;
     width: 40px;
     border-radius: 20;
+    margin-top: 10px;
     background: white;
     border: 1px solid red;
     display: flex;
@@ -137,25 +144,37 @@ class TaskComponent extends Component {
         const statuses = ['ЗАДАЧА ПОСТАВЛЕНА', 'ПРИНЯЛ В РАБОТУ', 'ВЫПОЛНЕНА', 'ПРИНЯТА',]
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec',];
         const colors = [red, yellow, green, purple];
-        let stat = ''
+        this.stat = ''
         switch (status) {
             case 'set':
-                stat = 1;
+                this.stat = 0;
+                break;
+            case 'accepted':
+                this.stat = 1;
                 break;
             case 'done':
-                stat = 2;
+                this.stat = 2;
+                break;
+            case 'completed':
+                this.stat = 3;
+                break;
+            case 'cancelled':
+                this.stat = 4;
                 break;
         }
         const deadlineDate = new Date(deadline)
         const creationDate = new Date(created_at)
-        activeTask.creator && console.log(stat, _id, activeTask._id)
+        const rightControl = activeTask._id === _id;
+        const leftControl = activeTask._id === _id;
         return (
             <OuterWrapper style={{ justifyContent: triangleRight ? 'flex-end' : 'flex-start', }}>
-                {activeTask._id === _id && triangleRight && <ControlBar style={{ alignItems: 'flex-end' }}>
-                    {activeTask.creator._id !== user._id && <Edit><Text>X</Text></Edit>}
-                    {(stat === 1 && activeTask.creator._id !== user._id) && <Accept onPress={this.accept}><Text>X</Text></Accept>}
-                    {(stat === 1 && activeTask.creator._id === user._id) && <Rearrange onPress={this.rearrange}><Text>X</Text></Rearrange>}
-                    {<Exit onPress={this.unselect}><Text>X</Text></Exit>}
+                {triangleRight && <ControlBar style={{ alignItems: 'flex-end' }}>
+                    {rightControl ? <>
+                        <Exit onPress={rightControl && this.unselect}><CloseTaskIcon /></Exit>
+                        {(this.stat === 2) && <Accept onPress={undefined}><RedoIcon /></Accept>}
+                        {(this.stat === 2) && <Rearrange onPress={rightControl && this.complete}><StartIcon /></Rearrange>}
+                    </> :
+                        <ExitPlaceholder />}
                 </ControlBar>}
                 <Wrapper style={{ alignSelf: triangleRight ? 'flex-end' : 'flex-start', }}>
                     {triangleLeft && <TriangleRightIcon style={{
@@ -172,9 +191,9 @@ class TaskComponent extends Component {
                         borderColor={borderColor}
                     >
                         <Status>
-                            <StatusText>{statuses[stat]}</StatusText>
+                            <StatusText>{statuses[this.stat]} {this.stat}</StatusText>
                             <StatusStage>
-                                {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= stat} color={colors[i]} onPress={() => this.changeState(i)} />)}
+                                {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= this.stat} color={colors[i]} onPress={() => this.changeState(i)} />)}
                             </StatusStage>
                         </Status>
                         <TaskTitle>
@@ -209,27 +228,41 @@ class TaskComponent extends Component {
                         zIndex: 99,
                     }} hollow color={borderColor} />}
                 </Wrapper>
-                {activeTask._id === _id && triangleLeft && <ControlBar>
-                    {activeTask.creator._id !== user._id && <Edit><Text>X</Text></Edit>}
-                    {(stat === 1 && activeTask.creator._id !== user._id) && <Accept onPress={this.accept}><Text>X</Text></Accept>}
-                    {(stat === 1 && activeTask.creator._id === user._id) && <Rearrange onPress={this.rearrange}><Text>X</Text></Rearrange>}
-                    {<Exit onPress={this.unselect}><Text>X</Text></Exit>}
-                </ControlBar>}
-            </OuterWrapper>)
+                {
+                    triangleLeft && <ControlBar>
+                        {leftControl ? <>
+                            <Exit onPress={leftControl && this.unselect}><CloseTaskIcon /></Exit>
+                            {(this.stat === 1) && <Accept onPress={leftControl && this.done}><DoneIcon /></Accept>}
+                            {(this.stat === 0) && <Rearrange onPress={leftControl && this.accept}><StartIcon /></Rearrange>}</> :
+                            <ExitPlaceholder />}
+                    </ControlBar>
+                }
+            </OuterWrapper >)
+    }
+    done = () => {
+        this.changeState('done')
+    }
+    complete = () => {
+        this.changeState('completed')
     }
     accept = () => {
-        const { activeTask, setActiveTask } = this.props
-        const newActiveTask = { ...activeTask }
-        newActiveTask.status = "done"
-        setActiveTask(newActiveTask)
+        this.changeState('accepted')
+    }
+    changeState = (e) => {
+        const { activeTask, setActiveTask, setTasks, tasks, currentTask } = this.props
+        const newActiveTask = { ...activeTask };
         const { _id, name, description, deadline, performers, status } = newActiveTask
-        console.log({
-            name,
-            description,
-            deadline,
-            performers,
-            status,
-        })
+        const newTasks = [...tasks];
+        const newHolder = newTasks.filter(e => e._id === currentTask._id)[0];
+        const newTask = newHolder.tasks.filter(e => e._id === activeTask._id)[0]
+        newTask.status = e;
+        const holderId = newHolder.tasks.findIndex(e => e._id === newTask._id)
+        const tasksId = newTasks.findIndex(e => e._id === newHolder._id)
+        newHolder.tasks[holderId] = newTask
+        newTasks[tasksId] = newHolder
+        setTasks(newTasks)
+        setActiveTask(newTask)
+        console.log(newTask)
         sendRequest({
             r_path: p_tasks,
             method: 'patch',
@@ -240,7 +273,7 @@ class TaskComponent extends Component {
                     description,
                     deadline,
                     performers,
-                    status,
+                    status: e,
                 }
             },
             success: (res) => {
@@ -251,34 +284,13 @@ class TaskComponent extends Component {
             }
         })
     }
-    rearrange = () => {
-
-    }
-    changeState = (e) => {
-        const { children, user, tasks } = this.props;
-        // console.log(e, children)
-        const newTask = { ...children }
-        let stat = ''
-        switch (e) {
-            case 0:
-                stat = '0';
-                break;
-            case 1:
-                stat = 'set';
-                break;
-            case 2:
-                stat = '2';
-                break;
-            case 3:
-                stat = 'done';
-                break;
-        }
-        newTask.status = stat;
-        currentTask = tasks.map(e => e.tasks.filter(e => e._id !== children._id)[0])
-    }
     unselect = () => {
         const { setActiveTask } = this.props;
         setActiveTask({})
+        this.changeState('set')
+        console.log('unselect')
+    }
+    componentDidMount() {
     }
     componenWillUmount() {
         this.unselect()
@@ -288,6 +300,7 @@ class TaskComponent extends Component {
 const mapStateToProps = state => ({
     tasks: state.tasksReducer.tasks,
     activeTask: state.tasksReducer.activeTask,
+    currentTask: state.tasksReducer.currentTask,
     user: state.userReducer.user
 });
 const mapDispatchToProps = dispatch => ({

@@ -617,6 +617,46 @@ export function SearchShadow(props) {
         />
     )
 }
+export function DoneIcon(props) {
+    const { size } = props;
+    return (
+        <Image
+            style={{ width: size || IconSize, height: size || IconSize }}
+            resizeMode={'contain'}
+            source={ICONS.Done}
+        />
+    )
+}
+export function StartIcon(props) {
+    const { size } = props;
+    return (
+        <Image
+            style={{ width: size || IconSize, height: size || IconSize }}
+            resizeMode={'contain'}
+            source={ICONS.Start}
+        />
+    )
+}
+export function RedoIcon(props) {
+    const { size } = props;
+    return (
+        <Image
+            style={{ width: size || IconSize, height: size || IconSize }}
+            resizeMode={'contain'}
+            source={ICONS.Redo}
+        />
+    )
+}
+export function CloseTaskIcon(props) {
+    const { size } = props;
+    return (
+        <Image
+            style={{ width: IconSize, height: IconSize }}
+            resizeMode={'contain'}
+            source={ICONS.Close}
+        />
+    )
+}
 
 
 export function ArrowDownIcon(props) {

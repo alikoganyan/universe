@@ -75,7 +75,8 @@ const BoxTitle = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
+    padding-bottom: 20px;
+    align-items: center;
 `
 const BoxInner = styled(AnimatedBox)`
     padding: 20px 0;
@@ -86,7 +87,6 @@ const BoxInner = styled(AnimatedBox)`
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
 `
 const BoxItem = styled(Text)`
-    padding-bottom: ${({ title }) => title ? 20 : 0}px;
     color: #A7B0BA;
 `
 const BoxInnerItem = styled(View)`

@@ -55,7 +55,7 @@ const HeaderText = styled(Text)`
 `
 class HeaderComponent extends Component {
     render() {
-        const { back, user, toProfile } = this.props;
+        const { back, user } = this.props;
         const { search, find } = this.state
         const { image } = user;
         return (
@@ -77,7 +77,7 @@ class HeaderComponent extends Component {
                         <>
                             <SearchIcon right onPress={this.startSearch} />
                             <AddIcon onPress={this.addTask} right />
-                            <TouchableOpacity onPress={toProfile}>
+                            <TouchableOpacity onPress={this.toProfile}>
                                 <ImageComponent size={'medium'} source={{ uri: `http://ser.univ.team${image}` }} />
                             </TouchableOpacity>
                         </> :
@@ -90,6 +90,10 @@ class HeaderComponent extends Component {
     state = {
         search: false,
         find: ''
+    }
+    toProfile = () => {
+        const { navigate } = this.props
+        navigate('Profile')
     }
     find = (e) => {
         this.setState({ find: e })

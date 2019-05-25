@@ -34,6 +34,9 @@ const Task_read = require('./Task_read.png');
 const Tasks = require('./Tasks.png');
 const logo_blue = require('./logo_blue.png');
 const SearchShadow = require('./SearchShadow.png');
+const Redo = require('./Redo.png');
+const Done = require('./Done.png');
+const Start = require('./Start.png');
 
 export default {
     Add,
@@ -72,4 +75,7 @@ export default {
     Tasks,
     logo_blue,
     SearchShadow,
+    Redo,
+    Done,
+    Start,
 }

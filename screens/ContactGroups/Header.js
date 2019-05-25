@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS } from 'react-native'
+import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS, TouchableOpacity } from 'react-native'
 import { BackIcon, AddIcon, SearchIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
@@ -59,7 +59,9 @@ class HeaderComponent extends Component {
                 <Right>
                     <SearchIcon right />
                     <AddIcon onPress={this.addContact} right />
-                    <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} style={{ marginLeft: 10 }} />
+                    <TouchableOpacity onPress={this.toProfile}>
+                        <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} style={{ marginLeft: 10 }} />
+                    </TouchableOpacity>
                 </Right>
             </Header>
         )
@@ -67,6 +69,10 @@ class HeaderComponent extends Component {
     addContact = e => {
         const { navigate } = this.props;
         navigate('NewContact')
+    }
+    toProfile = () => {
+        const { navigate } = this.props;
+        navigate('Profile')
     }
 }
 const mapStateToProps = state => ({

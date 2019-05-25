@@ -25,7 +25,7 @@ const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-` 
+`
 const Center = styled(View)``
 const Input = styled(TextInput)`
     margin-left: ${Dimensions.get('window').width * 0.085};
@@ -54,7 +54,7 @@ const MarginRight = styled(View)`
 
 class HeaderComponent extends Component {
     render() {
-        const { back, user, toProfile } = this.props;
+        const { back, user } = this.props;
         const { search, find } = this.state
         const { image } = user;
         return (
@@ -76,7 +76,7 @@ class HeaderComponent extends Component {
                         <>
                             <SearchIcon right onPress={this.startSearch} />
                             <AddIcon onPress={this.addTask} right />
-                            <TouchableOpacity onPress={toProfile}>
+                            <TouchableOpacity onPress={this.toProfile}>
                                 <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
                             </TouchableOpacity>
                         </> :
@@ -90,6 +90,10 @@ class HeaderComponent extends Component {
         search: false,
         find: ''
     }
+    toProfile = () => {
+        const { navigate } = this.props;
+        navigate('Profile')
+    }
     find = (e) => {
         this.setState({ find: e })
         e ? sendRequest({
@@ -100,7 +104,7 @@ class HeaderComponent extends Component {
                 withUser: true,
             },
             success: (res) => {
-                console.log({res})
+                console.log({ res })
             },
             failFunc: (err) => {
                 console.log(err)
