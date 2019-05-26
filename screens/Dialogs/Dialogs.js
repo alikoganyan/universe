@@ -57,28 +57,12 @@ class Dialogs extends Component {
 		const { user, addMessage, setDialogs, navigation } = this.props;
 		// navigation.navigate('TasksList') // restore 
 		BackHandler.addEventListener('hardwareBackPress', () => true)
-		socket.on('update_dialogs', e => {
-			console.log('update_dialog')
-			setDialogs(e.dialogs)
-		})
+		socket.removeListener('update_dialogs', this.setDialogsSocket);
+		socket.removeListener('new_message', this.newMessageSocket);
 		socket.emit('get_dialogs', { id: user._id })
-		socket.on('new_message', e => {
-			const { dialogs, currentRoom } = this.props
-			const message = {
-				...e, text: e.message, type: 'text', created_at: new Date(), sender: {
-					_id: e.sender._id
-				}
-			}
-			const newDialogs = [...dialogs]
-			const newDialog = newDialogs.filter(event => event.room === e.room)[0]
-			newDialog.messages.push(message)
-			newDialogs[newDialogs.findIndex(event => event.room === e.room)] = newDialog
-			console.log('new message', e)
-			setDialogs(newDialogs)
-			addMessage(message)
-		})
-		socket.on('new_dialogs', e => {
-		})
+		socket.on('update_dialogs', e => this.setDialogsSocket(e))
+		socket.on('new_message', e => this.newMessageSocket(e))
+		socket.on('new_dialogs', e => { })
 		socket.on('need_update', e => {
 			socket.emit('get_dialogs', { id: user._id })
 		})
@@ -87,9 +71,26 @@ class Dialogs extends Component {
 			// socket.emit('subscribe_to_group', {room: e.room})
 		})
 	}
+	setDialogsSocket = (e) => {
+		const { setDialogs } = this.props;
+		setDialogs(e.dialogs)
+	}
+	newMessageSocket = (e) => {
+		const { dialogs, currentRoom, user, addMessage, setDialogs, navigation } = this.props
+		const message = {
+			...e, text: e.message, type: 'text', created_at: new Date(), sender: {
+				_id: e.sender._id
+			}
+		}
+		const newDialogs = [...dialogs]
+		const newDialog = newDialogs.filter(event => event.room === e.room)[0]
+		newDialog.messages = [...newDialog.messages, message]
+		newDialogs[newDialogs.findIndex(event => event.room === e.room)] = newDialog
+		console.log('new message', e)
+		setDialogs(newDialogs)
+		addMessage(message)
+	}
 	componentWillUnmount() {
-		socket.removeListener('update_dialogs');
-		socket.removeListener('new_message');
 		socket.removeListener('new_dialog');
 		socket.removeListener('new_group');
 	}

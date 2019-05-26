@@ -130,7 +130,7 @@ class InputComponent extends Component {
         const { text } = this.state;
         if (text) {
             socket.emit('group_message', { room: currentChat, message: text })
-            addMessage({ room: currentChat, sender: id, text, date: new Date(), type: 'text' })
+            addMessage({ room: currentChat, sender: id, text, date: new Date(), type: 'text', viewers: [] })
         }
         this.setState({ text: '' })
     }

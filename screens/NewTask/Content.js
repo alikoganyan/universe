@@ -243,21 +243,20 @@ class Content extends Component {
             }]
             setTasks(newTasks)
         }
-        forward()
-        // sendRequest({
-        //     r_path: p_create_task,
-        //     method: 'post',
-        //     attr: {
-        //         task: { name: taskName, description: taskText, deadline, performers: [receivers[0]._id] }
-        //     },
-        //     success: (res) => {
-        //         console.log(res)
-        //         forward()
-        //     },
-        //     failFunc: (err) => {
-        //         console.log(err)
-        //     }
-        // })
+        sendRequest({
+            r_path: p_create_task,
+            method: 'post',
+            attr: {
+                task: { name: taskName, description: taskText, deadline, performers: [receivers[0]._id] }
+            },
+            success: (res) => {
+                console.log(res)
+                forward()
+            },
+            failFunc: (err) => {
+                console.log(err)
+            }
+        })
     }
     handleCountry = (e) => {
         this.setState({ country: e })

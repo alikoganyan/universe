@@ -148,6 +148,7 @@ class InputComponent extends Component {
                         date: new Date(),
                         type: 'image',
                         src: result.uri,
+                        viewers: [],
                     })
                 },
                 failFunc: (err) => {
@@ -177,7 +178,7 @@ class InputComponent extends Component {
         // console.log(e)
         if (text) {
             const { dialogs, currentChat } = this.props;
-            const message = { room: currentRoom, sender: { _id: user._id }, text: text.trim(), created_at: new Date(), type: 'text' }
+            const message = { room: currentRoom, sender: { _id: user._id }, text: text.trim(), created_at: new Date(), type: 'text', viewers: [] }
             // console.log(dialogs)
             const newDialogs = [...dialogs]
             const newDialog = {...newDialogs.filter(event => event.room === currentChat)[0]}
