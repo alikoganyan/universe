@@ -19,6 +19,7 @@ const MyMessage = styled(View)`
     max-width: 80%;
     margin-left: 20%;
     position: relative;
+    z-index: 1;
 `
 
 const MyMessageText = styled(Text)`

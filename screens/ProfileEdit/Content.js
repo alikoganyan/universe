@@ -10,7 +10,7 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { ImagePicker } from 'expo';
 import { socket } from '../../utils/socket'
-import { p_profile } from '../../constants/api'
+import { p_profile, p_profile_avatar } from '../../constants/api'
 import sendRequest from '../../utils/request'
 const { Colors, HeaderHeight, fontSize } = helper;
 const { grey2, blue, lightGrey1 } = Colors;
@@ -210,9 +210,37 @@ class Content extends Component {
         // }), 2000)
     }
     selectImage = async (e) => {
-        let result = await ImagePicker.launchImageLibraryAsync({
+        const { currentChat } = this.props
+        const result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
+        const { uri, type } = result
+        const form = new FormData();
+        const fileName = Math.random().toString(36).substring(7);
+        form.append("file", {
+            uri,
+            name: `photo.${fileName}`,
+            type: `image/${type}`,
+        })
+        console.log('test', form)
+        if (!result.cancelled) {
+            sendRequest({
+                r_path: p_profile_avatar,
+                method: 'post',
+                attr: form,
+                // config: {
+                //     headers: {
+                //         'Content-Type': 'multipart/form-data'
+                //     }
+                // },
+                success: (res) => {
+                    console.log({ res })
+                },
+                failFunc: (err) => {
+                    console.log({ err })
+                }
+            })
+        }
     }
     handleChange = (e, unit) => {
         const { user } = this.state;

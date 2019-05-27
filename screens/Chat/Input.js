@@ -64,15 +64,18 @@ const FilePicker = styled(FilePickerPosed)`
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
-    z-index: 4;
+    z-index: 999;
 `
 const Shadow = styled(TouchableOpacity)`
     position: absolute;
     width: ${Dimensions.get('window').width};
     height: ${Dimensions.get('window').height};
     background: rgba(5,5,5,.3);
-    top: -${Dimensions.get('window').height - HeaderHeight - 3};
-    z-index: 2;
+    top: -${Dimensions.get('window').height - HeaderHeight};
+    z-index: 990;
+`
+const FilePickerOption = styled(TouchableOpacity)`
+    z-index: 999;
 `
 class InputComponent extends Component {
     render() {
@@ -98,10 +101,10 @@ class InputComponent extends Component {
                     </Right>
                 </Wrapper>
                 <FilePicker pose={pickerOpened ? 'visible' : 'hidden'}>
-                    <TouchableOpacity onPress={this.selectPhoto}><Text>Фото или видео</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={this.selectFile}><Text>Файл</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={this.selectGeo}><Text>Мою локацию</Text></TouchableOpacity>
-                    <TouchableOpacity onPress={this.unselect}><Text>Отменить</Text></TouchableOpacity>
+                    <FilePickerOption onPress={this.selectPhoto}><Text>Фото или видео</Text></FilePickerOption>
+                    <FilePickerOption onPress={this.selectFile}><Text>Файл</Text></FilePickerOption>
+                    <FilePickerOption onPress={this.selectGeo}><Text>Мою локацию</Text></FilePickerOption>
+                    <FilePickerOption onPress={this.unselect}><Text>Отменить</Text></FilePickerOption>
                 </FilePicker>
             </>
         )
@@ -120,20 +123,21 @@ class InputComponent extends Component {
         this.setState({ pickerOpened: false })
     }
     selectPhoto = async (e) => {
+        const { currentChat } = this.props;
         this.unselect()
+        console.log('form, result')
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
         const form = new FormData();
-        form.append("photo", { uri: 'result.uri', name: 'image', type: 'image/jpeg' })
+        form.append("file", result)
+        form.append("room", currentChat)
+        console.log('test', form)
         if (!result.cancelled) {
             sendRequest({
                 r_path: p_send_file,
                 method: 'post',
-                attr: {
-                    file: form,
-                    room: currentChat
-                },
+                attr: form,
                 // config: {
                 //     headers: {
                 //         'Content-Type': 'multipart/form-data'
@@ -155,7 +159,6 @@ class InputComponent extends Component {
                     console.log({ err })
                 }
             })
-
         }
     }
     selectFile = async (e) => {
@@ -181,11 +184,11 @@ class InputComponent extends Component {
             const message = { room: currentRoom, sender: { _id: user._id }, text: text.trim(), created_at: new Date(), type: 'text', viewers: [] }
             // console.log(dialogs)
             const newDialogs = [...dialogs]
-            const newDialog = {...newDialogs.filter(event => event.room === currentChat)[0]}
+            const newDialog = { ...newDialogs.filter(event => event.room === currentChat)[0] }
             newDialog.messages = [...newDialog.messages, message]
             newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog
-   
-   
+
+
             socket.emit('message', { receiver: currentRoom, message: text.trim() })
             addMessage(message)
             setDialogs(newDialogs)
@@ -215,6 +218,6 @@ const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch()),
     stopSearch: _ => dispatch(stopSearch()),
-	setDialogs: _ => dispatch(setDialogs(_)),
+    setDialogs: _ => dispatch(setDialogs(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(InputComponent)
