@@ -149,71 +149,72 @@ class Content extends Component {
                     onSwipeRight={this.optionRight}
                 > */}
 
-                    <Wrapper>
-                        <KeyboardAwareScrollView enableOnAndroid>
-                            <Options>
+                <Wrapper>
+                    <KeyboardAwareScrollView enableOnAndroid>
+                        <Options>
+                            {
+                                options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+                                    <Option active={active % 3 === i}>{e}</Option>
+                                </TouchableOpacity>)
+                            }
+                        </Options>
+                        <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
+                            <ContactList>
                                 {
-                                    options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                                        <Option active={active % 3 === i}>{e}</Option>
-                                    </TouchableOpacity>)
+                                    department.map((e, i) => (
+                                        <Box key={i} last={i === department.length - 1}>
+                                            <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
+                                                <>
+                                                    <RoundCheckbox
+                                                        size={24}
+                                                        checked={this.state.isSelected}
+                                                        onValueChange={() => this.addAllReceivers(e.workers)}
+                                                    />
+                                                    <BoxItem title={true}>{e.title}</BoxItem>
+                                                </>
+                                                <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
+                                                    <ArrowDownIcon />
+                                                </ArrowWrapper>
+                                            </BoxTitle>
+                                            <Collapsible collapsed={collapsed[i] || false}>
+                                                <BoxInner>
+                                                    {
+                                                        e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
+                                                            <BoxInnerItem>
+                                                                <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
+                                                                <ContactInfo>
+                                                                    <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
+                                                                    <ContactRole>{e.role.length ? e.role[0] : 'no role'}</ContactRole>
+                                                                </ContactInfo>
+                                                            </BoxInnerItem>
+                                                        </TouchableOpacity>)
+                                                    }
+                                                </BoxInner>
+                                            </Collapsible>
+                                        </Box>
+                                    ))
                                 }
-                            </Options>
-                            <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
-                                <ContactList>
-                                    {
-                                        department.map((e, i) => (
-                                            <Box key={i} last={i === department.length - 1}>
-                                                <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                                    <>
-                                                        <RoundCheckbox
-                                                            size={24}
-                                                            checked={this.state.isSelected}
-                                                        />
-                                                        <BoxItem title={true}>{e.title}</BoxItem>
-                                                    </>
-                                                    <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                                                        <ArrowDownIcon />
-                                                    </ArrowWrapper>
-                                                </BoxTitle>
-                                                <Collapsible collapsed={collapsed[i] || false}>
-                                                    <BoxInner>
-                                                        {
-                                                            e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
-                                                                <BoxInnerItem>
-                                                                    <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
-                                                                    <ContactInfo>
-                                                                        <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
-                                                                        <ContactRole>{e.role.length ? e.role[0] : 'no role'}</ContactRole>
-                                                                    </ContactInfo>
-                                                                </BoxInnerItem>
-                                                            </TouchableOpacity>)
-                                                        }
-                                                    </BoxInner>
-                                                </Collapsible>
-                                            </Box>
-                                        ))
+                            </ContactList>
+                            <ContactList>
+                                <FlatList
+                                    style={{ paddingRight: 5, paddingLeft: 5, }}
+                                    ListHeaderComponent={<View style={{ margin: 35, }} />}
+                                    inverted={true}
+                                    data={groups}
+                                    renderItem={({ item, index }) => <Group key={index}>
+                                        <GroupImage />
+                                        <GroupInfo>
+                                            <GroupTitle>{item.title}</GroupTitle>
+                                            <GroupParticipants>{item.participants} участников</GroupParticipants>
+                                        </GroupInfo>
+                                    </Group>
                                     }
-                                </ContactList>
-                                <ContactList>
-                                    <FlatList
-                                        style={{ paddingRight: 5, paddingLeft: 5, }}
-                                        ListHeaderComponent={<View style={{ margin: 35, }} />}
-                                        inverted={true}
-                                        data={groups}
-                                        renderItem={({ item, index }) => <Group key={index}>
-                                            <GroupImage />
-                                            <GroupInfo>
-                                                <GroupTitle>{item.title}</GroupTitle>
-                                                <GroupParticipants>{item.participants} участников</GroupParticipants>
-                                            </GroupInfo>
-                                        </Group>
-                                        }
-                                        keyExtractor={(item, index) => index.toString()}
-                                    />
-                                </ContactList>
-                            </Animated>
-                        </KeyboardAwareScrollView>
-                    </Wrapper>
+                                    keyExtractor={(item, index) => index.toString()}
+                                />
+                            </ContactList>
+                        </Animated>
+                    </KeyboardAwareScrollView>
+                </Wrapper>
                 {/* </GestureRecognizer> */}
             </SafeAreaView>
         )
@@ -286,6 +287,11 @@ class Content extends Component {
         addReceiver(e)
         back()
     }
+    addAllReceivers = (e) => {
+        const { addReceiver, back } = this.props;
+        e.map(e => addReceiver(e))
+        back()
+    }u
     collapseDepartment = (i) => {
         const newDCollapsed = [...this.state.collapsed]
         newDCollapsed[i] = false;
