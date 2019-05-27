@@ -75,7 +75,8 @@ const BoxTitle = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: flex-start;
+    padding-bottom: 20px;
+    align-items: center;
 `
 const BoxInner = styled(AnimatedBox)`
     padding: 20px 0;
@@ -86,7 +87,6 @@ const BoxInner = styled(AnimatedBox)`
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
 `
 const BoxItem = styled(Text)`
-    padding-bottom: ${({ title }) => title ? 20 : 0}px;
     color: #A7B0BA;
 `
 const BoxInnerItem = styled(View)`
@@ -141,7 +141,7 @@ const GroupParticipants = styled(ContactRole)``
 const GroupImage = styled(ContactImage)``
 class Content extends Component {
     render() {
-        const { users, collapsed, options, groups } = this.state;
+        const { users, collapsed, options, groups, isSelected } = this.state;
         const { department } = users;
         const { active } = options;
         return (
@@ -153,37 +153,40 @@ class Content extends Component {
 
                 <Wrapper>
                     <KeyboardAwareScrollView enableOnAndroid>
-                            <ContactList>
-                                {
-                                    department.map((e, i) => (
-                                        <Box key={i} last={i === department.length - 1}>
-                                            <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                                <>
-                                                    <BoxItem title={true}>{e.title}</BoxItem>
-                                                </>
-                                                <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                                                    <ArrowDownIcon />
-                                                </ArrowWrapper>
-                                            </BoxTitle>
-                                            <Collapsible collapsed={collapsed[i] || false}>
-                                                <BoxInner>
-                                                    {
-                                                        e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
-                                                            <BoxInnerItem>
-                                                                <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
-                                                                <ContactInfo>
-                                                                    <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
-                                                                    <ContactRole>{e.role.length ? e.role[0] : 'no role'}</ContactRole>
-                                                                </ContactInfo>
-                                                            </BoxInnerItem>
-                                                        </TouchableOpacity>)
-                                                    }
-                                                </BoxInner>
-                                            </Collapsible>
-                                        </Box>
-                                    ))
-                                }
-                            </ContactList>
+                        <ContactList>
+                            {
+                                department.map((e, i) => (
+                                    <Box key={i} last={i === department.length - 1}>
+                                        <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
+                                            <RoundCheckbox
+                                                size={24}
+                                                checked={this.state.isSelected}
+                                                onValueChange={() => this.addAllReceivers(e.workers)}
+                                            />
+                                            <BoxItem title={true}>{e.title}</BoxItem>
+                                            <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
+                                                <ArrowDownIcon />
+                                            </ArrowWrapper>
+                                        </BoxTitle>
+                                        <Collapsible collapsed={collapsed[i] || false}>
+                                            <BoxInner>
+                                                {
+                                                    e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
+                                                        <BoxInnerItem>
+                                                            <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
+                                                            <ContactInfo>
+                                                                <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
+                                                                <ContactRole>{e.role.length ? e.role[0] : 'no role'}</ContactRole>
+                                                            </ContactInfo>
+                                                        </BoxInnerItem>
+                                                    </TouchableOpacity>)
+                                                }
+                                            </BoxInner>
+                                        </Collapsible>
+                                    </Box>
+                                ))
+                            }
+                        </ContactList>
                     </KeyboardAwareScrollView>
                 </Wrapper>
                 {/* </GestureRecognizer> */}
@@ -192,6 +195,7 @@ class Content extends Component {
     }
     state = {
         collapsed: [],
+        isSelected: false,
         users: {
             department: [
                 {
@@ -256,6 +260,11 @@ class Content extends Component {
     addReceiver = (e) => {
         const { addReceiver, back } = this.props;
         addReceiver(e)
+        back()
+    }
+    addAllReceivers = (e) => {
+        const { addReceiver, back } = this.props;
+        e.map(e => addReceiver(e))
         back()
     }
     collapseDepartment = (i) => {
