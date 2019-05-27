@@ -291,7 +291,7 @@ class Content extends Component {
         const { addReceiver, back } = this.props;
         e.map(e => addReceiver(e))
         back()
-    }u
+    }
     collapseDepartment = (i) => {
         const newDCollapsed = [...this.state.collapsed]
         newDCollapsed[i] = false;
