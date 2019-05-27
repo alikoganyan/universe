@@ -157,8 +157,10 @@ class Content extends Component {
     state = {
         switchOn: true,
         langs: {
+            ru: 'Русский',
+            en: 'English',
             'Русский': 'Русский',
-            'English': 'English'
+            'English': 'English',
         },
         pickerOpened: false,
         settings: [
@@ -176,6 +178,7 @@ class Content extends Component {
             if (e.item === 'language') {
                 e.option.value = 'Изменить'
                 e.status = langs[user.settings[e.item]]
+                console.log(user.settings[e.item])
             }
             else
                 e.option.value = user.settings[e.item]
@@ -199,7 +202,8 @@ class Content extends Component {
     }
     componentWillUnmount() {
         const { settings } = this.state;
-        const { setSettings } = this.props;
+        const { user } = this.props;
+        const userSettings = user.settings
         const reqBody = {
             language: '',
             notifications: '',
@@ -207,7 +211,7 @@ class Content extends Component {
             partition_contacts: '',
         }
         settings.map(e => reqBody[e.item] = e.item === 'language' ? e.status : e.option.value)
-        sendRequest({
+        JSON.stringify(reqBody) !== JSON.stringify(userSettings) && sendRequest({
             r_path: p_settings,
             method: 'patch',
             attr: {
