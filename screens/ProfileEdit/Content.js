@@ -53,7 +53,7 @@ const InputLabel = styled(Text)`
     text-align: right;
     color: ${grey2};
     z-index: 20;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     font-size: ${fontSize.sl};
     margin-right: 15px;
 `
@@ -148,14 +148,14 @@ class Content extends Component {
                         </Error>}
                         <InputBox key={4} err={!!passwordError}>
                             <InputLabel numberOfLines={1}>Пароль</InputLabel>
-                            <Input pass={true} onChange={(e) => this.handleChange(e, "password")}>Пароль</Input>
+                            <Input pass={true} onChange={(e) => this.handleChange(e, "password")} />
                         </InputBox>
                         {!!passwordError && <Error>
                             <ErrorText>{passwordError}</ErrorText>
                         </Error>}
                         <InputBox key={5} err={!!repasswordError}>
                             <InputLabel numberOfLines={1}>Повторите пароль</InputLabel>
-                            <Input pass={true} onChange={(e) => this.handleChange(e, "repassword")}>Повторите пароль</Input>
+                            <Input pass={true} onChange={(e) => this.handleChange(e, "repassword")} />
                         </InputBox>
                         {!!repasswordError && <Error>
                             <ErrorText>{repasswordError}</ErrorText>

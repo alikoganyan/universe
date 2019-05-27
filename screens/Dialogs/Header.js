@@ -60,7 +60,7 @@ class HeaderComponent extends Component {
                 {this.state.focused ?
                     <CloseIcon onPress={this.onBlur} />
                     : <TouchableOpacity onPress={this.toProfile}>
-                        <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} />
+                        <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size={34}/>
                     </TouchableOpacity>}
             </Header>
         )

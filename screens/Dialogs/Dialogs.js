@@ -55,7 +55,7 @@ class Dialogs extends Component {
 	}
 	componentDidMount() {
 		const { user, addMessage, setDialogs, navigation } = this.props;
-		// navigation.navigate('TasksList') // restore 
+		// navigation.navigate('NewGroup') // restore 
 		BackHandler.addEventListener('hardwareBackPress', () => true)
 		socket.removeListener('update_dialogs', this.setDialogsSocket);
 		socket.removeListener('new_message', this.newMessageSocket);

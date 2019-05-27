@@ -15,7 +15,6 @@ const Outer = styled(View)`
 const Wrapper = styled(View)`
   height: ${Dimensions.get('window').height};
   background: white;
-  padding-left: 40px;
 `
 class Drawer extends Component {
   render() {

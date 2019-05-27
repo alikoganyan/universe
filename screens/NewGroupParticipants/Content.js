@@ -153,14 +153,6 @@ class Content extends Component {
 
                 <Wrapper>
                     <KeyboardAwareScrollView enableOnAndroid>
-                        <Options>
-                            {
-                                options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                                    <Option active={active % 3 === i}>{e}</Option>
-                                </TouchableOpacity>)
-                            }
-                        </Options>
-                        <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
                             <ContactList>
                                 {
                                     department.map((e, i) => (
@@ -192,24 +184,6 @@ class Content extends Component {
                                     ))
                                 }
                             </ContactList>
-                            <ContactList>
-                                <FlatList
-                                    style={{ paddingRight: 5, paddingLeft: 5, }}
-                                    ListHeaderComponent={<View style={{ margin: 35, }} />}
-                                    inverted={true}
-                                    data={groups}
-                                    renderItem={({ item, index }) => <Group key={index}>
-                                        <GroupImage />
-                                        <GroupInfo>
-                                            <GroupTitle>{item.title}</GroupTitle>
-                                            <GroupParticipants>{item.participants} участников</GroupParticipants>
-                                        </GroupInfo>
-                                    </Group>
-                                    }
-                                    keyExtractor={(item, index) => index.toString()}
-                                />
-                            </ContactList>
-                        </Animated>
                     </KeyboardAwareScrollView>
                 </Wrapper>
                 {/* </GestureRecognizer> */}

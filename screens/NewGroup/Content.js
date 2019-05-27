@@ -32,7 +32,7 @@ const ButtonBox = styled(View)`
     width: 170px;
     align-self: center;
     position: absolute;
-    bottom: 30px;
+    bottom: 40px;
 `
 const Receivers = styled(View)`
     margin: 40px 0;
@@ -48,6 +48,7 @@ const Receiver = styled(View)`
 const ReceiverInfo = styled(View)`
     display: flex;
     justify-content: space-between;
+    padding-left: 5px;
 `
 const Department = styled(Text)`
     color: ${lightGrey1};
@@ -58,32 +59,36 @@ const DialogsLabel = styled(View)`
     flex-direction:row;
     justify-content: flex-start;
     margin-top: 20px;
+    margin-bottom: 20px;
 `
 const AddReceiver = styled(Text)`
     color: ${green};
 `
-const ReceiverComponent = (props) => {
-    const { children, last = false } = props;
-    const { info, title, image, role, first_name, last_name, phone_number } = children
-    return <Receiver last={last}>
-        <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
-            <View style={{ flex: 1 }}>
-                <ReceiverInfo>
-                    <Text numberOfLines={1}>{first_name || phone_number}</Text>
-                    <Department numberOfLines={1}>{role[0] || 'no role'}</Department>
-                </ReceiverInfo>
-            </View>
-            <CloseIcon />
-        </View>
-    </Receiver>
-}
+const DialogsLabelText = styled(Text)`
+    margin-left: 5px;
+`
 class Content extends Component {
     render() {
         const {
             text
         } = this.state
         const { participants } = this.props
+        const ReceiverComponent = (props) => {
+            const { children, last = false } = props;
+            const { info, title, image, role, first_name, last_name, phone_number } = children
+            return <Receiver last={last}>
+                <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
+                    <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
+                    <View style={{ flex: 1 }}>
+                        <ReceiverInfo>
+                            <Text numberOfLines={1}>{first_name || phone_number}</Text>
+                            {role[0] && <Department numberOfLines={1}>{role[0] || 'no role'}</Department>}
+                        </ReceiverInfo>
+                    </View>
+                    <CloseIcon onPress={e => this.deleteParticipant(e)} />
+                </View>
+            </Receiver>
+        }
         return (
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}
                 keyboardShouldPersistTaps='handled'>
@@ -98,9 +103,9 @@ class Content extends Component {
                     <Receivers>
                         <DialogsLabel>
                             <GroupIcon />
-                            <Text>Участники</Text>
+                            <DialogsLabelText>Участники</DialogsLabelText>
                         </DialogsLabel>
-                        <ScrollView style={{ maxHeight: 150 }}>
+                        <ScrollView style={{ maxHeight: 300 }}>
                             {participants.map((e, i) => (
                                 <ReceiverComponent key={i} last={i === participants.length}>{e}</ReceiverComponent>
                             ))}
@@ -128,6 +133,9 @@ class Content extends Component {
     }
     componentWillUpdate() {
 
+    }
+    deleteParticipant = (e) => {
+        console.log(e)
     }
     addParticipant = () => {
         const { addParticipant } = this.props

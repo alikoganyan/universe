@@ -34,6 +34,7 @@ export default helper = {
         grey2: '#80868b',
         lightGrey1: '#b1b9c2',
         lightGrey2: '#f7f7f7',
+        lightGrey3: '#ccc',
         myMessage: '#3776F9',
         interlocatorMessage: '#F6F6F6',
     },

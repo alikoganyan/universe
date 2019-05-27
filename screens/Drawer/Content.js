@@ -4,13 +4,14 @@ import styled from 'styled-components'
 import { PapperPlaneIcon, GroupIcon, FeedIcon, TasksIcon, SettingsIcon, DialogsIcon } from '../../assets/'
 import { DrawerActions } from 'react-navigation-drawer';
 import helper from '../../utils/helpers'
-const { sidePadding, topPadding } = helper;
+const { sidePadding, topPadding, fontSize } = helper;
 const Wrapper = styled(View)`
     flex: 7;
     display: flex;
     justify-content: flex-start;
     align-items: flex-start;
     margin-top: 20px;
+    padding-left: 40px;
 `
 const Content = styled(View)``
 
@@ -27,6 +28,7 @@ const Link = styled(TouchableOpacity)`
 const LinkText = styled(Text)`
     margin-left: 15px;
     color: #4d4d4d;
+    font-size: ${fontSize.header};
 `
 export default function ContentComponent(props) {
     const { navigate, dispatch } = props

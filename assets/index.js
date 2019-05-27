@@ -610,7 +610,7 @@ export function IntroIcon(props) {
 }
 
 export function LogoText(props) {
-    const { onPress, left, right, size } = props;
+    const { onPress, left, right, size, width, height } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
             {/* <SvgUri
@@ -619,7 +619,7 @@ export function LogoText(props) {
                 source={SVG.Intro}
             /> */}
             <Image
-                style={{ width: size || IconSize, height: size || IconSize }}
+                style={{ width: width || size || IconSize, height: height || size || IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.logo_blue}
             />

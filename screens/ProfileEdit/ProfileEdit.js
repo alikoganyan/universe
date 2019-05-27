@@ -26,7 +26,7 @@ class ProfileEdit extends Component {
                 <SafeAreaView behavior={'padding'}>
                     <Wrapper>
                         <Header back={this.navigateBack} />
-                        <ScrollView>
+                        <ScrollView keyboardDismissMode={'on-drag'}>
                             <Content back={this.navigateBack} />
                         </ScrollView>
                     </Wrapper>
