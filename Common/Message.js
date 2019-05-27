@@ -70,11 +70,11 @@ const MessageDate = styled(Text)`
 `
 
 const MyMessageImage = styled(ImageBackground)`
-    /* min-height: 300px; */
-    /* min-width: 100%; */
+    min-height: 300px; 
+    min-width: 100%;
     /* resize-mode: contain; */
     /* top: 5px; */
-    flex: 1;
+    /* flex: 1; */
 `
 const InterlocutorsName = styled(InterlocutorsMessageText)`
     margin-bottom: 0;
@@ -134,7 +134,6 @@ const FileSize = styled(Text)`
     color: ${({ color }) => color || 'white'};
 `
 const Indicator = ({ read = false, color }) => {
-    console.log(read)
     return read ? <CheckAllIcon color={color} /> : <CheckIcon color={color} />
 }
 function Message(props) {

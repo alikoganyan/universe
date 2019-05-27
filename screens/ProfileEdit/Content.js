@@ -3,7 +3,7 @@ import { View, Text, Image, Dimensions, TouchableOpacity, TextInput } from 'reac
 import { TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
 import { Button } from '../../common';
 import { setRoom } from '../../actions/messageActions'
-import { alterUser } from '../../actions/userActions'
+import { alterUser, setUser } from '../../actions/userActions'
 import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../utils/helpers'
@@ -210,7 +210,7 @@ class Content extends Component {
         // }), 2000)
     }
     selectImage = async (e) => {
-        const { currentChat } = this.props
+        const { user, setUser } = this.props
         const result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
@@ -235,6 +235,10 @@ class Content extends Component {
                 // },
                 success: (res) => {
                     console.log({ res })
+                    const newUser = { ...user };
+                    newUser.image = res.newImage
+                    setUser(newUser)
+                    this.setState({ user: newUser })
                 },
                 failFunc: (err) => {
                     console.log({ err })
@@ -309,6 +313,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
+    setUser: _ => dispatch(setUser(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
     addMessage: _ => dispatch(addMessage(_)),
     alterUser: _ => dispatch(alterUser(_))

@@ -38,7 +38,7 @@ const MessageOptions = styled(MessageOptionsPosed)`
     display: flex;
     justify-content: space-around;
     align-items: flex-start;
-    z-index: 99;
+    z-index: 9999;
 `
 const MessageOption = styled(TouchableOpacity)`
     padding-bottom: 30px;

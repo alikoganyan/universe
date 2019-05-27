@@ -4,7 +4,7 @@ import { SmileIcon, FileIcon, CameraIcon, ImageIcon, PapperPlaneIcon } from '../
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
+import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
 import { ImagePicker, DocumentPicker, Permissions, Location } from 'expo';
 import { p_send_file } from '../../constants/api'
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
@@ -123,16 +123,21 @@ class InputComponent extends Component {
         this.setState({ pickerOpened: false })
     }
     selectPhoto = async (e) => {
-        const { currentChat } = this.props;
+        const { currentChat, currentRoom, addMessage, getMessages, setDialogs, dialogs, user } = this.props;
         this.unselect()
-        console.log('form, result')
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
+        const { uri, type } = result
+        const fileName = Math.random().toString(36).substring(7);
         const form = new FormData();
-        form.append("file", result)
+        form.append("file", {
+            uri,
+            name: `photo.${fileName}`,
+            type: `image/${type}`,
+        })
         form.append("room", currentChat)
-        console.log('test', form)
+        console.log('sendFile')
         if (!result.cancelled) {
             sendRequest({
                 r_path: p_send_file,
@@ -144,16 +149,22 @@ class InputComponent extends Component {
                 //     }
                 // },
                 success: (res) => {
-                    console.log({ res })
                     socket.emit('file', { room: currentChat })
-                    addMessage({
+                    console.log(res.dialog)
+                    const newDialogs = [...dialogs]
+                    const index = newDialogs.findIndex(e => e.room === currentChat)
+                    newDialogs[index] = res.dialog
+                    const message = {
                         room: currentChat,
-                        sender: id,
-                        date: new Date(),
+                        sender: { ...user },
+                        created_at: new Date(),
                         type: 'image',
                         src: result.uri,
                         viewers: [],
-                    })
+                    }
+                    setDialogs(newDialogs)
+                    addMessage(message);
+                    console.log('success')
                 },
                 failFunc: (err) => {
                     console.log({ err })
@@ -178,7 +189,7 @@ class InputComponent extends Component {
     sendMessage = (e) => {
         const { currentRoom, user, addMessage, setDialogs } = this.props;
         const { text } = this.state;
-        // console.log(e)
+        console.log('sendMessage')
         if (text) {
             const { dialogs, currentChat } = this.props;
             const message = { room: currentRoom, sender: { _id: user._id }, text: text.trim(), created_at: new Date(), type: 'text', viewers: [] }
@@ -187,7 +198,6 @@ class InputComponent extends Component {
             const newDialog = { ...newDialogs.filter(event => event.room === currentChat)[0] }
             newDialog.messages = [...newDialog.messages, message]
             newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog
-
 
             socket.emit('message', { receiver: currentRoom, message: text.trim() })
             addMessage(message)
@@ -218,6 +228,7 @@ const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch()),
     stopSearch: _ => dispatch(stopSearch()),
+    getMessages: _ => dispatch(getMessages()),
     setDialogs: _ => dispatch(setDialogs(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(InputComponent)

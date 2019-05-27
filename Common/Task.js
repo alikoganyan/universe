@@ -166,7 +166,6 @@ class TaskComponent extends Component {
         const creationDate = new Date(created_at)
         const rightControl = activeTask._id === _id;
         const leftControl = activeTask._id === _id;
-        console.log(activeTask._id, rightControl, leftControl)
         return (
             <OuterWrapper style={{ justifyContent: triangleRight ? 'flex-end' : 'flex-start', }}>
                 {triangleRight && <ControlBar style={{ alignItems: 'flex-end' }}>
@@ -263,7 +262,6 @@ class TaskComponent extends Component {
         newTasks[tasksId] = newHolder
         setTasks(newTasks)
         setActiveTask(newTask)
-        console.log(newTask)
         sendRequest({
             r_path: p_tasks,
             method: 'patch',
