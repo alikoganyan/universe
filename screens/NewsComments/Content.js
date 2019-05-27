@@ -155,12 +155,13 @@ const FeedText = styled(View)``;
 
 const NewsText = styled(Text)`
     color: ${darkBlue2};
-    font-weight: 300;
-    font-size: 13;
+    font-size: ${fontSize.sm};
+	margin-left: 5px;
 `;
 const LikeText = styled(Text)`
     font-size: ${fontSize.sm};
     color: ${({ color }) => color || grey2};
+	margin-left: 5px;
 `;
 
 
@@ -248,9 +249,10 @@ class Content extends Component {
 				</NewsItem>
 				<FlatList
 					style={{ paddingRight: 5, paddingLeft: 5 }}
-					ListHeaderComponent={<View style={{ margin: 135 }} />}
+					ListHeaderComponent={<View style={{ margin: 110 }} />}
 					ListFooterComponent={<View style={{ margin: 5 }} />}
 					contentContainerStyle={{ alignItems: 'stretch' }}
+					keyboardDismissMode={'on-drag'}
 					inverted={true}
 					data={reversedCommnets}
 					renderItem={({ item }) => <Message>{item}</Message>}

@@ -117,7 +117,7 @@ const CreateDialog = styled(TouchableOpacity)`
     align-items: center;
     align-self: flex-start;
     background: ${green};
-    padding: 15px 30px;
+    padding: 5px 10px;
     margin-left: 30px;
     border-radius: 50000px;
     margin-top: 10px;
@@ -126,7 +126,7 @@ const CreateDialog = styled(TouchableOpacity)`
 const CreateDialogText = styled(Text)`
     margin-left: 10px;
     color: white;
-    font-size: ${fontSize.header - 1};
+    font-size: ${fontSize.text};
 `
 const Padding = styled(View)`
     height: 30px;

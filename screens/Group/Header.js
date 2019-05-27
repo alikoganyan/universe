@@ -78,6 +78,8 @@ const Category = styled(Text)`
     padding: 10px 0;
 `
 const Input = styled(TextInput)`
+    padding-left: 10px; 
+    flex: 1; 
 `
 const IconLeft = styled(Icon)`
     margin-left: ${sidePadding}px;

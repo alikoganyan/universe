@@ -61,6 +61,9 @@ const DialogsLabel = styled(View)`
     justify-content: flex-start;
     margin-top: 20px;
 `
+const DialogsLabelText = styled(Text)`
+    margin-left: 10px;
+`
 const AddReceiver = styled(Text)`
     color: ${purple};
 `
@@ -82,7 +85,7 @@ const ReceiverComponent = (props) => {
             <View style={{ flex: 1, marginLeft: 5 }}>
                 <ReceiverInfo>
                     <Text numberOfLines={1}>{first_name ? `${first_name} ${last_name}` : phone_number}</Text>
-                    <Department numberOfLines={1}>{role[0] || 'no role'}</Department>
+                    {role[0] && <Department numberOfLines={1}>{role[0]}</Department>}
                 </ReceiverInfo>
             </View>
             <CloseIcon onPress={() => onDelete()} />
@@ -111,9 +114,9 @@ class Content extends Component {
                     <StyledInput password={true}
                         onChangeText={this.handleTaskName}
                         value={taskName}
-                        placeholder={'Новая задача'}
+                        placeholder={'Название задачи'}
                         multiline={true}
-                        style={{ flex: 1, marginBottom: 30, textAlign: 'left', paddingLeft: 10 }} />
+                        style={{ flex: 1, marginBottom: 30, textAlign: 'left' }} />
                     <StyledInput password={true}
                         onChangeText={this.handleTaskText}
                         value={taskText}
@@ -123,7 +126,7 @@ class Content extends Component {
                     <DeadLine>
                         <DialogsLabel>
                             <GroupIcon />
-                            <Text>Дедлайн</Text>
+                            <DialogsLabelText>Дедлайн</DialogsLabelText>
                         </DialogsLabel>
                         <DeadlineTime>
                             <DatePicker
@@ -168,13 +171,13 @@ class Content extends Component {
                     <Receivers>
                         <DialogsLabel>
                             <GroupIcon />
-                            <Text>Исполнитель</Text>
+                            <DialogsLabelText>Исполнитель</DialogsLabelText>
                         </DialogsLabel>
                         {receivers.length > 0 ? receivers.map((e, i) => (
                             <ReceiverComponent key={i} last={i === receivers.length} onDelete={() => this.deleteReceiver(e)}>{e}</ReceiverComponent>
                         )) : <DialogsLabel>
                                 <TouchableOpacity onPress={this.addParticipant}>
-                                    <AddReceiver>Добавить</AddReceiver>
+                                    <AddReceiver>Добавить исполнителя</AddReceiver>
                                 </TouchableOpacity>
                             </DialogsLabel>}
                     </Receivers>
@@ -220,7 +223,7 @@ class Content extends Component {
         const deadline = this.jsCoreDateCreator(`${deadlineDate}:${deadlineTime}`)
         const newTaskUser = tasks.filter(e => e._id === user._id)[0]
         const newTask = {
-            _id: Math.floor(Math.random()*10000),
+            _id: Math.floor(Math.random() * 10000),
             name: taskName,
             description: taskText,
             deadline,

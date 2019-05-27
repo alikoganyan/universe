@@ -57,6 +57,7 @@ const StatusText = styled(Text)`
     margin-bottom: 5px;
 `
 const TaskTitle = styled(View)`
+    margin-top: 20px;
     margin-bottom: 10px;
     ${({ style }) => style}
 `

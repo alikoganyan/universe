@@ -149,24 +149,23 @@ function Message(props) {
         return (myId == sender._id ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <MyMessage background={background} style={{ padding: 0 }}>
-                    <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'center'}>
-                        <MessageInfo>
-                            <MessageDate color={'white'}>{finalTime}</MessageDate>
-                            <Indicator color={'white'} read={!!viewers.length} />
-                        </MessageInfo>
-                    </MyMessageImage>
+                    <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
+                    <MessageInfo>
+                        <MessageDate color={'white'}>{finalTime}</MessageDate>
+                        <Indicator color={'white'} read={!!viewers.length} />
+                    </MessageInfo>
                 </MyMessage >
                 <TriangleLeftIcon color={myMessage} />
             </ View >
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <TriangleRightIcon color={interlocatorMessage} />
                 <InterlocutorsMessage background={background}>
-                    <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} />
+                    <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
                     <MessageInfo>
                         <MessageDate>{finalTime}</MessageDate>
                     </MessageInfo>
                 </InterlocutorsMessage>
-            </ View>
+            </View>
         )
     }
     if (type === 'text' || !type) {
@@ -184,12 +183,12 @@ function Message(props) {
                 <TriangleLeftIcon color={background || myMessage} />
             </View>
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
-                {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://simpleicon.com/wp-content/uploads/user1.png` }} />}
+                {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
                 <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -10 : 0 }}>
                     <TriangleRightIcon color={background || interlocatorMessage} />
                     <InterlocutorsMessage background={background || interlocatorMessage}>
                         {withImage && <InterlocutorsName>
-                            Lol kek
+                            {sender.first_name} {sender.last_name}
                         </InterlocutorsName>}
                         <InterlocutorsMessageText>
                             {text}
@@ -290,12 +289,12 @@ function Message(props) {
                 <TriangleLeftIcon color={background || myMessage} />
             </View>
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
-                {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://simpleicon.com/wp-content/uploads/user1.png` }} />}
+                {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
                 <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -10 : 0 }}>
                     <TriangleRightIcon color={background || interlocatorMessage} />
                     <InterlocutorsMessage background={background || interlocatorMessage}>
                         {withImage && <InterlocutorsName>
-                            Lol Kek
+                            {sender.first_name} {sender.last_name}
                         </InterlocutorsName>}
                         <FileInfoWrapper>
                             <FileIcon background={pink}>

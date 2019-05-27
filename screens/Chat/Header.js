@@ -11,27 +11,27 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { ImageComponent } from '../../common'
 const { sidePadding, HeaderHeight, HeaderHeightInner, Colors, fontSize } = helper;
 const { border } = Colors;
+
+const Input = styled(TextInput)`
+    flex:1;
+    padding-left: 10px; 
+`
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
     align-self: center;
     background: white;
     display: flex;
-    height: ${HeaderHeight};
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    padding-top: ${(HeaderHeightInner - sidePadding) / 2}px;
-    padding-bottom: ${(HeaderHeightInner - sidePadding) / 2}px;
 `
 const Info = styled(View)`
     display: flex;
     margin-left: 10px;
-    width: 90%;
 `
 const InfoChatName = styled(Text)`
     color: black;
-    font-size: ${fontSize.sl};
-    max-width: 150px;
+    font-size: ${fontSize.text};
 `
 const InfoParticipants = styled(Text)`
     color: #5F7991;
@@ -41,7 +41,7 @@ const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    max-width: 100%;
+    max-width: 200px;
 `
 const Right = styled(View)`
     display: flex;
@@ -82,27 +82,22 @@ const Category = styled(Text)`
     text-align: center;
     padding: 10px 0;
 `
-const Input = styled(TextInput)`
-    flex:1;
-`
 const IconLeft = styled(Icon)`
     margin-left: ${sidePadding}px;
 `
 const ToProfile = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
-    justify-content: flex-start;
-    align-items: center;
-    max-width: 150px;
-    overflow: hidden;
+    margin-right: 20px;
 `
 const SearchIconContainer = styled(View)`
-    margin-right: 20px;
+margin-right: 20px;
 `
 class HeaderComponent extends Component {
     render() {
         const { back, search, startSearch, stopSearch, currentChat, currentDialog } = this.props
         const { first_name, last_name, phone_number, image } = currentDialog
+        console.log(search)
         return (
             <Header>
                 <Top>
@@ -134,18 +129,19 @@ class HeaderComponent extends Component {
                         ) : <CloseIcon onPress={stopSearch} />}
                     </Right>
                 </Top>
-                {search && (
-                    <Bottom>
-                        <Categories>
-                            <Category>Задачи</Category>
-                            <Category>Геолокация</Category>
-                            <Category>Контакты</Category>
-                            <Category>Файлы</Category>
-                        </Categories>
-                    </Bottom>
-                )}
+                {search && <Bottom>
+                    <Categories>
+                        <Category>Задачи</Category>
+                        <Category>Геолокация</Category>
+                        <Category>Контакты</Category>
+                        <Category>Файлы</Category>
+                    </Categories>
+                </Bottom>}
             </Header>
         )
+    }
+    state = {
+        search: false,
     }
     toProfile = () => {
         const { toProfile } = this.props;

@@ -211,6 +211,7 @@ class Content extends Component {
             partition_contacts: '',
         }
         settings.map(e => reqBody[e.item] = e.item === 'language' ? e.status : e.option.value)
+        reqBody.language = 'ru'
         JSON.stringify(reqBody) !== JSON.stringify(userSettings) && sendRequest({
             r_path: p_settings,
             method: 'patch',

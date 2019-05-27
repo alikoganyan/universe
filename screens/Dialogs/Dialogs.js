@@ -30,6 +30,7 @@ class Dialogs extends Component {
 					<StyledFlatList
 						ListHeaderComponent={<View style={{ margin: 30, }} />}
 						ref={(ref) => { this.flatList = ref; }}
+						keyboardDismissMode={'on-drag'}
 						data={dialogs}
 						keyboardShouldPersistTaps={'always'}
 						renderItem={(dialog) => {

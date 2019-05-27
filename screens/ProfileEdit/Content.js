@@ -217,9 +217,10 @@ class Content extends Component {
         const { uri, type } = result
         const form = new FormData();
         const fileName = Math.random().toString(36).substring(7);
+        console.log(fileName)
         form.append("file", {
             uri,
-            name: `photo.${fileName}`,
+            name: `photo${fileName}`,
             type: `image/${type}`,
         })
         console.log('test', form)

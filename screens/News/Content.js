@@ -80,6 +80,7 @@ const Reactions = styled(View)`
 const Reactionsext = styled(Text)`
     color: ${grey2};
     font-size: ${fontSize.sm};
+    margin-left: 5px;
 `
 
 class Content extends Component {

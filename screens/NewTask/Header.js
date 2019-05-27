@@ -59,7 +59,7 @@ class HeaderComponent extends Component {
             <Header>
                 <Left>
                     <CloseIcon onPress={this.back} right />
-                    <HeaderText>Создание Задачи</HeaderText>
+                    <HeaderText>Создание задачи</HeaderText>
                 </Left>
             </Header>
         )

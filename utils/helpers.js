@@ -10,7 +10,7 @@ export default helper = {
     IconSize: 17,
     IconSizeSmall: 11,
     IconSizeLarge: 20,
-    borderRadius: 7,
+    borderRadius: 10,
     Colors: {
         background: '#fff',
         border: '#F1F1F1',
