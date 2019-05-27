@@ -4,9 +4,10 @@ import { SmileIcon, FileIcon, CameraIcon, ImageIcon, PapperPlaneIcon } from '../
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
+import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
 import { ImagePicker, DocumentPicker, Permissions } from 'expo';
 import { p_send_file } from '../../constants/api'
+import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import posed from 'react-native-pose'
 import { socket } from '../../utils/socket'
@@ -114,10 +115,53 @@ class InputComponent extends Component {
         this.setState({ pickerOpened: false })
     }
     selectPhoto = async (e) => {
+        const { currentChat, currentRoom, addMessage, getMessages, setDialogs, dialogs, user } = this.props;
+        this.unselect()
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
-        console.log(result)
+        const { uri, type } = result
+        const fileName = Math.random().toString(36).substring(7);
+        const form = new FormData();
+        form.append("file", {
+            uri,
+            name: `photo.${fileName}`,
+            type: `image/${type}`,
+        })
+        form.append("room", currentChat)
+        console.log('sendFile')
+        if (!result.cancelled) {
+            sendRequest({
+                r_path: p_send_file,
+                method: 'post',
+                attr: form,
+                // config: {
+                //     headers: {
+                //         'Content-Type': 'multipart/form-data'
+                //     }
+                // },
+                success: (res) => {
+                    socket.emit('file', { room: currentChat })
+                    const newDialogs = [...dialogs]
+                    const index = newDialogs.findIndex(e => e.room === currentChat)
+                    newDialogs[index] = res.dialog
+                    const message = {
+                        room: currentChat,
+                        sender: { ...user },
+                        created_at: new Date(),
+                        type: 'image',
+                        src: result.uri,
+                        viewers: [],
+                    }
+                    setDialogs(newDialogs)
+                    addMessage(message);
+                    console.log('success')
+                },
+                failFunc: (err) => {
+                    console.log({ err })
+                }
+            })
+        }
     }
     selectFile = async (e) => {
         let result = await DocumentPicker.getDocumentAsync({});
@@ -181,11 +225,15 @@ const mapStateToProps = state => ({
     messages: state.messageReducer.messages,
     currentRoom: state.messageReducer.currentRoom,
     currentChat: state.messageReducer.currentChat,
-    id: state.userReducer.user._id
+    dialogs: state.dialogsReducer.dialogs,
+    id: state.userReducer.user._id,
+    user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch()),
     stopSearch: _ => dispatch(stopSearch()),
+    getMessages: _ => dispatch(getMessages()),
+    setDialogs: _ => dispatch(setDialogs(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(InputComponent)
