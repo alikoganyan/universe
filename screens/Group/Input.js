@@ -121,11 +121,12 @@ class InputComponent extends Component {
             allowsEditing: false,
         });
         const { uri, type } = result
+        const ext = uri.split('.')[uri.split('.').length-1]
         const fileName = Math.random().toString(36).substring(7);
         const form = new FormData();
         form.append("file", {
             uri,
-            name: `photo.${fileName}`,
+            name: `photo.${fileName}.${ext}`,
             type: `image/${type}`,
         })
         form.append("room", currentChat)

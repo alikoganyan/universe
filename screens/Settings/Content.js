@@ -159,12 +159,10 @@ class Content extends Component {
         langs: {
             ru: 'Русский',
             en: 'English',
-            'Русский': 'Русский',
-            'English': 'English',
         },
         pickerOpened: false,
         settings: [
-            { item: 'language', label: 'Язык', status: 'Русский', option: { type: 'link', value: 'изменить' } },
+            { item: 'language', label: 'Язык', status: 'ru', option: { type: 'link', value: 'изменить' } },
             { item: 'notifications', label: 'Уведомления', status: 'Включены', option: { type: 'toggle', value: 1 } },
             { item: 'sound', label: 'Звук', status: 'Включен', option: { type: 'toggle', value: 0 } },
             { item: 'partition_contacts', label: 'Контакты', status: 'По подразделениям', option: { type: 'toggle', value: 0 } },
@@ -177,7 +175,7 @@ class Content extends Component {
         newSettings.map(e => {
             if (e.item === 'language') {
                 e.option.value = 'Изменить'
-                e.status = langs[user.settings[e.item]]
+                e.status = langs[e.item]
                 console.log(user.settings[e.item])
             }
             else

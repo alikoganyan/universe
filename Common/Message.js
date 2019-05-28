@@ -184,7 +184,7 @@ function Message(props) {
             </View>
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
                 {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
-                <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -10 : 0 }}>
+                <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
                     <TriangleRightIcon color={background || interlocatorMessage} />
                     <InterlocutorsMessage background={background || interlocatorMessage}>
                         {withImage && <InterlocutorsName>

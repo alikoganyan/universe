@@ -198,7 +198,7 @@ class Content extends Component {
     }
     componentDidMount() {
         const { user } = this.props;
-        console.log(user)
+        // console.log(user)
         this.setState({ user: { ...this.state.user, ...user, password: '' } })
         // setInterval(() => this.setState({
         //     lastNameError: !this.state.lastNameError,
@@ -215,15 +215,15 @@ class Content extends Component {
             allowsEditing: false,
         });
         const { uri, type } = result
+        const ext = uri.split('.')[uri.split('.').length-1]
         const form = new FormData();
         const fileName = Math.random().toString(36).substring(7);
         console.log(fileName)
         form.append("file", {
             uri,
-            name: `photo${fileName}`,
+            name: `photo.${fileName}.${ext}`,
             type: `image/${type}`,
         })
-        console.log('test', form)
         if (!result.cancelled) {
             sendRequest({
                 r_path: p_profile_avatar,
@@ -235,7 +235,7 @@ class Content extends Component {
                 //     }
                 // },
                 success: (res) => {
-                    console.log({ res })
+                    console.log('test', { res })
                     const newUser = { ...user };
                     newUser.image = res.newImage
                     setUser(newUser)

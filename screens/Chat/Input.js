@@ -131,13 +131,15 @@ class InputComponent extends Component {
         const { uri, type } = result
         const fileName = Math.random().toString(36).substring(7);
         const form = new FormData();
+        const ext = uri.split('.')[uri.split('.').length-1]
+        console.log(ext)
+        console.log(`photo.${fileName}.png`)
         form.append("file", {
             uri,
-            name: `photo.${fileName}`,
+            name: `photo.${fileName}.${ext}`,
             type: `image/${type}`,
         })
         form.append("room", currentChat)
-        console.log('sendFile')
         if (!result.cancelled) {
             sendRequest({
                 r_path: p_send_file,
