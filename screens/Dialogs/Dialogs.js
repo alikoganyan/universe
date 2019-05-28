@@ -78,11 +78,7 @@ class Dialogs extends Component {
 	}
 	newMessageSocket = (e) => {
 		const { dialogs, currentRoom, user, addMessage, setDialogs, navigation } = this.props
-		const message = {
-			...e, text: e.message, type: 'text', created_at: new Date(), sender: {
-				_id: e.sender._id
-			}
-		}
+		const message = { ...e, text: e.message, type: 'text', created_at: new Date(), sender: { ...e.sender }, viewers: [] }
 		const newDialogs = [...dialogs]
 		const newDialog = newDialogs.filter(event => event.room === e.room)[0]
 		newDialog.messages = [...newDialog.messages, message]

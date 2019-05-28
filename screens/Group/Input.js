@@ -121,7 +121,7 @@ class InputComponent extends Component {
             allowsEditing: false,
         });
         const { uri, type } = result
-        const ext = uri.split('.')[uri.split('.').length-1]
+        const ext = uri.split('.')[uri.split('.').length - 1]
         const fileName = Math.random().toString(36).substring(7);
         const form = new FormData();
         form.append("file", {
@@ -171,11 +171,18 @@ class InputComponent extends Component {
     selectGeo = (e) => { }
     discardSelect = (e) => { }
     sendMessage = (event) => {
-        const { currentRoom, currentChat, id, addMessage } = this.props;
+        const { currentRoom, currentChat, id, addMessage, user, setDialogs, dialogs } = this.props;
+        const { _id, first_name, last_name, middle_name, image } = user
         const { text } = this.state;
         if (text) {
+            const message = { sender: { _id, first_name, last_name, middle_name, image }, text: text.trim(), created_at: new Date(), type: 'text', viewers: [] }
+            const newDialogs = [...dialogs]
+            const newDialog = { ...newDialogs.filter(event => event.room === currentChat)[0] }
+            newDialog.messages = [...newDialog.messages, message]
+            newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog
             socket.emit('group_message', { room: currentChat, message: text })
-            addMessage({ room: currentChat, sender: id, text, date: new Date(), type: 'text', viewers: [] })
+            addMessage(message)
+            setDialogs(newDialogs)
         }
         this.setState({ text: '' })
     }
