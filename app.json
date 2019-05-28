@@ -8,7 +8,7 @@
       "ios",
       "android"
     ],
-    "version": "2.0.15",
+    "version": "2.0.16",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "updates": {
@@ -18,7 +18,7 @@
       "./assets/*/**"
     ],
     "ios": {
-      "buildNumber": "10",
+      "buildNumber": "11",
       "supportsTablet": false,
       "bundleIdentifier": "team.amigo.media",
       "infoPlist": {
@@ -32,7 +32,7 @@
     },
     "android": {
       "package": "com.team.universe.media",
-      "versionCode": 10,
+      "versionCode": 11,
       "permissions": [
         "CAMERA",
         "READ_INTERNAL_STORAGE",

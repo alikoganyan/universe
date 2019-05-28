@@ -6,6 +6,7 @@ const sizes = {
     medium: Dimensions.get('window').height >= 1080 ? 72 : 24,
     xs: 40,
     large: 48,
+    header: 34,
 }
 const StyledImage = styled(Image)`
     /* border-color: black; */

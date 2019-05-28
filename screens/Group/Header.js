@@ -104,7 +104,7 @@ class HeaderComponent extends Component {
                             <>
                                 <BackIcon onPress={back} right />
                                 <ToProfile onPress={this.toProfile}>
-                                    <ImageComponent source={{ uri: `http://ser.univ.team${creator.image}` }} />
+                                    <ImageComponent source={{ uri: `http://ser.univ.team${creator.image}` }} size={'header'}/>
                                     <Info>
                                         <InfoChatName>{name}</InfoChatName>
                                         <InfoParticipants>{participants.length+1} участника</InfoParticipants>

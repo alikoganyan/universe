@@ -60,7 +60,7 @@ class HeaderComponent extends Component {
                     <SearchIcon right />
                     <AddIcon onPress={this.addContact} right />
                     <TouchableOpacity onPress={this.toProfile}>
-                        <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} style={{ marginLeft: 10 }} />
+                        <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size={'header'} style={{ marginLeft: 10 }} />
                     </TouchableOpacity>
                 </Right>
             </Header>
