@@ -36,15 +36,15 @@ class Dialogs extends Component {
 						keyboardShouldPersistTaps={'always'}
 						renderItem={(dialog) => {
 							const { item } = dialog
-							const { creator, participants, messages, name, text, isGroup, room } = item
+							const { creator, participants, messages, name, text, isGroup, room, image } = item
 							const chatName = !isGroup ?
 								user._id !== creator._id ?
 									(creator.first_name ? `${creator.first_name} ${creator.last_name}` : creator.phone_number) :
 									(participants[0] && participants[0].first_name ? `${participants[0].first_name} ${participants[0].last_name}` : participants[0].phone_number) :
 								(name || room)
-							const image = !isGroup ?
-								(user._id === creator ? user.image : participants[0].image) : '';
-							return <Dialog lastMessage={messages} onClick={() => this.toChat(item)} image={image} title={chatName} item={item}>{text}</Dialog>
+							const chatImage = !isGroup ?
+								(user._id === creator ? user.image : participants[0].image) : image;
+							return <Dialog lastMessage={messages} onClick={() => this.toChat(item)} image={chatImage} title={chatName} item={item}>{text}</Dialog>
 						}}
 						keyExtractor={(item, index) => index.toString()}
 					/> : <Loader style={{ flex: 1 }} hint={'Пока нет диалогов'}>
@@ -94,7 +94,6 @@ class Dialogs extends Component {
 		const newDialog = newDialogs.filter(event => event.room === e.room)[0]
 		newDialog.messages = [...newDialog.messages, message]
 		newDialogs[newDialogs.findIndex(event => event.room === e.room)] = newDialog
-		console.log('new message', e)
 		setDialogs(newDialogs)
 		addMessage(message)
 	}

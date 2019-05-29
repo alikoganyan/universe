@@ -320,7 +320,6 @@ class Content extends Component {
         const { creator, participants, isGroup } = e
         let item = creator._id === user._id ? participants[0] : creator
         const { image, first_name, last_name, phone_number, post } = item
-        console.log(e)
         getMessages(e.messages)
         setCurrentDialogs({ ...e, ...item })
         navigate('Chat')

@@ -198,7 +198,6 @@ class Content extends Component {
     }
     componentDidMount() {
         const { user } = this.props;
-        // console.log(user)
         this.setState({ user: { ...this.state.user, ...user, password: '' } })
         // setInterval(() => this.setState({
         //     lastNameError: !this.state.lastNameError,
@@ -218,7 +217,6 @@ class Content extends Component {
         const ext = uri.split('.')[uri.split('.').length-1]
         const form = new FormData();
         const fileName = Math.random().toString(36).substring(7);
-        console.log(fileName)
         form.append("file", {
             uri,
             name: `photo.${fileName}.${ext}`,
@@ -235,7 +233,6 @@ class Content extends Component {
                 //     }
                 // },
                 success: (res) => {
-                    console.log('test', { res })
                     const newUser = { ...user };
                     newUser.image = res.newImage
                     setUser(newUser)
@@ -286,7 +283,6 @@ class Content extends Component {
                     }
                 },
                 success: (res) => {
-                    console.log('pa_profile', { res })
                     alterUser({
                         email: email || userRedux.email,
                         first_name: first_name || userRedux.firstName,

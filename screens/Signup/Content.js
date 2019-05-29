@@ -135,7 +135,6 @@ class Content extends Component {
         if (phone && phone.length < 9) {
             this.setState({ error: <ErrorText>Проверьте правильность введенного номера</ErrorText> })
         }
-        console.log(phone_number, phone, phone.length >= 9)
         if (phone_number && phone && phone.length >= 9) {
             setRegisterUserNumber(phone_number);
             sendRequest({

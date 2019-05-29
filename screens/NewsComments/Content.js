@@ -180,7 +180,6 @@ class Content extends Component {
 			const { creator, created_at, likes_сount, text, _id } = children;
 			const myId = user._id;
 			const date = new Date(created_at)
-			console.log(myId, _id, text)
 			return myId === _id ?
 				<View style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
 					<MyMessage>
@@ -217,7 +216,6 @@ class Content extends Component {
 					</InterlocutorsMessage>
 				</View>
 		};
-		console.log(creator, image)
 		return (
 			<Wrapper>
 				<NewsItem onLayout={e => this.getUnreadMessageHeight(e)}>

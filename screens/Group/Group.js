@@ -40,7 +40,7 @@ class Chat extends Component {
     }
     componentWillUnmount() {
         const { setCurrentChat, currentRoom, currentChat, user } = this.props;
-        setCurrentChat({ currentChat: null })
+        setCurrentChat(null)
         socket.emit('leave', { room: currentChat, viewer: user._id })
     }
     navigateBack = () => {

@@ -236,7 +236,6 @@ class Content extends Component {
         this.setState({ phone: e, invalidPhone: false })
     }
     handleChangeCountry = (e) => {
-        console.log(e)
         this.setState({ country: e })
     }
     componentWillMount() {

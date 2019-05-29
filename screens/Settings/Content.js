@@ -123,7 +123,6 @@ class Content extends Component {
                         data={settings}
                         scrollEnabled={false}
                         renderItem={({ item, index }) => {
-                            // console.log(index, item)
                             return <Box key={index} last={index === settings.length - 1}>
                                 <Label>{item.label}</Label>
                                 <Status>{item.status || item.language}</Status>
@@ -176,7 +175,6 @@ class Content extends Component {
             if (e.item === 'language') {
                 e.option.value = 'Изменить'
                 e.status = langs[e.item]
-                console.log(user.settings[e.item])
             }
             else
                 e.option.value = user.settings[e.item]

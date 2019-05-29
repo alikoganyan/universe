@@ -97,7 +97,6 @@ class HeaderComponent extends Component {
     render() {
         const { back, search, startSearch, stopSearch, currentChat, currentDialog } = this.props
         const { first_name, last_name, phone_number, image } = currentDialog
-        console.log(search)
         return (
             <Header>
                 <Top>

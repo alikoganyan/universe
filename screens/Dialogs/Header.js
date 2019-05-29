@@ -89,7 +89,7 @@ class HeaderComponent extends Component {
                 name: e,
             },
             success: (res) => {
-                console.log(res)
+                // console.log(res)
             },
             failFunc: (err) => {
                 console.log(err)

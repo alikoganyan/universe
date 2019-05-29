@@ -95,7 +95,7 @@ margin-right: 20px;
 class HeaderComponent extends Component {
     render() {
         const { back, search, startSearch, stopSearch, currentChat, currentDialog } = this.props
-        const { name, creator, participants } = currentDialog
+        const { name, creator, participants, image } = currentDialog
         return (
             <Header>
                 <Top>
@@ -104,7 +104,7 @@ class HeaderComponent extends Component {
                             <>
                                 <BackIcon onPress={back} right />
                                 <ToProfile onPress={this.toProfile}>
-                                    <ImageComponent source={{ uri: `http://ser.univ.team${creator.image}` }} size={'header'}/>
+                                    <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'}/>
                                     <Info>
                                         <InfoChatName>{name}</InfoChatName>
                                         <InfoParticipants>{participants.length+1} участника</InfoParticipants>

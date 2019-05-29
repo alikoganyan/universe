@@ -4,6 +4,6 @@
   "packagerNgrokUrl": "https://packager.qj-i56.dr0kd3n.mobile-front.exp.direct",
   "ngrokPid": 23879,
   "devToolsPort": 19002,
-  "packagerPort": 19001,
-  "packagerPid": 23855
+  "packagerPort": null,
+  "packagerPid": null
 }

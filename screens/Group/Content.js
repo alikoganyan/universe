@@ -60,7 +60,6 @@ class Content extends Component {
                         data={reversedMessages}
                         animated={true}
                         renderItem={({ item, index }) => {
-                            console.log(item)
                             return <TouchableOpacity key={index} onLongPress={() => this.handleHold(item)}>
                                 <Message withImage={true}>{item}</Message>
                             </TouchableOpacity>
@@ -89,7 +88,6 @@ class Content extends Component {
         this.setState({ selectedMessage: {} })
     }
     handleHold = (e) => {
-        console.log(e)
         this.setState({ selectedMessage: e })
         Platform.os === 'ios' && ActionSheetIOS.showActionSheetWithOptions(
             {

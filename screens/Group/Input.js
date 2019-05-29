@@ -130,7 +130,6 @@ class InputComponent extends Component {
             type: `image/${type}`,
         })
         form.append("room", currentChat)
-        console.log('sendFile')
         if (!result.cancelled) {
             sendRequest({
                 r_path: p_send_file,
@@ -156,7 +155,6 @@ class InputComponent extends Component {
                     }
                     setDialogs(newDialogs)
                     addMessage(message);
-                    console.log('success')
                 },
                 failFunc: (err) => {
                     console.log({ err })
@@ -166,7 +164,6 @@ class InputComponent extends Component {
     }
     selectFile = async (e) => {
         let result = await DocumentPicker.getDocumentAsync({});
-        console.log(result)
     }
     selectGeo = (e) => { }
     discardSelect = (e) => { }

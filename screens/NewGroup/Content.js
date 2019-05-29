@@ -135,7 +135,6 @@ class Content extends Component {
 
     }
     deleteParticipant = (e) => {
-        console.log(e)
     }
     addParticipant = () => {
         const { addParticipant } = this.props

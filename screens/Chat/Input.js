@@ -163,7 +163,6 @@ class InputComponent extends Component {
                     }
                     setDialogs(newDialogs)
                     addMessage(message);
-                    console.log('success')
                 },
                 failFunc: (err) => {
                     console.log({ err })

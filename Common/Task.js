@@ -277,7 +277,7 @@ class TaskComponent extends Component {
                 }
             },
             success: (res) => {
-                console.log(res)
+                // console.log({res})
             },
             failFunc: (err) => {
                 console.log(err)
@@ -288,7 +288,7 @@ class TaskComponent extends Component {
         const { setActiveTask } = this.props;
         setActiveTask({})
         // this.changeState('set')
-        console.log('unselect')
+        // console.log('unselect')
     }
     componentDidMount() {
     }
