@@ -13,6 +13,7 @@ import sendRequest from '../../utils/request'
 const { Colors, HeaderHeight } = helper;
 const { blue, grey1, lightGrey1, pink } = Colors;
 const Wrapper = styled(View)`
+    flex: 1;
     padding: 0 20%;
     padding-bottom: 10%;
     display: flex;

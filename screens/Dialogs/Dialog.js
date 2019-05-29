@@ -111,8 +111,8 @@ class Content extends Component {
         lastType = green;
         lastMessageType = 'geo';
         break;
-      case 'image':
-        lastType = yellow;
+      default:
+        lastType = blue;
         lastMessageType = 'image';
         break;
     }

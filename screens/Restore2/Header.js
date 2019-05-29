@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'react-native'
-import { ForwardIcon, LocationIcon, SearchIcon } from '../../assets/index'
+import { ForwardIcon, LocationIcon, SearchIcon, BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 const { sidePadding, HeaderHeight } = helper;
@@ -46,7 +46,12 @@ export default class HeaderComponent extends Component {
     render() {
         return (
             <Header>
+                <BackIcon onPress={this.goBack}/>
             </Header>
         )
+    }
+    goBack = () => {
+        const { back } = this.props;
+        back()
     }
 }

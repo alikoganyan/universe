@@ -8,7 +8,7 @@ import { getMessages, setRoom, addMessage, setCurrentChat, setCurrentRoomId } fr
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
-import { socket } from '../../utils/socket'
+import { socket, connectToSocket } from '../../utils/socket'
 
 const { sidePadding, HeaderHeight, Colors } = helper;
 const { blue, grey2 } = Colors;
@@ -49,11 +49,11 @@ class Dialogs extends Component {
 						keyExtractor={(item, index) => index.toString()}
 					/> : <Loader style={{ flex: 1 }} hint={'Пока нет диалогов'}>
 							<TouchableOpacity onPress={this.toContacts}>
-								<Text style={{color: grey2, textAlign: 'center'}}>Откройте первый диалог, выбрав пользователя 
+								<Text style={{ color: grey2, textAlign: 'center' }}>Откройте первый диалог, выбрав пользователя
 									<Text style={{ color: blue }}> на странице контактов</Text>
 								</Text>
 							</TouchableOpacity>
-					</Loader>}
+						</Loader>}
 				</Wrapper>
 			</SafeAreaView >
 		)
@@ -63,6 +63,7 @@ class Dialogs extends Component {
 	}
 	componentDidMount() {
 		const { user, addMessage, setDialogs, navigation } = this.props;
+		connectToSocket()
 		// navigation.navigate('News') // restore
 		BackHandler.addEventListener('hardwareBackPress', () => true)
 		socket.removeListener('update_dialogs', this.setDialogsSocket);

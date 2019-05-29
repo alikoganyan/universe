@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
-import { ImageComponent } from '../../common'
+import { ImageComponent, Loader } from '../../common'
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
@@ -17,7 +17,7 @@ import { setContacts, setAllUsers } from '../../actions/userActions'
 import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/messageActions'
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 const { Colors, sidePadding } = helper;
-const { green, black } = Colors;
+const { green, black, grey2, blue } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
         x: 0,
@@ -154,90 +154,94 @@ class Content extends Component {
         return (
             <SafeAreaView>
                 <Wrapper>
-                    <KeyboardAwareScrollView enableOnAndroid>
-                        <GestureRecognizer
-                            onSwipeLeft={this.optionLeft}
-                            onSwipeRight={this.optionRight}
-                        >
-                            <Options>
-                                {options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                                    <Option active={active % 3 === i}>{e}</Option>
-                                </TouchableOpacity>)
-                                }
-                            </Options>
-                            <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
-                                <ContactList style={{ width: '100%' }}>
-                                    <FlatList
-                                        style={{ paddingRight: 5, paddingLeft: 5, }}
-                                        data={dialogs}
-                                        renderItem={({ item, index }) => {
-                                            const { participants, creator, _id, name, isGroup } = item
-                                            const chatItem = creator._id === user._id ? participants[0] : creator
-                                            const { first_name, last_name, phone_number, role, image } = chatItem
-                                            const chatName = isGroup ?
-                                                name :
-                                                first_name ? `${first_name} ${last_name}` : phone_number
-                                            return item ? <BoxInnerItem key={index} onPress={() => this.toChat(_id)}>
-                                                <ContactImage source={{ uri: `http://ser.univ.team${image || creator.image}` }} />
-                                                <ContactInfo>
-                                                    <ContactName>{chatName}</ContactName>
-                                                    <ContactRole>{isGroup ? `${participants.length + 1} участника` : role && role[0] || 'без роли'}</ContactRole>
-                                                </ContactInfo>
-                                            </BoxInnerItem> : null
-                                        }}
-                                        keyExtractor={(item, index) => index.toString()}
-                                    />
-                                </ContactList>
-                                <ContactList>
-                                    {department.map((e, i) => (
-                                        <Box key={i} last={i === department.length - 1}>
-                                            <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                                <BoxItem numberOfLines={1} title={true}>{e.title}</BoxItem>
-                                                <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                                                    <ArrowDownIcon />
-                                                </ArrowWrapper>
-                                            </BoxTitle>
-                                            <Collapsible collapsed={collapsed[i] || false}>
-                                                <BoxInner>
-                                                    {dialogs.map((e, i) => {
-                                                        const { creator, participants, isGroup } = e
-                                                        let item = creator._id === user._id ? participants[0] : creator
-                                                        const { image, first_name, last_name, phone_number, post } = item
-                                                        const name = first_name ? `${first_name} ${last_name}` : phone_number
-                                                        return !isGroup && <BoxInnerItem key={i} onPress={() => this.toChat(e)}>
-                                                            <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
-                                                            <ContactInfo>
-                                                                <ContactName>{name}</ContactName>
-                                                                <ContactRole>{'без роли'}</ContactRole>
-                                                            </ContactInfo>
-                                                        </BoxInnerItem>
-                                                    })}
-                                                </BoxInner>
-                                            </Collapsible>
-                                        </Box>
-                                    ))}
-                                </ContactList>
-                                <ContactList style={{ width: '100%' }}>
-                                    <FlatList
-                                        style={{ paddingRight: 5, paddingLeft: 5, }}
-                                        data={dialogs}
-                                        renderItem={({ item, index }) => {
-                                            const { participants, creator, _id, name, isGroup } = item
-                                            const chatItem = creator._id === user._id ? participants[0] : creator
-                                            const { first_name, last_name, phone_number, role, image } = chatItem
-                                            return isGroup ? <BoxInnerItem key={index} onPress={() => this.toChat(_id)}>
-                                                <ContactImage source={{ uri: `http://ser.univ.team${image || creator.image}` }} />
-                                                <ContactInfo>
-                                                    <ContactName>{name}</ContactName>
-                                                    <ContactRole>{participants.length + 1} участника</ContactRole>
-                                                </ContactInfo>
-                                            </BoxInnerItem> : null
-                                        }}
-                                        keyExtractor={(item, index) => index.toString()}
-                                    />
-                                </ContactList>
-                            </Animated>
-                        </GestureRecognizer>
+                    <KeyboardAwareScrollView enableOnAndroid style={{height: '100%'}}>
+                        {dialogs.length && false ?
+                            <>
+                                <Options>
+                                    {options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+                                        <Option active={active % 3 === i}>{e}</Option>
+                                    </TouchableOpacity>)
+                                    }
+                                </Options>
+                                <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
+                                    <ContactList style={{ width: '100%' }}>
+                                        <FlatList
+                                            style={{ paddingRight: 5, paddingLeft: 5, }}
+                                            data={dialogs}
+                                            renderItem={({ item, index }) => {
+                                                const { participants, creator, _id, name, isGroup } = item
+                                                const chatItem = creator._id === user._id ? participants[0] : creator
+                                                const { first_name, last_name, phone_number, role, image } = chatItem
+                                                const chatName = isGroup ?
+                                                    name :
+                                                    first_name ? `${first_name} ${last_name}` : phone_number
+                                                return item ? <BoxInnerItem key={index} onPress={() => this.toChat(_id)}>
+                                                    <ContactImage source={{ uri: `http://ser.univ.team${image || creator.image}` }} />
+                                                    <ContactInfo>
+                                                        <ContactName>{chatName}</ContactName>
+                                                        <ContactRole>{isGroup ? `${participants.length + 1} участника` : role && role[0] || 'без роли'}</ContactRole>
+                                                    </ContactInfo>
+                                                </BoxInnerItem> : null
+                                            }}
+                                            keyExtractor={(item, index) => index.toString()}
+                                        />
+                                    </ContactList>
+                                    <ContactList>
+                                        {department.map((e, i) => (
+                                            <Box key={i} last={i === department.length - 1}>
+                                                <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
+                                                    <BoxItem numberOfLines={1} title={true}>{e.title}</BoxItem>
+                                                    <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
+                                                        <ArrowDownIcon />
+                                                    </ArrowWrapper>
+                                                </BoxTitle>
+                                                <Collapsible collapsed={collapsed[i] || false}>
+                                                    <BoxInner>
+                                                        {dialogs.map((e, i) => {
+                                                            const { creator, participants, isGroup } = e
+                                                            let item = creator._id === user._id ? participants[0] : creator
+                                                            const { image, first_name, last_name, phone_number, post } = item
+                                                            const name = first_name ? `${first_name} ${last_name}` : phone_number
+                                                            return !isGroup && <BoxInnerItem key={i} onPress={() => this.toChat(e)}>
+                                                                <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                                                <ContactInfo>
+                                                                    <ContactName>{name}</ContactName>
+                                                                    <ContactRole>{'без роли'}</ContactRole>
+                                                                </ContactInfo>
+                                                            </BoxInnerItem>
+                                                        })}
+                                                    </BoxInner>
+                                                </Collapsible>
+                                            </Box>
+                                        ))}
+                                    </ContactList>
+                                    <ContactList style={{ width: '100%' }}>
+                                        <FlatList
+                                            style={{ paddingRight: 5, paddingLeft: 5, }}
+                                            data={dialogs}
+                                            renderItem={({ item, index }) => {
+                                                const { participants, creator, _id, name, isGroup } = item
+                                                const chatItem = creator._id === user._id ? participants[0] : creator
+                                                const { first_name, last_name, phone_number, role, image } = chatItem
+                                                return isGroup ? <BoxInnerItem key={index} onPress={() => this.toChat(_id)}>
+                                                    <ContactImage source={{ uri: `http://ser.univ.team${image || creator.image}` }} />
+                                                    <ContactInfo>
+                                                        <ContactName>{name}</ContactName>
+                                                        <ContactRole>{participants.length + 1} участника</ContactRole>
+                                                    </ContactInfo>
+                                                </BoxInnerItem> : null
+                                            }}
+                                            keyExtractor={(item, index) => index.toString()}
+                                        />
+                                    </ContactList>
+                                </Animated>
+                            </> : <Loader hint={'Пока нет диалогов'} style={{ flex: 1, height: '100%' }}>
+                                    <TouchableOpacity onPress={this.toContacts}>
+                                        <Text style={{ color: grey2, textAlign: 'center' }}>Откройте первый диалог, выбрав пользователя
+									<Text style={{ color: blue }}> на странице контактов</Text>
+                                        </Text>
+                                    </TouchableOpacity>
+                                </Loader>}
                     </KeyboardAwareScrollView>
                 </Wrapper>
             </SafeAreaView>

@@ -6,7 +6,7 @@ import { SafeAreaView } from '../../common'
 
 const Wrapper = styled(View)`
     height: 100%;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
 `
 export default class PinCode extends Component {
@@ -14,11 +14,12 @@ export default class PinCode extends Component {
         return (
             <SafeAreaView behavior={'padding'}>
                 <Wrapper>
-                    <Header />
+                    <Header back={this.back}/>
                     <Content navigate={this.navigate} />
                 </Wrapper>
             </SafeAreaView>
         )
     }
     navigate = (e) => this.props.navigation.navigate(e)
+    back = (e) => this.props.navigation.goBack()
 }
