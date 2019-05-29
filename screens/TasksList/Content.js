@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, FlatList, Dimensions, ScrollView } from 'react-native'
 import styled from 'styled-components'
 import { Header, Task, TaskPack } from './'
-import { SafeAreaView } from '../../common'
+import { SafeAreaView, Loader } from '../../common'
 import helper from '../../utils/helpers'
 import sendRequest from '../../utils/request'
 import { g_tasks, g_users } from '../../constants/api'
@@ -31,7 +31,12 @@ class Content extends Component {
           <TaskPack title={'inc'} tasks={tasks} onPress={() => navigate('TasksInc')} />
           <TaskPack title={'out'} tasks={tasks} onPress={() => navigate('TasksOut')} last />
           {
-            tasks.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>)
+            tasks.length && false ? tasks.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>) : 
+            <View style={{flex: 1}}>
+              <Loader style={{}} hint={'Поставьте вашу первую задачу,\n нажав на иконку "плюс"'}>
+              Пока нет задач
+            </Loader>
+            </View>
           }
           <View style={{ height: 20, width: '100%' }} />
         </StyledScrollView>

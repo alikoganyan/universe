@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { setFeed } from '../../actions/newsActions'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { ImageComponent } from '../../common'
+import { ImageComponent, Loader } from '../../common'
 const { borderRadius, Colors, fontSize, sidePadding, HeaderHeight } = helper;
 const { yellow, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`
@@ -77,6 +77,14 @@ const Reactions = styled(View)`
     flex-direction: row;
     align-items: center;
 `
+const LoaderWrapper = styled(View)`
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+`
 const Reactionsext = styled(Text)`
     color: ${grey2};
     font-size: ${fontSize.sm};
@@ -90,51 +98,54 @@ class Content extends Component {
         return (
             <SafeAreaView>
                 <Wrapper>
-                    <NewsList
+                    {news.length ? <NewsList
                         data={news}
                         ListFooterComponent={<View style={{ margin: 10, }} />}
                         renderItem={({ item }) => {
-                        const date = new Date(item.created_at)
-                        return <NewsItem onPress={() => this.proceed(item)}>
-                            <Sender>
-                                <ImageComponent source={{ uri: item.creator.image ? `http://ser.univ.team${item.creator.image}` : 'https://facebook.github.io/react/logo-og.png' }} size={"xs"} style={{
-                                    marginRight: 10
-                                }} />
-                                <SenderInfo>
-                                    <SenderName numberOfLines={1}>{item.creator.first_name} {item.creator.last_name}</SenderName>
-                                    <TimeSent>
-                                        {date.getDate()}{' '}
-                                        {months[date.getMonth()]}{' '}
-                                        {date.getFullYear()}{' '}
-                                        {date.getHours()}:{date.getMinutes()} 
-                                    </TimeSent>
-                                </SenderInfo>
-                            </Sender>
-                            <NewsText numberOfLines={2}>{item.text}</NewsText>
-                            <NewsItemInfo>
-                                <ShowAll>
-                                    <HashTag>ЧИТАТЬ ДАЛЕЕ</HashTag>
-                                </ShowAll>
+                            const date = new Date(item.created_at)
+                            return <NewsItem onPress={() => this.proceed(item)}>
+                                <Sender>
+                                    <ImageComponent source={{ uri: item.creator.image ? `http://ser.univ.team${item.creator.image}` : 'https://facebook.github.io/react/logo-og.png' }} size={"xs"} style={{
+                                        marginRight: 10
+                                    }} />
+                                    <SenderInfo>
+                                        <SenderName numberOfLines={1}>{item.creator.first_name} {item.creator.last_name}</SenderName>
+                                        <TimeSent>
+                                            {date.getDate()}{' '}
+                                            {months[date.getMonth()]}{' '}
+                                            {date.getFullYear()}{' '}
+                                            {date.getHours()}:{date.getMinutes()}
+                                        </TimeSent>
+                                    </SenderInfo>
+                                </Sender>
+                                <NewsText numberOfLines={2}>{item.text}</NewsText>
+                                <NewsItemInfo>
+                                    <ShowAll>
+                                        <HashTag>ЧИТАТЬ ДАЛЕЕ</HashTag>
+                                    </ShowAll>
 
-                                <Reactions>
-                                    <HeartIcon /><Reactionsext>{item.likes_сount}</Reactionsext>
-                                    <CommentIcon left /><Reactionsext>{item.comments.length}</Reactionsext>
-                                </Reactions>
-                            </NewsItemInfo>
-                        </NewsItem>}
+                                    <Reactions>
+                                        <HeartIcon /><Reactionsext>{item.likes_сount}</Reactionsext>
+                                        <CommentIcon left /><Reactionsext>{item.comments.length}</Reactionsext>
+                                    </Reactions>
+                                </NewsItemInfo>
+                            </NewsItem>
+                        }
                         }
                         keyExtractor={(item, index) => index.toString()}
-                    />
+                    /> : <Loader style={{ flex: 1 }}>
+                        Пока нет новостей
+                        </Loader>}
                 </Wrapper>
             </SafeAreaView>
         )
     }
     state = {
     }
-    componentDidMount(){
+    componentDidMount() {
     }
     proceed = (e) => {
-        const {proceed, setFeed} = this.props
+        const { proceed, setFeed } = this.props
         setFeed(e)
         proceed()
     }

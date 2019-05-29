@@ -676,6 +676,16 @@ export function CloseTaskIcon(props) {
         />
     )
 }
+export function LogoPlaceholder(props) {
+    const { size, width, height } = props;
+    return (
+        <Image
+            style={{ width: width || IconSize, height: height || IconSize }}
+            resizeMode={'contain'}
+            source={ICONS.logo_placeholder}
+        />
+    )
+}
 
 
 export function ArrowDownIcon(props) {

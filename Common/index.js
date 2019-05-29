@@ -4,6 +4,7 @@ import TaskComponent from './Task'
 import Message from './Message'
 import Feed from './Feed'
 import ImageComponent from './Image'
+import Loader from './Loader'
 export {
     Button,
     SafeAreaView,
@@ -11,4 +12,5 @@ export {
     Message,
     ImageComponent,
     Feed,
+    Loader,
 }

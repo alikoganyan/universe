@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, Dimensions, StatusBar, BackHandler } from 'react-native'
+import { View, Text, FlatList, Dimensions, StatusBar, BackHandler, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import { Header, Dialog } from './index'
-import { SafeAreaView } from '../../common'
+import { SafeAreaView, Loader } from '../../common'
 import { connect } from 'react-redux';
 import { getMessages, setRoom, addMessage, setCurrentChat, setCurrentRoomId } from '../../actions/messageActions'
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
@@ -10,7 +10,8 @@ import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 
-const { sidePadding, HeaderHeight } = helper;
+const { sidePadding, HeaderHeight, Colors } = helper;
+const { blue } = Colors;
 const Wrapper = styled(View)`
   height: 100%;
 `
@@ -27,7 +28,7 @@ class Dialogs extends Component {
 			<SafeAreaView behavior={'padding'}>
 				<Wrapper>
 					<Header toProfile={this.toProfile} toggleDrawer={this.props.navigation.openDrawer} />
-					<StyledFlatList
+					{dialogs.length && false ? <StyledFlatList
 						ListHeaderComponent={<View style={{ margin: 30, }} />}
 						ref={(ref) => { this.flatList = ref; }}
 						keyboardDismissMode={'on-drag'}
@@ -46,7 +47,14 @@ class Dialogs extends Component {
 							return <Dialog lastMessage={messages} onClick={() => this.toChat(item)} image={image} title={chatName} item={item}>{text}</Dialog>
 						}}
 						keyExtractor={(item, index) => index.toString()}
-					/>
+					/> : <Loader style={{ flex: 1 }} hint={
+						<TouchableOpacity onPress={this.toContacts}>
+							<Text>Откройте первый диалог, выбрав пользователя
+							<Text style={{ color: blue }}>на странице контактов</Text>
+							</Text>
+						</TouchableOpacity>}>
+							Пока нет диалогов
+					</Loader>}
 				</Wrapper>
 			</SafeAreaView>
 		)
@@ -56,7 +64,7 @@ class Dialogs extends Component {
 	}
 	componentDidMount() {
 		const { user, addMessage, setDialogs, navigation } = this.props;
-		// navigation.navigate('NewGroup') // restore 
+		// navigation.navigate('News') // restore
 		BackHandler.addEventListener('hardwareBackPress', () => true)
 		socket.removeListener('update_dialogs', this.setDialogsSocket);
 		socket.removeListener('new_message', this.newMessageSocket);
@@ -117,7 +125,7 @@ class Dialogs extends Component {
 		newFlatListData.sort((a, b) => {
 			return new Date(a.lastMessage) - new Date(b.lastMessage)
 		})
-		// this.setState({ FlatListData: newFlatListData })?
+		// this.setState({FlatListData: newFlatListData })?
 	}
 	newMessage = e => {
 		const { senderId, chatId } = e

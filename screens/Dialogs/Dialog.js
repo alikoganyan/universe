@@ -98,8 +98,6 @@ class Content extends Component {
     const dayOfTheWeek = lastMessage.length ? daysOfTheWeek[new Date(lastMessage[lastMessage.length - 1].created_at).getDay()] : undefined
     let lastMessageType = ''
     let lastType = ''
-    if (lastMessage.length) console.log(lastMessage[lastMessage.length - 1].created_at)
-
     if (lastMessage.length) switch (lastMessage[lastMessage.length - 1].type) {
       case 'text':
         lastType = blue;
