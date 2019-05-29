@@ -7,7 +7,7 @@ import { ImageComponent } from '../../common'
 import { socket } from '../../utils/socket'
 
 const { fontSize, PressDelay, sidePadding, Colors } = helper;
-const { purple, lightColor, grey2, blue, green, } = Colors;
+const { purple, lightColor, grey2, blue, green, yellow } = Colors;
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
@@ -59,13 +59,12 @@ const DialogLastMessage = styled(Text)`
 const DialogDate = styled(View)`
   right: ${sidePadding}px;
   color: ${lightColor};
-  flex: 1;
   font-size: ${fontSize.sm};
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   margin-bottom: 2px;
   text-align: center;
-  margin-left: -5px;
+  margin-left: 5px;
 `
 const UnreadMessages = styled(View)`
   display: flex;
@@ -80,7 +79,6 @@ const NewMessages = styled(View)`
   height: 25px;
   border-radius: 12.5;
   margin-top: 5px;
-  margin-left: 7.5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -88,6 +86,7 @@ const NewMessages = styled(View)`
 const NewMessagesText = styled(Text)`
   color: white;
   font-size: ${fontSize.text};
+  text-align: center;
 `
 class Content extends Component {
   render() {
@@ -95,18 +94,28 @@ class Content extends Component {
     const { phone, id } = item;
     const { creator } = item
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const dayOfTheWeek = daysOfTheWeek[new Date(lastMessage).getDay() - 1]
     const last = lastMessage.length ? lastMessage[lastMessage.length - 1].text : ''
+    const dayOfTheWeek = lastMessage.length ? daysOfTheWeek[new Date(lastMessage[lastMessage.length - 1].created_at).getDay()] : undefined
+    let lastMessageType = ''
     let lastType = ''
-    if (last) switch (lastMessage[lastMessage.length - 1].type) {
+    if (lastMessage.length) console.log(lastMessage[lastMessage.length - 1].created_at)
+
+    if (lastMessage.length) switch (lastMessage[lastMessage.length - 1].type) {
       case 'text':
         lastType = blue;
+        lastMessageType = 'text';
         break;
       case 'task':
         lastType = purple;
+        lastMessageType = 'task';
         break;
       case 'geo':
         lastType = green;
+        lastMessageType = 'geo';
+        break;
+      case 'image':
+        lastType = yellow;
+        lastMessageType = 'image';
         break;
     }
     return (
@@ -117,7 +126,7 @@ class Content extends Component {
             <DialogTextInner>
               {title && <>
                 <DialogTitle>{title}</DialogTitle>
-                <DialogLastMessage numberOfLines={1} >{last || 'no messages yet'}</DialogLastMessage>
+                <DialogLastMessage numberOfLines={1} >{last || lastMessageType || 'no messages yet'}</DialogLastMessage>
               </>
               }
               {phone && <>
