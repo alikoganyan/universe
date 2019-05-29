@@ -133,9 +133,8 @@ class Content extends Component {
                         }
                         }
                         keyExtractor={(item, index) => index.toString()}
-                    /> : <Loader style={{ flex: 1 }}>
-                        Пока нет новостей
-                        </Loader>}
+                    /> :
+                        <Loader hint={'Пока нет новостей'} style={{ flex: 1 }}></Loader>}
                 </Wrapper>
             </SafeAreaView>
         )

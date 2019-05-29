@@ -8,7 +8,8 @@ import sendRequest from '../../utils/request'
 import { g_tasks, g_users } from '../../constants/api'
 import { setTasks } from '../../actions/tasksActions'
 import { connect } from 'react-redux'
-const { sidePadding, HeaderHeight } = helper;
+const { sidePadding, HeaderHeight, Colors } = helper;
+const { grey2 } = Colors;
 const Wrapper = styled(View)`
   max-height: ${Dimensions.get('window').height - sidePadding}px;
   display: flex;
@@ -31,12 +32,13 @@ class Content extends Component {
           <TaskPack title={'inc'} tasks={tasks} onPress={() => navigate('TasksInc')} />
           <TaskPack title={'out'} tasks={tasks} onPress={() => navigate('TasksOut')} last />
           {
-            tasks.length && false ? tasks.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>) : 
-            <View style={{flex: 1}}>
-              <Loader style={{}} hint={'Поставьте вашу первую задачу,\n нажав на иконку "плюс"'}>
-              Пока нет задач
-            </Loader>
-            </View>
+            tasks.length ? tasks.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>) :
+              <View style={{ flex: 1 }}>
+                  <Loader hint={'Пока нет задач'}>
+                    <Text style={{ color: grey2, textAlign: 'center' }}>Поставьте вашу первую задачу, нажав на иконку "плюс"
+                    </Text>
+                  </Loader>
+              </View>
           }
           <View style={{ height: 20, width: '100%' }} />
         </StyledScrollView>

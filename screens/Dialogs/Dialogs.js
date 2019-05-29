@@ -11,7 +11,7 @@ import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 
 const { sidePadding, HeaderHeight, Colors } = helper;
-const { blue } = Colors;
+const { blue, grey2 } = Colors;
 const Wrapper = styled(View)`
   height: 100%;
 `
@@ -28,7 +28,7 @@ class Dialogs extends Component {
 			<SafeAreaView behavior={'padding'}>
 				<Wrapper>
 					<Header toProfile={this.toProfile} toggleDrawer={this.props.navigation.openDrawer} />
-					{dialogs.length && false ? <StyledFlatList
+					{dialogs.length ? <StyledFlatList
 						ListHeaderComponent={<View style={{ margin: 30, }} />}
 						ref={(ref) => { this.flatList = ref; }}
 						keyboardDismissMode={'on-drag'}
@@ -47,16 +47,15 @@ class Dialogs extends Component {
 							return <Dialog lastMessage={messages} onClick={() => this.toChat(item)} image={image} title={chatName} item={item}>{text}</Dialog>
 						}}
 						keyExtractor={(item, index) => index.toString()}
-					/> : <Loader style={{ flex: 1 }} hint={
-						<TouchableOpacity onPress={this.toContacts}>
-							<Text>Откройте первый диалог, выбрав пользователя
-							<Text style={{ color: blue }}>на странице контактов</Text>
-							</Text>
-						</TouchableOpacity>}>
-							Пока нет диалогов
+					/> : <Loader style={{ flex: 1 }} hint={'Пока нет диалогов'}>
+							<TouchableOpacity onPress={this.toContacts}>
+								<Text style={{color: grey2, textAlign: 'center'}}>Откройте первый диалог, выбрав пользователя 
+									<Text style={{ color: blue }}> на странице контактов</Text>
+								</Text>
+							</TouchableOpacity>
 					</Loader>}
 				</Wrapper>
-			</SafeAreaView>
+			</SafeAreaView >
 		)
 	}
 	state = {
@@ -83,6 +82,10 @@ class Dialogs extends Component {
 	setDialogsSocket = (e) => {
 		const { setDialogs } = this.props;
 		setDialogs(e.dialogs)
+	}
+	toContacts = () => {
+		const { navigation } = this.props;
+		navigation.navigate('NewDialog')
 	}
 	newMessageSocket = (e) => {
 		const { dialogs, currentRoom, user, addMessage, setDialogs, navigation } = this.props

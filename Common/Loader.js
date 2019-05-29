@@ -30,11 +30,9 @@ export default Loader = (props) => {
             <LogoPlaceholder width={width || 200} height={height || 200} />
             <LogoLable style={labelStyle}>
                 <LogoText style={textStyle}>
-                    {children}
-                </LogoText>
-                {!!hint && <LogoText style={textStyle}>
                     {hint}
-                </LogoText>}
+                </LogoText>
+                {children}
             </LogoLable>
         </Wrapper>
     )
