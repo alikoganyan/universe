@@ -191,7 +191,7 @@ class Content extends Component {
 							<HeartIcon style={{ paddingRight: 5 }} />
 							<LikeText color={darkBlue2}>{likes_сount}</LikeText>
 							<MessageDate color={darkBlue2}>
-								{date.getHours()}:{date.getMinutes()}
+								{date.getHours()}:{date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`}
 							</MessageDate>
 						</MessageInfo>
 					</MyMessage>

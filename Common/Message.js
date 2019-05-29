@@ -158,13 +158,16 @@ function Message(props) {
                 <TriangleLeftIcon color={myMessage} />
             </ View >
         ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <TriangleRightIcon color={interlocatorMessage} />
-                <InterlocutorsMessage background={background}>
-                    <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
-                    <MessageInfo>
-                        <MessageDate>{finalTime}</MessageDate>
-                    </MessageInfo>
-                </InterlocutorsMessage>
+                {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
+                <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
+                    <TriangleRightIcon color={interlocatorMessage} />
+                    <InterlocutorsMessage background={background}>
+                        <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
+                        <MessageInfo>
+                            <MessageDate>{finalTime}</MessageDate>
+                        </MessageInfo>
+                    </InterlocutorsMessage>
+                </View>
             </View>
         )
     }

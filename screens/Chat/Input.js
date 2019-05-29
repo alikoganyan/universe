@@ -132,8 +132,6 @@ class InputComponent extends Component {
         const fileName = Math.random().toString(36).substring(7);
         const form = new FormData();
         const ext = uri.split('.')[uri.split('.').length - 1]
-        console.log(ext)
-        console.log(`photo.${fileName}.png`)
         form.append("file", {
             uri,
             name: `photo.${fileName}.${ext}`,
@@ -152,7 +150,6 @@ class InputComponent extends Component {
                 // },
                 success: (res) => {
                     socket.emit('file', { room: currentChat })
-                    console.log(res.dialog)
                     const newDialogs = [...dialogs]
                     const index = newDialogs.findIndex(e => e.room === currentChat)
                     newDialogs[index] = res.dialog

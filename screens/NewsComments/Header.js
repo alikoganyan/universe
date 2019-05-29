@@ -75,7 +75,7 @@ class HeaderComponent extends Component {
                     {!search ?
                         <>
                             <SearchIcon right onPress={this.startSearch} />
-                            <TouchableOpacity onPress={toProfile}>
+                            <TouchableOpacity onPress={this.toProfile}>
                                 <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'}/>
                             </TouchableOpacity>
                         </> :
@@ -88,6 +88,10 @@ class HeaderComponent extends Component {
     state = {
         search: false,
         find: ''
+    }
+    toProfile = (e) => {
+        const { navigate } = this.props;
+        navigate('Profile')
     }
     find = (e) => {
         this.setState({ find: e })

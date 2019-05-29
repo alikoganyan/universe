@@ -21,7 +21,7 @@ export default class NewsComments extends Component {
         return (
             <SafeAreaView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
                 <Wrapper>
-                    <Header back={this.navigateBack} />
+                    <Header back={this.navigateBack} navigate={e => this.navigate(e)}/>
                     <Content />
                     <Bottom>
                         <Input />
@@ -32,5 +32,8 @@ export default class NewsComments extends Component {
     }
     navigateBack = () => {
         this.props.navigation.goBack()
+    }
+    navigate = (e) => {
+        this.props.navigation.navigate(e)
     }
 }
