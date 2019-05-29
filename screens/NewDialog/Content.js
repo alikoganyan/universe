@@ -88,7 +88,7 @@ const BoxInnerItem = styled(View)`
 const ContactImage = styled(Image)`
     width: 33px;
     height: 33px;
-    border-radius: 14;
+    border-radius: 16.5;
     margin-right: 8px;
 `
 const ContactInfo = styled(View)``
@@ -246,11 +246,14 @@ class Content extends Component {
         newState.active = e;
         this.setState({ options: newState })
     }
-    toChat = e => {
-        const { setCurrentDialogs, navigate, getMessages, setRoom } = this.props
-        setCurrentDialogs(e)
-        setRoom(e._id)
-        getMessages([])
+    toChat = event => {
+        const { setCurrentDialogs, navigate, getMessages, setRoom, dialog, setCurrentChat } = this.props
+        const dialogIncludes = dialog.filter(e => {
+            return (e.creator._id === event._id || e.participants[0]._id === event._id)
+        })[0]
+        setCurrentDialogs(event)
+        setRoom(event._id)
+        getMessages(dialogIncludes ? dialogIncludes.messages : [])
         navigate('Chat')
     }
 }

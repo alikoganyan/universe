@@ -4,7 +4,7 @@ import { SmileIcon, FileIcon, CameraIcon, ImageIcon, PapperPlaneIcon } from '../
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
+import { addMessage, startSearch, stopSearch, getMessages, setCurrentChat, setRoom, setCurrentRoomId, setCurrentDialog } from '../../actions/messageActions'
 import { ImagePicker, DocumentPicker, Permissions, Location } from 'expo';
 import { p_send_file } from '../../constants/api'
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
@@ -131,7 +131,7 @@ class InputComponent extends Component {
         const { uri, type } = result
         const fileName = Math.random().toString(36).substring(7);
         const form = new FormData();
-        const ext = uri.split('.')[uri.split('.').length-1]
+        const ext = uri.split('.')[uri.split('.').length - 1]
         console.log(ext)
         console.log(`photo.${fileName}.png`)
         form.append("file", {
@@ -189,21 +189,23 @@ class InputComponent extends Component {
     };
     discardSelect = (e) => { }
     sendMessage = (e) => {
-        const { currentRoom, user, addMessage, setDialogs } = this.props;
+        const { currentDialog, currentRoom, user, addMessage, setDialogs, setCurrentChat, setRoom, setCurrentRoomId, setCurrentDialog } = this.props;
         const { text } = this.state;
-        console.log('sendMessage')
         if (text) {
             const { dialogs, currentChat } = this.props;
             const message = { room: currentRoom, sender: { _id: user._id }, text: text.trim(), created_at: new Date(), type: 'text', viewers: [] }
-            // console.log(dialogs)
             const newDialogs = [...dialogs]
-            const newDialog = { ...newDialogs.filter(event => event.room === currentChat)[0] }
-            newDialog.messages = [...newDialog.messages, message]
-            newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog
-
-            socket.emit('message', { receiver: currentRoom, message: text.trim() })
+            const newDialog = newDialogs.filter(event => event.room === currentChat)[0]
+            if (newDialog) {
+                newDialog.messages = [...newDialog.messages, message]
+                newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog
+                setDialogs(newDialogs)
+            } else {
+                setRoom(currentDialog._id)
+                setCurrentChat(`${user._id}_${currentDialog._id}`)
+            }
             addMessage(message)
-            setDialogs(newDialogs)
+            socket.emit('message', { receiver: currentRoom, message: text.trim() })
         }
         this.setState({ text: '' })
     }
@@ -223,6 +225,7 @@ const mapStateToProps = state => ({
     messages: state.messageReducer.messages,
     currentRoom: state.messageReducer.currentRoom,
     currentChat: state.messageReducer.currentChat,
+    currentDialog: state.dialogsReducer.currentDialog,
     user: state.userReducer.user,
     dialogs: state.dialogsReducer.dialogs,
 })
@@ -232,5 +235,9 @@ const mapDispatchToProps = dispatch => ({
     stopSearch: _ => dispatch(stopSearch()),
     getMessages: _ => dispatch(getMessages()),
     setDialogs: _ => dispatch(setDialogs(_)),
+    setCurrentChat: _ => dispatch(setCurrentChat(_)),
+    setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
+    setCurrentDialog: _ => dispatch(setCurrentDialog(_)),
+    setRoom: _ => dispatch(setRoom(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(InputComponent)
