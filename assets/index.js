@@ -91,9 +91,9 @@ const RightWrapper = function (props) {
     )
 }
 export function BackIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, noPadding } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPadding={noPadding}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}
@@ -436,9 +436,9 @@ export function GroupIconWhite(props) {
 }
 
 export function TaskIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, noPaddingAll } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}
@@ -540,9 +540,9 @@ export function FeedIcon(props) {
     )
 }
 export function TasksIcon(props) {
-    const { onPress, left, right, noPadding, size } = props;
+    const { onPress, left, right, noPaddingAll, size } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPadding={noPadding}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}

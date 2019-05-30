@@ -157,7 +157,7 @@ class TaskPack extends Component {
               <TaskLastMessage numberOfLines={1}>{packItemsDescription}</TaskLastMessage>
               <TaskStatus>
                 <TaskStatusTextContainer>
-                  <TasksIcon noPadding />
+                  <TasksIcon noPaddingAll />
                   <TaskStatusText>{stat}</TaskStatusText>
                 </TaskStatusTextContainer>
                 <TaskStatusAdditional>{packItemsLength ? `+${packItemsLength + 1}` : packItemsLength} задач</TaskStatusAdditional>

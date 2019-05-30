@@ -7,7 +7,8 @@ export let socket = null
 export const connectToSocket = () => {
     socket = io(socketServer, {
         path: socketPath,
-        transports: ['polling'],
+        transports: ['polling', 'websocket'],
+        upgrade: false,
         secure: true,
         query: {
             token: 'Bearer ' + store.getState().userReducer.auth

@@ -149,6 +149,7 @@ class Content extends Component {
         })
         setParticipants([])
         socket.emit('new_group', { name: text, participants: idList })
+        setTimeout(() => socket.emit('get_dialogs'), 500)
         forward()
     }
     handleCountry = (e) => {

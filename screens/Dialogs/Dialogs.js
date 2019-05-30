@@ -87,8 +87,13 @@ class Dialogs extends Component {
 		const { setDialogs } = this.props;
 		let newDialogs = e.dialogs.length ? [...e.dialogs] : []
 		newDialogs = newDialogs.length && newDialogs.sort((a, b) => {
-			if (b.messages.length && a.messages.length)
-				return new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at)
+			if (b.messages.length && a.messages.length) {
+				const byMessage = new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at)
+				return byMessage
+			} else {
+				const byCreation = new Date(b.created_at) - new Date(a.created_at)
+				return byCreation
+			}
 		})
 		setDialogs(newDialogs)
 	}
