@@ -195,7 +195,11 @@ class InputComponent extends Component {
             if (newDialog) {
                 newDialog.messages = [...newDialog.messages, message]
                 newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog
-                setDialogs(newDialogs)
+                const newDialogSorted = newDialogs.sort((a, b) => {
+                    if (b.messages.length && a.messages.length)
+                        return new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at)
+                })
+                setDialogs(newDialogSorted)
             } else {
                 setRoom(currentDialog._id)
                 setCurrentChat(`${user._id}_${currentDialog._id}`)

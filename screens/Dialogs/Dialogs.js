@@ -63,8 +63,11 @@ class Dialogs extends Component {
 	}
 	componentDidMount() {
 		const { user, addMessage, setDialogs, navigation } = this.props;
-		connectToSocket()
 		// navigation.navigate('News') // restore
+		// clearInterval(this.interval)
+		// this.interval = setInterval(() => {
+		// 	if (!socket.connected) connectToSocket()
+		// }, 2000)
 		BackHandler.addEventListener('hardwareBackPress', () => true)
 		socket.removeListener('update_dialogs', this.setDialogsSocket);
 		socket.removeListener('new_message', this.newMessageSocket);
@@ -82,7 +85,12 @@ class Dialogs extends Component {
 	}
 	setDialogsSocket = (e) => {
 		const { setDialogs } = this.props;
-		setDialogs(e.dialogs)
+		let newDialogs = [...e.dialogs]
+		newDialogs = newDialogs.length && newDialogs.sort((a, b) => {
+			if (b.messages.length && a.messages.length)
+				return new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at)
+		})
+		setDialogs(newDialogs)
 	}
 	toContacts = () => {
 		const { navigation } = this.props;
@@ -95,12 +103,13 @@ class Dialogs extends Component {
 		const newDialog = newDialogs.filter(event => event.room === e.room)[0]
 		newDialog.messages = [...newDialog.messages, message]
 		newDialogs[newDialogs.findIndex(event => event.room === e.room)] = newDialog
-		setDialogs(newDialogs)
+		console.log('123')
+		const newDialogSorted = newDialogs.sort((a, b) => {
+			if (b.messages.length && a.messages.length)
+				return new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at)
+		})
+		setDialogs(newDialogSorted)
 		addMessage(message)
-	}
-	componentWillUnmount() {
-		socket.removeListener('new_dialog');
-		socket.removeListener('new_group');
 	}
 	toProfile = e => {
 		this.props.navigation.navigate('Profile')

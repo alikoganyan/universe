@@ -155,7 +155,7 @@ class Content extends Component {
             <SafeAreaView>
                 <Wrapper>
                     <KeyboardAwareScrollView enableOnAndroid style={{height: '100%'}}>
-                        {dialogs.length && false ?
+                        {dialogs.length ?
                             <>
                                 <Options>
                                     {options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
@@ -320,12 +320,13 @@ class Content extends Component {
         this.setState({ options: newState })
     }
     toChat = e => {
-        const { setCurrentDialogs, navigate, user, getMessages } = this.props
+        const { setCurrentDialogs, navigate, user, getMessages, setCurrentChat } = this.props
         const { creator, participants, isGroup } = e
         let item = creator._id === user._id ? participants[0] : creator
         const { image, first_name, last_name, phone_number, post } = item
         getMessages(e.messages)
         setCurrentDialogs({ ...e, ...item })
+        setCurrentChat(e._id)
         navigate('Chat')
     }
 }

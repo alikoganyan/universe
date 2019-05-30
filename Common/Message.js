@@ -134,7 +134,7 @@ const FileSize = styled(Text)`
     color: ${({ color }) => color || 'white'};
 `
 const Indicator = ({ read = false, color }) => {
-    return read ? <CheckAllIcon color={color} /> : <CheckIcon color={color} />
+    return read ? <CheckAllIcon color={color} noPaddingAll /> : <CheckIcon color={color} noPaddingAll/>
 }
 function Message(props) {
     const { children, messages, myId, background, withImage } = props

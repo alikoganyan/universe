@@ -19,7 +19,7 @@ const { IconDarkColor,
 const StyledTouchableOpacity = styled(TouchableOpacity)`
     margin-left: ${({ left }) => left ? Dimensions.get('window').height >= 1080 ? 30 : 12 : 0}px;
     margin-right: ${({ right }) => right ? Dimensions.get('window').height >= 1080 ? 30 : 12 : 0}px;
-    padding: ${({ noPadding }) => noPadding ? 0 : 10}px 12px;
+    padding: ${({ noPadding, noPaddingAll }) => noPadding ? (noPaddingAll ? 0 : `0 12`) : (noPaddingAll ? 0 : `10px 12`)}px;
 `
 const Left = styled(StyledTouchableOpacity)`
     margin-right: ${({ noPadding }) => noPadding ? 0 : 10}px;
@@ -285,7 +285,7 @@ export function ImageIcon(props) {
             <Image
                 style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
-                source={ICONS.Files_white}
+                source={ICONS.Files}
             />
         </StyledTouchableOpacity>
     )
@@ -489,9 +489,9 @@ export function CheckIcon(props) {
 }
 
 export function CheckAllIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, noPaddingAll } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}
