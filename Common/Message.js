@@ -5,7 +5,7 @@ import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CheckAllIcon, CommentIc
 import { connect } from 'react-redux'
 import { ImageComponent } from './'
 import MapView from 'react-native-maps';
-
+import { FileSystem } from 'expo'
 const { HeaderHeight, Colors, fontSize } = helper;
 const { myMessage, interlocatorMessage, pink } = Colors
 const MyMessage = styled(View)`
@@ -134,7 +134,14 @@ const FileSize = styled(Text)`
     color: ${({ color }) => color || 'white'};
 `
 const Indicator = ({ read = false, color }) => {
-    return read ? <CheckAllIcon color={color} noPaddingAll /> : <CheckIcon color={color} noPaddingAll/>
+    return read ? <CheckAllIcon color={color} noPaddingAll /> : <CheckIcon color={color} noPaddingAll />
+}
+const readFile = (uri, filename, options = {}) => {
+    FileSystem.readAsStringAsync(uri, options).then(data => {
+        const base64 = `data:image/jpg;base64` + data;
+        resolve(base64)
+        console.log('test', { base64 })
+    }).catch(err => console.log(err))
 }
 function Message(props) {
     const { children, messages, myId, background, withImage } = props
@@ -146,6 +153,9 @@ function Message(props) {
     const finalTime = Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time
     const fileSize = size / 1024 > 1024 ? `${(size / (1024 * 2)).toFixed(1)}МБ` : `${(size / 1024).toFixed(1)}КБ`
     if (type === 'image') {
+        console.log('images', FileSystem.documentDirectory)
+        readFile(FileSystem.documentDirectory + filename)
+        
         return (myId == sender._id ? (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
                 <MyMessage background={background} style={{ padding: 0 }}>

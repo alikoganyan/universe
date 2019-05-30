@@ -67,7 +67,7 @@ class Content extends Component {
                             </TouchableOpacity>
                         }}
                         keyExtractor={(item, index) => index.toString()}
-                    />
+                    /> 
                 </Wrapper>
                 <MessageOptions pose={selectedMessage._id ? 'visible' : 'hidden'}>
                     {
