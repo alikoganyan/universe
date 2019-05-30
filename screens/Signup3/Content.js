@@ -76,7 +76,7 @@ class Content extends Component {
                 </SubTitle>
                 <PhoneNumber>
                     {this.state.agreements.map((e, i) => {
-                        return <Checkbox>
+                        return <Checkbox key={i}>
                             <CheckBox
                                 checkBoxColor={blue}
                                 isChecked={e.value}

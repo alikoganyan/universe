@@ -1,8 +1,9 @@
-import { 
-    ADD_TASK_RECEIVER, 
-    SET_TASK_RECEIVERS, 
-    ADD_FEED_RECEIVER, 
-    ADD_DIALOG_PARTICIPANT, 
+import {
+    ADD_TASK_RECEIVER,
+    SET_TASK_RECEIVERS,
+    ADD_FEED_RECEIVER,
+    ADD_DIALOG_PARTICIPANT,
+    SET_DIALOG_PARTICIPANTS,
 } from '../actions/participantsActions'
 const initialState = {
     tasks: {
@@ -37,7 +38,12 @@ const participantsReducer = (state = initialState, action) => {
                 ...state,
                 dialog: { ...state.dialog, participants: [...state.dialog.participants, action.payload] },
             }
-        default: 
+        case SET_DIALOG_PARTICIPANTS:
+            return {
+                ...state,
+                dialog: { ...state.dialog, participants: [...action.payload] },
+            }
+        default:
             return state
     }
 }

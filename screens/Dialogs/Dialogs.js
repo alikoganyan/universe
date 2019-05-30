@@ -80,12 +80,12 @@ class Dialogs extends Component {
 		})
 		socket.on('dialog_opened', e => { })
 		socket.on('new_group', e => {
-			// socket.emit('subscribe_to_group', {room: e.room})
+			socket.emit('get_dialogs')
 		})
 	}
 	setDialogsSocket = (e) => {
 		const { setDialogs } = this.props;
-		let newDialogs = [...e.dialogs]
+		let newDialogs = e.dialogs.length ? [...e.dialogs] : []
 		newDialogs = newDialogs.length && newDialogs.sort((a, b) => {
 			if (b.messages.length && a.messages.length)
 				return new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at)
@@ -103,7 +103,6 @@ class Dialogs extends Component {
 		const newDialog = newDialogs.filter(event => event.room === e.room)[0]
 		newDialog.messages = [...newDialog.messages, message]
 		newDialogs[newDialogs.findIndex(event => event.room === e.room)] = newDialog
-		console.log('123')
 		const newDialogSorted = newDialogs.sort((a, b) => {
 			if (b.messages.length && a.messages.length)
 				return new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at)

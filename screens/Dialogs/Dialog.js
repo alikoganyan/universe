@@ -68,8 +68,8 @@ const DialogDate = styled(View)`
 `
 const UnreadMessages = styled(View)`
   display: flex;
-  justify-content: flex-start;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
 `
 const NewMessages = styled(View)`
   background: ${({ color }) => color || purple};
@@ -95,7 +95,11 @@ class Content extends Component {
     const { creator } = item
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
     const last = lastMessage.length ? lastMessage[lastMessage.length - 1].text : ''
-    const dayOfTheWeek = lastMessage.length ? daysOfTheWeek[new Date(lastMessage[lastMessage.length - 1].created_at).getDay()] : undefined
+    const lastMessageDate = new Date(lastMessage[lastMessage.length - 1].created_at)
+    const dayOfTheWeek = lastMessage.length ? daysOfTheWeek[lastMessageDate.getDay()] : undefined
+    const difference = Math.abs(new Date() - lastMessageDate) / 864e5;
+    const time = difference >= 1 ? dayOfTheWeek : `${lastMessageDate.getHours() >= 10 ? lastMessageDate.getHours() : '0'+lastMessageDate.getHours()}:${lastMessageDate.getMinutes() >= 10 ? lastMessageDate.getMinutes() : '0'+lastMessageDate.getMinutes()}`
+    console.log(difference)
     let lastMessageType = ''
     let lastType = ''
     if (lastMessage.length) switch (lastMessage[lastMessage.length - 1].type) {
@@ -134,7 +138,7 @@ class Content extends Component {
               </>}
             </DialogTextInner>
             <DialogDate>
-              <LastMessageDate>{dayOfTheWeek}</LastMessageDate>
+              <LastMessageDate>{time}</LastMessageDate>
               <UnreadMessages>
                 {lastMessage && (!!lastMessage.length &&
                   <NewMessages color={lastType}>

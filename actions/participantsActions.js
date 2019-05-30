@@ -2,6 +2,7 @@ export const ADD_TASK_RECEIVER = 'ADD_TASK_RECEIVERS';
 export const SET_TASK_RECEIVERS = 'SET_TASK_RECEIVERS';
 export const ADD_FEED_RECEIVER = 'ADD_FEED_RECEIVER'
 export const ADD_DIALOG_PARTICIPANT = 'ADD_DIALOG_PARTICIPANT'
+export const SET_DIALOG_PARTICIPANTS = 'SET_DIALOG_PARTICIPANTS'
 export const addTaskReceiver = (payload) => ({
     type: ADD_TASK_RECEIVER,
     payload,
@@ -20,5 +21,10 @@ export const addFeedReceiver = (payload) => ({
 
 export const addDialogParticipant = (payload) => ({
     type: ADD_DIALOG_PARTICIPANT,
+    payload,
+})
+
+export const setDialogParticipants = (payload) => ({
+    type: SET_DIALOG_PARTICIPANTS,
     payload,
 })

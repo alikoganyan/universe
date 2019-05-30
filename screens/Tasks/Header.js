@@ -93,7 +93,7 @@ const ToProfile = styled(TouchableOpacity)`
     margin-right: 20px;
 `
 const SearchIconContainer = styled(View)`
-margin-right: 20px;
+    margin-right: 20px;
 `
 class HeaderComponent extends Component {
     render() {
@@ -104,7 +104,7 @@ class HeaderComponent extends Component {
                 <Left>
                     <BackIcon onPress={back} right />
                         <ToProfile onPress={toProfile}>
-                            <ImageComponent size={'header'} source={{ uri: `http://ser.univ.team${image}` || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png' }} />
+                            <ImageComponent size={'header'} source={{ uri: `http://ser.univ.team${image}` }} />
                             <Info>
                                 <InfoChatName>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
                                 <InfoParticipants>{tasks && tasks.length ? tasks.length : ''} задач</InfoParticipants>
