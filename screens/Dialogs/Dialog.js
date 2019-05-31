@@ -3,7 +3,7 @@ import { View, Text, Image, TouchableHighlight, Dimensions, Platform, ActionShee
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { ImageComponent } from '../../common'
+import ImageComponent from '../../common/Image'
 import { socket } from '../../utils/socket'
 
 const { fontSize, PressDelay, sidePadding, Colors } = helper;

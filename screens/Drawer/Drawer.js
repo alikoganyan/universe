@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import helper from '../../utils/helpers'
 import { Header, Content } from './'
-import { SafeAreaView } from '../../common'
+import SafeAreaView from '../../common/SafeAreaView'
 const { sidePadding, topPadding } = helper;
 const Outer = styled(View)`
   display: flex;

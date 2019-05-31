@@ -4,7 +4,9 @@ import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon 
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { TaskComponent, Message, Feed } from '../../common'
+import TaskComponent from '../../common/Task'
+import Feed from '../../common/Feed'
+import Message from '../../common/Message'
 import posed from 'react-native-pose'
 const { Colors } = helper
 const { myMessage, interlocatorMessage } = Colors

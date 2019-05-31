@@ -5,7 +5,8 @@ import styled from 'styled-components'
 import { setFeed } from '../../actions/newsActions'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { ImageComponent, Loader } from '../../common'
+import ImageComponent from '../../common/Image'
+import Loader from '../../common/Loader'
 const { borderRadius, Colors, fontSize, sidePadding, HeaderHeight } = helper;
 const { yellow, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`

@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, Image } from 'react-native'
 import { BackIcon, EllipsisVIcon } from '../../assets/index'
 import styled from 'styled-components'
-import { SafeAreaView } from '../../common'
+import SafeAreaView from '../../common/SafeAreaView'
 import { Header, Content } from './'
 const Wrapper = styled(View)`
     height: 100%;

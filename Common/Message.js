@@ -134,199 +134,218 @@ const FileSize = styled(Text)`
     color: ${({ color }) => color || 'white'};
 `
 const Indicator = ({ read = false, color }) => {
-    return read ? <CheckAllIcon color={color} noPaddingAll /> : <CheckIcon color={color} noPaddingAll />
+    return read ? <CheckAllIcon color={color} noPaddingAll={true} /> : <CheckIcon color={color} noPaddingAll={true} />
 }
-const readFile = (uri, filename, options = {}) => {
-    FileSystem.readAsStringAsync(uri, options).then(data => {
-        const base64 = `data:image/jpg;base64` + data;
-        resolve(base64)
-        console.log('test', { base64 })
-    }).catch(err => console.log(err))
-}
-function Message(props) {
-    const { children, messages, myId, background, withImage } = props
-    const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename, size } = children;
-    const date = new Date(created_at);
-    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
-    const day = daysOfTheWeek[date.getDay()]
-    const time = `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`
-    const finalTime = Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time
-    const fileSize = size / 1024 > 1024 ? `${(size / (1024 * 2)).toFixed(1)}МБ` : `${(size / 1024).toFixed(1)}КБ`
-    if (type === 'image') {
-        console.log('images', FileSystem.documentDirectory)
-        readFile(FileSystem.documentDirectory + filename)
-        
-        return (myId == sender._id ? (
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <MyMessage background={background} style={{ padding: 0 }}>
-                    <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
-                    <MessageInfo>
-                        <MessageDate color={'white'}>{finalTime}</MessageDate>
-                        <Indicator color={'white'} read={!!viewers.length} />
-                    </MessageInfo>
-                </MyMessage >
-                <TriangleLeftIcon color={myMessage} />
-            </ View >
-        ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
-                {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
-                <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
-                    <TriangleRightIcon color={interlocatorMessage} />
-                    <InterlocutorsMessage background={background}>
-                        <MyMessageImage source={{ uri: `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
-                        <MessageInfo>
-                            <MessageDate>{finalTime}</MessageDate>
-                        </MessageInfo>
-                    </InterlocutorsMessage>
-                </View>
-            </View>
-        )
-    }
-    if (type === 'text' || !type) {
-        return (myId == sender._id ? (
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <MyMessage background={background}>
-                    <MyMessageText>
-                        {text}
-                    </MyMessageText>
-                    <MessageInfo>
-                        <MessageDate color={'white'}>{finalTime}</MessageDate>
-                        <Indicator color={'white'} read={!!viewers.length} />
-                    </MessageInfo>
-                </MyMessage>
-                <TriangleLeftIcon color={background || myMessage} />
-            </View>
-        ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
-                {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
-                <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
-                    <TriangleRightIcon color={background || interlocatorMessage} />
-                    <InterlocutorsMessage background={background || interlocatorMessage}>
-                        {withImage && <InterlocutorsName>
-                            {sender.first_name} {sender.last_name}
-                        </InterlocutorsName>}
-                        <InterlocutorsMessageText>
-                            {text}
-                        </InterlocutorsMessageText>
-                        <MessageInfo>
-                            <MessageDate>{finalTime}</MessageDate>
-                        </MessageInfo>
-                    </InterlocutorsMessage>
-                </View>
-            </ View>
-        )
-    }
-    if (type === 'geo') {
-        return (myId === sender._id ? (<View style={{
-            display: 'flex',
-            alignItems: 'flex-end'
-        }}>
-            <MyMessage style={{ height: 150 }}>
-                <MapView
-                    style={{ width: '99%', height: '98%', alignSelf: 'center' }}
-                    region={{
-                        latitude,
-                        longitude,
-                        latitudeDelta,
-                        longitudeDelta,
-                    }}
-                    tracksViewChanges={false} >
-                    <MapView.Marker
-                        coordinate={{
-                            latitude,
-                            longitude,
-                            latitudeDelta,
-                            longitudeDelta,
-                        }}
-                        tracksViewChanges={false}
-                    />
-                </MapView>
-                <MapViewStreet>
-                    <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
-                    <MapViewStreetInfo>
-                        <MapViewStreetTime>4:10</MapViewStreetTime>
-                        <Indicator read={!!viewers.length} />
-                    </MapViewStreetInfo>
-                </MapViewStreet>
-            </MyMessage>
-        </View>) : (<View style={{
-            display: 'flex',
-            alignItems: 'flex-end',
-            flexDirection: 'column'
-        }}>
-            <InterlocutorsMessage style={{ height: 150, marginLeft: 20 }} background={pink}>
-                <MapView
-                    style={{ width: '99%', height: '98%', alignSelf: 'center' }}
-                    region={{
-                        latitude,
-                        longitude,
-                        latitudeDelta,
-                        longitudeDelta,
-                    }}
-                    tracksViewChanges={false} >
-                    <MapView.Marker
-                        coordinate={{
-                            latitude,
-                            longitude,
-                            latitudeDelta,
-                            longitudeDelta,
-                        }}
-                        tracksViewChanges={false}
-                    />
-                </MapView>
-                <MapViewStreet>
-                    <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
-                </MapViewStreet>
-            </InterlocutorsMessage>
 
-        </View>))
-    }
-    if (type === 'file') {
-        return (myId == sender._id ? (
-            <View style={{ display: 'flex', flexDirection: 'row' }}>
-                <MyMessage background={background}>
-                    <FileInfoWrapper>
-                        <FileIcon>
-                            <ImageIconBlue />
-                        </FileIcon>
-                        <FileInfo>
-                            <MyMessageText noPadding>
-                                {filename}
-                            </MyMessageText>
-                            <FileSize>{fileSize}</FileSize>
-                        </FileInfo>
-                    </FileInfoWrapper>
-                    <MessageInfo>
-                        <MessageDate color={'white'}>{finalTime}</MessageDate>
-                        <Indicator color={'white'} read={!!viewers.length} />
-                    </MessageInfo>
+class Message extends Component {
+    render() {
+        const { children, messages, myId, background, withImage } = this.props
+        const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename, size } = children;
+        const date = new Date(created_at);
+        const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const day = daysOfTheWeek[date.getDay()]
+        const time = `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`
+        const finalTime = Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time
+        const fileSize = size / 1024 > 1024 ? `${(size / (1024 * 2)).toFixed(1)}МБ` : `${(size / 1024).toFixed(1)}КБ`
+        const { imageUri } = this.state
+        if (type === 'image') {
+            this.readFile(`http://ser.univ.team${src}`, filename)
+            console.log({image: this.image})
+            return (myId == sender._id ? (
+                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                    <MyMessage background={background} style={{ padding: 0 }}>
+                        <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
+                        <MessageInfo>
+                            <MessageDate color={'white'}>{finalTime}</MessageDate>
+                            <Indicator color={'white'} read={!!viewers.length} />
+                        </MessageInfo>
+                    </MyMessage >
+                    <TriangleLeftIcon color={myMessage} />
+                </ View >
+            ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
+                    {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
+                    <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
+                        <TriangleRightIcon color={interlocatorMessage} />
+                        <InterlocutorsMessage background={background}>
+                            <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
+                            <MessageInfo>
+                                <MessageDate>{finalTime}</MessageDate>
+                            </MessageInfo>
+                        </InterlocutorsMessage>
+                    </View>
+                </View>
+            )
+        }
+        if (type === 'text' || !type) {
+            return (myId == sender._id ? (
+                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                    <MyMessage background={background}>
+                        <MyMessageText>
+                            {text}
+                        </MyMessageText>
+                        <MessageInfo>
+                            <MessageDate color={'white'}>{finalTime}</MessageDate>
+                            <Indicator color={'white'} read={!!viewers.length} />
+                        </MessageInfo>
+                    </MyMessage>
+                    <TriangleLeftIcon color={background || myMessage} />
+                </View>
+            ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
+                    {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
+                    <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
+                        <TriangleRightIcon color={background || interlocatorMessage} />
+                        <InterlocutorsMessage background={background || interlocatorMessage}>
+                            {withImage && <InterlocutorsName>
+                                {sender.first_name} {sender.last_name}
+                            </InterlocutorsName>}
+                            <InterlocutorsMessageText>
+                                {text}
+                            </InterlocutorsMessageText>
+                            <MessageInfo>
+                                <MessageDate>{finalTime}</MessageDate>
+                            </MessageInfo>
+                        </InterlocutorsMessage>
+                    </View>
+                </ View>
+            )
+        }
+        if (type === 'geo') {
+            return (myId === sender._id ? (<View style={{
+                display: 'flex',
+                alignItems: 'flex-end'
+            }}>
+                <MyMessage style={{ height: 150 }}>
+                    <MapView
+                        style={{ width: '99%', height: '98%', alignSelf: 'center' }}
+                        region={{
+                            latitude,
+                            longitude,
+                            latitudeDelta,
+                            longitudeDelta,
+                        }}
+                        tracksViewChanges={false} >
+                        <MapView.Marker
+                            coordinate={{
+                                latitude,
+                                longitude,
+                                latitudeDelta,
+                                longitudeDelta,
+                            }}
+                            tracksViewChanges={false}
+                        />
+                    </MapView>
+                    <MapViewStreet>
+                        <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
+                        <MapViewStreetInfo>
+                            <MapViewStreetTime>4:10</MapViewStreetTime>
+                            <Indicator read={!!viewers.length} />
+                        </MapViewStreetInfo>
+                    </MapViewStreet>
                 </MyMessage>
-                <TriangleLeftIcon color={background || myMessage} />
-            </View>
-        ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
-                {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
-                <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -10 : 0 }}>
-                    <TriangleRightIcon color={background || interlocatorMessage} />
-                    <InterlocutorsMessage background={background || interlocatorMessage}>
-                        {withImage && <InterlocutorsName>
-                            {sender.first_name} {sender.last_name}
-                        </InterlocutorsName>}
+            </View>) : (<View style={{
+                display: 'flex',
+                alignItems: 'flex-end',
+                flexDirection: 'column'
+            }}>
+                <InterlocutorsMessage style={{ height: 150, marginLeft: 20 }} background={pink}>
+                    <MapView
+                        style={{ width: '99%', height: '98%', alignSelf: 'center' }}
+                        region={{
+                            latitude,
+                            longitude,
+                            latitudeDelta,
+                            longitudeDelta,
+                        }}
+                        tracksViewChanges={false} >
+                        <MapView.Marker
+                            coordinate={{
+                                latitude,
+                                longitude,
+                                latitudeDelta,
+                                longitudeDelta,
+                            }}
+                            tracksViewChanges={false}
+                        />
+                    </MapView>
+                    <MapViewStreet>
+                        <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
+                    </MapViewStreet>
+                </InterlocutorsMessage>
+
+            </View>))
+        }
+        if (type === 'file') {
+            return (myId == sender._id ? (
+                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                    <MyMessage background={background}>
                         <FileInfoWrapper>
-                            <FileIcon background={pink}>
-                                <ImageIcon />
+                            <FileIcon>
+                                <ImageIconBlue />
                             </FileIcon>
                             <FileInfo>
-                                <InterlocutorsMessageText noPadding>
+                                <MyMessageText noPadding>
                                     {filename}
-                                </InterlocutorsMessageText>
-                                <FileSize color={pink}>{fileSize}</FileSize>
+                                </MyMessageText>
+                                <FileSize>{fileSize}</FileSize>
                             </FileInfo>
                         </FileInfoWrapper>
                         <MessageInfo>
-                            <MessageDate>{finalTime}</MessageDate>
+                            <MessageDate color={'white'}>{finalTime}</MessageDate>
+                            <Indicator color={'white'} read={!!viewers.length} />
                         </MessageInfo>
-                    </InterlocutorsMessage>
+                    </MyMessage>
+                    <TriangleLeftIcon color={background || myMessage} />
                 </View>
-            </ View>
-        )
+            ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
+                    {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
+                    <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -10 : 0 }}>
+                        <TriangleRightIcon color={background || interlocatorMessage} />
+                        <InterlocutorsMessage background={background || interlocatorMessage}>
+                            {withImage && <InterlocutorsName>
+                                {sender.first_name} {sender.last_name}
+                            </InterlocutorsName>}
+                            <FileInfoWrapper>
+                                <FileIcon background={pink}>
+                                    <ImageIcon />
+                                </FileIcon>
+                                <FileInfo>
+                                    <InterlocutorsMessageText noPadding>
+                                        {filename}
+                                    </InterlocutorsMessageText>
+                                    <FileSize color={pink}>{fileSize}</FileSize>
+                                </FileInfo>
+                            </FileInfoWrapper>
+                            <MessageInfo>
+                                <MessageDate>{finalTime}</MessageDate>
+                            </MessageInfo>
+                        </InterlocutorsMessage>
+                    </View>
+                </ View>
+            )
+        }
+    }
+    state = {
+        imageUri: null
+    }
+    componentDidMount() {
+
+        const { children, messages, myId, background, withImage } = this.props
+        const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename, size } = children;
+    }
+    readFile = async (path, filename, options = {}) => {
+            const uri = FileSystem.cacheDirectory + filename;
+            const image = await FileSystem.getInfoAsync(uri)
+            if (image.exists) {
+                console.log('exists');
+                this.image = uri
+                return;
+                // resolve(uri);
+            }
+            const newImage = await FileSystem.downloadAsync(path, FileSystem.cacheDirectory + filename);
+            console.log(`downloaded`)
+            this.image = path
+            return;
+            // resolve(path);
     }
 }
 

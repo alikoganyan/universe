@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import { Header, Content } from './index'
 import styled from 'styled-components'
-import { SafeAreaView } from '../../common'
+import SafeAreaView from '../../common/SafeAreaView'
 import helper from '../../utils/helpers'
 const { Colors, fontSize } = helper;
 const { lightColor, blue } = Colors;

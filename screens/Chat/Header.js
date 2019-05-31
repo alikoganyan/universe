@@ -8,7 +8,7 @@ import sendRequest from '../../utils/request'
 import { p_search_messages } from '../../constants/api'
 import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { ImageComponent } from '../../common'
+import ImageComponent from '../../common/Image'
 const { sidePadding, HeaderHeight, HeaderHeightInner, Colors, fontSize } = helper;
 const { border } = Colors;
 

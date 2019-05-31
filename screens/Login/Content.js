@@ -216,8 +216,15 @@ class Content extends Component {
                 navigate('Dialogs')
             },
             failFunc: (err) => {
-                err.errors || err.password && this.setState({ invalidPassword: true })
-                err.phone_number && this.setState({ invalidPhone: true })
+                console.log({ err })
+                const phone = err.length ? err.filter(e => e.param === 'phone_number')[0] : err.phone_number;
+                const pass = err.length ? err.filter(e => e.param === 'password')[0] : err.password;
+                if (phone) {
+                    this.setState({ invalidPhone: true })
+                }
+                if (pass) {
+                    this.setState({ invalidPassword: true })
+                }
             }
         })
     }

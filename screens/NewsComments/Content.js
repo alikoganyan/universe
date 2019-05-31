@@ -13,7 +13,7 @@ import { CommentIcon, HeartIcon, TriangleLeftIcon, TriangleRightIcon, CheckIcon,
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components';
 import helper from '../../utils/helpers';
-import { ImageComponent } from '../../common';
+import ImageComponent from '../../common/Image';
 import { connect } from 'react-redux';
 const {
 	HeaderHeight,

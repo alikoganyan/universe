@@ -7,7 +7,7 @@ import { connect } from 'react-redux'
 import { setUser, setRegisterUserNumber } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
 import { p_get_sms } from '../../constants/api'
-import { Button } from '../../common'
+import Button from '../../common/Button'
 const { Colors, HeaderHeight, fontSize } = helper;
 const { lightGrey1, blue, pink } = Colors;
 const Wrapper = styled(View)`

@@ -5,7 +5,8 @@ import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
-import { ImageComponent, Loader } from '../../common'
+import ImageComponent from '../../common/Image'
+import Loader from '../../common/Loader'
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';

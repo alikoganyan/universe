@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native'
 import { TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
-import { Button } from '../../common';
+import Button from '../../common/Button';
 import { setRoom } from '../../actions/messageActions'
 import { alterUser, setUser } from '../../actions/userActions'
 import styled from 'styled-components'

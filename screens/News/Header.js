@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { p_news_search, g_users } from '../../constants/api'
-import { ImageComponent } from '../../common'
+import ImageComponent from '../../common/Image'
 import { setNews } from '../../actions/newsActions'
 import sendRequest from '../../utils/request'
 const { sidePadding, HeaderHeight, fontSize } = helper;

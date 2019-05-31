@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, ScrollView, Dimensions, FlatList, Image, TouchableOpacity } from 'react-native'
 import { CommentIcon, HeartIcon } from '../../assets/index'
-import { TaskComponent } from '../../common'
+import TaskComponent from '../../common/Task'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { setActiveTask } from '../../actions/tasksActions'

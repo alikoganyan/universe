@@ -5,7 +5,7 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { p_register } from '../../constants/api'
 import sendRequest from '../../utils/request'
-import { Button } from '../../common'
+import Button from '../../common/Button'
 import CheckBox from 'react-native-check-box'
 
 const { Colors, fontSize, HeaderHeight } = helper;

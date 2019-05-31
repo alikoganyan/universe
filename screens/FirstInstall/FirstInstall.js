@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View, ImageBackground, Dimensions } from 'react-native'
 import { Header, Content } from './index'
 import styled from 'styled-components'
-import { SafeAreaView } from '../../common'
+import SafeAreaView from '../../common/SafeAreaView'
 import { fitstScreen } from '../../assets/images/'
 const Wrapper = styled(View)`
     height: 100%;

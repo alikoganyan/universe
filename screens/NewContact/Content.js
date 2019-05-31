@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, TextInput, ScrollView, Platform, Dimensio
 import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
-import { Button } from '../../common'
+import Button from '../../common/Button'
 import sendRequest from '../../utils/request'
 import { p_create_contact } from '../../constants/api'
 const { Colors, HeaderHeight } = helper;

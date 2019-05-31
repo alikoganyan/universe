@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { Text, View } from 'react-native'
 import { Header, Content } from './index'
 import styled from 'styled-components'
-import { SafeAreaView } from '../../common'
+import SafeAreaView from '../../common/SafeAreaView'
 
 const Wrapper = styled(View)``
 export default class CreateTask extends Component {

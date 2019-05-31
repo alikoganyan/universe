@@ -3,7 +3,7 @@ import { View, Text, Image, KeyboardAvoidingView, Dimensions, Platform } from 'r
 import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { setCurrentChat } from '../../actions/messageActions'
-import { SafeAreaView } from '../../common'
+import SafeAreaView from '../../common/SafeAreaView'
 import helper from '../../utils/helpers';
 import { Header, Content, Input } from './'
 import { connect } from 'react-redux'
