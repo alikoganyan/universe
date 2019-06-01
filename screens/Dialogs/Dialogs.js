@@ -86,8 +86,8 @@ class Dialogs extends Component {
 	}
 	setDialogsSocket = (e) => {
 		const { setDialogs } = this.props;
-		let newDialogs = e.dialogs.length ? [...e.dialogs] : []
-		newDialogs = newDialogs.length && newDialogs.sort((a, b) => {
+		const newDialogs = e.dialogs.length ? [...e.dialogs] : []
+		const newDialogsSorted = newDialogs.length ? newDialogs.sort((a, b) => {
 			if (b.messages.length && a.messages.length) {
 				const aCreation = new Date(a.created_at);
 				const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at)
@@ -116,7 +116,9 @@ class Dialogs extends Component {
 				const bCreation = new Date(b.created_at);
 				return bCreation - aCreation
 			}
-		})
+		}) : []
+		setDialogs(newDialogsSorted)
+
 		setDialogs(newDialogs)
 	}
 	toContacts = () => {

@@ -1,10 +1,10 @@
 {
-  "expoServerPort": 19000,
-  "expoServerNgrokUrl": "https://qj-i56.dr0kd3n.mobile-front.exp.direct",
-  "packagerNgrokUrl": "https://packager.qj-i56.dr0kd3n.mobile-front.exp.direct",
-  "ngrokPid": 63935,
-  "devToolsPort": 19002,
-  "packagerPort": 19001,
-  "packagerPid": 63913,
+  "expoServerPort": null,
+  "expoServerNgrokUrl": "https://ys-h73.dr0kd3n.mobile-front.exp.direct",
+  "packagerNgrokUrl": "https://packager.ys-h73.dr0kd3n.mobile-front.exp.direct",
+  "ngrokPid": 9755,
+  "devToolsPort": 19004,
+  "packagerPort": null,
+  "packagerPid": null,
   "webpackServerPort": null
 }

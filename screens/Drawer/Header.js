@@ -10,10 +10,8 @@ const Wrapper = styled(View)`
     display: flex;
     justify-content: center;
     align-items: flex-start;
-    max-height: ${HeaderHeight-1}px;
+    max-height: ${HeaderHeight - 1}px;
     border: 1px solid ${lightGrey3};
-    margin-left: ${sidePadding};
-    margin-right: ${sidePadding};
     padding-left: 40px;
     padding-right: 40px;
     border-width: 0;
@@ -27,7 +25,7 @@ const Header = styled(Text)`
 export default function HeaderComponent(props) {
     return (
         <Wrapper>
-            <LogoText width={85} height={30}/>
+            <LogoText width={85} height={30} noPadding />
         </Wrapper>
     )
 }

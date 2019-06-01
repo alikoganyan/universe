@@ -4,7 +4,6 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { Ionicons } from '@expo/vector-icons';
 import styled from 'styled-components'
 import helper from '../utils/helpers'
-import SVG from './svg/'
 import ICONS from './icons'
 import SvgUri from '../utils/react-native-svg-uri';
 
@@ -20,6 +19,8 @@ const StyledTouchableOpacity = styled(TouchableOpacity)`
     margin-left: ${({ left }) => left ? Dimensions.get('window').height >= 1080 ? 30 : 12 : 0}px;
     margin-right: ${({ right }) => right ? Dimensions.get('window').height >= 1080 ? 30 : 12 : 0}px;
     padding: ${({ noPadding, noPaddingAll }) => noPadding ? (noPaddingAll ? 0 : `0 12`) : (noPaddingAll ? 0 : `10px 12`)}px;
+    position: relative;
+    left: ${({ marginLeft }) => marginLeft ? -12 : 0}px;
 `
 const Left = styled(StyledTouchableOpacity)`
     margin-right: ${({ noPadding }) => noPadding ? 0 : 10}px;
@@ -91,9 +92,9 @@ const RightWrapper = function (props) {
     )
 }
 export function BackIcon(props) {
-    const { onPress, left, right, noPadding } = props;
+    const { onPress, left, right, noPadding, noPaddingAll, marginLeft = true } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPadding={noPadding}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPadding={noPadding} noPaddingAll={noPaddingAll} marginLeft={marginLeft}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}
@@ -382,9 +383,9 @@ export function CommentIcon(props) {
 }
 
 export function CloseIcon(props) {
-    const { onPress, style, left, right } = props
+    const { onPress, style, left, right, noPadding, noPaddingAll, marginLeft = true } = props
     return (
-        <StyledTouchableOpacity onPress={onPress} style={style} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} style={style} left={left} right={right} noPadding={noPadding} noPaddingAll={noPaddingAll} marginLeft={marginLeft}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}
@@ -610,9 +611,9 @@ export function IntroIcon(props) {
 }
 
 export function LogoText(props) {
-    const { onPress, left, right, size, width, height } = props;
+    const { onPress, left, right, size, width, height, noPadding, noPaddingAll } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPadding={noPadding} noPaddingAll={noPaddingAll}>
             {/* <SvgUri
                 width={size || IconSize}
                 height={size || IconSize}
