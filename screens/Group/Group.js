@@ -5,7 +5,9 @@ import styled from 'styled-components'
 import { setCurrentChat } from '../../actions/messageActions'
 import SafeAreaView from '../../common/SafeAreaView'
 import helper from '../../utils/helpers';
-import { Header, Content, Input } from './'
+import Header from './Header'
+import Input from './Input'
+import Content from './Content'
 import { connect } from 'react-redux'
 import { socket } from '../../utils/socket'
 const { HeaderHeight } = helper

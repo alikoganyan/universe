@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { View, Text, Dimensions } from 'react-native'
 import styled from 'styled-components'
 import SafeAreaView from '../../common/SafeAreaView'
-import { Header, Content } from './index'
+import Header from './Header'
+import Content from './Content'
 import helper from '../../utils/helpers'
 
 const { HeaderHeight } = helper;

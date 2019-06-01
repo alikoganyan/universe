@@ -8,7 +8,8 @@ import {
     connectActionSheet,
 } from '@expo/react-native-action-sheet';
 
-import { Header, Content } from './'
+import Header from './Header'
+import Content from './Content'
 const Wrapper = styled(View)`
     height: 100%;
 `

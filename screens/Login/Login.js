@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
-import { Header, Content } from './index'
+import Header from './Header'
+import Content from './Content'
 import styled from 'styled-components'
 import SafeAreaView from '../../common/SafeAreaView'
 import helper from '../../utils/helpers'

@@ -3,7 +3,7 @@ import { Text, View, Image, ImageBackground } from 'react-native'
 import styled from 'styled-components'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CheckAllIcon, CommentIcon, HeartIcon, ImageIcon, ImageIconBlue } from '../assets/index'
 import { connect } from 'react-redux'
-import { ImageComponent } from './'
+import ImageComponent from './Image'
 import MapView from 'react-native-maps';
 import { FileSystem } from 'expo'
 const { HeaderHeight, Colors, fontSize } = helper;

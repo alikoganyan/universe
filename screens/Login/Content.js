@@ -27,6 +27,7 @@ const ControlBar = styled(View)`
     justify-content: center;
     width: 100%;
     align-items: center;
+    align-self: center;
     flex-direction: column;
 `
 
@@ -48,6 +49,7 @@ const Error = styled(View)`
 const ErrorText = styled(Text)`
     font-size: ${sm};
     margin-bottom: 10px;
+    text-align: center;
 `
 const ForgotPass = styled(Text)`
     font-size: ${sm};
@@ -173,14 +175,15 @@ class Content extends Component {
         invalidPhone: false,
         loading: false,
     }
-    componentDidMount = async () => {
+    componentDidMount = () => {
         const { navigation, setUser } = this.props;
-        let value = await AsyncStorage.getItem('user');
-        value = JSON.parse(value);
-        if (value) {
-            this.setState({ phone: value.phone_number.slice(2), password: value.password })
-            this.login() // restore
-        }
+        AsyncStorage.getItem('user').then(res => {
+            value = JSON.parse(res);
+            if (value) {
+                this.setState({ phone: value.phone_number.slice(2), password: value.password })
+                this.login() // restore
+            }
+        });
     }
     storeUserData = async (user) => {
         try {
@@ -189,15 +192,13 @@ class Content extends Component {
             // Error saving data
         }
     };
-    login = async (e) => {
+    login = (e) => {
         const { navigate, setUser } = this.props;
         const { country, phone, password } = this.state;
-        let value = await AsyncStorage.getItem('user');
-        value = JSON.parse(value);
         const phone_number = country.concat(phone)
         if (!phone || !phone.length) this.setState({ invalidPhone: true })
         if (!password || password.length < 4) this.setState({ invalidPassword: true })
-        setTimeout(() => this.setState({ invalidPhone: false, invalidPassword: false }), 2000)
+        setTimeout(() => this.setState({ invalidPhone: false, invalidPassword: false }), 5000)
         sendRequest({
             r_path: p_login,
             method: 'post',
@@ -219,6 +220,7 @@ class Content extends Component {
                 console.log({ err })
                 const phone = err.length ? err.filter(e => e.param === 'phone_number')[0] : err.phone_number;
                 const pass = err.length ? err.filter(e => e.param === 'password')[0] : err.password;
+                console.log('test', {phone}, {pass})
                 if (phone) {
                     this.setState({ invalidPhone: true })
                 }

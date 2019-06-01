@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { View, Text, FlatList, Dimensions, StatusBar, BackHandler, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
-import { Header, Dialog } from './index'
+import Header from './Header'
+import Dialog from './Dialog'
 import Loader from '../../common/Loader'
 import SafeAreaView from '../../common/SafeAreaView'
 import { connect } from 'react-redux';

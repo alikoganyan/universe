@@ -3,7 +3,8 @@ import { View, Text, FlatList, Dimensions, TouchableOpacity } from 'react-native
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import helper from '../../utils/helpers'
-import { Header, Content } from './'
+import Header from './Header'
+import Content from './Content'
 import SafeAreaView from '../../common/SafeAreaView'
 const { sidePadding, topPadding } = helper;
 const Outer = styled(View)`

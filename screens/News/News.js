@@ -6,7 +6,8 @@ import SafeAreaView from '../../common/SafeAreaView'
 import sendRequest from '../../utils/request'
 import { connect } from 'react-redux'
 import { p_news } from '../../constants/api'
-import { Header, Content, Input } from './'
+import Header from './Header'
+import Content from './Content'
 import { setNews } from '../../actions/newsActions'
 const Wrapper = styled(View)`
     height: 100%;

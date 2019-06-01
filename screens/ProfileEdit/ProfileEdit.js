@@ -12,7 +12,8 @@ import {
     connectActionSheet,
 } from '@expo/react-native-action-sheet';
 import { socket } from '../../utils/socket'
-import { Header, Content } from './'
+import Header from './Header'
+import Content from './Content'
 
 const { Colors } = helper
 const { blue } = Colors;

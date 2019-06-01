@@ -123,7 +123,7 @@ class InputComponent extends Component {
         this.setState({ pickerOpened: false })
     }
     selectPhoto = async (e) => {
-        const { currentChat, currentRoom, addMessage, getMessages, setDialogs, dialogs, user } = this.props;
+        const { currentChat, addMessage, setDialogs, dialogs, user } = this.props;
         this.unselect()
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,

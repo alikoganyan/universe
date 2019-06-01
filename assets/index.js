@@ -472,9 +472,9 @@ export function DialogsIcon(props) {
 }
 
 export function CheckIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left=true, right, noPaddingAll=true } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}
@@ -490,7 +490,7 @@ export function CheckIcon(props) {
 }
 
 export function CheckAllIcon(props) {
-    const { onPress, left, right, noPaddingAll } = props;
+    const { onPress, left=true, right, noPaddingAll=true } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll}>
             {/* <SvgUri

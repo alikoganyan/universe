@@ -4,7 +4,8 @@ import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import SafeAreaView from '../../common/SafeAreaView'
 
-import { Header, Content, Input } from './'
+import Header from './Header'
+import Content from './Content'
 const Wrapper = styled(View)`
     height: 100%;
 `
