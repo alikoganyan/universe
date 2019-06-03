@@ -4,6 +4,7 @@ import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import { setRegisterUserSms } from '../../actions/userActions'
 import {
     p_get_restore_password,
     p_check_restore_password,
@@ -20,7 +21,6 @@ const Wrapper = styled(View)`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    
 `
 const Title = styled(Text)`
     width: 100%;
@@ -130,16 +130,13 @@ class Content extends Component {
     state = {
         error: false,
         code: '',
-        answer: '4444',
         deadline: 2,
     }
     componentDidMount() {
-        const { register } = this.props;
-        const { sms } = register;
-        this.setState({ answer: sms })
         const countdown = setInterval(() => {
-            this.setState({ deadline: this.state.deadline - 1 })
-            if (this.state.deadline === 0)
+            const { deadline } = this.state;
+            this.setState({ deadline: deadline - 1 })
+            if (deadline === 0)
                 clearInterval(countdown)
         }, 1000)
 
@@ -148,18 +145,18 @@ class Content extends Component {
         this.setState({ code: e, error: false });
     }
     proceed = e => {
-        const { code, answer } = this.state;
-
-        if (this.state.code.length === 4) {
+        const { code } = this.state;
+        if (code.length === 6) {
             this.checkCode();
         } else {
             this.setState({ error: true })
         }
     }
     checkCode = e => {
-        const { navigate, register } = this.props;
+        const { navigate, register, setSms } = this.props;
         const { code } = this.state;
         const phone_number = register.phone;
+        setSms(code)
         sendRequest({
             r_path: p_check_restore_password,
             method: 'post',
@@ -177,25 +174,12 @@ class Content extends Component {
         })
     }
     sendAgain = e => {
-        const { register } = this.props;
-        const { phone } = register;
         this.setState({ deadline: 30 }, () => {
-            // sendRequest({
-            //     r_path: p_get_restore_password,
-            //     method: 'post',
-            //     attr: {
-            //         phone_number: phone,
-            //     },
-            //     success: (res) => {
-            //         console.log(res)
-            //     },
-            //     failFunc: (err) => {
-            //         console.log(err)
-            //     }
-            // })
+            const { deadline } = this.state
+            this.checkCode()
             const countdown = setInterval(() => {
-                this.setState({ deadline: this.state.deadline - 1 })
-                if (this.state.deadline === 0)
+                this.setState({ deadline: deadline - 1 })
+                if (deadline === 0)
                     clearInterval(countdown)
             }, 1000)
         })
@@ -205,5 +189,6 @@ const mapStateToProps = state => ({
     register: state.userReducer.register,
 })
 const mapDispatchToProps = dispatch => ({
+    setSms: _ => dispatch(setRegisterUserSms(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

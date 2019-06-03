@@ -4,7 +4,7 @@ import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { setUser, setAuth } from '../../actions/userActions'
+import { setUser, setAuth, setRegisterUserNumber } from '../../actions/userActions'
 import { p_login } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import { connectToSocket } from '../../utils/socket'
@@ -193,7 +193,7 @@ class Content extends Component {
         }
     };
     login = (e) => {
-        const { navigate, setUser } = this.props;
+        const { navigate, setUser, setRegisterUserNumber } = this.props;
         const { country, phone, password } = this.state;
         const phone_number = country.concat(phone)
         if (!phone || !phone.length) this.setState({ invalidPhone: true })
@@ -220,7 +220,9 @@ class Content extends Component {
                 console.log({ err })
                 const phone = err.length ? err.filter(e => e.param === 'phone_number')[0] : err.phone_number;
                 const pass = err.length ? err.filter(e => e.param === 'password')[0] : err.password;
-                console.log('test', {phone}, {pass})
+                setRegisterUserNumber(phone_number)
+                console.log('test', { phone }, { pass })
+
                 if (phone) {
                     this.setState({ invalidPhone: true })
                 }
@@ -256,7 +258,8 @@ const mapStateToProps = state => ({
     id: state.userReducer.id
 })
 const mapDispatchToProps = dispatch => ({
-    setAuth: info => { dispatch(setAuth(info)) },
-    setUser: info => { dispatch(setUser(info)) },
+    setAuth: _ => dispatch(setAuth(_)),
+    setUser: _ => dispatch(setUser(_)),
+    setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

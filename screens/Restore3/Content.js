@@ -103,14 +103,15 @@ class Content extends Component {
     checkCode = e => {
         const { navigate, register } = this.props;
         const { pass, repass } = this.state;
-        const phone_number = register.phone;
+        const { phone, sms } = register
         sendRequest({
             r_path: p_restore_password,
             method: 'post',
             attr: {
-                phone_number,
+                phone_number: phone,
                 new_password: pass,
-                repeat_password: repass
+                repeat_password: repass,
+                one_time_password: sms,
             },
             success: (res) => {
                 navigate('Login');

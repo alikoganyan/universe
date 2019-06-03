@@ -6,6 +6,7 @@ import { connect } from 'react-redux'
 import ImageComponent from './Image'
 import MapView from 'react-native-maps';
 import { FileSystem } from 'expo'
+import LightBox from 'react-native-lightbox'
 const { HeaderHeight, Colors, fontSize } = helper;
 const { myMessage, interlocatorMessage, pink } = Colors
 const MyMessage = styled(View)`
@@ -149,12 +150,19 @@ class Message extends Component {
         const fileSize = size / 1024 > 1024 ? `${(size / (1024 * 2)).toFixed(1)}МБ` : `${(size / 1024).toFixed(1)}КБ`
         const { imageUri } = this.state
         if (type === 'image') {
-            this.readFile(`http://ser.univ.team${src}`, filename)
-            console.log({image: this.image})
+            console.log(src.split('file://')[1])
+            if (src.split('file://')[1]) {
+                this.readFile(src, filename)
+            } else {
+                this.readFile(`http://ser.univ.team${src}`, filename)
+            }
+            console.log({ image: this.image })
             return (myId == sender._id ? (
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <MyMessage background={background} style={{ padding: 0 }}>
-                        <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
+                        <LightBox>
+                            <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
+                        </LightBox>
                         <MessageInfo>
                             <MessageDate color={'white'}>{finalTime}</MessageDate>
                             <Indicator color={'white'} read={!!viewers.length} />
@@ -167,7 +175,9 @@ class Message extends Component {
                     <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
                         <TriangleRightIcon color={interlocatorMessage} />
                         <InterlocutorsMessage background={background}>
-                            <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
+                            <LightBox>
+                                <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
+                            </LightBox>
                             <MessageInfo>
                                 <MessageDate>{finalTime}</MessageDate>
                             </MessageInfo>
@@ -333,19 +343,19 @@ class Message extends Component {
         const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename, size } = children;
     }
     readFile = async (path, filename, options = {}) => {
-            const uri = FileSystem.cacheDirectory + filename;
-            const image = await FileSystem.getInfoAsync(uri)
-            if (image.exists) {
-                console.log('exists');
-                this.image = uri
-                return;
-                // resolve(uri);
-            }
-            const newImage = await FileSystem.downloadAsync(path, FileSystem.cacheDirectory + filename);
-            console.log(`downloaded`)
-            this.image = path
+        const uri = FileSystem.cacheDirectory + filename;
+        const image = await FileSystem.getInfoAsync(uri)
+        if (image.exists) {
+            console.log('exists');
+            this.image = uri
             return;
-            // resolve(path);
+            // resolve(uri);
+        }
+        const newImage = await FileSystem.downloadAsync(path, FileSystem.cacheDirectory + filename);
+        console.log(`downloaded`)
+        this.image = path
+        return;
+        // resolve(path);
     }
 }
 

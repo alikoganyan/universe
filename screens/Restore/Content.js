@@ -16,7 +16,7 @@ const Wrapper = styled(View)`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    flex: 1;
 `
 const Title = styled(Text)`
     width: 100%;
@@ -119,6 +119,12 @@ class Content extends Component {
         country: '+7',
         phone: '',
     }
+    componentDidMount() {
+        const { register } = this.props;
+        const { phone } = register
+        const phone_number = phone.split('+7')[1]
+        this.setState({ phone: phone_number })
+    }
     handleCountry = e => {
         this.setState({ country: e, error: false });
     }
@@ -166,9 +172,10 @@ class Content extends Component {
     }
 }
 const mapStateToProps = state => ({
-    id: state.userReducer.id
+    id: state.userReducer.id,
+    register: state.userReducer.register,
 })
 const mapDispatchToProps = dispatch => ({
-    setRegisterUserNumber: _ => { dispatch(setRegisterUserNumber(_)) },
+    setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

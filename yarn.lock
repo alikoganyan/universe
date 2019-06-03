@@ -10796,6 +10796,13 @@ react-native-label-select@^1.0.10:
   resolved "https://registry.yarnpkg.com/react-native-label-select/-/react-native-label-select-1.1.0.tgz#9bc7f78acf196b14f69c10d72ce68a02b6889538"
   integrity sha1-m8f3is8ZaxT2nBDXLOaKAraIlTg=
 
+react-native-lightbox@^0.8.0:
+  version "0.8.0"
+  resolved "https://registry.yarnpkg.com/react-native-lightbox/-/react-native-lightbox-0.8.0.tgz#d132e9df458936bae6ae912c309775dce301fffc"
+  integrity sha512-qiPx8ordPiDuyBNIfR0pxxNERSIeOSU0P40bpPSEMyuQ6xsI4JDghyuRFD+onRjIpNnuOolsLCbsTTjeVwAB5g==
+  dependencies:
+    prop-types "^15.5.10"
+
 react-native-link-xg@^0.0.1:
   version "0.0.1"
   resolved "https://registry.yarnpkg.com/react-native-link-xg/-/react-native-link-xg-0.0.1.tgz#8504ce4e6557ee8308f1056edad905322ca0c5bd"

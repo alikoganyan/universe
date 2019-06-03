@@ -131,6 +131,16 @@ class InputComponent extends Component {
         })
         form.append("room", currentChat)
         if (!result.cancelled) {
+            const message = {
+                room: currentChat,
+                sender: { ...user },
+                created_at: new Date(),
+                type: 'image',
+                src: result.uri,
+                viewers: [],
+            }
+            addMessage(message);
+
             sendRequest({
                 r_path: p_send_file,
                 method: 'post',
@@ -145,16 +155,7 @@ class InputComponent extends Component {
                     const newDialogs = [...dialogs]
                     const index = newDialogs.findIndex(e => e.room === currentChat)
                     newDialogs[index] = res.dialog
-                    const message = {
-                        room: currentChat,
-                        sender: { ...user },
-                        created_at: new Date(),
-                        type: 'image',
-                        src: result.uri,
-                        viewers: [],
-                    }
                     setDialogs(newDialogs)
-                    addMessage(message);
                 },
                 failFunc: (err) => {
                     console.log({ err })
