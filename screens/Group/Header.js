@@ -104,10 +104,10 @@ class HeaderComponent extends Component {
                             <>
                                 <BackIcon onPress={back} right />
                                 <ToProfile onPress={this.toProfile}>
-                                    <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'}/>
+                                    <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
                                     <Info>
                                         <InfoChatName>{name}</InfoChatName>
-                                        <InfoParticipants>{participants.length+1} участника</InfoParticipants>
+                                        <InfoParticipants>{participants.length + 1} участника</InfoParticipants>
                                     </Info>
                                 </ToProfile>
                             </>
@@ -124,7 +124,7 @@ class HeaderComponent extends Component {
                                 <SearchIcon onPress={startSearch} right />
                                 <LocationIcon />
                             </>
-                        ) : <CloseIcon onPress={stopSearch} />}
+                        ) : <CloseIcon onPress={stopSearch} right left={false} />}
                     </Right>
                 </Top>
                 {search && (

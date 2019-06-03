@@ -21,6 +21,7 @@ const StyledTouchableOpacity = styled(TouchableOpacity)`
     padding: ${({ noPadding, noPaddingAll }) => noPadding ? (noPaddingAll ? 0 : `0 12`) : (noPaddingAll ? 0 : `10px 12`)}px;
     position: relative;
     left: ${({ marginLeft }) => marginLeft ? -12 : 0}px;
+    right: ${({ marginRight }) => marginRight ? -12 : 0}px;
 `
 const Left = styled(StyledTouchableOpacity)`
     margin-right: ${({ noPadding }) => noPadding ? 0 : 10}px;
@@ -347,9 +348,9 @@ export function FunnelIcon(props) {
     )
 }
 export function HeartIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, marginRight } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} marginRight={marginRight}>
             {/* <SvgUri
                 width={IconSizeSmall}
                 height={IconSizeSmall}
@@ -359,6 +360,23 @@ export function HeartIcon(props) {
                 style={{ width: IconSizeSmall, height: IconSizeSmall }}
                 resizeMode={'contain'}
                 source={ICONS.Likes}
+            />
+        </StyledTouchableOpacity>
+    )
+}
+export function HeartIconFilled(props) {
+    const { onPress, left, right, marginRight } = props;
+    return (
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} marginRight={marginRight}>
+            {/* <SvgUri
+                width={IconSizeSmall}
+                height={IconSizeSmall}
+                source={SVG.Likes}
+            /> */}
+            <Image
+                style={{ width: IconSizeSmall, height: IconSizeSmall }}
+                resizeMode={'contain'}
+                source={ICONS.Like}
             />
         </StyledTouchableOpacity>
     )
@@ -383,9 +401,9 @@ export function CommentIcon(props) {
 }
 
 export function CloseIcon(props) {
-    const { onPress, style, left, right, noPadding, noPaddingAll, marginLeft = true } = props
+    const { onPress, style, left, right, noPadding, noPaddingAll, marginLeft = true, marginRight } = props
     return (
-        <StyledTouchableOpacity onPress={onPress} style={style} left={left} right={right} noPadding={noPadding} noPaddingAll={noPaddingAll} marginLeft={marginLeft}>
+        <StyledTouchableOpacity onPress={onPress} style={style} left={left} right={right} noPadding={noPadding} noPaddingAll={noPaddingAll} marginLeft={marginLeft} marginRight={marginRight}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}
@@ -435,6 +453,23 @@ export function GroupIconWhite(props) {
         </StyledTouchableOpacity>
     )
 }
+export function GroupIconGrey(props) {
+    const { onPress, left, right } = props;
+    return (
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+            {/* <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Contacts_white}
+            /> */}
+            <Image
+                style={{ width: IconSize, height: IconSize }}
+                resizeMode={'contain'}
+                source={ICONS.Contacts_grey}
+            />
+        </StyledTouchableOpacity>
+    )
+}
 
 export function TaskIcon(props) {
     const { onPress, left, right, noPaddingAll } = props;
@@ -472,7 +507,7 @@ export function DialogsIcon(props) {
 }
 
 export function CheckIcon(props) {
-    const { onPress, left=true, right, noPaddingAll=true } = props;
+    const { onPress, left = true, right, noPaddingAll = true } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll}>
             {/* <SvgUri
@@ -490,7 +525,7 @@ export function CheckIcon(props) {
 }
 
 export function CheckAllIcon(props) {
-    const { onPress, left=true, right, noPaddingAll=true } = props;
+    const { onPress, left = true, right, noPaddingAll = true } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll}>
             {/* <SvgUri
@@ -541,7 +576,7 @@ export function FeedIcon(props) {
     )
 }
 export function TasksIcon(props) {
-    const { onPress, left, right, noPaddingAll, size } = props;
+    const { onPress, left, right, noPaddingAll = true, size } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll}>
             {/* <SvgUri

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Dimensions, BackHandler, AsyncStorage } from 'react-native';
+import { View, Text, Dimensions, BackHandler, AsyncStorage, StatusBar } from 'react-native';
 import GlobalFont from 'react-native-global-font'
 import { Font, Asset } from 'expo';
 import { store } from './reducers/store'
@@ -129,6 +129,7 @@ export default class AppComponent extends React.Component {
   render() {
     return (
       <Provider store={store}>
+        <StatusBar backgroundColor="white" barStyle="dark-content" />
         {this.state.loaded ? <App /> : <SplashScreen />}
       </Provider>
     )

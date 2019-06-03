@@ -86,7 +86,6 @@ class InputComponent extends Component {
                             onSubmitEditing={this.sendMessage}
                             value={text}
                             blurOnSubmit={false}
-                            autoFocus={true}
                             placeholderTextColor={grey2}
                         />
                     </Left>

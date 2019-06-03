@@ -103,7 +103,11 @@ const ContactImage = styled(Image)`
     border-radius: 18;
     margin-right: 10px;
 `
-const ContactInfo = styled(View)``
+const ContactInfo = styled(View)`
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+`
 const ContactName = styled(Text)``
 const ContactRole = styled(Text)`
     color: #A7B0BA;
@@ -184,7 +188,7 @@ class Content extends Component {
                                                                 <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
                                                                 <ContactInfo>
                                                                     <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
-                                                                    <ContactRole>{e.role.length ? e.role[0] : 'no role'}</ContactRole>
+                                                                    {e.role[0] && <ContactRole>{e.role[0] || 'no role'}</ContactRole>}
                                                                 </ContactInfo>
                                                             </BoxInnerItem>
                                                         </TouchableOpacity>)

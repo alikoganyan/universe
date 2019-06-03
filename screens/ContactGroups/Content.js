@@ -102,7 +102,11 @@ const ContactImage = styled(Image)`
     border-radius: 18;
     margin-right: 10px;
 `
-const ContactInfo = styled(View)``
+const ContactInfo = styled(View)`
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+`
 const ContactName = styled(Text)``
 const ContactRole = styled(Text)`
     color: #A7B0BA;
@@ -155,7 +159,7 @@ class Content extends Component {
         return (
             <SafeAreaView>
                 <Wrapper>
-                    <KeyboardAwareScrollView enableOnAndroid style={{height: '100%'}}>
+                    <KeyboardAwareScrollView enableOnAndroid style={{ height: '100%' }}>
                         {dialogs.length ?
                             <>
                                 <Options>
@@ -180,7 +184,8 @@ class Content extends Component {
                                                     <ContactImage source={{ uri: `http://ser.univ.team${image || creator.image}` }} />
                                                     <ContactInfo>
                                                         <ContactName>{chatName}</ContactName>
-                                                        <ContactRole>{isGroup ? `${participants.length + 1} участника` : role && role[0] || 'без роли'}</ContactRole>
+                                                        {isGroup && <ContactRole>{`${participants.length + 1} участника`}</ContactRole>}
+                                                        {(!isGroup && role) && <ContactRole>{role[0] || 'без роли'}</ContactRole>}
                                                     </ContactInfo>
                                                 </BoxInnerItem> : null
                                             }}
@@ -201,13 +206,13 @@ class Content extends Component {
                                                         {dialogs.map((e, i) => {
                                                             const { creator, participants, isGroup } = e
                                                             let item = creator._id === user._id ? participants[0] : creator
-                                                            const { image, first_name, last_name, phone_number, post } = item
+                                                            const { image, first_name, last_name, phone_number, post, role } = item
                                                             const name = first_name ? `${first_name} ${last_name}` : phone_number
                                                             return !isGroup && <BoxInnerItem key={i} onPress={() => this.toChat(e)}>
                                                                 <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
                                                                 <ContactInfo>
                                                                     <ContactName>{name}</ContactName>
-                                                                    <ContactRole>{'без роли'}</ContactRole>
+                                                                    {role && <ContactRole>{role[0] || 'без роли'}</ContactRole>}
                                                                 </ContactInfo>
                                                             </BoxInnerItem>
                                                         })}
@@ -237,12 +242,12 @@ class Content extends Component {
                                     </ContactList>
                                 </Animated>
                             </> : <Loader hint={'Пока нет диалогов'} style={{ flex: 1, height: '100%' }}>
-                                    <TouchableOpacity onPress={this.toContacts}>
-                                        <Text style={{ color: grey2, textAlign: 'center' }}>Откройте первый диалог, выбрав пользователя
+                                <TouchableOpacity onPress={this.toContacts}>
+                                    <Text style={{ color: grey2, textAlign: 'center' }}>Откройте первый диалог, выбрав пользователя
 									<Text style={{ color: blue }}> на странице контактов</Text>
-                                        </Text>
-                                    </TouchableOpacity>
-                                </Loader>}
+                                    </Text>
+                                </TouchableOpacity>
+                            </Loader>}
                     </KeyboardAwareScrollView>
                 </Wrapper>
             </SafeAreaView>

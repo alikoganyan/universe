@@ -14,12 +14,12 @@ const MyMessage = styled(View)`
     justify-content: center;
     text-align: right;
     margin: 5px 10px;
-    align-self: stretch;
     background: ${({ background }) => background || myMessage};
     border-radius: 3;
     max-width: 80%;
     margin-left: 20%;
     position: relative;
+    flex-grow: 1;
     z-index: 1;
 `
 
@@ -71,11 +71,9 @@ const MessageDate = styled(Text)`
 `
 
 const MyMessageImage = styled(ImageBackground)`
-    min-height: 300px; 
+    min-height: 200px;
     min-width: 100%;
-    /* resize-mode: contain; */
-    /* top: 5px; */
-    /* flex: 1; */
+    resize-mode: contain;
 `
 const InterlocutorsName = styled(InterlocutorsMessageText)`
     margin-bottom: 0;
@@ -150,18 +148,12 @@ class Message extends Component {
         const fileSize = size / 1024 > 1024 ? `${(size / (1024 * 2)).toFixed(1)}МБ` : `${(size / 1024).toFixed(1)}КБ`
         const { imageUri } = this.state
         if (type === 'image') {
-            console.log(src.split('file://')[1])
-            if (src.split('file://')[1]) {
-                this.readFile(src, filename)
-            } else {
-                this.readFile(`http://ser.univ.team${src}`, filename)
-            }
-            console.log({ image: this.image })
+            this.readFile(src.split('file://')[1] ? src : `http://ser.univ.team${src}`, filename)
             return (myId == sender._id ? (
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <MyMessage background={background} style={{ padding: 0 }}>
                         <LightBox>
-                            <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
+                            <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}`, cache: 'reload' }} width={width} height={height} resizeMode={'contain'} />
                         </LightBox>
                         <MessageInfo>
                             <MessageDate color={'white'}>{finalTime}</MessageDate>
@@ -176,7 +168,7 @@ class Message extends Component {
                         <TriangleRightIcon color={interlocatorMessage} />
                         <InterlocutorsMessage background={background}>
                             <LightBox>
-                                <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'stretch'} />
+                                <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'contain'} />
                             </LightBox>
                             <MessageInfo>
                                 <MessageDate>{finalTime}</MessageDate>

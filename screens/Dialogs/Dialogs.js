@@ -75,7 +75,10 @@ class Dialogs extends Component {
 		socket.removeListener('new_message', this.newMessageSocket);
 		socket.emit('get_dialogs', { id: user._id })
 		socket.on('update_dialogs', e => this.setDialogsSocket(e))
-		socket.on('new_message', e => this.newMessageSocket(e))
+		socket.on('new_message', e => {
+			console.log({e})
+			this.newMessageSocket(e)
+		})
 		socket.on('new_dialogs', e => { })
 		socket.on('need_update', e => {
 			socket.emit('get_dialogs', { id: user._id })

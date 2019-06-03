@@ -37,9 +37,7 @@ export default class HeaderComponent extends Component {
                     <BackIcon onPress={this.props.back} />
                 </Left>
                 <Right>
-                    {myProfile ?
-                        <EditIcon onPress={this.editProfile}/> :
-                        <LocationIcon />}
+                    <EditIcon onPress={this.editProfile} />
                 </Right>
             </Header>
         )

@@ -24,10 +24,8 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
     position: absolute;
-    padding: 10px ${sidePadding}px;
-    padding-left: 0;
+    padding: 10px 0;
     z-index: 2;
-    top: 1%;
     left: ${sidePadding}px;
 `
 const Input = styled(TextInput)`
@@ -59,8 +57,8 @@ class HeaderComponent extends Component {
                     onFocus={this.handleFocus}
                     placeholder={`Поиск`} />
                 {this.state.focused ?
-                    <CloseIcon onPress={this.onBlur} />
-                    : <TouchableOpacity onPress={this.toProfile}>
+                    <CloseIcon onPress={this.onBlur} marginLeft={false} marginRight right/>
+                    : <TouchableOpacity onPress={this.toProfile} style={{marginRight: sidePadding}}>
                         <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size={'header'}/>
                     </TouchableOpacity>}
             </Header>

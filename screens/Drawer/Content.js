@@ -75,7 +75,7 @@ export default function ContentComponent(props) {
                     dispatch(DrawerActions.closeDrawer())
                     navigate('TasksList')
                 }}>
-                    <TasksIcon size={20}/>
+                    <TasksIcon size={20} noPaddingAll={false}/>
                     <LinkText>
                         Задачи
                     </LinkText>

@@ -9,12 +9,14 @@ import {
 	ScrollView,
 	Dimensions,
 } from 'react-native';
-import { CommentIcon, HeartIcon, TriangleLeftIcon, TriangleRightIcon, CheckIcon, } from '../../assets/index';
+import { CommentIcon, HeartIcon, HeartIconFilled, TriangleLeftIcon, TriangleRightIcon, CheckIcon, } from '../../assets/index';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components';
 import helper from '../../utils/helpers';
 import ImageComponent from '../../common/Image';
 import { connect } from 'react-redux';
+import { setFeed } from '../../actions/newsActions'
+import { socket } from '../../utils/socket'
 const {
 	HeaderHeight,
 	sidePadding,
@@ -173,49 +175,6 @@ class Content extends Component {
 		const reversedCommnets = [...comments].reverse();
 		const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 		const date = new Date(feed.created_at);
-
-		const Message = props => {
-			const { children } = props;
-			const { user } = this.props;
-			const { creator, created_at, likes_сount, text, _id } = children;
-			const myId = user._id;
-			const date = new Date(created_at)
-			return myId === _id ?
-				<View style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
-					<MyMessage>
-						<MyMessageText>
-							{text}
-						</MyMessageText>
-						<MessageInfo>
-							<HeartIcon style={{ paddingRight: 5 }} />
-							<LikeText color={darkBlue2}>{likes_сount}</LikeText>
-							<MessageDate color={darkBlue2}>
-								{date.getHours()}:{date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`}
-							</MessageDate>
-						</MessageInfo>
-					</MyMessage>
-					<TriangleLeftIcon color={yellow} />
-				</View> :
-				<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
-					<ImageComponent
-						style={{ position: 'relative', left: 5, bottom: 5 }}
-						source={{
-							uri: `http://ser.univ.team${image}`,
-						}}
-					/>
-					<TriangleRightIcon color={'#fff1dd'} />
-					<InterlocutorsMessage>
-						<InterlocutorsMessageName>{first_name}</InterlocutorsMessageName>
-						<InterlocutorsMessageText>{text}</InterlocutorsMessageText>
-						<MessageInfo>
-							<HeartIcon style={{ paddingRight: 5 }} /><LikeText>{likes_сount}</LikeText>
-							<MessageDate>
-								{date.getHours()}:{date.getMinutes()}
-							</MessageDate>
-						</MessageInfo>
-					</InterlocutorsMessage>
-				</View>
-		};
 		return (
 			<Wrapper>
 				<NewsItem onLayout={e => this.getUnreadMessageHeight(e)}>
@@ -253,7 +212,7 @@ class Content extends Component {
 					keyboardDismissMode={'on-drag'}
 					inverted={true}
 					data={reversedCommnets}
-					renderItem={({ item }) => <Message>{item}</Message>}
+					renderItem={({ item }) => <this.Message>{item}</this.Message>}
 					keyExtractor={(item, index) => index.toString()}
 				/>
 			</Wrapper>
@@ -262,8 +221,84 @@ class Content extends Component {
 	state = {
 		height: null,
 	};
+	componentWillUnmount() {
+		const { setFeed } = this.props
+		setFeed({})
+	}
 	getUnreadMessageHeight = e => {
 		this.setState({ height: e.nativeEvent.layout.height });
+	};
+	hitLike = (e) => {
+		const { feed, user, setFeed } = this.props
+		const { _id, comments } = feed
+		const newFeed = { ...feed }
+		const reversedCommnets = [...comments].reverse();
+		const newComment = reversedCommnets.filter(comment => comment._id === e)[0]
+		if (!newComment.likes.includes(user._id)) {
+			newComment.likes_сount += 1;
+			newComment.likes.push(user._id);
+			const newComments = [...reversedCommnets]
+			const index = newComments.findIndex(comment => comment._id === e)
+			newComments[index] = newComment
+			newFeed.comments = newComments
+			socket.emit('like_news', { _id, e });
+			setFeed(newFeed);
+		}
+		// else {
+		// 	newComment.likes_сount -= 1;
+		// 	newComment.likes = newComment.likes.filter(e => e != user._id);
+		// 	const newComments = [...reversedCommnets]
+		// 	const index = newComments.findIndex(comment => comment._id === e)
+		// 	newComments[index] = newComment
+		// 	newFeed.comments = newComments
+		// 	setFeed(newFeed)
+		// }
+	}
+	Message = props => {
+		const { children } = props;
+		const { user, feed } = this.props;
+		const { creator, created_at, likes_сount, text, _id, likes } = children;
+		const { first_name, last_name, image } = creator
+		const myId = user._id;
+		const date = new Date(created_at)
+		return myId === _id ?
+			<View style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
+				<MyMessage>
+					<MyMessageText>
+						{text}
+					</MyMessageText>
+					<MessageInfo>
+						<HeartIcon style={{ paddingRight: 5 }} />
+						<LikeText color={darkBlue2}>{likes_сount}</LikeText>
+						<MessageDate color={darkBlue2}>
+							{date.getHours()}:{date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`}
+						</MessageDate>
+					</MessageInfo>
+				</MyMessage>
+				<TriangleLeftIcon color={yellow} />
+			</View> :
+			<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
+				<ImageComponent
+					style={{ position: 'relative', left: 5, bottom: 5 }}
+					source={{
+						uri: `http://ser.univ.team${image}`,
+					}}
+				/>
+				<TriangleRightIcon color={'#fff1dd'} />
+				<InterlocutorsMessage>
+					<InterlocutorsMessageName>{first_name} {last_name}</InterlocutorsMessageName>
+					<InterlocutorsMessageText>{text}</InterlocutorsMessageText>
+					<MessageInfo>
+						{likes.includes(user._id) ?
+							<HeartIconFilled style={{ paddingRight: 5 }} marginRight onPress={e => this.hitLike(feed._id, _id)} /> :
+							<HeartIcon style={{ paddingRight: 5 }} marginRight onPress={e => this.hitLike(feed._id, _id)} />}
+						<LikeText>{likes_сount}</LikeText>
+						<MessageDate>
+							{date.getHours()}:{date.getMinutes()}
+						</MessageDate>
+					</MessageInfo>
+				</InterlocutorsMessage>
+			</View>
 	};
 }
 const mapStateToProps = state => ({

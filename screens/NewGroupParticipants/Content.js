@@ -95,7 +95,6 @@ const BoxInnerItem = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-
 `
 const ContactImage = styled(Image)`
     width: 36px;
@@ -109,7 +108,9 @@ const ContactInfo = styled(View)`
 const ContactName = styled(Text)``
 const ContactRole = styled(Text)`
     color: #A7B0BA;
-
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)`
     
@@ -176,7 +177,7 @@ class Content extends Component {
                                                             <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
                                                             <ContactInfo>
                                                                 <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
-                                                                <ContactRole>{e.role.length ? e.role[0] : 'no role'}</ContactRole>
+                                                                {e.role[0] && <ContactRole>{e.role[0] || 'no role'}</ContactRole>}
                                                             </ContactInfo>
                                                         </BoxInnerItem>
                                                     </TouchableOpacity>)

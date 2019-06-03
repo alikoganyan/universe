@@ -91,7 +91,11 @@ const ContactImage = styled(Image)`
     border-radius: 16.5;
     margin-right: 8px;
 `
-const ContactInfo = styled(View)``
+const ContactInfo = styled(View)`
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+`
 const ContactName = styled(Text)`
     font-size: ${fontSize.text};
     color: ${black};
@@ -162,7 +166,7 @@ class Content extends Component {
                                                         <ContactName>
                                                             {e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}
                                                         </ContactName>
-                                                        <ContactRole>{e.role.length ? e.role[0] : 'нет роли'}</ContactRole>
+                                                        {e.role[0] && <ContactRole>{e.role[0]}</ContactRole>}
                                                     </ContactInfo>
                                                 </BoxInnerItem>
                                             </TouchableOpacity>)}
@@ -176,7 +180,7 @@ class Content extends Component {
                                     style={{ paddingRight: 5, paddingLeft: 5, }}
                                     ListHeaderComponent={<View style={{ margin: 35, }} />}
                                     inverted={true}
-                                    data={groups}
+                                    data={[]}
                                     renderItem={({ item }) => <Group>
                                         <GroupImage />
                                         <GroupInfo>

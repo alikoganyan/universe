@@ -44,7 +44,7 @@ const DialogTitle = styled(Text)`
 const LastMessageDate = styled(Text)`
   color: ${lightColor};
   font-size: ${fontSize.text};
-  text-align: left;
+  text-align: center;
   margin-bottom: 5px;
 `
 const DialogLastMessage = styled(Text)`
@@ -64,6 +64,7 @@ const DialogDate = styled(View)`
   justify-content: center;
   margin-bottom: 2px;
   text-align: center;
+  width: 40px;
   margin-left: 5px;
 `
 const UnreadMessages = styled(View)`
