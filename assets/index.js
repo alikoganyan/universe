@@ -20,8 +20,7 @@ const StyledTouchableOpacity = styled(TouchableOpacity)`
     margin-right: ${({ right }) => right ? Dimensions.get('window').height >= 1080 ? 30 : 12 : 0}px;
     padding: ${({ noPadding, noPaddingAll }) => noPadding ? (noPaddingAll ? 0 : `0 12`) : (noPaddingAll ? 0 : `10px 12`)}px;
     position: relative;
-    left: ${({ marginLeft }) => marginLeft ? -12 : 0}px;
-    right: ${({ marginRight }) => marginRight ? -12 : 0}px;
+    left: ${({ marginLeft, marginRight }) => marginLeft ? -12 : marginRight ? 12 : 0}px;
 `
 const Left = styled(StyledTouchableOpacity)`
     margin-right: ${({ noPadding }) => noPadding ? 0 : 10}px;
@@ -258,9 +257,9 @@ export function TriangleRightIcon({ color, colorInner = "#fff", style, hollow, s
 }
 
 export function LocationIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, marginRight = true } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} marginRight={marginRight}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}
@@ -322,9 +321,9 @@ export function MessageIndicatorIcon(props) {
 
 
 export function EditIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, marginRight = true } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} marginRight={marginRight}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}

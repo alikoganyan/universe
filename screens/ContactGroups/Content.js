@@ -180,7 +180,7 @@ class Content extends Component {
                                                 const chatName = isGroup ?
                                                     name :
                                                     first_name ? `${first_name} ${last_name}` : phone_number
-                                                return item ? <BoxInnerItem key={index} onPress={() => this.toChat(_id)}>
+                                                return item ? <BoxInnerItem key={index} onPress={() => this.toChat(item)}>
                                                     <ContactImage source={{ uri: `http://ser.univ.team${image || creator.image}` }} />
                                                     <ContactInfo>
                                                         <ContactName>{chatName}</ContactName>
@@ -229,7 +229,7 @@ class Content extends Component {
                                                 const { participants, creator, _id, name, isGroup } = item
                                                 const chatItem = creator._id === user._id ? participants[0] : creator
                                                 const { first_name, last_name, phone_number, role, image } = chatItem
-                                                return isGroup ? <BoxInnerItem key={index} onPress={() => this.toChat(_id)}>
+                                                return isGroup ? <BoxInnerItem key={index} onPress={() => this.toChat(item)}>
                                                     <ContactImage source={{ uri: `http://ser.univ.team${image || creator.image}` }} />
                                                     <ContactInfo>
                                                         <ContactName>{name}</ContactName>
@@ -329,11 +329,10 @@ class Content extends Component {
         const { setCurrentDialogs, navigate, user, getMessages, setCurrentChat } = this.props
         const { creator, participants, isGroup } = e
         let item = creator._id === user._id ? participants[0] : creator
-        const { image, first_name, last_name, phone_number, post } = item
         getMessages(e.messages)
         setCurrentDialogs({ ...e, ...item })
         setCurrentChat(e._id)
-        navigate('Chat')
+        navigate(isGroup ? 'Group' : 'Chat')
     }
 }
 

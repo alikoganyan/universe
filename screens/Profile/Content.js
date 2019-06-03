@@ -102,6 +102,7 @@ const Participants = styled(View)`
     display: flex;
     justify-content: flex-start;
     align-items: center;
+    padding-left: 10px;
     flex-direction: row;
 `
 const ParticipantsText = styled(Text)``
@@ -135,8 +136,8 @@ class Content extends Component {
         const { UserData, userName, status } = this.state;
         const { user, currentRoom, currentChat, myProfile, currentDialog } = this.props;
 
-        const { _id, image, last_name, first_name, phone_number, isGroup, participants } = myProfile ? user : currentDialog;
-        const name = first_name ? `${first_name} ${last_name}` : phone_number;
+        const { _id, image, last_name, first_name, phone_number, isGroup, participants, name } = myProfile ? user : currentDialog;
+        const chatName = first_name ? `${first_name} ${last_name}` : (phone_number || name);
         console.log(participants)
         return (
             <Wrapper>
@@ -144,10 +145,10 @@ class Content extends Component {
                     <UserImage source={{ uri: `http://ser.univ.team${image}` }} />
                     <UserInfo>
                         <UserName>
-                            <Name>{name}</Name>
+                            <Name>{chatName}</Name>
                         </UserName>
-                        {!myProfile && <UserStatus>{status}</UserStatus>}
-                        {!myProfile && <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>}
+                        {(!myProfile && !isGroup) && <UserStatus>{status}</UserStatus>}
+                        {(!myProfile && !isGroup) && <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>}
                     </UserInfo>
                 </User>
                 {isGroup ?
@@ -172,7 +173,6 @@ class Content extends Component {
                             data={participants}
                             renderItem={({ item, index }) => {
                                 const { _id, first_name, last_name, post, role, image } = item
-                                console.log({item})
                                 return (
                                     <BoxInnerItem>
                                         <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
