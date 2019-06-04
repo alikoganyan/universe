@@ -151,6 +151,7 @@ class Content extends Component {
                 phone_number,
             },
             success: (res) => {
+                console.log({res})
                 setRegisterUserNumber(phone_number);
                 setTimeout(() => navigate('Restore2'), 0)
             },

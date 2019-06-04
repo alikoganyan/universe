@@ -338,13 +338,11 @@ class Message extends Component {
         const uri = FileSystem.cacheDirectory + filename;
         const image = await FileSystem.getInfoAsync(uri)
         if (image.exists) {
-            console.log('exists');
             this.image = uri
             return;
             // resolve(uri);
         }
         const newImage = await FileSystem.downloadAsync(path, FileSystem.cacheDirectory + filename);
-        console.log(`downloaded`)
         this.image = path
         return;
         // resolve(path);

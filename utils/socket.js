@@ -21,10 +21,7 @@ export const connectToSocket = () => {
             }
         })
         socket.on('connect', () => {
-            // console.log('connect')
-        })
-        socket.on('disconnect', (data) => {
-            // console.log('disconnect')
+            console.log('connected')
         })
         socket.on('error', (data) => {
             console.log(data)
@@ -38,6 +35,7 @@ export const connectToSocket = () => {
 
 export const disconnectFromSocket = () => {
     socket.disconnect()
+    console.log('disconnected')
 }
 
 // export const addListener = (listener) => {

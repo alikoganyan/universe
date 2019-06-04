@@ -165,6 +165,7 @@ class Content extends Component {
                 password: code,
             },
             success: (res) => {
+                console.log({res})
                 navigate('Restore3');
             },
             failFunc: (err) => {

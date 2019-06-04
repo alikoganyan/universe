@@ -214,15 +214,12 @@ class Content extends Component {
                 connectToSocket()
                 this.storeUserData({ ...data, password })
                 this.setState({ loading: false })
-                navigate('Dialogs')
+                setTimeout(() => navigate('Dialogs'), 0)
             },
             failFunc: (err) => {
-                console.log({ err })
                 const phone = err.length ? err.filter(e => e.param === 'phone_number')[0] : err.phone_number;
                 const pass = err.length ? err.filter(e => e.param === 'password')[0] : err.password;
                 setRegisterUserNumber(phone_number)
-                console.log('test', { phone }, { pass })
-
                 if (phone) {
                     this.setState({ invalidPhone: true })
                 }

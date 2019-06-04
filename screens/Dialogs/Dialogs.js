@@ -10,7 +10,7 @@ import { getMessages, setRoom, addMessage, setCurrentChat, setCurrentRoomId } fr
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
-import { socket, connectToSocket } from '../../utils/socket'
+import { socket, connectToSocket, disconnectFromSocket } from '../../utils/socket'
 
 const { sidePadding, HeaderHeight, Colors } = helper;
 const { blue, grey2 } = Colors;
@@ -71,22 +71,24 @@ class Dialogs extends Component {
 		// 	if (!socket.connected) connectToSocket()
 		// }, 2000)
 		BackHandler.addEventListener('hardwareBackPress', () => true)
-		socket.removeListener('update_dialogs', this.setDialogsSocket);
-		socket.removeListener('new_message', this.newMessageSocket);
 		socket.emit('get_dialogs', { id: user._id })
-		socket.on('update_dialogs', e => this.setDialogsSocket(e))
-		socket.on('new_message', e => {
-			console.log({e})
-			this.newMessageSocket(e)
-		})
-		socket.on('new_dialogs', e => { })
-		socket.on('need_update', e => {
-			socket.emit('get_dialogs', { id: user._id })
-		})
-		socket.on('dialog_opened', e => { })
-		socket.on('new_group', e => {
-			socket.emit('get_dialogs')
-		})
+		socket.once('update_dialogs', e => this.setDialogsSocket(e))
+		socket.once('new_message', e => this.newMessageSocket(e))
+		socket.once('new_dialogs', this.socketNewDialog)
+		socket.once('need_update', this.socketNeedsUpdate)
+		socket.once('dialog_opened', this.socketDialogOpened)
+		socket.once('new_group', this.socketGetGroup)
+	}
+	componentWillUnmount(){
+		disconnectFromSocket()
+	}
+	socketGetGroup = e => {
+		socket.emit('get_dialogs')
+	}
+	socketNewDialog = e => { }
+	socketDialogOpened = e => { }
+	socketNeedsUpdate = e => {
+		socket.emit('get_dialogs', { id: user._id })
 	}
 	setDialogsSocket = (e) => {
 		const { setDialogs } = this.props;
