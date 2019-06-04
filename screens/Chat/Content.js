@@ -8,6 +8,8 @@ import TaskComponent from '../../common/Task'
 import Feed from '../../common/Feed'
 import Message from '../../common/Message'
 import posed from 'react-native-pose'
+import { getMessages } from '../../actions/messageActions'
+import { setDialogs } from '../../actions/dialogsActions'
 
 const { Colors } = helper
 const { myMessage, interlocatorMessage } = Colors
@@ -69,7 +71,7 @@ class Content extends Component {
                             </TouchableOpacity>
                         }}
                         keyExtractor={(item, index) => index.toString()}
-                    /> 
+                    />
                 </Wrapper>
                 <MessageOptions pose={selectedMessage._id ? 'visible' : 'hidden'}>
                     {
@@ -87,7 +89,21 @@ class Content extends Component {
     state = {
         selectedMessage: {},
     }
-    componentDidMount() { }
+    componentDidMount() {
+        const { dialogs, messages, setDialogs, getMessages, currentRoomId, user } = this.props;
+        const newMessages = []
+        messages.map((e, i) => {
+            newMessages.push({ ...messages[i], viewers: e.sender._id !== user._id ? [...messages[i].viewers, user._id] : messages[i].viewers })
+        });
+        const newDialogs = [...dialogs]
+        const newDialog = newDialogs.filter(e => e._id === currentRoomId)[0]
+        const newDialogIndex = newDialogs.findIndex(e => e._id === currentRoomId)
+        newDialogs[newDialogIndex] = newDialog
+        newDialog.messages = newMessages
+        getMessages(newMessages)
+        setDialogs(newDialogs)
+
+    }
     unselect = (e) => {
         this.setState({ selectedMessage: {} })
     }
@@ -112,9 +128,12 @@ const mapStateToProps = state => ({
     messages: state.messageReducer.messages,
     search: state.messageReducer.search,
     currentRoom: state.messageReducer.currentRoom,
+    currentRoomId: state.messageReducer.currentRoomId,
     user: state.userReducer.user,
+    dialogs: state.dialogsReducer.dialogs,
 })
 const mapDispatchToProps = dispatch => ({
-
+    getMessages: _ => dispatch(getMessages(_)),
+    setDialogs: _ => dispatch(setDialogs(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

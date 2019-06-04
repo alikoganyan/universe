@@ -91,7 +91,7 @@ const NewMessagesText = styled(Text)`
 `
 class Content extends Component {
   render() {
-    const { children, title, user, image, lastMessage, item } = this.props;
+    const { children, title, user, image, lastMessage, item, unreadMessages } = this.props;
     const { phone, id } = item;
     const { creator } = item
     const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -153,10 +153,10 @@ class Content extends Component {
             <DialogDate>
               <LastMessageDate>{time}</LastMessageDate>
               <UnreadMessages>
-                {lastMessage && (!!lastMessage.length &&
+                {!!unreadMessages &&
                   <NewMessages color={lastType}>
-                    <NewMessagesText>{lastMessage.length}</NewMessagesText>
-                  </NewMessages>)}
+                    <NewMessagesText>{unreadMessages}</NewMessagesText>
+                  </NewMessages>}
               </UnreadMessages>
             </DialogDate>
           </DialogText>

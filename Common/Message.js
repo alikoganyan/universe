@@ -138,7 +138,7 @@ const Indicator = ({ read = false, color }) => {
 
 class Message extends Component {
     render() {
-        const { children, messages, myId, background, withImage } = this.props
+        const { children, messages, myId, background, withImage, currentDialog } = this.props
         const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename, size } = children;
         const date = new Date(created_at);
         const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -147,6 +147,7 @@ class Message extends Component {
         const finalTime = Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time
         const fileSize = size / 1024 > 1024 ? `${(size / (1024 * 2)).toFixed(1)}МБ` : `${(size / 1024).toFixed(1)}КБ`
         const { imageUri } = this.state
+        const messageRead = viewers.includes(currentDialog._id) && sender._id === myId;
         if (type === 'image') {
             this.readFile(src.split('file://')[1] ? src : `http://ser.univ.team${src}`, filename)
             return (myId == sender._id ? (
@@ -157,7 +158,7 @@ class Message extends Component {
                         </LightBox>
                         <MessageInfo>
                             <MessageDate color={'white'}>{finalTime}</MessageDate>
-                            <Indicator color={'white'} read={!!viewers.length} />
+                            <Indicator color={'white'} read={messageRead} />
                         </MessageInfo>
                     </MyMessage >
                     <TriangleLeftIcon color={myMessage} />
@@ -187,7 +188,7 @@ class Message extends Component {
                         </MyMessageText>
                         <MessageInfo>
                             <MessageDate color={'white'}>{finalTime}</MessageDate>
-                            <Indicator color={'white'} read={!!viewers.length} />
+                            <Indicator color={'white'} read={messageRead} />
                         </MessageInfo>
                     </MyMessage>
                     <TriangleLeftIcon color={background || myMessage} />
@@ -240,7 +241,7 @@ class Message extends Component {
                         <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
                         <MapViewStreetInfo>
                             <MapViewStreetTime>4:10</MapViewStreetTime>
-                            <Indicator read={!!viewers.length} />
+                            <Indicator read={messageRead} />
                         </MapViewStreetInfo>
                     </MapViewStreet>
                 </MyMessage>
@@ -293,7 +294,7 @@ class Message extends Component {
                         </FileInfoWrapper>
                         <MessageInfo>
                             <MessageDate color={'white'}>{finalTime}</MessageDate>
-                            <Indicator color={'white'} read={!!viewers.length} />
+                            <Indicator color={'white'} read={messageRead} />
                         </MessageInfo>
                     </MyMessage>
                     <TriangleLeftIcon color={background || myMessage} />
@@ -352,7 +353,8 @@ class Message extends Component {
 const mapStateToProps = state => {
     return {
         messages: state.messageReducer.messages,
-        myId: state.userReducer.user._id
+        myId: state.userReducer.user._id,
+        currentDialog: state.dialogsReducer.currentDialog
     };
 };
 export default connect(mapStateToProps)(Message)

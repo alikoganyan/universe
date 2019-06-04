@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, Dimensions, StatusBar, BackHandler, TouchableOpacity } from 'react-native'
+import { View, Text, FlatList, Dimensions, StatusBar, BackHandler, TouchableOpacity, AppState } from 'react-native'
 import styled from 'styled-components'
 import Header from './Header'
 import Dialog from './Dialog'
@@ -39,6 +39,8 @@ class Dialogs extends Component {
 						renderItem={(dialog) => {
 							const { item } = dialog
 							const { creator, participants, messages, name, text, isGroup, room, image } = item
+							const unreadMessages = messages.filter(e =>
+								!e.viewers.includes(user._id) && e.sender._id !== user._id).length
 							const chatName = !isGroup ?
 								user._id !== creator._id ?
 									(creator.first_name ? `${creator.first_name} ${creator.last_name}` : creator.phone_number) :
@@ -46,7 +48,7 @@ class Dialogs extends Component {
 								(name || room)
 							const chatImage = !isGroup ?
 								(user._id === creator ? user.image : participants[0].image) : image;
-							return <Dialog lastMessage={messages} onClick={() => this.toChat(item)} image={chatImage} title={chatName} item={item}>{text}</Dialog>
+							return <Dialog unreadMessages={unreadMessages} lastMessage={messages} onClick={() => this.toChat(item)} image={chatImage} title={chatName} item={item}>{text}</Dialog>
 						}}
 						keyExtractor={(item, index) => index.toString()}
 					/> : <Loader style={{ flex: 1 }} hint={'Пока нет диалогов'}>
@@ -69,6 +71,7 @@ class Dialogs extends Component {
 		// clearInterval(this.interval)
 		// this.interval = setInterval(() => {
 		// 	if (!socket.connected) connectToSocket()
+		AppState.addEventListener('change', this._handleAppStateChange);
 		// }, 2000)
 		BackHandler.addEventListener('hardwareBackPress', () => true)
 		socket.emit('get_dialogs', { id: user._id })
@@ -79,14 +82,34 @@ class Dialogs extends Component {
 		socket.once('dialog_opened', this.socketDialogOpened)
 		socket.once('new_group', this.socketGetGroup)
 	}
-	componentWillUnmount(){
+	componentWillUnmount() {
 		disconnectFromSocket()
+		AppState.removeEventListener('change', this._handleAppStateChange);
 	}
+	_handleAppStateChange = (nextAppState) => {
+		if (!socket.connected) connectToSocket()
+	};
 	socketGetGroup = e => {
 		socket.emit('get_dialogs')
 	}
 	socketNewDialog = e => { }
-	socketDialogOpened = e => { }
+	socketDialogOpened = e => {
+		const { dialogs, setDialogs, getMessages } = this.props;
+		const { dialog_id, viewer } = e;
+		const newMessages = []
+		const newDialogs = [...dialogs]
+		const newDialog = newDialogs.filter(e => e._id === dialog_id)[0]
+		const newDialogIndex = newDialogs.findIndex(e => e._id === dialog_id)
+		newDialog.messages.map(e => {
+			newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
+		});
+		if (JSON.stringify(newDialogs[newDialogIndex]) !== JSON.stringify(newDialog)) {
+			newDialogs[newDialogIndex] = newDialog
+			newDialog.messages = newMessages
+			getMessages(newMessages)
+			setDialogs(newDialogs)
+		}
+	}
 	socketNeedsUpdate = e => {
 		socket.emit('get_dialogs', { id: user._id })
 	}
@@ -133,6 +156,7 @@ class Dialogs extends Component {
 	}
 	newMessageSocket = (e) => {
 		const { dialogs, currentRoom, user, addMessage, setDialogs, navigation } = this.props
+		console.log('NEW MESSAGE')
 		const message = { ...e, text: e.message, type: 'text', created_at: new Date(), sender: { ...e.sender }, viewers: [] }
 		const newDialogs = [...dialogs]
 		const newDialog = newDialogs.filter(event => event.room === e.room)[0]
@@ -267,7 +291,8 @@ const mapStateToProps = state => {
 		currentRoom: state.messageReducer.currentRoom,
 		currentChat: state.messageReducer.currentChat,
 		user: state.userReducer.user,
-		users: state.userReducer
+		users: state.userReducer,
+		currentDialog: state.dialogsReducer.currentDialog
 	};
 };
 const mapDispatchToProps = dispatch => ({
