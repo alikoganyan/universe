@@ -188,7 +188,7 @@ class Content extends Component {
                                                                 <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
                                                                 <ContactInfo>
                                                                     <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
-                                                                    {e.role[0] && <ContactRole>{e.role[0] || 'no role'}</ContactRole>}
+                                                                    {e.role ? <ContactRole>{e.role[0] || 'no role'}</ContactRole> : null}
                                                                 </ContactInfo>
                                                             </BoxInnerItem>
                                                         </TouchableOpacity>)

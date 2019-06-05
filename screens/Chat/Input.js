@@ -11,7 +11,7 @@ import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import posed from 'react-native-pose'
 import { socket } from '../../utils/socket'
-const { sidePadding, borderRadius, HeaderHeight } = helper;
+const { sidePadding, borderRadius, HeaderHeight, fontSize } = helper;
 const FilePickerPosed = posed.View({
     visible: { bottom: 10 },
     hidden: { bottom: -250 }
@@ -22,26 +22,29 @@ const Wrapper = styled(View)`
     left: 0;
     bottom: 10px;
     align-self: center;
-    padding: 0 10px;
+    padding: 0 15px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    border-radius: 5;
+    border-radius: ${borderRadius};
     border-width: 1;
     border-color: #ddd;
     align-items: center;
     border-bottom-width: 1;
-    min-height: 50px;
-    max-height: 70px;
+    min-height: 44px;
+    max-height: 65px;
 `
 const Input = styled(TextInput)`
-    font-size: 15px;
     display: flex;
     flex-direction: column;
     width: 100%;
     overflow: hidden;
+    padding: 0;
     min-height: 30px;
+    align-items: flex-start;
+    font-size: ${fontSize.sl};
+    text-align-vertical: bottom;
 `
 const Left = styled(View)`
     display: flex;
@@ -71,7 +74,7 @@ const Shadow = styled(TouchableOpacity)`
     width: ${Dimensions.get('window').width};
     height: ${Dimensions.get('window').height};
     background: rgba(5,5,5,.3);
-    top: -${Dimensions.get('window').height - HeaderHeight};
+    top: -${Dimensions.get('window').height - HeaderHeight}px;
     z-index: 990;
 `
 const FilePickerOption = styled(TouchableOpacity)`
@@ -91,7 +94,6 @@ class InputComponent extends Component {
                             onChangeText={e => this.handleChange(e)}
                             value={text}
                             blurOnSubmit={false}
-                            multiline={true}
                         />
                     </Left>
                     <Right>

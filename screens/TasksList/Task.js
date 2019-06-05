@@ -111,7 +111,7 @@ class Tasks extends Component {
 				break;
 		}
 		const day = new Date(tasks[0].created_at).getDay()
-		const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+		const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 		return (
 			<TouchableHighlight underlayColor='#2B7DE2' onPress={() => this.handleClick(children)} onLongPress={this.handleHold}
 				style={{

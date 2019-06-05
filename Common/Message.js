@@ -7,7 +7,7 @@ import ImageComponent from './Image'
 import MapView from 'react-native-maps';
 import { FileSystem } from 'expo'
 import LightBox from 'react-native-lightbox'
-const { HeaderHeight, Colors, fontSize } = helper;
+const { HeaderHeight, Colors, fontSize, borderRadius } = helper;
 const { myMessage, interlocatorMessage, pink } = Colors
 const MyMessage = styled(View)`
     display: flex;
@@ -15,7 +15,8 @@ const MyMessage = styled(View)`
     text-align: right;
     margin: 5px 10px;
     background: ${({ background }) => background || myMessage};
-    border-radius: 3;
+    border-radius: ${borderRadius};
+    border-bottom-right-radius: 0;
     max-width: 80%;
     margin-left: 20%;
     position: relative;
@@ -41,7 +42,8 @@ const InterlocutorsMessage = styled(MyMessage)`
     margin-left: 5px;
     position: relative;
     left: -10px;
-    
+    border-bottom-right-radius: ${borderRadius};
+    border-bottom-left-radius: 0;    
 `
 
 const InterlocutorsMessageText = styled(MyMessageText)`
@@ -141,7 +143,7 @@ class Message extends Component {
         const { children, messages, myId, background, withImage, currentDialog } = this.props
         const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename, size } = children;
         const date = new Date(created_at);
-        const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+        const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
         const day = daysOfTheWeek[date.getDay()]
         const time = `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`
         const finalTime = Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time

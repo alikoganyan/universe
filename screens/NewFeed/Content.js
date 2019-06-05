@@ -11,6 +11,7 @@ import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
 import { p_news } from '../../constants/api'
 import { GroupIcon, CloseIcon } from '../../assets/'
+import { setFeedReceivers } from '../../actions/participantsActions'
 const { Colors, HeaderHeight, sidePadding } = helper;
 const { lightGrey1, black, yellow } = Colors;
 const Wrapper = styled(View)`
@@ -64,7 +65,7 @@ const AddReciever = styled(Text)`
     color: ${yellow};
 `
 const RecieverComponent = (props) => {
-    const { children, last = false } = props;
+    const { children, last = false, onDelete } = props;
     const { image, first_name, last_name, phone_number, department } = children
     return <Reciever last={last}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -75,18 +76,14 @@ const RecieverComponent = (props) => {
                     <Department numberOfLines={1}>{department || 'без департамента'}</Department>
                 </RecieverInfo>
             </View>
-            <CloseIcon onPress={undefined} />
+            <CloseIcon onPress={onDelete} />
         </View>
     </Reciever>
 }
 class Content extends Component {
     render() {
-        const {
-            text
-        } = this.state
-        const {
-            receivers
-        } = this.props
+        const { text } = this.state
+        const { receivers } = this.props
         return (
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}
                 keyboardShouldPersistTaps='handled'>
@@ -104,7 +101,7 @@ class Content extends Component {
                         </DialogsLabel>
                         <ScrollView>
                             {receivers.map((e, i) => (
-                                <RecieverComponent key={i} last={i === receivers.length}>{e}</RecieverComponent>
+                                <RecieverComponent key={i} onDelete={() => this.deleteReceiver(e)} last={i === receivers.length}>{e}</RecieverComponent>
                             ))}
                         </ScrollView>
                         <DialogsLabel>
@@ -132,6 +129,12 @@ class Content extends Component {
     componentWillUpdate() {
 
     }
+    deleteReceiver = e => {
+        const { _id } = e
+        const { receivers, setFeedReceivers } = this.props
+        const newReceivers = [...receivers].filter(e => e._id !== _id)
+        setFeedReceivers(newReceivers)
+    }
     addParticipant = () => {
         const { addParticipant } = this.props
         addParticipant()
@@ -150,7 +153,7 @@ class Content extends Component {
             likes: [],
             text,
             comments: [],
-            creator: {...user},
+            creator: { ...user },
             created_at: new Date(),
             updated_at: new Date(),
         }
@@ -192,5 +195,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
     addFeed: _ => dispatch(addFeed(_)),
+    setFeedReceivers: _ => dispatch(setFeedReceivers(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

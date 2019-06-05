@@ -158,16 +158,16 @@ export function FileIcon(props) {
     )
 }
 export function FilesRedIcon(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right, noPaddingAll, size } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}
                 source={SVG.Files_red}
             /> */}
             <Image
-                style={{ width: IconSize, height: IconSize }}
+                style={{ width: size || IconSize, height: size || IconSize }}
                 resizeMode={'contain'}
                 source={ICONS.Files_red}
             />
@@ -453,9 +453,9 @@ export function GroupIconWhite(props) {
     )
 }
 export function GroupIconGrey(props) {
-    const { onPress, left, right } = props;
+    const { onPress, left, right = true, noPaddingAll = true } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll} right={right}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}

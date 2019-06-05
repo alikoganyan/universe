@@ -19,7 +19,7 @@ import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
 
 
-const { Colors } = helper;
+const { Colors, HeaderHeight } = helper;
 const { green, black } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
@@ -55,7 +55,7 @@ const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
     margin-bottom: 110px;
-    
+    height: ${Dimensions.get('window').height - HeaderHeight - 20};
 `
 const ContactList = styled(ScrollView)`
     padding: 30px;
@@ -188,7 +188,7 @@ class Content extends Component {
                                                                 <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
                                                                 <ContactInfo>
                                                                     <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
-                                                                    {e.role[0] && <ContactRole>{e.role[0] || 'no role'}</ContactRole>}
+                                                                    {e.role ? <ContactRole>{e.role[0] || 'no role'}</ContactRole> : null}
                                                                 </ContactInfo>
                                                             </BoxInnerItem>
                                                         </TouchableOpacity>)

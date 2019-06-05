@@ -2,6 +2,7 @@ import {
     ADD_TASK_RECEIVER,
     SET_TASK_RECEIVERS,
     ADD_FEED_RECEIVER,
+    SET_FEED_RECEIVERS,
     ADD_DIALOG_PARTICIPANT,
     SET_DIALOG_PARTICIPANTS,
 } from '../actions/participantsActions'
@@ -32,6 +33,11 @@ const participantsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 news: { ...state.news, receivers: [...state.news.receivers, action.payload] },
+            }
+        case SET_FEED_RECEIVERS:
+            return {
+                ...state,
+                news: { ...state.news, receivers: [...action.payload] },
             }
         case ADD_DIALOG_PARTICIPANT:
             return {

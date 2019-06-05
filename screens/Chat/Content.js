@@ -99,7 +99,7 @@ class Content extends Component {
         const newDialog = newDialogs.filter(e => e._id === currentRoomId)[0]
         const newDialogIndex = newDialogs.findIndex(e => e._id === currentRoomId)
         newDialogs[newDialogIndex] = newDialog
-        newDialog.messages = newMessages
+        if (newDialog) newDialog.messages = newMessages
         getMessages(newMessages)
         setDialogs(newDialogs)
 

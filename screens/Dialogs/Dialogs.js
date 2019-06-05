@@ -83,7 +83,7 @@ class Dialogs extends Component {
 		socket.once('new_group', this.socketGetGroup)
 	}
 	componentWillUnmount() {
-		disconnectFromSocket()
+		// disconnectFromSocket()
 		AppState.removeEventListener('change', this._handleAppStateChange);
 	}
 	_handleAppStateChange = (nextAppState) => {
@@ -156,7 +156,6 @@ class Dialogs extends Component {
 	}
 	newMessageSocket = (e) => {
 		const { dialogs, currentRoom, user, addMessage, setDialogs, navigation } = this.props
-		console.log('NEW MESSAGE')
 		const message = { ...e, text: e.message, type: 'text', created_at: new Date(), sender: { ...e.sender }, viewers: [] }
 		const newDialogs = [...dialogs]
 		const newDialog = newDialogs.filter(event => event.room === e.room)[0]

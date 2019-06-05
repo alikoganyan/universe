@@ -168,7 +168,7 @@ class Content extends Component {
                                                                     <ContactName>
                                                                         {e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}
                                                                     </ContactName>
-                                                                    {e.role && e.role[0] && <ContactRole>{e.role[0]}</ContactRole>}
+                                                                    {e.role ? <ContactRole>{e.role}</ContactRole> : null}
                                                                 </ContactInfo>
                                                             </BoxInnerItem>
                                                         </TouchableOpacity>)}

@@ -27,6 +27,7 @@ const Header = styled(View)`
     padding: 10px 0;
     z-index: 2;
     left: ${sidePadding}px;
+    margin-top: 10px;
 `
 const Input = styled(TextInput)`
     flex: 1;

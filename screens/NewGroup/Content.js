@@ -74,7 +74,7 @@ class Content extends Component {
         } = this.state
         const { participants } = this.props
         const ReceiverComponent = (props) => {
-            const { children, last = false } = props;
+            const { children, last = false, onDelete } = props;
             const { info, title, image, role, first_name, last_name, phone_number } = children
             return <Receiver last={last}>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
@@ -82,10 +82,10 @@ class Content extends Component {
                     <View style={{ flex: 1 }}>
                         <ReceiverInfo>
                             <Text numberOfLines={1}>{first_name || phone_number}</Text>
-                            {role[0] && <Department numberOfLines={1}>{role[0] || 'no role'}</Department>}
+                            {role ? <Department numberOfLines={1}>{role || 'no role'}</Department> : null}
                         </ReceiverInfo>
                     </View>
-                    <CloseIcon onPress={e => this.deleteParticipant(e)} />
+                    <CloseIcon onPress={onDelete} />
                 </View>
             </Receiver>
         }
@@ -107,7 +107,7 @@ class Content extends Component {
                         </DialogsLabel>
                         <ScrollView style={{ maxHeight: 300 }}>
                             {participants.map((e, i) => (
-                                <ReceiverComponent key={i} last={i === participants.length}>{e}</ReceiverComponent>
+                                <ReceiverComponent key={i} onDelete={() => this.deleteParticipant(e)} last={i === participants.length}>{e}</ReceiverComponent>
                             ))}
                         </ScrollView>
                         <DialogsLabel>
@@ -135,6 +135,10 @@ class Content extends Component {
 
     }
     deleteParticipant = (e) => {
+        const { _id } = e
+        const { participants, setParticipants } = this.props
+        const newParticipants = [...participants].filter(e => e._id !== _id)
+        setParticipants(newParticipants)
     }
     addParticipant = () => {
         const { addParticipant } = this.props

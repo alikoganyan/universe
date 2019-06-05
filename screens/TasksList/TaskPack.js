@@ -111,7 +111,7 @@ class TaskPack extends Component {
     const packItems = []
     let stat = ''
     let day = ''
-    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     let packItems0Tasks0 = null;
     if (tasks.length) {
       tasks.map(taskUser => {

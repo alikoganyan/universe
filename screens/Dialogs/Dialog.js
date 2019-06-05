@@ -5,9 +5,9 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import ImageComponent from '../../common/Image'
 import { socket } from '../../utils/socket'
-
+import { FilesRedIcon, TaskIcon, LocationIcon } from '../../assets/'
 const { fontSize, PressDelay, sidePadding, Colors } = helper;
-const { purple, lightColor, grey2, blue, green, yellow } = Colors;
+const { purple, lightColor, grey2, blue, green, yellow, grey3 } = Colors;
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
@@ -30,9 +30,9 @@ const DialogText = styled(View)`
 const DialogTextInner = styled(View)`
   display: flex;
   flex-direction: column;
-  justify-content: flex-end;
-  width: ${Dimensions.get('window').width - 110}px;
-
+  justify-content: flex-start;
+  width: ${Dimensions.get('window').width - 120}px;
+  top: 15px;
 `
 const DialogTitle = styled(Text)`
   font-size: ${fontSize.md};
@@ -42,19 +42,20 @@ const DialogTitle = styled(Text)`
   padding-left: 10px;
 `
 const LastMessageDate = styled(Text)`
-  color: ${lightColor};
-  font-size: ${fontSize.text};
+  color: ${grey2};
+  font-size: ${fontSize.sl};
   text-align: center;
   margin-bottom: 5px;
 `
 const DialogLastMessage = styled(Text)`
-  font-size: ${fontSize.text};
-  color: ${lightColor};
+  font-size: ${fontSize.sl};
   padding-right: 20px;
   color: ${grey2};
   font-weight: 400;
   padding-left: 10px;
   padding-top: 2px;
+  min-height: 25px;
+  margin-bottom: 10px;
 `
 const DialogDate = styled(View)`
   right: ${sidePadding}px;
@@ -71,6 +72,7 @@ const UnreadMessages = styled(View)`
   display: flex;
   justify-content: center;
   align-items: center;
+  min-height: 25px;
 `
 const NewMessages = styled(View)`
   background: ${({ color }) => color || purple};
@@ -79,7 +81,6 @@ const NewMessages = styled(View)`
   min-width: 25px;
   height: 25px;
   border-radius: 12.5;
-  margin-top: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -89,12 +90,42 @@ const NewMessagesText = styled(Text)`
   font-size: ${fontSize.text};
   text-align: center;
 `
+const LastFile = styled(View)`
+  height: 20px;
+  padding-left: 10px;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+`
+const LastFileItem = styled(View)`
+  height: 20px;
+  border: 0.3px ${grey3};
+  border-radius: 10px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  width: 42%;
+`
+const LastFileItemText = styled(Text)`
+  font-size: ${fontSize.sm};
+  color: ${grey3};
+  margin-left: 5px;
+`
+const LastFiles = styled(Text)`
+  font-size: ${fontSize.sm};
+  color: ${grey2};
+`
 class Content extends Component {
   render() {
     const { children, title, user, image, lastMessage, item, unreadMessages } = this.props;
     const { phone, id } = item;
     const { creator } = item
-    const daysOfTheWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+    const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    let lastTextMessage = lastMessage.filter(e => e.type === 'text')
+    lastTextMessage = lastTextMessage[lastTextMessage.length - 1].text
+    const lastFiles = lastMessage.filter(e => e.type !== 'text')
     const last = lastMessage.length ? lastMessage[lastMessage.length - 1].text : ''
     const lastMessageDate = lastMessage[lastMessage.length - 1] ? new Date(lastMessage[lastMessage.length - 1].created_at) : null
     const dayOfTheWeek = lastMessage.length ? daysOfTheWeek[lastMessageDate.getDay()] : undefined
@@ -139,9 +170,23 @@ class Content extends Component {
             <DialogTextInner>
               {title && <>
                 <DialogTitle>{title}</DialogTitle>
-                <DialogLastMessage numberOfLines={1}>
-                  {last || lastMessageType || 'no messages yet'}
+                <DialogLastMessage numberOfLines={2}>
+                  {lastTextMessage || 'no messages yet'}
                 </DialogLastMessage>
+                {lastFiles.length && <LastFile>
+                  {lastFiles.map((e, i) => {
+                    const { filename, type } = e
+                    return i < 2 && <LastFileItem key={i}>
+                      {type === 'image' && <FilesRedIcon noPaddingAll={true} size={10} />}
+                      {type === 'task' && <TaskIcon noPaddingAll={true} size={10} />}
+                      {type === 'geo' && <LocationIcon noPaddingAll={true} size={10} />}
+                      <LastFileItemText>
+                        {filename.length > 10 ? filename.substr(-10) : filename}
+                      </LastFileItemText>
+                    </LastFileItem>
+                  })}
+                  {lastFiles.length && <LastFiles>+{lastFiles.length > 2 ? lastFiles.length - 2 : lastFiles.length}</LastFiles>}
+                </LastFile>}
               </>
               }
               {phone && <>

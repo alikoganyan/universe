@@ -10,11 +10,11 @@ import { connect } from 'react-redux'
 import { socket } from '../../utils/socket'
 
 const { sidePadding, Colors, HeaderHeight, fontSize } = helper;
-const { border } = Colors;
+const { border, grey3, pink } = Colors;
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
-    height: ${Dimensions.get('window').height - HeaderHeight}px;
+    height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
 `
 const User = styled(View)`
     display: flex;
@@ -96,20 +96,28 @@ const PersonalData = styled(View)`
 `
 const SendMessage = styled(Button)``
 const StyledScrollView = styled(ScrollView)`
-    margin-bottom: 20px;
 `
 const Participants = styled(View)`
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
-    padding-left: 10px;
+    padding: 20px;
+    padding-right: 10px;
     flex-direction: row;
 `
-const ParticipantsText = styled(Text)``
-
+const ParticipantsItem = styled(Participants)`
+    padding: 0;
+`
+const ParticipantsText = styled(Text)`
+    color: ${grey3};
+`
+const LeaveGroup = styled(Text)`
+    font-size: ${fontSize.sm};
+    color: ${pink};
+`
 const BoxInnerItem = styled(View)`
     padding: 10px;
-    padding-bottom: ${({ title }) => title ? 20 : 0}px;
+    padding-bottom: 10px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -138,55 +146,61 @@ class Content extends Component {
 
         const { _id, image, last_name, first_name, phone_number, isGroup, participants, name } = myProfile ? user : currentDialog;
         const chatName = first_name ? `${first_name} ${last_name}` : (phone_number || name);
-        console.log(participants)
         return (
             <Wrapper>
-                <User >
-                    <UserImage source={{ uri: `http://ser.univ.team${image}` }} />
-                    <UserInfo>
-                        <UserName>
-                            <Name>{chatName}</Name>
-                        </UserName>
-                        {(!myProfile && !isGroup) && <UserStatus>{status}</UserStatus>}
-                        {(!myProfile && !isGroup) && <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>}
-                    </UserInfo>
-                </User>
-                {isGroup ?
-                    <StyledScrollView>
-                        <PersonalData>
-                            {UserData.map((item, index) => {
-                                return item && item.isGroup && (!myProfile || !item.icon) && <Info key={index}>
-                                    <Data>
-                                        <Type>{item.type}</Type>
-                                        <Value>{item.value}</Value>
-                                        {item.icon && item.icon}
-                                    </Data>
-                                </Info>
-                            })}
-                        </PersonalData>
-                        <Participants>
-                            <GroupIconGrey />
-                            <ParticipantsText>Участники</ParticipantsText>
-                        </Participants>
-                        <FlatList
-                            style={{ paddingRight: 5, paddingLeft: 5, }}
-                            data={participants}
-                            renderItem={({ item, index }) => {
-                                const { _id, first_name, last_name, post, role, image } = item
-                                return (
-                                    <BoxInnerItem>
-                                        <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
-                                        <ContactInfo>
-                                            <ContactName>{first_name ? `${first_name} ${last_name}` : phone_number}</ContactName>
-                                            {role && role[0] && <ContactRole>{role[0]}</ContactRole>}
-                                        </ContactInfo>
-                                    </BoxInnerItem>
-                                )
-                            }}
-                            keyExtractor={(item, index) => index.toString()}
-                        />
-                    </StyledScrollView> :
-                    <StyledScrollView>
+                <StyledScrollView>
+                    <User >
+                        <UserImage source={{ uri: `http://ser.univ.team${image}` }} />
+                        <UserInfo>
+                            <UserName>
+                                <Name>{chatName}</Name>
+                            </UserName>
+                            {(!myProfile && !isGroup) && <UserStatus>{status}</UserStatus>}
+                            {(!myProfile && !isGroup) && <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>}
+                        </UserInfo>
+                    </User>
+                    {isGroup ?
+                        <>
+                            <PersonalData>
+                                {UserData.map((item, index) => {
+                                    return item && item.isGroup && (!myProfile || !item.icon) && <Info key={index}>
+                                        <Data>
+                                            <Type>{item.type}</Type>
+                                            <Value>{item.value}</Value>
+                                            {item.icon && item.icon}
+                                        </Data>
+                                    </Info>
+                                })}
+                            </PersonalData>
+                            <Participants>
+                                <ParticipantsItem>
+                                    <GroupIconGrey noPaddingAll />
+                                    <ParticipantsText>Участники</ParticipantsText>
+                                </ParticipantsItem>
+                                <ParticipantsItem>
+                                    <TouchableOpacity onPress={this.LeaveGroup}>
+                                        <LeaveGroup>ВЫЙТИ ИЗ ГРУППЫ</LeaveGroup>
+                                    </TouchableOpacity>
+                                </ParticipantsItem>
+                            </Participants>
+                            <FlatList
+                                style={{ paddingRight: 5, paddingLeft: 5, }}
+                                data={participants}
+                                renderItem={({ item, index }) => {
+                                    const { _id, first_name, last_name, post, role, image, phone_number } = item
+                                    return (
+                                        <BoxInnerItem>
+                                            <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                            <ContactInfo>
+                                                <ContactName>{first_name ? `${first_name} ${last_name}` : phone_number}</ContactName>
+                                                {role && role[0] && <ContactRole>{role[0]}</ContactRole>}
+                                            </ContactInfo>
+                                        </BoxInnerItem>
+                                    )
+                                }}
+                                keyExtractor={(item, index) => index.toString()}
+                            />
+                        </> :
                         <PersonalData>
                             {UserData.map((item, index) => {
                                 return item && !item.isGroup && (!myProfile || !item.icon) && <Info key={index}>
@@ -198,8 +212,9 @@ class Content extends Component {
                                 </Info>
                             })}
                         </PersonalData>
-                    </StyledScrollView>}
-
+                    }
+                    <View style={{ height: 10 }} />
+                </StyledScrollView>
             </Wrapper>
 
         )
@@ -231,6 +246,10 @@ class Content extends Component {
         socket.emit('select chat', { chatId: id, userId: id })
         setRoom(id)
         toChat()
+    }
+    LeaveGroup = () => {
+        const { currentRoom } = this.props
+        console.log(`leave group ${currentRoom}`)
     }
 }
 

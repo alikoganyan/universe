@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
-import { addReceiver, setReceivers } from '../../actions/participantsActions'
+import { addReceiver, setReceivers, setTaskReceivers } from '../../actions/participantsActions'
 import ImageComponent from '../../common/Image'
 import Button from '../../common/Button'
 import { p_create_task } from '../../constants/api/'
@@ -20,8 +20,10 @@ const Wrapper = styled(View)`
     display: flex;
     justify-content: center;
     align-items: center;
+    height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
 `
 const StyledScrollView = styled(ScrollView)`
+    height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
 `
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
@@ -86,10 +88,10 @@ const ReceiverComponent = (props) => {
             <View style={{ flex: 1, marginLeft: 5 }}>
                 <ReceiverInfo>
                     <Text numberOfLines={1}>{first_name ? `${first_name} ${last_name}` : phone_number}</Text>
-                    {role[0] && <Department numberOfLines={1}>{role[0]}</Department>}
+                    {role ? <Department numberOfLines={1}>{role}</Department> : null}
                 </ReceiverInfo>
             </View>
-            <CloseIcon onPress={() => onDelete()} />
+            <CloseIcon onPress={onDelete} />
         </View>
     </Receiver>
 }
@@ -209,10 +211,10 @@ class Content extends Component {
         return new Date(...dateParam)
     }
     deleteReceiver = (e) => {
-        const { addReceiver, setReceivers, receivers } = this.props
-        let newReceivers = [...receivers];
-        newReceivers = newReceivers.filter(item => e._id !== item._id)
-        setReceivers(newReceivers)
+        const { _id } = e
+        const { receivers, setTaskReceivers } = this.props
+        const newReceivers = [...receivers].filter(e => e._id !== _id)
+        setTaskReceivers(newReceivers)
     }
     addParticipant = () => {
         const { addParticipants } = this.props;
@@ -288,5 +290,6 @@ const mapDispatchToProps = dispatch => ({
     addReceiver: _ => dispatch(addReceiver(_)),
     setReceivers: _ => dispatch(setReceivers(_)),
     setTasks: _ => dispatch(setTasks(_)),
+    setTaskReceivers: _ => dispatch(setTaskReceivers(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

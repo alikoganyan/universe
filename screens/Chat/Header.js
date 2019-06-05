@@ -48,6 +48,7 @@ const Right = styled(View)`
     flex-direction: row;
     align-items: flex-end;
     justify-content: flex-end;
+    flex: 1;
     margin-left: ${sidePadding}px;
 `
 const Categories = styled(Header)`
@@ -122,7 +123,7 @@ class HeaderComponent extends Component {
                     <Right>
                         {!search ? (
                             <>
-                                <SearchIcon onPress={startSearch} right />
+                                <SearchIcon onPress={startSearch} />
                                 <LocationIcon />
                             </>
                         ) : <CloseIcon onPress={stopSearch} />}
