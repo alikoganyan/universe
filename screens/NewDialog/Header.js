@@ -10,7 +10,7 @@ import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 
 const { Colors, sidePadding, fontSize, HeaderHeight } = helper;
-const { blue } = Colors;
+const { blue, grey3 } = Colors;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
     background-color: ${Colors.background};
@@ -47,6 +47,7 @@ const HeaderText = styled(Text)`
     font-size: ${fontSize.header};
     position: relative;
     left: -10px;
+    color: ${grey3};
 `
 const Right = styled(Left)`
     justify-content: flex-end;

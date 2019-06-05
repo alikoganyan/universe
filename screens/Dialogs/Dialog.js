@@ -7,7 +7,7 @@ import ImageComponent from '../../common/Image'
 import { socket } from '../../utils/socket'
 import { FilesRedIcon, TaskIcon, LocationIcon } from '../../assets/'
 const { fontSize, PressDelay, sidePadding, Colors } = helper;
-const { purple, lightColor, grey2, blue, green, yellow, grey3 } = Colors;
+const { purple, lightColor, grey2, blue, green, yellow, grey3, lightGrey2, lightBlue } = Colors;
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
@@ -25,6 +25,9 @@ const DialogText = styled(View)`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  border: 0.5px solid ${lightGrey2};
+  border-width: 0;
+  border-bottom-width: 1px;
 `
 
 const DialogTextInner = styled(View)`
@@ -55,7 +58,7 @@ const DialogLastMessage = styled(Text)`
   padding-left: 10px;
   padding-top: 2px;
   min-height: 25px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
 `
 const DialogDate = styled(View)`
   right: ${sidePadding}px;
@@ -93,8 +96,9 @@ const NewMessagesText = styled(Text)`
 const LastFile = styled(View)`
   height: 20px;
   padding-left: 10px;
+  padding-bottom: 40px;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 `
 const LastFileItem = styled(View)`
@@ -107,6 +111,7 @@ const LastFileItem = styled(View)`
   justify-content: center;
   align-items: center;
   width: 42%;
+  margin-right: 5px;
 `
 const LastFileItemText = styled(Text)`
   font-size: ${fontSize.sm};
@@ -120,16 +125,19 @@ const LastFiles = styled(Text)`
 class Content extends Component {
   render() {
     const { children, title, user, image, lastMessage, item, unreadMessages } = this.props;
-    const { phone, id } = item;
-    const { creator } = item
+    const { phone, id, creator, created_at } = item;
     const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     let lastTextMessage = lastMessage.filter(e => e.type === 'text')
-    lastTextMessage = lastTextMessage[lastTextMessage.length - 1].text
+    lastTextMessage = lastTextMessage.length ? lastTextMessage[lastTextMessage.length - 1].text : ''
     const lastFiles = lastMessage.filter(e => e.type !== 'text')
-    const last = lastMessage.length ? lastMessage[lastMessage.length - 1].text : ''
     const lastMessageDate = lastMessage[lastMessage.length - 1] ? new Date(lastMessage[lastMessage.length - 1].created_at) : null
     const dayOfTheWeek = lastMessage.length ? daysOfTheWeek[lastMessageDate.getDay()] : undefined
     const difference = Math.abs(new Date() - lastMessageDate) / 864e5;
+    const timeCreatedAt = new Date(created_at);
+    const timeCreated = `${timeCreatedAt.getHours() >= 10 ? timeCreatedAt.getHours() :
+      '0' + timeCreatedAt.getHours()}:${timeCreatedAt.getMinutes() >= 10 ?
+        timeCreatedAt.getMinutes() :
+        '0' + timeCreatedAt.getMinutes()}`
     const time = difference >= 1 ? dayOfTheWeek :
       `${lastMessageDate.getHours() >= 10 ? lastMessageDate.getHours() :
         '0' + lastMessageDate.getHours()}:${lastMessageDate.getMinutes() >= 10 ?
@@ -157,7 +165,7 @@ class Content extends Component {
     }
     return (
       <TouchableHighlight
-        underlayColor='#2B7DE2'
+        underlayColor={lightBlue}
         onPress={phone ?
           () => this.newDialog(id) :
           this.handleClick}
@@ -173,7 +181,7 @@ class Content extends Component {
                 <DialogLastMessage numberOfLines={2}>
                   {lastTextMessage || 'no messages yet'}
                 </DialogLastMessage>
-                {lastFiles.length && <LastFile>
+                {lastFiles.length ? <LastFile>
                   {lastFiles.map((e, i) => {
                     const { filename, type } = e
                     return i < 2 && <LastFileItem key={i}>
@@ -181,12 +189,12 @@ class Content extends Component {
                       {type === 'task' && <TaskIcon noPaddingAll={true} size={10} />}
                       {type === 'geo' && <LocationIcon noPaddingAll={true} size={10} />}
                       <LastFileItemText>
-                        {filename.length > 10 ? filename.substr(-10) : filename}
+                        {filename.length > 8 ? filename.substr(-8) : filename}
                       </LastFileItemText>
                     </LastFileItem>
                   })}
-                  {lastFiles.length && <LastFiles>+{lastFiles.length > 2 ? lastFiles.length - 2 : lastFiles.length}</LastFiles>}
-                </LastFile>}
+                  {(lastFiles.length && lastFiles.length - 2) ? <LastFiles>+{lastFiles.length >= 2 ? lastFiles.length - 2 : lastFiles.length}</LastFiles> : <LastFiles />}
+                </LastFile> : <LastFiles />}
               </>
               }
               {phone && <>
@@ -196,7 +204,7 @@ class Content extends Component {
               </>}
             </DialogTextInner>
             <DialogDate>
-              <LastMessageDate>{time}</LastMessageDate>
+              <LastMessageDate>{time || timeCreated}</LastMessageDate>
               <UnreadMessages>
                 {!!unreadMessages &&
                   <NewMessages color={lastType}>

@@ -33,11 +33,8 @@ const StyledInput = styled(TextInput)`
 const ButtonBox = styled(View)`
     width: 170px;
     align-self: center;
-    position: absolute;
-    bottom: 30px;
 `
-const Recievers = styled(View)`
-    margin: 60px 0;
+const Recievers = styled(View)`lkljkljk
 `
 const Reciever = styled(View)`
     display: flex;
@@ -73,7 +70,7 @@ const RecieverComponent = (props) => {
             <View style={{ flex: 1, marginLeft: 10 }}>
                 <RecieverInfo>
                     <Text numberOfLines={1}>{first_name ? `${first_name} ${last_name}` : phone_number}</Text>
-                    <Department numberOfLines={1}>{department || 'без департамента'}</Department>
+                    {/* {!!department ? <Department numberOfLines={1}>{'без департамента'}</Department> : null} */}
                 </RecieverInfo>
             </View>
             <CloseIcon onPress={onDelete} />
@@ -99,23 +96,21 @@ class Content extends Component {
                             <GroupIcon right />
                             <Text>Получатели</Text>
                         </DialogsLabel>
-                        <ScrollView>
-                            {receivers.map((e, i) => (
-                                <RecieverComponent key={i} onDelete={() => this.deleteReceiver(e)} last={i === receivers.length}>{e}</RecieverComponent>
-                            ))}
-                        </ScrollView>
-                        <DialogsLabel>
+                        <DialogsLabel style={{justifyContent: 'space-between'}}>
                             <TouchableOpacity onPress={this.addParticipant}>
                                 <AddReciever>Добавить</AddReciever>
                             </TouchableOpacity>
+                            <Button
+                                onPress={this.proceed}
+                                style={{ background: yellow }}
+                                color={black}>Продолжить</Button>
                         </DialogsLabel>
                     </Recievers>
-                    <ButtonBox>
-                        <Button
-                            onPress={this.proceed}
-                            style={{ background: yellow }}
-                            color={black}>Продолжить</Button>
-                    </ButtonBox>
+                    <ScrollView>
+                        {receivers.map((e, i) => (
+                            <RecieverComponent key={i} onDelete={() => this.deleteReceiver(e)} last={i === receivers.length}>{e}</RecieverComponent>
+                        ))}
+                    </ScrollView>
                 </Wrapper>
             </ScrollView>)
     }

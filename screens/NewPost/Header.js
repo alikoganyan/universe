@@ -3,7 +3,8 @@ import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'rea
 import { BackIcon, ForwardIcon, LocationIcon, SearchIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-const { sidePadding, HeaderHeight, fontSize } = helper;
+const { sidePadding, HeaderHeight, fontSize, Colors } = helper;
+const { grey3 } = Colors
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -47,15 +48,21 @@ const GroupImage = styled(Image)`
     border-radius: 20;
     margin-right: 10px;
 `
+const HeaderText = styled(Text)`
+    font-size: ${fontSize.header};
+    position: relative;
+    left: -10px;
+    color: ${grey3};
+`
 export default class HeaderComponent extends Component {
     render() {
         const { back } = this.props
         return (
             <Header>
                 <Left>
-                <BackIcon onPress={back} />
+                    <BackIcon onPress={back} />
                     <GroupImage />
-                    <Text>Написать новость</Text>
+                    <HeaderText>Написать новость</HeaderText>
                 </Left>
             </Header>
         )

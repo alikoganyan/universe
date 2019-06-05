@@ -151,7 +151,8 @@ const MessageInfo = styled(View)`
 
 const MessageDate = styled(Text)`
     color: ${({ color }) => color || grey2};
-    margin-left: 15px;
+	margin-left: 15px;
+    font-size: ${fontSize.sm};
 `;
 const FeedText = styled(View)``;
 
@@ -261,6 +262,9 @@ class Content extends Component {
 		const { first_name, last_name, image } = creator
 		const myId = user._id;
 		const date = new Date(created_at)
+		const difference = Math.abs(new Date() - date) / 864e5;
+		const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+		const time = difference < 1 ? `${date.getHours()}:${date.getMinutes()}` : daysOfTheWeek[date.getDay()]
 		return myId === _id ?
 			<View style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
 				<MyMessage>
@@ -271,7 +275,7 @@ class Content extends Component {
 						<HeartIcon style={{ paddingRight: 5 }} />
 						<LikeText color={darkBlue2}>{likes_сount}</LikeText>
 						<MessageDate color={darkBlue2}>
-							{date.getHours()}:{date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`}
+							{time}
 						</MessageDate>
 					</MessageInfo>
 				</MyMessage>
@@ -294,7 +298,7 @@ class Content extends Component {
 							<HeartIcon style={{ paddingRight: 5 }} marginRight onPress={e => this.hitLike(feed._id, _id)} />}
 						<LikeText>{likes_сount}</LikeText>
 						<MessageDate>
-							{date.getHours()}:{date.getMinutes()}
+							{time}
 						</MessageDate>
 					</MessageInfo>
 				</InterlocutorsMessage>

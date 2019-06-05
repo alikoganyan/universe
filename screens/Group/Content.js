@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Dimensions, TouchableOpacity, TouchableWithoutFeedback, ActionSheetIOS, Platform, Animated } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, Dimensions, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, ActionSheetIOS, Platform, Animated } from 'react-native'
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../../assets/index'
+import { chatBg } from '../../assets/images/'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
@@ -55,19 +56,21 @@ class Content extends Component {
             <>
                 <Wrapper search={search} >
                     {selectedMessage._id && <Shadow onPress={this.unselect} activeOpacity={1} />}
-                    <FlatList
-                        style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
-                        ListHeaderComponent={<View style={{ margin: 35, }} />}
-                        inverted={true}
-                        data={reversedMessages}
-                        animated={true}
-                        renderItem={({ item, index }) => {
-                            return <TouchableOpacity key={index} onLongPress={() => this.handleHold(item)}>
-                                <Message withImage={true}>{item}</Message>
-                            </TouchableOpacity>
-                        }}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
+                    <ImageBackground source={chatBg} style={{ width: '100%', height: '100%' }}>
+                        <FlatList
+                            style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
+                            ListHeaderComponent={<View style={{ margin: 35, }} />}
+                            inverted={true}
+                            data={reversedMessages}
+                            animated={true}
+                            renderItem={({ item, index }) => {
+                                return <TouchableOpacity key={index} onLongPress={() => this.handleHold(item)}>
+                                    <Message withImage={true}>{item}</Message>
+                                </TouchableOpacity>
+                            }}
+                            keyExtractor={(item, index) => index.toString()}
+                        />
+                    </ImageBackground>
                 </Wrapper>
                 <MessageOptions pose={selectedMessage._id ? 'visible' : 'hidden'}>
                     {

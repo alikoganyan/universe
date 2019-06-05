@@ -6,7 +6,7 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import ImageComponent from '../../common/Image'
 const { HeaderHeight, sidePadding, fontSize, Colors } = helper;
-const { green } = Colors
+const { green, grey3 } = Colors
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -43,6 +43,7 @@ const HeaderText = styled(Text)`
     font-size: ${fontSize.header};
     position: relative;
     left: -10px;
+    color: ${grey3};
 `
 
 class HeaderComponent extends Component {
@@ -58,7 +59,7 @@ class HeaderComponent extends Component {
                 </Left>
                 <Right>
                     <SearchIcon right />
-                    <AddIcon onPress={this.addContact} right />
+                    {/* <AddIcon onPress={this.addContact} right /> */}
                     <TouchableOpacity onPress={this.toProfile}>
                         <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size={'header'} style={{ marginLeft: 10 }} />
                     </TouchableOpacity>

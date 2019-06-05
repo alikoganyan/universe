@@ -83,7 +83,7 @@ class Content extends Component {
                                     <TouchableOpacity style={{ flex: 1 }} onLongPress={e => this.handleHold(item)}><TaskComponent
                                         triangleLeft={!myTask}
                                         triangleRight={myTask}
-                                        borderColor={myTask ? purple : pink}
+                                        borderColor={myTask ? pink : purple}
                                         style={{
                                             zIndex: activeTask._id === item._id ? 5 : 1,
                                             // marginRight: myTask ? 10 : 70,
@@ -122,7 +122,7 @@ class Content extends Component {
         options.active = e;
         this.setState({ options })
     }
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.unselect()
     }
 }

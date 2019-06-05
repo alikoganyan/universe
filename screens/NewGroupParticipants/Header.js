@@ -7,7 +7,8 @@ import { connect } from 'react-redux'
 import { p_tasks_search, g_users } from '../../constants/api'
 import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
-const { sidePadding, HeaderHeight, fontSize } = helper;
+const { sidePadding, HeaderHeight, fontSize, Colors } = helper;
+const { grey3 } = Colors
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -48,6 +49,7 @@ const HeaderText = styled(Text)`
     font-size: ${fontSize.header};
     position: relative;
     left: -10px;
+    color: ${grey3};
 `
 class HeaderComponent extends Component {
     render() {
@@ -73,7 +75,7 @@ class HeaderComponent extends Component {
                         <>
                             <SearchIcon right onPress={this.startSearch} />
                             <TouchableOpacity onPress={toProfile}>
-                                <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'}/>
+                                <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
                             </TouchableOpacity>
                         </> :
                         <CloseIcon onPress={this.stopSearch} />

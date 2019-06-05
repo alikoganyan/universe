@@ -9,7 +9,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 
 import ImageComponent from '../../common/Image'
 const { sidePadding, HeaderHeight, Colors, fontSize } = helper;
-const { border } = Colors;
+const { border, grey3 } = Colors;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
     align-self: center;
@@ -85,6 +85,12 @@ const Input = styled(TextInput)`
 const IconLeft = styled(Icon)`
     margin-left: ${sidePadding}px;
 `
+const HeaderText = styled(Text)`
+    font-size: ${fontSize.header};
+    position: relative;
+    left: -10px;
+    color: ${grey3};
+`
 class HeaderComponent extends Component {
     render() {
         const { back, search, startSearch, stopSearch, currentChat } = this.props
@@ -92,10 +98,8 @@ class HeaderComponent extends Component {
             <Header>
                 <Top>
                     <Left>
-                        <CloseIcon right onPress={this.back}/>
-                        <Info>
-                            <InfoChatName>Создание новости</InfoChatName>
-                        </Info>
+                        <CloseIcon right onPress={this.back} right={true} />
+                        <HeaderText>Создание новости</HeaderText>
                     </Left>
                     <Right>
                     </Right>

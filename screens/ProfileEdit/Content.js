@@ -154,7 +154,7 @@ class Content extends Component {
                             <ErrorText>{passwordError}</ErrorText>
                         </Error>}
                         <InputBox key={5} err={!!repasswordError}>
-                            <InputLabel numberOfLines={1}>Повторите пароль</InputLabel>
+                            <InputLabel numberOfLines={2}>Повторите пароль</InputLabel>
                             <Input pass={true} onChange={(e) => this.handleChange(e, "repassword")} />
                         </InputBox>
                         {!!repasswordError && <Error>

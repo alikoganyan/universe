@@ -71,7 +71,7 @@ const TaskDeadline = styled(View)`
     display: flex;
     flex-direction: column;
     width: 100%;
-    flex: 5;
+    flex: 6;
 `
 const TaskDeadlineLabel = styled(Text)`
     color: ${grey1};
@@ -88,6 +88,7 @@ const TaskPostTime = styled(View)`
     justify-content: flex-end;
     padding: 0;
     width: 100%;
+    margin-right: 10px;
     flex: 2;
 `
 const TaskFooter = styled(View)`
@@ -97,6 +98,7 @@ const TaskFooter = styled(View)`
     flex: 1;
 `
 const TaskPostTimeText = styled(MessageDate)`
+    font-size: ${fontSize.sm};
 `
 const ControlBar = styled(View)`
     display: flex;
@@ -205,12 +207,12 @@ class TaskComponent extends Component {
                         </TaskBody>
                         <TaskFooter>
                             <TaskDeadline>
-                                <TaskDeadlineLabel numberOfLines={1}>Делайн: {' '}
+                                <TaskDeadlineLabel numberOfLines={1}>Дедлайн: {' '}
                                     <TaskDeadlineValue>
-                                        {deadlineDate.getDate()}{' '}
-                                        {months[deadlineDate.getMonth()]}{' '}
-                                        {deadlineDate.getFullYear()}{' '}
-                                        {deadlineDate.getHours()}:{deadlineDate.getMinutes()}
+                                        {deadlineDate.getDate() >= 10 ? deadlineDate.getDate() : `0${deadlineDate.getDate()}`}.
+                                        {deadlineDate.getMonth() >= 10 ? deadlineDate.getMonth() : `0${deadlineDate.getMonth()}`}.
+                                        {deadlineDate.getFullYear().toString().substr(-2)}{' '}
+                                        {deadlineDate.getHours() >= 10 ? deadlineDate.getHours() : `0${deadlineDate.getHours()}`}:{deadlineDate.getMinutes() >= 10 ? deadlineDate.getMinutes() : `0${deadlineDate.getMinutes()}`}
                                     </TaskDeadlineValue>
                                 </TaskDeadlineLabel>
                             </TaskDeadline>
@@ -218,7 +220,7 @@ class TaskComponent extends Component {
                                 <TaskPostTimeText>
                                     {creationDate.getHours()}:{creationDate.getMinutes() < 10 ? `0${creationDate.getMinutes()}` : creationDate.getMinutes()}
                                 </TaskPostTimeText>
-                                {triangleRight && <Indicator />}
+                                {/* {triangleRight && <Indicator />} */}
                             </TaskPostTime>
                         </TaskFooter>
                     </Task>

@@ -3,7 +3,8 @@ import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS } from 'react
 import { BackIcon, BurgerIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-const { HeaderHeight } = helper;
+const { HeaderHeight, Colors, fontSize } = helper;
+const { green, grey3 } = Colors
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -25,15 +26,20 @@ const Right = styled(View)`
 `
 const Center = styled(View)`
 `
-
+const HeaderText = styled(Text)`
+    font-size: ${fontSize.header};
+    position: relative;
+    left: -10px;
+    color: ${grey3};
+`
 export default class HeaderComponent extends Component {
     render() {
         return (
             <Header>
                 <Center>
-                    <Text>
+                    <HeaderText>
                         Настройки
-                    </Text>
+                    </HeaderText>
                 </Center>
                 <Right style={{ position: "absolute", right: 0, }}>
                     <BurgerIcon />
