@@ -139,10 +139,11 @@ export default class AppComponent extends React.Component {
   }
   async componentDidMount() {
     await this._loadResourcesAsync()
-    // await Font.loadAsync({
-    //   'Roboto': require('./assets/fonts/Roboto-Medium.ttf'),
-    // });
-    GlobalFont.applyGlobal('Roboto')
+
+    await Font.loadAsync({
+      'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+    });
+    GlobalFont.applyGlobal('Roboto-Regular')
     this.setState({ loaded: true })
 
     BackHandler.addEventListener("hardwareBackPress", () => { })
