@@ -18,7 +18,7 @@
       "./assets/*/**"
     ],
     "ios": {
-      "buildNumber": "5",
+      "buildNumber": "8",
       "supportsTablet": false,
       "bundleIdentifier": "team.amigo.media",
       "infoPlist": {
@@ -32,7 +32,7 @@
     },
     "android": {
       "package": "com.team.universe.media",
-      "versionCode": 5,
+      "versionCode": 8,
       "permissions": [
         "CAMERA",
         "READ_INTERNAL_STORAGE",

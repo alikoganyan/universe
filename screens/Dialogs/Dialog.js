@@ -4,14 +4,15 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 import { socket } from '../../utils/socket'
-import { FilesRedIcon, TaskIcon, LocationIcon } from '../../assets/'
+import { FilesRedIcon, TaskIcon, LocationIcon, GroupIconWhite, UserIconWhite } from '../../assets/'
 const { fontSize, PressDelay, sidePadding, Colors } = helper;
-const { purple, lightColor, grey2, blue, green, yellow, grey3, lightGrey2, lightBlue } = Colors;
+const { purple, lightColor, grey2, blue, green, yellow, grey3, lightGrey2, lightBlue, avatars } = Colors;
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
-  align-items: center; 
+  align-items: flex-start; 
   padding: 15px ${sidePadding}px 15px;
 `
 const DialogImage = styled(Image)`
@@ -23,7 +24,7 @@ const DialogImage = styled(Image)`
 const DialogText = styled(View)`
   display: flex;
   flex-direction: row;
-  align-items: center;
+  align-items: flex-start;
   justify-content: space-between;
   border: 0.5px solid ${lightGrey2};
   border-width: 0;
@@ -35,7 +36,6 @@ const DialogTextInner = styled(View)`
   flex-direction: column;
   justify-content: flex-start;
   width: ${Dimensions.get('window').width - 120}px;
-  top: 15px;
 `
 const DialogTitle = styled(Text)`
   font-size: ${fontSize.md};
@@ -96,7 +96,7 @@ const NewMessagesText = styled(Text)`
 const LastFile = styled(View)`
   height: 20px;
   padding-left: 10px;
-  padding-bottom: 40px;
+  padding-bottom: 20px;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
@@ -122,10 +122,19 @@ const LastFiles = styled(Text)`
   font-size: ${fontSize.sm};
   color: ${grey2};
 `
+const ImagePlaceholder = styled(View)`
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  margin-top: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 class Content extends Component {
   render() {
     const { children, title, user, image, lastMessage, item, unreadMessages } = this.props;
-    const { phone, id, creator, created_at } = item;
+    const { phone, _id, creator, created_at, isGroup, participants } = item;
     const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     let lastTextMessage = lastMessage.filter(e => e.type === 'text')
     lastTextMessage = lastTextMessage.length ? lastTextMessage[lastTextMessage.length - 1].text : ''
@@ -163,6 +172,7 @@ class Content extends Component {
         lastMessageType = 'image';
         break;
     }
+    const chatImage = isGroup ? image : user._id === creator._id ? participants[0].image : creator.image
     return (
       <TouchableHighlight
         underlayColor={lightBlue}
@@ -171,9 +181,13 @@ class Content extends Component {
           this.handleClick}
         onLongPress={this.handleHold}>
         <Wrapper>
-          <DialogImage
-            source={{ uri: `http://ser.univ.team${image || creator.image}` }}
-            size={"large"} />
+          {
+            chatImage === '/images/default_group.png' || chatImage === '/images/default_avatar.jpg' ?
+              <DefaultAvatar isGroup={isGroup} id={item._id} size={'large'} /> :
+              <DialogImage
+                source={{ uri: `http://ser.univ.team${chatImage}` }}
+                size={"large"} />
+          }
           <DialogText>
             <DialogTextInner>
               {title && <>

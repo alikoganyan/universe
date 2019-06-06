@@ -11,6 +11,7 @@ const Contacts_white = require('./Contacts_white.png');
 const Edit = require('./Edit.png');
 const Files_red = require('./Files_red.png');
 const Files_white = require('./Files_white.png');
+const User = require('./User.png');
 const Files_yellow = require('./Files_yellow.png');
 const Files = require('./Files.png');
 const Geolocation = require('./Geolocation.png');
@@ -79,5 +80,6 @@ export default {
     SearchShadow,
     Redo,
     Done,
+    User,
     Start,
 }

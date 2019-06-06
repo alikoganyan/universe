@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 const { HeaderHeight, sidePadding, Colors, fontSize } = helper;
 const { grey3 } = Colors
 const Header = styled(View)`

@@ -4,11 +4,11 @@ import { SearchIcon, BurgerIcon, CloseIcon, BackIcon } from '../../assets/index'
 import { openDrawer } from '../../actions/drawerActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
-
 const { Colors, sidePadding, fontSize, HeaderHeight } = helper;
 const { blue, grey3 } = Colors;
 const Header = styled(View)`
@@ -22,9 +22,7 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
     position: absolute;
-    
     z-index: 2;
-    top: 1%;
     left: ${sidePadding}px;
 `
 const UserImage = styled(Image)`
@@ -68,7 +66,10 @@ class HeaderComponent extends Component {
                 <Right>
                     <SearchIcon right />
                     <TouchableOpacity onPress={toProfile}>
-                        <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size={'header'}/>
+                        {user.image === '/images/default_group.png' || user.image === '/images/default_avatar.jpg' ?
+                            <DefaultAvatar size={'header'} /> :
+                            <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size={'header'} />
+                        }
                     </TouchableOpacity>
                 </Right>
             </Header>

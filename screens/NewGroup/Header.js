@@ -8,6 +8,7 @@ import { addMessage, startSearch, stopSearch } from '../../actions/messageAction
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 const { sidePadding, HeaderHeight, Colors, fontSize } = helper;
 const { border } = Colors;
 const Header = styled(View)`

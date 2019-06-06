@@ -22,6 +22,13 @@ const StyledTouchableOpacity = styled(TouchableOpacity)`
     position: relative;
     left: ${({ marginLeft, marginRight }) => marginLeft ? -12 : marginRight ? 12 : 0}px;
 `
+const StyledView = styled(View)`
+    margin-left: ${({ left }) => left ? Dimensions.get('window').height >= 1080 ? 30 : 12 : 0}px;
+    margin-right: ${({ right }) => right ? Dimensions.get('window').height >= 1080 ? 30 : 12 : 0}px;
+    padding: ${({ noPadding, noPaddingAll }) => noPadding ? (noPaddingAll ? 0 : `0 12`) : (noPaddingAll ? 0 : `10px 12`)}px;
+    position: relative;
+    left: ${({ marginLeft, marginRight }) => marginLeft ? -12 : marginRight ? 12 : 0}px;
+`
 const Left = styled(StyledTouchableOpacity)`
     margin-right: ${({ noPadding }) => noPadding ? 0 : 10}px;
     padding: ${({ noPadding }) => noPadding ? 0 : 10}px;
@@ -436,9 +443,9 @@ export function GroupIcon(props) {
 
 
 export function GroupIconWhite(props) {
-    const { onPress, left, right } = props;
+    const { left, right } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledView left={left} right={right}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}
@@ -449,7 +456,24 @@ export function GroupIconWhite(props) {
                 resizeMode={'contain'}
                 source={ICONS.Contacts_white}
             />
-        </StyledTouchableOpacity>
+        </StyledView>
+    )
+}
+export function UserIconWhite(props) {
+    const { left, right } = props;
+    return (
+        <StyledView left={left} right={right}>
+            {/* <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Contacts_white}
+            /> */}
+            <Image
+                style={{ width: IconSize, height: IconSize }}
+                resizeMode={'contain'}
+                source={ICONS.User}
+            />
+        </StyledView>
     )
 }
 export function GroupIconGrey(props) {

@@ -8,6 +8,7 @@ import { setUser } from '../../actions/userActions'
 import { addFeed } from '../../actions/newsActions'
 import Button from '../../common/Button'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 import sendRequest from '../../utils/request'
 import { p_news } from '../../constants/api'
 import { GroupIcon, CloseIcon } from '../../assets/'
@@ -66,7 +67,10 @@ const RecieverComponent = (props) => {
     const { image, first_name, last_name, phone_number, department } = children
     return <Reciever last={last}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
+            {image === '/images/default_avatar.jpg' ?
+                <DefaultAvatar /> :
+                <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
+            }
             <View style={{ flex: 1, marginLeft: 10 }}>
                 <RecieverInfo>
                     <Text numberOfLines={1}>{first_name ? `${first_name} ${last_name}` : phone_number}</Text>
@@ -96,7 +100,7 @@ class Content extends Component {
                             <GroupIcon right />
                             <Text>Получатели</Text>
                         </DialogsLabel>
-                        <DialogsLabel style={{justifyContent: 'space-between'}}>
+                        <DialogsLabel style={{ justifyContent: 'space-between' }}>
                             <TouchableOpacity onPress={this.addParticipant}>
                                 <AddReciever>Добавить</AddReciever>
                             </TouchableOpacity>

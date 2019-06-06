@@ -6,6 +6,7 @@ import FloatingLabel from 'react-native-floating-labels'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 import Loader from '../../common/Loader'
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
@@ -100,12 +101,12 @@ const ContactImage = styled(Image)`
     width: 36px;
     height: 36px;
     border-radius: 18;
-    margin-right: 10px;
 `
 const ContactInfo = styled(View)`
     display: flex;
     align-items: flex-start;
     justify-content: center;
+    margin-left: 10px;
 `
 const ContactName = styled(Text)``
 const ContactRole = styled(Text)`
@@ -181,11 +182,15 @@ class Content extends Component {
                                                     name :
                                                     first_name ? `${first_name} ${last_name}` : phone_number
                                                 return item ? <BoxInnerItem key={index} onPress={() => this.toChat(item)}>
-                                                    <ContactImage source={{ uri: `http://ser.univ.team${image || creator.image}` }} />
+                                                    {
+                                                        image === '/images/default_avatar.jpg' ?
+                                                            <DefaultAvatar isGroup={isGroup} id={_id} size={36} /> :
+                                                            <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                                    }
                                                     <ContactInfo>
                                                         <ContactName>{chatName}</ContactName>
                                                         {isGroup && <ContactRole>{`${participants.length + 1} участника`}</ContactRole>}
-                                                        {(!isGroup && role) && <ContactRole>{role[0] || 'без роли'}</ContactRole>}
+                                                        {(!isGroup && role) && <ContactRole>{role.name}</ContactRole>}
                                                     </ContactInfo>
                                                 </BoxInnerItem> : null
                                             }}
@@ -196,23 +201,27 @@ class Content extends Component {
                                         {department.map((e, i) => (
                                             <Box key={i} last={i === department.length - 1}>
                                                 <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                                    <BoxItem numberOfLines={1} title={true}>{e.title}</BoxItem>
+                                                    <BoxItem numberOfLines={1} title={true}>{e.title.name}</BoxItem>
                                                     <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
                                                         <ArrowDownIcon />
                                                     </ArrowWrapper>
                                                 </BoxTitle>
                                                 <Collapsible collapsed={collapsed[i] || false}>
-                                                    <BoxInner>
+                                                    <BoxInner> 
                                                         {dialogs.map((e, i) => {
                                                             const { creator, participants, isGroup } = e
                                                             let item = creator._id === user._id ? participants[0] : creator
                                                             const { image, first_name, last_name, phone_number, post, role } = item
                                                             const name = first_name ? `${first_name} ${last_name}` : phone_number
                                                             return !isGroup && <BoxInnerItem key={i} onPress={() => this.toChat(e)}>
-                                                                <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                                                {
+                                                                    image === '/images/default_avatar.jpg' ?
+                                                                        <DefaultAvatar isGroup={isGroup} id={item._id} size={36} /> :
+                                                                        <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                                                }
                                                                 <ContactInfo>
                                                                     <ContactName>{name}</ContactName>
-                                                                    {role && <ContactRole>{role[0] || 'без роли'}</ContactRole>}
+                                                                    {post ? <ContactRole>{post}</ContactRole> : null}
                                                                 </ContactInfo>
                                                             </BoxInnerItem>
                                                         })}
@@ -230,7 +239,11 @@ class Content extends Component {
                                                 const chatItem = creator._id === user._id ? participants[0] : creator
                                                 const { first_name, last_name, phone_number, role, image } = chatItem
                                                 return isGroup ? <BoxInnerItem key={index} onPress={() => this.toChat(item)}>
-                                                    <ContactImage source={{ uri: `http://ser.univ.team${image || creator.image}` }} />
+                                                    {
+                                                        image === '/images/default_avatar.jpg' ?
+                                                            <DefaultAvatar isGroup={isGroup} id={_id} size={36} /> :
+                                                            <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                                    }
                                                     <ContactInfo>
                                                         <ContactName>{name}</ContactName>
                                                         <ContactRole>{participants.length + 1} участника</ContactRole>
@@ -256,14 +269,7 @@ class Content extends Component {
     state = {
         collapsed: [],
         users: {
-            department: [
-                {
-                    title: 'Отдел длинных корпоративных названий',
-                    workers: [
-                        { name: "Noah", role: 'менеджер по продажам', uri: 'https://facebook.github.io/react/logo-og.png' },
-                    ],
-                },
-            ],
+            department: [],
         },
         options: {
             active: 1,
@@ -290,10 +296,26 @@ class Content extends Component {
             r_path: g_users,
             method: 'get',
             success: (res) => {
-                setContacts(res.users)
+                const { users } = this.state
+                const newUsers = { ...users }
+                const newDepartment = [...users.department]
+                res.users.map(user => {
+                    const { users } = this.state
+                    const department = users.department.filter(e => e.title.name === user.department.name || e.title.name === 'без департамента')[0]
+                    if (department) {
+                        const index = users.department.findIndex(e => {
+                            return e.title.name === user.department || e.title.name === 'без департамента'
+                        })
+                        newDepartment[index].users.push(user)
+                    } else {
+                        newDepartment.push({ title: user.department || 'без департамента', users: [user] })
+                    }
+                    newUsers.department = [...newDepartment]
+                    this.setState({ users: newUsers })
+                })
             },
             failFunc: (err) => {
-                console.log(err)
+                console.log({ err })
             }
         })
         this.setState({ collapsed: newCollapsed })

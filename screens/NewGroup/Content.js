@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
 import Button from '../../common/Button'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 import { GroupIcon, CloseIcon } from '../../assets/'
 import { addDialogParticipant, setDialogParticipants } from '../../actions/participantsActions'
 import { socket } from '../../utils/socket'
@@ -29,10 +30,11 @@ const StyledInput = styled(TextInput)`
     ${({ style }) => style}
 `
 const ButtonBox = styled(View)`
-    width: 170px;
-    align-self: center;
-    position: absolute;
-    bottom: 40px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 20px;
 `
 const Receivers = styled(View)`
     margin: 40px 0;
@@ -41,7 +43,7 @@ const Receiver = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     margin-top: 20px;
     
 `
@@ -78,11 +80,14 @@ class Content extends Component {
             const { info, title, image, role, first_name, last_name, phone_number } = children
             return <Receiver last={last}>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-                    <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
+                    {image === '/images/default_avatar.jpg' ?
+                        <DefaultAvatar /> :
+                        <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
+                    }
                     <View style={{ flex: 1 }}>
                         <ReceiverInfo>
                             <Text numberOfLines={1}>{first_name || phone_number}</Text>
-                            {role ? <Department numberOfLines={1}>{role || 'no role'}</Department> : null}
+                            {role ? <Department numberOfLines={1}>{role.name}</Department> : null}
                         </ReceiverInfo>
                     </View>
                     <CloseIcon onPress={onDelete} />
@@ -100,6 +105,15 @@ class Content extends Component {
                         placeholder={'Новая группа'}
                         multiline={true}
                         style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
+                    <ButtonBox>
+                        <TouchableOpacity onPress={this.addParticipant}>
+                            <AddReceiver>Добавить</AddReceiver>
+                        </TouchableOpacity>
+                        <Button
+                            onPress={this.proceed}
+                            style={{ background: green }}
+                            color={black}>Продолжить</Button>
+                    </ButtonBox>
                     <Receivers>
                         <DialogsLabel>
                             <GroupIcon />
@@ -110,18 +124,7 @@ class Content extends Component {
                                 <ReceiverComponent key={i} onDelete={() => this.deleteParticipant(e)} last={i === participants.length}>{e}</ReceiverComponent>
                             ))}
                         </ScrollView>
-                        <DialogsLabel>
-                            <TouchableOpacity onPress={this.addParticipant}>
-                                <AddReceiver>Добавить</AddReceiver>
-                            </TouchableOpacity>
-                        </DialogsLabel>
                     </Receivers>
-                    <ButtonBox>
-                        <Button
-                            onPress={this.proceed}
-                            style={{ background: green }}
-                            color={black}>Продолжить</Button>
-                    </ButtonBox>
                 </Wrapper>
             </ScrollView>)
     }

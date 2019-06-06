@@ -1,8 +1,8 @@
 {
   "expoServerPort": null,
-  "expoServerNgrokUrl": null,
-  "packagerNgrokUrl": null,
-  "ngrokPid": null,
+  "expoServerNgrokUrl": "https://ys-h73.dr0kd3n.mobile-front.exp.direct",
+  "packagerNgrokUrl": "https://packager.ys-h73.dr0kd3n.mobile-front.exp.direct",
+  "ngrokPid": 88558,
   "devToolsPort": 19002,
   "packagerPort": null,
   "packagerPid": null,

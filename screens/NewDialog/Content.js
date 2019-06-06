@@ -156,7 +156,7 @@ class Content extends Component {
                                         <ContactList key={i}>
                                             <Box last={true}>
                                                 <BoxTitle onPress={() => collapsed[0] ? this.collapseDepartment(0) : this.showDepartment(0)}>
-                                                    <BoxItem title={true}>{dep.title}</BoxItem>
+                                                    <BoxItem title={true}>{dep.title.name}</BoxItem>
                                                     <ArrowWrapper pose={collapsed[0] ? 'right' : 'down'}>
                                                         <ArrowDownIcon />
                                                     </ArrowWrapper>
@@ -170,10 +170,11 @@ class Content extends Component {
                                                                     <ContactName>
                                                                         {e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}
                                                                     </ContactName>
-                                                                    {e.role ? <ContactRole>{e.role}</ContactRole> : null}
+                                                                    {e.role ? <ContactRole>{e.role.name}</ContactRole> : null}
                                                                 </ContactInfo>
                                                             </BoxInnerItem>
-                                                        </TouchableOpacity>)}
+                                                        </TouchableOpacity>
+                                                        )}
                                                     </BoxInner>
                                                 </Collapsible>
                                             </Box>
@@ -241,21 +242,21 @@ class Content extends Component {
             method: 'get',
             success: (res) => {
                 const { users } = this.state
-                setContacts(res.users)
                 const newUsers = { ...users }
+                setContacts(res.users)
                 const newDepartment = [...users.department]
                 res.users.map(user => {
                     const { users } = this.state
-                    const department = users.department.filter(e => e.title === user.department || e.title === 'без департамента')[0]
+                    const department = users.department.filter(e => e.title.name === user.department.name || e.title.name === 'без департамента')[0]
                     if (department) {
                         const index = users.department.findIndex(e => {
-                            return e.title === user.department || e.title === 'без департамента'
+                            return e.title.name === user.department || e.title.name === 'без департамента'
                         })
                         newDepartment[index].users.push(user)
                     } else {
                         newDepartment.push({ title: user.department || 'без департамента', users: [user] })
                     }
-                    newUsers.department = newDepartment
+                    newUsers.department = [...newDepartment]
                     this.setState({ users: newUsers })
                 })
             },

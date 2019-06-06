@@ -9,6 +9,7 @@ import { p_search_messages } from '../../constants/api'
 import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 const { sidePadding, HeaderHeight, Colors, fontSize } = helper;
 const { border } = Colors;
 const Header = styled(View)`
@@ -95,7 +96,7 @@ margin-right: 20px;
 class HeaderComponent extends Component {
     render() {
         const { back, search, startSearch, stopSearch, currentChat, currentDialog } = this.props
-        const { name, creator, participants, image } = currentDialog
+        const { name, creator, participants, image, _id } = currentDialog
         return (
             <Header>
                 <Top>
@@ -104,7 +105,11 @@ class HeaderComponent extends Component {
                             <>
                                 <BackIcon onPress={back} right />
                                 <ToProfile onPress={this.toProfile}>
-                                    <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
+                                    {
+                                        image === '/images/default_group.png' ?
+                                            <DefaultAvatar isGroup={true} id={_id} size={'header'} /> :
+                                            <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
+                                    }
                                     <Info>
                                         <InfoChatName>{name}</InfoChatName>
                                         <InfoParticipants>{participants.length + 1} участника</InfoParticipants>

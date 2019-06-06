@@ -6,6 +6,7 @@ import { setFeed } from '../../actions/newsActions'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 import Loader from '../../common/Loader'
 const { borderRadius, Colors, fontSize, sidePadding, HeaderHeight } = helper;
 const { yellow, darkBlue2, grey2 } = Colors;
@@ -107,9 +108,13 @@ class Content extends Component {
                             const date = new Date(created_at)
                             return <NewsItem onPress={() => this.proceed(item)}>
                                 <Sender>
-                                    <ImageComponent source={{ uri: creator.image ? `http://ser.univ.team${creator.image}` : 'https://facebook.github.io/react/logo-og.png' }} size={"xs"} style={{
-                                        marginRight: 10
-                                    }} />
+                                    {creator.image === '/images/default_avatar.jpg' ?
+                                        <DefaultAvatar size={"xs"} style={{ marginRight: 10 }} id={creator._id} /> :
+                                        <ImageComponent
+                                            source={{ uri: `http://ser.univ.team${creator.image}` }}
+                                            size={"xs"}
+                                            style={{ marginRight: 10 }} />
+                                    }
                                     <SenderInfo>
                                         <SenderName numberOfLines={1}>{creator.first_name ?
                                             `${creator.first_name} ${creator.last_name}` : creator.phone_number}</SenderName>

@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 const { HeaderHeight, sidePadding, fontSize, Colors } = helper;
 const { green, grey3 } = Colors
 const Header = styled(View)`
@@ -61,7 +62,10 @@ class HeaderComponent extends Component {
                     <SearchIcon right />
                     {/* <AddIcon onPress={this.addContact} right /> */}
                     <TouchableOpacity onPress={this.toProfile}>
-                        <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size={'header'} style={{ marginLeft: 10 }} />
+                        {user.image === '/images/default_group.png' || user.image === '/images/default_avatar.jpg' ?
+                            <DefaultAvatar size={'header'} style={{ marginLeft: 10 }} /> :
+                            <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size={'header'} style={{ marginLeft: 10 }} />
+                        }
                     </TouchableOpacity>
                 </Right>
             </Header>

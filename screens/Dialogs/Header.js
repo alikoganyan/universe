@@ -5,6 +5,7 @@ import { openDrawer } from '../../actions/drawerActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 import sendRequest from '../../utils/request'
 import { p_search_dialogs } from '../../constants/api'
 import styled from 'styled-components'
@@ -58,9 +59,12 @@ class HeaderComponent extends Component {
                     onFocus={this.handleFocus}
                     placeholder={`Поиск`} />
                 {this.state.focused ?
-                    <CloseIcon onPress={this.onBlur} marginLeft={false} marginRight right/>
-                    : <TouchableOpacity onPress={this.toProfile} style={{marginRight: sidePadding}}>
-                        <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size={'header'}/>
+                    <CloseIcon onPress={this.onBlur} marginLeft={false} marginRight right />
+                    : <TouchableOpacity onPress={this.toProfile} style={{ marginRight: sidePadding }}>
+                        {user.image === '/images/default_group.png' || user.image === '/images/default_avatar.jpg' ?
+                            <DefaultAvatar size={'header'} /> :
+                            <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size={'header'} />
+                        }
                     </TouchableOpacity>}
             </Header>
         )

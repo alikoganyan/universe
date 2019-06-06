@@ -9,6 +9,7 @@ import { p_search_messages } from '../../constants/api'
 import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 const { sidePadding, HeaderHeight, HeaderHeightInner, Colors, fontSize } = helper;
 const { border } = Colors;
 
@@ -97,7 +98,7 @@ margin-right: 20px;
 class HeaderComponent extends Component {
     render() {
         const { back, search, startSearch, stopSearch, currentChat, currentDialog } = this.props
-        const { first_name, last_name, phone_number, image } = currentDialog
+        const { first_name, last_name, phone_number, image, _id } = currentDialog
         return (
             <Header>
                 <Top>
@@ -106,7 +107,11 @@ class HeaderComponent extends Component {
                             <>
                                 <BackIcon onPress={back} right />
                                 <ToProfile onPress={this.toProfile}>
-                                    <ImageComponent size={'header'} source={{ uri: `http://ser.univ.team${image}` }} />
+                                    {
+                                        image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
+                                            <DefaultAvatar id={_id} size={'header'} /> :
+                                            <ImageComponent size={'header'} source={{ uri: `http://ser.univ.team${image}` }} />
+                                    }
                                     <Info>
                                         <InfoChatName numberOfLines={1}>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
                                         <InfoParticipants numberOfLines={1}>был вчера</InfoParticipants>

@@ -12,6 +12,7 @@ import { ImagePicker } from 'expo';
 import { socket } from '../../utils/socket'
 import { p_profile, p_profile_avatar } from '../../constants/api'
 import sendRequest from '../../utils/request'
+import DefaultAvatar from '../../common/DefaultAvatar'
 const { Colors, HeaderHeight, fontSize } = helper;
 const { grey2, blue, lightGrey1 } = Colors;
 const Wrapper = styled(View)`
@@ -111,11 +112,16 @@ class Content extends Component {
     render() {
         const { user, lastNameError, firstNameError, middleNameError, emailError, passwordError, repasswordError } = this.state;
         const { first_name, last_name, middle_name, email, image } = user || {};
+        console.log(image)
         return (
             <Wrapper>
                 <User >
                     <TouchableOpacity onPress={(this.selectImage)}>
-                        <UserImage source={{ uri: `http://ser.univ.team${image}` }} />
+                        {
+                            image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
+                                <DefaultAvatar size={80} /> :
+                                <UserImage source={{ uri: `http://ser.univ.team${image}` }} />
+                        }
                     </TouchableOpacity>
                     <UserInfo>
                         <InputBox key={0} err={!!lastNameError}>
@@ -214,7 +220,7 @@ class Content extends Component {
             allowsEditing: false,
         });
         const { uri, type } = result
-        const ext = uri.split('.')[uri.split('.').length-1]
+        const ext = uri.split('.')[uri.split('.').length - 1]
         const form = new FormData();
         const fileName = Math.random().toString(36).substring(7);
         form.append("file", {

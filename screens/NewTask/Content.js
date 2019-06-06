@@ -7,6 +7,7 @@ import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
 import { addReceiver, setReceivers, setTaskReceivers } from '../../actions/participantsActions'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 import Button from '../../common/Button'
 import { p_create_task } from '../../constants/api/'
 import sendRequest from '../../utils/request'
@@ -21,9 +22,11 @@ const Wrapper = styled(View)`
     justify-content: center;
     align-items: center;
     height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
+    width: 100%;
 `
 const StyledScrollView = styled(ScrollView)`
     height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
+    width: 100%;
 `
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
@@ -84,11 +87,14 @@ const ReceiverComponent = (props) => {
     const { image, phone_number, role, first_name, last_name } = children
     return <Receiver last={last}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-            <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
+            {image === '/images/default_avatar.jpg' ?
+                <DefaultAvatar /> :
+                <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
+            }
             <View style={{ flex: 1, marginLeft: 5 }}>
                 <ReceiverInfo>
                     <Text numberOfLines={1}>{first_name ? `${first_name} ${last_name}` : phone_number}</Text>
-                    {role ? <Department numberOfLines={1}>{role}</Department> : null}
+                    {role ? <Department numberOfLines={1}>{role.name}</Department> : null}
                 </ReceiverInfo>
             </View>
             <CloseIcon onPress={onDelete} />

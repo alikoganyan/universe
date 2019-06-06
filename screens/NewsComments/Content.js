@@ -13,7 +13,8 @@ import { CommentIcon, HeartIcon, HeartIconFilled, TriangleLeftIcon, TriangleRigh
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components';
 import helper from '../../utils/helpers';
-import ImageComponent from '../../common/Image';
+import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'	;
 import { connect } from 'react-redux';
 import { setFeed } from '../../actions/newsActions'
 import { socket } from '../../utils/socket'
@@ -180,7 +181,11 @@ class Content extends Component {
 			<Wrapper>
 				<NewsItem onLayout={e => this.getUnreadMessageHeight(e)}>
 					<Sender>
-						<Sendermage source={{ uri: `http://ser.univ.team${image}` }} />
+
+						{image === '/images/default_avatar.jpg' ?
+							<DefaultAvatar size={30} style={{ marginRight: 10 }} /> :
+							<Sendermage source={{ uri: `http://ser.univ.team${image}` }} />
+						}
 						<SenderInfo>
 							<SenderName>{first_name} {last_name}</SenderName>
 							<TimeSent>
@@ -265,7 +270,7 @@ class Content extends Component {
 		const difference = Math.abs(new Date() - date) / 864e5;
 		const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
 		const time = difference < 1 ? `${date.getHours()}:${date.getMinutes()}` : daysOfTheWeek[date.getDay()]
-		return myId === _id ?
+		return myId === creator._id ?
 			<View style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
 				<MyMessage>
 					<MyMessageText>
@@ -282,12 +287,15 @@ class Content extends Component {
 				<TriangleLeftIcon color={yellow} />
 			</View> :
 			<View style={{ display: 'flex', flexDirection: 'row', alignItems: 'flex-end' }}>
-				<ImageComponent
-					style={{ position: 'relative', left: 5, bottom: 5 }}
-					source={{
-						uri: `http://ser.univ.team${image}`,
-					}}
-				/>
+				{image === '/images/default_avatar.jpg' ?
+					<DefaultAvatar style={{ position: 'relative', left: 5, bottom: 5 }} id={creator._id} /> :
+					<ImageComponent
+						style={{ position: 'relative', left: 5, bottom: 5 }}
+						source={{
+							uri: `http://ser.univ.team${image}`,
+						}}
+					/>
+				}
 				<TriangleRightIcon color={'#fff1dd'} />
 				<InterlocutorsMessage>
 					<InterlocutorsMessageName>{first_name} {last_name}</InterlocutorsMessageName>

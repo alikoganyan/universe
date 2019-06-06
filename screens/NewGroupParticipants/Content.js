@@ -6,7 +6,8 @@ import FloatingLabel from 'react-native-floating-labels'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
-import RoundCheckbox from 'rn-round-checkbox';
+import DefaultAvatar from '../../common/DefaultAvatar'
+import RoundCheckbox from 'rn-round-checkbox'
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
@@ -174,10 +175,13 @@ class Content extends Component {
                                                 {
                                                     e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
                                                         <BoxInnerItem>
-                                                            <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
+                                                            {e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg' ?
+                                                                <DefaultAvatar size={36} id={e._id}/> :
+                                                                <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
+                                                            }
                                                             <ContactInfo>
                                                                 <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
-                                                                {e.role ? <ContactRole>{e.role[0] || 'no role'}</ContactRole> : null}
+                                                                {e.role ? <ContactRole>{e.role.name || 'no role'}</ContactRole> : null}
                                                             </ContactInfo>
                                                         </BoxInnerItem>
                                                     </TouchableOpacity>)

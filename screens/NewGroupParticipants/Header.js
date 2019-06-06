@@ -6,6 +6,7 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { p_tasks_search, g_users } from '../../constants/api'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 import sendRequest from '../../utils/request'
 const { sidePadding, HeaderHeight, fontSize, Colors } = helper;
 const { grey3 } = Colors

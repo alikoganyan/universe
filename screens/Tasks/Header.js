@@ -9,6 +9,7 @@ import { p_search_messages } from '../../constants/api'
 import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 const { sidePadding, HeaderHeight, Colors, fontSize } = helper;
 const { border } = Colors;
 const Header = styled(View)`
@@ -102,17 +103,20 @@ class HeaderComponent extends Component {
         return (
             <Header>
                 <Left>
-                    <BackIcon onPress={back} right />
-                        <ToProfile onPress={toProfile}>
-                            <ImageComponent size={'header'} source={{ uri: `http://ser.univ.team${image}` }} />
-                            <Info>
-                                <InfoChatName>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
-                                <InfoParticipants>{tasks && tasks.length ? tasks.length : ''} задач</InfoParticipants>
-                            </Info>
+                    <BackIcon onPress={back} />
+                    <ToProfile onPress={toProfile}>
+                        {image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
+                            <DefaultAvatar size={'header'} style={{ marginLeft: 10 }} /> :
+                            <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
+                        }
+                        <Info>
+                            <InfoChatName>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
+                            <InfoParticipants>{tasks && tasks.length ? tasks.length : ''} задач</InfoParticipants>
+                        </Info>
                     </ToProfile>
                 </Left>
                 <Right>
-                    <SearchIcon onPress={startSearch}/>
+                    <SearchIcon onPress={startSearch} />
                 </Right>
             </Header>
         )

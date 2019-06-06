@@ -6,6 +6,7 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { p_tasks_search, g_users } from '../../constants/api'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 import sendRequest from '../../utils/request'
 const { sidePadding, HeaderHeight, fontSize, HeaderHeightInner } = helper;
 
@@ -78,7 +79,10 @@ class HeaderComponent extends Component {
                             <SearchIcon right onPress={this.startSearch} />
                             <AddIcon onPress={this.addTask} right />
                             <TouchableOpacity onPress={this.toProfile}>
-                                <ImageComponent size={'header'} source={{ uri: `http://ser.univ.team${image}` }} />
+                                {user.image === '/images/default_group.png' || user.image === '/images/default_avatar.jpg' ?
+                                    <DefaultAvatar size={'header'} style={{ marginLeft: 10 }} /> :
+                                    <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size={'header'} />
+                                }
                             </TouchableOpacity>
                         </> :
                         <CloseIcon onPress={this.stopSearch} />

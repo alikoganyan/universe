@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import helper from '../../utils/helpers'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;

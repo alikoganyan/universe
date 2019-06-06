@@ -8,7 +8,7 @@ import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { socket } from '../../utils/socket'
-
+import DefaultAvatar from '../../common/DefaultAvatar'
 const { sidePadding, Colors, HeaderHeight, fontSize } = helper;
 const { border, grey3, pink } = Colors;
 const Wrapper = styled(View)`
@@ -150,7 +150,11 @@ class Content extends Component {
             <Wrapper>
                 <StyledScrollView>
                     <User >
-                        <UserImage source={{ uri: `http://ser.univ.team${image}` }} />
+                        {
+                            image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
+                                <DefaultAvatar isGroup={isGroup} id={_id} size={80} /> :
+                                <UserImage source={{ uri: `http://ser.univ.team${image}` }} />
+                        }
                         <UserInfo>
                             <UserName>
                                 <Name>{chatName}</Name>
@@ -190,10 +194,14 @@ class Content extends Component {
                                     const { _id, first_name, last_name, post, role, image, phone_number } = item
                                     return (
                                         <BoxInnerItem>
-                                            <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                            {image === '/images/default_avatar.jpg' ?
+                                                <DefaultAvatar size={36}/> :
+                                                <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                            }
+
                                             <ContactInfo>
                                                 <ContactName>{first_name ? `${first_name} ${last_name}` : phone_number}</ContactName>
-                                                {role && role[0] && <ContactRole>{role[0]}</ContactRole>}
+                                                {role && role.name && <ContactRole>{role.name}</ContactRole>}
                                             </ContactInfo>
                                         </BoxInnerItem>
                                     )
@@ -229,7 +237,7 @@ class Content extends Component {
         const { role, phone_number, department } = myProfile ? user : currentDialog;
         const newUserData = [
             { type: 'Подразделение', value: department || 'без подразделения', isGroup: false },
-            { type: 'Должность', value: role ? role.length ? role[0] : 'без должности' : 'без должности', isGroup: false },
+            { type: 'Должность', value: role ? role.length ? role.name : 'без должности' : 'без должности', isGroup: false },
             { type: 'Личный', value: phone_number || 'без номера', isGroup: false },
             !myProfile ? { type: 'Задачи', value: '4', icon: <TaskIcon />, isGroup: false } : undefined,
             !myProfile ? { type: 'Общих групп', value: '32', icon: <GroupIcon />, isGroup: false } : undefined,
