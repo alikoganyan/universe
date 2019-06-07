@@ -62,6 +62,7 @@ class Content extends Component {
                             ListHeaderComponent={<View style={{ margin: 35, }} />}
                             inverted={true}
                             data={reversedMessages}
+                            keyboardDismissMode={'on-drag'}
                             animated={true}
                             renderItem={({ item, index }) => {
                                 return <TouchableOpacity key={index} onLongPress={() => this.handleHold(item)}>

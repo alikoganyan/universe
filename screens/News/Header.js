@@ -4,7 +4,7 @@ import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon, CloseI
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { p_news_search, g_users } from '../../constants/api'
+import { p_news_search, g_users, p_news } from '../../constants/api'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { setNews } from '../../actions/newsActions'
@@ -25,10 +25,12 @@ const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
+    flex: 6;
 `
 const Center = styled(View)``
 const Input = styled(TextInput)`
     margin-left: ${Dimensions.get('window').width * 0.085};
+    flex: 1;
 `
 const HeaderText = styled(Text)`
     font-size: ${fontSize.header};
@@ -37,6 +39,7 @@ const HeaderText = styled(Text)`
 `
 const Right = styled(Left)`
     justify-content: flex-end;
+    flex: 1;
 `
 // const UserImage = styled(Image)`
 //     background: red;
@@ -83,7 +86,7 @@ class HeaderComponent extends Component {
                                 }
                             </TouchableOpacity>
                         </> :
-                        <CloseIcon onPress={this.stopSearch} />
+                        <CloseIcon onPress={this.stopSearch} marginLeft={false} />
                     }
                 </Right>
             </Header>
@@ -98,8 +101,9 @@ class HeaderComponent extends Component {
         navigate('Profile')
     }
     find = (e) => {
+        const { setNews } = this.props
         this.setState({ find: e })
-        e ? sendRequest({
+        e && e.length >= 2 ? sendRequest({
             r_path: p_news_search,
             method: 'post',
             attr: {
@@ -107,13 +111,13 @@ class HeaderComponent extends Component {
                 withUser: true,
             },
             success: (res) => {
-                console.log({ res })
+                setNews(res.news)
             },
             failFunc: (err) => {
                 console.log(err)
             }
         }) : sendRequest({
-            r_path: news,
+            r_path: p_news,
             method: 'get',
             success: (res) => {
                 setNews(res.news)

@@ -75,7 +75,7 @@ class Dialogs extends Component {
 		// }, 2000)
 		BackHandler.addEventListener('hardwareBackPress', () => true)
 		socket.emit('get_dialogs', { id: user._id })
-		socket.once('update_dialogs', e => this.setDialogsSocket(e))
+		socket.on('update_dialogs', e => this.setDialogsSocket(e))
 		socket.once('new_message', e => this.newMessageSocket(e))
 		socket.once('new_dialogs', this.socketNewDialog)
 		socket.once('need_update', this.socketNeedsUpdate)

@@ -13,6 +13,7 @@ import { socket } from '../../utils/socket'
 const { HeaderHeight } = helper
 const Wrapper = styled(View)`
     height: 100%;
+    overflow: hidden;
 `
 const Bottom = styled(View)`
     position: absolute;
@@ -24,7 +25,7 @@ const Bottom = styled(View)`
 class Chat extends Component {
     render() {
         return (
-            <SafeAreaView behavior={Platform.os === 'ios' ? 'height' : 'padding'}>
+            <SafeAreaView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
                 <Wrapper>
                     <Header toProfile={this.toProfile} back={this.navigateBack} currentChat={this.props.currentChat} />
                     <Content />

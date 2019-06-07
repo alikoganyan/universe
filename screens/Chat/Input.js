@@ -127,6 +127,10 @@ class InputComponent extends Component {
     selectPhoto = async (e) => {
         const { currentChat, addMessage, setDialogs, dialogs, user } = this.props;
         this.unselect()
+        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        if (status !== 'granted') {
+            alert('no camera roll permission')
+        }
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
@@ -176,11 +180,10 @@ class InputComponent extends Component {
         let result = await DocumentPicker.getDocumentAsync({});
     }
     selectGeo = async () => {
+        this.unselect()
         const { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
-            this.setState({
-                errorMessage: 'Permission to access location was denied',
-            });
+            alert('no camera location permission')
         }
         const location = await Location.getCurrentPositionAsync({});
         this.setState({ location });

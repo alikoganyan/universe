@@ -71,7 +71,7 @@ const TaskDeadline = styled(View)`
     display: flex;
     flex-direction: column;
     width: 100%;
-    flex: 6;
+    flex: 7;
 `
 const TaskDeadlineLabel = styled(Text)`
     color: ${grey1};

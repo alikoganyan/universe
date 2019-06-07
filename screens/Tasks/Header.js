@@ -20,6 +20,7 @@ const Header = styled(View)`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
+    height: ${HeaderHeight}px;
 `
 const HeaderUserImage = styled(Image)`
     border-radius: 15;

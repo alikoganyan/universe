@@ -118,7 +118,7 @@ class HeaderComponent extends Component {
                             </>
                         ) : (
                                 <>
-                                    <IconLeft name="search" />
+                                    <SearchIcon onPress={this.focusInput} />
                                     <Input placeholder="поиск" onChangeText={this.find} />
                                 </>
                             )}
@@ -129,7 +129,7 @@ class HeaderComponent extends Component {
                                 <SearchIcon onPress={startSearch} />
                                 <LocationIcon />
                             </>
-                        ) : <CloseIcon onPress={stopSearch} right left={false} />}
+                        ) : <CloseIcon onPress={stopSearch} right={false} marginRight={true} />}
                     </Right>
                 </Top>
                 {search && (
@@ -144,6 +144,10 @@ class HeaderComponent extends Component {
                 )}
             </Header>
         )
+    }
+    componentWillUnmount() {
+        const { stopSearch } = this.props;
+        stopSearch()
     }
     toProfile = () => {
         const { toProfile } = this.props;

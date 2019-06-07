@@ -15,7 +15,7 @@ const Wrapper = styled(View)`
   display:flex;
   align-items: center;
   padding: ${sidePadding}px 0 ${sidePadding*2}px;
-  width: ${Dimensions.get('window').width - sidePadding * 2};
+  width: ${Dimensions.get('window').width - sidePadding};  
 `
 const TaskImage = styled(Image)`
   width: 50px;
@@ -58,7 +58,7 @@ const TaskDate = styled(View)`
 	font-size: ${fontSize.text};
 	display: flex;
 	justify-content: flex-start;
-	align-items: flex-start;
+	align-items: center;
 `
 const UnreadMessages = styled(View)`
 	display: flex;

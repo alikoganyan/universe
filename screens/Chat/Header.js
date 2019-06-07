@@ -84,9 +84,6 @@ const Category = styled(Text)`
     text-align: center;
     padding: 10px 0;
 `
-const IconLeft = styled(Icon)`
-    margin-left: ${sidePadding}px;
-`
 const ToProfile = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
@@ -120,8 +117,8 @@ class HeaderComponent extends Component {
                             </>
                         ) : (
                                 <>
-                                    <IconLeft name="search" />
-                                    <Input placeholder="поиск" onChangeText={this.find} />
+                                    <SearchIcon onPress={this.focusInput} />
+                                    <Input placeholder="поиск" onChangeText={this.find} autoFocus={true}/>
                                 </>
                             )}
                     </Left>
@@ -131,7 +128,7 @@ class HeaderComponent extends Component {
                                 <SearchIcon onPress={startSearch} />
                                 <LocationIcon />
                             </>
-                        ) : <CloseIcon onPress={stopSearch} />}
+                        ) : <CloseIcon onPress={stopSearch} right={false} marginRight={true} />}
                     </Right>
                 </Top>
                 {search && <Bottom>
@@ -148,9 +145,16 @@ class HeaderComponent extends Component {
     state = {
         search: false,
     }
+    componentWillUnmount(){
+        const { stopSearch } = this.props;
+        stopSearch()
+    }
     toProfile = () => {
         const { toProfile } = this.props;
         toProfile()
+    }
+    focusInput = e => {
+
     }
     find = (e) => {
         const { getMessages, dialogs, currentRoom, currentChat, currentRoomId } = this.props;

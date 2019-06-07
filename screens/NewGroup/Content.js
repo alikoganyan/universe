@@ -6,6 +6,7 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
 import Button from '../../common/Button'
+import { ImagePicker, Permissions } from 'expo'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { GroupIcon, CloseIcon } from '../../assets/'
@@ -98,7 +99,9 @@ class Content extends Component {
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}
                 keyboardShouldPersistTaps='handled'>
                 <Wrapper>
-                    <ImageComponent style={{ alignSelf: 'center', marginBottom: 20 }} size={70} source={{ uri: 'http://simpleicon.com/wp-content/uploads/user1.png' }} />
+                    <TouchableOpacity onPress={this.selectPhoto}>
+                        <DefaultAvatar isGroup={true} style={{ alignSelf: 'center', marginBottom: 20 }} size={70} />
+                    </TouchableOpacity>
                     <StyledInput password={true}
                         onChangeText={this.handleChange}
                         value={text}
@@ -129,13 +132,33 @@ class Content extends Component {
             </ScrollView>)
     }
     state = {
-        text: ''
+        text: '',
+        image: null
     }
     componentDidMount() {
 
     }
     componentWillUpdate() {
 
+    }
+    selectPhoto = async e => {
+        alert('temporary unavailable')
+        // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        // if (status !== 'granted') {
+        //     alert('no camera roll permission')
+        // }
+        // let result = await ImagePicker.launchImageLibraryAsync({
+        //     allowsEditing: false,
+        // });
+        // const { uri, type } = result
+        // const fileName = Math.random().toString(36).substring(7);
+        // const form = new FormData();
+        // form.append("file", {
+        //     uri,
+        //     name: `photo.${fileName}.${ext}`,
+        //     type: `image/${type}`,
+        // })
+        // this.setState({ image: form })
     }
     deleteParticipant = (e) => {
         const { _id } = e

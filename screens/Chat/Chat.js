@@ -13,6 +13,7 @@ import { socket } from '../../utils/socket'
 const { HeaderHeight } = helper
 const Wrapper = styled(View)`
     height: 100%;
+    overflow: hidden;
 `
 const Bottom = styled(View)`
     position: absolute;

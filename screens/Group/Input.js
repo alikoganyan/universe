@@ -122,6 +122,10 @@ class InputComponent extends Component {
     selectPhoto = async (e) => {
         const { currentChat, currentRoom, addMessage, getMessages, setDialogs, dialogs, user } = this.props;
         this.unselect()
+        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        if (status !== 'granted') {
+            alert('no camera location permission')
+        }
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
@@ -171,7 +175,13 @@ class InputComponent extends Component {
     selectFile = async (e) => {
         let result = await DocumentPicker.getDocumentAsync({});
     }
-    selectGeo = (e) => { }
+    selectGeo = async (e) => {
+        this.unselect()
+        const { status } = await Permissions.askAsync(Permissions.LOCATION);
+        if (status !== 'granted') {
+            alert('no camera location permission')
+        }
+    }
     discardSelect = (e) => { }
     sendMessage = (event) => {
         const { currentRoom, currentChat, id, addMessage, user, setDialogs, dialogs } = this.props;

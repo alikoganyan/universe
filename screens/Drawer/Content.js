@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
+import { Text, View, TouchableOpacity, Dimensions } from 'react-native'
 import styled from 'styled-components'
 import { PapperPlaneIcon, GroupIcon, FeedIcon, TasksIcon, SettingsIcon, DialogsIcon } from '../../assets/'
 import { DrawerActions } from 'react-navigation-drawer';
@@ -13,7 +13,8 @@ const Wrapper = styled(View)`
     margin-top: 20px;
     padding-left: 40px;
 `
-const Content = styled(View)``
+const Content = styled(View)`
+`
 
 const Link = styled(TouchableOpacity)`
     display: flex;
@@ -39,7 +40,7 @@ export default function ContentComponent(props) {
                     dispatch(DrawerActions.closeDrawer())
                     navigate('Dialogs')
                 }}>
-                    <DialogsIcon size={20}/>
+                    <DialogsIcon size={20} />
                     <LinkText>
                         Диалоги
                     </LinkText>
@@ -48,7 +49,7 @@ export default function ContentComponent(props) {
                     dispatch(DrawerActions.closeDrawer())
                     navigate('NewDialog')
                 }}>
-                    <PapperPlaneIcon size={20}/>
+                    <PapperPlaneIcon size={20} />
                     <LinkText>
                         Новый диалог
                     </LinkText>
@@ -57,7 +58,7 @@ export default function ContentComponent(props) {
                     dispatch(DrawerActions.closeDrawer())
                     navigate('ContactGroups')
                 }}>
-                    <GroupIcon noPadding={true} size={20}/>
+                    <GroupIcon noPadding={true} size={20} />
                     <LinkText>
                         Контакты
                     </LinkText>
@@ -66,7 +67,7 @@ export default function ContentComponent(props) {
                     dispatch(DrawerActions.closeDrawer())
                     navigate('News')
                 }}>
-                    <FeedIcon size={20}/>
+                    <FeedIcon size={20} />
                     <LinkText>
                         Новости
                     </LinkText>
@@ -75,7 +76,7 @@ export default function ContentComponent(props) {
                     dispatch(DrawerActions.closeDrawer())
                     navigate('TasksList')
                 }}>
-                    <TasksIcon size={20} noPaddingAll={false}/>
+                    <TasksIcon size={20} noPaddingAll={false} />
                     <LinkText>
                         Задачи
                     </LinkText>
@@ -84,7 +85,7 @@ export default function ContentComponent(props) {
                     dispatch(DrawerActions.closeDrawer())
                     navigate('Settings')
                 }}>
-                    <SettingsIcon size={20}/>
+                    <SettingsIcon size={20} />
                     <LinkText>
                         Настройки
                     </LinkText>

@@ -61,19 +61,19 @@ class HeaderComponent extends Component {
                 <Left>
                     {!search ?
                         <>
-                            <BackIcon onPress={back} right />
+                            <BackIcon onPress={back} right marginLeft={true} />
                             <HeaderText>Все входящие задачи</HeaderText>
                         </> :
                         <>
-                            <SearchIcon />
+                            <SearchIcon marginLeft={true} />
                             <Input placeholder="поиск" value={find} onChangeText={this.find} />
                         </>
                     }
                 </Left>
                 <Right>
                     {!search ?
-                        <SearchIcon right onPress={this.startSearch} /> :
-                        <CloseIcon onPress={this.stopSearch} />
+                        <SearchIcon onPress={this.startSearch} marginRight={true} /> :
+                        <CloseIcon onPress={this.stopSearch} marginLeft={false} />
                     }
                 </Right>
             </Header>

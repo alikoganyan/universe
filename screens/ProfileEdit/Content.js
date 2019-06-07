@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { ImagePicker } from 'expo';
+import { ImagePicker, Permissions } from 'expo';
 import { socket } from '../../utils/socket'
 import { p_profile, p_profile_avatar } from '../../constants/api'
 import sendRequest from '../../utils/request'
@@ -110,12 +110,12 @@ const Input = (props) => {
 class Content extends Component {
 
     render() {
-        const { user, lastNameError, firstNameError, middleNameError, emailError, passwordError, repasswordError } = this.state;
+        const { user, permissionError, lastNameError, firstNameError, middleNameError, emailError, passwordError, repasswordError } = this.state;
         const { first_name, last_name, middle_name, email, image } = user || {};
         console.log(image)
         return (
             <Wrapper>
-                <User >
+                <User>
                     <TouchableOpacity onPress={(this.selectImage)}>
                         {
                             image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
@@ -216,6 +216,10 @@ class Content extends Component {
     }
     selectImage = async (e) => {
         const { user, setUser } = this.props
+        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        if (status !== 'granted') {
+            alert('no camera roll permission')
+        }
         const result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });

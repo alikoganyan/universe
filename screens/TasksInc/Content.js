@@ -18,6 +18,7 @@ const Wrapper = styled(View)`
 `
 const StyledScrollView = styled(ScrollView)`
   height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
+  width: 100%;
 `
 
 class Content extends Component {

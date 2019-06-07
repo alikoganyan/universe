@@ -84,20 +84,30 @@ class HeaderComponent extends Component {
         toProfile()
     }
     handleInputChange = (e) => {
+        const { user, setDialogs } = this.props
         this.setState({ input: e })
-        e && e.length > 1 && sendRequest({
-            r_path: p_search_dialogs,
-            method: 'post',
-            attr: {
-                name: e,
-            },
-            success: (res) => {
-                // console.log(res)
-            },
-            failFunc: (err) => {
-                console.log(err)
-            }
-        })
+        if (e && e.length > 1) {
+            sendRequest({
+                r_path: p_search_dialogs,
+                method: 'post',
+                attr: {
+                    name: e,
+                },
+                success: (res) => {
+                    const { dialogs, groups } = res;
+                    const newDialogs = [...dialogs, ...groups]
+                    setDialogs(newDialogs)
+
+                },
+                failFunc: (err) => {
+                    console.log(err)
+                }
+            })
+        }
+        else {
+            console.log('123', user._id)
+            socket.emit('get_dialogs', { id: user._id })
+        }
 
     }
     handleFocus = () => {
@@ -105,8 +115,9 @@ class HeaderComponent extends Component {
     }
     onBlur = () => {
         const { user } = this.props
-        this.setState({ focused: false });
-        socket.emit('dialogs', { userId: user.id });
+        this.setState({ focused: false, input: '' });
+        socket.emit('dialogs', { userId: user._id });
+        socket.emit('get_dialogs', { id: user._id })
         Keyboard.dismiss()
     }
 }

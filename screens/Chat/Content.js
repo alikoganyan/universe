@@ -59,7 +59,7 @@ class Content extends Component {
             <>
                 <Wrapper search={search} >
                     {selectedMessage._id && <Shadow onPress={this.unselect} activeOpacity={1} />}
-                    <ImageBackground source={chatBg} style={{width: '100%', height: '100%'}}>
+                    <ImageBackground source={chatBg} style={{ width: '100%', height: '100%' }}>
                         <Animated.FlatList
                             style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
                             ListHeaderComponent={<View style={{ margin: 35, }} />}
@@ -102,7 +102,7 @@ class Content extends Component {
         const newDialog = newDialogs.filter(e => e._id === currentRoomId)[0]
         const newDialogIndex = newDialogs.findIndex(e => e._id === currentRoomId)
         newDialogs[newDialogIndex] = newDialog
-        if (newDialog) newDialog.messages = newMessages
+        if (newDialog.messages) newDialog.messages = newMessages
         getMessages(newMessages)
         setDialogs(newDialogs)
 

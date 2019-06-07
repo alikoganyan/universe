@@ -10,7 +10,6 @@ const { sidePadding, Colors, HeaderHeight } = helper;
 const { yellow, green, purple, red, black, pink } = Colors;
 const Wrapper = styled(View)`
     margin-bottom: 50px;   
-    background: white;
 `
 const TaskList = styled(FlatList)`
     padding: 10px;
@@ -56,6 +55,12 @@ const Shadow = styled(TouchableOpacity)`
     top: -${HeaderHeight};
     left: 0;
 `
+const StyledScrollView = styled(ScrollView)`
+    flexGrow: 1;
+    zIndex: 10;
+    width: 100%;
+    height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
+`
 class Content extends Component {
     render() {
         const { taskList, options } = this.state;
@@ -64,8 +69,7 @@ class Content extends Component {
         return (
             <SafeAreaView>
                 {/* {activeTask._id && <Shadow onPress={this.unselect}></Shadow>} */}
-                <ScrollView contentContainerStyle={{ flexGrow: 1, zIndex: 2 }}
-                    keyboardShouldPersistTaps='handled'>
+                <StyledScrollView keyboardShouldPersistTaps='handled'>
                     <Wrapper>
                         <Options>
                             {
@@ -81,8 +85,8 @@ class Content extends Component {
                                 const myTask = item.creator._id === user._id;
                                 return <TaskWrapper>
                                     <TouchableOpacity style={{ flex: 1 }} onLongPress={e => this.handleHold(item)}><TaskComponent
-                                        triangleLeft={!myTask}
-                                        triangleRight={myTask}
+                                        triangleLeft={myTask}
+                                        triangleRight={!myTask}
                                         borderColor={myTask ? pink : purple}
                                         style={{
                                             zIndex: activeTask._id === item._id ? 5 : 1,
@@ -94,7 +98,7 @@ class Content extends Component {
                             keyExtractor={(item, index) => index.toString()}
                         />}
                     </Wrapper>
-                </ScrollView>
+                </StyledScrollView>
             </SafeAreaView>
         )
     }

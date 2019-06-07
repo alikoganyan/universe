@@ -10,7 +10,6 @@ const Wrapper = styled(View)`
     width: ${({ size }) => typeof size === 'number' ? size : imageSize[size]};
     height: ${({ size }) => typeof size === 'number' ? size : imageSize[size]};
     border-radius: ${({ size }) => typeof size === 'number' ? size / 2 : imageSize[size] / 2};
-    margin-top: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
