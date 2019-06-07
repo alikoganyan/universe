@@ -100,11 +100,13 @@ class Content extends Component {
         });
         const newDialogs = [...dialogs]
         const newDialog = newDialogs.filter(e => e._id === currentRoomId)[0]
-        const newDialogIndex = newDialogs.findIndex(e => e._id === currentRoomId)
-        newDialogs[newDialogIndex] = newDialog
-        if (newDialog.messages) newDialog.messages = newMessages
-        getMessages(newMessages)
-        setDialogs(newDialogs)
+        if (newDialog) {
+            const newDialogIndex = newDialogs.findIndex(e => e._id === currentRoomId)
+            newDialogs[newDialogIndex] = newDialog
+            newDialog.messages = newMessages
+            getMessages(newMessages)
+            setDialogs(newDialogs)
+        }
 
     }
     unselect = (e) => {

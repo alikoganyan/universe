@@ -107,14 +107,16 @@ class Dialogs extends Component {
 		const newDialog = newDialogs.filter(e => {
 			return e._id === dialog_id
 		})[0]
-		const newDialogIndex = newDialogs.findIndex(e => e._id === dialog_id)
-		newDialog.messages && newDialog.messages.map(e => {
-			newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
-		});
-		newDialogs[newDialogIndex] = newDialog
-		newDialog.messages = newMessages
-		getMessages(newMessages)
-		setDialogs(newDialogs)
+		if (newDialog) {
+			const newDialogIndex = newDialogs.findIndex(e => e._id === dialog_id)
+			newDialog.messages && newDialog.messages.map(e => {
+				newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
+			});
+			newDialogs[newDialogIndex] = newDialog
+			newDialog.messages = newMessages
+			getMessages(newMessages)
+			setDialogs(newDialogs)
+		}
 	}
 	socketNeedsUpdate = e => {
 		socket.emit('get_dialogs', { id: user._id })
@@ -165,40 +167,42 @@ class Dialogs extends Component {
 		const message = { ...e, text: e.message, type: 'text', created_at: new Date(), sender: { ...e.sender }, viewers: [] }
 		const newDialogs = [...dialogs]
 		const newDialog = newDialogs.filter(event => event.room === e.room)[0]
-		newDialog.messages = [...newDialog.messages, message]
-		newDialogs[newDialogs.findIndex(event => event.room === e.room)] = newDialog
-		const newDialogSorted = newDialogs.length && newDialogs.sort((a, b) => {
-			if (b.messages.length && a.messages.length) {
-				const aCreation = new Date(a.created_at);
-				const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at)
-				const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
-				const bCreation = new Date(b.created_at);
-				const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at)
-				const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
-				return bDate - aDate
-			}
-			if (b.messages.length && !a.messages.length) {
-				const aCreation = new Date(a.created_at);
-				const bCreation = new Date(b.created_at);
-				const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at)
-				const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
-				return bDate - aCreation
-			}
-			if (!b.messages.length && a.messages.length) {
-				const aCreation = new Date(a.created_at);
-				const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at)
-				const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
-				const bCreation = new Date(b.created_at);
-				return bCreation - aDate
-			}
-			if (!b.messages.length && !a.messages.length) {
-				const aCreation = new Date(a.created_at);
-				const bCreation = new Date(b.created_at);
-				return bCreation - aCreation
-			}
-		})
-		setDialogs(newDialogSorted)
-		addMessage(message)
+		if (newDialog) {
+			newDialog.messages = [...newDialog.messages, message]
+			newDialogs[newDialogs.findIndex(event => event.room === e.room)] = newDialog
+			const newDialogSorted = newDialogs.length && newDialogs.sort((a, b) => {
+				if (b.messages.length && a.messages.length) {
+					const aCreation = new Date(a.created_at);
+					const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at)
+					const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
+					const bCreation = new Date(b.created_at);
+					const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at)
+					const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
+					return bDate - aDate
+				}
+				if (b.messages.length && !a.messages.length) {
+					const aCreation = new Date(a.created_at);
+					const bCreation = new Date(b.created_at);
+					const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at)
+					const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
+					return bDate - aCreation
+				}
+				if (!b.messages.length && a.messages.length) {
+					const aCreation = new Date(a.created_at);
+					const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at)
+					const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
+					const bCreation = new Date(b.created_at);
+					return bCreation - aDate
+				}
+				if (!b.messages.length && !a.messages.length) {
+					const aCreation = new Date(a.created_at);
+					const bCreation = new Date(b.created_at);
+					return bCreation - aCreation
+				}
+			})
+			setDialogs(newDialogSorted)
+			addMessage(message)
+		}
 	}
 	toProfile = e => {
 		this.props.navigation.navigate('Profile')

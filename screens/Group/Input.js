@@ -193,11 +193,13 @@ class InputComponent extends Component {
             const message = { sender: { _id, first_name, last_name, middle_name, image }, text: text.trim(), created_at: new Date(), type: 'text', viewers: [] }
             const newDialogs = [...dialogs]
             const newDialog = { ...newDialogs.filter(event => event.room === currentChat)[0] }
-            newDialog.messages = [...newDialog.messages, message]
-            newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog
-            socket.emit('group_message', { room: currentChat, message: text })
-            addMessage(message)
-            setDialogs(newDialogs)
+            if (newDialog) {
+                newDialog.messages = [...newDialog.messages, message]
+                newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog
+                socket.emit('group_message', { room: currentChat, message: text })
+                addMessage(message)
+                setDialogs(newDialogs)
+            }
         }
         this.setState({ text: '' })
     }
