@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native'
-import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon, CloseIcon } from '../../assets/index'
+import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon, CloseIcon, CheckGreyIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
@@ -54,7 +54,7 @@ const HeaderText = styled(Text)`
 `
 class HeaderComponent extends Component {
     render() {
-        const { back, user, toProfile } = this.props;
+        const { back, user, toProfile, receivers } = this.props;
         const { search, find } = this.state
         const { image } = user;
         return (
@@ -75,9 +75,12 @@ class HeaderComponent extends Component {
                     {!search ?
                         <>
                             <SearchIcon right onPress={this.startSearch} />
-                            <TouchableOpacity onPress={toProfile}>
-                                <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
-                            </TouchableOpacity>
+                            {
+                                !receivers.length ?
+                                    <TouchableOpacity onPress={toProfile}>
+                                        <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
+                                    </TouchableOpacity> : <CheckGreyIcon size={22} noPaddingAll={true} left={true} onPress={this.addParticipants} />
+                            }
                         </> :
                         <CloseIcon onPress={this.stopSearch} />
                     }
@@ -150,12 +153,16 @@ class HeaderComponent extends Component {
         const { navigate } = this.props;
         navigate('NewTask')
     }
+    addParticipants = () => {
+
+    }
 }
 
 const mapStateToProps = state => {
     return {
         user: state.userReducer.user,
         tasks: state.tasksReducer.tasks,
+        receivers: state.participantsReducer.news.receivers,
     };
 };
 const mapDispatchToProps = dispatch => ({

@@ -119,6 +119,7 @@ class Dialogs extends Component {
 		}
 	}
 	socketNeedsUpdate = e => {
+		const { user } = this.props;
 		socket.emit('get_dialogs', { id: user._id })
 	}
 	setDialogsSocket = (e) => {

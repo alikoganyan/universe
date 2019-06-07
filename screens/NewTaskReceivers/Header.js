@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native'
-import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon, CloseIcon } from '../../assets/index'
+import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon, CloseIcon, CheckGreyIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
@@ -52,7 +52,7 @@ const HeaderText = styled(Text)`
 `
 class HeaderComponent extends Component {
     render() {
-        const { back, user, toProfile } = this.props;
+        const { back, user, toProfile, receivers } = this.props;
         const { search, find } = this.state
         const { image } = user;
         return (
@@ -74,10 +74,12 @@ class HeaderComponent extends Component {
                         <>
                             <SearchIcon right onPress={this.startSearch} />
                             <TouchableOpacity onPress={toProfile}>
-                                {image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
-                            <DefaultAvatar size={'header'} style={{ marginLeft: 10 }} /> :
-                            <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
-                        }
+                                {
+                                    !receivers.length ?
+                                        <TouchableOpacity onPress={toProfile}>
+                                            <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
+                                        </TouchableOpacity> : <CheckGreyIcon size={22} noPaddingAll={true} left={true} onPress={this.addParticipants} />
+                                }
                             </TouchableOpacity>
                         </> :
                         <CloseIcon onPress={this.stopSearch} />
@@ -151,12 +153,17 @@ class HeaderComponent extends Component {
         const { navigate } = this.props;
         navigate('NewTask')
     }
+    addParticipants = () => {
+        const { back } = this.props
+        back()
+    }
 }
 
 const mapStateToProps = state => {
     return {
         user: state.userReducer.user,
         tasks: state.tasksReducer.tasks,
+        receivers: state.participantsReducer.tasks.receivers,
     };
 };
 const mapDispatchToProps = dispatch => ({

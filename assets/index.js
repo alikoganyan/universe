@@ -529,6 +529,24 @@ export function DialogsIcon(props) {
     )
 }
 
+export function CheckGreyIcon(props) {
+    const { onPress, left, right, noPaddingAll, size, marginRight } = props;
+    return (
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll} marginRight={marginRight}>
+            {/* <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Message_delivered}
+            /> */}
+            <Image
+                style={{ width: size || IconSize, height: size || IconSize }}
+                resizeMode={'contain'}
+                source={ICONS.Task_delivered}
+            />
+        </StyledTouchableOpacity>
+    )
+}
+
 export function CheckIcon(props) {
     const { onPress, left = true, right, noPaddingAll = true } = props;
     return (

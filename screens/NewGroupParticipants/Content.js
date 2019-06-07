@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native'
+import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native'
 import { BackIcon, EllipsisVIcon, ArrowDownIcon } from '../../assets/index'
 import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
@@ -101,7 +101,6 @@ const ContactImage = styled(Image)`
     width: 36px;
     height: 36px;
     border-radius: 18;
-    margin-right: 10px;
 `
 const ContactInfo = styled(View)`
     margin-left: 10px;
@@ -143,7 +142,8 @@ const GroupParticipants = styled(ContactRole)``
 const GroupImage = styled(ContactImage)``
 class Content extends Component {
     render() {
-        const { users, collapsed, options, groups, isSelected } = this.state;
+        const { participants } = this.props
+        const { users, collapsed, options, groups, isSelected, usersToAdd } = this.state;
         const { department } = users;
         const { active } = options;
         return (
@@ -162,7 +162,7 @@ class Content extends Component {
                                         <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
                                             <RoundCheckbox
                                                 size={24}
-                                                checked={this.state.isSelected}
+                                                checked={participants.length === e.workers.length}
                                                 onValueChange={() => this.addAllReceivers(e.workers)}
                                             />
                                             <BoxItem title={true}>{e.title}</BoxItem>
@@ -173,18 +173,25 @@ class Content extends Component {
                                         <Collapsible collapsed={collapsed[i] || false}>
                                             <BoxInner>
                                                 {
-                                                    e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
+                                                    e.workers.map((e, i) => <TouchableWithoutFeedback key={e._id} onPress={() => this.addReceiver(e)}>
                                                         <BoxInnerItem>
-                                                            {e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg' ?
-                                                                <DefaultAvatar size={36} id={e._id}/> :
-                                                                <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
+                                                            {
+                                                                this.includes(e) ?
+                                                                    <RoundCheckbox
+                                                                        size={36}
+                                                                        checked={true}
+                                                                        onValueChange={() => this.addReceiver(e)}
+                                                                    />
+                                                                    : e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg' ?
+                                                                        <DefaultAvatar size={36} id={e._id} /> :
+                                                                        <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
                                                             }
                                                             <ContactInfo>
                                                                 <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
                                                                 {e.role ? <ContactRole>{e.role.name || 'no role'}</ContactRole> : null}
                                                             </ContactInfo>
                                                         </BoxInnerItem>
-                                                    </TouchableOpacity>)
+                                                    </TouchableWithoutFeedback>)
                                                 }
                                             </BoxInner>
                                         </Collapsible>
@@ -199,8 +206,8 @@ class Content extends Component {
         )
     }
     state = {
+        usersToAdd: [],
         collapsed: [],
-        isSelected: false,
         users: {
             department: [
                 {
@@ -229,6 +236,7 @@ class Content extends Component {
         ]
     }
     componentDidMount() {
+        const { participants } = this.props
         const newDCollapsed = [...this.state.collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
             newDCollapsed.push(false)
@@ -263,14 +271,19 @@ class Content extends Component {
 
     }
     addReceiver = (e) => {
-        const { addReceiver, back } = this.props;
-        addReceiver(e)
-        back()
+        const { addReceiver, back, setReceivers, participants } = this.props;
+        const { usersToAdd } = this.state;
+        const newReceivers = [...participants].filter(user => user._id !== e._id)
+        this.includes(e) ? setReceivers(newReceivers) : addReceiver(e)
+    }
+    includes = (e) => {
+        const { participants } = this.props;
+        return !!participants.filter(user => e._id === user._id)[0]
     }
     addAllReceivers = (e) => {
-        const { addReceiver, back } = this.props;
-        e.map(e => addReceiver(e))
-        back()
+        const { addReceiver, back, participants, setReceivers } = this.props;
+        const newReceivers = JSON.stringify(e) === JSON.stringify(participants) ? [] : e
+        setReceivers(newReceivers)
     }
     collapseDepartment = (i) => {
         const newDCollapsed = [...this.state.collapsed]
@@ -295,7 +308,8 @@ const mapStateToProps = state => ({
     currentRoom: state.messageReducer.currentRoom,
     currentChat: state.messageReducer.currentChat,
     user: state.userReducer.user,
-    users: state.userReducer
+    users: state.userReducer,
+    participants: state.participantsReducer.dialog.participants
 })
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
@@ -306,6 +320,5 @@ const mapDispatchToProps = dispatch => ({
     setContacts: _ => dispatch(setContacts(_)),
     addReceiver: _ => dispatch(addDialogParticipant(_)),
     setReceivers: _ => dispatch(setDialogParticipants(_)),
-
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

@@ -144,6 +144,7 @@ const GroupParticipants = styled(ContactRole)``
 const GroupImage = styled(ContactImage)``
 class Content extends Component {
     render() {
+        const { receivers } = this.props
         const { users, collapsed, options, groups } = this.state;
         const { department } = users;
         const { active } = options;
@@ -172,7 +173,7 @@ class Content extends Component {
                                                 <>
                                                     <RoundCheckbox
                                                         size={24}
-                                                        checked={this.state.isSelected}
+                                                        checked={receivers.length === e.workers.length}
                                                         onValueChange={() => this.addAllReceivers(e.workers)}
                                                     />
                                                     <BoxItem title={true}>{e.title}</BoxItem>
@@ -186,9 +187,16 @@ class Content extends Component {
                                                     {
                                                         e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
                                                             <BoxInnerItem>
-                                                                {e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg' ?
-                                                                    <DefaultAvatar size={36} id={e._id} /> :
-                                                                    <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
+                                                                {
+                                                                    this.includes(e) ?
+                                                                        <RoundCheckbox
+                                                                            size={36}
+                                                                            checked={true}
+                                                                            onValueChange={() => this.addReceiver(e)}
+                                                                        />
+                                                                        : e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg' ?
+                                                                            <DefaultAvatar size={36} id={e._id} /> :
+                                                                            <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
                                                                 }
                                                                 <ContactInfo>
                                                                     <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
@@ -291,14 +299,19 @@ class Content extends Component {
 
     }
     addReceiver = (e) => {
-        const { addReceiver, back } = this.props;
-        addReceiver(e)
-        back()
+        const { addReceiver, back, setReceivers, receivers } = this.props;
+        const { usersToAdd } = this.state;
+        const newReceivers = [...receivers].filter(user => user._id !== e._id)
+        this.includes(e) ? setReceivers(newReceivers) : addReceiver(e)
     }
     addAllReceivers = (e) => {
-        const { addReceiver, back } = this.props;
-        e.map(e => addReceiver(e))
-        back()
+        const { addReceiver, back, receivers, setReceivers } = this.props;
+        const newReceivers = JSON.stringify(e) === JSON.stringify(receivers) ? [] : e
+        setReceivers(newReceivers)
+    }
+    includes = (e) => {
+        const { receivers } = this.props;
+        return !!receivers.filter(user => e._id === user._id)[0]
     }
     collapseDepartment = (i) => {
         const newDCollapsed = [...this.state.collapsed]
@@ -323,7 +336,8 @@ const mapStateToProps = state => ({
     currentRoom: state.messageReducer.currentRoom,
     currentChat: state.messageReducer.currentChat,
     user: state.userReducer.user,
-    users: state.userReducer
+    users: state.userReducer,
+    receivers: state.participantsReducer.news.receivers
 })
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
