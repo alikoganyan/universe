@@ -20,7 +20,7 @@ import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
 
 const { Colors } = helper;
-const { green, black } = Colors;
+const { green, black, purple } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
         x: Dimensions.get('window').width,
@@ -191,6 +191,7 @@ class Content extends Component {
                                                                     this.includes(e) ?
                                                                         <RoundCheckbox
                                                                             size={36}
+                                                                            backgroundColor={purple}
                                                                             checked={true}
                                                                             onValueChange={() => this.addReceiver(e)}
                                                                         />

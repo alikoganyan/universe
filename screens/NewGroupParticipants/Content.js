@@ -21,7 +21,7 @@ import { connect } from 'react-redux'
 
 
 const { Colors } = helper;
-const { green, black } = Colors;
+const { green, black, } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
         x: Dimensions.get('window').width,
@@ -162,6 +162,7 @@ class Content extends Component {
                                         <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
                                             <RoundCheckbox
                                                 size={24}
+                                                backgroundColor={green}
                                                 checked={participants.length === e.workers.length}
                                                 onValueChange={() => this.addAllReceivers(e.workers)}
                                             />
@@ -179,6 +180,7 @@ class Content extends Component {
                                                                 this.includes(e) ?
                                                                     <RoundCheckbox
                                                                         size={36}
+                                                                        backgroundColor={green}
                                                                         checked={true}
                                                                         onValueChange={() => this.addReceiver(e)}
                                                                     />
