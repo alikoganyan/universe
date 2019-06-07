@@ -66,7 +66,7 @@ class Content extends Component {
                             animated={true}
                             renderItem={({ item, index }) => {
                                 return <TouchableOpacity key={index} onLongPress={() => this.handleHold(item)}>
-                                    <Message withImage={true}>{item}</Message>
+                                    <Message withImage={true} read={!!item.viewers.length}>{item}</Message>
                                 </TouchableOpacity>
                             }}
                             keyExtractor={(item, index) => index.toString()}

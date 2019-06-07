@@ -36,10 +36,10 @@ class Content extends Component {
           {
             tasks.length ? tasks.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>) :
               <View style={{ flex: 1 }}>
-                  <Loader hint={'Пока нет задач'}>
-                    <Text style={{ color: grey2, textAlign: 'center' }}>Поставьте вашу первую задачу, нажав на иконку "плюс"
+                <Loader hint={'Пока нет задач'}>
+                  <Text style={{ color: grey2, textAlign: 'center' }}>Поставьте вашу первую задачу, нажав на иконку "плюс"
                     </Text>
-                  </Loader>
+                </Loader>
               </View>
           }
           <View style={{ height: 20, width: '100%' }} />

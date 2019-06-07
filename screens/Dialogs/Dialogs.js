@@ -71,16 +71,22 @@ class Dialogs extends Component {
 		// clearInterval(this.interval)
 		// this.interval = setInterval(() => {
 		// 	if (!socket.connected) connectToSocket()
-		AppState.addEventListener('change', this._handleAppStateChange);
 		// }, 2000)
+		socket.removeEventListener('update_dialogs', this.setDialogsSocket)
+		socket.removeEventListener('new_message', this.newMessageSocket)
+		socket.removeEventListener('new_dialogs', this.socketNewDialog)
+		socket.removeEventListener('need_update', this.socketNeedsUpdate)
+		socket.removeEventListener('dialog_opened', this.socketDialogOpened)
+		socket.removeEventListener('new_group', this.socketGetGroup)
+		AppState.addEventListener('change', this._handleAppStateChange);
 		BackHandler.addEventListener('hardwareBackPress', () => true)
 		socket.emit('get_dialogs', { id: user._id })
 		socket.on('update_dialogs', e => this.setDialogsSocket(e))
-		socket.once('new_message', e => this.newMessageSocket(e))
-		socket.once('new_dialogs', this.socketNewDialog)
-		socket.once('need_update', this.socketNeedsUpdate)
-		socket.once('dialog_opened', this.socketDialogOpened)
-		socket.once('new_group', this.socketGetGroup)
+		socket.on('new_message', e => this.newMessageSocket(e))
+		socket.on('new_dialogs', this.socketNewDialog)
+		socket.on('need_update', this.socketNeedsUpdate)
+		socket.on('dialog_opened', this.socketDialogOpened)
+		socket.on('new_group', this.socketGetGroup)
 	}
 	componentWillUnmount() {
 		// disconnectFromSocket()
@@ -98,17 +104,17 @@ class Dialogs extends Component {
 		const { dialog_id, viewer } = e;
 		const newMessages = []
 		const newDialogs = [...dialogs]
-		const newDialog = newDialogs.filter(e => e._id === dialog_id)[0]
+		const newDialog = newDialogs.filter(e => {
+			return e._id === dialog_id
+		})[0]
 		const newDialogIndex = newDialogs.findIndex(e => e._id === dialog_id)
-		newDialog.messages.map(e => {
+		newDialog.messages && newDialog.messages.map(e => {
 			newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
 		});
-		if (JSON.stringify(newDialogs[newDialogIndex]) !== JSON.stringify(newDialog)) {
-			newDialogs[newDialogIndex] = newDialog
-			newDialog.messages = newMessages
-			getMessages(newMessages)
-			setDialogs(newDialogs)
-		}
+		newDialogs[newDialogIndex] = newDialog
+		newDialog.messages = newMessages
+		getMessages(newMessages)
+		setDialogs(newDialogs)
 	}
 	socketNeedsUpdate = e => {
 		socket.emit('get_dialogs', { id: user._id })

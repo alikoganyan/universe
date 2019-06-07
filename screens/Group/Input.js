@@ -124,7 +124,8 @@ class InputComponent extends Component {
         this.unselect()
         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         if (status !== 'granted') {
-            alert('no camera location permission')
+            alert('no image permission')
+            return;
         }
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
@@ -179,7 +180,8 @@ class InputComponent extends Component {
         this.unselect()
         const { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
-            alert('no camera location permission')
+            alert('no location permission')
+            return;
         }
     }
     discardSelect = (e) => { }
@@ -204,41 +206,7 @@ class InputComponent extends Component {
     }
     pickImage = async () => {
         const { image } = this.state
-        const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        const { currentRoom, id, addMessage } = this.props;
         this.setState({ pickerOpened: true })
-        const form = new FormData();
-        form.append("photo", { uri: 'result.uri', name: 'image', type: 'image/jpeg' })
-        if (!result.cancelled) {
-            sendRequest({
-                r_path: p_send_file,
-                method: 'post',
-                attr: {
-                    file: form,
-                    room: '0_1'
-                },
-                config: {
-                    headers: {
-                        'Content-Type': 'multipart/form-data',
-                    }
-                },
-                success: (res) => {
-                    console.log({ res })
-                    socket.emit('file', { room: currentRoom })
-                    addMessage({
-                        room: currentRoom,
-                        sender: id,
-                        date: new Date(),
-                        type: 'image',
-                        src: result.uri,
-                    })
-                },
-                failFunc: (err) => {
-                    console.log({ err })
-                }
-            })
-
-        }
     };
 }
 

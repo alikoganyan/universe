@@ -149,7 +149,7 @@ class Message extends Component {
         const finalTime = Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time
         const fileSize = size / 1024 > 1024 ? `${(size / (1024 * 2)).toFixed(1)}МБ` : `${(size / 1024).toFixed(1)}КБ`
         const { imageUri } = this.state
-        const messageRead = viewers.includes(currentDialog._id) && sender._id === myId;
+        const messageRead = !!viewers.filter(e => e !== myId).length;
         if (type === 'image') {
             this.readFile(src.split('file://')[1] ? src : `http://ser.univ.team${src}`, filename)
             return (myId == sender._id ? (

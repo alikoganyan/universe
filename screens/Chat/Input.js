@@ -130,6 +130,7 @@ class InputComponent extends Component {
         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         if (status !== 'granted') {
             alert('no camera roll permission')
+            return;
         }
         let result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
@@ -183,7 +184,8 @@ class InputComponent extends Component {
         this.unselect()
         const { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
-            alert('no camera location permission')
+            alert('no location permission')
+            return;
         }
         const location = await Location.getCurrentPositionAsync({});
         this.setState({ location });

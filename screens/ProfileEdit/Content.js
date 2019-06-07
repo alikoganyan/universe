@@ -219,6 +219,7 @@ class Content extends Component {
         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         if (status !== 'granted') {
             alert('no camera roll permission')
+            return;
         }
         const result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,

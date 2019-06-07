@@ -8,6 +8,7 @@ import { p_tasks_search, g_users } from '../../constants/api'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import sendRequest from '../../utils/request'
+import { setTasks } from '../../actions/tasksActions'
 const { sidePadding, HeaderHeight, fontSize, HeaderHeightInner } = helper;
 
 const Header = styled(View)`
@@ -28,13 +29,16 @@ const Left = styled(View)`
     flex-direction: row;
     align-items: center;
     height: ${HeaderHeightInner};
+    flex: 6;
 `
 const Center = styled(View)``
 const Input = styled(TextInput)`
     margin-left: ${Dimensions.get('window').width * 0.085};
+    flex: 1;
 `
 const Right = styled(Left)`
     justify-content: flex-end;
+    flex: 1;
 `
 // const UserImage = styled(Image)`
 //     background: red;
@@ -69,7 +73,7 @@ class HeaderComponent extends Component {
                         </> :
                         <>
                             <SearchIcon />
-                            <Input placeholder="поиск" value={find} onChangeText={this.find} />
+                            <Input placeholder="поиск" value={find} onChangeText={this.find} autoFocus={true} />
                         </>
                     }
                 </Left>
@@ -85,7 +89,7 @@ class HeaderComponent extends Component {
                                 }
                             </TouchableOpacity>
                         </> :
-                        <CloseIcon onPress={this.stopSearch} />
+                        <CloseIcon onPress={this.stopSearch} marginLeft={false} />
                     }
                 </Right>
             </Header>
@@ -95,65 +99,73 @@ class HeaderComponent extends Component {
         search: false,
         find: ''
     }
+    componentWillUnmount() {
+        this.stopSearch()
+    }
     toProfile = () => {
         const { navigate } = this.props
         navigate('Profile')
     }
+
     find = (e) => {
+        const { setTasks } = this.props
         this.setState({ find: e })
-        e ? sendRequest({
+        e && e.length >= 2 ? sendRequest({
             r_path: p_tasks_search,
             method: 'post',
             attr: {
                 text: e,
                 withUser: true,
             },
-            success: ({ users }) => {
+            success: ({ tasks }) => {
                 const tasksList = []
-                users.map(user => {
-                    const { tasks } = user
-                    tasks && tasks.map((e, i) => {
-                        if (i === 0 && (e.creator === user._id || e.performers.includes(user._id))) {
-                            tasksList.push(user)
-                        }
-                    })
-                })
-                setTimeout(() => {
-                    this.setState({ FlatListData: [...tasksList] })
-                    setTasks(tasksList)
-                }, 0)
+                console.log({ users: tasks })
+                // res.users.map(user => {
+                //     // const { tasks } = user
+                //     // tasks && tasks.map((e, i) => {
+                //     //     if (i === 0 && (e.creator === user._id || e.performers.includes(user._id))) {
+                //     //         tasksList.push(user)
+                //     //     }
+                //     // })
+                // })
+                // setTimeout(() => {
+                //     // this.setState({ FlatListData: [...tasksList] })
+                //     // setTasks(tasksList)
+                //     console.log({tasksList})
+                // }, 0)
             },
             failFunc: (err) => {
                 console.log(err)
             }
-        }) : sendRequest({
-            r_path: g_users,
-            method: 'get',
-            success: ({ users }) => {
-                const tasksList = []
-                users.map(user => {
-                    const { tasks } = user
-                    tasks && tasks.map((e, i) => {
-                        if (i === 0 && (e.creator === user._id || e.performers.includes(user._id))) {
-                            tasksList.push(user)
-                        }
-                    })
-                })
-                setTimeout(() => {
-                    const { setTasks } = this.props
-                    this.setState({ FlatListData: [...tasksList] })
-                }, 0)
-            },
-            failFunc: (err) => {
-                console.log({ err })
-            }
         })
+            : sendRequest({
+                r_path: g_users,
+                method: 'get',
+                success: ({ users }) => {
+                    const tasksList = []
+                    users.map(user => {
+                        const { tasks } = user
+                        tasks && tasks.map((e, i) => {
+                            if (i === 0 && (e.creator === user._id || e.performers.includes(user._id))) {
+                                tasksList.push(user)
+                            }
+                        })
+                    })
+                    setTimeout(() => {
+                        const { setTasks } = this.props
+                        this.setState({ FlatListData: [...tasksList] })
+                    }, 0)
+                },
+                failFunc: (err) => {
+                    console.log({ err })
+                }
+            })
     }
     startSearch = () => {
         this.setState({ search: true })
     }
     stopSearch = () => {
-        this.setState({ search: false })
+        this.setState({ search: false, find: '' })
     }
     addTask = (e) => {
         const { navigate } = this.props;

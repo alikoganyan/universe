@@ -75,7 +75,7 @@ class HeaderComponent extends Component {
     }
     componentDidMount() {
         const { setDialogs } = this.props;
-        socket.once('find', ({ result }) => {
+        socket.on('find', ({ result }) => {
             setDialogs(result)
         })
     }
@@ -105,7 +105,6 @@ class HeaderComponent extends Component {
             })
         }
         else {
-            console.log('123', user._id)
             socket.emit('get_dialogs', { id: user._id })
         }
 
