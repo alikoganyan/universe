@@ -155,8 +155,6 @@ class Dialogs extends Component {
 			}
 		}) : []
 		setDialogs(newDialogsSorted)
-
-		setDialogs(newDialogs)
 	}
 	toContacts = () => {
 		const { navigation } = this.props;
