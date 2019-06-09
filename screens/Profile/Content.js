@@ -8,6 +8,7 @@ import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { socket } from '../../utils/socket'
+import { setDialogs } from '../../actions/dialogsActions'
 import DefaultAvatar from '../../common/DefaultAvatar'
 const { sidePadding, Colors, HeaderHeight, fontSize } = helper;
 const { border, grey3, pink } = Colors;
@@ -116,8 +117,6 @@ const LeaveGroup = styled(Text)`
     color: ${pink};
 `
 const BoxInnerItem = styled(View)`
-    padding: 10px;
-    padding-bottom: 10px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -132,7 +131,12 @@ const ContactInfo = styled(View)`
     margin-left: 10px;
 `
 
-const ContactName = styled(Text)``
+const ContactName = styled(Text)`
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+`
 const ContactRole = styled(Text)`
     color: #A7B0BA;
     display: flex;
@@ -144,8 +148,10 @@ class Content extends Component {
         const { UserData, userName, status } = this.state;
         const { user, currentRoom, currentChat, myProfile, currentDialog } = this.props;
 
-        const { _id, image, last_name, first_name, phone_number, isGroup, participants, name } = myProfile ? user : currentDialog;
+        const { _id, image, last_name, first_name, phone_number, isGroup, participants, name, creator } = myProfile ? user : currentDialog;
         const chatName = first_name ? `${first_name} ${last_name}` : (phone_number || name);
+        const myGroup = creator._id === user._id
+        const sortedParticipants = [...participants].sort((a, b) => b._id === creator._id)
         return (
             <Wrapper>
                 <StyledScrollView>
@@ -182,28 +188,36 @@ class Content extends Component {
                                     <ParticipantsText>Участники</ParticipantsText>
                                 </ParticipantsItem>
                                 <ParticipantsItem>
-                                    <TouchableOpacity onPress={this.LeaveGroup}>
+                                    {!myGroup && <TouchableOpacity onPress={this.leaveGroup}>
                                         <LeaveGroup>ВЫЙТИ ИЗ ГРУППЫ</LeaveGroup>
-                                    </TouchableOpacity>
+                                    </TouchableOpacity>}
                                 </ParticipantsItem>
                             </Participants>
                             <FlatList
                                 style={{ paddingRight: 5, paddingLeft: 5, }}
-                                data={participants}
+                                data={sortedParticipants}
                                 renderItem={({ item, index }) => {
                                     const { _id, first_name, last_name, post, role, image, phone_number } = item
                                     return (
-                                        <BoxInnerItem>
-                                            {image === '/images/default_avatar.jpg' ?
-                                                <DefaultAvatar size={36}/> :
-                                                <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
-                                            }
-
-                                            <ContactInfo>
-                                                <ContactName>{first_name ? `${first_name} ${last_name}` : phone_number}</ContactName>
-                                                {role && role.name && <ContactRole>{role.name}</ContactRole>}
-                                            </ContactInfo>
-                                        </BoxInnerItem>
+                                        <View style={{
+                                            display: 'flex',
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'space-between',
+                                            padding: 10,
+                                        }}>
+                                            <BoxInnerItem>
+                                                {image === '/images/default_avatar.jpg' ?
+                                                    <DefaultAvatar size={36} /> :
+                                                    <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                                }
+                                                <ContactInfo>
+                                                    <ContactName>{first_name ? `${first_name} ${last_name}` : phone_number}</ContactName>
+                                                    {role && role.name && <ContactRole>{role.name}</ContactRole>}
+                                                </ContactInfo>
+                                            </BoxInnerItem>
+                                            <Text>{index === 0 && 'admin'}</Text>
+                                        </View>
                                     )
                                 }}
                                 keyExtractor={(item, index) => index.toString()}
@@ -255,8 +269,11 @@ class Content extends Component {
         setRoom(id)
         toChat()
     }
-    LeaveGroup = () => {
-        const { currentRoom } = this.props
+    leaveGroup = () => {
+        const { currentRoom, currentDialog, setDialogs, dialog, toDialogs } = this.props
+        const newDialogs = [...dialog].filter(e => e._id !== currentDialog._id)
+        setDialogs(newDialogs)
+        toDialogs()
         console.log(`leave group ${currentRoom}`)
     }
 }

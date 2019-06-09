@@ -49,7 +49,7 @@ class Profile extends Component {
                 <SafeAreaView behavior={'padding'}>
                     <Wrapper>
                         <Header edit={this.edit} back={this.navigateBack} myProfile={myProfile} />
-                        <Content toChat={this.toChat} myProfile={myProfile} />
+                        <Content toChat={this.toChat} myProfile={myProfile} toDialogs={this.toDialogs}/>
                         <Bottom>
                             {
                                 myProfile && <Logout onPress={this.logout}><LogoutText>Выйти из аккаунта</LogoutText></Logout>
@@ -67,7 +67,10 @@ class Profile extends Component {
         const { currentChat, user } = this.props
         socket.emit('select chat', { chatId: currentChat.id, userId: user.id })
         this.props.navigation.navigate('Chat')
+    }
 
+    toDialogs = () => {
+        this.props.navigation.navigate('Dialogs')
     }
     logout = async () => {
         const { navigation } = this.props

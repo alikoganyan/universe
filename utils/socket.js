@@ -6,6 +6,10 @@ export let socket = null
 
 export const connectToSocket = () => {
     socket = io(socketServer, {
+        reconnection: true,
+        reconnectionDelay: 1000,
+        reconnectionDelayMax : 5000,
+        reconnectionAttempts: Infinity,
         path: socketPath,
         transports: ['polling', 'websocket'],
         upgrade: false,
