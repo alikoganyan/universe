@@ -6,6 +6,8 @@ import { connect } from 'react-redux'
 import { setTasks, setActiveTask } from '../actions/tasksActions'
 import sendRequest from '../utils/request'
 import { p_tasks } from '../constants/api'
+import ImageComponent from '../common/Image'
+import DefaultAvatar from '../common/DefaultAvatar'
 const { HeaderHeight, Colors, fontSize } = helper;
 const { red, yellow, green, purple, grey1 } = Colors;
 const borderRadius = 5;
@@ -15,6 +17,7 @@ const Wrapper = styled(View)`
     flex: 5;
     max-width: 300px;
     align-self: flex-start;
+    justify-content: flex-end;
 `
 const MessageDate = styled(Text)`
     color: ${({ color }) => color || '#ABABAB'};
@@ -142,7 +145,7 @@ const Indicator = ({ delievered = false, read = false, color }) => {
 }
 class TaskComponent extends Component {
     render() {
-        const { children, style, triangleLeft, triangleRight, borderColor, user, activeTask } = this.props
+        const { children, style, triangleLeft, triangleRight, borderColor, user, activeTask, withImage } = this.props
         const { name, description, status, deadline, created_at, creator, created, text, title, _id } = children
         const statuses = ['ЗАДАЧА ПОСТАВЛЕНА', 'ПРИНЯЛ В РАБОТУ', 'ВЫПОЛНЕНА', 'ПРИНЯТА',]
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec',];
@@ -170,7 +173,7 @@ class TaskComponent extends Component {
         const rightControl = activeTask._id === _id;
         const leftControl = activeTask._id === _id;
         return (
-            <OuterWrapper style={{ justifyContent: triangleRight ? 'flex-end' : 'flex-start', }}>
+            <OuterWrapper style={{ justifyContent: triangleRight ? 'flex-end' : 'flex-start', left: withImage ? -20 : 0}}>
                 {triangleRight && <ControlBar style={{ alignItems: 'flex-end' }}>
                     {rightControl ? <>
                         <Exit onPress={rightControl && this.unselect}><CloseTaskIcon /></Exit>
@@ -180,6 +183,19 @@ class TaskComponent extends Component {
                         <ExitPlaceholder />}
                 </ControlBar>}
                 <Wrapper style={{ alignSelf: triangleRight ? 'flex-end' : 'flex-start', }}>
+                    {
+                        withImage && <View style={{
+                            alignSelf: 'flex-end',
+                            top: -10,
+                            left: 15,
+                        }}>
+                            {
+                                creator.image === '/images/default_group.png' || creator.image === '/images/default_avatar.jpg' ?
+                                    <DefaultAvatar id={_id} size={'header'} /> :
+                                    <ImageComponent size={'header'} source={{ uri: `http://ser.univ.team${creator.image}` }} />
+                            }
+                        </View>
+                    }
                     {triangleLeft && <TriangleRightIcon style={{
                         position: 'relative',
                         left: 11,

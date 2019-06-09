@@ -58,7 +58,7 @@ const TaskDate = styled(View)`
 	font-size: ${fontSize.text};
 	display: flex;
 	justify-content: flex-start;
-	align-items: flex-start;
+	align-items: center;
 `
 const UnreadMessages = styled(View)`
 	display: flex;

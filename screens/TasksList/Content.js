@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 const { sidePadding, HeaderHeight, Colors } = helper;
 const { grey2 } = Colors;
 const Wrapper = styled(View)`
-  max-height: ${Dimensions.get('window').height - sidePadding}px;
+  max-height: ${Dimensions.get('window').height - HeaderHeight}px;
   display: flex;
   align-self: center;
   align-items: center;
@@ -26,13 +26,15 @@ const StyledScrollView = styled(ScrollView)`
 class Content extends Component {
   render() {
     const { FlatListData } = this.state;
-    const { tasks, navigate } = this.props;
+    const { tasks, navigate, user } = this.props;
+    const incTasks = [...tasks].filter(e => e._id !== user._id)
+    const outTasks = [...tasks].filter(e => e._id === user._id)
     return (tasks && tasks.length) ? (
       <Wrapper>
         <StyledScrollView contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps='handled'>
-          <TaskPack title={'inc'} tasks={tasks} onPress={() => navigate('TasksInc')} />
-          <TaskPack title={'out'} tasks={tasks} onPress={() => navigate('TasksOut')} last />
+          <TaskPack title={'inc'} tasks={incTasks} onPress={() => navigate('TasksInc')} />
+          <TaskPack title={'out'} tasks={outTasks} onPress={() => navigate('TasksOut')} last />
           {
             tasks.length ? tasks.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>) :
               <View style={{ flex: 1 }}>

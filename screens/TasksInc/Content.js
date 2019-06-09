@@ -1,82 +1,144 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, Dimensions, ScrollView } from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, Dimensions, FlatList, Image, TouchableOpacity } from 'react-native'
+import { CommentIcon, HeartIcon } from '../../assets/index'
+import TaskComponent from '../../common/Task'
 import styled from 'styled-components'
-import Task from './Task'
-import SafeAreaView from '../../common/SafeAreaView'
-import helper from '../../utils/helpers'
-import sendRequest from '../../utils/request'
-import { g_tasks, g_users } from '../../constants/api'
-import { setTasks } from '../../actions/tasksActions'
 import { connect } from 'react-redux'
-const { sidePadding, HeaderHeight } = helper;
+import { setActiveTask } from '../../actions/tasksActions'
+import helper from '../../utils/helpers'
+const { sidePadding, Colors, HeaderHeight } = helper;
+const { yellow, green, purple, red, black, pink } = Colors;
 const Wrapper = styled(View)`
-  max-height: ${Dimensions.get('window').height - sidePadding}px;
-  display: flex;
-  align-self: center;
-  align-items: center;
-  justify-content: center;
+    margin-bottom: 50px;   
+`
+const TaskList = styled(FlatList)`
+    padding: 10px;
+    display: flex;
+    flex-grow: 1;
+    padding-bottom: 20px;
+    z-index: 5;
+`
+const Options = styled(View)`
+    display: flex;
+    align-self: center;
+    background: ${purple};
+    flex-direction: row;
+    border-radius: 14;
+    padding: 1px;
+    overflow: hidden;
+    margin: 10px 0;
+    max-width: 85%;
+`
+const Option = styled(Text)`
+    color: ${({ active }) => active ? black : 'white'};
+    background: ${({ active }) => active ? 'white' : 'transparent'};
+    margin: 1px;
+    border-radius: 10;
+    padding: 2px 0;
+    overflow: hidden;
+    min-width: 30%;
+    text-align: center;
+`
+const TaskWrapper = styled(View)`
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    flex-direction: row;
+`
+const Shadow = styled(TouchableOpacity)`
+    background: black;
+    opacity: 0.1;
+    z-index: 0;
+    height: ${Dimensions.get('window').height};
+    width: ${Dimensions.get('window').width};
+    position: absolute;
+    top: -${HeaderHeight};
+    left: 0;
 `
 const StyledScrollView = styled(ScrollView)`
-  height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
-  width: 100%;
+    flexGrow: 1;
+    zIndex: 10;
+    width: 100%;
+    height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
 `
-
 class Content extends Component {
-  render() {
-    const { FlatListData } = this.state;
-    const { tasks } = this.props;
-    return (tasks && tasks.length) ? (
-      <Wrapper>
-        <StyledScrollView>
-          {
-            tasks.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>)
-          }
-          <View style={{ height: 20, width: '100%' }} />
-        </StyledScrollView>
-      </Wrapper>
-    ) : <View />
-  }
-  state = {
-    FlatListData: []
-  }
-  componentDidMount() {
-    const { setTasks } = this.props
-    sendRequest({
-      r_path: g_users,
-      method: 'get',
-      success: ({ users }) => {
-        const tasksList = []
-        users.map(user => {
-          const { tasks } = user
-          tasks && tasks.map((e, i) => {
-            if (i === 0 && (e.creator === user._id || e.performers.includes(user._id))) {
-              tasksList.push(user)
-            }
-          })
-        })
-        setTimeout(() => {
-          this.setState({ FlatListData: [...tasksList] })
-          setTasks(tasksList)
-        }, 0)
-      },
-      failFunc: (err) => {
-        console.log({ err })
-      }
-    })
-  }
-  toTasks = () => {
-    const { navigate } = this.props
-    navigate('Tasks')
-  }
+    render() {
+        const { taskList, options } = this.state;
+        const { active } = options;
+        const { currentTask, user, activeTask, tasks } = this.props
+        const incTasks = [...tasks].filter(e => e._id !== user._id).map(e => e.tasks).flat()
+        return (
+            <SafeAreaView>
+                {/* {activeTask._id && <Shadow onPress={this.unselect}></Shadow>} */}
+                <StyledScrollView keyboardShouldPersistTaps='handled'>
+                    <Wrapper>
+                        <Options>
+                            {
+                                options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+                                    <Option active={active === i}>{e}</Option>
+                                </TouchableOpacity>)
+                            }
+                        </Options>
+                        {incTasks && <TaskList
+                            data={incTasks}
+                            ListFooterComponent={<View style={{ margin: 40, }} />}
+                            renderItem={({ item, index }) => {
+                                const { creator } = item
+                                return <TaskWrapper>
+                                    <TouchableOpacity style={{ flex: 1 }} onLongPress={e => this.handleHold(item)}><TaskComponent
+                                        triangleLeft={true}
+                                        borderColor={purple}
+                                        withImage={true}
+                                        style={{
+                                            zIndex: activeTask._id === item._id ? 5 : 1,
+                                            // marginRight: myTask ? 10 : 70,
+                                            // marginLeft: myTask ? 70 : 10,
+                                        }}>{item}</TaskComponent></TouchableOpacity>
+                                </TaskWrapper>
+                            }}
+                            keyExtractor={(item, index) => index.toString()}
+                        />}
+                    </Wrapper>
+                </StyledScrollView>
+            </SafeAreaView>
+        )
+    }
+    state = {
+        options: {
+            active: 1,
+            options: [
+                'Все',
+                'В работе',
+                'Не в работе'
+            ]
+        },
+        taskList: []
+    }
+    unselect = () => {
+        const { setActiveTask } = this.props
+        setActiveTask({})
+    }
+    handleHold = (e) => {
+        const { setActiveTask } = this.props
+        setActiveTask(e)
+    }
+    selectOption = (e) => {
+        const options = { ...this.state.options };
+        options.active = e;
+        this.setState({ options })
+    }
+    componentWillUnmount() {
+        this.unselect()
+    }
 }
 
-const mapStateToProps = state => {
-  return {
-    user: state.userReducer.user,
+const mapStateToProps = state => ({
+    currentTask: state.tasksReducer.currentTask,
+    activeTask: state.tasksReducer.activeTask,
     tasks: state.tasksReducer.tasks,
-  };
-};
+    user: state.userReducer.user
+})
 const mapDispatchToProps = dispatch => ({
-  setTasks: _ => dispatch(setTasks(_))
+    setActiveTask: _ => dispatch(setActiveTask(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

@@ -1,158 +1,122 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native'
-import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon, CloseIcon } from '../../assets/index'
+import { View, Text, TextInput, Image, Platform, Dimensions, TouchableOpacity } from 'react-native'
+import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/index'
+import { connect } from 'react-redux'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-import { connect } from 'react-redux'
-import { p_tasks_search, g_users } from '../../constants/api'
+import sendRequest from '../../utils/request'
+import { p_search_messages } from '../../constants/api'
+import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
+import Icon from 'react-native-vector-icons/FontAwesome';
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
-import sendRequest from '../../utils/request'
-const { sidePadding, HeaderHeight, fontSize } = helper;
-
+const { sidePadding, HeaderHeight, Colors, fontSize } = helper;
+const { border } = Colors;
 const Header = styled(View)`
-    width: 100%;
+    width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
+    align-self: center;
     background: white;
-    height: ${HeaderHeight}; 
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    padding-right: ${sidePadding}px;
-    padding-left: ${sidePadding}px;
+    height: ${HeaderHeight}px;
+`
+const HeaderUserImage = styled(Image)`
+    border-radius: 15;
+    height: 30px;
+    width: 30px;
+    margin-right: 10px;
+`
+const Info = styled(View)`
+    display: flex;
+    margin-left: 10px;
+`
+const InfoChatName = styled(Text)`
+    color: black;
+    font-size: ${fontSize.text};
+`
+const InfoParticipants = styled(Text)`
+    color: #5F7991;
+    font-size: ${fontSize.sm};
 `
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
 `
-const Center = styled(View)``
-const Input = styled(TextInput)`
-    margin-left: ${Dimensions.get('window').width * 0.085};
-`
-const Right = styled(Left)`
+const Right = styled(View)`
+    display: flex;
+    flex-direction: row;
+    align-items: flex-end;
     justify-content: flex-end;
+    margin-left: ${sidePadding}px;
 `
-// const UserImage = styled(Image)`
-//     background: red;
-//     width: 30px;
-//     height: 30px;
-//     border-radius: 15px;
-//     margin-left:${sidePadding}px;
-// `
-const MarginRight = styled(View)`
-    margin-right: ${Dimensions.get('window').width * 0.085};
+const Categories = styled(Header)`
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: flex-end;
+    width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
+`
+const Top = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
+    justify-content: space-between;
+    height: ${HeaderHeight}; 
+    width: 100%;
+
 `
-const HeaderText = styled(Text)`
-    font-size: ${fontSize.header};
-    position: relative;
-    left: -10px;
+const Bottom = styled(Top)`
+    border: 1px solid ${border};
+    border-width: 0;
+    border-top-width: 1px;
+    margin: 0 ${sidePadding}px;
+    min-height: 0; 
+    width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
+`
+const Category = styled(Text)`
+    display: flex;
+    flex:1;
+    justify-content: center;
+    font-size: 11px;
+    text-align: center;
+    padding: 10px 0;
+`
+const Input = styled(TextInput)`
+`
+const IconLeft = styled(Icon)`
+    margin-left: ${sidePadding}px;
+`
+const ToProfile = styled(TouchableOpacity)`
+    display: flex;
+    flex-direction: row;
+    margin-right: 20px;
+`
+const SearchIconContainer = styled(View)`
+    margin-right: 20px;
 `
 class HeaderComponent extends Component {
     render() {
-        const { back, user, toProfile } = this.props;
-        const { search, find } = this.state
-        const { image } = user;
+        const { back, currentTask, toProfile } = this.props
+        const { first_name, last_name, phone_number, tasks, image } = currentTask
         return (
             <Header>
                 <Left>
-                    {!search ?
-                        <>
-                            <BackIcon onPress={back} right marginLeft={true} />
-                            <HeaderText>Все входящие задачи</HeaderText>
-                        </> :
-                        <>
-                            <SearchIcon marginLeft={true} />
-                            <Input placeholder="поиск" value={find} onChangeText={this.find} />
-                        </>
-                    }
+                    <BackIcon onPress={back} />
+                    <InfoChatName>Все исходящие задачи</InfoChatName>
                 </Left>
                 <Right>
-                    {!search ?
-                        <SearchIcon onPress={this.startSearch} marginRight={true} /> :
-                        <CloseIcon onPress={this.stopSearch} marginLeft={false} />
-                    }
+                    <SearchIcon onPress={startSearch} />
                 </Right>
             </Header>
         )
     }
-    state = {
-        search: false,
-        find: ''
-    }
-    find = (e) => {
-        this.setState({ find: e })
-        e ? sendRequest({
-            r_path: p_tasks_search,
-            method: 'post',
-            attr: {
-                text: e,
-                withUser: true,
-            },
-            success: ({ users }) => {
-                const tasksList = []
-                users.map(user => {
-                    const { tasks } = user
-                    tasks && tasks.map((e, i) => {
-                        if (i === 0 && (e.creator === user._id || e.performers.includes(user._id))) {
-                            tasksList.push(user)
-                        }
-                    })
-                })
-                setTimeout(() => {
-                    this.setState({ FlatListData: [...tasksList] })
-                    setTasks(tasksList)
-                }, 0)
-            },
-            failFunc: (err) => {
-                console.log(err)
-            }
-        }) : sendRequest({
-            r_path: g_users,
-            method: 'get',
-            success: ({ users }) => {
-                const tasksList = []
-                users.map(user => {
-                    const { tasks } = user
-                    tasks && tasks.map((e, i) => {
-                        if (i === 0 && (e.creator === user._id || e.performers.includes(user._id))) {
-                            tasksList.push(user)
-                        }
-                    })
-                })
-                setTimeout(() => {
-                    const { setTasks } = this.props
-                    this.setState({ FlatListData: [...tasksList] })
-                }, 0)
-            },
-            failFunc: (err) => {
-                console.log({ err })
-            }
-        })
-    }
-    startSearch = () => {
-        this.setState({ search: true })
-    }
-    stopSearch = () => {
-        this.setState({ search: false })
-    }
-    addTask = (e) => {
-        const { navigate } = this.props;
-        navigate('NewTask')
-    }
 }
-
-const mapStateToProps = state => {
-    return {
-        user: state.userReducer.user,
-        tasks: state.tasksReducer.tasks,
-    };
-};
+const mapStateToProps = state => ({
+    currentTask: state.tasksReducer.currentTask,
+})
 const mapDispatchToProps = dispatch => ({
-    setTasks: _ => dispatch(setTasks(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
-

@@ -1,30 +1,27 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, Dimensions, ScrollView } from 'react-native'
+import { View, Text, Image } from 'react-native'
+import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
+import SafeAreaView from '../../common/SafeAreaView'
+
 import Header from './Header'
 import Content from './Content'
-import SafeAreaView from '../../common/SafeAreaView'
-import helper from '../../utils/helpers'
-const { sidePaddingNumber } = helper;
 const Wrapper = styled(View)`
-  max-height: ${Dimensions.get('window').height - sidePaddingNumber}px;
+    height: 100%;
 `
 
-export default class TasksInc extends Component {
-	render() {
-		return (
-			<SafeAreaView behavior={'padding'}>
-				<Wrapper>
-					<Header navigate={this.navigate} back={this.navigateBack} />
-					<Content navigate={this.navigate} />
-				</Wrapper>
-			</SafeAreaView>
-		)
-	}
-	navigateBack = () => {
-		this.props.navigation.goBack()
-	}
-	navigate = (e) => {
-		this.props.navigation.navigate(e)
-	}
+export default class News extends Component {
+    render() {
+        return (
+            <SafeAreaView>
+                <Wrapper>
+                    <Header back={this.navigateBack} />
+                    <Content />
+                </Wrapper>
+            </SafeAreaView>
+        )
+    }
+    navigateBack = () => {
+        this.props.navigation.goBack()
+    }
 }

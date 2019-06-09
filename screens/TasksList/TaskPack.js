@@ -110,42 +110,51 @@ class TaskPack extends Component {
     const user = { _id: 1 }
     const packItems = []
     let stat = ''
+    title === 'inc' && console.log({ tasks: tasks.length })
     let day = ''
     const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     let packItems0Tasks0 = null;
-    if (tasks.length) {
+    const itemCount = [...tasks].map(e => e.tasks).flat()
+
+    if (itemCount.length) {
       tasks.map(taskUser => {
         if (taskUser.tasks.length) {
           taskUser.tasks.map(task => {
-            if (task.creator === user._id && title === 'out') {
+            if (task.creator._id === user._id && title === 'inc') {
               const packItemUser = { ...taskUser }
-              packItemUser.tasks = packItemUser.tasks.filter(e => e.creator === user._id)
+              packItemUser.tasks = packItemUser.tasks.filter(e => e.creator._id === user._id)
               packItems.push(packItemUser)
             }
-            if (task.creator !== user._id && title === 'inc') {
+            if (task.creator._id !== user._id && title === 'out') {
               const packItemUser = { ...taskUser }
-              packItemUser.tasks = packItemUser.tasks.filter(e => e.creator !== user._id)
+              packItemUser.tasks = packItemUser.tasks.filter(e => e.creator._id !== user._id)
               packItems.push(packItemUser)
             }
           })
         }
       })
       packItems0Tasks = packItems && packItems[0] && packItems[0].tasks && packItems[0].tasks ? packItems[0].tasks : null;
-      if (packItems0Tasks) {
-        day = packItems0Tasks[0] && packItems0Tasks[0].created_at ? new Date(packItems[0].tasks[0].created_at).getDay() : '';
-        if (packItems0Tasks[0] && packItems0Tasks[0].status) {
-          switch (packItems0Tasks[0].status) {
-            case 'set':
-              stat = 'В работе';
-              break;
-            case 'done':
-              stat = 'Выполнена';
-              break;
-          }
-        }
-      }
     }
-    // title === 'inc' ? setIncTasks(packItems) : setOutTasks(packItems)
+    switch (itemCount[itemCount.length - 1].status) {
+      case 'set':
+        this.stat = 'В работе';
+        break;
+      case 'accepted':
+        this.stat = 'В работе';
+        break;
+      case 'done':
+        this.stat = 'В работе';
+        break;
+      case 'completed':
+        this.stat = 'В работе';
+        break;
+      case 'cancelled':
+        this.stat = 'В работе';
+        break;
+    }
+    // title === 'inc' ? setInc Tasks(packItems) : setOutTasks(packItems)
+    day = new Date(itemCount[itemCount.length - 1].created_at).getDay()
+    console.log('test', day)
     const packItemsDescription = packItems0Tasks && packItems0Tasks[0] ? packItems0Tasks[0].description : '';
     const packItemsLength = packItems0Tasks && packItems0Tasks.length ? packItems0Tasks.length - 1 : 0;
     return (
@@ -158,16 +167,16 @@ class TaskPack extends Component {
               <TaskStatus>
                 <TaskStatusTextContainer>
                   <TasksIcon noPaddingAll />
-                  <TaskStatusText>{stat}</TaskStatusText>
+                  <TaskStatusText>{this.stat}</TaskStatusText>
                 </TaskStatusTextContainer>
-                <TaskStatusAdditional>{packItemsLength ? `+${packItemsLength + 1}` : packItemsLength} задач</TaskStatusAdditional>
+                <TaskStatusAdditional>{itemCount.length ? `+${itemCount.length - 1}` : itemCount.length} задач</TaskStatusAdditional>
               </TaskStatus>
             </TaskTextInner>
             <TaskDate>
               <LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
-              <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-                <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{packItems && packItems.length}</NewMessages>
-              </UnreadMessages>
+              {itemCount.length && <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
+                <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{itemCount.length}</NewMessages>
+              </UnreadMessages>}
             </TaskDate>
           </TaskText>
 
@@ -203,7 +212,6 @@ class TaskPack extends Component {
   }
 }
 const mapStateToProps = state => ({
-  tasks: state.tasksReducer.tasks,
   user: state.userReducer.user
 });
 const mapDispatchToProps = dispatch => ({

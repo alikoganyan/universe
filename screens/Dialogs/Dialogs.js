@@ -67,7 +67,7 @@ class Dialogs extends Component {
 	}
 	componentDidMount() {
 		const { user, addMessage, setDialogs, navigation } = this.props;
-		// navigation.navigate('News') // restore
+		navigation.navigate('TasksList') // restore
 		// clearInterval(this.interval)
 		// this.interval = setInterval(() => {
 		// 	if (!socket.connected) connectToSocket()
