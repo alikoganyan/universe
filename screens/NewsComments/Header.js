@@ -75,12 +75,13 @@ class HeaderComponent extends Component {
                 <Right>
                     {!search ?
                         <>
+                            <EditIcon right onPress={this.editFeed}/>
                             <SearchIcon right onPress={this.startSearch} />
                             <TouchableOpacity onPress={this.toProfile}>
                                 {image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
-                            <DefaultAvatar size={'header'} style={{ marginLeft: 10 }} /> :
-                            <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
-                        }
+                                    <DefaultAvatar size={'header'} style={{ marginLeft: 10 }} /> :
+                                    <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
+                                }
                             </TouchableOpacity>
                         </> :
                         <CloseIcon onPress={this.stopSearch} />
@@ -132,6 +133,10 @@ class HeaderComponent extends Component {
     addTask = (e) => {
         const { navigate } = this.props;
         navigate('NewFeed')
+    }
+    editFeed = (e) => {
+        const { navigate } = this.props;
+        navigate('FeedEdit')
     }
 }
 

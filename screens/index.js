@@ -28,6 +28,7 @@ import TasksList from './TasksList/TasksList'
 import NewContact from './NewContact/NewContact'
 import FirstInstall from './FirstInstall/FirstInstall'
 import NewFeed from './NewFeed/NewFeed'
+import FeedEdit from './FeedEdit/FeedEdit'
 import SplashScreen from './SplashScreen/SplashScreen'
 import NewFeedReceivers from './NewFeedReceivers/NewFeedReceivers'
 import FeedReceivers from './FeedReceivers/FeedReceivers'
@@ -67,6 +68,7 @@ export {
     NewContact,
     FirstInstall,
     NewFeed,
+    FeedEdit,
     SplashScreen,
     NewFeedReceivers,
     ProfileEdit,

@@ -5,7 +5,7 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { p_tasks_search, g_users } from '../../constants/api'
 import ImageComponent from '../../common/Image'
-import { BackIcon } from '../../assets/'
+import { BackIcon, CheckGreyIcon } from '../../assets/'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import sendRequest from '../../utils/request'
 const { sidePadding, HeaderHeight, fontSize, Colors } = helper;

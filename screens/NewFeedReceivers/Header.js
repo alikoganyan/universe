@@ -154,7 +154,8 @@ class HeaderComponent extends Component {
         navigate('NewTask')
     }
     addParticipants = () => {
-
+        const { back } = this.props
+        back()
     }
 }
 
