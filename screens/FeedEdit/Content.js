@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, Dimensions, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
@@ -14,7 +14,7 @@ import { p_news } from '../../constants/api'
 import { GroupIcon, CloseIcon } from '../../assets/'
 import { setFeedReceivers } from '../../actions/participantsActions'
 const { Colors, HeaderHeight, sidePadding } = helper;
-const { lightGrey1, black, yellow } = Colors;
+const { lightGrey1, black, yellow, red } = Colors;
 const Wrapper = styled(View)`
     padding: 0 ${sidePadding * 2}px;
     justify-content: center;
@@ -35,7 +35,7 @@ const ButtonBox = styled(View)`
     width: 170px;
     align-self: center;
 `
-const Recievers = styled(View)`lkljkljk
+const Recievers = styled(View)`
 `
 const Reciever = styled(View)`
     display: flex;
@@ -58,9 +58,13 @@ const DialogsLabel = styled(View)`
     flex-direction:row;
     justify-content: flex-start;
     margin-top: 20px;
+    margin-bottom: 10px;
 `
 const AddReciever = styled(Text)`
     color: ${yellow};
+`
+const DeleteFeed = styled(AddReciever)`
+    color: ${red};
 `
 const RecieverComponent = (props) => {
     const { children, last = false, onDelete } = props;
@@ -96,20 +100,23 @@ class Content extends Component {
                         multiline={true}
                         style={{ margin: 0, textAlign: 'left', paddingLeft: 10, maxHeight: 130 }} />
                     <Recievers>
-                        <DialogsLabel>
-                            <GroupIcon right />
-                            <Text>Получатели</Text>
-                        </DialogsLabel>
                         <DialogsLabel style={{ justifyContent: 'space-between' }}>
-                            <TouchableOpacity onPress={this.addParticipant}>
-                                <AddReciever>Добавить</AddReciever>
+                            <TouchableOpacity onPress={this.deleteFeed} style={{ justifyContent: 'flex-start' }}>
+                                <DeleteFeed>Удалить</DeleteFeed>
                             </TouchableOpacity>
                             <Button
                                 onPress={this.proceed}
                                 style={{ background: yellow }}
-                                color={black}>Сохранить изменения</Button>
+                                color={black}>Сохранить</Button>
                         </DialogsLabel>
                     </Recievers>
+                    <DialogsLabel>
+                        <GroupIcon right noPaddingAll />
+                        <Text>Получатели</Text>
+                    </DialogsLabel>
+                    <TouchableOpacity onPress={this.addParticipant} style={{ justifyContent: 'flex-start' }}>
+                        <AddReciever>Добавить получателей</AddReciever>
+                    </TouchableOpacity>
                     <ScrollView>
                         {receivers.map((e, i) => (
                             <RecieverComponent key={i} onDelete={() => this.deleteReceiver(e)} last={i === receivers.length}>{e}</RecieverComponent>
@@ -131,6 +138,31 @@ class Content extends Component {
     }
     componentWillUpdate() {
 
+    }
+    deleteFeed = e => {
+        Alert.alert(
+            'Удалить новость?',
+            null,
+            [
+                {
+                    text: 'Отменить',
+                    onPress: () => console.log('dismiss'),
+                    style: 'cancel'
+                },
+                {
+                    text: 'Удалить',
+                    onPress: this.confirmDelete,
+                },
+            ]
+
+        )
+    }
+    confirmDelete = () => {
+        const { id, receivers, forward, setNews, setFeed, user, feed, news } = this.props;
+        const { text } = this.state;
+        const newNews = [...news].filter(e => e._id !== feed._id)
+        setNews(newNews)
+        forward()
     }
     deleteReceiver = e => {
         const { _id } = e

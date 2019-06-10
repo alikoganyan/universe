@@ -22,7 +22,7 @@ export default helper = {
         yellow2: '#fff1dd',
         orange: '#fdb557',
         pink: '#f96281',
-        red: '#70d0af',
+        red: '#f96281',
         blue: '#4a83fa',
         blueDisabled: '#80a6f8',
         lightBlue: '#dbe5fd',

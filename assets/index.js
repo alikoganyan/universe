@@ -441,9 +441,9 @@ export function CloseIcon(props) {
     )
 }
 export function GroupIcon(props) {
-    const { onPress, left, right, size } = props;
+    const { onPress, left, right, size, noPaddingAll } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}
