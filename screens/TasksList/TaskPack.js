@@ -134,27 +134,28 @@ class TaskPack extends Component {
           })
         }
       })
+      switch (itemCount[itemCount.length - 1].status) {
+        case 'set':
+          this.stat = 'В работе';
+          break;
+        case 'accepted':
+          this.stat = 'В работе';
+          break;
+        case 'done':
+          this.stat = 'В работе';
+          break;
+        case 'completed':
+          this.stat = 'В работе';
+          break;
+        case 'cancelled':
+          this.stat = 'В работе';
+          break;
+      }
+      day = new Date(itemCount[itemCount.length - 1].created_at).getDay()
+
       packItems0Tasks = packItems && packItems[0] && packItems[0].tasks && packItems[0].tasks ? packItems[0].tasks : null;
     }
-    switch (itemCount[itemCount.length - 1].status) {
-      case 'set':
-        this.stat = 'В работе';
-        break;
-      case 'accepted':
-        this.stat = 'В работе';
-        break;
-      case 'done':
-        this.stat = 'В работе';
-        break;
-      case 'completed':
-        this.stat = 'В работе';
-        break;
-      case 'cancelled':
-        this.stat = 'В работе';
-        break;
-    }
     // title === 'inc' ? setInc Tasks(packItems) : setOutTasks(packItems)
-    day = new Date(itemCount[itemCount.length - 1].created_at).getDay()
     console.log('test', day)
     const packItemsDescription = packItems0Tasks && packItems0Tasks[0] ? packItems0Tasks[0].description : '';
     const packItemsLength = packItems0Tasks && packItems0Tasks.length ? packItems0Tasks.length - 1 : 0;
@@ -164,7 +165,7 @@ class TaskPack extends Component {
           <TaskText>
             <TaskTextInner>
               <TaskTitle>{title === 'inc' ? 'Все входящие задачи' : 'Все исходящие задачи'}</TaskTitle>
-              <TaskLastMessage numberOfLines={1}>{packItemsDescription}</TaskLastMessage>
+              {itemCount.length ? <TaskLastMessage numberOfLines={1}>{itemCount[itemCount.length - 1].description}</TaskLastMessage> : null}
               <TaskStatus>
                 <TaskStatusTextContainer>
                   <TasksIcon noPaddingAll />
@@ -175,9 +176,9 @@ class TaskPack extends Component {
             </TaskTextInner>
             <TaskDate>
               <LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
-              {itemCount.length && <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
+              {itemCount.length ? <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
                 <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{itemCount.length}</NewMessages>
-              </UnreadMessages>}
+              </UnreadMessages> : null}
             </TaskDate>
           </TaskText>
 
