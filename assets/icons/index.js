@@ -39,6 +39,7 @@ const SearchShadow = require('./SearchShadow.png');
 const Redo = require('./Redo.png');
 const Done = require('./Done.png');
 const Start = require('./Start.png');
+const Arrow_right_yellow = require('./Arrow_right_yellow.png');
 
 export default {
     Add,
@@ -82,4 +83,5 @@ export default {
     Done,
     User,
     Start,
+    Arrow_right_yellow,
 }

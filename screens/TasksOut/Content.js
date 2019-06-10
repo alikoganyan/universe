@@ -12,7 +12,7 @@ const Wrapper = styled(View)`
     margin-bottom: 50px;   
 `
 const TaskList = styled(FlatList)`
-    padding: 10px;
+    padding: 10px 0;
     display: flex;
     flex-grow: 1;
     padding-bottom: 20px;
@@ -66,8 +66,9 @@ class Content extends Component {
     const { taskList, options } = this.state;
     const { active } = options;
     const { currentTask, user, activeTask, tasks } = this.props
-    const outTasks = [...tasks].filter(e => e._id === user._id).map(e => e.tasks).flat()
-    console.log({ outTasks })
+    const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
+    const tasksList = [...tasks].filter(e => e._id === user._id).map(e => e.tasks)
+    const outTasks = flatten(tasksList)
     return (
       <SafeAreaView>
         {/* {activeTask._id && <Shadow onPress={this.unselect}></Shadow>} */}

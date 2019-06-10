@@ -114,7 +114,8 @@ class TaskPack extends Component {
     let day = ''
     const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     let packItems0Tasks0 = null;
-    const itemCount = [...tasks].map(e => e.tasks).flat()
+    const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
+    const itemCount = flatten([...tasks].map(e => e.tasks))
 
     if (itemCount.length) {
       tasks.map(taskUser => {

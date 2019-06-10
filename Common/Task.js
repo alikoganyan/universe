@@ -173,7 +173,7 @@ class TaskComponent extends Component {
         const rightControl = activeTask._id === _id;
         const leftControl = activeTask._id === _id;
         return (
-            <OuterWrapper style={{ justifyContent: triangleRight ? 'flex-end' : 'flex-start', left: withImage ? -20 : 0}}>
+            <OuterWrapper style={{ justifyContent: triangleRight ? 'flex-end' : 'flex-start', left: withImage ? -10 : 0}}>
                 {triangleRight && <ControlBar style={{ alignItems: 'flex-end' }}>
                     {rightControl ? <>
                         <Exit onPress={rightControl && this.unselect}><CloseTaskIcon /></Exit>

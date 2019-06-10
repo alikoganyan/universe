@@ -9,12 +9,12 @@ import {
 	ScrollView,
 	Dimensions,
 } from 'react-native';
-import { CommentIcon, HeartIcon, HeartIconFilled, TriangleLeftIcon, TriangleRightIcon, CheckIcon, } from '../../assets/index';
+import { CommentIcon, HeartIcon, HeartIconFilled, TriangleLeftIcon, TriangleRightIcon, CheckIcon, ArrowRightIcon } from '../../assets/index';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components';
 import helper from '../../utils/helpers';
 import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'	;
+import DefaultAvatar from '../../common/DefaultAvatar';
 import { connect } from 'react-redux';
 import { setFeed } from '../../actions/newsActions'
 import { socket } from '../../utils/socket'
@@ -167,8 +167,18 @@ const LikeText = styled(Text)`
     color: ${({ color }) => color || grey2};
 	margin-left: 5px;
 `;
-
-
+const SeeReceivers = styled(TouchableOpacity)`
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	flex-direction: row;
+	padding-right: ${sidePadding}px;
+	padding: 10px;
+	padding-bottom: 0;
+`
+const SeeReceiversText = styled(Text)`
+	color: ${yellow};
+`
 class Content extends Component {
 	render() {
 		const { feed } = this.props;
@@ -210,6 +220,10 @@ class Content extends Component {
 						</Reactions>
 					</NewsItemInfo>
 				</NewsItem>
+				<SeeReceivers onPress={this.seeParticipants}>
+					<SeeReceiversText>{reversedCommnets.length} пользователи</SeeReceiversText>
+					<ArrowRightIcon left={true} noPaddingAll={true} />
+				</SeeReceivers>
 				<FlatList
 					style={{ paddingRight: 5, paddingLeft: 5 }}
 					ListHeaderComponent={<View style={{ margin: 110 }} />}
@@ -234,6 +248,12 @@ class Content extends Component {
 	getUnreadMessageHeight = e => {
 		this.setState({ height: e.nativeEvent.layout.height });
 	};
+	seeParticipants = (e) => {
+		const { navigate, feed } = this.props
+		navigate('FeedReceivers')
+		console.log('navigate')
+		console.log({ receivers: feed.receivers })
+	}
 	hitLike = (e) => {
 		const { feed, user, setFeed } = this.props
 		const { _id, comments } = feed

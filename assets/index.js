@@ -115,6 +115,23 @@ export function BackIcon(props) {
         </StyledTouchableOpacity>
     )
 }
+export function ArrowRightIcon(props) {
+    const { onPress, left, right, noPadding, noPaddingAll, marginLeft } = props;
+    return (
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPadding={noPadding} noPaddingAll={noPaddingAll} marginLeft={marginLeft}>
+            {/* <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Arrow_back}
+            /> */}
+            <Image
+                style={{ width: IconSize, height: IconSize }}
+                resizeMode={'contain'}
+                source={ICONS.Arrow_right_yellow}
+            />
+        </StyledTouchableOpacity>
+    )
+}
 
 export function ForwardIcon(props) {
     return (

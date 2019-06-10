@@ -150,8 +150,8 @@ class Content extends Component {
 
         const { _id, image, last_name, first_name, phone_number, isGroup, participants, name, creator } = myProfile ? user : currentDialog;
         const chatName = first_name ? `${first_name} ${last_name}` : (phone_number || name);
-        const myGroup = creator._id === user._id
-        const sortedParticipants = [...participants].sort((a, b) => b._id === creator._id)
+        const myGroup = creator && creator._id === user._id
+        const sortedParticipants = creator && [...participants].sort((a, b) => b._id === creator._id)
         return (
             <Wrapper>
                 <StyledScrollView>
@@ -228,7 +228,7 @@ class Content extends Component {
                                 return item && !item.isGroup && (!myProfile || !item.icon) && <Info key={index}>
                                     <Data>
                                         <Type>{item.type}</Type>
-                                        <Value>{item.value}</Value>
+                                        <Value>{item.value && (item.value.name ? item.value.name : item.value)}</Value>
                                         {item.icon && item.icon}
                                     </Data>
                                 </Info>

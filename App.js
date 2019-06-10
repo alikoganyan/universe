@@ -41,6 +41,7 @@ import {
   NewTaskReceivers,
   NewGroupParticipants,
   NewGroup,
+  FeedReceivers,
 
 } from './screens'
 import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
@@ -116,6 +117,7 @@ const AppStackNavigator = createStackNavigator(
     NewTaskReceivers: { screen: NewTaskReceivers },
     NewGroupParticipants: { screen: NewGroupParticipants },
     NewGroup: { screen: NewGroup },
+    FeedReceivers: { screen: FeedReceivers },
   },
   {
     initialRouteName: 'Login',

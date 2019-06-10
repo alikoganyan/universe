@@ -30,6 +30,7 @@ import FirstInstall from './FirstInstall/FirstInstall'
 import NewFeed from './NewFeed/NewFeed'
 import SplashScreen from './SplashScreen/SplashScreen'
 import NewFeedReceivers from './NewFeedReceivers/NewFeedReceivers'
+import FeedReceivers from './FeedReceivers/FeedReceivers'
 import ProfileEdit from './ProfileEdit/ProfileEdit'
 import NewTask from './NewTask/NewTask'
 import NewTaskReceivers from './NewTaskReceivers/NewTaskReceivers'
@@ -73,4 +74,5 @@ export {
     NewTaskReceivers,
     NewGroupParticipants,
     NewGroup,
+    FeedReceivers,
 }
