@@ -182,7 +182,7 @@ const SeeReceiversText = styled(Text)`
 class Content extends Component {
 	render() {
 		const { feed } = this.props;
-		const { comments, likes, creator } = feed;
+		const { comments, likes, creator, receivers } = feed;
 		const { first_name, last_name, image, _id } = creator
 		const reversedCommnets = [...comments].reverse();
 		const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
@@ -221,7 +221,7 @@ class Content extends Component {
 					</NewsItemInfo>
 				</NewsItem>
 				<SeeReceivers onPress={this.seeParticipants}>
-					<SeeReceiversText>{reversedCommnets.length} пользователи</SeeReceiversText>
+					<SeeReceiversText>{receivers.length} получатели</SeeReceiversText>
 					<ArrowRightIcon left={true} noPaddingAll={true} />
 				</SeeReceivers>
 				<FlatList
