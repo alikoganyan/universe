@@ -231,7 +231,7 @@ class Content extends Component {
                 </User>
                 <Bottom>
                     <Button
-                        style={{ backgroundColor: blue, flex: 1 }}
+                        style={{ backgroundColor: blue }}
                         color={"#fff"}
                         onPress={this.apply}
                     >
