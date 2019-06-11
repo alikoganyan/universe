@@ -40,7 +40,7 @@ export default class HeaderComponent extends Component {
                     <MarginRight>
                         <BackIcon onPress={this.props.back} />
                     </MarginRight>
-                    <Text>Изменить профиль</Text>
+                    <Text>Редактирование профиль</Text>
                 </Left>
             </Header>
         )

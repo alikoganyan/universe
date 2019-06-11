@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import Header from './Header'
 import Dialog from './Dialog'
 import Loader from '../../common/Loader'
+import Congratulations from '../../common/Congratulations'
 import SafeAreaView from '../../common/SafeAreaView'
 import { connect } from 'react-redux';
 import { getMessages, setRoom, addMessage, setCurrentChat, setCurrentRoomId } from '../../actions/messageActions'
@@ -13,7 +14,7 @@ import helper from '../../utils/helpers'
 import { socket, connectToSocket, disconnectFromSocket } from '../../utils/socket'
 
 const { sidePadding, HeaderHeight, Colors } = helper;
-const { blue, grey2 } = Colors;
+const { blue, grey2, lightColor } = Colors;
 const Wrapper = styled(View)`
   height: 100%;
 `
@@ -25,11 +26,17 @@ class Dialogs extends Component {
 
 	render() {
 		const { dialogs, user } = this.props
-		const { FlatListData } = this.state;
+		const { FlatListData, congratulations } = this.state;
 		return (
 			<SafeAreaView behavior={'padding'}>
 				<Wrapper>
 					<Header toProfile={this.toProfile} toggleDrawer={this.props.navigation.openDrawer} />
+					{congratulations ? <Congratulations title={'Поздравляем с регистрацией.'} onClickOutside={this.closeCongratulations}>
+						<Text style={{ color: lightColor, textAlign: 'center' }}>Не забудьте заполнить</Text>
+						<TouchableOpacity onPress={this.toProfileEdit}>
+							<Text style={{ color: blue, textAlign: 'center' }}>свой профиль и поменять пароль.</Text>
+						</TouchableOpacity>
+					</Congratulations> : null}
 					{dialogs.length ? <StyledFlatList
 						ListHeaderComponent={<View style={{ margin: 30, }} />}
 						ref={(ref) => { this.flatList = ref; }}
@@ -63,10 +70,11 @@ class Dialogs extends Component {
 		)
 	}
 	state = {
-		FlatListData: []
+		FlatListData: [],
+		congratulations: false,
 	}
 	componentDidMount() {
-		const { user, addMessage, setDialogs, navigation } = this.props;
+		const { user, addMessage, setDialogs, navigation, dialogs } = this.props;
 		// navigation.navigate('News') // restore
 		// clearInterval(this.interval)
 		// this.interval = setInterval(() => {
@@ -87,6 +95,9 @@ class Dialogs extends Component {
 		socket.on('need_update', this.socketNeedsUpdate)
 		socket.on('dialog_opened', this.socketDialogOpened)
 		socket.on('new_group', this.socketGetGroup)
+
+		console.log(user.first_name)
+		this.setState({ congratulations: !user.first_name })
 	}
 	componentWillUnmount() {
 		// disconnectFromSocket()
@@ -100,7 +111,7 @@ class Dialogs extends Component {
 	}
 	socketNewDialog = e => { }
 	socketDialogOpened = e => {
-		const { dialogs, setDialogs, getMessages } = this.props;
+		const { dialogs, setDialogs, getMessages, currentDialog } = this.props;
 		const { dialog_id, viewer } = e;
 		const newMessages = []
 		const newDialogs = [...dialogs]
@@ -109,7 +120,7 @@ class Dialogs extends Component {
 		})[0]
 		if (newDialog) {
 			const newDialogIndex = newDialogs.findIndex(e => e._id === dialog_id)
-			newDialog.messages && newDialog.messages.map(e => {
+			currentDialog.messages && currentDialog.messages.map(e => {
 				newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
 			});
 			newDialogs[newDialogIndex] = newDialog
@@ -156,6 +167,14 @@ class Dialogs extends Component {
 			}
 		}) : []
 		setDialogs(newDialogsSorted)
+	}
+	closeCongratulations = () => {
+		this.setState({ congratulations: false })
+	}
+	toProfileEdit = () => {
+		const { navigation } = this.props;
+		navigation.navigate('ProfileEdit')
+		setTimeout(() => this.closeCongratulations(), 400)
 	}
 	toContacts = () => {
 		const { navigation } = this.props;

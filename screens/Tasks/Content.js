@@ -80,7 +80,7 @@ class Content extends Component {
                         </Options>
                         {currentTask.tasks && <TaskList
                             data={currentTask.tasks}
-                            ListFooterComponent={<View style={{ margin: 40, }} />}
+                            ListFooterComponent={<View style={{ margin: 0, }} />}
                             renderItem={({ item, index }) => {
                                 const myTask = item.creator._id === user._id;
                                 return <TaskWrapper>

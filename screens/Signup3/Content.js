@@ -59,7 +59,7 @@ const CheckBoxLabel = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-    `
+`
 const LinkText = styled(Text)`
     color: ${blue};
 `
@@ -105,19 +105,19 @@ class Content extends Component {
         agreements: [
             {
                 value: false,
-                label: 'согласен с',
-                linkText: 'условиями пользования',
+                label: 'Согласен с',
+                linkText: 'условия использования',
                 linkComp: 'linkComp'
             },
             {
                 value: false,
-                label: 'ознакомился с',
+                label: 'Согласен с',
                 linkText: 'пользовательским соглашением',
                 linkComp: 'linkComp'
             },
             {
                 value: false,
-                label: 'согласен на',
+                label: 'Согласен на',
                 linkText: 'использование персональных данные',
                 linkComp: 'linkComp'
             }

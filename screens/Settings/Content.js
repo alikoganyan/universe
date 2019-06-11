@@ -10,6 +10,8 @@ import { socket } from '../../utils/socket'
 import sendRequest from '../../utils/request'
 import { p_settings } from '../../constants/api'
 import { setSettings } from '../../actions/userActions'
+import CheckBox from 'react-native-check-box'
+
 const { Colors, sidePadding, fontSize, borderRadius, HeaderHeight } = helper;
 const { lightGrey1, blue, lightBlue, grey2 } = Colors;
 const LangPickerPosed = posed.View({
@@ -84,6 +86,25 @@ const Shadow = styled(TouchableOpacity)`
     top: -${HeaderHeight};
     z-index: 2;
 `
+const LinkText = styled(Text)`
+    color: ${blue};
+`
+const CheckBoxLabel = styled(View)`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`
+const Checkbox = styled(View)`
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+`
+const CheckboxHolder = styled(View)`
+    flex: 1;
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 10px;
+`
 const Toggle = (props) => {
     const { switchOn, onPress } = props;
     return <SwitchToggle
@@ -118,7 +139,7 @@ class Content extends Component {
                 <Wrapper>
                     {pickerOpened && <Shadow activeOpacity={1} onPress={this.pickerClose}></Shadow>}
                     <FlatList
-                        style={{ paddingRight: 5, paddingLeft: 5, marginBottom: 10 }}
+                        style={{ paddingRight: 5, paddingLeft: 5, maxHeight: 300 }}
                         ListHeaderComponent={<View style={{ margin: 10, }} />}
                         data={settings}
                         scrollEnabled={false}
@@ -136,10 +157,20 @@ class Content extends Component {
                                     </TouchableOpacity>}
                                 </Option>
                             </Box>
-                        }
-                        }
+                        }}
                         keyExtractor={(item, index) => index.toString()}
                     />
+                    <CheckboxHolder>
+                        {this.state.agreements.map((e, i) => {
+                            return <Checkbox key={i}>
+                                <CheckBoxLabel>
+                                    <TouchableOpacity>
+                                        <LinkText>{e.linkText}</LinkText>
+                                    </TouchableOpacity>
+                                </CheckBoxLabel>
+                            </Checkbox>
+                        })}
+                    </CheckboxHolder>
                     <Policy>
                         <PolicyLink>Соглашение об использовании персональных данных</PolicyLink>
                         <PolicyLink>Политика соглашения</PolicyLink>
@@ -165,6 +196,23 @@ class Content extends Component {
             { item: 'notifications', label: 'Уведомления', status: 'Включены', option: { type: 'toggle', value: 1 } },
             { item: 'sound', label: 'Звук', status: 'Включен', option: { type: 'toggle', value: 0 } },
             { item: 'partition_contacts', label: 'Контакты', status: 'По подразделениям', option: { type: 'toggle', value: 0 } },
+        ],
+        agreements: [
+            {
+                value: false,
+                linkText: 'Условия использования',
+                linkComp: 'linkComp'
+            },
+            {
+                value: false,
+                linkText: 'Пользовательское соглашение',
+                linkComp: 'linkComp'
+            },
+            {
+                value: false,
+                linkText: 'Использование персональных данные',
+                linkComp: 'linkComp'
+            }
         ]
     }
     componentDidMount() {

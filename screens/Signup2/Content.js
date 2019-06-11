@@ -58,6 +58,7 @@ const SendAgain = styled(Text)`
 `
 const NoSMS = styled(SendAgain)`
     color: ${lightGrey1};
+    margin-bottom: 10px;
 `
 const SendAgainButton = styled(Button)`
     background: green;

@@ -14,7 +14,7 @@ const Wrapper = styled(View)`
   align-items: center;
   display:flex;
   align-items: center;
-  padding: ${sidePadding}px 0 ${sidePadding*2}px;
+  padding: ${sidePadding}px 0 ${sidePadding * 2}px;
   width: ${Dimensions.get('window').width - sidePadding * 2};
 `
 const TaskImage = styled(Image)`
@@ -102,7 +102,7 @@ class Tasks extends Component {
 		const { children, onClick } = this.props;
 		const { first_name, last_name, phone_number, image, tasks } = children
 		let stat = ''
-		switch (tasks[0].status) {
+		switch (tasks[tasks.length - 1].status) {
 			case 'set':
 				stat = 'В работе';
 				break;
@@ -110,7 +110,7 @@ class Tasks extends Component {
 				stat = 'Выполнена';
 				break;
 		}
-		const day = new Date(tasks[0].created_at).getDay()
+		const day = new Date(tasks[tasks.length - 1].created_at).getDay()
 		const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
 		return (
 			<TouchableHighlight underlayColor='#2B7DE2' onPress={() => this.handleClick(children)} onLongPress={this.handleHold}
@@ -127,10 +127,10 @@ class Tasks extends Component {
 					<TaskText>
 						<TaskTextInner>
 							<TaskTitle>{first_name ? `${first_name} ${last_name}` : phone_number}</TaskTitle>
-							<TaskLastMessage numberOfLines={1} >{tasks[0].name}</TaskLastMessage>
+							<TaskLastMessage numberOfLines={1} >{tasks[tasks.length - 1].name}</TaskLastMessage>
 							<TaskStatus>
 								<TaskStatusTextContainer>
-									<TasksIcon noPaddingAll/>
+									<TasksIcon noPaddingAll />
 									<TaskStatusText>{stat}</TaskStatusText>
 								</TaskStatusTextContainer>
 								{(tasks.length - 1) > 0 && <TaskStatusAdditional>+{tasks.length - 1} задачи</TaskStatusAdditional>}

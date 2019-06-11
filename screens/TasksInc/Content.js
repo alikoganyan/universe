@@ -83,7 +83,7 @@ class Content extends Component {
                         </Options>
                         {incTasks && <TaskList
                             data={incTasks}
-                            ListFooterComponent={<View style={{ margin: 40, }} />}
+                            ListFooterComponent={<View   />}
                             renderItem={({ item, index }) => {
                                 const { creator } = item
                                 return <TaskWrapper>

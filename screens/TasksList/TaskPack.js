@@ -113,7 +113,6 @@ class TaskPack extends Component {
     title === 'inc' && console.log({ tasks: tasks.length })
     let day = ''
     const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-    let packItems0Tasks0 = null;
     const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
     const itemCount = flatten([...tasks].map(e => e.tasks))
 
@@ -153,12 +152,7 @@ class TaskPack extends Component {
       }
       day = new Date(itemCount[itemCount.length - 1].created_at).getDay()
 
-      packItems0Tasks = packItems && packItems[0] && packItems[0].tasks && packItems[0].tasks ? packItems[0].tasks : null;
     }
-    // title === 'inc' ? setInc Tasks(packItems) : setOutTasks(packItems)
-    console.log('test', day)
-    const packItemsDescription = packItems0Tasks && packItems0Tasks[0] ? packItems0Tasks[0].description : '';
-    const packItemsLength = packItems0Tasks && packItems0Tasks.length ? packItems0Tasks.length - 1 : 0;
     return (
       <TouchableHighlight underlayColor='#2B7DE2' onPress={onPress} onLongPress={this.handleHold}>
         <Wrapper last={last}>

@@ -54,6 +54,7 @@ const ErrorText = styled(Text)`
 `
 const ErrorTextLink = styled(ErrorText)`
     color: ${blue};
+    padding-top: 10px;
 `
 const Input = (props) => {
     const { children, password = false, value, style, editable, inputStyle, labelStyle, keyboardType } = props;
@@ -151,7 +152,7 @@ class Content extends Component {
                     let { phone_number } = err
                     this.setState({
                         invalidPhone: phone_number || null,
-                        error: <TouchableOpacity onPress={this.login}><ErrorText>Телефон уже зарегестрирован в системе. <ErrorTextLink>Авторизируйтесь</ErrorTextLink></ErrorText></TouchableOpacity>
+                        error: err.msg === 'Извините, функция недоступна. Попробуйте позже.' ? <ErrorText>{err.description || 'функция временно недоступна'}</ErrorText> : <TouchableOpacity onPress={this.login}><ErrorText>Телефон уже зарегистрирован в системе </ErrorText><ErrorTextLink>Авторизируйтесь</ErrorTextLink></TouchableOpacity>
                     })
                 }
             })

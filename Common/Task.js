@@ -223,7 +223,7 @@ class TaskComponent extends Component {
                         </TaskBody>
                         <TaskFooter>
                             <TaskDeadline>
-                                <TaskDeadlineLabel numberOfLines={1}>Дедлайн: {' '}
+                                <TaskDeadlineLabel numberOfLines={1}>Срок: {' '}
                                     <TaskDeadlineValue>
                                         {deadlineDate.getDate() >= 10 ? deadlineDate.getDate() : `0${deadlineDate.getDate()}`}.
                                         {deadlineDate.getMonth() >= 10 ? deadlineDate.getMonth() : `0${deadlineDate.getMonth()}`}.

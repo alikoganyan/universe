@@ -83,7 +83,7 @@ class Content extends Component {
             </Options>
             {outTasks && <TaskList
               data={outTasks}
-              ListFooterComponent={<View style={{ margin: 40, }} />}
+              ListFooterComponent={<View   />}
               renderItem={({ item, index }) => {
                 return <TaskWrapper>
                   <TouchableOpacity style={{ flex: 1 }} onLongPress={e => this.handleHold(item)}><TaskComponent
