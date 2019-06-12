@@ -110,7 +110,6 @@ class TaskPack extends Component {
     const user = { _id: 1 }
     const packItems = []
     let stat = ''
-    title === 'inc' && console.log({ tasks: tasks.length })
     let day = ''
     const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])

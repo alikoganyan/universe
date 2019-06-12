@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
-import { CheckIcon, CloseTaskIcon, TriangleLeftIcon, TriangleRightIcon, RedoIcon, DoneIcon, StartIcon } from '../assets'
+import { CheckIcon, CloseTaskIcon, TriangleLeftIcon, TriangleRightIcon, RedoIcon, DoneIcon, StartIcon, EditIcon } from '../assets'
 import { connect } from 'react-redux'
 import { setTasks, setActiveTask } from '../actions/tasksActions'
 import sendRequest from '../utils/request'
@@ -139,6 +139,8 @@ const Rearrange = styled(Exit)`
 `
 const Edit = styled(Exit)`
     border-color: ${green};
+    display: flex;
+    justify-content: center;
 `
 const Indicator = ({ delievered = false, read = false, color }) => {
     return <CheckIcon color={color} />
@@ -177,6 +179,7 @@ class TaskComponent extends Component {
                 {triangleRight && <ControlBar style={{ alignItems: 'flex-end' }}>
                     {rightControl ? <>
                         <Exit onPress={rightControl && this.unselect}><CloseTaskIcon /></Exit>
+                        <Edit onPress={this.editFeed}><EditIcon noPaddingAll marginRight={false}/></Edit>
                         {(this.stat === 2) && <Accept onPress={undefined}><RedoIcon /></Accept>}
                         {(this.stat === 2) && <Rearrange onPress={rightControl && this.complete}><StartIcon /></Rearrange>}
                     </> :
@@ -257,6 +260,10 @@ class TaskComponent extends Component {
                     </ControlBar>
                 }
             </OuterWrapper >)
+    }
+    editFeed = () => {
+        const { editFeed } = this.props
+        editFeed()
     }
     done = () => {
         this.changeState('done')

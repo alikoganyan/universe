@@ -1,8 +1,15 @@
-import React from 'react';
-import { View, Text, Dimensions, BackHandler, AsyncStorage, StatusBar } from 'react-native';
-import GlobalFont from 'react-native-global-font'
-import { Font, Asset } from 'expo';
-import { store } from './reducers/store'
+import React from "react";
+import {
+  View,
+  Text,
+  Dimensions,
+  BackHandler,
+  AsyncStorage,
+  StatusBar
+} from "react-native";
+import GlobalFont from "react-native-global-font";
+import { Font, Asset } from "expo";
+import { store } from "./reducers/store";
 import {
   Group,
   Dialogs,
@@ -43,30 +50,31 @@ import {
   NewGroupParticipants,
   NewGroup,
   FeedReceivers,
-
-} from './screens'
-import { createStackNavigator, createAppContainer, createDrawerNavigator } from 'react-navigation';
+  TaskEdit
+} from "./screens";
 import {
-  createStore,
-  applyMiddleware,
-} from 'redux';
-import thunk from 'redux-thunk';
-import { Provider } from 'react-redux';
-import devToolsEnhancer from 'remote-redux-devtools';
-import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction';
-import {
-  connectActionSheet,
-} from '@expo/react-native-action-sheet';
+  createStackNavigator,
+  createAppContainer,
+  createDrawerNavigator
+} from "react-navigation";
+import { createStore, applyMiddleware } from "redux";
+import thunk from "redux-thunk";
+import { Provider } from "react-redux";
+import devToolsEnhancer from "remote-redux-devtools";
+import { composeWithDevTools } from "redux-devtools-extension/logOnlyInProduction";
+import { connectActionSheet } from "@expo/react-native-action-sheet";
 console.disableYellowBox = true;
 
 const AppDrawerNavigator = createDrawerNavigator(
   {
-    Home: { screen: Dialogs },
+    Home: { screen: Dialogs }
   },
   {
-    drawerWidth: Dimensions.get('window').width * 0.8,
-    contentComponent: ({ navigation }) => <DrawerComponent navigation={navigation} />,
-  },
+    drawerWidth: Dimensions.get("window").width * 0.8,
+    contentComponent: ({ navigation }) => (
+      <DrawerComponent navigation={navigation} />
+    )
+  }
 );
 const AppStackNavigator = createStackNavigator(
   {
@@ -74,14 +82,14 @@ const AppStackNavigator = createStackNavigator(
     Dialogs: {
       screen: AppDrawerNavigator,
       navigationOptions: {
-        gesturesEnabled: false,
-      },
+        gesturesEnabled: false
+      }
     },
     Chat: { screen: Chat },
     Login: {
-      screen: Login, navigationOptions: {
-        gesturesEnabled: false,
-
+      screen: Login,
+      navigationOptions: {
+        gesturesEnabled: false
       },
       defaultNavigationOptions: {
         gesturesEnabled: false
@@ -120,14 +128,15 @@ const AppStackNavigator = createStackNavigator(
     NewGroupParticipants: { screen: NewGroupParticipants },
     NewGroup: { screen: NewGroup },
     FeedReceivers: { screen: FeedReceivers },
+    TaskEdit: { screen: TaskEdit }
   },
   {
-    initialRouteName: 'Login',
-    headerMode: 'none',
+    initialRouteName: "Login",
+    headerMode: "none"
   }
-)
+);
 
-const App = createAppContainer(AppStackNavigator)
+const App = createAppContainer(AppStackNavigator);
 @connectActionSheet
 export default class AppComponent extends React.Component {
   render() {
@@ -136,21 +145,21 @@ export default class AppComponent extends React.Component {
         <StatusBar backgroundColor="white" barStyle="dark-content" />
         {this.state.loaded ? <App /> : <SplashScreen />}
       </Provider>
-    )
+    );
   }
   state = {
     loaded: false
-  }
+  };
   async componentDidMount() {
-    await this._loadResourcesAsync()
+    await this._loadResourcesAsync();
 
     await Font.loadAsync({
-      'Roboto-Regular': require('./assets/fonts/Roboto-Regular.ttf'),
+      "Roboto-Regular": require("./assets/fonts/Roboto-Regular.ttf")
     });
-    GlobalFont.applyGlobal('Roboto-Regular')
-    this.setState({ loaded: true })
+    GlobalFont.applyGlobal("Roboto-Regular");
+    this.setState({ loaded: true });
 
-    BackHandler.addEventListener("hardwareBackPress", () => { })
+    BackHandler.addEventListener("hardwareBackPress", () => {});
   }
   _loadResourcesAsync = async () => {
     return Promise.all([
@@ -168,8 +177,8 @@ export default class AppComponent extends React.Component {
       //   require('./assets/svg/Tasks.svg'),
       // ]),
       Font.loadAsync({
-        'Roboto': require('./assets/fonts/Roboto-Medium.ttf'),
-      }),
+        Roboto: require("./assets/fonts/Roboto-Medium.ttf")
+      })
     ]);
   };
 }

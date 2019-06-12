@@ -88,6 +88,7 @@ class Content extends Component {
                                         triangleLeft={myTask}
                                         triangleRight={!myTask}
                                         borderColor={myTask ? pink : purple}
+                                        editFeed={this.editFeed}
                                         style={{
                                             zIndex: activeTask._id === item._id ? 5 : 1,
                                             // marginRight: myTask ? 10 : 70,
@@ -112,6 +113,10 @@ class Content extends Component {
             ]
         },
         taskList: []
+    }
+    editFeed = () => {
+        const { navigate } = this.props 
+        navigate('TaskEdit')
     }
     unselect = () => {
         const { setActiveTask } = this.props

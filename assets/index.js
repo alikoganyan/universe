@@ -345,9 +345,9 @@ export function MessageIndicatorIcon(props) {
 
 
 export function EditIcon(props) {
-    const { onPress, left, right, marginRight = true } = props;
+    const { onPress, left, right, marginRight = true, noPaddingAll } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right} marginRight={marginRight}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} marginRight={marginRight} noPaddingAll={noPaddingAll}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}

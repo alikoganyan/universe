@@ -119,7 +119,6 @@ class HeaderComponent extends Component {
             },
             success: ({ tasks }) => {
                 const tasksList = []
-                console.log({ users: tasks })
                 // res.users.map(user => {
                 //     // const { tasks } = user
                 //     // tasks && tasks.map((e, i) => {
