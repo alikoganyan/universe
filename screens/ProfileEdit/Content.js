@@ -15,6 +15,7 @@ import styled from "styled-components";
 import FloatingLabel from "react-native-floating-labels";
 import helper from "../../utils/helpers";
 import { connect } from "react-redux";
+import ImageComponent from '../../common/Image'
 import { ImagePicker, Permissions } from "expo";
 import { socket } from "../../utils/socket";
 import { p_profile, p_profile_avatar } from "../../constants/api";
@@ -136,8 +137,10 @@ class Content extends Component {
                         image === "/images/default_avatar.jpg" ? (
                             <DefaultAvatar size={80} />
                         ) : (
-                            <UserImage
+                            <ImageComponent 
+                                size={80}
                                 source={{ uri: `http://ser.univ.team${image}` }}
+                                style={{marginTop: 0, marginBottom: 16, marginRight: 10, marginLeft: 10}}
                             />
                         )}
                     </TouchableOpacity>

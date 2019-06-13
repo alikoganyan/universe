@@ -9,6 +9,7 @@ import helper from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import RoundCheckbox from 'rn-round-checkbox'
 import posed, { Transition } from 'react-native-pose';
+import ImageComponent from '../../common/Image'
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import sendRequest from '../../utils/request'
@@ -186,7 +187,10 @@ class Content extends Component {
                                                                     />
                                                                     : e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg' ?
                                                                         <DefaultAvatar size={36} id={e._id} /> :
-                                                                        <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
+                                                                        <ImageComponent 
+                                                                            source={{ uri: `http://ser.univ.team${e.image}` }}
+                                                                            size={36}
+                                                                        />
                                                             }
                                                             <ContactInfo>
                                                                 <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>

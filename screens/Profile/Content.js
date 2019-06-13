@@ -6,6 +6,7 @@ import { setRoom } from '../../actions/messageActions'
 import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../utils/helpers'
+import ImageComponent from '../../common/Image'
 import { connect } from 'react-redux'
 import { socket } from '../../utils/socket'
 import { setDialogs } from '../../actions/dialogsActions'
@@ -159,7 +160,11 @@ class Content extends Component {
                         {
                             image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
                                 <DefaultAvatar isGroup={isGroup} id={_id} size={80} /> :
-                                <UserImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                <ImageComponent 
+                                    size={80}
+                                    source={{ uri: `http://ser.univ.team${image}` }}
+                                    style={{marginTop: 0, marginBottom: 16, marginRight: 10, marginLeft: 10}}
+                                />
                         }
                         <UserInfo>
                             <UserName>
@@ -209,7 +214,11 @@ class Content extends Component {
                                             <BoxInnerItem>
                                                 {image === '/images/default_avatar.jpg' ?
                                                     <DefaultAvatar size={36} /> :
-                                                    <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+                                                    <ImageComponent 
+                                                        size={36}
+                                                        source={{ uri: `http://ser.univ.team${image}` }}
+                                                        style={{marginRight: 8}}
+                                                    />
                                                 }
                                                 <ContactInfo>
                                                     <ContactName>{first_name ? `${first_name} ${last_name}` : phone_number}</ContactName>

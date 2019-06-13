@@ -7,6 +7,7 @@ import helper from '../../utils/helpers'
 import posed from 'react-native-pose';
 import sendRequest from '../../utils/request'
 import { g_users } from '../../constants/api'
+import ImageComponent from '../../common/Image'
 import Collapsible from 'react-native-collapsible';
 import { connect } from 'react-redux'
 import { setContacts, setAllUsers } from '../../actions/userActions'
@@ -165,7 +166,11 @@ class Content extends Component {
                                                     <BoxInner>
                                                         {dep.users.map((e, i) => <TouchableOpacity key={i} onPress={() => this.toChat(e)}>
                                                             <BoxInnerItem>
-                                                                <ContactImage source={{ uri: e.image ? `http://ser.univ.team${e.image}` : `http://simpleicon.com/wp-content/uploads/user1.png` }} />
+                                                                <ImageComponent 
+                                                                    size={33}
+                                                                    style={{marginRight: 8}}
+                                                                    source={{ uri: e.image ? `http://ser.univ.team${e.image}` : `http://simpleicon.com/wp-content/uploads/user1.png` }}
+                                                                />
                                                                 <ContactInfo>
                                                                     <ContactName>
                                                                         {e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}

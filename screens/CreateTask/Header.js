@@ -3,6 +3,8 @@ import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'rea
 import { ForwardIcon, LocationIcon, CloseIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
+import ImageLoader from 'react-native-image-progress';
+import ProgressBar from 'react-native-progress/Circle'
 const { HeaderHeight, fontSize } = helper;
 const Header = styled(View)`
     width: 100%;
@@ -15,7 +17,7 @@ const Header = styled(View)`
     justify-content: space-between;
     z-index: 10;
 `
-const HeaderUserImage = styled(Image)`
+const HeaderUserImage = styled(ImageLoader)`
     border-radius: 15;
     height: 30px;
     width: 30px;

@@ -7,8 +7,12 @@ import ImageComponent from './Image'
 import MapView from 'react-native-maps';
 import { FileSystem } from 'expo'
 import LightBox from 'react-native-lightbox'
+import ImageLoader from 'react-native-image-progress';
+import ProgressBar from 'react-native-progress/Circle'
+
 const { HeaderHeight, Colors, fontSize, borderRadius } = helper;
 const { myMessage, interlocatorMessage, pink } = Colors
+
 const MyMessage = styled(View)`
     display: flex;
     justify-content: center;
@@ -72,7 +76,7 @@ const MessageDate = styled(Text)`
     color: ${({ color }) => color || '#ABABAB'};
 `
 
-const MyMessageImage = styled(ImageBackground)`
+const MyMessageImage = styled(ImageLoader)`
     min-height: 200px;
     min-width: 100%;
     resize-mode: contain;
@@ -156,7 +160,8 @@ class Message extends Component {
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <MyMessage background={background} style={{ padding: 0 }}>
                         <LightBox>
-                            <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}`, cache: 'reload' }} width={width} height={height} resizeMode={'contain'} />
+                            <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}`, cache: 'reload' }} width={width} height={height} resizeMode={'contain'} 
+                            />
                         </LightBox>
                         <MessageInfo>
                             <MessageDate color={'white'}>{finalTime}</MessageDate>
@@ -171,7 +176,8 @@ class Message extends Component {
                         <TriangleRightIcon color={interlocatorMessage} />
                         <InterlocutorsMessage background={background}>
                             <LightBox>
-                                <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'contain'} />
+                                <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'contain'} 
+                                />
                             </LightBox>
                             <MessageInfo>
                                 <MessageDate>{finalTime}</MessageDate>

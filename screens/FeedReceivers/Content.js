@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
+import ImageComponent from '../../common/Image'
 import RoundCheckbox from 'rn-round-checkbox'
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
@@ -98,7 +99,7 @@ const BoxInnerItem = styled(View)`
     align-items: center;
 
 `
-const ContactImage = styled(Image)`
+const ContactImage = styled(ImageComponent)`
     width: 36px;
     height: 36px;
     border-radius: 18;
@@ -182,7 +183,7 @@ class Content extends Component {
                                                             {
                                                                 e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg' ?
                                                                     <DefaultAvatar size={36} id={e._id} /> :
-                                                                    <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
+                                                                    <ImageComponent size={36} source={{ uri: `http://ser.univ.team${e.image}` }} />
                                                             }
                                                             <ContactInfo>
                                                                 <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>

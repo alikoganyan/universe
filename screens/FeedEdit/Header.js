@@ -6,7 +6,6 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions'
 import Icon from 'react-native-vector-icons/FontAwesome';
-
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 const { sidePadding, HeaderHeight, Colors, fontSize } = helper;

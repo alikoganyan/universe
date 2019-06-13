@@ -6,7 +6,8 @@ import FloatingLabel from 'react-native-floating-labels'
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
-
+import ImageLoader from 'react-native-image-progress';
+import ProgressBar from 'react-native-progress/Circle'
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
@@ -43,7 +44,7 @@ const ContactsListItem = styled(View)`
 const UserName = styled(Text)`
 
 `
-const ContactImage = styled(Image)`
+const ContactImage = styled(ImageLoader)`
     width: 50;
     height: 50;
     border-radius: 25;

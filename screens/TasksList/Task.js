@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { TasksIcon } from '../../assets/index'
 import { setTask } from '../../actions/tasksActions'
+import ImageComponent from '../../common/Image'
 import { connect } from 'react-redux'
 const { fontSize, PressDelay, sidePadding, Colors } = helper;
 const { purple, lightColor, grey2, lightGrey1 } = Colors;
@@ -123,7 +124,11 @@ class Tasks extends Component {
 				}}
 			>
 				<Wrapper>
-					<TaskImage source={{ uri: `http://ser.univ.team${image}` }} />
+					<ImageComponent 
+						size={50}
+						source={{ uri: `http://ser.univ.team${image}` }}
+						style={{marginRight: sidePadding}}
+					/>
 					<TaskText>
 						<TaskTextInner>
 							<TaskTitle>{first_name ? `${first_name} ${last_name}` : phone_number}</TaskTitle>
