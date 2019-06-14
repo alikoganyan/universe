@@ -292,16 +292,17 @@ class Dialogs extends Component {
 	}
 	toChat = e => {
 		const { setRoom, setCurrentChat, navigation, getMessages, user, setCurrentDialogs, setCurrentRoomId } = this.props
-		const { isGroup } = e
-		const roomId = e.room.split('_').filter(e => e != user._id)[0]
+		const { isGroup, messages, room, participants, creator, _id } = e
+		const roomId = room.split('_').filter(e => e != user._id)[0]
+		const currentDialog = isGroup ?
+			{ ...e } :
+			user._id === creator._id ? { ...participants[0] } : { ...creator }
 		setRoom(roomId)
-		setCurrentRoomId(e._id);
-		setCurrentChat(e.room)
-		setCurrentDialogs(isGroup ?
-			e :
-			user._id === e.creator._id ? e.participants[0] : e.creator)
-		getMessages(e.messages);
-		socket.emit('view', { room: e.room, viewer: user._id })
+		setCurrentRoomId(_id);
+		setCurrentChat(room)
+		setCurrentDialogs(currentDialog)
+		getMessages(messages);
+		socket.emit('view', { room: room, viewer: user._id })
 		navigation.navigate(e.isGroup ? 'Group' : 'Chat')
 	}
 	toGroup = e => {
