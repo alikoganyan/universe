@@ -13,11 +13,12 @@ const Wrapper = styled(View)`
 `
 export default class Signup extends Component {
     render() {
+        const deafultValues = this.props.navigation.getParam('task', {});
         return (
             <SafeAreaView behavior={'padding'}>
                 <Wrapper>
-                    <Header back={this.props.navigation.goBack}/>
-                    <Content addParticipants={this.addParticipants} forward={this.moveForward} />
+                    <Header back={this.props.navigation.goBack} />
+                    <Content addParticipants={this.addParticipants} forward={this.moveForward} deafultValues={deafultValues} />
                 </Wrapper>
             </SafeAreaView>
         )

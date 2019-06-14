@@ -207,6 +207,10 @@ class Content extends Component {
         deadlineTime: ''
     }
     componentDidMount() {
+        const { deafultValues, setTaskReceivers } = this.props
+        const { text, participants } = deafultValues
+        this.setState({ taskText: text })
+        // setTaskReceivers(participants)
     }
     componentWillUpdate() {
     }

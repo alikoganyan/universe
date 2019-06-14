@@ -80,7 +80,7 @@ class Content extends Component {
                 <MessageOptions pose={selectedMessage._id ? 'visible' : 'hidden'}>
                     {
                         selectedMessage._id && selectedMessage.sender._id === user._id && <>
-                            <MessageOption><Text>Сделать задачей</Text></MessageOption>
+                            <MessageOption onPress={this.turnToTask}><Text>Сделать задачей</Text></MessageOption>
                             <MessageOption><Text>Редактировать</Text></MessageOption>
                         </>
                     }
@@ -109,6 +109,18 @@ class Content extends Component {
             setDialogs(newDialogs)
         }
 
+    }
+    turnToTask = e => {
+        const { user, navigate } = this.props
+        const { selectedMessage } = this.state
+        const { text, viewers } = selectedMessage
+        const participants = [...viewers].filter(e => e !== user._id)
+        const task = {
+            text,
+            participants
+        }
+        console.log({ task })
+        navigate('NewTask', { task })
     }
     unselect = (e) => {
         this.setState({ selectedMessage: {} })

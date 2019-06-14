@@ -160,7 +160,7 @@ class Message extends Component {
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <MyMessage background={background} style={{ padding: 0 }}>
                         <LightBox>
-                            <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}`, cache: 'reload' }} width={width} height={height} resizeMode={'contain'} 
+                            <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}`, cache: 'reload' }} width={width} height={height} resizeMode={'contain'}
                             />
                         </LightBox>
                         <MessageInfo>
@@ -176,7 +176,7 @@ class Message extends Component {
                         <TriangleRightIcon color={interlocatorMessage} />
                         <InterlocutorsMessage background={background}>
                             <LightBox>
-                                <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'contain'} 
+                                <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'contain'}
                                 />
                             </LightBox>
                             <MessageInfo>
@@ -344,16 +344,23 @@ class Message extends Component {
         const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename, size } = children;
     }
     readFile = async (path, filename, options = {}) => {
-        const uri = FileSystem.cacheDirectory + filename;
-        const image = await FileSystem.getInfoAsync(uri)
-        if (image.exists) {
-            this.image = uri
-            return;
-            // resolve(uri);
-        }
-        const newImage = await FileSystem.downloadAsync(path, FileSystem.cacheDirectory + filename);
-        this.image = path
-        return;
+        const uri = `${FileSystem.cacheDirectory}${filename}`;
+        FileSystem.getInfoAsync(uri)
+            .then(image => {
+                if (image.exists) {
+                    this.image = uri
+                    return;
+                }
+                this.image = path
+                return;
+            }).catch(async err => {
+                await FileSystem.downloadAsync(path, uri)
+                    .then(res => {
+                        // console.log({ res })
+                    }).catch(err => {
+                        // console.log({ err })
+                    });
+            })
         // resolve(path);
     }
 }

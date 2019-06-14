@@ -28,7 +28,7 @@ class Chat extends Component {
             <SafeAreaView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
                 <Wrapper>
                     <Header toProfile={this.toProfile} back={this.navigateBack} currentChat={this.props.currentChat} />
-                    <Content />
+                    <Content navigate={this.props.navigation.navigate} />
                     <Bottom>
                         <Input />
                     </Bottom>
@@ -59,10 +59,10 @@ class Chat extends Component {
 
 
 const mapStateToProps = state => ({
-        messages: state.messageReducer.messages,
-        currentRoom: state.messageReducer.currentRoom,
-        currentChat: state.messageReducer.currentChat,
-        user: state.userReducer.user
+    messages: state.messageReducer.messages,
+    currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
+    user: state.userReducer.user
 });
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
