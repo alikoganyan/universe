@@ -38,6 +38,7 @@ import NewTaskReceivers from './NewTaskReceivers/NewTaskReceivers'
 import NewGroupParticipants from './NewGroupParticipants/NewGroupParticipants'
 import NewGroup from './NewGroup/NewGroup'
 import TaskEdit from './TaskEdit/TaskEdit'
+import GroupEdit from './GroupEdit/GroupEdit'
 export {
     Group,
     Dialogs,
@@ -79,4 +80,5 @@ export {
     NewGroup,
     FeedReceivers,
     TaskEdit,
+    GroupEdit,
 }

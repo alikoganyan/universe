@@ -48,6 +48,7 @@ const InterlocutorsMessage = styled(MyMessage)`
     left: -10px;
     border-bottom-right-radius: ${borderRadius};
     border-bottom-left-radius: 0;    
+    max-width: 80%;
 `
 
 const InterlocutorsMessageText = styled(MyMessageText)`
@@ -79,6 +80,7 @@ const MessageDate = styled(Text)`
 const MyMessageImage = styled(ImageLoader)`
     min-height: 200px;
     min-width: 100%;
+    max-height: 100%;
     resize-mode: contain;
 `
 const InterlocutorsName = styled(InterlocutorsMessageText)`
@@ -159,8 +161,12 @@ class Message extends Component {
             return (myId == sender._id ? (
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <MyMessage background={background} style={{ padding: 0 }}>
-                        <LightBox>
-                            <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}`, cache: 'reload' }} width={width} height={height} resizeMode={'contain'}
+                        <LightBox style={{ flex: 1 }}>
+                            <MyMessageImage
+                                source={{ uri: this.image || `http://ser.univ.team${src}`, cache: 'reload' }}
+                                width={width}
+                                height={height}
+                                resizeMode={'contain'}
                             />
                         </LightBox>
                         <MessageInfo>
@@ -175,8 +181,11 @@ class Message extends Component {
                     <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
                         <TriangleRightIcon color={interlocatorMessage} />
                         <InterlocutorsMessage background={background}>
-                            <LightBox>
-                                <MyMessageImage source={{ uri: this.image || `http://ser.univ.team${src}` }} width={width} height={height} resizeMode={'contain'}
+                            <LightBox style={{ flex: 1 }}>
+                                <MyMessageImage
+                                    source={{ uri: this.image || `http://ser.univ.team${src}`, cache: 'reload' }}
+                                    width={width} height={height}
+                                    resizeMode={'contain'}
                                 />
                             </LightBox>
                             <MessageInfo>

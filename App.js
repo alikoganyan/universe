@@ -50,7 +50,8 @@ import {
   NewGroupParticipants,
   NewGroup,
   FeedReceivers,
-  TaskEdit
+  TaskEdit,
+  GroupEdit,
 } from "./screens";
 import {
   createStackNavigator,
@@ -128,7 +129,8 @@ const AppStackNavigator = createStackNavigator(
     NewGroupParticipants: { screen: NewGroupParticipants },
     NewGroup: { screen: NewGroup },
     FeedReceivers: { screen: FeedReceivers },
-    TaskEdit: { screen: TaskEdit }
+    TaskEdit: { screen: TaskEdit },
+    GroupEdit: { screen: GroupEdit },
   },
   {
     initialRouteName: "Login",

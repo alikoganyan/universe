@@ -44,7 +44,7 @@ class Profile extends Component {
     render() {
         const { currentChat, user, currentDialog } = this.props;
         const myProfile = !currentChat
-        const myGroup = currentDialog.creator._id === user._id
+        const myGroup = currentDialog.isGroup ? currentDialog.creator._id === user._id : false
         return (
             <ActionSheetProvider>
                 <SafeAreaView behavior={'padding'}>
@@ -79,8 +79,8 @@ class Profile extends Component {
         navigation.navigate('Login')
     }
     edit = () => {
-        const { navigation } = this.props;
-        navigation.navigate('ProfileEdit')
+        const { navigation, currentDialog } = this.props;
+        navigation.navigate(currentDialog.isGroup ? 'GroupEdit' : 'ProfileEdit', { currentDialog })
     }
 }
 
