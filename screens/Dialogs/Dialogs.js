@@ -111,21 +111,27 @@ class Dialogs extends Component {
 	}
 	socketNewDialog = e => { }
 	socketDialogOpened = e => {
-		const { dialogs, setDialogs, getMessages, currentDialog } = this.props;
+		const { dialogs, setDialogs, getMessages, currentDialog, user } = this.props;
 		const { dialog_id, viewer } = e;
+
 		const newMessages = []
 		const newDialogs = [...dialogs]
-		const newDialog = newDialogs.filter(e => {
-			return e._id === dialog_id
-		})[0]
+		const newDialog = newDialogs.filter(e => e._id === dialog_id)[0]
 		if (newDialog) {
 			const newDialogIndex = newDialogs.findIndex(e => e._id === dialog_id)
-			currentDialog.messages && currentDialog.messages.map(e => {
-				newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
-			});
+			const dialog = newDialogs.filter(e => e._id === dialog_id)[0]
+			if (viewer !== user._id) {
+				currentDialog.messages && currentDialog.messages.map(e => {
+					newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
+				});
+			} else {
+				newDialog.messages && newDialog.messages.map(e => {
+					newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
+				});
+			}
 			newDialogs[newDialogIndex] = newDialog
 			newDialog.messages = newMessages
-			getMessages(newMessages)
+			if (viewer !== user._id) getMessages(newMessages)
 			setDialogs(newDialogs)
 		}
 	}
@@ -291,12 +297,25 @@ class Dialogs extends Component {
 		setDialogs(newDialogs)
 	}
 	toChat = e => {
-		const { setRoom, setCurrentChat, navigation, getMessages, user, setCurrentDialogs, setCurrentRoomId } = this.props
+		const { setRoom, setCurrentChat, navigation, getMessages, user, setCurrentDialogs, setCurrentRoomId, dialogs } = this.props
 		const { isGroup, messages, room, participants, creator, _id } = e
 		const roomId = room.split('_').filter(e => e != user._id)[0]
 		const currentDialog = isGroup ?
 			{ ...e } :
 			user._id === creator._id ? { ...participants[0] } : { ...creator }
+		const newMessages = []
+		const newDialogs = [...dialogs]
+		const newDialog = newDialogs.filter(e => e._id === _id)[0]
+		if (newDialog) {
+			const newDialogIndex = newDialogs.findIndex(e => e._id === _id)
+			currentDialog.messages && currentDialog.messages.map(e => {
+				newMessages.push({ ...e, viewers: [...e.viewers, user._id] })
+			});
+			newDialogs[newDialogIndex] = newDialog
+			newDialog.messages = newMessages
+			getMessages(newMessages)
+			setDialogs(newDialogs)
+		}
 		setRoom(roomId)
 		setCurrentRoomId(_id);
 		setCurrentChat(room)
