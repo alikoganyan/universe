@@ -26,7 +26,7 @@ const Header = styled(View)`
     justify-content: space-between;
     position: absolute;
     padding: 10px 0;
-    z-index: 2;
+    z-index: 1;
     left: ${sidePadding}px;
     margin-top: 10px;
 `

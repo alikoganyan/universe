@@ -63,6 +63,7 @@ class Content extends Component {
                             inverted={true}
                             data={reversedMessages}
                             keyboardDismissMode={'on-drag'}
+                            initialNumToRender={20}
                             animated={true}
                             renderItem={({ item, index }) => {
                                 return <TouchableOpacity key={index} onLongPress={() => this.handleHold(item)}>

@@ -60,11 +60,12 @@ class Content extends Component {
                 <Wrapper search={search} >
                     {selectedMessage._id && <Shadow onPress={this.unselect} activeOpacity={1} />}
                     <ImageBackground source={chatBg} style={{ width: '100%', height: '100%' }}>
-                        <Animated.FlatList
+                        <FlatList
                             style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
                             ListHeaderComponent={<View style={{ margin: 35, }} />}
                             inverted={true}
                             data={reversedMessages}
+                            initialNumToRender={20}
                             keyboardDismissMode={'on-drag'}
                             animated={true}
                             renderItem={({ item, index }) => {

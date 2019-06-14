@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, TextInput, ActionSheetIOS, Platform, Dimensions, TouchableOpacity } from 'react-native'
-import { SmileIcon, FileIcon, CameraIcon, ImageIcon, PapperPlaneIcon } from '../../assets/index'
+import { SmileIcon, FileIcon, CameraIcon, ImageIconBlue, PapperPlaneIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
@@ -93,7 +93,7 @@ class InputComponent extends Component {
                         />
                     </Left>
                     <Right>
-                        {text ? <PapperPlaneIcon onPress={this.sendMessage} /> : <ImageIcon
+                        {text ? <PapperPlaneIcon onPress={this.sendMessage} /> : <ImageIconBlue
                             onPress={this.pickImage}
                         />}
                     </Right>
@@ -150,7 +150,10 @@ class InputComponent extends Component {
                 viewers: [],
             }
             addMessage(message);
-
+            const newDialogs = [...dialogs]
+            const index = newDialogs.findIndex(e => e.room === currentChat)
+            newDialogs[index] = res.dialog
+            setDialogs(newDialogs)
             sendRequest({
                 r_path: p_send_file,
                 method: 'post',
@@ -162,10 +165,7 @@ class InputComponent extends Component {
                 // },
                 success: (res) => {
                     socket.emit('file', { room: currentChat })
-                    const newDialogs = [...dialogs]
-                    const index = newDialogs.findIndex(e => e.room === currentChat)
-                    newDialogs[index] = res.dialog
-                    setDialogs(newDialogs)
+
                 },
                 failFunc: (err) => {
                     console.log({ err })

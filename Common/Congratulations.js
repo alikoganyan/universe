@@ -26,7 +26,7 @@ const Shadow = styled(TouchableOpacity)`
     align-items: center;
     border: 1px solid ${border};
     position: absolute;
-    z-index: 180;
+    z-index: -1;
     top: -25px;
     width: ${Dimensions.get('window').width + 20}px;
     height: ${Dimensions.get('window').height + 20};

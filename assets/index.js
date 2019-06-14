@@ -310,7 +310,7 @@ export function ImageIcon(props) {
             <Image
                 style={{ width: IconSize, height: IconSize }}
                 resizeMode={'contain'}
-                source={ICONS.Files}
+                source={ICONS.Files_white}
             />
         </StyledTouchableOpacity>
     )

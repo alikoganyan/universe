@@ -42,14 +42,15 @@ const LogoutText = styled(Text)`
 `
 class Profile extends Component {
     render() {
-        const { currentChat, user } = this.props;
+        const { currentChat, user, currentDialog } = this.props;
         const myProfile = !currentChat
+        const myGroup = currentDialog.creator._id === user._id
         return (
             <ActionSheetProvider>
                 <SafeAreaView behavior={'padding'}>
                     <Wrapper>
-                        <Header edit={this.edit} back={this.navigateBack} myProfile={myProfile} />
-                        <Content toChat={this.toChat} myProfile={myProfile} toDialogs={this.toDialogs}/>
+                        <Header edit={this.edit} back={this.navigateBack} myProfile={myProfile || myGroup} />
+                        <Content toChat={this.toChat} myProfile={myProfile} toDialogs={this.toDialogs} />
                         <Bottom>
                             {
                                 myProfile && <Logout onPress={this.logout}><LogoutText>Выйти из аккаунта</LogoutText></Logout>
@@ -85,7 +86,8 @@ class Profile extends Component {
 
 const mapStateToProps = state => ({
     user: state.userReducer.user,
-    currentChat: state.messageReducer.currentChat
+    currentChat: state.messageReducer.currentChat,
+    currentDialog: state.dialogsReducer.currentDialog
 })
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),

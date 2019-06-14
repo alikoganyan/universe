@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, Image, TextInput, ActionSheetIOS, Platform, Dimensions, TouchableOpacity } from 'react-native'
-import { SmileIcon, FileIcon, CameraIcon, ImageIcon, PapperPlaneIcon } from '../../assets/index'
+import { SmileIcon, FileIcon, CameraIcon, ImageIcon, PapperPlaneIcon, ImageIconBlue } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
@@ -97,7 +97,7 @@ class InputComponent extends Component {
                         />
                     </Left>
                     <Right>
-                        {text ? <PapperPlaneIcon onPress={this.sendMessage} /> : <ImageIcon
+                        {text ? <PapperPlaneIcon onPress={this.sendMessage} /> : <ImageIconBlue
                             onPress={this.pickImage}
                         />}
                     </Right>
@@ -153,8 +153,8 @@ class InputComponent extends Component {
             src: result.uri,
             viewers: [],
         }
-        addMessage(message);
         if (!result.cancelled) {
+            addMessage(message);
             sendRequest({
                 r_path: p_send_file,
                 method: 'post',

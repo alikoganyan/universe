@@ -113,25 +113,23 @@ class Dialogs extends Component {
 	socketDialogOpened = e => {
 		const { dialogs, setDialogs, getMessages, currentDialog, user } = this.props;
 		const { dialog_id, viewer } = e;
-
 		const newMessages = []
 		const newDialogs = [...dialogs]
 		const newDialog = newDialogs.filter(e => e._id === dialog_id)[0]
 		if (newDialog) {
 			const newDialogIndex = newDialogs.findIndex(e => e._id === dialog_id)
-			const dialog = newDialogs.filter(e => e._id === dialog_id)[0]
-			if (viewer !== user._id) {
-				currentDialog.messages && currentDialog.messages.map(e => {
-					newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
-				});
-			} else {
-				newDialog.messages && newDialog.messages.map(e => {
-					newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
-				});
-			}
+			// if (currentDialog._id === dialog_id) {
+			// 	currentDialog.messages && currentDialog.messages.map(e => {
+			// 		newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
+			// 	});
+			// } else {
+			// }
+			newDialog.messages && newDialog.messages.map(e => {
+				newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
+			});
 			newDialogs[newDialogIndex] = newDialog
 			newDialog.messages = newMessages
-			if (viewer !== user._id) getMessages(newMessages)
+			if (currentDialog._id === dialog_id) getMessages(newMessages)
 			setDialogs(newDialogs)
 		}
 	}
@@ -187,7 +185,7 @@ class Dialogs extends Component {
 		navigation.navigate('NewDialog')
 	}
 	newMessageSocket = (e) => {
-		const { dialogs, currentRoom, user, addMessage, setDialogs, navigation } = this.props
+		const { dialogs, currentRoom, user, addMessage, setDialogs, navigation, currentDialog } = this.props
 		const message = { ...e, text: e.message, type: 'text', created_at: new Date(), sender: { ...e.sender }, viewers: [] }
 		const newDialogs = [...dialogs]
 		const newDialog = newDialogs.filter(event => event.room === e.room)[0]
@@ -225,7 +223,7 @@ class Dialogs extends Component {
 				}
 			})
 			setDialogs(newDialogSorted)
-			addMessage(message)
+			if (newDialog._id === currentDialog._id) addMessage(message)
 		}
 	}
 	toProfile = e => {
@@ -313,7 +311,6 @@ class Dialogs extends Component {
 			});
 			newDialogs[newDialogIndex] = newDialog
 			newDialog.messages = newMessages
-			getMessages(newMessages)
 			setDialogs(newDialogs)
 		}
 		setRoom(roomId)
