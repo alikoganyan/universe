@@ -28,7 +28,7 @@ class Chat extends Component {
             <SafeAreaView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
                 <Wrapper>
                     <Header toProfile={this.toProfile} back={this.navigateBack} currentChat={this.props.currentChat} />
-                    <Content />
+                    <Content navigate={this.props.navigation.navigate}/>
                     <Bottom>
                         <Input />
                     </Bottom>

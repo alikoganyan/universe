@@ -111,12 +111,12 @@ class Content extends Component {
                         </DialogsLabel>
                     </Recievers>
                     <DialogsLabel>
-                        <GroupIcon right noPaddingAll />
-                        <Text>Получатели</Text>
+                        <TouchableOpacity onPress={this.addParticipant} style={{ justifyContent: 'flex-start', flexDirection: 'row' }}>
+                            <GroupIcon right noPaddingAll />
+                            <AddReciever>Добавить получателей</AddReciever>
+                        </TouchableOpacity>
                     </DialogsLabel>
-                    <TouchableOpacity onPress={this.addParticipant} style={{ justifyContent: 'flex-start' }}>
-                        <AddReciever>Добавить получателей</AddReciever>
-                    </TouchableOpacity>
+
                     <ScrollView>
                         {receivers.map((e, i) => (
                             <RecieverComponent key={i} onDelete={() => this.deleteReceiver(e)} last={i === receivers.length}>{e}</RecieverComponent>

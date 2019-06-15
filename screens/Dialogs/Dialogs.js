@@ -87,7 +87,7 @@ class Dialogs extends Component {
 		socket.removeEventListener('dialog_opened', this.socketDialogOpened)
 		socket.removeEventListener('new_group', this.socketGetGroup)
 		AppState.addEventListener('change', this._handleAppStateChange);
-		BackHandler.addEventListener('hardwareBackPress', () => true)
+		// BackHandler.addEventListener('hardwareBackPress', () => true)
 		socket.emit('get_dialogs', { id: user._id })
 		socket.on('update_dialogs', e => this.setDialogsSocket(e))
 		socket.on('new_message', e => this.newMessageSocket(e))
@@ -95,8 +95,6 @@ class Dialogs extends Component {
 		socket.on('need_update', this.socketNeedsUpdate)
 		socket.on('dialog_opened', this.socketDialogOpened)
 		socket.on('new_group', this.socketGetGroup)
-
-		console.log(user.first_name)
 		this.setState({ congratulations: !user.first_name })
 	}
 	componentWillUnmount() {

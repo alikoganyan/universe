@@ -112,7 +112,7 @@ class HeaderComponent extends Component {
                                     }
                                     <Info>
                                         <InfoChatName>{name}</InfoChatName>
-                                        <InfoParticipants>{participants.length + 1} участника</InfoParticipants>
+                                        {participants && <InfoParticipants>{participants.length + 1} участника</InfoParticipants>}
                                     </Info>
                                 </ToProfile>
                             </>
