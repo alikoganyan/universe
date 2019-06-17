@@ -11,6 +11,7 @@ import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import posed from 'react-native-pose'
 import { socket } from '../../utils/socket'
+import { BottomSheet } from 'react-native-btr'
 const { sidePadding, borderRadius, HeaderHeight, fontSize } = helper;
 const FilePickerPosed = posed.View({
     visible: { bottom: 10 },
@@ -74,11 +75,18 @@ const Shadow = styled(TouchableOpacity)`
     width: ${Dimensions.get('window').width};
     height: ${Dimensions.get('window').height};
     background: rgba(5,5,5,.3);
-    top: -${Dimensions.get('window').height - HeaderHeight}px;
+    top: -${Dimensions.get('window').height - HeaderHeight * 3}px;
     z-index: 990;
 `
 const FilePickerOption = styled(TouchableOpacity)`
     z-index: 999;
+`
+const OuterView = styled(View)`
+    background: red;
+    height: 150px;
+    display: flex;
+    justify-content: flex-end;
+    z-index: -1;
 `
 class InputComponent extends Component {
     render() {
@@ -102,12 +110,19 @@ class InputComponent extends Component {
                         />}
                     </Right>
                 </Wrapper>
-                <FilePicker pose={pickerOpened ? 'visible' : 'hidden'}>
-                    <FilePickerOption onPress={this.selectPhoto}><Text>Фото или видео</Text></FilePickerOption>
-                    <FilePickerOption onPress={this.selectFile}><Text>Файл</Text></FilePickerOption>
-                    <FilePickerOption onPress={this.selectGeo}><Text>Мою локацию</Text></FilePickerOption>
-                    <FilePickerOption onPress={this.unselect}><Text>Отменить</Text></FilePickerOption>
-                </FilePicker>
+                <BottomSheet
+                    visible={pickerOpened}
+                    onBackButtonPress={this.unselect}
+                    onBackdropPress={this.unselect}
+                >
+                    <FilePicker>
+                        <FilePickerOption onPress={this.selectPhoto}><Text>Фото или видео</Text></FilePickerOption>
+                        <FilePickerOption onPress={this.selectFile}><Text>Файл</Text></FilePickerOption>
+                        <FilePickerOption onPress={this.selectGeo}><Text>Мою локацию</Text></FilePickerOption>
+                        <FilePickerOption onPress={this.unselect}><Text>Отменить</Text></FilePickerOption>
+                    </FilePicker>
+                </BottomSheet>
+
             </>
         )
     }

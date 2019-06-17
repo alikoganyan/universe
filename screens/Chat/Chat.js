@@ -20,7 +20,7 @@ const Bottom = styled(View)`
     bottom: 0;
     width: 100%;
     background: transparent;
-    z-index: 200;
+    z-index: 3;
 `
 class Chat extends Component {
     render() {

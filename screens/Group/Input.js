@@ -10,6 +10,7 @@ import { p_send_file } from '../../constants/api'
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import posed from 'react-native-pose'
+import { BottomSheet } from 'react-native-btr'
 import { socket } from '../../utils/socket'
 const { sidePadding, borderRadius, HeaderHeight, fontSize } = helper;
 const FilePickerPosed = posed.View({
@@ -98,12 +99,18 @@ class InputComponent extends Component {
                         />}
                     </Right>
                 </Wrapper>
-                <FilePicker pose={pickerOpened ? 'visible' : 'hidden'}>
-                    <TouchableOpacity onPress={this.selectPhoto}><Text>Фото или видео</Text></TouchableOpacity>
+                <BottomSheet
+                    visible={pickerOpened}
+                    onBackButtonPress={this.unselect}
+                    onBackdropPress={this.unselect}
+                >
+                    <FilePicker>
+                      <TouchableOpacity onPress={this.selectPhoto}><Text>Фото или видео</Text></TouchableOpacity>
                     <TouchableOpacity onPress={this.selectFile}><Text>Файл</Text></TouchableOpacity>
                     <TouchableOpacity onPress={this.selectGeo}><Text>Мою локацию</Text></TouchableOpacity>
                     <TouchableOpacity onPress={this.unselect}><Text>Отменить</Text></TouchableOpacity>
-                </FilePicker>
+                    </FilePicker>
+                </BottomSheet>
             </>
         )
     }

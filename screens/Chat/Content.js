@@ -11,7 +11,7 @@ import Message from '../../common/Message'
 import posed from 'react-native-pose'
 import { getMessages } from '../../actions/messageActions'
 import { setDialogs } from '../../actions/dialogsActions'
-
+import { BottomSheet } from 'react-native-btr'
 const { Colors } = helper
 const { myMessage, interlocatorMessage } = Colors
 const MessageOptionsPosed = posed.View({
@@ -23,6 +23,7 @@ const Wrapper = styled(View)`
     background: white;
     margin-bottom: ${({ search }) => search ? HeaderHeight * 2 : HeaderHeight};
     z-index: 1;
+    position: relative;
 `
 const Shadow = styled(TouchableOpacity)`
     position: absolute;
@@ -32,7 +33,7 @@ const Shadow = styled(TouchableOpacity)`
     top: -${HeaderHeight - 3}px;
     z-index: 4;
 `
-const MessageOptions = styled(MessageOptionsPosed)`
+const MessageOptions = styled(View)`
     background: white;
     width: 94%;
     position: absolute;
@@ -47,6 +48,7 @@ const MessageOptions = styled(MessageOptionsPosed)`
 `
 const MessageOption = styled(TouchableOpacity)`
     padding-bottom: 30px;
+    width: 100%;
 `
 class Content extends Component {
     render() {
@@ -77,7 +79,11 @@ class Content extends Component {
                         />
                     </ImageBackground>
                 </Wrapper>
-                <MessageOptions pose={selectedMessage._id ? 'visible' : 'hidden'}>
+                <BottomSheet
+                    visible={selectedMessage._id}
+                    onBackButtonPress={this.unselect}
+                    onBackdropPress={this.unselect}>
+                    <MessageOptions>
                     {
                         selectedMessage._id && selectedMessage.sender._id === user._id && <>
                             <MessageOption onPress={this.turnToTask}><Text>Сделать задачей</Text></MessageOption>
@@ -86,7 +92,8 @@ class Content extends Component {
                     }
                     <MessageOption><Text>Переслать</Text></MessageOption>
                     <MessageOption onPress={this.unselect}><Text>Отменить</Text></MessageOption>
-                </MessageOptions>
+                    </MessageOptions>
+                </BottomSheet>
             </>
         )
     }
