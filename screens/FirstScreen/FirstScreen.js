@@ -13,6 +13,9 @@ const { Colors, fontSize } = helper;
 const { lightColor, lightGrey1, blue, pink } = Colors;
 const { large, text, sm } = fontSize;
 class FirstScreen extends Component {
+    static navigationOptions = {
+        drawerLockedMode: 'locked-open',
+    }
     render() {
         const { logged, loaded } = this.state
         return loaded ? <View>
@@ -25,6 +28,7 @@ class FirstScreen extends Component {
                         </View> : <SplashScreen />
 
     }
+
     state = {
         logged: false,
         loaded: false,
@@ -40,14 +44,15 @@ class FirstScreen extends Component {
             value = JSON.parse(res);
             if (value) {
                 // this.login() // restore
-                this.props.setUser({...value})
+                this.props.setUser({ ...value })
                 this.props.setAuth(value.access_token)
                 setTimeout(() => {
                     connectToSocket()
                     console.log(value.access_token)
-                    this.setState({ logged: true, loaded: !!value.access_token, phone: value.phone_number.slice(2), password: value.password })
+                    this.setState({ logged: true, phone: value.phone_number.slice(2), password: value.password })
                 }, 0)
             }
+            setTimeout(() => this.setState({ loaded: true }), 0)
         });
     }
     login = (e) => {
