@@ -17,6 +17,7 @@ import {
   Signup,
   Signup2,
   Signup3,
+  FirstScreen,
   PinCode,
   Login,
   Restore,
@@ -128,12 +129,13 @@ const AppStackNavigator = createStackNavigator(
     NewTaskReceivers: { screen: NewTaskReceivers },
     NewGroupParticipants: { screen: NewGroupParticipants },
     NewGroup: { screen: NewGroup },
+    FirstScreen: { screen: FirstScreen },
     FeedReceivers: { screen: FeedReceivers },
     TaskEdit: { screen: TaskEdit },
     GroupEdit: { screen: GroupEdit },
   },
   {
-    initialRouteName: "Login",
+    initialRouteName: "FirstScreen",
     headerMode: "none"
   }
 );

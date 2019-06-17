@@ -12,7 +12,6 @@ import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
 import { socket, connectToSocket, disconnectFromSocket } from '../../utils/socket'
-
 const { sidePadding, HeaderHeight, Colors } = helper;
 const { blue, grey2, lightColor } = Colors;
 const Wrapper = styled(View)
@@ -89,7 +88,18 @@ class Dialogs extends Component {
         socket.removeEventListener('dialog_opened', this.socketDialogOpened)
         socket.removeEventListener('new_group', this.socketGetGroup)
         AppState.addEventListener('change', this._handleAppStateChange);
-        // BackHandler.addEventListener('hardwareBackPress', () => true)
+        BackHandler.addEventListener('hardwareBackPress', () => {
+            if (this.props.navigation.state.routeName === 'Home') {
+                this.props.navigation.goBack();
+                console.log('home', this.props.navigation.state)
+                return;
+            }else{
+                console.log('not home')
+                return;
+            }
+            // if(this.props.navigation.state.routeName === 'Home') return true;
+        })
+        console.log()
         socket.emit('get_dialogs', { id: user._id })
         socket.on('update_dialogs', e => this.setDialogsSocket(e))
         socket.on('new_message', e => this.newMessageSocket(e))

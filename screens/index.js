@@ -39,6 +39,7 @@ import NewGroupParticipants from './NewGroupParticipants/NewGroupParticipants'
 import NewGroup from './NewGroup/NewGroup'
 import TaskEdit from './TaskEdit/TaskEdit'
 import GroupEdit from './GroupEdit/GroupEdit'
+import FirstScreen from './FirstScreen/FirstScreen'
 export {
     Group,
     Dialogs,
@@ -81,4 +82,5 @@ export {
     FeedReceivers,
     TaskEdit,
     GroupEdit,
+    FirstScreen,
 }

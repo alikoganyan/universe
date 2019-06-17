@@ -176,14 +176,14 @@ class Content extends Component {
         loading: false,
     }
     componentDidMount = () => {
-        const { navigation, setUser } = this.props;
-        AsyncStorage.getItem('user').then(res => {
-            value = JSON.parse(res);
-            if (value) {
-                this.setState({ phone: value.phone_number.slice(2), password: value.password })
-                this.login() // restore
-            }
-        });
+        // const { navigation, setUser } = this.props;
+        // AsyncStorage.getItem('user').then(res => {
+        //     value = JSON.parse(res);
+        //     if (value) {
+        //         this.setState({ phone: value.phone_number.slice(2), password: value.password })
+        //         this.login() // restore
+        //     }
+        // });
     }
     storeUserData = async (user) => {
         try {
@@ -212,7 +212,7 @@ class Content extends Component {
                 setAuth(access_token)
                 setUser(data)
                 connectToSocket()
-                this.storeUserData({ ...data, password })
+                this.storeUserData({ ...data, password, access_token })
                 this.setState({ loading: false })
                 setTimeout(() => navigate('Dialogs'), 0)
             },

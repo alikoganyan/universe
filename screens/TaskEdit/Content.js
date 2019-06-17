@@ -26,7 +26,7 @@ import { setTasks, setCurrentTask } from "../../actions/tasksActions";
 import { GroupIcon, CloseIcon } from "../../assets/";
 import DatePicker from "react-native-datepicker";
 const { Colors, HeaderHeight, sidePadding } = helper;
-const { lightGrey1, black, purple } = Colors;
+const { lightGrey1, black, purple, red } = Colors;
 const Wrapper = styled(View)`
     padding: 0 ${sidePadding}px;
     display: flex;
@@ -92,6 +92,11 @@ const DeadlineTime = styled(View)`
     justify-content: space-between;
     max-width: 70%;
 `;
+const DeleteTask = styled(Text)`
+    color: ${red};
+    text-align: center;
+    margin-top: 20px;
+`
 const ReceiverComponent = props => {
     const { children, last = false, onDelete } = props;
     const { image, phone_number, role, first_name, last_name } = children;
@@ -241,9 +246,15 @@ class Content extends Component {
                             onPress={this.proceed}
                             style={{ background: purple }}
                             color={"white"}>
-                            Создать задачу
+                            Редактировать задачу
                         </Button>
+                        <TouchableOpacity onPress={this.deleteTask}>
+                         <DeleteTask>
+                             Удалить задачу
+                         </DeleteTask>
+                     </TouchableOpacity>
                     </ButtonBox>
+                    
                 </StyledScrollView>
             </Wrapper>
         );
@@ -281,6 +292,29 @@ class Content extends Component {
         const { addParticipants } = this.props;
         addParticipants();
     };
+    deleteTask = e => {
+        const { back, activeTask, setTasks, setCurrentTask, tasks, user, currentTask } = this.props;
+        const { _id, status, performers, creator } = activeTask;
+        console.log('123', {_id}, {p_tasks})
+        sendRequest({
+            r_path: p_tasks,
+            method: "delete",
+            attr: {
+                _id
+            },
+            success: res => {
+                // setCurrentTask({});
+                // const newTasks = [...tasks].filter(e => e._id !== _id)
+                // setTasks(newTasks);
+                // back();
+                console.log('deleted')
+                // getMessages(res.messages);
+            },
+            failFunc: err => {
+                console.log(err);
+            }
+        });
+    }
     proceed = e => {
         const { back, activeTask, setTasks, setCurrentTask, tasks, user, currentTask } = this.props;
         const { _id, status, performers, creator } = activeTask;
