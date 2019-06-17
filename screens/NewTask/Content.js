@@ -16,7 +16,8 @@ import { GroupIcon, CloseIcon } from '../../assets/'
 import DatePicker from 'react-native-datepicker'
 const { Colors, HeaderHeight, sidePadding } = helper;
 const { lightGrey1, black, purple } = Colors;
-const Wrapper = styled(View)`
+const Wrapper = styled(View)
+`
     padding: 0 ${sidePadding}px;
     display: flex;
     justify-content: center;
@@ -24,11 +25,13 @@ const Wrapper = styled(View)`
     height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
     width: 100%;
 `
-const StyledScrollView = styled(ScrollView)`
+const StyledScrollView = styled(ScrollView)
+`
     height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
     width: 100%;
 `
-const StyledInput = styled(TextInput)`
+const StyledInput = styled(TextInput)
+`
     border: 1px solid ${lightGrey1};
     border-width: 0;
     border-bottom-width: 1px;
@@ -39,13 +42,16 @@ const StyledInput = styled(TextInput)`
     max-height: 40px;
     ${({ style }) => style}
 `
-const ButtonBox = styled(View)`
+const ButtonBox = styled(View)
+`
     align-self: center;
 `
-const Receivers = styled(View)`
+const Receivers = styled(View)
+`
     margin: 60px 0;
 `
-const Receiver = styled(View)`
+const Receiver = styled(View)
+`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -53,30 +59,37 @@ const Receiver = styled(View)`
     margin-top: 20px;
     
 `
-const ReceiverInfo = styled(View)`
+const ReceiverInfo = styled(View)
+`
     display: flex;
     justify-content: space-between;
 `
-const Department = styled(Text)`
+const Department = styled(Text)
+`
     color: ${lightGrey1};
 `
-const DialogsLabel = styled(View)`
+const DialogsLabel = styled(View)
+`
     display: flex;
     align-items: center;
     flex-direction:row;
     justify-content: flex-start;
     margin-top: 20px;
 `
-const DialogsLabelText = styled(Text)`
+const DialogsLabelText = styled(Text)
+`
     margin-left: 10px;
 `
-const AddReceiver = styled(Text)`
+const AddReceiver = styled(Text)
+`
     color: ${purple};
 `
-const DeadLine = styled(View)`
+const DeadLine = styled(View)
+`
     margin-top: 30px;
 `
-const DeadlineTime = styled(View)`
+const DeadlineTime = styled(View)
+`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -192,6 +205,12 @@ class Content extends Component {
                     </Receivers>
                     <ButtonBox>
                         <Button
+                            disabled={
+                                !taskName ||
+                                !taskText ||
+                                !deadlineDate ||
+                                !deadlineTime
+                            }
                             onPress={this.proceed}
                             style={{ background: purple }}
                             color={'white'}>Создать задачу</Button>
@@ -212,8 +231,7 @@ class Content extends Component {
         this.setState({ taskText: text })
         // setTaskReceivers(participants)
     }
-    componentWillUpdate() {
-    }
+    componentWillUpdate() {}
     jsCoreDateCreator = (dateString) => {
         // dateString *HAS* to be in this format "YYYY-MM-DD HH:MM:SS"  
         let dateParam = dateString.split(/[\s-:]/)

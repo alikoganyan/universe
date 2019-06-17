@@ -13,7 +13,8 @@ import ProgressBar from 'react-native-progress/Circle'
 const { HeaderHeight, Colors, fontSize, borderRadius } = helper;
 const { myMessage, interlocatorMessage, pink } = Colors
 
-const MyMessage = styled(View)`
+const MyMessage = styled(View)
+`
     display: flex;
     justify-content: center;
     text-align: right;
@@ -28,7 +29,8 @@ const MyMessage = styled(View)`
     z-index: 1;
 `
 
-const MyMessageText = styled(Text)`
+const MyMessageText = styled(Text)
+`
     display: flex;
     justify-content: flex-end;
     text-align: left;
@@ -37,7 +39,8 @@ const MyMessageText = styled(Text)`
     color: white;
 `
 
-const InterlocutorsMessage = styled(MyMessage)`
+const InterlocutorsMessage = styled(MyMessage)
+`
     justify-content: center;
     flex-direction: column;
     text-align: left;
@@ -51,7 +54,8 @@ const InterlocutorsMessage = styled(MyMessage)`
     max-width: 80%;
 `
 
-const InterlocutorsMessageText = styled(MyMessageText)`
+const InterlocutorsMessageText = styled(MyMessageText)
+`
     justify-content: flex-start;
     text-align: left;
     display: flex;
@@ -64,7 +68,8 @@ const InterlocutorsMessageText = styled(MyMessageText)`
     padding-bottom: 0;
     flex-wrap: wrap;
 `
-const MessageInfo = styled(View)`
+const MessageInfo = styled(View)
+`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -73,20 +78,24 @@ const MessageInfo = styled(View)`
     width: 100%;
 `
 
-const MessageDate = styled(Text)`
+const MessageDate = styled(Text)
+`
     color: ${({ color }) => color || '#ABABAB'};
 `
 
-const MyMessageImage = styled(ImageLoader)`
+const MyMessageImage = styled(ImageLoader)
+`
     min-height: 200px;
     min-width: 100%;
     max-height: 100%;
     resize-mode: contain;
 `
-const InterlocutorsName = styled(InterlocutorsMessageText)`
+const InterlocutorsName = styled(InterlocutorsMessageText)
+`
     margin-bottom: 0;
 `
-const MapViewStreet = styled(View)`
+const MapViewStreet = styled(View)
+`
     height: 30;
     width: 99%;
     align-self: center;
@@ -100,26 +109,31 @@ const MapViewStreet = styled(View)`
     padding: 5px 10px;
     font-size: ${fontSize.sm};
 `
-const MapViewStreetText = styled(Text)`
+const MapViewStreetText = styled(Text)
+`
     color: white;
 `
-const MapViewStreetInfo = styled(View)`
+const MapViewStreetInfo = styled(View)
+`
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-end;
 `
-const MapViewStreetTime = styled(Text)`
+const MapViewStreetTime = styled(Text)
+`
     color: white;
 `
-const FileInfoWrapper = styled(View)`
+const FileInfoWrapper = styled(View)
+`
     display: flex;
     flex-direction: row;
     padding: 10px;
     padding-bottom: 0;
     align-items: center;
 `
-const FileIcon = styled(View)`
+const FileIcon = styled(View)
+`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -131,13 +145,15 @@ const FileIcon = styled(View)`
     margin-right: 10px;
     overflow: hidden;
 `
-const FileInfo = styled(View)`
+const FileInfo = styled(View)
+`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: center;
 `
-const FileSize = styled(Text)`
+const FileSize = styled(Text)
+`
     color: ${({ color }) => color || 'white'};
 `
 const Indicator = ({ read = false, color }) => {
@@ -146,20 +162,20 @@ const Indicator = ({ read = false, color }) => {
 
 class Message extends Component {
     render() {
-        const { children, messages, myId, background, withImage, currentDialog } = this.props
-        const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename, size } = children;
-        const date = new Date(created_at);
-        const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
-        const day = daysOfTheWeek[date.getDay()]
-        const time = `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`
-        const finalTime = Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time
-        const fileSize = size / 1024 > 1024 ? `${(size / (1024 * 2)).toFixed(1)}МБ` : `${(size / 1024).toFixed(1)}КБ`
-        const { imageUri } = this.state
-        const messageRead = !!viewers.filter(e => e !== myId).length;
-        if (type === 'image') {
-            this.readFile(src.split('file://')[1] ? src : `http://ser.univ.team${src}`, filename)
-            return (myId == sender._id ? (
-                <View style={{ display: 'flex', flexDirection: 'row' }}>
+            const { children, messages, myId, background, withImage, currentDialog } = this.props
+            const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename, size } = children;
+            const date = new Date(created_at);
+            const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+            const day = daysOfTheWeek[date.getDay()]
+            const time = `${date.getHours() >= 10 ? date.getHours() : '0' + date.getHours()}:${date.getMinutes() >= 10 ? date.getMinutes() : '0' + date.getMinutes()}`
+            const finalTime = Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time
+            const fileSize = size / 1024 > 1024 ? `${(size / (1024 * 2)).toFixed(1)}МБ` : `${(size / 1024).toFixed(1)}КБ`
+            const { imageUri } = this.state
+            const messageRead = !!viewers.filter(e => e !== myId).length;
+            if (type === 'image') {
+                this.readFile(src.split('file://')[1] ? src : `http://ser.univ.team${src}`, filename)
+                return (myId == sender._id ? (
+                    <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <MyMessage background={background} style={{ padding: 0 }}>
                         <LightBox style={{ flex: 1 }}>
                             <MyMessageImage
@@ -175,9 +191,9 @@ class Message extends Component {
                         </MessageInfo>
                     </MyMessage >
                     <TriangleLeftIcon color={myMessage} />
-                </ View >
-            ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
+                </View>
+                ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
+                    {withImage ? <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} /> : null}
                     <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
                         <TriangleRightIcon color={interlocatorMessage} />
                         <InterlocutorsMessage background={background}>
@@ -193,12 +209,11 @@ class Message extends Component {
                             </MessageInfo>
                         </InterlocutorsMessage>
                     </View>
-                </View>
-            )
-        }
-        if (type === 'text' || !type) {
-            return (myId == sender._id ? (
-                <View style={{ display: 'flex', flexDirection: 'row' }}>
+                </View>)
+            }
+            if (type === 'text' || !type) {
+                return (myId == sender._id ? (
+                            <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <MyMessage background={background}>
                         <MyMessageText>
                             {text}
@@ -210,7 +225,7 @@ class Message extends Component {
                     </MyMessage>
                     <TriangleLeftIcon color={background || myMessage} />
                 </View>
-            ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
+                        ) : <View style={{ display: 'flex', flexDirection: 'row' }}>
                     {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
                     <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
                         <TriangleRightIcon color={background || interlocatorMessage} />

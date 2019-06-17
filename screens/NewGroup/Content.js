@@ -113,6 +113,7 @@ class Content extends Component {
                             <AddReceiver>Добавить</AddReceiver>
                         </TouchableOpacity>
                         <Button
+                            disabled={!text}
                             onPress={this.proceed}
                             style={{ background: green }}
                             color={black}>Продолжить</Button>

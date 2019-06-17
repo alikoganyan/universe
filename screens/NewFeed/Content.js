@@ -15,14 +15,16 @@ import { GroupIcon, CloseIcon } from '../../assets/'
 import { setFeedReceivers } from '../../actions/participantsActions'
 const { Colors, HeaderHeight, sidePadding } = helper;
 const { lightGrey1, black, yellow } = Colors;
-const Wrapper = styled(View)`
+const Wrapper = styled(View)
+`
     padding: 0 ${sidePadding * 2}px;
     justify-content: center;
     flex-grow: 1;
     height: 100%;
 `
 
-const StyledInput = styled(TextInput)`
+const StyledInput = styled(TextInput)
+`
     border: 1px solid ${lightGrey1};
     border-width: 0;
     border-bottom-width: 1px;
@@ -31,13 +33,16 @@ const StyledInput = styled(TextInput)`
     margin-bottom: 50px;
     ${({ style }) => style}
 `
-const ButtonBox = styled(View)`
+const ButtonBox = styled(View)
+`
     width: 170px;
     align-self: center;
 `
-const Recievers = styled(View)`lkljkljk
+const Recievers = styled(View)
+`lkljkljk
 `
-const Reciever = styled(View)`
+const Reciever = styled(View)
+`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -45,21 +50,25 @@ const Reciever = styled(View)`
     margin-top: 20px;
     
 `
-const RecieverInfo = styled(View)`
+const RecieverInfo = styled(View)
+`
     display: flex;
     justify-content: space-between;
 `
-const Department = styled(Text)`
+const Department = styled(Text)
+`
     color: ${lightGrey1};
 `
-const DialogsLabel = styled(View)`
+const DialogsLabel = styled(View)
+`
     display: flex;
     align-items: center;
     flex-direction:row;
     justify-content: flex-start;
     margin-top: 20px;
 `
-const AddReciever = styled(Text)`
+const AddReciever = styled(Text)
+`
     color: ${yellow};
 `
 const RecieverComponent = (props) => {
@@ -105,6 +114,7 @@ class Content extends Component {
                                 <AddReciever>Добавить</AddReciever>
                             </TouchableOpacity>
                             <Button
+                                disabled={!text || !receivers.length}
                                 onPress={this.proceed}
                                 style={{ background: yellow }}
                                 color={black}>Продолжить</Button>
@@ -123,8 +133,7 @@ class Content extends Component {
         text: '',
         err: false
     }
-    componentDidMount() {
-    }
+    componentDidMount() {}
     componentWillUpdate() {
 
     }
