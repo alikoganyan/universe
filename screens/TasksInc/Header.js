@@ -105,7 +105,7 @@ class HeaderComponent extends Component {
             <Header>
                 <Left>
                     <BackIcon onPress={back} />
-                    <InfoChatName>Все исходящие задачи</InfoChatName>
+                    <InfoChatName>Все входящие задачи</InfoChatName>
                 </Left>
                 <Right>
                     <SearchIcon onPress={startSearch} />

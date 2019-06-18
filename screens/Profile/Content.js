@@ -40,6 +40,7 @@ const UserInfo = styled(View)`
     align-items: center;
     height: 60px;
     width: 100%;
+    margin-top: 10px;
 `
 const UserName = styled(View)`
     display: flex;

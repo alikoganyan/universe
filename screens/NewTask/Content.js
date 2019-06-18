@@ -123,6 +123,7 @@ class Content extends Component {
             deadlineDate,
             deadlineTime
         } = this.state
+        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
         const date = new Date();
         return (
             <Wrapper>
@@ -154,9 +155,9 @@ class Content extends Component {
                             <DatePicker
                                 date={deadlineDate}
                                 mode="date"
-                                placeholder={`${date.getDay()} ${'Мая'} ${date.getFullYear()}`}
                                 confirmBtnText="Подтвердить"
-                                format="YYYY-MM-DD"
+                                format="DD-MM-YYYY"
+                                minDate = {new Date()}
                                 cancelBtnText="Отменить"
                                 customStyles={{
                                     dateIcon: {
@@ -173,7 +174,6 @@ class Content extends Component {
                             <DatePicker
                                 date={deadlineTime}
                                 mode="time"
-                                placeholder="11:12"
                                 confirmBtnText="Подтвердить"
                                 cancelBtnText="Отменить"
                                 customStyles={{
@@ -222,9 +222,10 @@ class Content extends Component {
     state = {
         taskName: '',
         taskText: '',
-        deadlineDate: '',
-        deadlineTime: ''
+        deadlineDate: new Date(),
+        deadlineTime: new Date()
     }
+
     componentDidMount() {
         const { deafultValues, setTaskReceivers } = this.props
         const { text, participants } = deafultValues

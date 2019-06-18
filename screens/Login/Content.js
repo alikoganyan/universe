@@ -176,7 +176,7 @@ class Content extends Component {
         loading: false,
     }
     componentDidMount = () => {
-        // const { navigation, setUser } = this.props;
+        const { navigation, setUser } = this.props;
         // AsyncStorage.getItem('user').then(res => {
         //     value = JSON.parse(res);
         //     if (value) {

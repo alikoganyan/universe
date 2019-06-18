@@ -83,10 +83,11 @@ class Content extends Component {
                             ListFooterComponent={<View style={{ margin: 0, }} />}
                             renderItem={({ item, index }) => {
                                 const myTask = item.creator._id === user._id;
+                                console.log(item.creator.first_name, user._id, myTask)
                                 return <TaskWrapper>
                                     <TouchableOpacity style={{ flex: 1 }} onLongPress={e => this.handleHold(item)}><TaskComponent
-                                        triangleLeft={myTask}
-                                        triangleRight={!myTask}
+                                        triangleLeft={!myTask}
+                                        triangleRight={myTask}
                                         borderColor={myTask ? pink : purple}
                                         editFeed={this.editFeed}
                                         style={{

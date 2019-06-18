@@ -62,7 +62,7 @@ class HeaderComponent extends Component {
                     {!search ?
                         <>
                             <BackIcon onPress={back} right marginLeft={true} />
-                            <HeaderText>Все входящие задачи</HeaderText>
+                            <HeaderText>Все исходящие задачи</HeaderText>
                         </> :
                         <>
                             <SearchIcon marginLeft={true} />

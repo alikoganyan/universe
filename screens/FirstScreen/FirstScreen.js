@@ -8,7 +8,9 @@ import { setUser, setAuth, setRegisterUserNumber } from '../../actions/userActio
 import { p_login } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import { connectToSocket } from '../../utils/socket'
-import { Login, Dialogs, SplashScreen } from '../'
+import Login from '../Login/Login'
+import Dialogs from '../Dialogs/Dialogs'
+import SplashScreen from '../SplashScreen/SplashScreen'
 const { Colors, fontSize } = helper;
 const { lightColor, lightGrey1, blue, pink } = Colors;
 const { large, text, sm } = fontSize;

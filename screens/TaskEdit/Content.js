@@ -177,9 +177,8 @@ class Content extends Component {
                             <DatePicker
                                 date={deadlineDate}
                                 mode="date"
-                                placeholder={`${date.getDay()} ${"Мая"} ${date.getFullYear()}`}
                                 confirmBtnText="Подтвердить"
-                                format="YYYY-MM-DD"
+                                format="DD-MM-YYYY"
                                 cancelBtnText="Отменить"
                                 customStyles={{
                                     dateIcon: {
@@ -198,7 +197,6 @@ class Content extends Component {
                             <DatePicker
                                 date={deadlineTime}
                                 mode="time"
-                                placeholder="11:12"
                                 confirmBtnText="Подтвердить"
                                 cancelBtnText="Отменить"
                                 customStyles={{
@@ -262,8 +260,8 @@ class Content extends Component {
     state = {
         taskName: "",
         taskText: "",
-        deadlineDate: "",
-        deadlineTime: ""
+        deadlineDate: new Date(),
+        deadlineTime: new Date()
     };
     componentDidMount() {
         const { activeTask } = this.props;

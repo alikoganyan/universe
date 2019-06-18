@@ -8,17 +8,20 @@ import { setActiveTask } from '../../actions/tasksActions'
 import helper from '../../utils/helpers'
 const { sidePadding, Colors, HeaderHeight } = helper;
 const { yellow, green, purple, red, black, pink } = Colors;
-const Wrapper = styled(View)`
+const Wrapper = styled(View)
+`
     margin-bottom: 50px;   
 `
-const TaskList = styled(FlatList)`
+const TaskList = styled(FlatList)
+`
     padding: 10px 0;
     display: flex;
     flex-grow: 1;
     padding-bottom: 20px;
     z-index: 5;
 `
-const Options = styled(View)`
+const Options = styled(View)
+`
     display: flex;
     align-self: center;
     background: ${purple};
@@ -29,7 +32,8 @@ const Options = styled(View)`
     margin: 10px 0;
     max-width: 85%;
 `
-const Option = styled(Text)`
+const Option = styled(Text)
+`
     color: ${({ active }) => active ? black : 'white'};
     background: ${({ active }) => active ? 'white' : 'transparent'};
     margin: 1px;
@@ -39,13 +43,15 @@ const Option = styled(Text)`
     min-width: 30%;
     text-align: center;
 `
-const TaskWrapper = styled(View)`
+const TaskWrapper = styled(View)
+`
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
     flex-direction: row;
 `
-const Shadow = styled(TouchableOpacity)`
+const Shadow = styled(TouchableOpacity)
+`
     background: black;
     opacity: 0.1;
     z-index: 0;
@@ -55,7 +61,8 @@ const Shadow = styled(TouchableOpacity)`
     top: -${HeaderHeight};
     left: 0;
 `
-const StyledScrollView = styled(ScrollView)`
+const StyledScrollView = styled(ScrollView)
+`
     flexGrow: 1;
     zIndex: 10;
     width: 100%;
@@ -67,7 +74,10 @@ class Content extends Component {
         const { active } = options;
         const { currentTask, user, activeTask, tasks } = this.props
         const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
-        const tasksList = [...tasks].filter(e => e._id !== user._id).map(e => e.tasks)
+        const tasksList = [...tasks].filter(e => {
+            console.log({ e })
+            return e._id === user._id;
+        }).map(e => e.tasks)
         const incTasks = flatten(tasksList)
         return (
             <SafeAreaView>
