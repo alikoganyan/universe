@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, Dimensions, ScrollView } from 'react-native'
+import { View, Dimensions } from 'react-native'
 import styled from 'styled-components'
 import Header from './Header'
 import Content from './Content'

@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, ScrollView, Platform, Dimensions } from 'react-native'
+import { View, Text, TextInput, ScrollView, Dimensions } from 'react-native'
 import helper from '../../utils/helpers'
-import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import Button from '../../common/Button'
 import sendRequest from '../../utils/request'
 import { p_create_contact } from '../../constants/api'
-const { Colors, HeaderHeight } = helper;
-const { green, lightGrey1, grey2, black, color } = Colors;
+const { Colors } = helper;
+const { green, lightGrey1, grey2 } = Colors;
 
 const Wrapper = styled(View)`
     padding: 10%;
@@ -47,8 +46,7 @@ const ButtonBox = styled(View)`
 `
 export default class Content extends Component {
     render() {
-        const { error, phone, country, lastName, firstName, patronymic, post, email } = this.state;
-        const { navigateToDialogs } = this.props;
+        const { phone, country, lastName, firstName, patronymic, post, email } = this.state;
         return (
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}
                 keyboardShouldPersistTaps='handled'>
@@ -118,7 +116,7 @@ export default class Content extends Component {
     handleChangeEmail = (e) => {
         this.setState({ email: e })
     }
-    proceed = e => {
+    proceed = () => {
         const {
             phone,
             country,

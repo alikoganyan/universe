@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, KeyboardAvoidingView, Dimensions, Platform } from 'react-native'
-import { BackIcon } from '../../assets/index'
+import { View, Platform } from 'react-native'
 import styled from 'styled-components'
 import { setCurrentChat } from '../../actions/messageActions'
 import SafeAreaView from '../../common/SafeAreaView'
@@ -10,7 +9,6 @@ import Input from './Input'
 import Content from './Content'
 import { connect } from 'react-redux'
 import { socket } from '../../utils/socket'
-const { HeaderHeight } = helper
 const Wrapper = styled(View)`
     height: 100%;
     overflow: hidden;
@@ -42,12 +40,12 @@ class Chat extends Component {
     componentDidMount() {
     }
     componentWillUnmount() {
-        const { setCurrentChat, currentRoom, currentChat, user } = this.props;
+        const { setCurrentChat, currentChat, user } = this.props;
         setCurrentChat(null)
         socket.emit('leave', { room: currentChat, viewer: user._id })
     }
     navigateBack = () => {
-        const { currentRoom, navigation } = this.props;
+        const { navigation } = this.props;
         navigation.goBack()
     }
     toProfile = () => {

@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native'
-import { BackIcon, EllipsisVIcon, ArrowDownIcon } from '../../assets/index'
+import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import { ArrowDownIcon } from '../../assets/index'
 import styled from 'styled-components'
-import FloatingLabel from 'react-native-floating-labels'
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import RoundCheckbox from 'rn-round-checkbox'
-import posed, { Transition } from 'react-native-pose';
+import posed from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import sendRequest from '../../utils/request'
 import { g_users } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
@@ -18,9 +15,8 @@ import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
 import { addTaskReceiver, setTaskReceivers } from '../../actions/participantsActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { connect } from 'react-redux'
-
 const { Colors } = helper;
-const { green, black, purple } = Colors;
+const { purple } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
         x: Dimensions.get('window').width,
@@ -117,26 +113,6 @@ const ContactRole = styled(Text)`
 const ArrowWrapper = styled(AnimatedArrowWrapper)`
     
 `
-const Options = styled(View)`
-    display: flex;
-    align-self: center;
-    background: ${green};
-    flex-direction: row;
-    justify-content: space-between;
-    padding: 1px;
-    border-radius: 13;
-    overflow: hidden;
-`
-const Option = styled(Text)`
-    color: ${({ active }) => active ? black : 'white'};
-    background: ${({ active }) => active ? 'white' : 'transparent'};
-    min-width: 20%;
-    margin: 1px;
-    border-radius: 10;
-    padding: 2px 10px;
-    overflow: hidden;
-    text-align: center;
-`
 const Group = styled(BoxInnerItem)``
 const GroupInfo = styled(ContactInfo)``
 const GroupTitle = styled(ContactName)``
@@ -144,7 +120,6 @@ const GroupParticipants = styled(ContactRole)``
 const GroupImage = styled(ContactImage)``
 class Content extends Component {
     render() {
-        const { receivers } = this.props
         const { users, collapsed, options, groups } = this.state;
         const { department } = users;
         const { active } = options;
@@ -300,12 +275,11 @@ class Content extends Component {
 
     }
     addReceiver = (e) => {
-        const { addReceiver, back, setReceivers, receivers } = this.props;
-        const { usersToAdd } = this.state;
+        const { setReceivers } = this.props;
         setReceivers([e])
     }
     addAllReceivers = (e) => {
-        const { addReceiver, back, receivers, setReceivers } = this.props;
+        const { receivers, setReceivers } = this.props;
         const newReceivers = JSON.stringify(e) === JSON.stringify(receivers) ? [] : e
         setReceivers(newReceivers)
     }

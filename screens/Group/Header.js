@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Image, Platform, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, Dimensions, TouchableOpacity } from 'react-native'
 import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/index'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
@@ -82,21 +82,16 @@ const Input = styled(TextInput)`
     padding-left: 10px; 
     flex: 1; 
 `
-const IconLeft = styled(Icon)`
-    margin-left: ${sidePadding}px;
-`
 const ToProfile = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
     margin-right: 20px;
 `
-const SearchIconContainer = styled(View)`
-margin-right: 20px;
-`
+
 class HeaderComponent extends Component {
     render() {
-        const { back, search, startSearch, stopSearch, currentChat, currentDialog } = this.props
-        const { name, creator, participants, image, _id } = currentDialog
+        const { back, search, startSearch, stopSearch, currentDialog } = this.props
+        const { name, participants, image, _id } = currentDialog
         return (
             <Header>
                 <Top>
@@ -154,7 +149,7 @@ class HeaderComponent extends Component {
         toProfile()
     }
     find = (e) => {
-        const { getMessages, dialogs, currentRoom, currentChat, currentRoomId } = this.props;
+        const { getMessages, dialogs, currentRoom, currentRoomId } = this.props;
         e ? sendRequest({
             r_path: p_search_messages,
             method: 'post',
@@ -181,8 +176,8 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
-    startSearch: _ => dispatch(startSearch()),
-    stopSearch: _ => dispatch(stopSearch()),
+    startSearch: _ => dispatch(startSearch(_)),
+    stopSearch: _ => dispatch(stopSearch(_)),
     getMessages: _ => dispatch(getMessages(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)

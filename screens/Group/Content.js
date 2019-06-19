@@ -1,21 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Dimensions, ImageBackground, TouchableOpacity, TouchableWithoutFeedback, ActionSheetIOS, Platform, Animated } from 'react-native'
-import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CommentIcon, HeartIcon } from '../../assets/index'
+import { View, Text, FlatList, Dimensions, ImageBackground, TouchableOpacity, ActionSheetIOS, Platform } from 'react-native'
 import { chatBg } from '../../assets/images/'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import TaskComponent from '../../common/Task'
-import Feed from '../../common/Feed'
 import Message from '../../common/Message'
 import posed from 'react-native-pose'
 import { BottomSheet } from 'react-native-btr'
-const { Colors } = helper
-const { myMessage, interlocatorMessage } = Colors
-const MessageOptionsPosed = posed.View({
-    visible: { bottom: 10 },
-    hidden: { bottom: -250 }
-});
+
 const { HeaderHeight, borderRadius } = helper;
 const Wrapper = styled(View)`
     background: white;
@@ -49,7 +41,7 @@ const MessageOption = styled(TouchableOpacity)`
 class Content extends Component {
     render() {
         const { selectedMessage } = this.state
-        const { messages, search, currentChat, user } = this.props
+        const { messages, search, user } = this.props
         const reversedMessages = [...messages].sort((x, y) => {
             return x.timeSent < y.timeSent
         });
@@ -97,10 +89,10 @@ class Content extends Component {
         selectedMessage: {},
     }
     componentDidMount() { }
-    unselect = (e) => {
+    unselect = () => {
         this.setState({ selectedMessage: {} })
     }
-    turnToTask = e => {
+    turnToTask = () => {
         const { user, navigate } = this.props
         const { selectedMessage } = this.state
         const { text, viewers } = selectedMessage

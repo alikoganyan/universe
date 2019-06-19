@@ -81,6 +81,7 @@ export const createRootNavigator = (logged = false) => {
         Group: { screen: Group },
         Dialogs: {
             screen: DialogDrawerNavigator,
+            headerLeft: null,
             navigationOptions: {
                 gesturesEnabled: false
             }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, Dimensions, Platform, ActionSheetIOS } from 'react-native'
-import { BackIcon, LocationIcon, EditIcon } from '../../assets/index'
+import { View, Text } from 'react-native'
+import { BackIcon, } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
@@ -22,18 +22,11 @@ const Left = styled(View)`
     align-items: center;
     justify-content: flex-start;
 `
-const Right = styled(View)`
-    display: flex;
-    flex-direction: row;
-    align-items: flex-end;
-    justify-content: flex-start;
-`
 const MarginRight = styled(View)`
     margin-right: ${sidePadding}px;
 `
 export default class HeaderComponent extends Component {
     render() {
-        const { myProfile } = this.props;
         return (
             <Header>
                 <Left>

@@ -139,9 +139,7 @@ class Content extends Component {
     componentDidMount() {
 
     }
-    componentWillUpdate() {
-
-    }
+    
     selectPhoto = async e => {
         alert('temporary unavailable')
         // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);

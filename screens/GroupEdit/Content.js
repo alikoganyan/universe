@@ -1,20 +1,18 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
-import FloatingLabel from 'react-native-floating-labels'
+import { View, Text, TextInput, ScrollView, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
 import Button from '../../common/Button'
-import { ImagePicker, Permissions } from 'expo'
 import { p_update_group, p_delete_group } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { GroupIcon, CloseIcon } from '../../assets/'
-import { addDialogParticipant, setDialogParticipants } from '../../actions/participantsActions'
+import { setDialogParticipants } from '../../actions/participantsActions'
 import { socket } from '../../utils/socket'
-const { Colors, HeaderHeight, sidePadding } = helper;
+const { Colors, sidePadding } = helper;
 const { lightGrey1, black, green, red } = Colors;
 const Wrapper = styled(View)`
     padding: 0 ${sidePadding}px;
@@ -72,9 +70,6 @@ const AddReceiver = styled(Text)`
 const DeleteGroup = styled(Text)`
     color: ${red};
 `
-const DialogsLabelText = styled(Text)`
-    margin-left: 5px;
-`
 class Content extends Component {
     render() {
         const {
@@ -83,7 +78,7 @@ class Content extends Component {
         const { participants } = this.props
         const ReceiverComponent = (props) => {
             const { children, last = false, onDelete } = props;
-            const { info, title, image, role, first_name, last_name, phone_number } = children
+            const { image, role, first_name, phone_number } = children
             return <Receiver last={last}>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     {image === '/images/default_avatar.jpg' ?
@@ -144,14 +139,11 @@ class Content extends Component {
     }
     componentDidMount() {
         const { defaultValues, setParticipants } = this.props;
-        const { name, participants, image, _id } = defaultValues;
+        const { name, participants, image } = defaultValues;
         this.setState({ text: name, image })
         setParticipants(participants)
     }
-    componentWillUpdate() {
-
-    }
-    deleteGroup = e => {
+    deleteGroup = () => {
         const { defaultValues, setParticipants, forward } = this.props;
         const { _id } = defaultValues;
         sendRequest({
@@ -171,7 +163,7 @@ class Content extends Component {
             }
         })
     }
-    selectPhoto = async e => {
+    selectPhoto = async () => {
         alert('temporary unavailable')
         // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         // if (status !== 'granted') {
@@ -200,7 +192,7 @@ class Content extends Component {
         const { addParticipant } = this.props
         addParticipant()
     }
-    proceed = (e) => {
+    proceed = () => {
         const { participants, forward, setParticipants, defaultValues } = this.props;
         const { name, _id } = defaultValues;
         let idList = []

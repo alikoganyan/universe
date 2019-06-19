@@ -1,13 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS } from 'react-native'
+import { View, Text, Platform, ActionSheetIOS } from 'react-native'
 import { BackIcon, EllipsisVIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import {
-    ActionSheetProvider,
     connectActionSheet,
 } from '@expo/react-native-action-sheet';
-const { sidePadding, HeaderHeight } = helper;
+const { HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -27,8 +26,9 @@ const Right = styled(View)`
     flex-direction: row;
     align-items: flex-end;
 `
-@connectActionSheet
-export default class HeaderComponent extends Component {
+
+export default @connectActionSheet 
+    class HeaderComponent extends Component {
     render() {
         const { back } = this.props;
         return (
@@ -55,7 +55,6 @@ export default class HeaderComponent extends Component {
                 options,
                 cancelButtonIndex,
             },
-            buttonIndex => { },
         );
     }
 }

@@ -1,16 +1,13 @@
 import React, { Component } from 'react'
 import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Dimensions } from 'react-native'
-import { BackIcon, EllipsisVIcon, MessageIndicatorIcon } from '../../assets/index'
 import styled from 'styled-components'
 import SwitchToggle from 'react-native-switch-toggle';
 import helper from '../../utils/helpers'
 import posed from 'react-native-pose'
 import { connect } from 'react-redux'
-import { socket } from '../../utils/socket'
 import sendRequest from '../../utils/request'
 import { p_settings } from '../../constants/api'
 import { setSettings } from '../../actions/userActions'
-import CheckBox from 'react-native-check-box'
 
 const { Colors, sidePadding, fontSize, borderRadius, HeaderHeight } = helper;
 const { lightGrey1, blue, lightBlue, grey2 } = Colors;
@@ -131,9 +128,7 @@ const Toggle = (props) => {
 }
 class Content extends Component {
     render() {
-        const { settings, switchOn, pickerOpened, langs } = this.state;
-        const { user } = this.props;
-        const { sound, language, notifications, contacts } = user;
+        const { settings, pickerOpened, langs } = this.state;
         return (
             <SafeAreaView>
                 <Wrapper>
@@ -232,16 +227,16 @@ class Content extends Component {
             this.setState({ settings: newSettings })
         }, 0)
     }
-    pickerClose = (e) => {
+    pickerClose = () => {
         this.setState({ pickerOpened: false })
     }
-    handleToggle = (e) => {
+    handleToggle = () => {
         const { settings } = this.state;
         const newSettings = [...settings]
         newSettings.filter(({ label }) => e === label)[0].option.value = !newSettings.filter(({ label }) => e === label)[0].option.value;
         this.setState({ settings: newSettings })
     }
-    selectOption = (e) => {
+    selectOption = () => {
         this.setState({ pickerOpened: true })
     }
     componentWillUnmount() {

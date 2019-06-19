@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, TextInput, ActionSheetIOS, Platform, Dimensions, TouchableOpacity } from 'react-native'
-import { SmileIcon, FileIcon, CameraIcon, ImageIconBlue, PapperPlaneIcon } from '../../assets/index'
+import { View, Text, TextInput, Dimensions, TouchableOpacity } from 'react-native'
+import { ImageIconBlue, PapperPlaneIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
 import { ImagePicker, DocumentPicker, Permissions } from 'expo';
 import { p_send_file } from '../../constants/api'
-import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
+import { setDialogs } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import posed from 'react-native-pose'
 import { BottomSheet } from 'react-native-btr'
@@ -80,7 +80,6 @@ const Shadow = styled(TouchableOpacity)`
 class InputComponent extends Component {
     render() {
         const { text, pickerOpened } = this.state;
-        const { startSearch, stopSearch } = this.props;
         return (
             <>
                 {pickerOpened && <Shadow activeOpacity={1} onPress={this.unselect} />}
@@ -121,13 +120,12 @@ class InputComponent extends Component {
         pickerOpened: false,
     }
     componentDidMount() {
-        const { messages, addMessage } = this.props
     }
-    unselect = (e) => {
+    unselect = () => {
         this.setState({ pickerOpened: false })
     }
-    selectPhoto = async (e) => {
-        const { currentChat, currentRoom, addMessage, getMessages, setDialogs, dialogs, user } = this.props;
+    selectPhoto = async () => {
+        const { currentChat, addMessage, setDialogs, dialogs, user } = this.props;
         this.unselect()
         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         if (status !== 'granted') {
@@ -170,7 +168,7 @@ class InputComponent extends Component {
                 //         'Content-Type': 'multipart/form-data'
                 //     }
                 // },
-                success: (res) => {
+                success: () => {
                     socket.emit('file', { room: currentChat })
 
                 },
@@ -180,10 +178,10 @@ class InputComponent extends Component {
             })
         }
     }
-    selectFile = async (e) => {
-        let result = await DocumentPicker.getDocumentAsync({});
+    selectFile = async () => {
+        // let result = await DocumentPicker.getDocumentAsync({});
     }
-    selectGeo = async (e) => {
+    selectGeo = async () => {
         this.unselect()
         const { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
@@ -191,9 +189,9 @@ class InputComponent extends Component {
             return;
         }
     }
-    discardSelect = (e) => { }
-    sendMessage = (event) => {
-        const { currentRoom, currentChat, id, addMessage, user, setDialogs, dialogs } = this.props;
+    discardSelect = () => { }
+    sendMessage = () => {
+        const { currentChat, addMessage, user, setDialogs, dialogs } = this.props;
         const { _id, first_name, last_name, middle_name, image } = user
         const { text } = this.state;
         if (text) {
@@ -244,7 +242,6 @@ class InputComponent extends Component {
         this.setState({ text: e })
     }
     pickImage = async () => {
-        const { image } = this.state
         this.setState({ pickerOpened: true })
     };
 }
@@ -259,9 +256,9 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
-    startSearch: _ => dispatch(startSearch()),
-    stopSearch: _ => dispatch(stopSearch()),
-    getMessages: _ => dispatch(getMessages()),
+    startSearch: _ => dispatch(startSearch(_)),
+    stopSearch: _ => dispatch(stopSearch(_)),
+    getMessages: _ => dispatch(getMessages(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(InputComponent)

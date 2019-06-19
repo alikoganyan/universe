@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native'
-import { BackIcon, GroupIconWhite, ArrowDownIcon } from '../../assets/index'
+import { View, Text, SafeAreaView, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import { GroupIconWhite, ArrowDownIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
@@ -15,23 +15,7 @@ import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 const { Colors, HeaderHeight, fontSize } = helper;
 const { green, black, grey2 } = Colors;
-const AnimatedScrollView = posed.View({
-    left: {
-        x: Dimensions.get('window').width,
-        transition: { duration: 300, ease: 'easeOut' }
-    },
-    center: {
-        x: 0,
-        transition: { duration: 300, ease: 'easeOut' },
-    },
 
-
-    right: {
-        x: -Dimensions.get('window').width,
-        transition: { duration: 300, ease: 'easeOut' }
-    },
-
-})
 const AnimatedBox = posed.View({
     visible: { flex: 1 },
     hidden: { flex: 0 }
@@ -108,13 +92,6 @@ const ContactRole = styled(Text)`
 const ArrowWrapper = styled(AnimatedArrowWrapper)`
     
 `
-const Group = styled(BoxInnerItem)``
-const GroupInfo = styled(ContactInfo)``
-const GroupTitle = styled(ContactName)``
-const GroupParticipants = styled(ContactRole)`
-
-`
-const GroupImage = styled(ContactImage)``
 const CreateDialog = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
@@ -135,12 +112,9 @@ const CreateDialogText = styled(Text)`
     color: white;
     font-size: ${fontSize.text};
 `
-const Padding = styled(View)`
-    height: 30px;
-`
 class Content extends Component {
     render() {
-        const { users, collapsed, options, groups } = this.state;
+        const { users, collapsed } = this.state;
         const { department } = users;
         return (
             <SafeAreaView>
@@ -277,7 +251,7 @@ class Content extends Component {
         this.setState({ options: newState })
     }
     toChat = event => {
-        const { setCurrentDialogs, navigate, getMessages, setRoom, dialog, setCurrentChat } = this.props
+        const { setCurrentDialogs, navigate, getMessages, setRoom, dialog } = this.props
         const dialogIncludes = dialog.filter(e => {
             return (e.creator._id === event._id || e.participants[0]._id === event._id)
         })[0]

@@ -1,17 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, Dimensions, Platform, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 import helper from '../../utils/helpers'
-import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { setRegisterUserSms } from '../../actions/userActions'
-import {
-    p_get_restore_password,
-    p_check_restore_password,
-    p_restore_password,
-} from '../../constants/api'
+import Button from '../../common/Button'
 import sendRequest from '../../utils/request'
-const { Colors, HeaderHeight } = helper;
+const { Colors } = helper;
 const { blue, grey1, lightGrey1, pink } = Colors;
 const Wrapper = styled(View)`
     flex: 1;
@@ -70,33 +65,6 @@ const StyledInput = styled(TextInput)`
     width: 100%;
     padding-bottom: 10px;
 `
-const Input = (props) => {
-    const { autoFocus = false, keyboardType = 'number-pad', children, password = false, value, style, editable, onChangeText, inputStyle, maxLength } = props;
-    return <FloatingLabel
-        labelStyle={{ fontSize: 11 }}
-        inputStyle={{
-            fontSize: 11,
-            borderWidth: 0,
-            borderBottomWidth: 1,
-            borderBottomColor: lightGrey1,
-            display: 'flex',
-            textAlign: 'center',
-            paddingLeft: 0,
-            ...inputStyle
-        }}
-        keyboardType={keyboardType}
-        password={password}
-        value={value}
-        style={{
-            ...style
-        }}
-        editable={editable}
-        onChangeText={onChangeText}
-        maxLength={maxLength}
-        autoFocus={autoFocus}
-    >{children}</FloatingLabel>
-
-}
 class Content extends Component {
     render() {
         const { code, error, deadline } = this.state;
@@ -144,7 +112,7 @@ class Content extends Component {
     handleChangeCode = e => {
         this.setState({ code: e, error: false });
     }
-    proceed = e => {
+    proceed = () => {
         const { code } = this.state;
         if (code.length === 6) {
             this.checkCode();
@@ -152,7 +120,7 @@ class Content extends Component {
             this.setState({ error: true })
         }
     }
-    checkCode = e => {
+    checkCode = () => {
         const { navigate, register, setSms } = this.props;
         const { code } = this.state;
         const phone_number = register.phone;
@@ -174,7 +142,7 @@ class Content extends Component {
             }
         })
     }
-    sendAgain = e => {
+    sendAgain = () => {
         this.setState({ deadline: 30 }, () => {
             const { deadline } = this.state
             this.checkCode()

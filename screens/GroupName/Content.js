@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'react-native'
-import { BackIcon, EllipsisVIcon, MessageIndicatorIcon } from '../../assets/index'
+import { View, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import FloatingLabel from 'react-native-floating-labels'
 
-import helper from '../../utils/helpers'
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;

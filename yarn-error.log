@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add react-native-ntr
+  /usr/local/bin/node /usr/local/bin/yarn install
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -14,17 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/react-native-ntr: Not found
-      at Request.params.callback [as _callback] (/usr/local/lib/node_modules/yarn/lib/cli.js:66091:18)
-      at Request.self.callback (/usr/local/lib/node_modules/yarn/lib/cli.js:129590:22)
-      at Request.emit (events.js:198:13)
-      at Request.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:130562:10)
-      at Request.emit (events.js:198:13)
-      at IncomingMessage.<anonymous> (/usr/local/lib/node_modules/yarn/lib/cli.js:130484:12)
-      at Object.onceWrapper (events.js:286:20)
-      at IncomingMessage.emit (events.js:203:15)
-      at endReadableNT (_stream_readable.js:1129:12)
-      at process._tickCallback (internal/process/next_tick.js:63:19)
+  Error: EACCES: permission denied, mkdir '/Users/dr0kd3n/Projects/Mobile-Front/node_modules/@babel/preset-env/node_modules/caniuse-lite'
 
 npm manifest: 
   {
@@ -64,6 +54,7 @@ npm manifest:
       "react-native-actionsheet": "^2.4.2",
       "react-native-animated-flatlist": "^0.0.3",
       "react-native-autogrow-textinput": "^5.2.0",
+      "react-native-btr": "^1.1.4",
       "react-native-check-box": "^2.1.7",
       "react-native-checkBox": "^0.0.2",
       "react-native-checkbox": "^2.0.0",
@@ -89,7 +80,6 @@ npm manifest:
       "react-native-paper": "^2.12.0",
       "react-native-pose": "^0.9.0",
       "react-native-progress": "^3.6.0",
-      "react-native-push-notification": "^3.1.2",
       "react-native-root-modal": "^3.1.1",
       "react-native-shadow": "^1.2.2",
       "react-native-splash-screen": "^3.2.0",
@@ -117,9 +107,11 @@ npm manifest:
       "yarn": "^1.13.0"
     },
     "devDependencies": {
+      "babel-eslint": "^10.0.2",
       "babel-plugin-transform-remove-console": "^6.9.4",
       "babel-preset-expo": "^5.0.0",
       "eslint": "^5.16.0",
+      "eslint-plugin-react": "^7.13.0",
       "remote-redux-devtools": "^0.5.16",
       "webpack-watchman-plugin": "^1.1.0"
     },
@@ -2225,6 +2217,14 @@ Lockfile:
     version "2.1.2"
     resolved "https://registry.yarnpkg.com/array-flatten/-/array-flatten-2.1.2.tgz#24ef80a28c1a893617e2149b0c6d0d788293b099"
     integrity sha512-hNfzcOV8W4NdualtqBFPyVO+54DSJuZGY9qT4pRroB6S9e3iiido2ISIC5h9R2sPJ8H3FHCIiEnsv1lPXO3KtQ==
+  
+  array-includes@^3.0.3:
+    version "3.0.3"
+    resolved "https://registry.yarnpkg.com/array-includes/-/array-includes-3.0.3.tgz#184b48f62d92d7452bb31b323165c7f8bd02266d"
+    integrity sha1-GEtI9i2S10UrsxsyMWXH+L0CJm0=
+    dependencies:
+      define-properties "^1.1.2"
+      es-abstract "^1.7.0"
   
   array-map@~0.0.0:
     version "0.0.0"
@@ -4758,6 +4758,13 @@ Lockfile:
     dependencies:
       buffer-indexof "^1.0.0"
   
+  doctrine@^2.1.0:
+    version "2.1.0"
+    resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-2.1.0.tgz#5cd01fc101621b42c4cd7f5d1a66243716d3f39d"
+    integrity sha512-35mSku4ZXK0vfCuHEDAwt55dg2jNajHZ1odvF+8SSr82EsZY4QmXfuWso8oEd8zRhVObSN18aM0CjSdoBX7zIw==
+    dependencies:
+      esutils "^2.0.2"
+  
   doctrine@^3.0.0:
     version "3.0.0"
     resolved "https://registry.yarnpkg.com/doctrine/-/doctrine-3.0.0.tgz#addebead72a6574db783639dc87a121773973961"
@@ -5030,7 +5037,7 @@ Lockfile:
       accepts "~1.3.3"
       escape-html "~1.0.3"
   
-  es-abstract@^1.12.0, es-abstract@^1.5.0, es-abstract@^1.5.1:
+  es-abstract@^1.11.0, es-abstract@^1.12.0, es-abstract@^1.5.0, es-abstract@^1.5.1, es-abstract@^1.7.0:
     version "1.13.0"
     resolved "https://registry.yarnpkg.com/es-abstract/-/es-abstract-1.13.0.tgz#ac86145fdd5099d8dd49558ccba2eaf9b88e24e9"
     integrity sha512-vDZfg/ykNxQVwup/8E1BZhVzFfBxs9NqMzGcvIJrqg5k2/5Za2bWo40dK2J1pgLngZ7c+Shh8lwYtLGyrwPutg==
@@ -5102,6 +5109,19 @@ Lockfile:
     version "1.0.5"
     resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-1.0.5.tgz#1b61c0562190a8dff6ae3bb2cf0200ca130b86d4"
     integrity sha1-G2HAViGQqN/2rjuyzwIAyhMLhtQ=
+  
+  eslint-plugin-react@^7.13.0:
+    version "7.13.0"
+    resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.13.0.tgz#bc13fd7101de67996ea51b33873cd9dc2b7e5758"
+    integrity sha512-uA5LrHylu8lW/eAH3bEQe9YdzpPaFd9yAJTwTi/i/BKTD7j6aQMKVAdGM/ML72zD6womuSK7EiGtMKuK06lWjQ==
+    dependencies:
+      array-includes "^3.0.3"
+      doctrine "^2.1.0"
+      has "^1.0.3"
+      jsx-ast-utils "^2.1.0"
+      object.fromentries "^2.0.0"
+      prop-types "^15.7.2"
+      resolve "^1.10.1"
   
   eslint-scope@^4.0.0, eslint-scope@^4.0.3:
     version "4.0.3"
@@ -8017,6 +8037,13 @@ Lockfile:
       json-schema "0.2.3"
       verror "1.10.0"
   
+  jsx-ast-utils@^2.1.0:
+    version "2.1.0"
+    resolved "https://registry.yarnpkg.com/jsx-ast-utils/-/jsx-ast-utils-2.1.0.tgz#0ee4e2c971fb9601c67b5641b71be80faecf0b36"
+    integrity sha512-yDGDG2DS4JcqhA6blsuYbtsT09xL8AoLuUR2Gb5exrw7UEM19sBcOTq+YBBhrNbl0PUC4R4LnFu+dHg2HKeVvA==
+    dependencies:
+      array-includes "^3.0.3"
+  
   kefir@^3.7.3:
     version "3.8.6"
     resolved "https://registry.yarnpkg.com/kefir/-/kefir-3.8.6.tgz#046f0dabd870ff7cbfe039995c9bca2c1e68ac36"
@@ -9459,6 +9486,16 @@ Lockfile:
       function-bind "^1.1.1"
       has-symbols "^1.0.0"
       object-keys "^1.0.11"
+  
+  object.fromentries@^2.0.0:
+    version "2.0.0"
+    resolved "https://registry.yarnpkg.com/object.fromentries/-/object.fromentries-2.0.0.tgz#49a543d92151f8277b3ac9600f1e930b189d30ab"
+    integrity sha512-9iLiI6H083uiqUuvzyY6qrlmc/Gz8hLQFOcb/Ri/0xXFkSNS3ctV+CbE6yM2+AnkYfOB3dGjdzC0wrMLIhQICA==
+    dependencies:
+      define-properties "^1.1.2"
+      es-abstract "^1.11.0"
+      function-bind "^1.1.1"
+      has "^1.0.1"
   
   object.getownpropertydescriptors@^2.0.3:
     version "2.0.3"
@@ -10919,6 +10956,13 @@ Lockfile:
     resolved "https://registry.yarnpkg.com/react-native-actionsheet/-/react-native-actionsheet-2.4.2.tgz#6a00dd51a75ef2c8974312130e405af73191500f"
     integrity sha512-DBoWIvVwuWXuptF4t46pBqkFxaUxS+rsIdHiA05t0n4BdTIDV2R4s9bLEUVOGzb94D7VxIamsXZPA/3mmw+SXg==
   
+  react-native-animatable@^1.2.4:
+    version "1.3.2"
+    resolved "https://registry.yarnpkg.com/react-native-animatable/-/react-native-animatable-1.3.2.tgz#4783ee1a73dc98815aef234ce6b819f80bfe7d80"
+    integrity sha512-rmah3KQ63ft8DxkzFUwJSuZeq+oSYwldoGF4DTOR5WM2WR5wiWLgBAtrAHlI3Di3by323uOR21s+MlqPcHz2Kw==
+    dependencies:
+      prop-types "^15.5.10"
+  
   react-native-animated-flatlist@^0.0.3:
     version "0.0.3"
     resolved "https://registry.yarnpkg.com/react-native-animated-flatlist/-/react-native-animated-flatlist-0.0.3.tgz#7712d37f7dd8f9d70b389595ca532fe502e0e956"
@@ -10933,6 +10977,14 @@ Lockfile:
     version "2.2.5"
     resolved "https://registry.yarnpkg.com/react-native-branch/-/react-native-branch-2.2.5.tgz#4074dd63b4973e6397d9ce50e97b57c77a518e9d"
     integrity sha1-QHTdY7SXPmOX2c5Q6XtXx3pRjp0=
+  
+  react-native-btr@^1.1.4:
+    version "1.1.4"
+    resolved "https://registry.yarnpkg.com/react-native-btr/-/react-native-btr-1.1.4.tgz#fe534bdaeae0cae0b43fa64a9adcd2b31d9b5791"
+    integrity sha512-RsYore4YEsvTJfiZaMYoyRLy7TIRaHL0/R6ioHI8qFXNsZi44H9bQ8uoYhEkrXe6ftVtAIkWDndRnxf6sCv0IQ==
+    dependencies:
+      react-native-modal "^7.0.1"
+      react-native-vector-icons "^6.1.0"
   
   react-native-buttons@^0.0.3:
     version "0.0.3"
@@ -11168,6 +11220,14 @@ Lockfile:
     version "0.22.1"
     resolved "https://codeload.github.com/expo/react-native-maps/tar.gz/e6f98ff7272e5d0a7fe974a41f28593af2d77bb2"
   
+  react-native-modal@^7.0.1:
+    version "7.0.2"
+    resolved "https://registry.yarnpkg.com/react-native-modal/-/react-native-modal-7.0.2.tgz#6048217807e03cd585204dace2e1ca1726c0b647"
+    integrity sha512-IRTDeErr4asDdPs4DGbaKvz3fgr56tcVA7nAdCLu4IkjNw7DaIlAbQelg0Sdirb+8+RbIDPyrrnuEH84Fnj4ZA==
+    dependencies:
+      prop-types "^15.6.1"
+      react-native-animatable "^1.2.4"
+  
   react-native-options-menu@^2.0.2:
     version "2.0.2"
     resolved "https://registry.yarnpkg.com/react-native-options-menu/-/react-native-options-menu-2.0.2.tgz#ff4ed9a1ac0026e52097b33b3dd318fa14856564"
@@ -11199,11 +11259,6 @@ Lockfile:
     integrity sha512-zzTe595xaaskyfR5OzaGrU4O0R+YkgdEw+EspgGD7wh8Hu0fs6ue3xLW+HEbTjOCn62pCRivwi3NxbpWNBCC7Q==
     dependencies:
       prop-types "^15.7.2"
-  
-  react-native-push-notification@^3.1.2:
-    version "3.1.2"
-    resolved "https://registry.yarnpkg.com/react-native-push-notification/-/react-native-push-notification-3.1.2.tgz#a6129fb2897773a19c7b42bba1b51a9a4aac7df3"
-    integrity sha512-MjjPNXb2Cw7g1D41DtVbTVuGFCAtADxb91pAEFSkQ0AZ2gIooqYkWFHBL6woc15QHhtaZS8VT2GQoyW5OWlxIg==
   
   react-native-reanimated@1.0.0-alpha.11:
     version "1.0.0-alpha.11"
@@ -11354,6 +11409,15 @@ Lockfile:
       lodash "^4.0.0"
       prop-types "^15.5.10"
       yargs "^8.0.2"
+  
+  react-native-vector-icons@^6.1.0:
+    version "6.5.0"
+    resolved "https://registry.yarnpkg.com/react-native-vector-icons/-/react-native-vector-icons-6.5.0.tgz#bf925f62a47fed2f02a26392eed385058b7f137e"
+    integrity sha512-24Y5hkNTbpwK4OQFQQhJ20vBFWltGOcunJPztjO7E/4QpF3YmpbZIWjjf07wHOAlpeqCz3gEWr5iDI0Y2zLNnA==
+    dependencies:
+      lodash "^4.0.0"
+      prop-types "^15.6.2"
+      yargs "^13.2.2"
   
   react-native-vector-icons@^6.3.0:
     version "6.4.2"
@@ -11924,6 +11988,13 @@ Lockfile:
     version "1.10.0"
     resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.10.0.tgz#3bdaaeaf45cc07f375656dfd2e54ed0810b101ba"
     integrity sha512-3sUr9aq5OfSg2S9pNtPA9hL1FVEAjvfOC4leW0SNf/mpnaakz2a9femSd6LqAww2RaFctwyf1lCqnTHuF1rxDg==
+    dependencies:
+      path-parse "^1.0.6"
+  
+  resolve@^1.10.1:
+    version "1.11.0"
+    resolved "https://registry.yarnpkg.com/resolve/-/resolve-1.11.0.tgz#4014870ba296176b86343d50b60f3b50609ce232"
+    integrity sha512-WL2pBDjqT6pGUNSUzMw00o4T7If+z4H2x3Gz893WoUQ5KW8Vr9txp00ykiP16VBaZF5+j/OcXJHZ9+PCvdiDKw==
     dependencies:
       path-parse "^1.0.6"
   

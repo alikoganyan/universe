@@ -1,11 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS } from 'react-native'
+import { View, Text, Image } from 'react-native'
 import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import helper from '../../utils/helpers'
 import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
 const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
@@ -28,17 +27,9 @@ const Right = styled(View)`
     flex-direction: row;
     align-items: flex-end;
 `
-const UserImage = styled(Image)`
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-`
-const MarginRight = styled(View)`
-    margin-right: ${sidePadding}px;
-`
 class HeaderComponent extends Component {
     render() {
-        const { user, back } = this.props;
+        const { back } = this.props;
         // const { image } = user;
         return (
             <Header>

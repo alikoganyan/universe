@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native'
-import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon, CloseIcon } from '../../assets/index'
+import { View, Text, Dimensions, TouchableOpacity, TextInput } from 'react-native'
+import { BackIcon, SearchIcon, EditIcon, CloseIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import { p_news_search, g_users } from '../../constants/api'
+import { p_news_search } from '../../constants/api'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { setNews } from '../../actions/newsActions'
@@ -27,7 +27,6 @@ const Left = styled(View)`
     flex-direction: row;
     align-items: center;
 `
-const Center = styled(View)``
 const Input = styled(TextInput)`
     margin-left: ${Dimensions.get('window').width * 0.085};
 `
@@ -46,16 +45,10 @@ const Right = styled(Left)`
 //     border-radius: 15px;
 //     margin-left:${sidePadding}px;
 // `
-const MarginRight = styled(View)`
-    margin-right: ${Dimensions.get('window').width * 0.085};
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-`
 
 class HeaderComponent extends Component {
     render() {
-        const { back, user, toProfile } = this.props;
+        const { back, user } = this.props;
         const { search, find } = this.state
         const { image } = user;
         return (
@@ -94,7 +87,7 @@ class HeaderComponent extends Component {
         search: false,
         find: ''
     }
-    toProfile = (e) => {
+    toProfile = () => {
         const { navigate } = this.props;
         navigate('Profile')
     }
@@ -130,11 +123,11 @@ class HeaderComponent extends Component {
     stopSearch = () => {
         this.setState({ search: false })
     }
-    addTask = (e) => {
+    addTask = () => {
         const { navigate } = this.props;
         navigate('NewFeed')
     }
-    editFeed = (e) => {
+    editFeed = () => {
         const { navigate } = this.props;
         navigate('FeedEdit')
     }

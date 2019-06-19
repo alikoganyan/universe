@@ -232,7 +232,7 @@ class Content extends Component {
         this.setState({ taskText: text })
         // setTaskReceivers(participants)
     }
-    componentWillUpdate() {}
+    
     jsCoreDateCreator = (dateString) => {
         // dateString *HAS* to be in this format "YYYY-MM-DD HH:MM:SS"  
         let dateParam = dateString.split(/[\s-:]/)

@@ -78,8 +78,8 @@ export default class AppComponent extends React.Component {
         const Navigator = createRootNavigator(logged);
         return (
             <Provider store={store}>
+                <StatusBar backgroundColor="white" barStyle="dark-content" />
                 {loaded ? <Navigator/> : <SplashScreen />}
-                {/*<StatusBar backgroundColor="white" barStyle="dark-content" />*/}
                 {/*this.state.loaded ? <App /> : <SplashScreen />*/}
             </Provider>
         );

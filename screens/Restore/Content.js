@@ -6,6 +6,7 @@ import styled from 'styled-components'
 import { p_get_restore_password } from '../../constants/api'
 import { setRegisterUserNumber } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
+import Button from '../../common/Button'
 import { connect } from 'react-redux'
 const { Colors, HeaderHeight, fontSize } = helper;
 const { blue, grey1, lightGrey1, pink } = Colors;

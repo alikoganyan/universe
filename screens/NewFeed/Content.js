@@ -134,9 +134,7 @@ class Content extends Component {
         err: false
     }
     componentDidMount() {}
-    componentWillUpdate() {
-
-    }
+    
     deleteReceiver = e => {
         const { _id } = e
         const { receivers, setFeedReceivers } = this.props

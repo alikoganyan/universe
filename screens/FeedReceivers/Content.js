@@ -1,19 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native'
-import { BackIcon, EllipsisVIcon, ArrowDownIcon } from '../../assets/index'
+import { View, Text, SafeAreaView, FlatList, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import { ArrowDownIcon } from '../../assets/index'
 import styled from 'styled-components'
-import FloatingLabel from 'react-native-floating-labels'
-import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import ImageComponent from '../../common/Image'
-import RoundCheckbox from 'rn-round-checkbox'
-import posed, { Transition } from 'react-native-pose';
+import posed from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
-import sendRequest from '../../utils/request'
-import { g_users } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
 import { addFeedReceiver, setFeedReceivers } from '../../actions/participantsActions'
@@ -22,7 +16,7 @@ import { connect } from 'react-redux'
 
 
 const { Colors, HeaderHeight } = helper;
-const { green, black, yellow } = Colors;
+const { black, yellow } = Colors;
 const AnimatedScrollView = posed.View({
     left: {
         x: Dimensions.get('window').width,
@@ -40,7 +34,8 @@ const AnimatedScrollView = posed.View({
     },
 
 })
-const Animated = styled(AnimatedScrollView)`
+const Animated = styled(AnimatedScrollView)
+`
     display: flex;
     flex-direction: row;
     width: ${Dimensions.get('window').width * 3};
@@ -53,34 +48,39 @@ const AnimatedArrowWrapper = posed.View({
     down: { rotate: "0deg", },
     right: { rotate: "-90deg", }
 });
-const Wrapper = styled(View)`
+const Wrapper = styled(View)
+`
     padding-top: 0px;
     background: white;
     margin-bottom: 110px;
     height: ${Dimensions.get('window').height - HeaderHeight - 20};
 `
-const ContactList = styled(ScrollView)`
+const ContactList = styled(ScrollView)
+`
     padding: 30px;
     padding-bottom: 10px;
     max-width: ${Dimensions.get('window').width};
     overflow: hidden;
     flex: 1;
 `
-const Box = styled(View)`
+const Box = styled(View)
+`
     padding-top: 20px;
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
 `
-const BoxTitle = styled(TouchableOpacity)`
+const BoxTitle = styled(TouchableOpacity)
+`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 20px;
 `
-const BoxInner = styled(AnimatedBox)`
+const BoxInner = styled(AnimatedBox)
+`
     padding: 20px 0;
     padding-top: 20px;
     border: 1px solid #E8EBEE;
@@ -88,10 +88,12 @@ const BoxInner = styled(AnimatedBox)`
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
 `
-const BoxItem = styled(Text)`
+const BoxItem = styled(Text)
+`
     color: #A7B0BA;
 `
-const BoxInnerItem = styled(View)`
+const BoxInnerItem = styled(View)
+`
     padding: 10px;
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     display: flex;
@@ -99,26 +101,32 @@ const BoxInnerItem = styled(View)`
     align-items: center;
 
 `
-const ContactImage = styled(ImageComponent)`
+const ContactImage = styled(ImageComponent)
+`
     width: 36px;
     height: 36px;
     border-radius: 18;
 `
-const ContactInfo = styled(View)`
+const ContactInfo = styled(View)
+`
     display: flex;
     align-items: flex-start;
     justify-content: center;
     margin-left: 10px;
 `
-const ContactName = styled(Text)``
-const ContactRole = styled(Text)`
+const ContactName = styled(Text)
+``
+const ContactRole = styled(Text)
+`
     color: #A7B0BA;
 
 `
-const ArrowWrapper = styled(AnimatedArrowWrapper)`
+const ArrowWrapper = styled(AnimatedArrowWrapper)
+`
     
 `
-const Options = styled(View)`
+const Options = styled(View)
+`
     display: flex;
     align-self: center;
     background: ${yellow};
@@ -128,7 +136,8 @@ const Options = styled(View)`
     border-radius: 13;
     overflow: hidden;
 `
-const Option = styled(Text)`
+const Option = styled(Text)
+`
     color: ${({ active }) => active ? black : 'white'};
     background: ${({ active }) => active ? 'white' : 'transparent'};
     min-width: 20%;
@@ -138,24 +147,23 @@ const Option = styled(Text)`
     overflow: hidden;
     text-align: center;
 `
-const Group = styled(BoxInnerItem)``
-const GroupInfo = styled(ContactInfo)``
-const GroupTitle = styled(ContactName)``
-const GroupParticipants = styled(ContactRole)``
-const GroupImage = styled(ContactImage)``
+const Group = styled(BoxInnerItem)
+``
+const GroupInfo = styled(ContactInfo)
+``
+const GroupTitle = styled(ContactName)
+``
+const GroupParticipants = styled(ContactRole)
+``
+const GroupImage = styled(ContactImage)
+``
 class Content extends Component {
     render() {
-        const { feed } = this.props
         const { users, collapsed, options, groups } = this.state;
         const { department } = users;
         const { active } = options;
         return (
             <SafeAreaView>
-                {/* <GestureRecognizer
-                    onSwipeLeft={this.optionLeft}
-                    onSwipeRight={this.optionRight}
-                > */}
-
                 <Wrapper>
                     <KeyboardAwareScrollView enableOnAndroid>
                         <Options>
@@ -179,7 +187,7 @@ class Content extends Component {
                                             <Collapsible collapsed={collapsed[i] || false}>
                                                 <BoxInner>
                                                     {
-                                                        e.workers.map((e, i) => <BoxInnerItem>
+                                                        e.workers.map((e, i) => <BoxInnerItem key={i}>
                                                             {
                                                                 e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg' ?
                                                                     <DefaultAvatar size={36} id={e._id} /> :
@@ -217,19 +225,16 @@ class Content extends Component {
                         </Animated>
                     </KeyboardAwareScrollView>
                 </Wrapper>
-                {/* </GestureRecognizer> */}
             </SafeAreaView>
         )
     }
     state = {
         collapsed: [],
         users: {
-            department: [
-                {
-                    title: 'Отдел длинных корпоративных названий',
-                    workers: [],
-                },
-            ],
+            department: [{
+                title: 'Отдел длинных корпоративных названий',
+                workers: [],
+            }, ],
         },
         options: {
             active: 1,

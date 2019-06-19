@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
@@ -13,19 +13,6 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
     padding: 0 ${sidePadding}px;
-`
-const Left = styled(View)`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-`
-const Right = styled(TouchableOpacity)`
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-`
-const MarginLeft = styled(View)`
-    margin-left:${sidePadding}px;
 `
 export default class HeaderComponent extends Component {
     render() {

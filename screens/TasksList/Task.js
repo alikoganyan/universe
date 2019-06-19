@@ -2,10 +2,8 @@ import React, { Component } from "react";
 import {
 	View,
 	Text,
-	Image,
 	TouchableHighlight,
 	Dimensions,
-	StatusBar,
 	ActionSheetIOS,
 	Platform
 } from "react-native";
@@ -15,8 +13,8 @@ import { TasksIcon } from "../../assets/index";
 import { setTask } from "../../actions/tasksActions";
 import ImageComponent from "../../common/Image";
 import { connect } from "react-redux";
-const { fontSize, PressDelay, sidePadding, Colors } = helper;
-const { purple, lightColor, grey2, lightGrey1 } = Colors;
+const { fontSize, sidePadding, Colors } = helper;
+const { purple, lightGrey1 } = Colors;
 
 const Wrapper = styled(View)`
 	display: flex;
@@ -26,12 +24,6 @@ const Wrapper = styled(View)`
 	align-items: center;
 	padding: ${sidePadding}px 0 ${sidePadding * 2}px;
 	width: ${Dimensions.get("window").width - sidePadding * 2};
-`;
-const TaskImage = styled(Image)`
-	width: 50px;
-	height: 50px;
-	border-radius: 25px;
-	margin-right: ${sidePadding}px;
 `;
 const TaskText = styled(View)`
 	display: flex;
@@ -108,7 +100,7 @@ const TaskStatusAdditional = styled(Text)`
 `;
 class Tasks extends Component {
 	render() {
-		const { children, onClick } = this.props;
+		const { children } = this.props;
 		const { first_name, last_name, phone_number, image, tasks } = children;
 		let stat = "";
 		switch (tasks[tasks.length - 1].status) {
@@ -210,9 +202,9 @@ class Tasks extends Component {
 	};
 }
 
-const mapStateToProps = state => {
-	return {};
-};
+const mapStateToProps = state => ({
+	
+});
 const mapDispatchToProps = dispatch => ({
 	setTask: _ => dispatch(setTask(_))
 });

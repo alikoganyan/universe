@@ -7,7 +7,6 @@ import {
     ScrollView,
     TouchableOpacity
 } from "react-native";
-import FloatingLabel from "react-native-floating-labels";
 import styled from "styled-components";
 import helper from "../../utils/helpers";
 import { connect } from "react-redux";
@@ -26,7 +25,7 @@ import { setTasks, setCurrentTask } from "../../actions/tasksActions";
 import { GroupIcon, CloseIcon } from "../../assets/";
 import DatePicker from "react-native-datepicker";
 const { Colors, HeaderHeight, sidePadding } = helper;
-const { lightGrey1, black, purple, red } = Colors;
+const { lightGrey1, purple, red } = Colors;
 const Wrapper = styled(View)`
     padding: 0 ${sidePadding}px;
     display: flex;
@@ -138,7 +137,6 @@ class Content extends Component {
     render() {
         const { receivers } = this.props;
         const { taskName, taskText, deadlineDate, deadlineTime } = this.state;
-        const date = new Date();
         return (
             <Wrapper>
                 <StyledScrollView
@@ -265,7 +263,7 @@ class Content extends Component {
     };
     componentDidMount() {
         const { activeTask } = this.props;
-        const { name, deadline, performers, description, _id } = activeTask;
+        const { name, deadline, description } = activeTask;
         this.setState({
             taskName: name,
             taskText: description,
@@ -273,7 +271,7 @@ class Content extends Component {
             deadlineTime: deadline
         });
     }
-    componentWillUpdate() {}
+    
     jsCoreDateCreator = dateString => {
         // dateString *HAS* to be in this format "YYYY-MM-DD HH:MM:SS"
         let dateParam = dateString.split(/[\s-:]/);
@@ -291,16 +289,15 @@ class Content extends Component {
         addParticipants();
     };
     deleteTask = e => {
-        const { back, activeTask, setTasks, setCurrentTask, tasks, user, currentTask } = this.props;
-        const { _id, status, performers, creator } = activeTask;
-        console.log('123', {_id}, {p_tasks})
+        const { activeTask } = this.props;
+        const { _id } = activeTask;
         sendRequest({
             r_path: p_tasks,
             method: "delete",
             attr: {
                 _id
             },
-            success: res => {
+            success: () => {
                 // setCurrentTask({});
                 // const newTasks = [...tasks].filter(e => e._id !== _id)
                 // setTasks(newTasks);
@@ -314,7 +311,7 @@ class Content extends Component {
         });
     }
     proceed = e => {
-        const { back, activeTask, setTasks, setCurrentTask, tasks, user, currentTask } = this.props;
+        const { back, activeTask, setTasks, setCurrentTask, tasks, currentTask } = this.props;
         const { _id, status, performers, creator } = activeTask;
         const { deadlineDate, deadlineTime, taskName, taskText } = this.state;
         const deadline = this.jsCoreDateCreator(
@@ -337,14 +334,13 @@ class Content extends Component {
         const newCurrentTask = {...currentTask}
         const newTaskCreator = newCurrentTask.tasks[currentTaskIndex].creator
         newCurrentTask.tasks[currentTaskIndex] = {...newTask, creator: {...newTaskCreator}}
-        console.log(newCurrentTask)
         sendRequest({
             r_path: p_tasks,
             method: "patch",
             attr: {
                 task: { ...newTask }
             },
-            success: res => {
+            success: () => {
                 setCurrentTask(newCurrentTask);
                 setTasks(newTasks);
                 back();

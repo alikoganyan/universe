@@ -125,15 +125,13 @@ class Content extends Component {
     }
     componentDidMount() {
     }
-    componentWillUpdate() {
-    }
     setInputState = (e) => {
         const newAgreements = [...this.state.agreements];
         const item = newAgreements.filter((item) => e.linkText === item.linkText)[0];
         item.value = !item.value
         this.setState({ agreements: [...newAgreements], btnDisabled: false })
     }
-    proceed = (e) => {
+    proceed = () => {
         const checked = !this.state.agreements.filter(e => e.value === false)[0];
         this.setState({ btnDisabled: !checked })
         if (checked) {

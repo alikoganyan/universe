@@ -1,7 +1,6 @@
-import React, { Component, Fragment } from 'react'
-import { View, Text, TextInput, Image, Platform, Dimensions, Keyboard, TouchableOpacity } from 'react-native'
-import { SearchIcon, BurgerIcon, CloseIcon, BackIcon } from '../../assets/index'
-import { openDrawer } from '../../actions/drawerActions'
+import React, { Component } from 'react'
+import { View, Text, Dimensions, Keyboard, TouchableOpacity } from 'react-native'
+import { SearchIcon, BackIcon } from '../../assets/index'
 import { setDialogs } from '../../actions/dialogsActions'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
@@ -10,7 +9,7 @@ import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 const { Colors, sidePadding, fontSize, HeaderHeight } = helper;
-const { blue, grey3 } = Colors;
+const { grey3 } = Colors;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
     background-color: ${Colors.background};
@@ -24,16 +23,6 @@ const Header = styled(View)`
     position: absolute;
     z-index: 2;
     left: ${sidePadding}px;
-`
-const UserImage = styled(Image)`
-    width: 30px;
-    height: 30px;
-    border-radius: 15;
-    margin-left: 8%;
-`
-const Input = styled(TextInput)`
-    flex: 1;
-    height: ${HeaderHeight};
 `
 const Left = styled(View)`
     display: flex;
@@ -50,13 +39,9 @@ const HeaderText = styled(Text)`
 const Right = styled(Left)`
     justify-content: flex-end;
 `
-const MarginRight = styled(View)`
-margin-right: ${sidePadding}px;
-`
 class HeaderComponent extends Component {
     render() {
         const { user, toProfile, back } = this.props
-        const { input } = this.state;
         return (
             <Header>
                 <Left>

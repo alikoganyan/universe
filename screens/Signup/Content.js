@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity } from 'react-native'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
@@ -8,7 +8,7 @@ import { setUser, setRegisterUserNumber } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
 import { p_get_sms } from '../../constants/api'
 import Button from '../../common/Button'
-const { Colors, HeaderHeight, fontSize } = helper;
+const { Colors, fontSize } = helper;
 const { lightGrey1, blue, pink } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
@@ -83,7 +83,6 @@ class Content extends Component {
             phone,
             error
         } = this.state
-        console.log(error)
         return (
             <Wrapper>
                 <Title>
@@ -96,7 +95,6 @@ class Content extends Component {
                     <Input
                         value={country} onPress={this.handleCountry}
                         style={{ width: '20%' }}
-                        value='+7'
                         inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
                         keyboardType={'phone-pad'} />
                     <StyledInput password={true}
@@ -126,7 +124,7 @@ class Content extends Component {
         invalidPhone: false,
     }
     componentDidMount() { }
-    proceed = (e) => {
+    proceed = () => {
         const { country, phone } = this.state;
         const { setRegisterUserNumber, forward } = this.props;
         phone_number = country.concat(phone)
@@ -144,7 +142,7 @@ class Content extends Component {
                 attr: {
                     phone_number,
                 },
-                success: (res) => {
+                success: () => {
                     forward();
                 },
                 failFunc: (err) => {
@@ -160,7 +158,7 @@ class Content extends Component {
         }
 
     }
-    login = (e) => {
+    login = () => {
         const { navigate } = this.props;
         navigate('Login')
     }

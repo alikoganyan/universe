@@ -1,18 +1,14 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native'
-import { BackIcon, EllipsisVIcon, ArrowDownIcon } from '../../assets/index'
+import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
+import { ArrowDownIcon } from '../../assets/index'
 import styled from 'styled-components'
-import FloatingLabel from 'react-native-floating-labels'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import helper from '../../utils/helpers'
-import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import Loader from '../../common/Loader'
-import posed, { Transition } from 'react-native-pose';
+import posed from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
 import { connect } from 'react-redux'
-import { socket } from '../../utils/socket'
 import sendRequest from '../../utils/request'
 import { g_users } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
@@ -139,22 +135,10 @@ const Option = styled(Text)`
     overflow: hidden;
     text-align: center;
 `
-const Group = styled(BoxInnerItem)`
-    justify-content: flex-start;
-    flex: 1;
-    padding-left: 0;
-    padding-right: 0;
-`
-const GroupInfo = styled(ContactInfo)`
-    flex: 1;
-`
-const GroupTitle = styled(ContactName)``
-const GroupParticipants = styled(ContactRole)``
-const GroupImage = styled(ContactImage)``
 class Content extends Component {
     render() {
-        const { allUsers, users, collapsed, options, groups } = this.state;
-        const { contacts, user, dialogs } = this.props;
+        const { users, collapsed, options } = this.state;
+        const { user, dialogs } = this.props;
         const { department } = users;
         const { active } = options;
         return (
@@ -287,7 +271,6 @@ class Content extends Component {
         ]
     }
     componentDidMount() {
-        const { user, users, setContacts, dialogs } = this.props;
         const newCollapsed = [...this.state.collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
             newCollapsed.push(false)

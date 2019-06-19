@@ -6,7 +6,8 @@
     "ios": "expo start --ios",
     "eject": "expo eject",
     "build:ios": "expo build:ios",
-    "build:android": "expo build:android"
+    "build:android": "expo build:android",
+    "lint": "eslint ./screens/*.js ./screens/**/*.js"
   },
   "rnpm": {
     "assets": [
@@ -61,7 +62,6 @@
     "react-native-paper": "^2.12.0",
     "react-native-pose": "^0.9.0",
     "react-native-progress": "^3.6.0",
-    "react-native-push-notification": "^3.1.2",
     "react-native-root-modal": "^3.1.1",
     "react-native-shadow": "^1.2.2",
     "react-native-splash-screen": "^3.2.0",
@@ -89,9 +89,14 @@
     "yarn": "^1.13.0"
   },
   "devDependencies": {
+    "babel-eslint": "^10.0.2",
     "babel-plugin-transform-remove-console": "^6.9.4",
     "babel-preset-expo": "^5.0.0",
     "eslint": "^5.16.0",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-import": "^2.17.3",
+    "eslint-plugin-jsx-a11y": "^6.2.1",
+    "eslint-plugin-react": "^7.13.0",
     "remote-redux-devtools": "^0.5.16",
     "webpack-watchman-plugin": "^1.1.0"
   },

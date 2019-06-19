@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions } from 'react-native'
+import { View, Text, TextInput } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
@@ -7,7 +7,7 @@ import Button from '../../common/Button'
 import { setUser, setRegisterUserSms } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
 import { p_register, p_get_sms } from '../../constants/api'
-const { Colors, fontSize, HeaderHeight } = helper;
+const { Colors, fontSize } = helper;
 const { lightGrey1, blue, pink } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
@@ -60,9 +60,6 @@ const NoSMS = styled(SendAgain)`
     color: ${lightGrey1};
     margin-bottom: 10px;
 `
-const SendAgainButton = styled(Button)`
-    background: green;
-`
 class Content extends Component {
     render() {
         const { deadline, sms, err } = this.state
@@ -114,7 +111,7 @@ class Content extends Component {
 
     }
     handleSMS = (e) => {
-        const { sms, error, tries } = this.state;
+        const { error, tries } = this.state;
         const { forward, register } = this.props
         if (error <= tries) {
             this.setState({ sms: e }, () => {
@@ -154,7 +151,7 @@ class Content extends Component {
                 attr: {
                     phone_number: phone,
                 },
-                success: (res) => {
+                success: () => {
                     forward();
                 },
                 failFunc: (err) => {

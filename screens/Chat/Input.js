@@ -1,13 +1,13 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, TextInput, ActionSheetIOS, Platform, Dimensions, TouchableOpacity } from 'react-native'
-import { SmileIcon, FileIcon, CameraIcon, ImageIcon, PapperPlaneIcon, ImageIconBlue } from '../../assets/index'
+import { View, Text, TextInput, Dimensions, TouchableOpacity } from 'react-native'
+import { PapperPlaneIcon, ImageIconBlue } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { addMessage, startSearch, stopSearch, getMessages, setCurrentChat, setRoom, setCurrentRoomId, setCurrentDialog } from '../../actions/messageActions'
 import { ImagePicker, DocumentPicker, Permissions, Location } from 'expo';
 import { p_send_file } from '../../constants/api'
-import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
+import { setDialogs } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import posed from 'react-native-pose'
 import { socket } from '../../utils/socket'
@@ -81,17 +81,9 @@ const Shadow = styled(TouchableOpacity)`
 const FilePickerOption = styled(TouchableOpacity)`
     z-index: 999;
 `
-const OuterView = styled(View)`
-    background: red;
-    height: 150px;
-    display: flex;
-    justify-content: flex-end;
-    z-index: -1;
-`
 class InputComponent extends Component {
     render() {
         const { text, pickerOpened } = this.state;
-        const { startSearch, stopSearch } = this.props;
         return (
             <>
                 {pickerOpened && <Shadow activeOpacity={1} onPress={this.unselect} />}
@@ -134,12 +126,11 @@ class InputComponent extends Component {
         location: null,
     }
     componentDidMount() {
-        const { messages, addMessage } = this.props
     }
-    unselect = (e) => {
+    unselect = () => {
         this.setState({ pickerOpened: false })
     }
-    selectPhoto = async (e) => {
+    selectPhoto = async () => {
         const { currentChat, addMessage, setDialogs, dialogs, user } = this.props;
         this.unselect()
         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -192,8 +183,8 @@ class InputComponent extends Component {
             })
         }
     }
-    selectFile = async (e) => {
-        let result = await DocumentPicker.getDocumentAsync({});
+    selectFile = async () => {
+        // let result = await DocumentPicker.getDocumentAsync({});
     }
     selectGeo = async () => {
         this.unselect()
@@ -205,9 +196,9 @@ class InputComponent extends Component {
         const location = await Location.getCurrentPositionAsync({});
         this.setState({ location });
     };
-    discardSelect = (e) => { }
-    sendMessage = (e) => {
-        const { currentDialog, currentRoom, user, addMessage, setDialogs, setCurrentChat, setRoom, setCurrentRoomId, setCurrentDialog } = this.props;
+    discardSelect = () => { }
+    sendMessage = () => {
+        const { currentDialog, currentRoom, user, addMessage, setDialogs, setCurrentChat, setRoom } = this.props;
         const { text } = this.state;
         if (text) {
             const { dialogs, currentChat } = this.props;
@@ -266,9 +257,7 @@ class InputComponent extends Component {
         this.setState({ text: e })
     }
     pickImage = async () => {
-        const { image } = this.state
-        const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        const { currentRoom, currentChat, id, addMessage } = this.props;
+        // const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         this.setState({ pickerOpened: true })
 
     };
@@ -284,9 +273,9 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
-    startSearch: _ => dispatch(startSearch()),
-    stopSearch: _ => dispatch(stopSearch()),
-    getMessages: _ => dispatch(getMessages()),
+    startSearch: _ => dispatch(startSearch(_)),
+    stopSearch: _ => dispatch(stopSearch(_)),
+    getMessages: _ => dispatch(getMessages(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
     setCurrentChat: _ => dispatch(setCurrentChat(_)),
     setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),

@@ -1,11 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, TextInput, ActionSheetIOS, Platform, Dimensions, TouchableOpacity } from 'react-native'
-import { SmileIcon, FileIcon, CameraIcon, ImageIcon } from '../../assets/index'
+import { View, Text, TextInput, Dimensions, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setFeed } from '../../actions/newsActions'
-import { ImagePicker, DocumentPicker, Permissions } from 'expo';
 import { p_send_file, p_news_add_comment } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import posed from 'react-native-pose'
@@ -45,10 +43,6 @@ const Left = styled(View)`
     display: flex;
     flex-direction: row;
 `
-const Right = styled(View)` 
-    display: flex;
-    flex-direction: row;
-`
 const FilePicker = styled(FilePickerPosed)`
     background: white;
     width: 94%;
@@ -74,7 +68,6 @@ const Shadow = styled(TouchableOpacity)`
 class InputComponent extends Component {
     render() {
         const { text, pickerOpened } = this.state;
-        const { startSearch, stopSearch } = this.props;
         return (
             <>
                 {pickerOpened && <Shadow activeOpacity={1} onPress={this.unselect} />}
@@ -106,23 +99,22 @@ class InputComponent extends Component {
         pickerOpened: false,
     }
     componentDidMount() {
-        const { messages, setFeed } = this.props
     }
-    unselect = (e) => {
+    unselect = () => {
         this.setState({ pickerOpened: false })
     }
-    selectPhoto = async (e) => {
-        let result = await ImagePicker.launchImageLibraryAsync({
-            allowsEditing: false,
-        });
+    selectPhoto = async () => {
+        // let result = await ImagePicker.launchImageLibraryAsync({
+        //     allowsEditing: false,
+        // });
     }
-    selectFile = async (e) => {
-        let result = await DocumentPicker.getDocumentAsync({});
+    selectFile = async () => {
+        // let result = await DocumentPicker.getDocumentAsync({});
     }
-    selectGeo = (e) => { }
-    discardSelect = (e) => { }
-    sendMessage = (event) => {
-        const { currentRoom, user, addComment, feed } = this.props;
+    selectGeo = () => { }
+    discardSelect = () => { }
+    sendMessage = () => {
+        const { user, addComment, feed } = this.props;
         const { text } = this.state;
         if (text) {
             const newFeed = feed
@@ -162,9 +154,8 @@ class InputComponent extends Component {
         this.setState({ text: e })
     }
     pickImage = async () => {
-        const { image } = this.state
-        const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        const { currentRoom, id, setFeed } = this.props;
+        // const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        const { currentRoom } = this.props;
         this.setState({ pickerOpened: true })
         const form = new FormData();
         form.append("photo", { uri: 'result.uri', name: 'image', type: 'image/jpeg' })
@@ -202,7 +193,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
     addComment: _ => dispatch(setFeed(_)),
-    startSearch: _ => dispatch(startSearch()),
-    stopSearch: _ => dispatch(stopSearch()),
+    startSearch: _ => dispatch(startSearch(_)),
+    stopSearch: _ => dispatch(stopSearch(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(InputComponent)

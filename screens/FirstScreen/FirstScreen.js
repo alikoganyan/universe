@@ -1,8 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, AsyncStorage, Platform, Dimensions, Keyboard, TouchableWithoutFeedback } from 'react-native'
-import helper from '../../utils/helpers'
-import FloatingLabel from 'react-native-floating-labels'
-import styled from 'styled-components'
+import { View, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import { setUser, setAuth, setRegisterUserNumber } from '../../actions/userActions'
 import { p_login } from '../../constants/api'
@@ -11,9 +8,6 @@ import { connectToSocket } from '../../utils/socket'
 import Login from '../Login/Login'
 import Dialogs from '../Dialogs/Dialogs'
 import SplashScreen from '../SplashScreen/SplashScreen'
-const { Colors, fontSize } = helper;
-const { lightColor, lightGrey1, blue, pink } = Colors;
-const { large, text, sm } = fontSize;
 class FirstScreen extends Component {
     static navigationOptions = {
         drawerLockedMode: 'locked-open',
@@ -57,8 +51,8 @@ class FirstScreen extends Component {
             setTimeout(() => this.setState({ loaded: true }), 0)
         });
     }
-    login = (e) => {
-        const { navigate, setUser, setRegisterUserNumber } = this.props;
+    login = () => {
+        const { setRegisterUserNumber } = this.props;
         const { country, phone, password } = this.state;
         const phone_number = country.concat(phone)
         if (!phone || !phone.length) this.setState({ invalidPhone: true })

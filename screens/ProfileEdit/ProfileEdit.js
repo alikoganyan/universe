@@ -1,22 +1,17 @@
 import React, { Component } from 'react'
-import { View, Text, Image, Dimensions, Platform, TouchableOpacity, AsyncStorage, ScrollView, KeyboardAvoidingView } from 'react-native'
-import { BackIcon, EllipsisVIcon } from '../../assets/index'
+import { View, AsyncStorage, ScrollView } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
-import Button from '../../common/Button'
 import SafeAreaView from '../../common/SafeAreaView'
 import { connect } from 'react-redux'
 import { setCurrentChat } from '../../actions/messageActions'
 import {
     ActionSheetProvider,
-    connectActionSheet,
 } from '@expo/react-native-action-sheet';
 import { socket } from '../../utils/socket'
 import Header from './Header'
 import Content from './Content'
 
-const { Colors } = helper
-const { blue } = Colors;
 const Wrapper = styled(View)`
     height: 100%;
 `

@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, AsyncStorage, Platform, Dimensions, Keyboard, TouchableWithoutFeedback } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, AsyncStorage, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native'
 import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { setUser, setAuth, setRegisterUserNumber } from '../../actions/userActions'
 import { p_login } from '../../constants/api'
+import Button from '../../common/Button'
 import sendRequest from '../../utils/request'
 import { connectToSocket } from '../../utils/socket'
 const { Colors, fontSize } = helper;
-const { lightColor, lightGrey1, blue, pink } = Colors;
-const { large, text, sm } = fontSize;
+const { lightGrey1, blue, pink } = Colors;
+const { large, sm } = fontSize;
 const Wrapper = styled(View)`
     padding: 0 20%;
     height: 90%;
@@ -38,14 +39,6 @@ const PhoneNumber = styled(View)`
     margin-bottom: ${({ err }) => err ? 10 : 35};    
     align-items: flex-end;
 `
-const Error = styled(View)`
-    color: red;
-    font-size: ${text};
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-`
 const ErrorText = styled(Text)`
     font-size: ${sm};
     margin-bottom: 10px;
@@ -55,19 +48,6 @@ const ForgotPass = styled(Text)`
     font-size: ${sm};
     margin-bottom: 10px;
     color: ${blue};
-`
-const NoAccount = styled(View)`
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    bottom: 0;
-    width: 100%;
-    align-self: center;
-`
-const Label = styled(Text)`
-    color: ${lightColor};
-    font-size: ${sm};
 `
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
@@ -176,7 +156,7 @@ class Content extends Component {
         loading: false,
     }
     componentDidMount = () => {
-        const { navigation, setUser } = this.props;
+        // const { navigation, setUser } = this.props;
         // AsyncStorage.getItem('user').then(res => {
         //     value = JSON.parse(res);
         //     if (value) {
@@ -192,8 +172,8 @@ class Content extends Component {
             // Error saving data
         }
     };
-    login = (e) => {
-        const { navigate, setUser, setRegisterUserNumber } = this.props;
+    login = () => {
+        const { setRegisterUserNumber } = this.props;
         const { country, phone, password } = this.state;
         const phone_number = country.concat(phone)
         if (!phone || !phone.length) this.setState({ invalidPhone: true })
@@ -229,11 +209,11 @@ class Content extends Component {
             }
         })
     }
-    signup = (e) => {
+    signup = () => {
         const { navigate } = this.props;
         navigate('Signup')
     }
-    restorePass = e => {
+    restorePass = () => {
         const { navigate } = this.props;
         navigate('Restore')
     }
@@ -245,9 +225,6 @@ class Content extends Component {
     }
     handleChangeCountry = (e) => {
         this.setState({ country: e })
-    }
-    componentWillMount() {
-
     }
 }
 

@@ -1,19 +1,16 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions, ScrollView, TouchableOpacity, Alert } from 'react-native'
-import FloatingLabel from 'react-native-floating-labels'
+import { View, Text, TextInput, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
-import { addFeed, setNews, setFeed } from '../../actions/newsActions'
+import { setNews, setFeed } from '../../actions/newsActions'
 import Button from '../../common/Button'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
-import sendRequest from '../../utils/request'
-import { p_news } from '../../constants/api'
 import { GroupIcon, CloseIcon } from '../../assets/'
 import { setFeedReceivers } from '../../actions/participantsActions'
-const { Colors, HeaderHeight, sidePadding } = helper;
+const { Colors, sidePadding } = helper;
 const { lightGrey1, black, yellow, red } = Colors;
 const Wrapper = styled(View)`
     padding: 0 ${sidePadding * 2}px;
@@ -31,10 +28,6 @@ const StyledInput = styled(TextInput)`
     margin-bottom: 50px;
     ${({ style }) => style}
 `
-const ButtonBox = styled(View)`
-    width: 170px;
-    align-self: center;
-`
 const Recievers = styled(View)`
 `
 const Reciever = styled(View)`
@@ -48,9 +41,6 @@ const Reciever = styled(View)`
 const RecieverInfo = styled(View)`
     display: flex;
     justify-content: space-between;
-`
-const Department = styled(Text)`
-    color: ${lightGrey1};
 `
 const DialogsLabel = styled(View)`
     display: flex;
@@ -68,7 +58,7 @@ const DeleteFeed = styled(AddReciever)`
 `
 const RecieverComponent = (props) => {
     const { children, last = false, onDelete } = props;
-    const { image, first_name, last_name, phone_number, department } = children
+    const { image, first_name, last_name, phone_number } = children
     return <Reciever last={last}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             {image === '/images/default_avatar.jpg' ?
@@ -136,9 +126,6 @@ class Content extends Component {
         this.setState({ text, receivers })
         setFeedReceivers(receivers)
     }
-    componentWillUpdate() {
-
-    }
     deleteFeed = e => {
         Alert.alert(
             'Удалить новость?',
@@ -158,8 +145,7 @@ class Content extends Component {
         )
     }
     confirmDelete = () => {
-        const { id, receivers, forward, setNews, setFeed, user, feed, news } = this.props;
-        const { text } = this.state;
+        const { forward, setNews, feed, news } = this.props;
         const newNews = [...news].filter(e => e._id !== feed._id)
         setNews(newNews)
         forward()
@@ -175,8 +161,8 @@ class Content extends Component {
         const { addParticipant } = this.props
         addParticipant()
     }
-    proceed = (e) => {
-        const { id, receivers, forward, setNews, setFeed, user, feed, news, back } = this.props;
+    proceed = () => {
+        const { receivers, setNews, setFeed, feed, news, back } = this.props;
         const { text } = this.state;
         const newFeed = {
             ...feed,

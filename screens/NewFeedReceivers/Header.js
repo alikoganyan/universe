@@ -1,12 +1,11 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, Dimensions, TouchableOpacity, TextInput } from 'react-native'
-import { BackIcon, AddIcon, SearchIcon, BurgerIcon, EditIcon, FunnelIcon, CloseIcon, CheckGreyIcon } from '../../assets/index'
+import { View, Text, Dimensions, TouchableOpacity, TextInput } from 'react-native'
+import { BackIcon, SearchIcon, CloseIcon, CheckGreyIcon } from '../../assets/index'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import { p_tasks_search, g_users } from '../../constants/api'
 import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
 import sendRequest from '../../utils/request'
 const { sidePadding, HeaderHeight, fontSize, Colors } = helper;
 const { grey3 } = Colors
@@ -26,7 +25,6 @@ const Left = styled(View)`
     flex-direction: row;
     align-items: center;
 `
-const Center = styled(View)``
 const Input = styled(TextInput)`
     margin-left: ${Dimensions.get('window').width * 0.085};
 `
@@ -40,12 +38,6 @@ const Right = styled(Left)`
 //     border-radius: 15px;
 //     margin-left:${sidePadding}px;
 // `
-const MarginRight = styled(View)`
-    margin-right: ${Dimensions.get('window').width * 0.085};
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-`
 const HeaderText = styled(Text)`
     font-size: ${fontSize.header};
     position: relative;
@@ -133,7 +125,6 @@ class HeaderComponent extends Component {
                     })
                 })
                 setTimeout(() => {
-                    const { setTasks } = this.props
                     this.setState({ FlatListData: [...tasksList] })
                     // setTasks([])
                 }, 0)
@@ -149,7 +140,7 @@ class HeaderComponent extends Component {
     stopSearch = () => {
         this.setState({ search: false })
     }
-    addTask = (e) => {
+    addTask = () => {
         const { navigate } = this.props;
         navigate('NewTask')
     }

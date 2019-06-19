@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, Dimensions, StatusBar, BackHandler, TouchableOpacity, AppState } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, AppState } from 'react-native'
 import styled from 'styled-components'
 import Header from './Header'
 import Dialog from './Dialog'
@@ -11,8 +11,8 @@ import { getMessages, setRoom, addMessage, setCurrentChat, setCurrentRoomId } fr
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
-import { socket, connectToSocket, disconnectFromSocket } from '../../utils/socket'
-const { sidePadding, HeaderHeight, Colors } = helper;
+import { socket, connectToSocket } from '../../utils/socket'
+const { Colors } = helper;
 const { blue, grey2, lightColor } = Colors;
 const Wrapper = styled(View)
 `
@@ -27,7 +27,7 @@ class Dialogs extends Component {
 
     render() {
         const { dialogs, user } = this.props
-        const { FlatListData, congratulations } = this.state;
+        const { congratulations } = this.state;
         return (
             <SafeAreaView behavior={'padding'}>
                 <Wrapper>
@@ -42,6 +42,7 @@ class Dialogs extends Component {
                         ListHeaderComponent={<View style={{ margin: 30, }} />}
                         ref={(ref) => { this.flatList = ref; }}
                         keyboardDismissMode={'on-drag'}
+                        initialNumToRender={20}
                         data={dialogs}
                         keyboardShouldPersistTaps={'always'}
                         renderItem={(dialog) => {
@@ -56,7 +57,7 @@ class Dialogs extends Component {
                                 (name || room)
                             const chatImage = !isGroup ?
                                 (user._id === creator ? user.image : participants[0].image) : image;
-                            return <Dialog unreadMessages={unreadMessages} lastMessage={messages} onClick={() => this.toChat(item)} image={chatImage} title={chatName} item={item}>{text}</Dialog>
+                            return <Dialog unreadMessages={unreadMessages} lastMessage={messages} onClick={() => this.toChat({...item})} image={chatImage} title={chatName} item={item}>{text}</Dialog>
                         }}
                         keyExtractor={(item, index) => index.toString()}
                     /> : <Loader style={{ flex: 1 }} hint={'Пока нет диалогов'}>
@@ -75,7 +76,7 @@ class Dialogs extends Component {
         congratulations: false,
     }
     componentDidMount() {
-        const { user, addMessage, setDialogs, navigation, dialogs } = this.props;
+        const { user } = this.props;
         // navigation.navigate('NewTask') // restore
         // clearInterval(this.interval)
         // this.interval = setInterval(() => {
@@ -88,18 +89,6 @@ class Dialogs extends Component {
         socket.removeEventListener('dialog_opened', this.socketDialogOpened)
         socket.removeEventListener('new_group', this.socketGetGroup)
         AppState.addEventListener('change', this._handleAppStateChange);
-        BackHandler.addEventListener('hardwareBackPress', () => {
-            if (this.props.navigation.state.routeName === 'Home') {
-                this.props.navigation.goBack();
-                console.log('home', this.props.navigation.state)
-                return;
-            }else{
-                console.log('not home')
-                return;
-            }
-            // if(this.props.navigation.state.routeName === 'Home') return true;
-        })
-        console.log()
         socket.emit('get_dialogs', { id: user._id })
         socket.on('update_dialogs', e => this.setDialogsSocket(e))
         socket.on('new_message', e => this.newMessageSocket(e))
@@ -110,18 +99,19 @@ class Dialogs extends Component {
         this.setState({ congratulations: !user.first_name })
     }
     componentWillUnmount() {
+        console.log('unmount dialogs')
         // disconnectFromSocket()
         AppState.removeEventListener('change', this._handleAppStateChange);
     }
-    _handleAppStateChange = (nextAppState) => {
+    _handleAppStateChange = () => {
         if (!socket.connected) connectToSocket()
     };
-    socketGetGroup = e => {
+    socketGetGroup = () => {
         socket.emit('get_dialogs')
     }
-    socketNewDialog = e => {}
+    socketNewDialog = () => {}
     socketDialogOpened = e => {
-        const { dialogs, setDialogs, getMessages, currentDialog, user } = this.props;
+        const { dialogs, setDialogs, getMessages, currentDialog } = this.props;
         const { dialog_id, viewer } = e;
         const newMessages = []
         const newDialogs = [...dialogs]
@@ -143,12 +133,12 @@ class Dialogs extends Component {
             setDialogs(newDialogs)
         }
     }
-    socketNeedsUpdate = e => {
+    socketNeedsUpdate = () => {
         const { user } = this.props;
         socket.emit('get_dialogs', { id: user._id })
     }
     setDialogsSocket = (e) => {
-        const { setDialogs, currentChat, dialogs, getMessages } = this.props;
+        const { setDialogs } = this.props;
         const newDialogs = e.dialogs.length ? [...e.dialogs] : [];
         const newDialogsSorted = newDialogs.length ? newDialogs.sort((a, b) => {
             if (b.messages.length && a.messages.length) {
@@ -195,7 +185,7 @@ class Dialogs extends Component {
         navigation.navigate('NewDialog')
     }
     newMessageSocket = (e) => {
-        const { dialogs, currentRoom, user, addMessage, setDialogs, navigation, currentDialog, currentRoomId } = this.props
+        const { dialogs, addMessage, setDialogs, currentRoomId } = this.props
         const message = e.message._id ? {
             ...e.message
         } : { ...e, text: e.message, type: 'text', created_at: new Date(), sender: { ...e.sender }, viewers: [] }
@@ -236,13 +226,12 @@ class Dialogs extends Component {
             })
             setDialogs(newDialogSorted)
             if (newDialog._id === currentRoomId) addMessage(message)
-            console.log({ message })
         }
     }
-    toProfile = e => {
+    toProfile = () => {
         this.props.navigation.navigate('Profile')
     }
-    news = e => {
+    news = () => {
 
     }
     getUsers = e => {
@@ -260,7 +249,6 @@ class Dialogs extends Component {
     chatMessage = e => {
         const { addMessage, dialogs } = this.props
         addMessage(e)
-        const { FlatListData } = this.state
         const newFlatListData = [...dialogs]
         newFlatListData.sort((a, b) => {
             return new Date(a.lastMessage) - new Date(b.lastMessage)
@@ -269,9 +257,8 @@ class Dialogs extends Component {
     }
     newMessage = e => {
         const { senderId, chatId } = e
-        const { user, currentChat, dialogs } = this.props
+        const { user, dialogs } = this.props
         const chat = chatId.split('room')[1].replace(/\_/, '').replace(senderId, '')
-        const { FlatListData } = this.state
         const newFlatListData = [...dialogs]
         const index = newFlatListData.findIndex((event) => {
             return event.id === e.senderId
@@ -316,6 +303,15 @@ class Dialogs extends Component {
         const newMessages = []
         const newDialogs = [...dialogs]
         const newDialog = newDialogs.filter(e => e._id === _id)[0]
+        
+        setRoom(roomId)//s
+        setCurrentRoomId(_id); 
+        // console.log(room)
+        setCurrentChat(room)
+        setCurrentDialogs(currentDialog)
+        getMessages([...messages]);
+        socket.emit('view', { room: room, viewer: user._id })
+
         if (newDialog) {
             const newDialogIndex = newDialogs.findIndex(e => e._id === _id)
             currentDialog.messages && currentDialog.messages.map(e => {
@@ -325,15 +321,9 @@ class Dialogs extends Component {
             newDialog.messages = newMessages
             setDialogs(newDialogs)
         }
-        setRoom(roomId)
-        setCurrentRoomId(_id);
-        setCurrentChat(room)
-        setCurrentDialogs(currentDialog)
-        getMessages(messages);
-        socket.emit('view', { room: room, viewer: user._id })
         navigation.navigate(e.isGroup ? 'Group' : 'Chat')
     }
-    toGroup = e => {
+    toGroup = () => {
         const { navigation } = this.props
         navigation.navigate('Group')
     }

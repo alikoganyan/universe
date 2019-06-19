@@ -1,17 +1,17 @@
 import React, { Component } from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
-import { CheckIcon, CloseTaskIcon, TriangleLeftIcon, TriangleRightIcon, RedoIcon, DoneIcon, StartIcon, EditIcon } from '../assets'
+import { CloseTaskIcon, TriangleLeftIcon, TriangleRightIcon, RedoIcon, DoneIcon, StartIcon, EditIcon } from '../assets'
 import { connect } from 'react-redux'
 import { setTasks, setActiveTask } from '../actions/tasksActions'
 import sendRequest from '../utils/request'
 import { p_tasks } from '../constants/api'
 import ImageComponent from '../common/Image'
 import DefaultAvatar from '../common/DefaultAvatar'
-const { HeaderHeight, Colors, fontSize } = helper;
+const { Colors, fontSize, borderRadius } = helper;
 const { red, yellow, green, purple, grey1 } = Colors;
-const borderRadius = 5;
-const Wrapper = styled(View)`
+const Wrapper = styled(View)
+`
     display :flex;
     flex-direction: row;
     flex: 5;
@@ -19,11 +19,13 @@ const Wrapper = styled(View)`
     align-self: flex-start;
     justify-content: flex-end;
 `
-const MessageDate = styled(Text)`
+const MessageDate = styled(Text)
+`
     color: ${({ color }) => color || '#ABABAB'};
 `
 
-const Task = styled(View)`
+const Task = styled(View)
+`
     flex: 1;
     margin: 10px;
     /* margin-right: 0; */
@@ -36,11 +38,13 @@ const Task = styled(View)`
     border-radius: ${borderRadius};
     align-self: flex-end;
 `
-const Status = styled(View)`
+const Status = styled(View)
+`
     display: flex;
     flex-direction: column;
 `
-const StatusItem = styled(TouchableOpacity)`
+const StatusItem = styled(TouchableOpacity)
+`
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -51,40 +55,49 @@ const StatusItem = styled(TouchableOpacity)`
     background: ${({ completed, color }) => completed ? color : '#D9D9D9'};
     margin: 1px;
 `
-const StatusStage = styled(View)`
+const StatusStage = styled(View)
+`
     display: flex;
     flex-direction: row;
 `
-const StatusText = styled(Text)`
+const StatusText = styled(Text)
+`
     color: ${purple};
     margin-bottom: 5px;
 `
-const TaskTitle = styled(View)`
+const TaskTitle = styled(View)
+`
     margin-top: 20px;
     margin-bottom: 10px;
     ${({ style }) => style}
 `
-const TaskBody = styled(View)`
+const TaskBody = styled(View)
+`
     margin-bottom: 10px;
 `
-const TaskBodyText = styled(Text)`
+const TaskBodyText = styled(Text)
+`
     color: ${grey1};
 `
-const TaskDeadline = styled(View)`
+const TaskDeadline = styled(View)
+`
     display: flex;
     flex-direction: column;
     width: 100%;
     flex: 7;
 `
-const TaskDeadlineLabel = styled(Text)`
+const TaskDeadlineLabel = styled(Text)
+`
     color: ${grey1};
     flex: 1;
     font-size: ${fontSize.sl};
 `
-const TaskDeadlineValue = styled(Text)`
+const TaskDeadlineValue = styled(Text)
+`
     color: ${purple};
 `
-const TaskPostTime = styled(View)`
+const TaskPostTime = styled(View)
+`
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -94,33 +107,39 @@ const TaskPostTime = styled(View)`
     margin-right: 10px;
     flex: 2;
 `
-const TaskFooter = styled(View)`
+const TaskFooter = styled(View)
+`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     flex: 1;
 `
-const TaskPostTimeText = styled(MessageDate)`
+const TaskPostTimeText = styled(MessageDate)
+`
     font-size: ${fontSize.sm};
 `
-const ControlBar = styled(View)`
+const ControlBar = styled(View)
+`
     display: flex;
     padding: 10px 0;
     flex: 1;
     justify-content: flex-end;
 `
-const OuterWrapper = styled(View)`
+const OuterWrapper = styled(View)
+`
     display: flex;
     justify-content: flex-start;
     flex-direction: row;
 `
-const ExitPlaceholder = styled(View)`
+const ExitPlaceholder = styled(View)
+`
     height: 40px;
     width: 40px;
     border-radius: 20;
     margin-top: 10px;
 `
-const Exit = styled(TouchableOpacity)`
+const Exit = styled(TouchableOpacity)
+`
     height: 40px;
     width: 40px;
     border-radius: 20;
@@ -131,26 +150,25 @@ const Exit = styled(TouchableOpacity)`
     justify-content: center;
     align-items: center;
 `
-const Accept = styled(Exit)`
+const Accept = styled(Exit)
+`
     border-color: ${purple};
 `
-const Rearrange = styled(Exit)`
+const Rearrange = styled(Exit)
+`
     border-color: ${yellow};
 `
-const Edit = styled(Exit)`
+const Edit = styled(Exit)
+`
     border-color: ${green};
     display: flex;
     justify-content: center;
 `
-const Indicator = ({ delievered = false, read = false, color }) => {
-    return <CheckIcon color={color} />
-}
 class TaskComponent extends Component {
     render() {
-        const { children, style, triangleLeft, triangleRight, borderColor, user, activeTask, withImage } = this.props
-        const { name, description, status, deadline, created_at, creator, created, text, title, _id } = children
-        const statuses = ['ЗАДАЧА ПОСТАВЛЕНА', 'ПРИНЯЛ В РАБОТУ', 'ВЫПОЛНЕНА', 'ПРИНЯТА',]
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec',];
+        const { children, style, triangleLeft, triangleRight, borderColor, activeTask, withImage } = this.props
+        const { name, description, status, deadline, created_at, creator, _id, performers } = children
+        const statuses = ['ЗАДАЧА ПОСТАВЛЕНА', 'ПРИНЯЛ В РАБОТУ', 'ВЫПОЛНЕНА', 'ПРИНЯТА', ]
         const colors = [red, yellow, green, purple];
         this.stat = ''
         switch (status) {
@@ -222,7 +240,9 @@ class TaskComponent extends Component {
                             <Text>{name}</Text>
                         </TaskTitle>
                         <TaskBody>
-                            <TaskBodyText>{description}</TaskBodyText>
+                            <TaskBodyText>{description} 
+                                {performers.map(e => e.first_name)}
+                            </TaskBodyText>
                         </TaskBody>
                         <TaskFooter>
                             <TaskDeadline>
@@ -277,7 +297,7 @@ class TaskComponent extends Component {
     changeState = (e) => {
         const { activeTask, setActiveTask, setTasks, tasks, currentTask } = this.props
         const newActiveTask = { ...activeTask };
-        const { _id, name, description, deadline, performers, status } = newActiveTask
+        const { _id, name, description, deadline, performers } = newActiveTask
         const newTasks = [...tasks];
         const newHolder = newTasks.filter(e => e._id === currentTask._id)[0];
         const newTask = newHolder.tasks.filter(e => e._id === activeTask._id)[0]
@@ -301,7 +321,7 @@ class TaskComponent extends Component {
                     status: e,
                 }
             },
-            success: (res) => {
+            success: () => {
                 // console.log({res})
             },
             failFunc: (err) => {
@@ -315,8 +335,7 @@ class TaskComponent extends Component {
         // this.changeState('set')
         // console.log('unselect')
     }
-    componentDidMount() {
-    }
+    componentDidMount() {}
     componenWillUmount() {
         this.unselect()
     }

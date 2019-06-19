@@ -1,17 +1,16 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, Dimensions, Platform } from 'react-native'
+import { View, Text } from 'react-native'
 import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import {
-    p_get_restore_password,
-    p_check_restore_password,
     p_restore_password,
 } from '../../constants/api'
+import Button from '../../common/Button'
 import sendRequest from '../../utils/request'
-const { Colors, HeaderHeight } = helper;
-const { blue, grey1 } = Colors;
+const { Colors } = helper;
+const { blue } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
     padding-bottom: 10%;
@@ -95,12 +94,12 @@ class Content extends Component {
     handleChangeRepass = e => {
         this.setState({ repass: e });
     }
-    proceed = e => {
+    proceed = () => {
         const { pass, repass } = this.state;
         (pass === repass && pass.length >= 4) && this.checkCode()
 
     }
-    checkCode = e => {
+    checkCode = () => {
         const { navigate, register } = this.props;
         const { pass, repass } = this.state;
         const { phone, sms } = register
@@ -113,7 +112,7 @@ class Content extends Component {
                 repeat_password: repass,
                 one_time_password: sms,
             },
-            success: (res) => {
+            success: () => {
                 navigate('Login');
             },
             failFunc: (err) => {

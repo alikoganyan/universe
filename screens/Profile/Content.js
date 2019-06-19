@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, Dimensions, ScrollView } from 'react-native'
-import { BackIcon, TaskIcon, GroupIcon, FilesRedIcon, GroupIconGrey } from '../../assets/index'
+import { View, Text, FlatList, TouchableOpacity, Dimensions, ScrollView } from 'react-native'
+import { TaskIcon, GroupIcon, FilesRedIcon, GroupIconGrey } from '../../assets/index'
 import Button from '../../common/Button';
 import { setRoom } from '../../actions/messageActions'
 import styled from 'styled-components'
-import FloatingLabel from 'react-native-floating-labels'
 import helper from '../../utils/helpers'
 import ImageComponent from '../../common/Image'
 import { connect } from 'react-redux'
@@ -25,13 +24,6 @@ const User = styled(View)`
     justify-content: flex-start;
     padding-bottom: 20px;
     margin-bottom: 10px;
-`
-const UserImage = styled(Image)`
-    width: 80px;
-    height: 80px;
-    border-radius: 40;
-    margin: 0 10px 16px;
-
 `
 const UserInfo = styled(View)`
     display: flex;
@@ -123,12 +115,6 @@ const BoxInnerItem = styled(View)`
     flex-direction: row;
     align-items: center;
 `
-const ContactImage = styled(Image)`
-    width: 36px;
-    height: 36px;
-    border-radius: 18;
-    margin-right: 10px;
-`
 const ContactInfo = styled(View)`
     margin-left: 10px;
 `
@@ -147,8 +133,8 @@ const ContactRole = styled(Text)`
 `
 class Content extends Component {
     render() {
-        const { UserData, userName, status } = this.state;
-        const { user, currentRoom, currentChat, myProfile, currentDialog } = this.props;
+        const { UserData, status } = this.state;
+        const { user, myProfile, currentDialog } = this.props;
 
         const { _id, image, last_name, first_name, phone_number, isGroup, participants, name, creator } = myProfile ? user : currentDialog;
         const chatName = first_name ? `${first_name} ${last_name}` : (phone_number || name);
@@ -203,7 +189,7 @@ class Content extends Component {
                                 style={{ paddingRight: 5, paddingLeft: 5, }}
                                 data={sortedParticipants}
                                 renderItem={({ item, index }) => {
-                                    const { _id, first_name, last_name, post, role, image, phone_number } = item
+                                    const { first_name, last_name, role, image, phone_number } = item
                                     return (
                                         <View style={{
                                             display: 'flex',
@@ -257,7 +243,7 @@ class Content extends Component {
         UserData: []
     }
     componentDidMount() {
-        const { myProfile, user, currentChat, currentDialog } = this.props
+        const { myProfile, user, currentDialog } = this.props
         const { role, phone_number, department } = myProfile ? user : currentDialog;
         const newUserData = [
             { type: 'Подразделение', value: department || 'без подразделения', isGroup: false },
