@@ -8,21 +8,24 @@ import { p_create_contact } from '../../constants/api'
 const { Colors } = helper;
 const { green, lightGrey1, grey2 } = Colors;
 
-const Wrapper = styled(View)`
+const Wrapper = styled(View)
+`
     padding: 10%;
     padding-top: 0;
     display: flex;
     justify-content: center;
     height: ${Dimensions.get('window').height}px;
 `
-const PhoneNumber = styled(View)`
+const PhoneNumber = styled(View)
+`
     display: flex;
     flex-direction: row;
     margin-top: 10%;
     align-items: center;
     justify-content: space-between;
 `
-const InputLabel = styled(Text)`
+const InputLabel = styled(Text)
+`
     margin-right: 20px;
     padding-bottom: 10px;
     padding-right:1%;
@@ -30,7 +33,8 @@ const InputLabel = styled(Text)`
     text-align: right;
     color: ${grey2};
 `
-const Input = styled(TextInput)`
+const Input = styled(TextInput)
+`
     border: 1px solid ${lightGrey1};
     border-width: 0;
     border-bottom-width: 1px;
@@ -39,7 +43,8 @@ const Input = styled(TextInput)`
     font-size: 13px; 
 `
 
-const ButtonBox = styled(View)`
+const ButtonBox = styled(View)
+`
     position: absolute;
     bottom: 15%;
     align-self: center;
@@ -79,7 +84,7 @@ export default class Content extends Component {
                         </PhoneNumber>
                     </ScrollView>
                     <ButtonBox>
-                        <Button onPress={this.proceed} style={{ background: green }} color={'white'}>Добавить контакт</Button>
+                        <Button onPress={this.proceed} background ={green} color={'white'}>Добавить контакт</Button>
                     </ButtonBox>
                 </Wrapper>
             </ScrollView>

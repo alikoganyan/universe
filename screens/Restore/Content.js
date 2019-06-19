@@ -110,7 +110,7 @@ class Content extends Component {
                     error ? <View>{error}</View> : null
                 }
                 <ControlBar>
-                    <Button onPress={this.proceed} style={{ backgroundColor: blue, width: '100%' }} color={'#fff'} >Восстановить пароль</Button>
+                    <Button onPress={this.proceed} style={{ width: '100%' }} background={blue} color={'#fff'} >Восстановить пароль</Button>
                 </ControlBar>
             </Wrapper>
         )
@@ -152,7 +152,6 @@ class Content extends Component {
                 phone_number,
             },
             success: (res) => {
-                console.log({res})
                 setRegisterUserNumber(phone_number);
                 setTimeout(() => navigate('Restore2'), 0)
             },

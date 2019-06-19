@@ -91,7 +91,21 @@ class Content extends Component {
               data={outTasks}
               ListFooterComponent={<View   />}
               renderItem={({ item }) => {
-                return <TaskWrapper>
+                let condition = true;
+                switch(active){
+                    case 0: 
+                        condition = true;
+                        break;
+                    case 1: 
+                        condition = item.status !== 'cancelled';
+                        break;
+                    case 2: 
+                        condition = item.status === 'cancelled';
+                        break;
+                    default: 
+                        break;
+                }
+                if(condition) return <TaskWrapper>
                   <TouchableOpacity style={{ flex: 1 }} onLongPress={() => this.handleHold(item)}><TaskComponent
                     triangleRight={true}
                     borderColor={pink}
@@ -129,9 +143,10 @@ class Content extends Component {
         setActiveTask(e)
     }
     selectOption = (e) => {
-        const options = { ...this.state.options };
-        options.active = e;
-        this.setState({ options })
+        const { options } = this.state;
+        const newOptions = { ...options };
+        newOptions.active = e;
+        this.setState({ options: newOptions });
     }
     componentWillUnmount() {
         this.unselect()

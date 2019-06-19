@@ -137,9 +137,9 @@ class Content extends Component {
         const { user, myProfile, currentDialog } = this.props;
 
         const { _id, image, last_name, first_name, phone_number, isGroup, participants, name, creator } = myProfile ? user : currentDialog;
-        const chatName = first_name ? `${first_name} ${last_name}` : (phone_number || name);
-        const myGroup = creator && creator._id === user._id
-        const sortedParticipants = creator && [...participants].sort((a, b) => b._id === creator._id)
+        const chatName = isGroup ? name : first_name ? `${first_name} ${last_name}` : phone_number;
+        const myGroup = creator && creator._id === user._id;
+        const sortedParticipants = creator && [...participants].sort((a, b) => b._id === creator._id);
         return (
             <Wrapper>
                 <StyledScrollView>

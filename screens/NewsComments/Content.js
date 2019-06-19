@@ -251,8 +251,6 @@ class Content extends Component {
 	seeParticipants = (e) => {
 		const { navigate, feed } = this.props
 		navigate('FeedReceivers')
-		console.log('navigate')
-		console.log({ receivers: feed.receivers })
 	}
 	hitLike = (e) => {
 		const { feed, user, setFeed } = this.props

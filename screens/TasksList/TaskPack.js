@@ -186,7 +186,6 @@ class TaskPack extends Component {
         const outTasks = [...flatten(tl)].filter(e => e.creator._id === user._id);
         const incTasks = [...flatten(tl)].filter(e => true);
         const tasksList = title == 'inc' ? incTasks : outTasks;
-        console.log({title}, {tasksList})
         this.setState({ taskPack: tasksList });
     }
     handleHold = () => {

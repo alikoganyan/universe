@@ -84,7 +84,7 @@ class Content extends Component {
                         keyboardType={'phone-pad'} />
                 </PhoneNumber>
                 <ControlBar>
-                    {(this.state.code.length === 6 && !error) ? <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>Отправить</Button> :
+                    {(this.state.code.length === 6 && !error) ? <Button onPress={this.proceed} background={blue} color={'#fff'}>Отправить</Button> :
                         <NoCode>
                             {error &&
                                 <TouchableOpacity onPress={this.sendAgain}><NoCodeLabel>Неверный пароль, <NoCodeLabelLink>отправить sms повторно?</NoCodeLabelLink></NoCodeLabel></TouchableOpacity>}
@@ -133,7 +133,6 @@ class Content extends Component {
                 password: code,
             },
             success: (res) => {
-                console.log({res})
                 navigate('Restore3');
             },
             failFunc: (err) => {

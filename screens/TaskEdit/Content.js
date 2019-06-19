@@ -240,7 +240,7 @@ class Content extends Component {
                     <ButtonBox>
                         <Button
                             onPress={this.proceed}
-                            style={{ background: purple }}
+                            background={purple}
                             color={"white"}>
                             Редактировать задачу
                         </Button>

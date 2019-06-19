@@ -12,7 +12,7 @@ import { connect } from 'react-redux'
 import sendRequest from '../../utils/request'
 import { g_users } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
-import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/messageActions'
+import { getMessages, setRoom, addMessage, setCurrentChat, setCurrentRoomId } from '../../actions/messageActions'
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 const { Colors, sidePadding } = helper;
 const { green, black, grey2, blue } = Colors;
@@ -33,7 +33,8 @@ const AnimatedScrollView = posed.View({
     },
 
 })
-const Animated = styled(AnimatedScrollView)`
+const Animated = styled(AnimatedScrollView)
+`
     display: flex;
     flex-direction: row;
     width: ${Dimensions.get('window').width * 3};
@@ -46,13 +47,15 @@ const AnimatedArrowWrapper = posed.View({
     down: { rotate: "0deg", },
     right: { rotate: "-90deg", }
 });
-const Wrapper = styled(View)`
+const Wrapper = styled(View)
+`
     padding: 0 ${sidePadding}px;
     background: white;
     margin-bottom: 40px;
     
 `
-const ContactList = styled(ScrollView)`
+const ContactList = styled(ScrollView)
+`
     padding: 20px;
     padding-bottom: 10px;
     max-width: ${Dimensions.get('window').width - sidePadding * 2}px;
@@ -60,32 +63,37 @@ const ContactList = styled(ScrollView)`
     margin-left: ${sidePadding}px;
     flex: 1;
 `
-const Box = styled(View)`
+const Box = styled(View)
+`
     padding-top: 20px;
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
 `
-const BoxTitle = styled(TouchableOpacity)`
+const BoxTitle = styled(TouchableOpacity)
+`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
 `
-const BoxInner = styled(AnimatedBox)`
+const BoxInner = styled(AnimatedBox)
+`
     padding-bottom: 20px;
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
 `
-const BoxItem = styled(Text)`
+const BoxItem = styled(Text)
+`
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     color: #A7B0BA;
     flex: 1;
 `
-const BoxInnerItem = styled(TouchableOpacity)`
+const BoxInnerItem = styled(TouchableOpacity)
+`
     padding: 20px 5px;
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     display: flex;
@@ -93,26 +101,32 @@ const BoxInnerItem = styled(TouchableOpacity)`
     align-items: center;
 
 `
-const ContactImage = styled(Image)`
+const ContactImage = styled(Image)
+`
     width: 36px;
     height: 36px;
     border-radius: 18;
 `
-const ContactInfo = styled(View)`
+const ContactInfo = styled(View)
+`
     display: flex;
     align-items: flex-start;
     justify-content: center;
     margin-left: 10px;
 `
-const ContactName = styled(Text)``
-const ContactRole = styled(Text)`
+const ContactName = styled(Text)
+``
+const ContactRole = styled(Text)
+`
     color: #A7B0BA;
 
 `
-const ArrowWrapper = styled(AnimatedArrowWrapper)`
+const ArrowWrapper = styled(AnimatedArrowWrapper)
+`
     
 `
-const Options = styled(View)`
+const Options = styled(View)
+`
     display: flex;
     align-self: center;
     background: ${green};
@@ -123,7 +137,8 @@ const Options = styled(View)`
     overflow: hidden;
     width: 90%;
 `
-const Option = styled(Text)`
+const Option = styled(Text)
+`
     color: ${({ active }) => active ? black : 'white'};
     background: ${({ active }) => active ? 'white' : 'transparent'};
     border: ${({ active }) => active ? '1px rgba(0, 0, 0, 0.1) solid' : '0'};
@@ -241,7 +256,7 @@ class Content extends Component {
                             </> : <Loader hint={'Пока нет диалогов'} style={{ flex: 1, height: '100%' }}>
                                 <TouchableOpacity onPress={this.toContacts}>
                                     <Text style={{ color: grey2, textAlign: 'center' }}>Откройте первый диалог, выбрав пользователя
-									<Text style={{ color: blue }}> на странице контактов</Text>
+                                    <Text style={{ color: blue }}> на странице контактов</Text>
                                     </Text>
                                 </TouchableOpacity>
                             </Loader>}
@@ -271,7 +286,8 @@ class Content extends Component {
         ]
     }
     componentDidMount() {
-        const newCollapsed = [...this.state.collapsed]
+        const { collapsed } = this.state;
+        const newCollapsed = [...collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
             newCollapsed.push(false)
         }
@@ -304,40 +320,49 @@ class Content extends Component {
         this.setState({ collapsed: newCollapsed })
     }
     optionLeft = () => {
-        const newState = { ...this.state.options }
+        const { options } = this.state;
+        const newState = { ...options }
         const length = this.state.options.options.length
         newState.active = this.state.options.active < length - 1 ? this.state.options.active + 1 : 0;
         this.setState({ options: newState })
     }
     optionRight = () => {
-        const newState = { ...this.state.options }
+        const { options } = this.state;
+        const newState = { ...options }
         const length = this.state.options.options.length
         newState.active = this.state.options.active > 0 ? this.state.options.active - 1 : length - 1;
         this.setState({ options: newState })
     }
     collapseDepartment = (i) => {
-        const newDCollapsed = [...this.state.collapsed]
+        const { collapsed } = this.state;
+        const newDCollapsed = [...collapsed]
         newDCollapsed[i] = false;
         this.setState({ collapsed: newDCollapsed })
     }
     showDepartment = (i) => {
-        const newDCollapsed = [...this.state.collapsed]
+        const { collapsed } = this.state;
+        const newDCollapsed = [...collapsed]
         newDCollapsed[i] = true;
         this.setState({ collapsed: newDCollapsed })
     }
     selectOption = (e) => {
-        const newState = { ...this.state.options }
+        const { options } = this.state;
+        const newState = { ...options }
         newState.active = e;
         this.setState({ options: newState })
     }
     toChat = e => {
-        const { setCurrentDialogs, navigate, user, getMessages, setCurrentChat } = this.props
-        const { creator, participants, isGroup } = e
-        let item = creator._id === user._id ? participants[0] : creator
+        const { setCurrentDialogs, setRoom, setCurrentRoomId, navigate, user, getMessages, setCurrentChat } = this.props;
+        const { creator, participants, isGroup, _id, room } = e;
+        let item = creator._id === user._id ? participants[0] : creator;
+        const roomId = room.split('_').filter(e => e != user._id)[0];
         getMessages(e.messages)
         setCurrentDialogs({ ...e, ...item })
-        setCurrentChat(e._id)
+        setRoom(roomId)
+        setCurrentRoomId(_id);
+        setCurrentChat(_id)
         navigate(isGroup ? 'Group' : 'Chat')
+
     }
 }
 
@@ -357,6 +382,7 @@ const mapDispatchToProps = dispatch => ({
     setAllUsers: _ => dispatch(setAllUsers(_)),
     setContacts: _ => dispatch(setContacts(_)),
     setCurrentChat: _ => dispatch(setCurrentChat(_)),
+    setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
     setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
 
 })

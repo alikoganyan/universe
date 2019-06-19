@@ -212,7 +212,7 @@ class Content extends Component {
                                 !deadlineTime
                             }
                             onPress={this.proceed}
-                            style={{ background: purple }}
+                            background={purple}
                             color={'white'}>Создать задачу</Button>
                     </ButtonBox>
                 </StyledScrollView>
@@ -232,7 +232,7 @@ class Content extends Component {
         this.setState({ taskText: text })
         // setTaskReceivers(participants)
     }
-    
+
     jsCoreDateCreator = (dateString) => {
         // dateString *HAS* to be in this format "YYYY-MM-DD HH:MM:SS"  
         let dateParam = dateString.split(/[\s-:]/)

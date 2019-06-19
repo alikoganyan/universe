@@ -114,7 +114,7 @@ class Content extends Component {
                         </TouchableOpacity>
                         <Button
                             onPress={this.proceed}
-                            style={{ background: green }}
+                            background={green}
                             color={black}>Продолжить</Button>
                     </ButtonBox>
                     <Receivers>
@@ -159,28 +159,29 @@ class Content extends Component {
                 forward()
             },
             failFunc: (err) => {
-                console.log(err)
+                console.log({err})
+                alert(err.msg);
             }
         })
     }
     selectPhoto = async () => {
-        alert('temporary unavailable')
-        // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-        // if (status !== 'granted') {
-        //     alert('no camera roll permission')
-        // }
-        // let result = await ImagePicker.launchImageLibraryAsync({
-        //     allowsEditing: false,
-        // });
-        // const { uri, type } = result
-        // const fileName = Math.random().toString(36).substring(7);
-        // const form = new FormData();
-        // form.append("file", {
-        //     uri,
-        //     name: `photo.${fileName}.${ext}`,
-        //     type: `image/${type}`,
-        // })
-        // this.setState({ image: form })
+        // alert('temporary unavailable')
+        const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+        if (status !== 'granted') {
+            alert('no camera roll permission')
+        }
+        let result = await ImagePicker.launchImageLibraryAsync({
+            allowsEditing: false,
+        });
+        const { uri, type } = result
+        const fileName = Math.random().toString(36).substring(7);
+        const form = new FormData();
+        form.append("file", {
+            uri,
+            name: `photo.${fileName}.${ext}`,
+            type: `image/${type}`,
+        })
+        this.setState({ image: form })
     }
     deleteParticipant = (e) => {
         const { _id } = e

@@ -43,8 +43,8 @@ const LogoutText = styled(Text)`
 class Profile extends Component {
     render() {
         const { currentChat, user, currentDialog } = this.props;
-        const myProfile = !currentChat
-        const myGroup = currentDialog.isGroup ? currentDialog.creator._id === user._id : false
+        const myProfile = !currentChat || currentDialog._id === user._id;
+        const myGroup = currentDialog.isGroup ? currentDialog.creator._id === user._id : false;
         return (
             <ActionSheetProvider>
                 <SafeAreaView behavior={'padding'}>
@@ -62,25 +62,25 @@ class Profile extends Component {
         )
     }
     navigateBack = () => {
-        this.props.navigation.goBack()
+        this.props.navigation.goBack();
     }
     toChat = () => {
-        const { currentChat, user } = this.props
-        socket.emit('select chat', { chatId: currentChat.id, userId: user.id })
-        this.props.navigation.navigate('Chat')
+        const { currentChat, user } = this.props;
+        socket.emit('select chat', { chatId: currentChat.id, userId: user.id });
+        this.props.navigation.navigate('Chat');
     }
 
     toDialogs = () => {
-        this.props.navigation.navigate('Dialogs')
+        this.props.navigation.navigate('Dialogs');
     }
     logout = async () => {
-        const { navigation } = this.props
+        const { navigation } = this.props;
         await AsyncStorage.clear();
-        navigation.navigate('Login')
+        navigation.navigate('Login');
     }
     edit = () => {
         const { navigation, currentDialog } = this.props;
-        navigation.navigate(currentDialog.isGroup ? 'GroupEdit' : 'ProfileEdit', { currentDialog })
+        navigation.navigate(currentDialog.isGroup ? 'GroupEdit' : 'ProfileEdit', { currentDialog });
     }
 }
 

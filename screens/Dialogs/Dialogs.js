@@ -304,9 +304,8 @@ class Dialogs extends Component {
         const newDialogs = [...dialogs]
         const newDialog = newDialogs.filter(e => e._id === _id)[0]
         
-        setRoom(roomId)//s
+        setRoom(roomId)
         setCurrentRoomId(_id); 
-        // console.log(room)
         setCurrentChat(room)
         setCurrentDialogs(currentDialog)
         getMessages([...messages]);

@@ -155,7 +155,8 @@ export default class Settings extends Component {
     handleFocus = () => {
     }
     sortUsersByName = (users) => {
-        const newNames = { ...this.state.names };
+        const { names } = this.state;
+        const newNames = { ...names };
         let index = 0
         users.sort((a, b) => {
             return (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1;

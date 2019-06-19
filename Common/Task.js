@@ -240,9 +240,7 @@ class TaskComponent extends Component {
                             <Text>{name}</Text>
                         </TaskTitle>
                         <TaskBody>
-                            <TaskBodyText>{description} 
-                                {performers.map(e => e.first_name)}
-                            </TaskBodyText>
+                            <TaskBodyText>{description} </TaskBodyText>
                         </TaskBody>
                         <TaskFooter>
                             <TaskDeadline>

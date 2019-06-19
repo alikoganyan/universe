@@ -116,7 +116,7 @@ class Content extends Component {
                             <Button
                                 disabled={!text || !receivers.length}
                                 onPress={this.proceed}
-                                style={{ background: yellow }}
+                                background ={yellow}
                                 color={black}>Продолжить</Button>
                         </DialogsLabel>
                     </Recievers>
@@ -134,7 +134,7 @@ class Content extends Component {
         err: false
     }
     componentDidMount() {}
-    
+
     deleteReceiver = e => {
         const { _id } = e
         const { receivers, setFeedReceivers } = this.props

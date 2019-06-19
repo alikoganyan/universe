@@ -196,7 +196,8 @@ class Content extends Component {
         ]
     }
     collapseDepartment = (i) => {
-        const newDCollapsed = [...this.state.collapsed]
+        const { collapsed } = this.state;
+        const newDCollapsed = [...collapsed]
         newDCollapsed[i] = false;
         this.setState({ collapsed: newDCollapsed })
     }
@@ -205,13 +206,15 @@ class Content extends Component {
         navigate('NewGroup')
     }
     showDepartment = (i) => {
-        const newDCollapsed = [...this.state.collapsed]
+        const { collapsed } = this.state;
+        const newDCollapsed = [...collapsed]
         newDCollapsed[i] = true;
         this.setState({ collapsed: newDCollapsed })
     }
     componentDidMount() {
+        const { collapsed } = this.state;
         const { setContacts } = this.props
-        const newDCollapsed = [...this.state.collapsed]
+        const newDCollapsed = [...collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
             newDCollapsed.push(false)
         }
@@ -246,7 +249,8 @@ class Content extends Component {
 
     }
     selectOption = (e) => {
-        const newState = { ...this.state.options }
+        const { options } = this.state;
+        const newState = { ...options }
         newState.active = e;
         this.setState({ options: newState })
     }

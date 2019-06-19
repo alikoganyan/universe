@@ -111,7 +111,7 @@ class Content extends Component {
                 <ButtonBox>
                     <Button
                         onPress={this.proceed}
-                        style={{ background: blue }}
+                        background={blue}
                         color={'white'}>Продолжить</Button>
                 </ButtonBox>
             </Wrapper>

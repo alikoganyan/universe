@@ -7,17 +7,20 @@ import { setActiveTask } from '../../actions/tasksActions'
 import helper from '../../utils/helpers'
 const { Colors, HeaderHeight } = helper;
 const { purple, black, pink } = Colors;
-const Wrapper = styled(View)`
+const Wrapper = styled(View)
+`
     margin-bottom: 50px;   
 `
-const TaskList = styled(FlatList)`
+const TaskList = styled(FlatList)
+`
     padding: 10px;
     display: flex;
     flex-grow: 1;
     padding-bottom: 20px;
     z-index: 5;
 `
-const Options = styled(View)`
+const Options = styled(View)
+`
     display: flex;
     align-self: center;
     background: ${purple};
@@ -28,7 +31,8 @@ const Options = styled(View)`
     margin: 10px 0;
     max-width: 85%;
 `
-const Option = styled(Text)`
+const Option = styled(Text)
+`
     color: ${({ active }) => active ? black : 'white'};
     background: ${({ active }) => active ? 'white' : 'transparent'};
     margin: 1px;
@@ -38,17 +42,22 @@ const Option = styled(Text)`
     min-width: 30%;
     text-align: center;
 `
-const TaskWrapper = styled(View)`
+const TaskWrapper = styled(View)
+`
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
     flex-direction: row;
 `
-const StyledScrollView = styled(ScrollView)`
+const StyledScrollView = styled(ScrollView)
+`
     flexGrow: 1;
     zIndex: 10;
     width: 100%;
     height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
+`
+const TaskListFooter = styled(View)`
+    margin: 0;
 `
 class Content extends Component {
     render() {
@@ -69,11 +78,26 @@ class Content extends Component {
                         </Options>
                         {currentTask.tasks && <TaskList
                             data={currentTask.tasks}
-                            ListFooterComponent={<View style={{ margin: 0, }} />}
+                            ListFooterComponent={<TaskListFooter />}
                             renderItem={({ item }) => {
                                 const myTask = item.creator._id === user._id;
-                                return <TaskWrapper>
-                                    <TouchableOpacity style={{ flex: 1 }} onLongPress={e => this.handleHold(item)}><TaskComponent
+                                let condition = true;
+                                switch(active){
+                                    case 0: 
+                                        condition = true;
+                                        break;
+                                    case 1: 
+                                        condition = item.status !== 'cancelled';
+                                        break;
+                                    case 2: 
+                                        condition = item.status === 'cancelled';
+                                        break;
+                                    default: 
+                                        break;
+                                }
+                                if(condition) return <TaskWrapper>
+                                    <TouchableOpacity style={{ flex: 1 }} onLongPress={e => this.handleHold(item)}>
+                                        <TaskComponent
                                         triangleLeft={!myTask}
                                         triangleRight={myTask}
                                         borderColor={myTask ? pink : purple}
@@ -82,7 +106,8 @@ class Content extends Component {
                                             zIndex: activeTask._id === item._id ? 5 : 1,
                                             // marginRight: myTask ? 10 : 70,
                                             // marginLeft: myTask ? 70 : 10,
-                                        }}>{item}</TaskComponent></TouchableOpacity>
+                                        }}>{item}</TaskComponent>
+                                    </TouchableOpacity>
                                 </TaskWrapper>
                             }}
                             keyExtractor={(item, index) => index.toString()}
@@ -104,7 +129,7 @@ class Content extends Component {
         taskList: []
     }
     editFeed = () => {
-        const { navigate } = this.props 
+        const { navigate } = this.props
         navigate('TaskEdit')
     }
     unselect = () => {
@@ -116,9 +141,10 @@ class Content extends Component {
         setActiveTask(e)
     }
     selectOption = (e) => {
-        const options = { ...this.state.options };
-        options.active = e;
-        this.setState({ options })
+        const { options } = this.state;
+        const newOptions = { ...options };
+        newOptions.active = e;
+        this.setState({ options: newOptions });
     }
     componentWillUnmount() {
         this.unselect()

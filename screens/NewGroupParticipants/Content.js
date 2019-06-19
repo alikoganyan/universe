@@ -243,8 +243,9 @@ class Content extends Component {
     }
     componentDidMount() {
         const { participants } = this.props
-        const newDCollapsed = [...this.state.collapsed]
-        for (let i = 0; i <= this.state.users.department.length; i++) {
+        const { collapsed, users} = this.state;
+        const newDCollapsed = [...collapsed]
+        for (let i = 0; i <= users.department.length; i++) {
             newDCollapsed.push(false)
         }
         this.setState({ collapsed: newDCollapsed })
@@ -253,7 +254,7 @@ class Content extends Component {
             method: 'get',
             success: (res) => {
                 this.props.setContacts(res.users)
-                const newUsers = { ...this.state.users }
+                const newUsers = { ...users }
                 newUsers.department[0].workers = res.users
                 this.setState({ users: newUsers })
             },
@@ -263,16 +264,18 @@ class Content extends Component {
         })
     }
     optionLeft = () => {
-        const newState = { ...this.state.options }
-        const length = this.state.options.options.length
-        newState.active = this.state.options.active < length - 1 ? this.state.options.active + 1 : 0;
+        const { options } = this.state;
+        const newState = { ...options }
+        const length = options.options.length
+        newState.active = options.active < length - 1 ? options.active + 1 : 0;
         this.setState({ options: newState })
 
     }
     optionRight = () => {
-        const newState = { ...this.state.options }
-        const length = this.state.options.options.length
-        newState.active = this.state.options.active > 0 ? this.state.options.active - 1 : length - 1;
+        const { options } = this.state;
+        const newState = { ...options }
+        const length = options.options.length
+        newState.active = options.active > 0 ? options.active - 1 : length - 1;
         this.setState({ options: newState })
 
     }
@@ -292,17 +295,20 @@ class Content extends Component {
         setReceivers(newReceivers)
     }
     collapseDepartment = (i) => {
-        const newDCollapsed = [...this.state.collapsed]
+        const { collapsed } = this.state;
+        const newDCollapsed = [...collapsed]
         newDCollapsed[i] = false;
         this.setState({ collapsed: newDCollapsed })
     }
     showDepartment = (i) => {
-        const newDCollapsed = [...this.state.collapsed]
+        const { collapsed } = this.state;
+        const newDCollapsed = [...collapsed]
         newDCollapsed[i] = true;
         this.setState({ collapsed: newDCollapsed })
     }
     selectOption = (e) => {
-        const newState = { ...this.state.options }
+        const { options } = this.state;
+        const newState = { ...options }
         newState.active = e;
         this.setState({ options: newState })
     }

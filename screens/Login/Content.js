@@ -137,7 +137,7 @@ class Content extends Component {
                             }
                         </TouchableOpacity>
                         <TouchableOpacity onPress={navigateToDialogs}>
-                            <Button onPress={this.login} style={{ backgroundColor: blue }} color={'#fff'}>войти</Button>
+                            <Button onPress={this.login} background={blue} color={'#fff'}>войти</Button>
                         </TouchableOpacity>
                     </ControlBar>
                 </Wrapper >

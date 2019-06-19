@@ -73,7 +73,7 @@ class Content extends Component {
                     <Input style={{ minWidth: '100%' }} value={repass} onChangeText={this.handleChangeRepass} password={true} keyboardType={'phone-pad'}>Повторите пароль</Input>
                 </PhoneNumber>
                 <ControlBar>
-                    <Button onPress={this.proceed} style={{ backgroundColor: blue }} color={'#fff'}>Сохранить и войти</Button>
+                    <Button onPress={this.proceed} background={blue} color={'#fff'}>Сохранить и войти</Button>
                 </ControlBar>
             </Wrapper>
         )

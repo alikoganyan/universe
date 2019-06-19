@@ -75,6 +75,7 @@ class Content extends Component {
         const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
         const tasksList = [...tasks].filter(e => e._id === user._id).map(e => e.tasks);
         const incTasks = flatten(tasksList).filter(e => e.creator._id !== user._id);
+
         return (
             <SafeAreaView>
                 {/* {activeTask._id && <Shadow onPress={this.unselect}></Shadow>} */}
@@ -92,7 +93,21 @@ class Content extends Component {
                             ListFooterComponent={<View   />}
                             renderItem={({ item, index }) => {
                                 const { creator } = item
-                                return <TaskWrapper>
+                                let condition = true;
+                                switch(active){
+                                    case 0: 
+                                        condition = true;
+                                        break;
+                                    case 1: 
+                                        condition = item.status !== 'cancelled';
+                                        break;
+                                    case 2: 
+                                        condition = item.status === 'cancelled';
+                                        break;
+                                    default: 
+                                        break;
+                                }
+                                if(condition) return <TaskWrapper>
                                     <TouchableOpacity style={{ flex: 1 }} onLongPress={e => this.handleHold(item)}><TaskComponent
                                         triangleLeft={true}
                                         borderColor={purple}
@@ -131,9 +146,10 @@ class Content extends Component {
         setActiveTask(e)
     }
     selectOption = (e) => {
-        const options = { ...this.state.options };
-        options.active = e;
-        this.setState({ options })
+        const { options } = this.state;
+        const newOptions = { ...options };
+        newOptions.active = e;
+        this.setState({ options: newOptions })
     }
     componentWillUnmount() {
         this.unselect()

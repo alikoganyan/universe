@@ -78,7 +78,7 @@ export default class Content extends Component {
                     <FirstTimeText>
                         Pariatur consectetur Lorem est irure et in ullamco. Proident pariatur labore aliquip fugiat ullamco sunt non. Laborum mollit velit amet
                     </FirstTimeText>
-                    <Button onPress={this.goSignup} style={{ backgroundColor: blue }} color={'#fff'}>Зарегистрируйтесь</Button>
+                    <Button onPress={this.goSignup} background={blue} color={'#fff'}>Зарегистрируйтесь</Button>
                 </FirstTime>
                 <Dots>
                     <Dot active />

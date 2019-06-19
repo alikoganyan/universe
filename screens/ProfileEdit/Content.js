@@ -128,7 +128,6 @@ class Content extends Component {
             repasswordError
         } = this.state;
         const { first_name, last_name, middle_name, email, image } = user || {};
-        console.log(image);
         return (
             <Wrapper>
                 <User>
@@ -234,7 +233,7 @@ class Content extends Component {
                 </User>
                 <Bottom>
                     <Button
-                        style={{ backgroundColor: blue }}
+                        background={blue}
                         color={"#fff"}
                         onPress={this.apply}
                     >
@@ -271,7 +270,8 @@ class Content extends Component {
     };
     componentDidMount() {
         const { user } = this.props;
-        this.setState({ user: { ...this.state.user, ...user, password: "" } });
+        const statUser = this.state.user;
+        this.setState({ user: { ...statUser, ...user, password: "" } });
         // setInterval(() => this.setState({
         //     lastNameError: !this.state.lastNameError,
         //     firstNameError: !this.state.firstNameError,

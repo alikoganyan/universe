@@ -101,7 +101,6 @@ class Content extends Component {
             text,
             participants
         }
-        console.log({ task })
         navigate('NewTask', { task })
     }
     handleHold = (e) => {

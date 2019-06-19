@@ -41,6 +41,18 @@ const MessageOption = styled(TouchableOpacity)`
     padding-bottom: 30px;
     width: 100%;
 `
+const StyledFlatList = styled(FlatList)`
+    padding-right: 5; 
+    padding-left: 5; 
+    z-index: 2;
+`
+const FlatListHeader = styled(View)`
+    margin: 35px;
+`
+const StyledImageBackground = styled(ImageBackground)`
+    width: 100%;
+    height: 100%; 
+`
 class Content extends Component {
     render() {
         const { selectedMessage } = this.state
@@ -52,10 +64,9 @@ class Content extends Component {
             <>
                 <Wrapper search={search} >
                     {selectedMessage._id && <Shadow onPress={this.unselect} activeOpacity={1} />}
-                    <ImageBackground source={chatBg} style={{ width: '100%', height: '100%' }}>
-                        <FlatList
-                            style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
-                            ListHeaderComponent={<View style={{ margin: 35, }} />}
+                    <StyledImageBackground source={chatBg}>
+                        <StyledFlatList
+                            ListHeaderComponent={<FlatListHeader />}
                             inverted={true}
                             data={reversedMessages}
                             initialNumToRender={15}
@@ -68,7 +79,7 @@ class Content extends Component {
                             }}
                             keyExtractor={(item, index) => index.toString()}
                         />
-                    </ImageBackground>
+                    </StyledImageBackground>
                 </Wrapper>
                 <BottomSheet
                     visible={selectedMessage._id}

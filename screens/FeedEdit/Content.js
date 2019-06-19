@@ -96,7 +96,7 @@ class Content extends Component {
                             </TouchableOpacity>
                             <Button
                                 onPress={this.proceed}
-                                style={{ background: yellow }}
+                                background={yellow}
                                 color={black}>Сохранить</Button>
                         </DialogsLabel>
                     </Recievers>

@@ -40,7 +40,8 @@ const AnimatedScrollView = posed.View({
     },
 
 })
-const Animated = styled(AnimatedScrollView)`
+const Animated = styled(AnimatedScrollView)
+`
     display: flex;
     flex-direction: row;
     width: ${Dimensions.get('window').width * 3};
@@ -53,34 +54,39 @@ const AnimatedArrowWrapper = posed.View({
     down: { rotate: "0deg", },
     right: { rotate: "-90deg", }
 });
-const Wrapper = styled(View)`
+const Wrapper = styled(View)
+`
     padding-top: 0px;
     background: white;
     margin-bottom: 110px;
     height: ${Dimensions.get('window').height - HeaderHeight - 20};
 `
-const ContactList = styled(ScrollView)`
+const ContactList = styled(ScrollView)
+`
     padding: 30px;
     padding-bottom: 10px;
     max-width: ${Dimensions.get('window').width};
     overflow: hidden;
     flex: 1;
 `
-const Box = styled(View)`
+const Box = styled(View)
+`
     padding-top: 20px;
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
 `
-const BoxTitle = styled(TouchableOpacity)`
+const BoxTitle = styled(TouchableOpacity)
+`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
     padding-bottom: 20px;
 `
-const BoxInner = styled(AnimatedBox)`
+const BoxInner = styled(AnimatedBox)
+`
     padding: 20px 0;
     padding-top: 20px;
     border: 1px solid #E8EBEE;
@@ -88,10 +94,12 @@ const BoxInner = styled(AnimatedBox)`
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
 `
-const BoxItem = styled(Text)`
+const BoxItem = styled(Text)
+`
     color: #A7B0BA;
 `
-const BoxInnerItem = styled(View)`
+const BoxInnerItem = styled(View)
+`
     padding: 10px;
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     display: flex;
@@ -99,26 +107,32 @@ const BoxInnerItem = styled(View)`
     align-items: center;
 
 `
-const ContactImage = styled(Image)`
+const ContactImage = styled(Image)
+`
     width: 36px;
     height: 36px;
     border-radius: 18;
 `
-const ContactInfo = styled(View)`
+const ContactInfo = styled(View)
+`
     display: flex;
     align-items: flex-start;
     justify-content: center;
     margin-left: 10px;
 `
-const ContactName = styled(Text)``
-const ContactRole = styled(Text)`
+const ContactName = styled(Text)
+``
+const ContactRole = styled(Text)
+`
     color: #A7B0BA;
 
 `
-const ArrowWrapper = styled(AnimatedArrowWrapper)`
+const ArrowWrapper = styled(AnimatedArrowWrapper)
+`
     
 `
-const Options = styled(View)`
+const Options = styled(View)
+`
     display: flex;
     align-self: center;
     background: ${green};
@@ -128,7 +142,8 @@ const Options = styled(View)`
     border-radius: 13;
     overflow: hidden;
 `
-const Option = styled(Text)`
+const Option = styled(Text)
+`
     color: ${({ active }) => active ? black : 'white'};
     background: ${({ active }) => active ? 'white' : 'transparent'};
     min-width: 20%;
@@ -138,11 +153,16 @@ const Option = styled(Text)`
     overflow: hidden;
     text-align: center;
 `
-const Group = styled(BoxInnerItem)``
-const GroupInfo = styled(ContactInfo)``
-const GroupTitle = styled(ContactName)``
-const GroupParticipants = styled(ContactRole)``
-const GroupImage = styled(ContactImage)``
+const Group = styled(BoxInnerItem)
+``
+const GroupInfo = styled(ContactInfo)
+``
+const GroupTitle = styled(ContactName)
+``
+const GroupParticipants = styled(ContactRole)
+``
+const GroupImage = styled(ContactImage)
+``
 class Content extends Component {
     render() {
         const { receivers } = this.props
@@ -244,12 +264,10 @@ class Content extends Component {
     state = {
         collapsed: [],
         users: {
-            department: [
-                {
-                    title: 'Отдел длинных корпоративных названий',
-                    workers: [],
-                },
-            ],
+            department: [{
+                title: 'Отдел длинных корпоративных названий',
+                workers: [],
+            }, ],
         },
         options: {
             active: 1,
@@ -271,7 +289,9 @@ class Content extends Component {
         ]
     }
     componentDidMount() {
-        const newDCollapsed = [...this.state.collapsed]
+        const { collapsed, users } = this.state;
+        const { setContacts } = this.props;
+        const newDCollapsed = [...collapsed]
         for (let i = 0; i <= this.state.users.department.length; i++) {
             newDCollapsed.push(false)
         }
@@ -280,8 +300,8 @@ class Content extends Component {
             r_path: g_users,
             method: 'get',
             success: (res) => {
-                this.props.setContacts(res.users)
-                const newUsers = { ...this.state.users }
+                setContacts(res.users)
+                const newUsers = { ...users }
                 newUsers.department[0].workers = res.users
                 this.setState({ users: newUsers })
             },
@@ -291,14 +311,16 @@ class Content extends Component {
         })
     }
     optionLeft = () => {
-        const newState = { ...this.state.options }
+        const { options } = this.state;
+        const newState = { ...options }
         const length = this.state.options.options.length
         newState.active = this.state.options.active < length - 1 ? this.state.options.active + 1 : 0;
         this.setState({ options: newState })
 
     }
     optionRight = () => {
-        const newState = { ...this.state.options }
+        const { options } = this.state;
+        const newState = { ...options }
         const length = this.state.options.options.length
         newState.active = this.state.options.active > 0 ? this.state.options.active - 1 : length - 1;
         this.setState({ options: newState })
@@ -320,17 +342,20 @@ class Content extends Component {
         return !!receivers.filter(user => e._id === user._id)[0]
     }
     collapseDepartment = (i) => {
-        const newDCollapsed = [...this.state.collapsed]
+        const { collapsed } = this.state;
+        const newDCollapsed = [...collapsed]
         newDCollapsed[i] = false;
         this.setState({ collapsed: newDCollapsed })
     }
     showDepartment = (i) => {
-        const newDCollapsed = [...this.state.collapsed]
+        const { collapsed } = this.state;
+        const newDCollapsed = [...collapsed]
         newDCollapsed[i] = true;
         this.setState({ collapsed: newDCollapsed })
     }
     selectOption = (e) => {
-        const newState = { ...this.state.options }
+        const { options } = this.state;
+        const newState = { ...options }
         newState.active = e;
         this.setState({ options: newState })
     }

@@ -157,6 +157,14 @@ const GroupParticipants = styled(ContactRole)
 ``
 const GroupImage = styled(ContactImage)
 ``
+const StyledFlatList = styled(FlatList)
+`
+    padding: 0 5px;
+`
+const FlatListHeader = styled(View)
+`
+    margin: 35px;
+`
 class Content extends Component {
     render() {
         const { users, collapsed, options, groups } = this.state;
@@ -206,9 +214,8 @@ class Content extends Component {
                                 }
                             </ContactList>
                             <ContactList>
-                                <FlatList
-                                    style={{ paddingRight: 5, paddingLeft: 5, }}
-                                    ListHeaderComponent={<View style={{ margin: 35, }} />}
+                                <StyledFlatList
+                                    ListHeaderComponent={<FlatListHeader/>}
                                     inverted={true}
                                     data={groups}
                                     renderItem={({ item, index }) => <Group key={index}>
@@ -256,45 +263,51 @@ class Content extends Component {
         ]
     }
     componentDidMount() {
-        const { feed } = this.props
-        const { receivers } = feed
-        const newDCollapsed = [...this.state.collapsed]
-        for (let i = 0; i <= this.state.users.department.length; i++) {
+        const { feed, setContacts } = this.props;
+        const { collapsed, users } = this.state;
+        const { receivers } = feed;
+        const newDCollapsed = [...collapsed]
+        for (let i = 0; i <= users.department.length; i++) {
             newDCollapsed.push(false)
         }
-        this.setState({ collapsed: newDCollapsed })
-
-        this.props.setContacts(receivers)
-        const newUsers = { ...this.state.users }
+        setContacts(receivers)
+        const newUsers = { ...users }
         newUsers.department[0].workers = receivers
-        this.setState({ users: newUsers })
+        this.setState({ users: newUsers, collapsed: newDCollapsed })
     }
     optionLeft = () => {
-        const newState = { ...this.state.options }
+        const { options } = this.state;
+        const newState = { ...options }
         const length = this.state.options.options.length
         newState.active = this.state.options.active < length - 1 ? this.state.options.active + 1 : 0;
         this.setState({ options: newState })
 
     }
     optionRight = () => {
-        const newState = { ...this.state.options }
+        const { options } = this.state;
+        const newState = { ...options }
         const length = this.state.options.options.length
         newState.active = this.state.options.active > 0 ? this.state.options.active - 1 : length - 1;
         this.setState({ options: newState })
 
     }
     collapseDepartment = (i) => {
-        const newDCollapsed = [...this.state.collapsed]
+        const { collapsed } = this.state;
+        const newDCollapsed = [...collapsed]
         newDCollapsed[i] = false;
         this.setState({ collapsed: newDCollapsed })
     }
     showDepartment = (i) => {
-        const newDCollapsed = [...this.state.collapsed]
+        const { collapsed } = this.state;
+
+        const newDCollapsed = [...collapsed]
         newDCollapsed[i] = true;
         this.setState({ collapsed: newDCollapsed })
     }
     selectOption = (e) => {
-        const newState = { ...this.state.options }
+        const { options } = this.state;
+
+        const newState = { ...options }
         newState.active = e;
         this.setState({ options: newState })
     }

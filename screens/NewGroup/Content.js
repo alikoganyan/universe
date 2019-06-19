@@ -115,7 +115,7 @@ class Content extends Component {
                         <Button
                             disabled={!text}
                             onPress={this.proceed}
-                            style={{ background: green }}
+                            background={green}
                             color={black}>Продолжить</Button>
                     </ButtonBox>
                     <Receivers>

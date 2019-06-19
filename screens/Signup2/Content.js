@@ -88,7 +88,8 @@ class Content extends Component {
 
                         <Button
                             onPress={this.sendAgain}
-                            style={{ background: blue, marginTop: 10 }}
+                            style={{ marginTop: 10 }}
+                            background={blue}
                             color={'white'}>Отправить</Button>
                     }
                 </Controls>
@@ -104,24 +105,25 @@ class Content extends Component {
     }
     componentDidMount() {
         const countdown = setInterval(() => {
-            this.setState({ deadline: this.state.deadline - 1 })
-            if (this.state.deadline === 0)
+            const { deadline } = this.state;
+            this.setState({ deadline: deadline - 1 })
+            if (deadline === 0)
                 clearInterval(countdown)
         }, 1000)
 
     }
     handleSMS = (e) => {
-        const { error, tries } = this.state;
+        const { error, tries, sms } = this.state;
         const { forward, register } = this.props
         if (error <= tries) {
             this.setState({ sms: e }, () => {
-                if (this.state.sms.length === 6) {
+                if (sms.length === 6) {
                     sendRequest({
                         r_path: p_register,
                         method: 'post',
                         attr: {
                             phone_number: register.phone,
-                            password: this.state.sms
+                            password: sms
                         },
                         success: (res) => {
                             console.log({ res })
@@ -164,8 +166,9 @@ class Content extends Component {
                 }
             })
             const countdown = setInterval(() => {
-                this.setState({ deadline: this.state.deadline - 1 })
-                if (this.state.deadline === 0)
+                const { deadline } = this.state;
+                this.setState({ deadline: deadline - 1 })
+                if (deadline === 0)
                     clearInterval(countdown)
             }, 1000)
         })
