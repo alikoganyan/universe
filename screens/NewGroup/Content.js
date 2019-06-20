@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
-import FloatingLabel from 'react-native-floating-labels'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import { connect } from 'react-redux'
-import { setUser } from '../../actions/userActions'
-import Button from '../../common/Button'
-import { ImagePicker, Permissions } from 'expo'
-import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
-import { GroupIcon, CloseIcon } from '../../assets/'
-import { addDialogParticipant, setDialogParticipants } from '../../actions/participantsActions'
-import { socket } from '../../utils/socket'
+import React, { Component } from 'react';
+import { View, Text, TextInput, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import FloatingLabel from 'react-native-floating-labels';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import { connect } from 'react-redux';
+import { setUser } from '../../actions/userActions';
+import Button from '../../common/Button';
+import { ImagePicker, Permissions } from 'expo';
+import ImageComponent from '../../common/Image';
+import DefaultAvatar from '../../common/DefaultAvatar';
+import { GroupIcon, CloseIcon } from '../../assets/';
+import { addDialogParticipant, setDialogParticipants } from '../../actions/participantsActions';
+import { socket } from '../../utils/socket';
 const { Colors, HeaderHeight, sidePadding } = helper;
 const { lightGrey1, black, green } = Colors;
 const Wrapper = styled(View)`
@@ -19,7 +19,7 @@ const Wrapper = styled(View)`
     justify-content: center;
     flex-grow: 1;
     height: 100%;
-`
+`;
 
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
@@ -29,17 +29,17 @@ const StyledInput = styled(TextInput)`
     text-align: center;
     margin-bottom: 50px;
     ${({ style }) => style}
-`
+`;
 const ButtonBox = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
     margin-top: 20px;
-`
+`;
 const Receivers = styled(View)`
     margin: 40px 0;
-`
+`;
 const Receiver = styled(View)`
     display: flex;
     flex-direction: row;
@@ -47,15 +47,15 @@ const Receiver = styled(View)`
     justify-content: flex-start;
     margin-top: 20px;
     
-`
+`;
 const ReceiverInfo = styled(View)`
     display: flex;
     justify-content: space-between;
     padding-left: 5px;
-`
+`;
 const Department = styled(Text)`
     color: ${lightGrey1};
-`
+`;
 const DialogsLabel = styled(View)`
     display: flex;
     align-items: center;
@@ -63,22 +63,22 @@ const DialogsLabel = styled(View)`
     justify-content: flex-start;
     margin-top: 20px;
     margin-bottom: 20px;
-`
+`;
 const AddReceiver = styled(Text)`
     color: ${green};
-`
+`;
 const DialogsLabelText = styled(Text)`
     margin-left: 5px;
-`
+`;
 class Content extends Component {
     render() {
         const {
             text
-        } = this.state
-        const { participants } = this.props
+        } = this.state;
+        const { participants } = this.props;
         const ReceiverComponent = (props) => {
             const { children, last = false, onDelete } = props;
-            const { info, title, image, role, first_name, last_name, phone_number } = children
+            const { info, title, image, role, first_name, last_name, phone_number } = children;
             return <Receiver last={last}>
                 <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
                     {image === '/images/default_avatar.jpg' ?
@@ -93,8 +93,8 @@ class Content extends Component {
                     </View>
                     <CloseIcon onPress={onDelete} />
                 </View>
-            </Receiver>
-        }
+            </Receiver>;
+        };
         return (
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}
                 keyboardShouldPersistTaps='handled'>
@@ -130,7 +130,7 @@ class Content extends Component {
                         </ScrollView>
                     </Receivers>
                 </Wrapper>
-            </ScrollView>)
+            </ScrollView>);
     }
     state = {
         text: '',
@@ -141,7 +141,7 @@ class Content extends Component {
     }
     
     selectPhoto = async e => {
-        alert('temporary unavailable')
+        alert('temporary unavailable');
         // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         // if (status !== 'granted') {
         //     alert('no camera roll permission')
@@ -160,40 +160,40 @@ class Content extends Component {
         // this.setState({ image: form })
     }
     deleteParticipant = (e) => {
-        const { _id } = e
-        const { participants, setParticipants } = this.props
-        const newParticipants = [...participants].filter(e => e._id !== _id)
-        setParticipants(newParticipants)
+        const { _id } = e;
+        const { participants, setParticipants } = this.props;
+        const newParticipants = [...participants].filter(e => e._id !== _id);
+        setParticipants(newParticipants);
     }
     addParticipant = () => {
-        const { addParticipant } = this.props
-        addParticipant()
+        const { addParticipant } = this.props;
+        addParticipant();
     }
     proceed = (e) => {
         const { participants, forward, setParticipants } = this.props;
-        const { text } = this.state
-        let idList = []
+        const { text } = this.state;
+        let idList = [];
         participants.map((e) => {
-            idList = [...idList, e._id]
-        })
-        setParticipants([])
-        socket.emit('new_group', { name: text, participants: idList })
-        setTimeout(() => socket.emit('get_dialogs'), 500)
-        forward()
+            idList = [...idList, e._id];
+        });
+        setParticipants([]);
+        socket.emit('new_group', { name: text, participants: idList });
+        setTimeout(() => socket.emit('get_dialogs'), 500);
+        forward();
     }
     handleCountry = (e) => {
-        this.setState({ country: e })
+        this.setState({ country: e });
     }
     handleChange = (e) => {
-        this.setState({ text: e })
+        this.setState({ text: e });
     }
 }
 const mapStateToProps = state => ({
     id: state.userReducer.user.id,
     participants: state.participantsReducer.dialog.participants
-})
+});
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
     setParticipants: _ => dispatch(setDialogParticipants(_)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

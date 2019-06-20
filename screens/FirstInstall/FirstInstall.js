@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
-import { Text, View, ImageBackground, Dimensions } from 'react-native'
-import Header from './Header'
-import Content from './Content'
-import styled from 'styled-components'
-import SafeAreaView from '../../common/SafeAreaView'
-import { fitstScreen } from '../../assets/images/'
+import React, { Component } from 'react';
+import { Text, View, ImageBackground, Dimensions } from 'react-native';
+import Header from './Header';
+import Content from './Content';
+import styled from 'styled-components';
+import SafeAreaView from '../../common/SafeAreaView';
+import { fitstScreen } from '../../assets/images/';
 const Wrapper = styled(View)`
     height: 100%;
     margin-bottom: 200px;
-`
+`;
 
 export default class PinCode extends Component {
     render() {
@@ -23,6 +23,6 @@ export default class PinCode extends Component {
                     </Wrapper>
                 </ImageBackground>
             </SafeAreaView>
-        )
+        );
     }
 }

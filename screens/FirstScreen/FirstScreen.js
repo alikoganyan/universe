@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
-import { View, AsyncStorage } from 'react-native'
-import { connect } from 'react-redux'
-import { setUser, setAuth, setRegisterUserNumber } from '../../actions/userActions'
-import { p_login } from '../../constants/api'
-import sendRequest from '../../utils/request'
-import { connectToSocket } from '../../utils/socket'
-import Login from '../Login/Login'
-import Dialogs from '../Dialogs/Dialogs'
-import SplashScreen from '../SplashScreen/SplashScreen'
+import React, { Component } from 'react';
+import { View, AsyncStorage } from 'react-native';
+import { connect } from 'react-redux';
+import { setUser, setAuth, setRegisterUserNumber } from '../../actions/userActions';
+import { p_login } from '../../constants/api';
+import sendRequest from '../../utils/request';
+import { connectToSocket } from '../../utils/socket';
+import Login from '../Login/Login';
+import Dialogs from '../Dialogs/Dialogs';
+import SplashScreen from '../SplashScreen/SplashScreen';
 class FirstScreen extends Component {
     static navigationOptions = {
         drawerLockedMode: 'locked-open',
@@ -15,7 +15,7 @@ class FirstScreen extends Component {
     render() {
         const { logged, loaded } = this.state;
         const { navigation } = this.props;
-        console.log('123')
+        console.log('123');
         return loaded ? <View>
                             {
                                 logged ? 
@@ -23,7 +23,7 @@ class FirstScreen extends Component {
                                     <Dialogs navigation={navigation}/> : 
                                     <Login navigation={navigation}/>
                             }
-                        </View> : <SplashScreen />
+                        </View> : <SplashScreen />;
 
     }
 
@@ -43,24 +43,24 @@ class FirstScreen extends Component {
             value = JSON.parse(res);
             if (value) {
                 // this.login() // restore
-                this.props.setUser({ ...value })
-                this.props.setAuth(value.access_token)
-                connectToSocket(value.access_token)
+                this.props.setUser({ ...value });
+                this.props.setAuth(value.access_token);
+                connectToSocket(value.access_token);
                 setTimeout(() => {
-                    console.log(value.access_token)
-                    this.setState({ logged: true, phone: value.phone_number.slice(2), password: value.password })
-                }, 0)
+                    console.log(value.access_token);
+                    this.setState({ logged: true, phone: value.phone_number.slice(2), password: value.password });
+                }, 0);
             }
-            setTimeout(() => this.setState({ loaded: true }), 0)
+            setTimeout(() => this.setState({ loaded: true }), 0);
         });
     }
     login = () => {
         const { setRegisterUserNumber } = this.props;
         const { country, phone, password } = this.state;
-        const phone_number = country.concat(phone)
-        if (!phone || !phone.length) this.setState({ invalidPhone: true })
-        if (!password || password.length < 4) this.setState({ invalidPassword: true })
-        setTimeout(() => this.setState({ invalidPhone: false, invalidPassword: false }), 5000)
+        const phone_number = country.concat(phone);
+        if (!phone || !phone.length) this.setState({ invalidPhone: true });
+        if (!password || password.length < 4) this.setState({ invalidPassword: true });
+        setTimeout(() => this.setState({ invalidPhone: false, invalidPassword: false }), 5000);
         sendRequest({
             r_path: p_login,
             method: 'post',
@@ -69,35 +69,35 @@ class FirstScreen extends Component {
                 password,
             },
             success: (res) => {
-                const { setAuth, setUser, navigate } = this.props
-                const { access_token, data } = res
-                setAuth(access_token)
-                setUser(data)
-                connectToSocket()
-                this.storeUserData({ ...data, password })
-                setTimeout(() => navigate('Dialogs'), 0)
+                const { setAuth, setUser, navigate } = this.props;
+                const { access_token, data } = res;
+                setAuth(access_token);
+                setUser(data);
+                connectToSocket();
+                this.storeUserData({ ...data, password });
+                setTimeout(() => navigate('Dialogs'), 0);
             },
             failFunc: (err) => {
                 const phone = err.length ? err.filter(e => e.param === 'phone_number')[0] : err.phone_number;
                 const pass = err.length ? err.filter(e => e.param === 'password')[0] : err.password;
-                setRegisterUserNumber(phone_number)
+                setRegisterUserNumber(phone_number);
                 if (phone) {
-                    this.setState({ invalidPhone: true })
+                    this.setState({ invalidPhone: true });
                 }
                 if (pass) {
-                    this.setState({ invalidPassword: true })
+                    this.setState({ invalidPassword: true });
                 }
             }
-        })
+        });
     }
 }
 
 const mapStateToProps = state => ({
     id: state.userReducer.id
-})
+});
 const mapDispatchToProps = dispatch => ({
     setAuth: _ => dispatch(setAuth(_)),
     setUser: _ => dispatch(setUser(_)),
     setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(FirstScreen)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(FirstScreen);

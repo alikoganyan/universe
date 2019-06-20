@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { View, Text, Dimensions, TextInput } from 'react-native'
-import { CloseIcon } from '../../assets/index'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import { View, Text, Dimensions, TextInput } from 'react-native';
+import { CloseIcon } from '../../assets/index';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import { connect } from 'react-redux';
 const { sidePadding, HeaderHeight, fontSize } = helper;
 
 const Header = styled(View)`
@@ -16,12 +16,12 @@ const Header = styled(View)`
     justify-content: space-between;
     padding-right: ${sidePadding}px;
     padding-left: ${sidePadding}px;
-`
+`;
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 // const UserImage = styled(Image)`
 //     background: red;
 //     width: 30px;
@@ -34,7 +34,7 @@ const HeaderText = styled(Text)`
     font-size: ${fontSize.header};
     position: relative;
     left: -10px;
-`
+`;
 class HeaderComponent extends Component {
     render() {
         return (
@@ -44,7 +44,7 @@ class HeaderComponent extends Component {
                     <HeaderText>Создание задачи</HeaderText>
                 </Left>
             </Header>
-        )
+        );
     }
     state = {
         search: false,
@@ -54,29 +54,27 @@ class HeaderComponent extends Component {
 
     }
     startSearch = () => {
-        this.setState({ search: true })
+        this.setState({ search: true });
     }
     stopSearch = () => {
-        this.setState({ search: false })
+        this.setState({ search: false });
     }
     addTask = () => {
         const { navigate } = this.props;
-        navigate('NewTask')
+        navigate('NewTask');
     }
     back = () => {
         const { back } = this.props;
-        back()
+        back();
     }
 }
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         user: state.userReducer.user,
         tasks: state.tasksReducer.tasks,
-    };
-};
+    });
 const mapDispatchToProps = dispatch => ({
     setTasks: _ => dispatch(setTasks(_))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);
 

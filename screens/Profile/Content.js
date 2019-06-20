@@ -1,22 +1,22 @@
-import React, { Component } from 'react'
-import { View, Text, FlatList, TouchableOpacity, Dimensions, ScrollView } from 'react-native'
-import { TaskIcon, GroupIcon, FilesRedIcon, GroupIconGrey } from '../../assets/index'
+import React, { Component } from 'react';
+import { View, Text, FlatList, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
+import { TaskIcon, GroupIcon, FilesRedIcon, GroupIconGrey } from '../../assets/index';
 import Button from '../../common/Button';
-import { setRoom } from '../../actions/messageActions'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import ImageComponent from '../../common/Image'
-import { connect } from 'react-redux'
-import { socket } from '../../utils/socket'
-import { setDialogs } from '../../actions/dialogsActions'
-import DefaultAvatar from '../../common/DefaultAvatar'
+import { setRoom } from '../../actions/messageActions';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import ImageComponent from '../../common/Image';
+import { connect } from 'react-redux';
+import { socket } from '../../utils/socket';
+import { setDialogs } from '../../actions/dialogsActions';
+import DefaultAvatar from '../../common/DefaultAvatar';
 const { sidePadding, Colors, HeaderHeight, fontSize } = helper;
 const { border, grey3, pink } = Colors;
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
     height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
-`
+`;
 const User = styled(View)`
     display: flex;
     flex-direction: column;
@@ -24,7 +24,7 @@ const User = styled(View)`
     justify-content: flex-start;
     padding-bottom: 20px;
     margin-bottom: 10px;
-`
+`;
 const UserInfo = styled(View)`
     display: flex;
     flex-direction: column;
@@ -33,7 +33,7 @@ const UserInfo = styled(View)`
     height: 60px;
     width: 100%;
     margin-top: 10px;
-`
+`;
 const UserName = styled(View)`
     display: flex;
     flex-direction: row;
@@ -41,7 +41,7 @@ const UserName = styled(View)`
     justify-content: center;
     margin-bottom: 10px;
 
-`
+`;
 
 const Name = styled(Text)`
     font-size: 15;
@@ -49,18 +49,18 @@ const Name = styled(Text)`
     flex-wrap: wrap;
     width: 100%;
     text-align: center;
-`
+`;
 const UserStatus = styled(Name)`
     font-size: 11;
     color: #B9B9B9;
     margin-bottom: 10px;
 
-`
+`;
 
 const Info = styled(View)`
     padding: 0 ${sidePadding}px;
     flex: 1;
-`
+`;
 const Data = styled(View)`
     display: flex;
     flex-direction: row;
@@ -70,7 +70,7 @@ const Data = styled(View)`
     padding: ${sidePadding}px 0;
     border-width: 0;
     border-top-width: 1px; 
-`
+`;
 const Value = styled(Text)`
     font-size: 13px;
     min-width: 150px;
@@ -78,20 +78,20 @@ const Value = styled(Text)`
     flex: 1;
     display: flex;
     justify-content: flex-start;
-`
+`;
 const Type = styled(Value)`
     color: #BABABA;
     min-width: 110px;
     flex: 0;
     font-size: ${fontSize.sm};
-`
+`;
 const PersonalData = styled(View)`
     border: 1px solid #E6E6E6;
     border-width: 0;
-`
-const SendMessage = styled(Button)``
+`;
+const SendMessage = styled(Button)``;
 const StyledScrollView = styled(ScrollView)`
-`
+`;
 const Participants = styled(View)`
     display: flex;
     justify-content: space-between;
@@ -99,38 +99,38 @@ const Participants = styled(View)`
     padding: 20px;
     padding-right: 10px;
     flex-direction: row;
-`
+`;
 const ParticipantsItem = styled(Participants)`
     padding: 0;
-`
+`;
 const ParticipantsText = styled(Text)`
     color: ${grey3};
-`
+`;
 const LeaveGroup = styled(Text)`
     font-size: ${fontSize.sm};
     color: ${pink};
-`
+`;
 const BoxInnerItem = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 const ContactInfo = styled(View)`
     margin-left: 10px;
-`
+`;
 
 const ContactName = styled(Text)`
     display: flex;
     align-items: center;
     justify-content: space-between;
     width: 100%;
-`
+`;
 const ContactRole = styled(Text)`
     color: #A7B0BA;
     display: flex;
     align-items: flex-start;
     justify-content: center;
-`
+`;
 class Content extends Component {
     render() {
         const { UserData, status } = this.state;
@@ -164,15 +164,13 @@ class Content extends Component {
                     {isGroup ?
                         <>
                             <PersonalData>
-                                {UserData.map((item, index) => {
-                                    return item && item.isGroup && (!myProfile || !item.icon) && <Info key={index}>
+                                {UserData.map((item, index) => item && item.isGroup && (!myProfile || !item.icon) && <Info key={index}>
                                         <Data>
                                             <Type>{item.type}</Type>
                                             <Value>{item.value}</Value>
                                             {item.icon && item.icon}
                                         </Data>
-                                    </Info>
-                                })}
+                                    </Info>)}
                             </PersonalData>
                             <Participants>
                                 <ParticipantsItem>
@@ -189,7 +187,7 @@ class Content extends Component {
                                 style={{ paddingRight: 5, paddingLeft: 5, }}
                                 data={sortedParticipants}
                                 renderItem={({ item, index }) => {
-                                    const { first_name, last_name, role, image, phone_number } = item
+                                    const { first_name, last_name, role, image, phone_number } = item;
                                     return (
                                         <View style={{
                                             display: 'flex',
@@ -214,28 +212,26 @@ class Content extends Component {
                                             </BoxInnerItem>
                                             <Text>{index === 0 && 'admin'}</Text>
                                         </View>
-                                    )
+                                    );
                                 }}
                                 keyExtractor={(item, index) => index.toString()}
                             />
                         </> :
                         <PersonalData>
-                            {UserData.map((item, index) => {
-                                return item && !item.isGroup && (!myProfile || !item.icon) && <Info key={index}>
+                            {UserData.map((item, index) => item && !item.isGroup && (!myProfile || !item.icon) && <Info key={index}>
                                     <Data>
                                         <Type>{item.type}</Type>
                                         <Value>{item.value && (item.value.name ? item.value.name : item.value)}</Value>
                                         {item.icon && item.icon}
                                     </Data>
-                                </Info>
-                            })}
+                                </Info>)}
                         </PersonalData>
                     }
                     <View style={{ height: 10 }} />
                 </StyledScrollView>
             </Wrapper>
 
-        )
+        );
     }
     state = {
         userName: 'Константин Константинопольский',
@@ -243,7 +239,7 @@ class Content extends Component {
         UserData: []
     }
     componentDidMount() {
-        const { myProfile, user, currentDialog } = this.props
+        const { myProfile, user, currentDialog } = this.props;
         const { role, phone_number, department } = myProfile ? user : currentDialog;
         const newUserData = [
             { type: 'Подразделение', value: department || 'без подразделения', isGroup: false },
@@ -255,22 +251,22 @@ class Content extends Component {
             !myProfile ? { type: 'Задачи', value: '32', icon: <TaskIcon />, isGroup: true } : undefined,
             !myProfile ? { type: 'Общих файлов', value: '10', icon: <FilesRedIcon />, isGroup: false } : undefined,
             !myProfile ? { type: 'Общих файлов', value: '10', icon: <FilesRedIcon />, isGroup: true } : undefined,
-        ]
-        this.setState({ UserData: newUserData })
+        ];
+        this.setState({ UserData: newUserData });
     }
     toChat = () => {
-        const { toChat, setRoom, user } = this.props
-        const { id } = user
-        socket.emit('select chat', { chatId: id, userId: id })
-        setRoom(id)
-        toChat()
+        const { toChat, setRoom, user } = this.props;
+        const { id } = user;
+        socket.emit('select chat', { chatId: id, userId: id });
+        setRoom(id);
+        toChat();
     }
     leaveGroup = () => {
-        const { currentRoom, currentDialog, setDialogs, dialog, toDialogs } = this.props
-        const newDialogs = [...dialog].filter(e => e._id !== currentDialog._id)
-        setDialogs(newDialogs)
-        toDialogs()
-        console.log(`leave group ${currentRoom}`)
+        const { currentRoom, currentDialog, setDialogs, dialog, toDialogs } = this.props;
+        const newDialogs = [...dialog].filter(e => e._id !== currentDialog._id);
+        setDialogs(newDialogs);
+        toDialogs();
+        console.log(`leave group ${currentRoom}`);
     }
 }
 
@@ -281,11 +277,11 @@ const mapStateToProps = state => ({
     currentChat: state.messageReducer.currentChat,
     currentDialog: state.dialogsReducer.currentDialog,
     user: state.userReducer.user,
-})
+});
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
     addMessage: _ => dispatch(addMessage(_))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

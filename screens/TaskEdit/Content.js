@@ -95,7 +95,7 @@ const DeleteTask = styled(Text)`
     color: ${red};
     text-align: center;
     margin-top: 20px;
-`
+`;
 const ReceiverComponent = props => {
     const { children, last = false, onDelete } = props;
     const { image, phone_number, role, first_name, last_name } = children;
@@ -274,7 +274,7 @@ class Content extends Component {
     
     jsCoreDateCreator = dateString => {
         // dateString *HAS* to be in this format "YYYY-MM-DD HH:MM:SS"
-        let dateParam = dateString.split(/[\s-:]/);
+        const dateParam = dateString.split(/[\s-:]/);
         dateParam[1] = (parseInt(dateParam[1], 10) - 1).toString();
         return new Date(...dateParam);
     };
@@ -302,7 +302,7 @@ class Content extends Component {
                 // const newTasks = [...tasks].filter(e => e._id !== _id)
                 // setTasks(newTasks);
                 // back();
-                console.log('deleted')
+                console.log('deleted');
                 // getMessages(res.messages);
             },
             failFunc: err => {
@@ -326,14 +326,14 @@ class Content extends Component {
             status,
             creator,
         };
-        const index = [...tasks].findIndex(e => e._id === currentTask._id)
-        const newTasks = [...tasks]
-        const taskIndex = newTasks[index].tasks.findIndex(e => e._id === newTask._id)
-        const currentTaskIndex = currentTask.tasks.findIndex(e => e._id === newTask._id)
-        newTasks[index].tasks[taskIndex] = newTask
-        const newCurrentTask = {...currentTask}
-        const newTaskCreator = newCurrentTask.tasks[currentTaskIndex].creator
-        newCurrentTask.tasks[currentTaskIndex] = {...newTask, creator: {...newTaskCreator}}
+        const index = [...tasks].findIndex(e => e._id === currentTask._id);
+        const newTasks = [...tasks];
+        const taskIndex = newTasks[index].tasks.findIndex(e => e._id === newTask._id);
+        const currentTaskIndex = currentTask.tasks.findIndex(e => e._id === newTask._id);
+        newTasks[index].tasks[taskIndex] = newTask;
+        const newCurrentTask = {...currentTask};
+        const newTaskCreator = newCurrentTask.tasks[currentTaskIndex].creator;
+        newCurrentTask.tasks[currentTaskIndex] = {...newTask, creator: {...newTaskCreator}};
         sendRequest({
             r_path: p_tasks,
             method: "patch",

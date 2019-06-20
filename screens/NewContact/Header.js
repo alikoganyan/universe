@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import { View, Text } from 'react-native'
-import { BackIcon } from '../../assets/index'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import { BackIcon } from '../../assets/index';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
 const { HeaderHeight, sidePadding, Colors, fontSize } = helper;
-const { grey3 } = Colors
+const { grey3 } = Colors;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -15,26 +15,26 @@ const Header = styled(View)`
     justify-content: space-between;
     padding-right: ${sidePadding}px;
     padding-left: ${sidePadding}px;
-`
+`;
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 const Right = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 const MarginRight = styled(View)`
 margin-right: ${sidePadding}px;
-`
+`;
 const HeaderText = styled(Text)`
     font-size: ${fontSize.header};
     position: relative;
     left: -10px;
     color: ${grey3};
-`
+`;
 export default class HeaderComponent extends Component {
     render() {
         return (
@@ -50,6 +50,6 @@ export default class HeaderComponent extends Component {
                 <Right>
                 </Right>
             </Header>
-        )
+        );
     }
 }

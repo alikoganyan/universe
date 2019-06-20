@@ -1,20 +1,20 @@
-import React, { Component } from 'react'
-import { View, AsyncStorage, ScrollView } from 'react-native'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import SafeAreaView from '../../common/SafeAreaView'
-import { connect } from 'react-redux'
-import { setCurrentChat } from '../../actions/messageActions'
+import React, { Component } from 'react';
+import { View, AsyncStorage, ScrollView } from 'react-native';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import SafeAreaView from '../../common/SafeAreaView';
+import { connect } from 'react-redux';
+import { setCurrentChat } from '../../actions/messageActions';
 import {
     ActionSheetProvider,
 } from '@expo/react-native-action-sheet';
-import { socket } from '../../utils/socket'
-import Header from './Header'
-import Content from './Content'
+import { socket } from '../../utils/socket';
+import Header from './Header';
+import Content from './Content';
 
 const Wrapper = styled(View)`
     height: 100%;
-`
+`;
 
 class ProfileEdit extends Component {
     render() {
@@ -29,20 +29,20 @@ class ProfileEdit extends Component {
                     </Wrapper>
                 </SafeAreaView>
             </ActionSheetProvider>
-        )
+        );
     }
     navigateBack = () => {
-        this.props.navigation.goBack()
+        this.props.navigation.goBack();
     }
     toChat = () => {
-        const { currentChat, user, navigation } = this.props
-        socket.emit('select chat', { chatId: currentChat.id, userId: user.id })
-        navigation.navigate('Chat')
+        const { currentChat, user, navigation } = this.props;
+        socket.emit('select chat', { chatId: currentChat.id, userId: user.id });
+        navigation.navigate('Chat');
     }
     logout = async () => {
-        const { navigation } = this.props
+        const { navigation } = this.props;
         await AsyncStorage.clear();
-        navigation.navigate('Login')
+        navigation.navigate('Login');
 
     }
 }
@@ -53,8 +53,8 @@ const mapStateToProps = state => ({
     currentRoom: state.messageReducer.currentRoom,
     currentChat: state.messageReducer.currentChat,
     user: state.userReducer.user,
-})
+});
 const mapDispatchToProps = dispatch => ({
     setCurrentChat: _ => dispatch(setCurrentChat(_)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(ProfileEdit)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileEdit);

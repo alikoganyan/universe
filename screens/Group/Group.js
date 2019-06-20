@@ -1,25 +1,25 @@
-import React, { Component } from 'react'
-import { View, Platform } from 'react-native'
-import styled from 'styled-components'
-import { setCurrentChat, setCurrentRoomId, setRoom } from '../../actions/messageActions'
-import SafeAreaView from '../../common/SafeAreaView'
+import React, { Component } from 'react';
+import { View, Platform } from 'react-native';
+import styled from 'styled-components';
+import { setCurrentChat, setCurrentRoomId, setRoom } from '../../actions/messageActions';
+import SafeAreaView from '../../common/SafeAreaView';
 import helper from '../../utils/helpers';
-import Header from './Header'
-import Input from './Input'
-import Content from './Content'
-import { connect } from 'react-redux'
-import { socket } from '../../utils/socket'
+import Header from './Header';
+import Input from './Input';
+import Content from './Content';
+import { connect } from 'react-redux';
+import { socket } from '../../utils/socket';
 const Wrapper = styled(View)`
     height: 100%;
     overflow: hidden;
-`
+`;
 const Bottom = styled(View)`
     position: absolute;
     bottom: 0;
     width: 100%;
     background: transparent;
     z-index: 200;
-`
+`;
 class Chat extends Component {
     render() {
         return (
@@ -32,7 +32,7 @@ class Chat extends Component {
                     </Bottom>
                 </Wrapper>
             </SafeAreaView>
-        )
+        );
     }
     state = {
         currentChat: null
@@ -63,11 +63,11 @@ const mapStateToProps = state => ({
         currentRoom: state.messageReducer.currentRoom,
         currentChat: state.messageReducer.currentChat,
         user: state.userReducer.user
-})
+});
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
     setCurrentChat: _ => dispatch(setCurrentChat(_)),
     setCurrentRoomId: _ => dispatch(setCurrentRoomId(_))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Chat)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

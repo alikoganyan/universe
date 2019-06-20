@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
-import { View, Text, TextInput, ScrollView, Dimensions } from 'react-native'
-import helper from '../../utils/helpers'
-import styled from 'styled-components'
-import Button from '../../common/Button'
-import sendRequest from '../../utils/request'
-import { p_create_contact } from '../../constants/api'
+import React, { Component } from 'react';
+import { View, Text, TextInput, ScrollView, Dimensions } from 'react-native';
+import helper from '../../utils/helpers';
+import styled from 'styled-components';
+import Button from '../../common/Button';
+import sendRequest from '../../utils/request';
+import { p_create_contact } from '../../constants/api';
 const { Colors } = helper;
 const { green, lightGrey1, grey2 } = Colors;
 
@@ -15,7 +15,7 @@ const Wrapper = styled(View)
     display: flex;
     justify-content: center;
     height: ${Dimensions.get('window').height}px;
-`
+`;
 const PhoneNumber = styled(View)
 `
     display: flex;
@@ -23,7 +23,7 @@ const PhoneNumber = styled(View)
     margin-top: 10%;
     align-items: center;
     justify-content: space-between;
-`
+`;
 const InputLabel = styled(Text)
 `
     margin-right: 20px;
@@ -32,7 +32,7 @@ const InputLabel = styled(Text)
     font-size: 13px; 
     text-align: right;
     color: ${grey2};
-`
+`;
 const Input = styled(TextInput)
 `
     border: 1px solid ${lightGrey1};
@@ -41,14 +41,14 @@ const Input = styled(TextInput)
     margin-right: 10px;
     padding-bottom: 10px;
     font-size: 13px; 
-`
+`;
 
 const ButtonBox = styled(View)
 `
     position: absolute;
     bottom: 15%;
     align-self: center;
-`
+`;
 export default class Content extends Component {
     render() {
         const { phone, country, lastName, firstName, patronymic, post, email } = this.state;
@@ -88,7 +88,7 @@ export default class Content extends Component {
                     </ButtonBox>
                 </Wrapper>
             </ScrollView>
-        )
+        );
     }
     state = {
         error: false,
@@ -101,25 +101,25 @@ export default class Content extends Component {
         email: '',
     }
     handleChangeCountry = (e) => {
-        this.setState({ country: e })
+        this.setState({ country: e });
     }
     handleChangePhone = (e) => {
-        this.setState({ phone: e })
+        this.setState({ phone: e });
     }
     handleChangeLastName = (e) => {
-        this.setState({ lastName: e })
+        this.setState({ lastName: e });
     }
     handleChangeFirstName = (e) => {
-        this.setState({ firstName: e })
+        this.setState({ firstName: e });
     }
     handleChangePatronymic = (e) => {
-        this.setState({ patronymic: e })
+        this.setState({ patronymic: e });
     }
     handleChangePost = (e) => {
-        this.setState({ post: e })
+        this.setState({ post: e });
     }
     handleChangeEmail = (e) => {
-        this.setState({ email: e })
+        this.setState({ email: e });
     }
     proceed = () => {
         const {
@@ -138,21 +138,21 @@ export default class Content extends Component {
             middle_name: patronymic,
             last_name: lastName,
             post
-        }
+        };
         sendRequest({
             r_path: p_create_contact,
             method: 'post',
             attr: { contact },
             success: (res) => {
-                console.log({ res })
+                console.log({ res });
             },
             failFunc: (err) => {
-                console.log(err)
-                let { phone_number } = err
+                console.log(err);
+                const { phone_number } = err;
                 this.setState({
                     invalidPhone: phone_number || null,
-                })
+                });
             }
-        })
+        });
     }
 }

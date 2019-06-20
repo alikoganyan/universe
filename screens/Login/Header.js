@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { View, Text, Image, TouchableOpacity } from 'react-native'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
+import React, { Component } from 'react';
+import { View, Text, Image, TouchableOpacity } from 'react-native';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
 const { HeaderHeight, fontSize } = helper;
 const Header = styled(View)`
     width: 100%;
@@ -11,16 +11,16 @@ const Header = styled(View)`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-`
+`;
 
 export default class HeaderComponent extends Component {
     render() {
         return (
             <Header>
             </Header>
-        )
+        );
     }
     moveForward = () => {
-        this.props.back()
+        this.props.back();
     }
 }

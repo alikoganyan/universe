@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
-import { BackIcon } from '../../assets/index'
-import styled from 'styled-components'
-import SafeAreaView from '../../common/SafeAreaView'
+import React, { Component } from 'react';
+import { View, Text, Image } from 'react-native';
+import { BackIcon } from '../../assets/index';
+import styled from 'styled-components';
+import SafeAreaView from '../../common/SafeAreaView';
 
-import Header from './Header'
-import Content from './Content'
+import Header from './Header';
+import Content from './Content';
 const Wrapper = styled(View)`
     height: 100%;
-`
+`;
 
 export default class News extends Component {
     render() {
@@ -19,12 +19,12 @@ export default class News extends Component {
                     <Content navigate={this.navigate}/>
                 </Wrapper>
             </SafeAreaView>
-        )
+        );
     }
     navigateBack = () => {
-        this.props.navigation.goBack()
+        this.props.navigation.goBack();
     }
     navigate = e => {
-        this.props.navigation.navigate(e)
+        this.props.navigation.navigate(e);
     }
 }

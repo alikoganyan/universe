@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { View, AsyncStorage } from 'react-native'
-import styled from 'styled-components'
-import { setUser } from '../../actions/userActions'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import { View, AsyncStorage } from 'react-native';
+import styled from 'styled-components';
+import { setUser } from '../../actions/userActions';
+import { connect } from 'react-redux';
 // import PINCode from '@haskkor/react-native-pincode'
 const Wrapper = styled(View)
 `
@@ -11,7 +11,7 @@ const Wrapper = styled(View)
     justify-content: center;
     align-items: center;
     height: 100%;
-`
+`;
 
 const Dot = styled(View)
 `
@@ -20,12 +20,12 @@ const Dot = styled(View)
     background: ${({ active }) => active ? '#fff' : lightGrey1};
     border-radius: 5;
     margin-right: ${({ last }) => !last ? '20px' : 0};
-`
+`;
 class Content extends Component {
     render() {
         const dots = [];
         for (let i = 0; i < 4; i++) {
-            dots.push(<Dot active={i < this.state.pin.length} last={i === 3} />)
+            dots.push(<Dot active={i < this.state.pin.length} last={i === 3} />);
         }
         return (
             <Wrapper>
@@ -38,7 +38,7 @@ class Content extends Component {
                     numbersButtonOverlayColor={lightBlue}
                 /> */}
             </Wrapper>
-        )
+        );
     }
     state = {
         pin: [],
@@ -52,7 +52,7 @@ class Content extends Component {
         }
         if (pin.length === 3) {
             this.setState({ pin: [] });
-            this.tryLogin()
+            this.tryLogin();
 
         }
     }
@@ -63,26 +63,26 @@ class Content extends Component {
         setUser({
             id: value.id,
             image: value.image || 'https://www.paulekman.com/wp-content/uploads/2018/06/personicon-23.png',
-        })
+        });
         setTimeout(() => {
-            toDialogs()
-        }, 0)
+            toDialogs();
+        }, 0);
     }
     goLogin = () => {
         const { navigate } = this.props;
-        navigate('Login')
+        navigate('Login');
     }
     goSignup = () => {
         const { navigate } = this.props;
-        navigate('Signup')
+        navigate('Signup');
     }
 }
 
 const mapStateToProps = state => ({
     id: state.userReducer.id,
     user: state,
-})
+});
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

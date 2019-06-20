@@ -15,7 +15,7 @@ import styled from "styled-components";
 import FloatingLabel from "react-native-floating-labels";
 import helper from "../../utils/helpers";
 import { connect } from "react-redux";
-import ImageComponent from '../../common/Image'
+import ImageComponent from '../../common/Image';
 import { ImagePicker, Permissions } from "expo";
 import { socket } from "../../utils/socket";
 import { p_profile, p_profile_avatar } from "../../constants/api";

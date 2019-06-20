@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import { View, Text, TextInput, Image, Platform, Dimensions, TouchableOpacity } from 'react-native'
+import React, { Component } from 'react';
+import { View, Text, TextInput, Image, Platform, Dimensions, TouchableOpacity } from 'react-native';
 import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/index';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -75,7 +75,7 @@ const Bottom = styled(Top)`
     margin: 0 ${sidePadding}px;
     min-height: 0; 
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
-`
+`;
 const Category = styled(Text)`
     display: flex;
     flex:1;
@@ -94,8 +94,8 @@ margin-right: 20px;
 `;
 class HeaderComponent extends Component {
     render() {
-        const { back, search, startSearch, stopSearch, currentChat, currentDialog } = this.props
-        const { first_name, last_name, phone_number, image, _id } = currentDialog
+        const { back, search, startSearch, stopSearch, currentChat, currentDialog } = this.props;
+        const { first_name, last_name, phone_number, image, _id } = currentDialog;
         return (
             <Header>
                 <Top>

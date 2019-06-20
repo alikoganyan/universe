@@ -46,18 +46,18 @@ class Dialogs extends Component {
                         data={dialogs}
                         keyboardShouldPersistTaps={'always'}
                         renderItem={(dialog) => {
-                            const { item } = dialog
-                            const { creator, participants, messages, name, text, isGroup, room, image } = item
+                            const { item } = dialog;
+                            const { creator, participants, messages, name, text, isGroup, room, image } = item;
                             const unreadMessages = messages.filter(e =>
-                                !e.viewers.includes(user._id) && e.sender._id !== user._id).length
+                                !e.viewers.includes(user._id) && e.sender._id !== user._id).length;
                             const chatName = !isGroup ?
                                 user._id !== creator._id ?
                                     (creator.first_name ? `${creator.first_name} ${creator.last_name}` : creator.phone_number) :
                                     (participants[0] && participants[0].first_name ? `${participants[0].first_name} ${participants[0].last_name}` : participants[0].phone_number) :
-                                (name || room)
+                                (name || room);
                             const chatImage = !isGroup ?
                                 (user._id === creator ? user.image : participants[0].image) : image;
-                            return <Dialog unreadMessages={unreadMessages} lastMessage={messages} onClick={() => this.toChat({...item})} image={chatImage} title={chatName} item={item}>{text}</Dialog>
+                            return <Dialog unreadMessages={unreadMessages} lastMessage={messages} onClick={() => this.toChat({...item})} image={chatImage} title={chatName} item={item}>{text}</Dialog>;
                         }}
                         keyExtractor={(item, index) => index.toString()}
                     /> : <Loader style={{ flex: 1 }} hint={'Пока нет диалогов'}>
@@ -258,19 +258,13 @@ class Dialogs extends Component {
         const { user, dialogs } = this.props;
         const chat = chatId.split('room')[1].replace(/\_/, '').replace(senderId, '');
         const newFlatListData = [...dialogs];
-        const index = newFlatListData.findIndex((event) => {
-            return event.id === e.senderId;
-        });
-        const myIndex = newFlatListData.findIndex((event) => {
-            return event.id === user.id;
-        });
+        const index = newFlatListData.findIndex((event) => event.id === e.senderId);
+        const myIndex = newFlatListData.findIndex((event) => event.id === user.id);
         if (newFlatListData[index] || newFlatListData[myIndex]) {
             if (chat == user.id) newFlatListData[index].text = e.text;
             if (senderId == user.id) newFlatListData[myIndex].text = e.text;
         }
-        newFlatListData.sort((a, b) => {
-            return new Date(b.lastMessage) - new Date(a.lastMessage);
-        });
+        newFlatListData.sort((a, b) => new Date(b.lastMessage) - new Date(a.lastMessage));
         if (chat == user.id || senderId == user.id) setDialogs(newFlatListData);
     }
     dialogs = e => {
@@ -282,9 +276,7 @@ class Dialogs extends Component {
                 const room = user.id >= e.id ? `room${user.id}_${e.id}` : `room${e.id}_${user.id}`;
                 return message ? room === message.chatId : false;
             })[0];
-            const unreadMessage = unread.filter(unreadMessage => {
-                return unreadMessage ? e.id === unreadMessage.chatId : false;
-            })[0];
+            const unreadMessage = unread.filter(unreadMessage => unreadMessage ? e.id === unreadMessage.chatId : false)[0];
             newDialogs.push({ title: e.phone, text: message ? message.text : ' no messages yet', id: e.id, unreadMessage, lastMessage: message ? message.timeSent : null });
         });
         newDialogs.sort((x, y) => x.lastMessage < y.lastMessage);
@@ -319,8 +311,7 @@ class Dialogs extends Component {
 }
 
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         messages: state.messageReducer.messages,
         dialogs: state.dialogsReducer.dialogs,
         currentRoomId: state.messageReducer.currentRoomId,
@@ -329,8 +320,7 @@ const mapStateToProps = state => {
         user: state.userReducer.user,
         users: state.userReducer,
         currentDialog: state.dialogsReducer.currentDialog
-    };
-};
+    });
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),

@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
-import { View, Text, Dimensions } from 'react-native'
-import styled from 'styled-components'
-import SafeAreaView from '../../common/SafeAreaView'
-import Header from './Header'
-import Content from './Content'
-import helper from '../../utils/helpers'
+import React, { Component } from 'react';
+import { View, Text, Dimensions } from 'react-native';
+import styled from 'styled-components';
+import SafeAreaView from '../../common/SafeAreaView';
+import Header from './Header';
+import Content from './Content';
+import helper from '../../utils/helpers';
 
 const { HeaderHeight } = helper;
 const Wrapper = styled(View)`
     height: 100%;
     padding-bottom: ${HeaderHeight};
-`
+`;
 export default class Signup extends Component {
     render() {
         return (
@@ -20,18 +20,18 @@ export default class Signup extends Component {
                     <Content forward={this.moveForward} navigate={this.navigate} />
                 </Wrapper>
             </SafeAreaView>
-        )
+        );
     }
     navigateBack = () => {
-        this.props.navigation.goBack()
+        this.props.navigation.goBack();
     }
     componentDidMount() {
 
     }
     moveForward = () => {
-        this.props.navigation.navigate('Signup2')
+        this.props.navigation.navigate('Signup2');
     }
     navigate = (e) => {
-        this.props.navigation.navigate(e)
+        this.props.navigation.navigate(e);
     }
 }

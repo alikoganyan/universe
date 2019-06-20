@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { View, Dimensions } from 'react-native'
-import { CloseIcon } from '../../assets/index'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
+import React, { Component } from 'react';
+import { View, Dimensions } from 'react-native';
+import { CloseIcon } from '../../assets/index';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
 const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
@@ -13,13 +13,13 @@ const Header = styled(View)`
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-`
+`;
 
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 
 const Top = styled(View)`
     display: flex;
@@ -28,7 +28,7 @@ const Top = styled(View)`
     justify-content: space-between;
     height: ${HeaderHeight}; 
     width: 100%;
-`
+`;
 class HeaderComponent extends Component {
     render() {
         return (
@@ -39,16 +39,16 @@ class HeaderComponent extends Component {
                     </Left>
                 </Top>
             </Header>
-        )
+        );
     }
     back = () => {
         const { back } = this.props;
-        back()
+        back();
     }
 }
 const mapStateToProps = state => ({
-})
+});
 const mapDispatchToProps = dispatch => ({
 
-})
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);

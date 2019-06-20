@@ -157,7 +157,7 @@ class Content extends Component {
             },
             failFunc: (err) => {
                 console.log(err);
-                let { phone_number, password } = err;
+                const { phone_number, password } = err;
                 this.setState({
                     error: <TouchableOpacity onPress={this.signup}><ErrorText>Телефона нет в системе. <ErrorTextLink>Зарегистрируйтесь</ErrorTextLink></ErrorText></TouchableOpacity>,
                     loading: false,
@@ -178,5 +178,5 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
-})
+});
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

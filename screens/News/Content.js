@@ -1,26 +1,26 @@
-import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, Dimensions } from 'react-native'
-import { CommentIcon, HeartIcon } from '../../assets/index'
-import styled from 'styled-components'
-import { setFeed } from '../../actions/newsActions'
-import helper from '../../utils/helpers'
-import { connect } from 'react-redux'
-import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
-import Loader from '../../common/Loader'
+import React, { Component } from 'react';
+import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, Dimensions } from 'react-native';
+import { CommentIcon, HeartIcon } from '../../assets/index';
+import styled from 'styled-components';
+import { setFeed } from '../../actions/newsActions';
+import helper from '../../utils/helpers';
+import { connect } from 'react-redux';
+import ImageComponent from '../../common/Image';
+import DefaultAvatar from '../../common/DefaultAvatar';
+import Loader from '../../common/Loader';
 const { borderRadius, Colors, fontSize, sidePadding, HeaderHeight } = helper;
 const { yellow, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`
     padding-bottom: 20px;   
     background: white;
     height: ${Dimensions.get('window').height - HeaderHeight};
-`
+`;
 const NewsList = styled(FlatList)`
     padding: ${sidePadding}px;
     display: flex;
     flex-grow: 1;
     padding-bottom: 20px;
-`
+`;
 const NewsItem = styled(TouchableOpacity)`
     background: white;
     padding: 20px;
@@ -28,26 +28,26 @@ const NewsItem = styled(TouchableOpacity)`
     margin-bottom: 10px;
     border: 0.5px solid ${yellow};
     border-radius: ${borderRadius};
-`
+`;
 const Sender = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-bottom: 15px;
-`
+`;
 const SenderName = styled(Text)`
     font-size: 13;
-`
+`;
 const SenderInfo = styled(View)`
     display: flex;
     justify-content: space-between;
     height: 35px;
     flex: 1;
-`
+`;
 const TimeSent = styled(Text)`
     color: #848484;
     font-size: 11;
-`
+`;
 const NewsItemInfo = styled(View)`
     width: 100%;
     display: flex;
@@ -55,30 +55,30 @@ const NewsItemInfo = styled(View)`
     flex-direction: row;
     align-items: center;
     margin-top: 10px;
-`
+`;
 const ShowAll = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: flex-start;
-`
+`;
 const HashTag = styled(Text)`
     color: ${yellow};
     margin-right: 5px;
     font-weight: 500;
     font-size: 13px;
-`
+`;
 const NewsText = styled(Text)`
     color: ${darkBlue2};
     font-weight: 300;
     font-size: 13px;
-`
+`;
 const Reactions = styled(View)`
     display: flex;
     justify-content: space-between;
     flex-direction: row;
     align-items: center;
-`
+`;
 const LoaderWrapper = styled(View)`
     display: flex;
     justify-content: space-between;
@@ -86,12 +86,12 @@ const LoaderWrapper = styled(View)`
     align-items: center;
     height: 100%;
     width: 100%;
-`
+`;
 const Reactionsext = styled(Text)`
     color: ${grey2};
     font-size: ${fontSize.sm};
     margin-left: 5px;
-`
+`;
 
 class Content extends Component {
     render() {
@@ -104,8 +104,8 @@ class Content extends Component {
                         data={news}
                         ListFooterComponent={<View style={{ margin: 10, }} />}
                         renderItem={({ item }) => {
-                            const { created_at, first_name, last_name, phone_number, creator, text, comments, likes_сount } = item
-                            const date = new Date(created_at)
+                            const { created_at, first_name, last_name, phone_number, creator, text, comments, likes_сount } = item;
+                            const date = new Date(created_at);
                             return <NewsItem onPress={() => this.proceed(item)}>
                                 <Sender>
                                     {creator.image === '/images/default_avatar.jpg' ?
@@ -137,7 +137,7 @@ class Content extends Component {
                                         <CommentIcon left /><Reactionsext>{comments.length}</Reactionsext>
                                     </Reactions>
                                 </NewsItemInfo>
-                            </NewsItem>
+                            </NewsItem>;
                         }
                         }
                         keyExtractor={(item, index) => index.toString()}
@@ -145,23 +145,23 @@ class Content extends Component {
                         <Loader hint={'Пока нет новостей'} style={{ flex: 1 }}></Loader>}
                 </Wrapper>
             </SafeAreaView>
-        )
+        );
     }
     state = {
     }
     componentDidMount() {
     }
     proceed = (e) => {
-        const { proceed, setFeed } = this.props
-        setFeed(e)
-        proceed()
+        const { proceed, setFeed } = this.props;
+        setFeed(e);
+        proceed();
     }
 }
 
 const mapStateToProps = state => ({
     news: state.newsReducer.news,
-})
+});
 const mapDispatchToProps = dispatch => ({
     setFeed: _ => dispatch(setFeed(_)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

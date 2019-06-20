@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
-import { View, Text, FlatList, Dimensions, ScrollView } from 'react-native'
-import styled from 'styled-components'
-import Task from './Task'
-import TaskPack from './TaskPack'
-import Loader from '../../common/Loader'
-import helper from '../../utils/helpers'
-import sendRequest from '../../utils/request'
-import { g_users } from '../../constants/api'
-import { setTasks } from '../../actions/tasksActions'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import { View, Text, FlatList, Dimensions, ScrollView } from 'react-native';
+import styled from 'styled-components';
+import Task from './Task';
+import TaskPack from './TaskPack';
+import Loader from '../../common/Loader';
+import helper from '../../utils/helpers';
+import sendRequest from '../../utils/request';
+import { g_users } from '../../constants/api';
+import { setTasks } from '../../actions/tasksActions';
+import { connect } from 'react-redux';
 const { HeaderHeight, Colors } = helper;
 const { grey2 } = Colors;
 const Wrapper = styled(View)
@@ -18,11 +18,11 @@ const Wrapper = styled(View)
   align-self: center;
   align-items: center;
   justify-content: center;
-`
+`;
 const StyledScrollView = styled(ScrollView)
 `
   height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
-`
+`;
 
 class Content extends Component {
     render() {
@@ -47,13 +47,13 @@ class Content extends Component {
                 <View style={{ height: 20, width: '100%' }} />
               </StyledScrollView>
             </Wrapper>
-        ) : <View />
+        ) : <View />;
     }
     state = {
         FlatListData: []
     }
     componentDidMount() {
-        const { setTasks } = this.props
+        const { setTasks } = this.props;
         sendRequest({
             r_path: g_users,
             method: 'get',
@@ -69,21 +69,21 @@ class Content extends Component {
                         if (i === 0) {
                             tasksList.push(user);
                         }
-                    })
-                })
+                    });
+                });
                 setTimeout(() => {
                     // console.log({ tasksList });
                     setTasks(tasksList);
-                }, 0)
+                }, 0);
             },
             failFunc: (err) => {
                 console.log({ err });
             }
-        })
+        });
     }
     toTasks = () => {
-        const { navigate } = this.props
-        navigate('Tasks')
+        const { navigate } = this.props;
+        navigate('Tasks');
     }
 }
 
@@ -93,5 +93,5 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     setTasks: _ => dispatch(setTasks(_))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

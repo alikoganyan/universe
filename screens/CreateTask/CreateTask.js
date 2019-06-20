@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import { Text, View } from 'react-native'
-import Header from './Header'
-import Content from './Content'
-import styled from 'styled-components'
-import SafeAreaView from '../../common/SafeAreaView'
+import React, { Component } from 'react';
+import { Text, View } from 'react-native';
+import Header from './Header';
+import Content from './Content';
+import styled from 'styled-components';
+import SafeAreaView from '../../common/SafeAreaView';
 
-const Wrapper = styled(View)``
+const Wrapper = styled(View)``;
 export default class CreateTask extends Component {
     render() {
         return (
@@ -15,9 +15,9 @@ export default class CreateTask extends Component {
                     <Content />
                 </Wrapper>
             </SafeAreaView>
-        )
+        );
     }
     navigateBack = () => {
-        this.props.navigation.goBack()
+        this.props.navigation.goBack();
     }
 }

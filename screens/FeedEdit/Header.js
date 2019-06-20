@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { View, Text, Dimensions } from 'react-native'
-import { CloseIcon } from '../../assets/index'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
+import React, { Component } from 'react';
+import { View, Text, Dimensions } from 'react-native';
+import { CloseIcon } from '../../assets/index';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
 const { sidePadding, HeaderHeight, Colors, fontSize } = helper;
 const { grey3 } = Colors;
 const Header = styled(View)`
@@ -14,18 +14,18 @@ const Header = styled(View)`
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-`
+`;
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 const Right = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     justify-content: flex-end;
-`
+`;
 const Top = styled(View)`
     display: flex;
     flex-direction: row;
@@ -34,13 +34,13 @@ const Top = styled(View)`
     height: ${HeaderHeight}; 
     width: 100%;
 
-`
+`;
 const HeaderText = styled(Text)`
     font-size: ${fontSize.header};
     position: relative;
     left: -10px;
     color: ${grey3};
-`
+`;
 class HeaderComponent extends Component {
     render() {
         return (
@@ -54,16 +54,16 @@ class HeaderComponent extends Component {
                     </Right>
                 </Top>
             </Header>
-        )
+        );
     }
     back = () => {
-        const { back } = this.props
-        back()
+        const { back } = this.props;
+        back();
     }
 }
 const mapStateToProps = state => ({
-})
+});
 const mapDispatchToProps = dispatch => ({
 
-})
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);

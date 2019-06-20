@@ -115,7 +115,7 @@ class Content extends Component {
             },
             failFunc: (err) => {
                 console.log(err);
-                let { phone_number, password } = err;
+                const { phone_number, password } = err;
                 this.setState({
                     loading: false,
                     invalidPhone: phone_number || null,

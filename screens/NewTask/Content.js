@@ -1,19 +1,19 @@
-import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions, ScrollView, TouchableOpacity } from 'react-native'
-import FloatingLabel from 'react-native-floating-labels'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import { connect } from 'react-redux'
-import { setUser } from '../../actions/userActions'
-import { addReceiver, setReceivers, setTaskReceivers } from '../../actions/participantsActions'
-import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
-import Button from '../../common/Button'
-import { p_create_task } from '../../constants/api/'
-import sendRequest from '../../utils/request'
-import { setTasks } from '../../actions/tasksActions'
-import { GroupIcon, CloseIcon } from '../../assets/'
-import DatePicker from 'react-native-datepicker'
+import React, { Component } from 'react';
+import { View, Text, TextInput, Dimensions, ScrollView, TouchableOpacity } from 'react-native';
+import FloatingLabel from 'react-native-floating-labels';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import { connect } from 'react-redux';
+import { setUser } from '../../actions/userActions';
+import { addReceiver, setReceivers, setTaskReceivers } from '../../actions/participantsActions';
+import ImageComponent from '../../common/Image';
+import DefaultAvatar from '../../common/DefaultAvatar';
+import Button from '../../common/Button';
+import { p_create_task } from '../../constants/api/';
+import sendRequest from '../../utils/request';
+import { setTasks } from '../../actions/tasksActions';
+import { GroupIcon, CloseIcon } from '../../assets/';
+import DatePicker from 'react-native-datepicker';
 const { Colors, HeaderHeight, sidePadding } = helper;
 const { lightGrey1, black, purple } = Colors;
 const Wrapper = styled(View)
@@ -24,12 +24,12 @@ const Wrapper = styled(View)
     align-items: center;
     height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
     width: 100%;
-`
+`;
 const StyledScrollView = styled(ScrollView)
 `
     height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
     width: 100%;
-`
+`;
 const StyledInput = styled(TextInput)
 `
     border: 1px solid ${lightGrey1};
@@ -41,15 +41,15 @@ const StyledInput = styled(TextInput)
     height: 40px;
     max-height: 40px;
     ${({ style }) => style}
-`
+`;
 const ButtonBox = styled(View)
 `
     align-self: center;
-`
+`;
 const Receivers = styled(View)
 `
     margin: 60px 0;
-`
+`;
 const Receiver = styled(View)
 `
     display: flex;
@@ -58,16 +58,16 @@ const Receiver = styled(View)
     justify-content: space-between;
     margin-top: 20px;
     
-`
+`;
 const ReceiverInfo = styled(View)
 `
     display: flex;
     justify-content: space-between;
-`
+`;
 const Department = styled(Text)
 `
     color: ${lightGrey1};
-`
+`;
 const DialogsLabel = styled(View)
 `
     display: flex;
@@ -75,29 +75,29 @@ const DialogsLabel = styled(View)
     flex-direction:row;
     justify-content: flex-start;
     margin-top: 20px;
-`
+`;
 const DialogsLabelText = styled(Text)
 `
     margin-left: 10px;
-`
+`;
 const AddReceiver = styled(Text)
 `
     color: ${purple};
-`
+`;
 const DeadLine = styled(View)
 `
     margin-top: 30px;
-`
+`;
 const DeadlineTime = styled(View)
 `
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     max-width: 70%;
-`
+`;
 const ReceiverComponent = (props) => {
     const { children, last = false, onDelete } = props;
-    const { image, phone_number, role, first_name, last_name } = children
+    const { image, phone_number, role, first_name, last_name } = children;
     return <Receiver last={last}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             {image === '/images/default_avatar.jpg' ?
@@ -112,8 +112,8 @@ const ReceiverComponent = (props) => {
             </View>
             <CloseIcon onPress={onDelete} />
         </View>
-    </Receiver>
-}
+    </Receiver>;
+};
 class Content extends Component {
     render() {
         const { receivers } = this.props;
@@ -122,7 +122,7 @@ class Content extends Component {
             taskText,
             deadlineDate,
             deadlineTime
-        } = this.state
+        } = this.state;
         const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
         const date = new Date();
         return (
@@ -218,7 +218,7 @@ class Content extends Component {
                     </ButtonBox>
                 </StyledScrollView>
             </Wrapper>
-        )
+        );
     }
     state = {
         taskName: '',
@@ -228,33 +228,33 @@ class Content extends Component {
     }
 
     componentDidMount() {
-        const { deafultValues, setTaskReceivers } = this.props
-        const { text, participants } = deafultValues
-        this.setState({ taskText: text })
+        const { deafultValues, setTaskReceivers } = this.props;
+        const { text, participants } = deafultValues;
+        this.setState({ taskText: text });
         // setTaskReceivers(participants)
     }
 
     jsCoreDateCreator = (dateString) => {
         // dateString *HAS* to be in this format "YYYY-MM-DD HH:MM:SS"  
-        let dateParam = dateString.split(/[\s-:]/)
-        dateParam[1] = (parseInt(dateParam[1], 10) - 1).toString()
-        return new Date(...dateParam)
+        const dateParam = dateString.split(/[\s-:]/);
+        dateParam[1] = (parseInt(dateParam[1], 10) - 1).toString();
+        return new Date(...dateParam);
     }
     deleteReceiver = (e) => {
-        const { _id } = e
-        const { receivers, setTaskReceivers } = this.props
-        const newReceivers = [...receivers].filter(e => e._id !== _id)
-        setTaskReceivers(newReceivers)
+        const { _id } = e;
+        const { receivers, setTaskReceivers } = this.props;
+        const newReceivers = [...receivers].filter(e => e._id !== _id);
+        setTaskReceivers(newReceivers);
     }
     addParticipant = () => {
         const { addParticipants } = this.props;
-        addParticipants()
+        addParticipants();
     }
     proceed = (e) => {
-        const { receivers, forward, setTasks, user, tasks } = this.props
+        const { receivers, forward, setTasks, user, tasks } = this.props;
         const { deadlineDate, deadlineTime, taskName, taskText } = this.state;
-        const deadline = this.jsCoreDateCreator(`${deadlineDate}:${deadlineTime}`)
-        const newTaskUser = tasks.filter(e => e._id === user._id)[0]
+        const deadline = this.jsCoreDateCreator(`${deadlineDate}:${deadlineTime}`);
+        const newTaskUser = tasks.filter(e => e._id === user._id)[0];
         const newTask = {
             _id: Math.floor(Math.random() * 10000),
             name: taskName,
@@ -265,19 +265,19 @@ class Content extends Component {
             created_at: new Date(),
             updated_at: new Date(),
             status: 'set',
-        }
+        };
         if (newTaskUser) {
-            const newTasks = [...tasks]
-            newTaskUser.tasks = [...newTaskUser.tasks, newTask]
-            const index = newTasks.findIndex(e => e._id === user._id)
-            newTasks[index] = newTaskUser
-            setTasks(newTasks)
+            const newTasks = [...tasks];
+            newTaskUser.tasks = [...newTaskUser.tasks, newTask];
+            const index = newTasks.findIndex(e => e._id === user._id);
+            newTasks[index] = newTaskUser;
+            setTasks(newTasks);
         } else {
             const newTasks = [...tasks, {
                 ...user,
                 tasks: [...user.tasks, newTask]
-            }]
-            setTasks(newTasks)
+            }];
+            setTasks(newTasks);
         }
         sendRequest({
             r_path: p_create_task,
@@ -286,40 +286,40 @@ class Content extends Component {
                 task: { name: taskName, description: taskText, deadline, performers: [receivers[0]._id] }
             },
             success: (res) => {
-                console.log(res)
-                forward()
+                console.log(res);
+                forward();
             },
             failFunc: (err) => {
-                console.log(err)
+                console.log(err);
             }
-        })
+        });
     }
     handleCountry = (e) => {
-        this.setState({ country: e })
+        this.setState({ country: e });
     }
     handleTaskName = (e) => {
-        this.setState({ taskName: e })
+        this.setState({ taskName: e });
     }
     handleTaskText = (e) => {
-        this.setState({ taskText: e })
+        this.setState({ taskText: e });
     }
     handleDeadlineDate = (e) => {
-        this.setState({ deadlineDate: e })
+        this.setState({ deadlineDate: e });
     }
     handleDeadlineTime = (e) => {
-        this.setState({ deadlineTime: e })
+        this.setState({ deadlineTime: e });
     }
 }
 const mapStateToProps = state => ({
     user: state.userReducer.user,
     receivers: state.participantsReducer.tasks.receivers,
     tasks: state.tasksReducer.tasks,
-})
+});
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
     addReceiver: _ => dispatch(addReceiver(_)),
     setReceivers: _ => dispatch(setReceivers(_)),
     setTasks: _ => dispatch(setTasks(_)),
     setTaskReceivers: _ => dispatch(setTaskReceivers(_))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

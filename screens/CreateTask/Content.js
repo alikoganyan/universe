@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native'
+import React, { Component } from 'react';
+import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native';
 
-import FloatingLabel from 'react-native-floating-labels'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
+import FloatingLabel from 'react-native-floating-labels';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
 const { Colors } = helper;
 const { border, lightColor } = Colors;
 const Wrapper = styled(View)`
@@ -11,17 +11,17 @@ const Wrapper = styled(View)`
     justify-content: center;
     height: 100%;
     display: flex;
-`
+`;
 const InputBox = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-between;
     min-width: 100%;
-`
+`;
 const Label = styled(Text)`
     font-size: 11px;
-`
+`;
 const CreateTask = styled(TouchableOpacity)`
     position: absolute;
     border: 1px solid ${border};
@@ -32,10 +32,10 @@ const CreateTask = styled(TouchableOpacity)`
     align-items: center;
     align-self: center;
     padding: 10px;
-`
+`;
 const CreateTaskText = styled(Text)`
     color: ${lightColor};
-`
+`;
 
 const Input = (props) => {
     const { children, password = false, value, style, editable, multiline = false } = props;
@@ -52,9 +52,9 @@ const Input = (props) => {
         style={{ ...style }}
         editable={editable}
         multiline={multiline}
-    >{children}</FloatingLabel>
+    >{children}</FloatingLabel>;
 
-}
+};
 export default class Content extends Component {
     render() {
         return (
@@ -77,7 +77,7 @@ export default class Content extends Component {
                     <CreateTaskText>Создать задачу</CreateTaskText>
                 </CreateTask>
             </Wrapper>
-        )
+        );
     }
     state = {
         error: false,

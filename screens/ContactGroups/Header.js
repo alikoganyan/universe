@@ -1,13 +1,13 @@
-import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS, TouchableOpacity } from 'react-native'
-import { BackIcon, AddIcon, SearchIcon } from '../../assets/index'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import { connect } from 'react-redux'
-import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
+import React, { Component } from 'react';
+import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS, TouchableOpacity } from 'react-native';
+import { BackIcon, AddIcon, SearchIcon } from '../../assets/index';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import { connect } from 'react-redux';
+import ImageComponent from '../../common/Image';
+import DefaultAvatar from '../../common/DefaultAvatar';
 const { HeaderHeight, sidePadding, fontSize, Colors } = helper;
-const { green, grey3 } = Colors
+const { green, grey3 } = Colors;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -18,34 +18,34 @@ const Header = styled(View)`
     justify-content: space-between;
     padding-right: ${sidePadding}px;
     padding-left: ${sidePadding}px;
-`
+`;
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 const Right = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 const Center = styled(View)`
-`
+`;
 const UserImage = styled(Image)`
     width: 30px;
     height: 30px;
     border-radius: 15px;
     margin-left:${sidePadding}px;
-`
+`;
 const MarginRight = styled(View)`
     margin-right: ${sidePadding}px;
-`
+`;
 const HeaderText = styled(Text)`
     font-size: ${fontSize.header};
     position: relative;
     left: -10px;
     color: ${grey3};
-`
+`;
 
 class HeaderComponent extends Component {
     render() {
@@ -69,15 +69,15 @@ class HeaderComponent extends Component {
                     </TouchableOpacity>
                 </Right>
             </Header>
-        )
+        );
     }
     addContact = e => {
         const { navigate } = this.props;
-        navigate('NewContact')
+        navigate('NewContact');
     }
     toProfile = () => {
         const { navigate } = this.props;
-        navigate('Profile')
+        navigate('Profile');
     }
 }
 const mapStateToProps = state => ({
@@ -85,5 +85,5 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     setDialogs: _ => dispatch(setDialogs(_))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);

@@ -59,9 +59,7 @@ class Content extends Component {
         const { search, user, dialogs, currentChat } = this.props;
         const dialog = [...dialogs].filter(e => e.room === currentChat)[0];
         const messages = dialog ? dialog.messages : [];
-        const reversedMessages = [...messages].sort((x, y) => {
-            return x.timeSent < y.timeSent;
-        });
+        const reversedMessages = [...messages].sort((x, y) => x.timeSent < y.timeSent);
         return (
             <>
                 <Wrapper search={search} >
@@ -74,11 +72,9 @@ class Content extends Component {
                                                 initialNumToRender={15}
                                                 keyboardDismissMode={'on-drag'}
                                                 animated={true}
-                                                renderItem={({ item, index }) => {
-                                                    return <TouchableOpacity key={index} onLongPress={() => this.handleHold(item)}>
+                                                renderItem={({ item, index }) => <TouchableOpacity key={index} onLongPress={() => this.handleHold(item)}>
                                                         <Message>{item}</Message>
-                                                    </TouchableOpacity>;
-                                                }}
+                                                    </TouchableOpacity>}
                                                 keyExtractor={(item, index) => index.toString()}
                                             /> : null}
                     </StyledImageBackground>
@@ -175,4 +171,4 @@ const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
 });
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

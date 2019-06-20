@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { View, Text, Dimensions, TouchableOpacity } from 'react-native'
-import { BackIcon, SearchIcon } from '../../assets/index'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import { startSearch } from '../../actions/messageActions'
-import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
+import React, { Component } from 'react';
+import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
+import { BackIcon, SearchIcon } from '../../assets/index';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import { startSearch } from '../../actions/messageActions';
+import ImageComponent from '../../common/Image';
+import DefaultAvatar from '../../common/DefaultAvatar';
 const { sidePadding, HeaderHeight, fontSize } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
@@ -17,41 +17,41 @@ const Header = styled(View)`
     align-items: center;
     justify-content: space-between;
     height: ${HeaderHeight}px;
-`
+`;
 
 const Info = styled(View)`
     display: flex;
     margin-left: 10px;
-`
+`;
 const InfoChatName = styled(Text)`
     color: black;
     font-size: ${fontSize.text};
-`
+`;
 const InfoParticipants = styled(Text)`
     color: #5F7991;
     font-size: ${fontSize.sm};
-`
+`;
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 const Right = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     justify-content: flex-end;
     margin-left: ${sidePadding}px;
-`
+`;
 const ToProfile = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
     margin-right: 20px;
-`
+`;
 class HeaderComponent extends Component {
     render() {
-        const { back, currentTask, toProfile } = this.props
-        const { first_name, last_name, phone_number, tasks, image } = currentTask
+        const { back, currentTask, toProfile } = this.props;
+        const { first_name, last_name, phone_number, tasks, image } = currentTask;
         return (
             <Header>
                 <Left>
@@ -71,12 +71,12 @@ class HeaderComponent extends Component {
                     <SearchIcon onPress={startSearch} />
                 </Right>
             </Header>
-        )
+        );
     }
 }
 const mapStateToProps = state => ({
     currentTask: state.tasksReducer.currentTask,
-})
+});
 const mapDispatchToProps = dispatch => ({
-})
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);

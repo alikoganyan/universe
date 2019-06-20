@@ -110,6 +110,9 @@ class Tasks extends Component {
 			case "done":
 				stat = "Выполнена";
 				break;
+			default: 
+				stat = "";
+				break;
 		}
 		const day = new Date(tasks[tasks.length - 1].created_at).getDay();
 		const daysOfTheWeek = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
@@ -183,10 +186,7 @@ class Tasks extends Component {
 				destructiveButtonIndex: 1,
 				cancelButtonIndex: 0
 			},
-			buttonIndex => {
-				if (buttonIndex === 1) {
-				}
-			}
+			buttonIndex => {}
 		);
 	};
 	handleClick = tasks => {

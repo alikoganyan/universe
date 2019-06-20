@@ -139,40 +139,43 @@ class TaskPack extends Component {
                 case 'cancelled':
                     this.stat = 'В работе';
                     break;
+                default:
+                    this.stat = '';
+                    break;
             }
             day = new Date(taskPack[taskPack.length - 1].created_at).getDay();
         }
         return (
             <TouchableHighlight underlayColor='#2B7DE2' onPress={onPress} onLongPress={this.handleHold}>
-		        <Wrapper last={last}>
-		          <TaskText>
-		            <TaskTextInner>
-		              <TaskTitle>{title === 'inc' ? 'Все входящие задачи' : 'Все исходящие задачи'}</TaskTitle>
-		              {taskPack.length ? <TaskLastMessage numberOfLines={1}>{taskPack[taskPack.length - 1].description}</TaskLastMessage> : null}
-		              <TaskStatus>
-		                <TaskStatusTextContainer>
-		                  <TasksIcon noPaddingAll />
-		                  <TaskStatusText>{this.stat}</TaskStatusText>
-		                </TaskStatusTextContainer>
-		                {
-		                	taskPack.length > 1 ? 
-		                		<TaskStatusAdditional>
-		                			+{taskPack.length - 1} задач
-		                		</TaskStatusAdditional> : 
-		                	null
-		                }
-		              </TaskStatus>
-		            </TaskTextInner>
-			            <TaskDate>
-			                <LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
-			                {taskPack.length ? <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
-			                  <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{taskPack.length}</NewMessages>
-			                </UnreadMessages> : null}
-			            </TaskDate>
-		        	</TaskText>
+            <Wrapper last={last}>
+              <TaskText>
+                <TaskTextInner>
+                  <TaskTitle>{title === 'inc' ? 'Все входящие задачи' : 'Все исходящие задачи'}</TaskTitle>
+                  {taskPack.length ? <TaskLastMessage numberOfLines={1}>{taskPack[taskPack.length - 1].description}</TaskLastMessage> : null}
+                  <TaskStatus>
+                    <TaskStatusTextContainer>
+                      <TasksIcon noPaddingAll />
+                      <TaskStatusText>{this.stat}</TaskStatusText>
+                    </TaskStatusTextContainer>
+                    {
+                      taskPack.length > 1 ? 
+                        <TaskStatusAdditional>
+                          +{taskPack.length - 1} задач
+                        </TaskStatusAdditional> : 
+                      null
+                    }
+                  </TaskStatus>
+                </TaskTextInner>
+                  <TaskDate>
+                      <LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
+                      {taskPack.length ? <UnreadMessages onLayout={(e) => this.getUnreadMessageHeight(e)}>
+                        <NewMessages onLayout={(e) => this.getUnreadMessageWidth(e)}>{taskPack.length}</NewMessages>
+                      </UnreadMessages> : null}
+                  </TaskDate>
+              </TaskText>
 
-		        </Wrapper>
-		    </TouchableHighlight>
+            </Wrapper>
+        </TouchableHighlight>
         );
     }
     state = {

@@ -8,7 +8,8 @@
     "build": "expo build:ios && expo build:android",
     "build:ios": "expo build:ios",
     "build:android": "expo build:android",
-    "lint": "eslint ./screens/*.js ./screens/**/*.js"
+    "lint": "eslint ./screens/*.js ./screens/**/*.js",
+    "lint:fix": "eslint --fix ./screens/*.js ./screens/**/*.js"
   },
   "rnpm": {
     "assets": [

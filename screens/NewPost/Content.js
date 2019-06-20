@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
-import { View, Text, Image, Platform, Dimensions } from 'react-native'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import React, { Component } from 'react';
+import { View, Text, Image, Platform, Dimensions } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { AutoGrowingTextInput } from 'react-native-autogrow-textinput';
-import FloatingLabel from 'react-native-floating-labels'
-import helper from '../../utils/helpers'
-import styled from 'styled-components'
+import FloatingLabel from 'react-native-floating-labels';
+import helper from '../../utils/helpers';
+import styled from 'styled-components';
 
 const { HeaderHeight } = helper;
 const Wrapper = styled(View)`
     height: ${Dimensions.get('window').height - HeaderHeight};
-`
+`;
 const Author = styled(View)`
     display: flex;
     flex-direction: row;
@@ -20,22 +20,22 @@ const Author = styled(View)`
     border-width: 0;
     padding: 10px;
     border-bottom-width: 1px;
-`
+`;
 const AuthorImage = styled(Image)`
     width: 40px;
     height: 40px;
     border-radius: 20;
     background: red;
-`
+`;
 const Post = styled(View)`
     border: 1px solid red;    
     position: absolute;
     width: 100%;
     bottom: 20;
-`
+`;
 const AutoGrowingInput = styled(AutoGrowingTextInput)`
     max-height: 250px;
-`
+`;
 const Input = (props) => {
     const { children, password = false, value, style, editable, multiline, onContentSizeChange } = props;
     return <FloatingLabel
@@ -52,9 +52,9 @@ const Input = (props) => {
         multiline={multiline}
         editable={editable}
         onContentSizeChange={onContentSizeChange}
-    >{children}</FloatingLabel>
+    >{children}</FloatingLabel>;
 
-}
+};
 export default class Content extends Component {
     render() {
         return (
@@ -73,7 +73,7 @@ export default class Content extends Component {
                     </Post>
                 </Wrapper>
             </KeyboardAwareScrollView>
-        )
+        );
     }
     state = {
         height: 'auto',

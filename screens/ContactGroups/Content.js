@@ -1,19 +1,19 @@
-import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
-import { ArrowDownIcon } from '../../assets/index'
-import styled from 'styled-components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import helper from '../../utils/helpers'
-import DefaultAvatar from '../../common/DefaultAvatar'
-import Loader from '../../common/Loader'
+import React, { Component } from 'react';
+import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { ArrowDownIcon } from '../../assets/index';
+import styled from 'styled-components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import helper from '../../utils/helpers';
+import DefaultAvatar from '../../common/DefaultAvatar';
+import Loader from '../../common/Loader';
 import posed from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
-import { connect } from 'react-redux'
-import sendRequest from '../../utils/request'
-import { g_users } from '../../constants/api'
-import { setContacts, setAllUsers } from '../../actions/userActions'
-import { getMessages, setRoom, addMessage, setCurrentChat, setCurrentRoomId } from '../../actions/messageActions'
-import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
+import { connect } from 'react-redux';
+import sendRequest from '../../utils/request';
+import { g_users } from '../../constants/api';
+import { setContacts, setAllUsers } from '../../actions/userActions';
+import { getMessages, setRoom, addMessage, setCurrentChat, setCurrentRoomId } from '../../actions/messageActions';
+import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions';
 const { Colors, sidePadding } = helper;
 const { green, black, grey2, blue } = Colors;
 const AnimatedScrollView = posed.View({
@@ -32,13 +32,13 @@ const AnimatedScrollView = posed.View({
         transition: { duration: 300, ease: 'easeOut' }
     },
 
-})
+});
 const Animated = styled(AnimatedScrollView)
 `
     display: flex;
     flex-direction: row;
     width: ${Dimensions.get('window').width * 3};
-`
+`;
 const AnimatedBox = posed.View({
     visible: { flex: 1 },
     hidden: { flex: 0 }
@@ -53,7 +53,7 @@ const Wrapper = styled(View)
     background: white;
     margin-bottom: 40px;
     
-`
+`;
 const ContactList = styled(ScrollView)
 `
     padding: 20px;
@@ -62,7 +62,7 @@ const ContactList = styled(ScrollView)
     overflow: hidden;
     margin-left: ${sidePadding}px;
     flex: 1;
-`
+`;
 const Box = styled(View)
 `
     padding-top: 20px;
@@ -70,14 +70,14 @@ const Box = styled(View)
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
-`
+`;
 const BoxTitle = styled(TouchableOpacity)
 `
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-`
+`;
 const BoxInner = styled(AnimatedBox)
 `
     padding-bottom: 20px;
@@ -85,14 +85,14 @@ const BoxInner = styled(AnimatedBox)
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
-`
+`;
 const BoxItem = styled(Text)
 `
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     color: #A7B0BA;
     flex: 1;
     width: 80%;
-`
+`;
 const BoxInnerItem = styled(TouchableOpacity)
 `
     padding: 20px 5px;
@@ -101,31 +101,31 @@ const BoxInnerItem = styled(TouchableOpacity)
     flex-direction: row;
     align-items: center;
 
-`
+`;
 const ContactImage = styled(Image)
 `
     width: 36px;
     height: 36px;
     border-radius: 18;
-`
+`;
 const ContactInfo = styled(View)
 `
     display: flex;
     align-items: flex-start;
     justify-content: center;
     margin-left: 10px;
-`
+`;
 const ContactName = styled(Text)
-``
+``;
 const ContactRole = styled(Text)
 `
     color: #A7B0BA;
 
-`
+`;
 const ArrowWrapper = styled(AnimatedArrowWrapper)
 `
     
-`
+`;
 const Options = styled(View)
 `
     display: flex;
@@ -137,7 +137,7 @@ const Options = styled(View)
     padding: 1px;
     overflow: hidden;
     width: 90%;
-`
+`;
 const Option = styled(Text)
 `
     color: ${({ active }) => active ? black : 'white'};
@@ -150,7 +150,7 @@ const Option = styled(Text)
     padding: 4px 10px 3px;
     overflow: hidden;
     text-align: center;
-`
+`;
 class Content extends Component {
     render() {
         const { users, collapsed, options } = this.state;
@@ -175,12 +175,12 @@ class Content extends Component {
                                             style={{ paddingRight: 5, paddingLeft: 5, }}
                                             data={dialogs}
                                             renderItem={({ item, index }) => {
-                                                const { participants, creator, _id, name, isGroup } = item
-                                                const chatItem = creator._id === user._id ? participants[0] : creator
-                                                const { first_name, last_name, phone_number, role, image } = chatItem
+                                                const { participants, creator, _id, name, isGroup } = item;
+                                                const chatItem = creator._id === user._id ? participants[0] : creator;
+                                                const { first_name, last_name, phone_number, role, image } = chatItem;
                                                 const chatName = isGroup ?
                                                     name :
-                                                    first_name ? `${first_name} ${last_name}` : phone_number
+                                                    first_name ? `${first_name} ${last_name}` : phone_number;
                                                 return item ? <BoxInnerItem key={index} onPress={() => this.toChat(item)}>
                                                     {
                                                         image === '/images/default_avatar.jpg' ?
@@ -192,7 +192,7 @@ class Content extends Component {
                                                         {isGroup && <ContactRole>{`${participants.length + 1} участника`}</ContactRole>}
                                                         {(!isGroup && role) && <ContactRole>{role.name}</ContactRole>}
                                                     </ContactInfo>
-                                                </BoxInnerItem> : null
+                                                </BoxInnerItem> : null;
                                             }}
                                             keyExtractor={(item, index) => index.toString()}
                                         />
@@ -209,10 +209,10 @@ class Content extends Component {
                                                 <Collapsible collapsed={collapsed[i] || false}>
                                                     <BoxInner> 
                                                         {dialogs.map((e, i) => {
-                                                            const { creator, participants, isGroup } = e
-                                                            let item = creator._id === user._id ? participants[0] : creator
-                                                            const { image, first_name, last_name, phone_number, post, role } = item
-                                                            const name = first_name ? `${first_name} ${last_name}` : phone_number
+                                                            const { creator, participants, isGroup } = e;
+                                                            const item = creator._id === user._id ? participants[0] : creator;
+                                                            const { image, first_name, last_name, phone_number, post, role } = item;
+                                                            const name = first_name ? `${first_name} ${last_name}` : phone_number;
                                                             return !isGroup && <BoxInnerItem key={i} onPress={() => this.toChat(e)}>
                                                                 {
                                                                     image === '/images/default_avatar.jpg' ?
@@ -223,7 +223,7 @@ class Content extends Component {
                                                                     <ContactName>{name}</ContactName>
                                                                     {post ? <ContactRole>{post}</ContactRole> : null}
                                                                 </ContactInfo>
-                                                            </BoxInnerItem>
+                                                            </BoxInnerItem>;
                                                         })}
                                                     </BoxInner>
                                                 </Collapsible>
@@ -235,9 +235,9 @@ class Content extends Component {
                                             style={{ paddingRight: 5, paddingLeft: 5, }}
                                             data={dialogs}
                                             renderItem={({ item, index }) => {
-                                                const { participants, creator, _id, name, isGroup } = item
-                                                const chatItem = creator._id === user._id ? participants[0] : creator
-                                                const { first_name, last_name, phone_number, role, image } = chatItem
+                                                const { participants, creator, _id, name, isGroup } = item;
+                                                const chatItem = creator._id === user._id ? participants[0] : creator;
+                                                const { first_name, last_name, phone_number, role, image } = chatItem;
                                                 return isGroup ? <BoxInnerItem key={index} onPress={() => this.toChat(item)}>
                                                     {
                                                         image === '/images/default_avatar.jpg' ?
@@ -248,7 +248,7 @@ class Content extends Component {
                                                         <ContactName>{name}</ContactName>
                                                         <ContactRole>{participants.length + 1} участника</ContactRole>
                                                     </ContactInfo>
-                                                </BoxInnerItem> : null
+                                                </BoxInnerItem> : null;
                                             }}
                                             keyExtractor={(item, index) => index.toString()}
                                         />
@@ -264,7 +264,7 @@ class Content extends Component {
                     </KeyboardAwareScrollView>
                 </Wrapper>
             </SafeAreaView>
-        )
+        );
     }
     state = {
         collapsed: [],
@@ -288,81 +288,79 @@ class Content extends Component {
     }
     componentDidMount() {
         const { collapsed } = this.state;
-        const newCollapsed = [...collapsed]
+        const newCollapsed = [...collapsed];
         for (let i = 0; i <= this.state.users.department.length; i++) {
-            newCollapsed.push(false)
+            newCollapsed.push(false);
         }
         sendRequest({
             r_path: g_users,
             method: 'get',
             success: (res) => {
-                const { users } = this.state
-                const newUsers = { ...users }
-                const newDepartment = [...users.department]
+                const { users } = this.state;
+                const newUsers = { ...users };
+                const newDepartment = [...users.department];
                 res.users.map(user => {
-                    const { users } = this.state
-                    const department = users.department.filter(e => e.title.name === user.department.name || e.title.name === 'без департамента')[0]
+                    const { users } = this.state;
+                    const department = users.department.filter(e => e.title.name === user.department.name || e.title.name === 'без департамента')[0];
                     if (department) {
-                        const index = users.department.findIndex(e => {
-                            return e.title.name === user.department || e.title.name === 'без департамента'
-                        })
-                        newDepartment[index].users.push(user)
+                        const index = users.department.findIndex(e => e.title.name === user.department || e.title.name === 'без департамента');
+                        newDepartment[index].users.push(user);
                     } else {
-                        newDepartment.push({ title: user.department || 'без департамента', users: [user] })
+                        newDepartment.push({ title: user.department || 'без департамента', users: [user] });
                     }
-                    newUsers.department = [...newDepartment]
-                    this.setState({ users: newUsers })
-                })
+                    newUsers.department = [...newDepartment];
+                    this.setState({ users: newUsers });
+                });
             },
             failFunc: (err) => {
-                console.log({ err })
+                console.log({ err });
             }
-        })
-        this.setState({ collapsed: newCollapsed })
+        });
+        this.setState({ collapsed: newCollapsed });
     }
     optionLeft = () => {
         const { options } = this.state;
-        const newState = { ...options }
-        const length = this.state.options.options.length
+        const newState = { ...options };
+        const length = this.state.options.options.length;
         newState.active = this.state.options.active < length - 1 ? this.state.options.active + 1 : 0;
-        this.setState({ options: newState })
+        this.setState({ options: newState });
     }
     optionRight = () => {
         const { options } = this.state;
-        const newState = { ...options }
-        const length = this.state.options.options.length
+        const newState = { ...options };
+        const length = this.state.options.options.length;
         newState.active = this.state.options.active > 0 ? this.state.options.active - 1 : length - 1;
-        this.setState({ options: newState })
+        this.setState({ options: newState });
     }
     collapseDepartment = (i) => {
         const { collapsed } = this.state;
-        const newDCollapsed = [...collapsed]
+        const newDCollapsed = [...collapsed];
         newDCollapsed[i] = false;
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newDCollapsed });
     }
     showDepartment = (i) => {
         const { collapsed } = this.state;
-        const newDCollapsed = [...collapsed]
+        const newDCollapsed = [...collapsed];
         newDCollapsed[i] = true;
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newDCollapsed });
     }
     selectOption = (e) => {
         const { options } = this.state;
-        const newState = { ...options }
+        const newState = { ...options };
         newState.active = e;
-        this.setState({ options: newState })
+        this.setState({ options: newState });
     }
     toChat = e => {
         const { setCurrentDialogs, setRoom, setCurrentRoomId, navigate, user, getMessages, setCurrentChat } = this.props;
         const { creator, participants, isGroup, _id, room } = e;
-        let item = creator._id === user._id ? participants[0] : creator;
+        const item = creator._id === user._id ? participants[0] : creator;
         const roomId = room.split('_').filter(e => e != user._id)[0];
-        getMessages(e.messages)
-        setCurrentDialogs({ ...e, ...item })
-        setRoom(roomId)
+        getMessages(e.messages);
+        setCurrentDialogs({ ...e, ...item });
+        setRoom(roomId);
         setCurrentRoomId(_id);
-        setCurrentChat(_id)
-        navigate(isGroup ? 'Group' : 'Chat')
+        setCurrentChat(_id);
+        navigate(isGroup ? 'Group' : 'Chat');
 
     }
 }
@@ -374,7 +372,7 @@ const mapStateToProps = state => ({
     user: state.userReducer.user,
     users: state.userReducer,
     contacts: state.userReducer.contacts,
-})
+});
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
@@ -386,5 +384,5 @@ const mapDispatchToProps = dispatch => ({
     setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
     setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
 
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

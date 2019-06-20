@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
-import { BackIcon } from '../../assets/index'
-import styled from 'styled-components'
-import SafeAreaView from '../../common/SafeAreaView'
-import sendRequest from '../../utils/request'
-import { connect } from 'react-redux'
-import { p_news } from '../../constants/api'
-import Header from './Header'
-import Content from './Content'
-import { setNews } from '../../actions/newsActions'
+import React, { Component } from 'react';
+import { View, Text, Image } from 'react-native';
+import { BackIcon } from '../../assets/index';
+import styled from 'styled-components';
+import SafeAreaView from '../../common/SafeAreaView';
+import sendRequest from '../../utils/request';
+import { connect } from 'react-redux';
+import { p_news } from '../../constants/api';
+import Header from './Header';
+import Content from './Content';
+import { setNews } from '../../actions/newsActions';
 const Wrapper = styled(View)`
     height: 100%;
-`
+`;
 
 class News extends Component {
     render() {
@@ -22,29 +22,29 @@ class News extends Component {
                     <Content proceed={this.proceed} />
                 </Wrapper>
             </SafeAreaView>
-        )
+        );
     }
     componentDidMount() {
-        const { setNews, news } = this.props
+        const { setNews, news } = this.props;
         sendRequest({
             r_path: p_news,
             method: 'get',
             success: (res) => {
-                setNews(res.news)
+                setNews(res.news);
             },
             failFunc: (err) => {
-                console.log(err)
+                console.log(err);
             }
-        })
+        });
     }
     navigateBack = () => {
-        this.props.navigation.goBack()
+        this.props.navigation.goBack();
     }
     navigate = (e) => {
-        this.props.navigation.navigate(e)
+        this.props.navigation.navigate(e);
     }
     proceed = () => {
-        this.props.navigation.navigate('NewsComments')
+        this.props.navigation.navigate('NewsComments');
     }
 }
 const mapStateToProps = state => ({
@@ -52,5 +52,5 @@ const mapStateToProps = state => ({
 });
 const mapDispatchToProps = dispatch => ({
     setNews: _ => dispatch(setNews(_)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(News)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(News);

@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { View, Text, Platform, ActionSheetIOS } from 'react-native'
-import { BackIcon, EllipsisVIcon } from '../../assets/index'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
+import React, { Component } from 'react';
+import { View, Text, Platform, ActionSheetIOS } from 'react-native';
+import { BackIcon, EllipsisVIcon } from '../../assets/index';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
 import {
     connectActionSheet,
 } from '@expo/react-native-action-sheet';
@@ -15,17 +15,17 @@ const Header = styled(View)`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-`
+`;
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 const Right = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-`
+`;
 
 export default @connectActionSheet 
     class HeaderComponent extends Component {
@@ -43,7 +43,7 @@ export default @connectActionSheet
                     <EllipsisVIcon onPress={this.openModal} />
                 </Right>
             </Header>
-        )
+        );
     }
     openModal = () => {
         const options = Platform.OS === 'ios' ?

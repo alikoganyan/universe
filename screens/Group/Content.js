@@ -44,9 +44,7 @@ class Content extends Component {
         const { dialogs, currentChat, search, user } = this.props;
         const dialog = [...dialogs].filter(e => e.room === currentChat)[0];
         const messages = dialog ? dialog.messages : [];
-        const reversedMessages = [...messages].sort((x, y) => {
-            return x.timeSent < y.timeSent;
-        });
+        const reversedMessages = [...messages].sort((x, y) => x.timeSent < y.timeSent);
         return (
             <>
                 <Wrapper search={search} >
@@ -60,11 +58,9 @@ class Content extends Component {
                                                    keyboardDismissMode={'on-drag'}
                                                    initialNumToRender={10}
                                                    animated={true}
-                                                   renderItem={({ item, index }) => {
-                                                       return <TouchableOpacity key={index} onLongPress={() => this.handleHold(item)}>
+                                                   renderItem={({ item, index }) => <TouchableOpacity key={index} onLongPress={() => this.handleHold(item)}>
                                                            <Message withImage={true} read={!!item.viewers.length}>{item}</Message>
-                                                       </TouchableOpacity>;
-                                                   }}
+                                                       </TouchableOpacity>}
                                                    keyExtractor={(item, index) => index.toString()}
                                                /> : null}
                     </ImageBackground>

@@ -75,17 +75,15 @@ class HeaderComponent extends Component {
         back();
     };
     editTask = () => {
-        const { navigate } = this.props
-        navigate('TaskEdit')
+        const { navigate } = this.props;
+        navigate('TaskEdit');
     }
 }
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         user: state.userReducer.user,
         tasks: state.tasksReducer.tasks,
-    };
-};
+    });
 const mapDispatchToProps = dispatch => ({
     setTasks: _ => dispatch(setTasks(_))
 });

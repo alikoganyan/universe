@@ -1,11 +1,11 @@
-import React, { Component } from 'react'
-import { View, Text, Platform } from 'react-native'
-import styled from 'styled-components'
-import SafeAreaView from '../../common/SafeAreaView'
-import Header from './Header'
-import Content from './Content'
+import React, { Component } from 'react';
+import { View, Text, Platform } from 'react-native';
+import styled from 'styled-components';
+import SafeAreaView from '../../common/SafeAreaView';
+import Header from './Header';
+import Content from './Content';
 
-const Wrapper = styled(View)``
+const Wrapper = styled(View)``;
 export default class NewPost extends Component {
     render() {
         return (
@@ -15,9 +15,9 @@ export default class NewPost extends Component {
                     <Content />
                 </Wrapper>
             </SafeAreaView>
-        )
+        );
     }
     navigateBack = () => {
-        this.props.navigation.goBack()
+        this.props.navigation.goBack();
     }
 }

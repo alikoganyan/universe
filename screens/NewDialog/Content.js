@@ -1,18 +1,18 @@
-import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native'
-import { GroupIconWhite, ArrowDownIcon } from '../../assets/index'
-import styled from 'styled-components'
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import helper from '../../utils/helpers'
+import React, { Component } from 'react';
+import { View, Text, SafeAreaView, Image, TouchableOpacity, ScrollView, Dimensions } from 'react-native';
+import { GroupIconWhite, ArrowDownIcon } from '../../assets/index';
+import styled from 'styled-components';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import helper from '../../utils/helpers';
 import posed from 'react-native-pose';
-import sendRequest from '../../utils/request'
-import { g_users } from '../../constants/api'
-import ImageComponent from '../../common/Image'
+import sendRequest from '../../utils/request';
+import { g_users } from '../../constants/api';
+import ImageComponent from '../../common/Image';
 import Collapsible from 'react-native-collapsible';
-import { connect } from 'react-redux'
-import { setContacts, setAllUsers } from '../../actions/userActions'
-import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/messageActions'
-import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
+import { connect } from 'react-redux';
+import { setContacts, setAllUsers } from '../../actions/userActions';
+import { getMessages, setRoom, addMessage, setCurrentChat } from '../../actions/messageActions';
+import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions';
 const { Colors, HeaderHeight, fontSize } = helper;
 const { green, black, grey2 } = Colors;
 
@@ -30,7 +30,7 @@ const Wrapper = styled(View)`
     margin-bottom: 110px;
     height: ${Dimensions.get('window').height - HeaderHeight}px;
     margin-top: ${HeaderHeight};
-`
+`;
 const ContactList = styled(ScrollView)`
     padding: 30px;
     padding-top: 10px;
@@ -38,61 +38,61 @@ const ContactList = styled(ScrollView)`
     max-width: ${Dimensions.get('window').width};
     overflow: hidden;
     flex: 1;
-`
+`;
 const Box = styled(View)`
     padding-top: 20px;
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
-`
+`;
 const BoxTitle = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-start;
-`
+`;
 const BoxInner = styled(AnimatedBox)`
     padding: 0 0 20px;
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
-`
+`;
 const BoxItem = styled(Text)`
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     color: #A7B0BA;
     width: 80%;
-`
+`;
 const BoxInnerItem = styled(View)`
     padding: 20px 0;
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 const ContactImage = styled(Image)`
     width: 33px;
     height: 33px;
     border-radius: 16.5;
     margin-right: 8px;
-`
+`;
 const ContactInfo = styled(View)`
     display: flex;
     align-items: flex-start;
     justify-content: center;
-`
+`;
 const ContactName = styled(Text)`
     font-size: ${fontSize.text};
     color: ${black};
-`
+`;
 const ContactRole = styled(Text)`
     font-size: ${fontSize.text - 1};
     color: ${grey2};
-`
+`;
 const ArrowWrapper = styled(AnimatedArrowWrapper)`
     
-`
+`;
 const CreateDialog = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
@@ -107,12 +107,12 @@ const CreateDialog = styled(TouchableOpacity)`
     border-radius: 50000px;
     margin-top: 10px;
 
-`
+`;
 const CreateDialogText = styled(Text)`
     margin-left: 10px;
     color: white;
     font-size: ${fontSize.text};
-`
+`;
 class Content extends Component {
     render() {
         const { users, collapsed } = this.state;
@@ -126,8 +126,7 @@ class Content extends Component {
                                 <GroupIconWhite />
                                 <CreateDialogText>Создать группу</CreateDialogText>
                             </CreateDialog>
-                            {department.map((dep, i) => {
-                                return (
+                            {department.map((dep, i) => (
                                     <View key={i}>
                                         <ContactList key={i}>
                                             <Box last={true}>
@@ -177,13 +176,12 @@ class Content extends Component {
                                         />
                                     </ContactList> */}
                                     </View>
-                                )
-                            })}
+                                ))}
                         </KeyboardAwareScrollView>
                     </Wrapper>
                 </ScrollView>
             </SafeAreaView>
-        )
+        );
     }
     state = {
         collapsed: [],
@@ -198,72 +196,68 @@ class Content extends Component {
     }
     collapseDepartment = (i) => {
         const { collapsed } = this.state;
-        const newDCollapsed = [...collapsed]
+        const newDCollapsed = [...collapsed];
         newDCollapsed[i] = false;
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newDCollapsed });
     }
     newGroup = () => {
-        const { navigate } = this.props
-        navigate('NewGroup')
+        const { navigate } = this.props;
+        navigate('NewGroup');
     }
     showDepartment = (i) => {
         const { collapsed } = this.state;
-        const newDCollapsed = [...collapsed]
+        const newDCollapsed = [...collapsed];
         newDCollapsed[i] = true;
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newDCollapsed });
     }
     componentDidMount() {
         const { collapsed } = this.state;
-        const { setContacts } = this.props
-        const newDCollapsed = [...collapsed]
+        const { setContacts } = this.props;
+        const newDCollapsed = [...collapsed];
         for (let i = 0; i <= this.state.users.department.length; i++) {
-            newDCollapsed.push(false)
+            newDCollapsed.push(false);
         }
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newDCollapsed });
         sendRequest({
             r_path: g_users,
             method: 'get',
             success: (res) => {
-                const { users } = this.state
-                const newUsers = { ...users }
-                setContacts(res.users)
-                const newDepartment = [...users.department]
+                const { users } = this.state;
+                const newUsers = { ...users };
+                setContacts(res.users);
+                const newDepartment = [...users.department];
                 res.users.map(user => {
-                    const { users } = this.state
-                    const department = users.department.filter(e => e.title.name === user.department.name || e.title.name === 'без департамента')[0]
+                    const { users } = this.state;
+                    const department = users.department.filter(e => e.title.name === user.department.name || e.title.name === 'без департамента')[0];
                     if (department) {
-                        const index = users.department.findIndex(e => {
-                            return e.title.name === user.department || e.title.name === 'без департамента'
-                        })
-                        newDepartment[index].users.push(user)
+                        const index = users.department.findIndex(e => e.title.name === user.department || e.title.name === 'без департамента');
+                        newDepartment[index].users.push(user);
                     } else {
-                        newDepartment.push({ title: user.department || 'без департамента', users: [user] })
+                        newDepartment.push({ title: user.department || 'без департамента', users: [user] });
                     }
-                    newUsers.department = [...newDepartment]
-                    this.setState({ users: newUsers })
-                })
+                    newUsers.department = [...newDepartment];
+                    this.setState({ users: newUsers });
+                });
             },
             failFunc: (err) => {
-                console.log({ err })
+                console.log({ err });
             }
-        })
+        });
 
     }
     selectOption = (e) => {
         const { options } = this.state;
-        const newState = { ...options }
+        const newState = { ...options };
         newState.active = e;
-        this.setState({ options: newState })
+        this.setState({ options: newState });
     }
     toChat = event => {
-        const { setCurrentDialogs, navigate, getMessages, setRoom, dialog } = this.props
-        const dialogIncludes = dialog.filter(e => {
-            return (e.creator._id === event._id || e.participants[0]._id === event._id)
-        })[0]
-        setCurrentDialogs(event)
-        setRoom(event._id)
-        getMessages(dialogIncludes ? dialogIncludes.messages : [])
-        navigate('Chat')
+        const { setCurrentDialogs, navigate, getMessages, setRoom, dialog } = this.props;
+        const dialogIncludes = dialog.filter(e => (e.creator._id === event._id || e.participants[0]._id === event._id))[0];
+        setCurrentDialogs(event);
+        setRoom(event._id);
+        getMessages(dialogIncludes ? dialogIncludes.messages : []);
+        navigate('Chat');
     }
 }
 
@@ -274,7 +268,7 @@ const mapStateToProps = state => ({
     currentChat: state.messageReducer.currentChat,
     user: state.userReducer.user,
     users: state.userReducer
-})
+});
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
@@ -285,5 +279,5 @@ const mapDispatchToProps = dispatch => ({
     setCurrentChat: _ => dispatch(setCurrentChat(_)),
     setCurrentDialogs: _ => dispatch(setCurrentDialogs(_))
 
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

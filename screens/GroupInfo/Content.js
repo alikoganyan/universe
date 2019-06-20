@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'react-native'
-import { BackIcon, EllipsisVIcon, MessageIndicatorIcon } from '../../assets/index'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-const { fontSize } = helper
+import React, { Component } from 'react';
+import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'react-native';
+import { BackIcon, EllipsisVIcon, MessageIndicatorIcon } from '../../assets/index';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+const { fontSize } = helper;
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
     margin-bottom: 110px;
     
-`
+`;
 const Group = styled(View)`
     display: flex;
     flex-direction: row;
@@ -19,27 +19,27 @@ const Group = styled(View)`
     border: 1px solid #E6E6E6;
     border-width: 0;
     border-bottom-width: 1px;
-`
+`;
 const GroupImage = styled(Image)`
     width: 60px;
     height: 60px;
     border-radius: 30;
     margin: 0 10px;
 
-`
+`;
 const GroupInfo = styled(View)`
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: flex-start;
     height: 50px;
-`
+`;
 const GroupName = styled(Text)`
     font-size: 18;
-`
+`;
 const GroupParticipants = styled(Text)`
     font-size: 15;
-`
+`;
 
 const User = styled(View)`
     display: flex;
@@ -47,42 +47,42 @@ const User = styled(View)`
     align-items: center;
     justify-content: flex-start;
     padding: 10px 0;
-`
+`;
 const Participants = styled(View)`
     padding: 0 10px;
-`
+`;
 const ParticipantImage = styled(Image)`
     width: 50px;
     height: 50px;
     border-radius: 25px;
     margin-right: 10px;
-`
+`;
 const ParticipantInfo = styled(View)`
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: space-between;
     height: 40px;
-`
+`;
 const ParticipantName = styled(Text)`
     font-size: 15px;
-`
+`;
 const ParticipantLastSeen = styled(Text)`
     font-size:${fontSize.text};
     color: #A3A3A3;
-`
+`;
 const GoBack = styled(View)`
     position: absolute;
     right: 10px;
     margin-top: 10px;
     z-index: 5;
-`
+`;
 const GoBackText = styled(Text)`
     color: #395E7F;
-`
+`;
 const StyledFlatList = styled(FlatList)`
     height: 100%;
-`
+`;
 export default class Content extends Component {
     render() {
         const { groupsList } = this.state;
@@ -97,8 +97,8 @@ export default class Content extends Component {
                         <ParticipantLastSeen>{lastSeen}</ParticipantLastSeen>
                     </ParticipantInfo>
                 </User>
-            )
-        }
+            );
+        };
         return (
             <SafeAreaView>
                 <Wrapper>
@@ -125,7 +125,7 @@ export default class Content extends Component {
                     </Participants>
                 </Wrapper>
             </SafeAreaView>
-        )
+        );
     }
     state = {
         groupsList: [

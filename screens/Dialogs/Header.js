@@ -1,17 +1,17 @@
-import React, { Component, Fragment } from 'react'
-import { View, Text, TextInput, TouchableOpacity, Platform, Dimensions, Keyboard } from 'react-native'
-import { SearchIcon, BurgerIcon, CloseIcon } from '../../assets/index'
-import { openDrawer } from '../../actions/drawerActions'
-import { setDialogs } from '../../actions/dialogsActions'
-import { connect } from 'react-redux'
-import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
-import sendRequest from '../../utils/request'
-import { p_search_dialogs } from '../../constants/api'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import { socket } from '../../utils/socket'
-import { SearchShadow } from '../../assets/'
+import React, { Component, Fragment } from 'react';
+import { View, Text, TextInput, TouchableOpacity, Platform, Dimensions, Keyboard } from 'react-native';
+import { SearchIcon, BurgerIcon, CloseIcon } from '../../assets/index';
+import { openDrawer } from '../../actions/drawerActions';
+import { setDialogs } from '../../actions/dialogsActions';
+import { connect } from 'react-redux';
+import ImageComponent from '../../common/Image';
+import DefaultAvatar from '../../common/DefaultAvatar';
+import sendRequest from '../../utils/request';
+import { p_search_dialogs } from '../../constants/api';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import { socket } from '../../utils/socket';
+import { SearchShadow } from '../../assets/';
 const { Colors, sidePadding, fontSize, HeaderHeight, borderRadius } = helper;
 const { white, lightBlue2 } = Colors;
 const Header = styled(View)`
@@ -30,17 +30,17 @@ const Header = styled(View)`
     z-index: 1;
     left: ${sidePadding}px;
     margin-top: 10px;
-`
+`;
 const Input = styled(TextInput)`
     flex: 1;
     height: ${HeaderHeight};
     position: relative;
     left: -4px;
     font-size: ${fontSize.sm};
-`
+`;
 class HeaderComponent extends Component {
     render() {
-        const { user } = this.props
+        const { user } = this.props;
         const { input } = this.state;
         return (
             <Header
@@ -68,7 +68,7 @@ class HeaderComponent extends Component {
                         }
                     </TouchableOpacity>}
             </Header>
-        )
+        );
     }
     state = {
         input: '',
@@ -77,16 +77,16 @@ class HeaderComponent extends Component {
     componentDidMount() {
         const { setDialogs } = this.props;
         socket.on('find', ({ result }) => {
-            setDialogs(result)
-        })
+            setDialogs(result);
+        });
     }
     toProfile = (e) => {
-        const { toProfile } = this.props
-        toProfile()
+        const { toProfile } = this.props;
+        toProfile();
     }
     handleInputChange = (e) => {
-        const { user, setDialogs } = this.props
-        this.setState({ input: e })
+        const { user, setDialogs } = this.props;
+        this.setState({ input: e });
         if (e && e.length > 1) {
             sendRequest({
                 r_path: p_search_dialogs,
@@ -96,17 +96,17 @@ class HeaderComponent extends Component {
                 },
                 success: (res) => {
                     const { dialogs, groups } = res;
-                    const newDialogs = [...dialogs, ...groups]
-                    setDialogs(newDialogs)
+                    const newDialogs = [...dialogs, ...groups];
+                    setDialogs(newDialogs);
 
                 },
                 failFunc: (err) => {
-                    console.log(err)
+                    console.log(err);
                 }
-            })
+            });
         }
         else {
-            socket.emit('get_dialogs', { id: user._id })
+            socket.emit('get_dialogs', { id: user._id });
         }
 
     }
@@ -114,11 +114,11 @@ class HeaderComponent extends Component {
         this.setState({ focused: true });
     }
     onBlur = () => {
-        const { user } = this.props
+        const { user } = this.props;
         this.setState({ focused: false, input: '' });
         socket.emit('dialogs', { userId: user._id });
-        socket.emit('get_dialogs', { id: user._id })
-        Keyboard.dismiss()
+        socket.emit('get_dialogs', { id: user._id });
+        Keyboard.dismiss();
     }
 }
 
@@ -128,8 +128,8 @@ const mapStateToProps = state => ({
     search: state.messageReducer.search,
     drawer: state.drawerReducer.open,
     user: state.userReducer.user
-})
+});
 const mapDispatchToProps = dispatch => ({
     setDialogs: _ => dispatch(setDialogs(_))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);

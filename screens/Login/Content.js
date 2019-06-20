@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, AsyncStorage, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native'
-import helper from '../../utils/helpers'
-import FloatingLabel from 'react-native-floating-labels'
-import styled from 'styled-components'
-import { connect } from 'react-redux'
-import { setUser, setAuth, setRegisterUserNumber } from '../../actions/userActions'
-import { p_login } from '../../constants/api'
-import Button from '../../common/Button'
-import sendRequest from '../../utils/request'
-import { connectToSocket } from '../../utils/socket'
+import React, { Component } from 'react';
+import { View, Text, TouchableOpacity, TextInput, AsyncStorage, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import helper from '../../utils/helpers';
+import FloatingLabel from 'react-native-floating-labels';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { setUser, setAuth, setRegisterUserNumber } from '../../actions/userActions';
+import { p_login } from '../../constants/api';
+import Button from '../../common/Button';
+import sendRequest from '../../utils/request';
+import { connectToSocket } from '../../utils/socket';
 const { Colors, fontSize } = helper;
 const { lightGrey1, blue, pink, black } = Colors;
 const { large, sm } = fontSize;
@@ -17,12 +17,12 @@ const Wrapper = styled(View)`
     height: 90%;
     display: flex;
     justify-content: center;
-`
+`;
 const Title = styled(Text)`
     width: 100%;
     font-size: ${large};
     text-align: center;
-`
+`;
 const ControlBar = styled(View)`
     display: flex;
     justify-content: center;
@@ -30,7 +30,7 @@ const ControlBar = styled(View)`
     align-items: center;
     align-self: center;
     flex-direction: column;
-`
+`;
 
 const PhoneNumber = styled(View)`
     display: flex;
@@ -38,17 +38,17 @@ const PhoneNumber = styled(View)`
     margin-top: 30px;
     margin-bottom: ${({ err }) => err ? 10 : 35};    
     align-items: flex-end;
-`
+`;
 const ErrorText = styled(Text)`
     font-size: ${sm};
     margin-bottom: 10px;
     text-align: center;
-`
+`;
 const ForgotPass = styled(Text)`
     font-size: ${sm};
     margin-bottom: 10px;
     color: ${blue};
-`
+`;
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
     border-width: 0;
@@ -58,7 +58,7 @@ const StyledInput = styled(TextInput)`
     margin-bottom: 10px;
     color: black;
     ${({ style }) => style};
-`
+`;
 const Input = (props) => {
     const { keyboardType = 'default', onChangeText, children, password = false, value, style, editable, inputStyle, labelStyle } = props;
     return <FloatingLabel
@@ -80,9 +80,9 @@ const Input = (props) => {
         style={{ ...style }}
         editable={editable}
         onChangeText={onChangeText}
-    >{children}</FloatingLabel>
+    >{children}</FloatingLabel>;
 
-}
+};
 class Content extends Component {
     render() {
         const { invalidPassword, invalidPhone, country, phone, password } = this.state;
@@ -142,7 +142,7 @@ class Content extends Component {
                     </ControlBar>
                 </Wrapper >
             </TouchableWithoutFeedback>
-        )
+        );
     }
     state = {
         country: '+7',
@@ -175,10 +175,10 @@ class Content extends Component {
     login = () => {
         const { setRegisterUserNumber } = this.props;
         const { country, phone, password } = this.state;
-        const phone_number = country.concat(phone)
-        if (!phone || !phone.length) this.setState({ invalidPhone: true })
-        if (!password || password.length < 4) this.setState({ invalidPassword: true })
-        setTimeout(() => this.setState({ invalidPhone: false, invalidPassword: false }), 5000)
+        const phone_number = country.concat(phone);
+        if (!phone || !phone.length) this.setState({ invalidPhone: true });
+        if (!password || password.length < 4) this.setState({ invalidPassword: true });
+        setTimeout(() => this.setState({ invalidPhone: false, invalidPassword: false }), 5000);
         sendRequest({
             r_path: p_login,
             method: 'post',
@@ -187,55 +187,55 @@ class Content extends Component {
                 password,
             },
             success: (res) => {
-                const { setAuth, setUser, navigate } = this.props
-                const { access_token, data } = res
-                setAuth(access_token)
-                setUser(data)
-                this.storeUserData({ ...data, password, access_token })
-                this.setState({ loading: false })
+                const { setAuth, setUser, navigate } = this.props;
+                const { access_token, data } = res;
+                setAuth(access_token);
+                setUser(data);
+                this.storeUserData({ ...data, password, access_token });
+                this.setState({ loading: false });
                 setTimeout(() => {
                     connectToSocket(access_token);
                     navigate('Dialogs');
-                }, 0)
+                }, 0);
             },
             failFunc: (err) => {
                 const phone = err.length ? err.filter(e => e.param === 'phone_number')[0] : err.phone_number;
                 const pass = err.length ? err.filter(e => e.param === 'password')[0] : err.password;
-                setRegisterUserNumber(phone_number)
+                setRegisterUserNumber(phone_number);
                 if (phone) {
-                    this.setState({ invalidPhone: true })
+                    this.setState({ invalidPhone: true });
                 }
                 if (pass) {
-                    this.setState({ invalidPassword: true })
+                    this.setState({ invalidPassword: true });
                 }
             }
-        })
+        });
     }
     signup = () => {
         const { navigate } = this.props;
-        navigate('Signup')
+        navigate('Signup');
     }
     restorePass = () => {
         const { navigate } = this.props;
-        navigate('Restore')
+        navigate('Restore');
     }
     handleChangePassword = (e) => {
-        this.setState({ password: e, invalidPassword: false })
+        this.setState({ password: e, invalidPassword: false });
     }
     handleChangePhone = (e) => {
-        this.setState({ phone: e, invalidPhone: false })
+        this.setState({ phone: e, invalidPhone: false });
     }
     handleChangeCountry = (e) => {
-        this.setState({ country: e })
+        this.setState({ country: e });
     }
 }
 
 const mapStateToProps = state => ({
     id: state.userReducer.id
-})
+});
 const mapDispatchToProps = dispatch => ({
     setAuth: _ => dispatch(setAuth(_)),
     setUser: _ => dispatch(setUser(_)),
     setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

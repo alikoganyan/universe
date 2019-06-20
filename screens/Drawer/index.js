@@ -3,4 +3,4 @@ import Content from './Content';
 export {
     Header,
     Content,
-}
+};

@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions, TouchableOpacity } from 'react-native'
-import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/index'
-import { connect } from 'react-redux'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import sendRequest from '../../utils/request'
-import { p_search_messages } from '../../constants/api'
-import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
+import React, { Component } from 'react';
+import { View, Text, TextInput, Dimensions, TouchableOpacity } from 'react-native';
+import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/index';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import sendRequest from '../../utils/request';
+import { p_search_messages } from '../../constants/api';
+import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
+import ImageComponent from '../../common/Image';
+import DefaultAvatar from '../../common/DefaultAvatar';
 const { sidePadding, HeaderHeight, Colors, fontSize } = helper;
 const { border } = Colors;
 const Header = styled(View)`
@@ -20,39 +20,39 @@ const Header = styled(View)`
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-`
+`;
 const Info = styled(View)`
     display: flex;
     margin-left: 10px;
-`
+`;
 const InfoChatName = styled(Text)`
     color: black;
     font-size: ${fontSize.text};
-`
+`;
 const InfoParticipants = styled(Text)`
     color: #5F7991;
     font-size: ${fontSize.sm};
-`
+`;
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
     max-width: 200px;
-`
+`;
 const Right = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     justify-content: flex-end;
     margin-left: ${sidePadding}px;
-`
+`;
 const Categories = styled(Header)`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: flex-end;
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
-`
+`;
 const Top = styled(View)`
     display: flex;
     flex-direction: row;
@@ -61,7 +61,7 @@ const Top = styled(View)`
     height: ${HeaderHeight}; 
     width: 100%;
 
-`
+`;
 const Bottom = styled(Top)`
     border: 1px solid ${border};
     border-width: 0;
@@ -69,7 +69,7 @@ const Bottom = styled(Top)`
     margin: 0 ${sidePadding}px;
     min-height: 0; 
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
-`
+`;
 const Category = styled(Text)`
     display: flex;
     flex:1;
@@ -77,16 +77,16 @@ const Category = styled(Text)`
     font-size: 11px;
     text-align: center;
     padding: 10px 0;
-`
+`;
 const Input = styled(TextInput)`
     padding-left: 10px; 
     flex: 1; 
-`
+`;
 const ToProfile = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
     margin-right: 20px;
-`
+`;
 
 class HeaderComponent extends Component {
     render() {
@@ -158,12 +158,12 @@ class HeaderComponent extends Component {
                 dialog_id: currentRoomId
             },
             success: (res) => {
-                getMessages(res.messages)
+                getMessages(res.messages);
             },
             failFunc: (err) => {
-                console.log(err)
+                console.log(err);
             }
-        }) : getMessages(dialogs.filter(e => e.room.includes(currentRoom))[0].messages)
+        }) : getMessages(dialogs.filter(e => e.room.includes(currentRoom))[0].messages);
     }
 }
 const mapStateToProps = state => ({
@@ -173,11 +173,11 @@ const mapStateToProps = state => ({
     currentRoomId: state.messageReducer.currentRoomId,
     currentChat: state.messageReducer.currentChat,
     currentDialog: state.dialogsReducer.currentDialog
-})
+});
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch(_)),
     stopSearch: _ => dispatch(stopSearch(_)),
     getMessages: _ => dispatch(getMessages(_))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);

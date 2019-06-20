@@ -1,8 +1,8 @@
-import React, { Component } from 'react'
-import { View, Text } from 'react-native'
-import { BackIcon } from '../../assets/index'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
+import React, { Component } from 'react';
+import { View, Text } from 'react-native';
+import { BackIcon } from '../../assets/index';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
 const { HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
@@ -12,12 +12,12 @@ const Header = styled(View)`
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-`
+`;
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 
 export default class HeaderComponent extends Component {
     render() {
@@ -31,6 +31,6 @@ export default class HeaderComponent extends Component {
                     </Text>
                 </Left>
             </Header>
-        )
+        );
     }
 }

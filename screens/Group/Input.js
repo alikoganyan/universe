@@ -1,17 +1,17 @@
-import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions, TouchableOpacity } from 'react-native'
-import { ImageIconBlue, PapperPlaneIcon } from '../../assets/index'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import { connect } from 'react-redux'
-import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions'
+import React, { Component } from 'react';
+import { View, Text, TextInput, Dimensions, TouchableOpacity } from 'react-native';
+import { ImageIconBlue, PapperPlaneIcon } from '../../assets/index';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import { connect } from 'react-redux';
+import { addMessage, startSearch, stopSearch, getMessages } from '../../actions/messageActions';
 import { ImagePicker, DocumentPicker, Permissions } from 'expo';
-import { p_send_file } from '../../constants/api'
-import { setDialogs } from '../../actions/dialogsActions'
-import sendRequest from '../../utils/request'
-import posed from 'react-native-pose'
-import { BottomSheet } from 'react-native-btr'
-import { socket } from '../../utils/socket'
+import { p_send_file } from '../../constants/api';
+import { setDialogs } from '../../actions/dialogsActions';
+import sendRequest from '../../utils/request';
+import posed from 'react-native-pose';
+import { BottomSheet } from 'react-native-btr';
+import { socket } from '../../utils/socket';
 const { sidePadding, borderRadius, HeaderHeight, fontSize } = helper;
 const FilePickerPosed = posed.View({
     visible: { bottom: 10 },
@@ -34,7 +34,7 @@ const Wrapper = styled(View)`
     border-bottom-width: 1;
     min-height: 44px;
     max-height: 65px;
-`
+`;
 const Input = styled(TextInput)`
     display: flex;
     flex-direction: column;
@@ -45,16 +45,16 @@ const Input = styled(TextInput)`
     align-items: flex-start;
     font-size: ${fontSize.sl};
     text-align-vertical: bottom;
-`
+`;
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     width: 90%;
-`
+`;
 const Right = styled(View)` 
     display: flex;
     flex-direction: row;
-`
+`;
 const FilePicker = styled(FilePickerPosed)`
     background: white;
     width: 94%;
@@ -68,7 +68,7 @@ const FilePicker = styled(FilePickerPosed)`
     justify-content: space-around;
     align-items: flex-start;
     z-index: 4;
-`
+`;
 const Shadow = styled(TouchableOpacity)`
     position: absolute;
     width: ${Dimensions.get('window').width};
@@ -76,7 +76,7 @@ const Shadow = styled(TouchableOpacity)`
     background: rgba(5,5,5,.3);
     top: -${Dimensions.get('window').height - HeaderHeight - 3};
     z-index: 2;
-`
+`;
 class InputComponent extends Component {
     render() {
         const { text, pickerOpened } = this.state;
@@ -111,7 +111,7 @@ class InputComponent extends Component {
                     </FilePicker>
                 </BottomSheet>
             </>
-        )
+        );
     }
     state = {
         text: '',
@@ -122,29 +122,29 @@ class InputComponent extends Component {
     componentDidMount() {
     }
     unselect = () => {
-        this.setState({ pickerOpened: false })
+        this.setState({ pickerOpened: false });
     }
     selectPhoto = async () => {
         const { currentChat, addMessage, setDialogs, dialogs, user } = this.props;
-        this.unselect()
+        this.unselect();
         const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
         if (status !== 'granted') {
-            alert('no image permission')
+            alert('no image permission');
             return;
         }
-        let result = await ImagePicker.launchImageLibraryAsync({
+        const result = await ImagePicker.launchImageLibraryAsync({
             allowsEditing: false,
         });
-        const { uri, type } = result
-        const ext = uri.split('.')[uri.split('.').length - 1]
+        const { uri, type } = result;
+        const ext = uri.split('.')[uri.split('.').length - 1];
         const fileName = Math.random().toString(36).substring(7);
         const form = new FormData();
         form.append("file", {
             uri,
             name: `photo.${fileName}.${ext}`,
             type: `image/${type}`,
-        })
-        form.append("room", currentChat)
+        });
+        form.append("room", currentChat);
         if (!result.cancelled) {
             const message = {
                 room: currentChat,
@@ -153,12 +153,12 @@ class InputComponent extends Component {
                 type: 'image',
                 src: result.uri,
                 viewers: [],
-            }
+            };
             addMessage(message);
-            const newDialogs = [...dialogs]
-            const index = newDialogs.findIndex(e => e.room === currentChat)
-            newDialogs[index] = res.dialog
-            setDialogs(newDialogs)
+            const newDialogs = [...dialogs];
+            const index = newDialogs.findIndex(e => e.room === currentChat);
+            newDialogs[index] = res.dialog;
+            setDialogs(newDialogs);
             sendRequest({
                 r_path: p_send_file,
                 method: 'post',
@@ -169,80 +169,80 @@ class InputComponent extends Component {
                 //     }
                 // },
                 success: () => {
-                    socket.emit('file', { room: currentChat })
+                    socket.emit('file', { room: currentChat });
 
                 },
                 failFunc: (err) => {
-                    console.log({ err })
+                    console.log({ err });
                 }
-            })
+            });
         }
     }
     selectFile = async () => {
         // let result = await DocumentPicker.getDocumentAsync({});
     }
     selectGeo = async () => {
-        this.unselect()
+        this.unselect();
         const { status } = await Permissions.askAsync(Permissions.LOCATION);
         if (status !== 'granted') {
-            alert('no location permission')
+            alert('no location permission');
             return;
         }
     }
     discardSelect = () => { }
     sendMessage = () => {
         const { currentChat, addMessage, user, setDialogs, dialogs } = this.props;
-        const { _id, first_name, last_name, middle_name, image } = user
+        const { _id, first_name, last_name, middle_name, image } = user;
         const { text } = this.state;
         if (text) {
-            const message = { sender: { _id, first_name, last_name, middle_name, image }, text: text.trim(), created_at: new Date(), type: 'text', viewers: [] }
-            const newDialogs = [...dialogs]
-            const newDialog = { ...newDialogs.filter(event => event.room === currentChat)[0] }
+            const message = { sender: { _id, first_name, last_name, middle_name, image }, text: text.trim(), created_at: new Date(), type: 'text', viewers: [] };
+            const newDialogs = [...dialogs];
+            const newDialog = { ...newDialogs.filter(event => event.room === currentChat)[0] };
             if (newDialog) {
-                newDialog.messages = [...newDialog.messages, message]
-                newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog
+                newDialog.messages = [...newDialog.messages, message];
+                newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog;
                 const newDialogSorted = newDialogs.length && newDialogs.sort((a, b) => {
                     if (b.messages.length && a.messages.length) {
                         const aCreation = new Date(a.created_at);
-                        const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at)
-                        const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
+                        const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at);
+                        const aDate = aCreation > aLastMessage ? aCreation : aLastMessage;
                         const bCreation = new Date(b.created_at);
-                        const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at)
-                        const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
-                        return bDate - aDate
+                        const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at);
+                        const bDate = bCreation > bLastMessage ? bCreation : bLastMessage;
+                        return bDate - aDate;
                     }
                     if (b.messages.length && !a.messages.length) {
                         const aCreation = new Date(a.created_at);
                         const bCreation = new Date(b.created_at);
-                        const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at)
-                        const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
-                        return bDate - aCreation
+                        const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at);
+                        const bDate = bCreation > bLastMessage ? bCreation : bLastMessage;
+                        return bDate - aCreation;
                     }
                     if (!b.messages.length && a.messages.length) {
                         const aCreation = new Date(a.created_at);
-                        const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at)
-                        const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
+                        const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at);
+                        const aDate = aCreation > aLastMessage ? aCreation : aLastMessage;
                         const bCreation = new Date(b.created_at);
-                        return bCreation - aDate
+                        return bCreation - aDate;
                     }
                     if (!b.messages.length && !a.messages.length) {
                         const aCreation = new Date(a.created_at);
                         const bCreation = new Date(b.created_at);
-                        return bCreation - aCreation
+                        return bCreation - aCreation;
                     }
-                })
-                socket.emit('group_message', { room: currentChat, message: text })
-                addMessage(message)
-                setDialogs(newDialogSorted)
+                });
+                socket.emit('group_message', { room: currentChat, message: text });
+                addMessage(message);
+                setDialogs(newDialogSorted);
             }
         }
-        this.setState({ text: '' })
+        this.setState({ text: '' });
     }
     handleChange = (e) => {
-        this.setState({ text: e })
+        this.setState({ text: e });
     }
     pickImage = async () => {
-        this.setState({ pickerOpened: true })
+        this.setState({ pickerOpened: true });
     };
 }
 
@@ -253,12 +253,12 @@ const mapStateToProps = state => ({
     dialogs: state.dialogsReducer.dialogs,
     id: state.userReducer.user._id,
     user: state.userReducer.user,
-})
+});
 const mapDispatchToProps = dispatch => ({
     addMessage: _ => dispatch(addMessage(_)),
     startSearch: _ => dispatch(startSearch(_)),
     stopSearch: _ => dispatch(stopSearch(_)),
     getMessages: _ => dispatch(getMessages(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(InputComponent)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(InputComponent);

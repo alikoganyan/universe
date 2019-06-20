@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
-import { View, Text, TextInput, ScrollView, TouchableOpacity, Alert } from 'react-native'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import { connect } from 'react-redux'
-import { setUser } from '../../actions/userActions'
-import { setNews, setFeed } from '../../actions/newsActions'
-import Button from '../../common/Button'
-import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
-import { GroupIcon, CloseIcon } from '../../assets/'
-import { setFeedReceivers } from '../../actions/participantsActions'
+import React, { Component } from 'react';
+import { View, Text, TextInput, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import { connect } from 'react-redux';
+import { setUser } from '../../actions/userActions';
+import { setNews, setFeed } from '../../actions/newsActions';
+import Button from '../../common/Button';
+import ImageComponent from '../../common/Image';
+import DefaultAvatar from '../../common/DefaultAvatar';
+import { GroupIcon, CloseIcon } from '../../assets/';
+import { setFeedReceivers } from '../../actions/participantsActions';
 const { Colors, sidePadding } = helper;
 const { lightGrey1, black, yellow, red } = Colors;
 const Wrapper = styled(View)`
@@ -17,7 +17,7 @@ const Wrapper = styled(View)`
     justify-content: center;
     flex-grow: 1;
     height: 100%;
-`
+`;
 
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
@@ -27,9 +27,9 @@ const StyledInput = styled(TextInput)`
     text-align: center;
     margin-bottom: 50px;
     ${({ style }) => style}
-`
+`;
 const Recievers = styled(View)`
-`
+`;
 const Reciever = styled(View)`
     display: flex;
     flex-direction: row;
@@ -37,11 +37,11 @@ const Reciever = styled(View)`
     justify-content: space-between;
     margin-top: 20px;
     
-`
+`;
 const RecieverInfo = styled(View)`
     display: flex;
     justify-content: space-between;
-`
+`;
 const DialogsLabel = styled(View)`
     display: flex;
     align-items: center;
@@ -49,16 +49,16 @@ const DialogsLabel = styled(View)`
     justify-content: flex-start;
     margin-top: 20px;
     margin-bottom: 10px;
-`
+`;
 const AddReciever = styled(Text)`
     color: ${yellow};
-`
+`;
 const DeleteFeed = styled(AddReciever)`
     color: ${red};
-`
+`;
 const RecieverComponent = (props) => {
     const { children, last = false, onDelete } = props;
-    const { image, first_name, last_name, phone_number } = children
+    const { image, first_name, last_name, phone_number } = children;
     return <Reciever last={last}>
         <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
             {image === '/images/default_avatar.jpg' ?
@@ -73,12 +73,12 @@ const RecieverComponent = (props) => {
             </View>
             <CloseIcon onPress={onDelete} />
         </View>
-    </Reciever>
-}
+    </Reciever>;
+};
 class Content extends Component {
     render() {
-        const { text } = this.state
-        const { receivers } = this.props
+        const { text } = this.state;
+        const { receivers } = this.props;
         return (
             <ScrollView contentContainerStyle={{ flexGrow: 1 }}
                 keyboardShouldPersistTaps='handled'>
@@ -113,7 +113,7 @@ class Content extends Component {
                         ))}
                     </ScrollView>
                 </Wrapper>
-            </ScrollView>)
+            </ScrollView>);
     }
     state = {
         receivers: [],
@@ -121,10 +121,10 @@ class Content extends Component {
         err: false
     }
     componentDidMount() {
-        const { feed, setFeedReceivers } = this.props
-        const { text, receivers } = feed
-        this.setState({ text, receivers })
-        setFeedReceivers(receivers)
+        const { feed, setFeedReceivers } = this.props;
+        const { text, receivers } = feed;
+        this.setState({ text, receivers });
+        setFeedReceivers(receivers);
     }
     deleteFeed = e => {
         Alert.alert(
@@ -142,24 +142,24 @@ class Content extends Component {
                 },
             ]
 
-        )
+        );
     }
     confirmDelete = () => {
         const { forward, setNews, feed, news } = this.props;
-        const newNews = [...news].filter(e => e._id !== feed._id)
-        setNews(newNews)
-        forward()
+        const newNews = [...news].filter(e => e._id !== feed._id);
+        setNews(newNews);
+        forward();
     }
     deleteReceiver = e => {
-        const { _id } = e
-        const { receivers } = this.state
-        const { setFeedReceivers } = this.props
-        const newReceivers = [...receivers].filter(e => e._id !== _id)
-        setFeedReceivers(newReceivers)
+        const { _id } = e;
+        const { receivers } = this.state;
+        const { setFeedReceivers } = this.props;
+        const newReceivers = [...receivers].filter(e => e._id !== _id);
+        setFeedReceivers(newReceivers);
     }
     addParticipant = () => {
-        const { addParticipant } = this.props
-        addParticipant()
+        const { addParticipant } = this.props;
+        addParticipant();
     }
     proceed = () => {
         const { receivers, setNews, setFeed, feed, news, back } = this.props;
@@ -168,24 +168,24 @@ class Content extends Component {
             ...feed,
             receivers,
             text,
-        }
-        const newNews = [...news]
-        const index = newNews.findIndex(e => e._id === feed._id)
-        newNews[index] = newFeed
+        };
+        const newNews = [...news];
+        const index = newNews.findIndex(e => e._id === feed._id);
+        newNews[index] = newFeed;
         if (text && receivers.length) {
-            setNews(newNews)
-            setFeed(newFeed)
-            back()
+            setNews(newNews);
+            setFeed(newFeed);
+            back();
         } else {
-            this.setState({ err: true })
+            this.setState({ err: true });
         }
 
     }
     handleCountry = (e) => {
-        this.setState({ country: e })
+        this.setState({ country: e });
     }
     handleChange = (e) => {
-        this.setState({ text: e })
+        this.setState({ text: e });
     }
 }
 const mapStateToProps = state => ({
@@ -193,11 +193,11 @@ const mapStateToProps = state => ({
     receivers: state.participantsReducer.news.receivers,
     feed: state.newsReducer.feed,
     news: state.newsReducer.news
-})
+});
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
     setFeed: _ => dispatch(setFeed(_)),
     setNews: _ => dispatch(setNews(_)),
     setFeedReceivers: _ => dispatch(setFeedReceivers(_))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

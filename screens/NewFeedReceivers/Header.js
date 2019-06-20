@@ -1,14 +1,14 @@
-import React, { Component } from 'react'
-import { View, Text, Dimensions, TouchableOpacity, TextInput } from 'react-native'
-import { BackIcon, SearchIcon, CloseIcon, CheckGreyIcon } from '../../assets/index'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import { connect } from 'react-redux'
-import { p_tasks_search, g_users } from '../../constants/api'
-import ImageComponent from '../../common/Image'
-import sendRequest from '../../utils/request'
+import React, { Component } from 'react';
+import { View, Text, Dimensions, TouchableOpacity, TextInput } from 'react-native';
+import { BackIcon, SearchIcon, CloseIcon, CheckGreyIcon } from '../../assets/index';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import { connect } from 'react-redux';
+import { p_tasks_search, g_users } from '../../constants/api';
+import ImageComponent from '../../common/Image';
+import sendRequest from '../../utils/request';
 const { sidePadding, HeaderHeight, fontSize, Colors } = helper;
-const { grey3 } = Colors
+const { grey3 } = Colors;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -19,18 +19,18 @@ const Header = styled(View)`
     justify-content: space-between;
     padding-right: ${sidePadding}px;
     padding-left: ${sidePadding}px;
-`
+`;
 const Left = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 const Input = styled(TextInput)`
     margin-left: ${Dimensions.get('window').width * 0.085};
-`
+`;
 const Right = styled(Left)`
     justify-content: flex-end;
-`
+`;
 // const UserImage = styled(Image)`
 //     background: red;
 //     width: 30px;
@@ -43,11 +43,11 @@ const HeaderText = styled(Text)`
     position: relative;
     left: -10px;
     color: ${grey3};
-`
+`;
 class HeaderComponent extends Component {
     render() {
         const { back, user, toProfile, receivers } = this.props;
-        const { search, find } = this.state
+        const { search, find } = this.state;
         const { image } = user;
         return (
             <Header>
@@ -78,14 +78,14 @@ class HeaderComponent extends Component {
                     }
                 </Right>
             </Header>
-        )
+        );
     }
     state = {
         search: false,
         find: ''
     }
     find = (e) => {
-        this.setState({ find: e })
+        this.setState({ find: e });
         e ? sendRequest({
             r_path: p_tasks_search,
             method: 'post',
@@ -94,71 +94,69 @@ class HeaderComponent extends Component {
                 withUser: true,
             },
             success: ({ users }) => {
-                const tasksList = []
+                const tasksList = [];
                 users.map(user => {
-                    const { tasks } = user
+                    const { tasks } = user;
                     tasks && tasks.map((e, i) => {
                         if (i === 0 && (e.creator === user._id || e.performers.includes(user._id))) {
-                            tasksList.push(user)
+                            tasksList.push(user);
                         }
-                    })
-                })
+                    });
+                });
                 setTimeout(() => {
-                    this.setState({ FlatListData: [...tasksList] })
-                    setTasks(tasksList)
-                }, 0)
+                    this.setState({ FlatListData: [...tasksList] });
+                    setTasks(tasksList);
+                }, 0);
             },
             failFunc: (err) => {
-                console.log(err)
+                console.log(err);
             }
         }) : sendRequest({
             r_path: g_users,
             method: 'get',
             success: ({ users }) => {
-                const tasksList = []
+                const tasksList = [];
                 users.map(user => {
-                    const { tasks } = user
+                    const { tasks } = user;
                     tasks && tasks.map((e, i) => {
                         if (i === 0 && (e.creator === user._id || e.performers.includes(user._id))) {
-                            tasksList.push(user)
+                            tasksList.push(user);
                         }
-                    })
-                })
+                    });
+                });
                 setTimeout(() => {
-                    this.setState({ FlatListData: [...tasksList] })
+                    this.setState({ FlatListData: [...tasksList] });
                     // setTasks([])
-                }, 0)
+                }, 0);
             },
             failFunc: (err) => {
-                console.log({ err })
+                console.log({ err });
             }
-        })
+        });
     }
     startSearch = () => {
-        this.setState({ search: true })
+        this.setState({ search: true });
     }
     stopSearch = () => {
-        this.setState({ search: false })
+        this.setState({ search: false });
     }
     addTask = () => {
         const { navigate } = this.props;
-        navigate('NewTask')
+        navigate('NewTask');
     }
     addParticipants = () => {
-        const { back } = this.props
-        back()
+        const { back } = this.props;
+        back();
     }
 }
 
-const mapStateToProps = state => {
-    return {
+const mapStateToProps = state => ({
         user: state.userReducer.user,
         tasks: state.tasksReducer.tasks,
         receivers: state.participantsReducer.news.receivers,
-    };
-};
+    });
 const mapDispatchToProps = dispatch => ({
     setTasks: _ => dispatch(setTasks(_))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);
 

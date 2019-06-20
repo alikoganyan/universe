@@ -1,27 +1,27 @@
-import React, { Component } from 'react'
-import { View, Text, Image, KeyboardAvoidingView, Dimensions, Platform } from 'react-native'
-import { BackIcon } from '../../assets/index'
-import styled from 'styled-components'
-import { setCurrentChat, setCurrentRoomId, setRoom } from '../../actions/messageActions'
-import SafeAreaView from '../../common/SafeAreaView'
+import React, { Component } from 'react';
+import { View, Text, Image, KeyboardAvoidingView, Dimensions, Platform } from 'react-native';
+import { BackIcon } from '../../assets/index';
+import styled from 'styled-components';
+import { setCurrentChat, setCurrentRoomId, setRoom } from '../../actions/messageActions';
+import SafeAreaView from '../../common/SafeAreaView';
 import helper from '../../utils/helpers';
-import Header from './Header'
-import Input from './Input'
-import Content from './Content'
-import { connect } from 'react-redux'
-import { socket } from '../../utils/socket'
-const { HeaderHeight } = helper
+import Header from './Header';
+import Input from './Input';
+import Content from './Content';
+import { connect } from 'react-redux';
+import { socket } from '../../utils/socket';
+const { HeaderHeight } = helper;
 const Wrapper = styled(View)`
     height: 100%;
     overflow: hidden;
-`
+`;
 const Bottom = styled(View)`
     position: absolute;
     bottom: 0;
     width: 100%;
     background: transparent;
     z-index: 3;
-`
+`;
 class Chat extends Component {
     render() {
         const { currentChat } = this.props;
@@ -35,7 +35,7 @@ class Chat extends Component {
                     </Bottom>
                 </Wrapper>
             </SafeAreaView>
-        )
+        );
     }
     state = {
         currentChat: null
@@ -51,12 +51,12 @@ class Chat extends Component {
     }
     navigateBack = () => {
         const { currentRoom, navigation } = this.props;
-        navigation.goBack()
+        navigation.goBack();
     }
     toProfile = () => {
         const { navigation } = this.props;
         const { navigate } = navigation;
-        navigate('Profile')
+        navigate('Profile');
     }
     navigate = (e) => {
         const { navigation } = this.props;
@@ -76,5 +76,5 @@ const mapDispatchToProps = dispatch => ({
     setRoom: _ => dispatch(setRoom(_)),
     setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
     setCurrentChat: _ => dispatch(setCurrentChat(_)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Chat)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

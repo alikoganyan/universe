@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { View, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native'
-import styled from 'styled-components'
-import FloatingLabel from 'react-native-floating-labels'
+import React, { Component } from 'react';
+import { View, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native';
+import styled from 'styled-components';
+import FloatingLabel from 'react-native-floating-labels';
 
 const Wrapper = styled(View)`
     padding-top: 0px;
@@ -9,36 +9,36 @@ const Wrapper = styled(View)`
     margin-bottom: 110px;
     padding: 0 50px;
     
-`
+`;
 const Group = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
     padding: 20px 0;
-`
+`;
 const GroupImage = styled(Image)`
     width: 100px;
     height: 100px;
     border-radius: 50;
     margin: 0 10px;
 
-`
+`;
 const ControlBox = styled(View)`
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
     margin-top: 35px;
-`
+`;
 const Create = styled(Text)`
     margin-left: 30px;
     color: #003058;
 
-`
+`;
 const Cancel = styled(Create)`
     color: #B1B1B1;
-`
+`;
 export default class Content extends Component {
     render() {
         const Input = (props) => {
@@ -55,9 +55,9 @@ export default class Content extends Component {
                 value={value}
                 style={{ ...style }}
                 editable={editable}
-            >{children}</FloatingLabel>
+            >{children}</FloatingLabel>;
 
-        }
+        };
         return (
             <SafeAreaView>
                 <Wrapper>
@@ -71,6 +71,6 @@ export default class Content extends Component {
                     </ControlBox>
                 </Wrapper>
             </SafeAreaView>
-        )
+        );
     }
 }

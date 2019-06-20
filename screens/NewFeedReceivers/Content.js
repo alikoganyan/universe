@@ -300,73 +300,73 @@ class Content extends Component {
         });
         const { collapsed, users } = this.state;
         const { setContacts } = this.props;
-        const newDCollapsed = [...collapsed]
+        const newDCollapsed = [...collapsed];
         for (let i = 0; i <= this.state.users.department.length; i++) {
-            newDCollapsed.push(false)
+            newDCollapsed.push(false);
         }
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newDCollapsed });
         sendRequest({
             r_path: g_users,
             method: 'get',
             success: (res) => {
-                setContacts(res.users)
-                const newUsers = { ...users }
-                newUsers.department[0].workers = res.users
-                this.setState({ users: newUsers })
+                setContacts(res.users);
+                const newUsers = { ...users };
+                newUsers.department[0].workers = res.users;
+                this.setState({ users: newUsers });
             },
             failFunc: (err) => {
-                console.log({ err })
+                console.log({ err });
             }
-        })
+        });
     }
     optionLeft = () => {
         const { options } = this.state;
-        const newState = { ...options }
-        const length = this.state.options.options.length
+        const newState = { ...options };
+        const length = this.state.options.options.length;
         newState.active = this.state.options.active < length - 1 ? this.state.options.active + 1 : 0;
-        this.setState({ options: newState })
+        this.setState({ options: newState });
 
     }
     optionRight = () => {
         const { options } = this.state;
-        const newState = { ...options }
-        const length = this.state.options.options.length
+        const newState = { ...options };
+        const length = this.state.options.options.length;
         newState.active = this.state.options.active > 0 ? this.state.options.active - 1 : length - 1;
-        this.setState({ options: newState })
+        this.setState({ options: newState });
 
     }
     addReceiver = (e) => {
         const { addReceiver, back, setReceivers, receivers } = this.props;
         const { usersToAdd } = this.state;
-        const newReceivers = [...receivers].filter(user => user._id !== e._id)
-        this.includes(e) ? setReceivers(newReceivers) : addReceiver(e)
+        const newReceivers = [...receivers].filter(user => user._id !== e._id);
+        this.includes(e) ? setReceivers(newReceivers) : addReceiver(e);
     }
     addAllReceivers = (e) => {
         const { addReceiver, back, receivers, setReceivers } = this.props;
-        const newReceivers = JSON.stringify(e) === JSON.stringify(receivers) ? [] : e
-        setReceivers(newReceivers)
+        const newReceivers = JSON.stringify(e) === JSON.stringify(receivers) ? [] : e;
+        setReceivers(newReceivers);
     }
     includes = (e) => {
         const { receivers } = this.props;
-        return !!receivers.filter(user => e._id === user._id)[0]
+        return !!receivers.filter(user => e._id === user._id)[0];
     }
     collapseDepartment = (i) => {
         const { collapsed } = this.state;
-        const newDCollapsed = [...collapsed]
+        const newDCollapsed = [...collapsed];
         newDCollapsed[i] = false;
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newDCollapsed });
     }
     showDepartment = (i) => {
         const { collapsed } = this.state;
-        const newDCollapsed = [...collapsed]
+        const newDCollapsed = [...collapsed];
         newDCollapsed[i] = true;
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newDCollapsed });
     }
     selectOption = (e) => {
         const { options } = this.state;
-        const newState = { ...options }
+        const newState = { ...options };
         newState.active = e;
-        this.setState({ options: newState })
+        this.setState({ options: newState });
     }
 }
 
@@ -378,7 +378,7 @@ const mapStateToProps = state => ({
     user: state.userReducer.user,
     users: state.userReducer,
     receivers: state.participantsReducer.news.receivers
-})
+});
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
@@ -389,5 +389,5 @@ const mapDispatchToProps = dispatch => ({
     addReceiver: _ => dispatch(addFeedReceiver(_)),
     setReceivers: _ => dispatch(setFeedReceivers(_)),
 
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

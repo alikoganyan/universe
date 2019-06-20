@@ -1,12 +1,12 @@
-import React, { Component } from 'react'
-import { View, Text, TextInput } from 'react-native'
-import styled from 'styled-components'
-import helper from '../../utils/helpers'
-import { connect } from 'react-redux'
-import Button from '../../common/Button'
-import { setUser, setRegisterUserSms } from '../../actions/userActions'
-import sendRequest from '../../utils/request'
-import { p_register, p_get_sms } from '../../constants/api'
+import React, { Component } from 'react';
+import { View, Text, TextInput } from 'react-native';
+import styled from 'styled-components';
+import helper from '../../utils/helpers';
+import { connect } from 'react-redux';
+import Button from '../../common/Button';
+import { setUser, setRegisterUserSms } from '../../actions/userActions';
+import sendRequest from '../../utils/request';
+import { p_register, p_get_sms } from '../../constants/api';
 const { Colors, fontSize } = helper;
 const { lightGrey1, blue, pink } = Colors;
 const Wrapper = styled(View)`
@@ -14,13 +14,13 @@ const Wrapper = styled(View)`
     justify-content: center;
     flex-grow: 1;
     
-`
+`;
 const Title = styled(Text)`
     width: 100%;
     margin-bottom: 30px;
     font-size: ${fontSize.large};
     text-align: center;
-`
+`;
 const SubTitle = styled(Text)`
     width: 100%;
     color: ${lightGrey1};
@@ -28,14 +28,14 @@ const SubTitle = styled(Text)`
     margin-bottom: 30px;
     font-size: ${fontSize.text};
 
-`
+`;
 const PhoneNumber = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
     margin-bottom: 20px;
 
-`
+`;
 
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
@@ -45,24 +45,24 @@ const StyledInput = styled(TextInput)`
     text-align: center;
     margin-bottom: 10px;
     ${({ style }) => style};
-`
+`;
 const Controls = styled(View)`
     align-self: center;
     justify-content: center;
     align-items: center;
-`
+`;
 const SendAgain = styled(Text)`
     text-align: center;
     font-size: ${fontSize.text};
     max-width: 90%;
-`
+`;
 const NoSMS = styled(SendAgain)`
     color: ${lightGrey1};
     margin-bottom: 10px;
-`
+`;
 class Content extends Component {
     render() {
-        const { deadline, sms, err } = this.state
+        const { deadline, sms, err } = this.state;
 
         return (
             <Wrapper>
@@ -94,7 +94,7 @@ class Content extends Component {
                     }
                 </Controls>
             </Wrapper>
-        )
+        );
     }
     state = {
         sms: '',
@@ -106,15 +106,15 @@ class Content extends Component {
     componentDidMount() {
         const countdown = setInterval(() => {
             const { deadline } = this.state;
-            this.setState({ deadline: deadline - 1 })
+            this.setState({ deadline: deadline - 1 });
             if (deadline === 0)
-                clearInterval(countdown)
-        }, 1000)
+                clearInterval(countdown);
+        }, 1000);
 
     }
     handleSMS = (e) => {
         const { error, tries, sms } = this.state;
-        const { forward, register } = this.props
+        const { forward, register } = this.props;
         if (error <= tries) {
             this.setState({ sms: e }, () => {
                 if (sms.length === 6) {
@@ -126,20 +126,20 @@ class Content extends Component {
                             password: sms
                         },
                         success: (res) => {
-                            console.log({ res })
+                            console.log({ res });
                             forward();
                         },
                         failFunc: (err) => {
-                            console.log(err)
-                            let { phone_number } = err
+                            console.log(err);
+                            const { phone_number } = err;
                             this.setState({
                                 invalidPhone: phone_number || null,
                                 err: true,
-                            })
+                            });
                         }
-                    })
+                    });
                 }
-            })
+            });
         }
 
     }
@@ -157,29 +157,29 @@ class Content extends Component {
                     forward();
                 },
                 failFunc: (err) => {
-                    console.log(err)
-                    let { phone_number } = err
+                    console.log(err);
+                    const { phone_number } = err;
                     this.setState({
                         invalidPhone: phone_number || null,
                         error: true
-                    })
+                    });
                 }
-            })
+            });
             const countdown = setInterval(() => {
                 const { deadline } = this.state;
-                this.setState({ deadline: deadline - 1 })
+                this.setState({ deadline: deadline - 1 });
                 if (deadline === 0)
-                    clearInterval(countdown)
-            }, 1000)
-        })
+                    clearInterval(countdown);
+            }, 1000);
+        });
     }
 }
 const mapStateToProps = state => ({
     id: state.userReducer.user._id,
     register: state.userReducer.register
-})
+});
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),
     setRegisterUserSms: _ => dispatch(setRegisterUserSms(_)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);
