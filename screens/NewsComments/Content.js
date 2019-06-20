@@ -226,17 +226,18 @@ class Content extends Component {
 					<SeeReceiversText>{receivers.length} получатели</SeeReceiversText>
 					<ArrowRightIcon left={true} noPaddingAll={true} />
 				</SeeReceivers>
-				{animationCompleted ? <FlatList
-									style={{ paddingRight: 5, paddingLeft: 5 }}
-									ListHeaderComponent={<View style={{ margin: 110 }} />}
-									ListFooterComponent={<View style={{ margin: 5 }} />}
-									contentContainerStyle={{ alignItems: 'stretch' }}
-									keyboardDismissMode={'on-drag'}
-									inverted={true}
-									data={reversedCommnets}
-									renderItem={({ item }) => <this.Message>{item}</this.Message>}
-									keyExtractor={(item, index) => index.toString()}
-								/> : null}
+				{animationCompleted ? 
+					<FlatList
+						style={{ paddingRight: 5, paddingLeft: 5 }}
+						ListHeaderComponent={<View style={{ margin: 110 }} />}
+						ListFooterComponent={<View style={{ margin: 5 }} />}
+						contentContainerStyle={{ alignItems: 'stretch' }}
+						keyboardDismissMode={'on-drag'}
+						inverted={true}
+						data={reversedCommnets}
+						renderItem={({ item }) => <this.Message>{item}</this.Message>}
+						keyExtractor={(item, index) => index.toString()}
+					/> : null}
 			</Wrapper>
 		);
 	}
@@ -244,7 +245,7 @@ class Content extends Component {
 		height: null,
 		animationCompleted: false
 	};
-	componetnDidMount(){
+	componentDidMount(){
 		InteractionManager.runAfterInteractions(() => {
             this.setState({
                 animationCompleted: true,

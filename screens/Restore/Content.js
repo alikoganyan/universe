@@ -1,15 +1,15 @@
-import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, Dimensions, Platform, TextInput } from 'react-native'
-import helper from '../../utils/helpers'
-import FloatingLabel from 'react-native-floating-labels'
-import styled from 'styled-components'
-import { p_get_restore_password } from '../../constants/api'
-import { setRegisterUserNumber } from '../../actions/userActions'
-import sendRequest from '../../utils/request'
-import Button from '../../common/Button'
-import { connect } from 'react-redux'
+import React, { Component } from 'react';
+import { View, Text, TouchableOpacity, Dimensions, Platform, TextInput } from 'react-native';
+import helper from '../../utils/helpers';
+import FloatingLabel from 'react-native-floating-labels';
+import styled from 'styled-components';
+import { p_get_restore_password } from '../../constants/api';
+import { setRegisterUserNumber } from '../../actions/userActions';
+import sendRequest from '../../utils/request';
+import Button from '../../common/Button';
+import { connect } from 'react-redux';
 const { Colors, HeaderHeight, fontSize } = helper;
-const { blue, grey1, lightGrey1, pink, back } = Colors;
+const { blue, grey1, lightGrey1, pink, black } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
     padding-bottom: 10%;
@@ -18,25 +18,25 @@ const Wrapper = styled(View)`
     justify-content: center;
     align-items: center;
     flex: 1;
-`
+`;
 const Title = styled(Text)`
     width: 100%;
     font-size: 20px;
     text-align: center;
     margin-bottom: 20px;
-`
+`;
 const ControlBar = styled(View)`
     display: flex;
     justify-content: center;
     min-width: 250px;
     align-items: center;
     margin-top: 20px;
-`
+`;
 const PhoneNumber = styled(View)`
     display: flex;
     flex-direction: row;
     align-items: flex-end;
-`
+`;
 const StyledInput = styled(TextInput)`
     border: 1px solid ${lightGrey1};
     border-width: 0;
@@ -46,23 +46,23 @@ const StyledInput = styled(TextInput)`
     margin-bottom: 10px;
     margin-left: 20px;
     ${({ style }) => style};
-`
+`;
 const Label = styled(Title)`
     font-size: 15px;
     color: ${lightGrey1};
     margin-bottom: 0px;
-`
+`;
 const Error = styled(Text)`
     font-size: ${fontSize.sm};
-`
+`;
 
 const ErrorText = styled(Text)`
     font-size: ${fontSize.sm};
     text-align: center;
-`
+`;
 const ErrorTextLink = styled(ErrorText)`
     color: ${blue};
-`
+`;
 const Input = (props) => {
     const { children, password = false, value, style, editable, inputStyle, labelStyle, keyboardType } = props;
     return <FloatingLabel
@@ -80,9 +80,9 @@ const Input = (props) => {
         value={value}
         style={{ ...style }}
         editable={editable}
-    >{children}</FloatingLabel>
+    >{children}</FloatingLabel>;
 
-}
+};
 class Content extends Component {
     render() {
         const { country, phone, error } = this.state;
@@ -113,7 +113,7 @@ class Content extends Component {
                     <Button onPress={this.proceed} style={{ width: '100%' }} background={blue} color={'#fff'} >Восстановить пароль</Button>
                 </ControlBar>
             </Wrapper>
-        )
+        );
     }
     state = {
         error: false,
@@ -122,9 +122,9 @@ class Content extends Component {
     }
     componentDidMount() {
         const { register } = this.props;
-        const { phone } = register
-        const phone_number = phone.split('+7')[1]
-        this.setState({ phone: phone_number })
+        const { phone } = register;
+        const phone_number = phone.split('+7')[1];
+        this.setState({ phone: phone_number });
     }
     handleCountry = e => {
         this.setState({ country: e, error: false });
@@ -133,17 +133,17 @@ class Content extends Component {
         this.setState({ phone: e, error: false });
     }
     proceed = e => {
-        this.getRestorePassword()
+        this.getRestorePassword();
     }
     getRestorePassword = e => {
         const { country, phone } = this.state;
         const { navigate, setRegisterUserNumber } = this.props;
-        const phone_number = country.concat(phone)
+        const phone_number = country.concat(phone);
         if (!phone) {
-            this.setState({ error: <Error>Введите телефон</Error> })
+            this.setState({ error: <Error>Введите телефон</Error> });
         }
         if (phone && phone.length < 9) {
-            this.setState({ error: <Error>Проверьте правильность введенного номера</Error> })
+            this.setState({ error: <Error>Проверьте правильность введенного номера</Error> });
         }
         (phone_number && phone && phone.length >= 9) && sendRequest({
             r_path: p_get_restore_password,
@@ -153,30 +153,30 @@ class Content extends Component {
             },
             success: (res) => {
                 setRegisterUserNumber(phone_number);
-                setTimeout(() => navigate('Restore2'), 0)
+                setTimeout(() => navigate('Restore2'), 0);
             },
             failFunc: (err) => {
-                console.log(err)
-                let { phone_number, password } = err
+                console.log(err);
+                let { phone_number, password } = err;
                 this.setState({
                     error: <TouchableOpacity onPress={this.signup}><ErrorText>Телефона нет в системе. <ErrorTextLink>Зарегистрируйтесь</ErrorTextLink></ErrorText></TouchableOpacity>,
                     loading: false,
                     invalidPhone: phone_number || null,
                     invalidPassword: password || null
-                })
+                });
             }
-        })
+        });
     }
     signup = () => {
         const { navigate } = this.props;
-        navigate('Signup')
+        navigate('Signup');
     }
 }
 const mapStateToProps = state => ({
     id: state.userReducer.id,
     register: state.userReducer.register,
-})
+});
 const mapDispatchToProps = dispatch => ({
     setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

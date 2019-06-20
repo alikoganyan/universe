@@ -168,7 +168,7 @@ const FlatListHeader = styled(View)
 `;
 class Content extends Component {
     render() {
-        const { users, collapsed, options, groups } = this.state;
+        const { users, collapsed, options, groups, animationCompleted } = this.state;
         const { department } = users;
         const { active } = options;
         return (

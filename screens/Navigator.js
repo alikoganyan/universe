@@ -138,7 +138,7 @@ export const createRootNavigator = (logged = false) => {
         TaskEdit: { screen: TaskEdit },
         GroupEdit: { screen: GroupEdit },
     }, {
-        initialRouteName: logged ? "Dialogs" : "Login",
+        initialRouteName: logged ? "Dialogs" : "Restore3",
         headerMode: "none"
     });
 

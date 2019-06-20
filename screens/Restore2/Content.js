@@ -1,11 +1,12 @@
-import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
-import helper from '../../utils/helpers'
-import styled from 'styled-components'
-import { connect } from 'react-redux'
-import { setRegisterUserSms } from '../../actions/userActions'
-import Button from '../../common/Button'
-import sendRequest from '../../utils/request'
+import React, { Component } from 'react';
+import { View, Text, TouchableOpacity, TextInput } from 'react-native';
+import helper from '../../utils/helpers';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { setRegisterUserSms } from '../../actions/userActions';
+import Button from '../../common/Button';
+import { p_check_restore_password } from '../../constants/api';
+import sendRequest from '../../utils/request';
 const { Colors } = helper;
 const { blue, grey1, lightGrey1, pink, black } = Colors;
 const Wrapper = styled(View)`
@@ -16,45 +17,45 @@ const Wrapper = styled(View)`
     flex-direction: column;
     justify-content: center;
     align-items: center;
-`
+`;
 const Title = styled(Text)`
     width: 100%;
     font-size: 18px;
     text-align: center;
     margin-bottom: 20px;
-`
+`;
 const ControlBar = styled(View)`
     display: flex;
     justify-content: center;
     width: 100%;
     align-items: center;
-`
+`;
 const PhoneNumber = styled(View)`
     display: flex;
     flex-direction: row;
     margin-bottom: 30px;
-`
+`;
 const Label = styled(Title)`
     font-size: 13px;
     color: ${grey1};
     margin-bottom: 0px;
-`
+`;
 const NoCode = styled(View)`
     display: flex;
     justify-content: center;
-`
+`;
 const NoCodeLabel = styled(Text)`
     font-size: 11px;
     color: ${grey1};
     text-align: center;
-`
+`;
 const NoCodeLabelLink = styled(NoCodeLabel)`
     color: ${blue};
-`
+`;
 const NoCodeTimer = styled(Text)`
     font-size: 11px;
     text-align: center;
-`
+`;
 const StyledInput = styled(TextInput)`
     border-width: 0;
     border-bottom-width: 1;
@@ -64,7 +65,7 @@ const StyledInput = styled(TextInput)`
     padding-left: 0;
     width: 100%;
     padding-bottom: 10px;
-`
+`;
 class Content extends Component {
     render() {
         const { code, error, deadline } = this.state;
