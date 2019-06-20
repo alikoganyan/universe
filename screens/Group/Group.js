@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, Platform } from 'react-native'
 import styled from 'styled-components'
-import { setCurrentChat } from '../../actions/messageActions'
+import { setCurrentChat, setCurrentRoomId, setRoom } from '../../actions/messageActions'
 import SafeAreaView from '../../common/SafeAreaView'
 import helper from '../../utils/helpers';
 import Header from './Header'
@@ -40,18 +40,20 @@ class Chat extends Component {
     componentDidMount() {
     }
     componentWillUnmount() {
-        const { setCurrentChat, currentChat, user } = this.props;
-        setCurrentChat(null)
-        socket.emit('leave', { room: currentChat, viewer: user._id })
+        const { setCurrentChat, setRoom, setCurrentRoomId, currentChat, user } = this.props;
+        socket.emit('leave', { room: currentChat, viewer: user._id });
+        setCurrentChat(null);
+        setCurrentRoomId(null);
+        setRoom(null);
     }
     navigateBack = () => {
         const { navigation } = this.props;
-        navigation.goBack()
+        navigation.goBack();
     }
     toProfile = () => {
         const { navigation } = this.props;
         const { navigate } = navigation;
-        navigate('Profile')
+        navigate('Profile');
     }
 }
 
@@ -66,5 +68,6 @@ const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
     setCurrentChat: _ => dispatch(setCurrentChat(_)),
+    setCurrentRoomId: _ => dispatch(setCurrentRoomId(_))
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Chat)

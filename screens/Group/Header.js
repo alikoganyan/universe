@@ -90,8 +90,8 @@ const ToProfile = styled(TouchableOpacity)`
 
 class HeaderComponent extends Component {
     render() {
-        const { back, search, startSearch, stopSearch, currentDialog } = this.props
-        const { name, participants, image, _id } = currentDialog
+        const { back, search, startSearch, stopSearch, currentDialog } = this.props;
+        const { name, participants, image, _id } = currentDialog;
         return (
             <Header>
                 <Top>
@@ -138,15 +138,15 @@ class HeaderComponent extends Component {
                     </Bottom>
                 )}
             </Header>
-        )
+        );
     }
     componentWillUnmount() {
         const { stopSearch } = this.props;
-        stopSearch()
+        stopSearch();
     }
     toProfile = () => {
         const { toProfile } = this.props;
-        toProfile()
+        toProfile();
     }
     find = (e) => {
         const { getMessages, dialogs, currentRoom, currentRoomId } = this.props;

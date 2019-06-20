@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, Image, KeyboardAvoidingView, Dimensions, Platform } from 'react-native'
 import { BackIcon } from '../../assets/index'
 import styled from 'styled-components'
-import { setCurrentChat } from '../../actions/messageActions'
+import { setCurrentChat, setCurrentRoomId, setRoom } from '../../actions/messageActions'
 import SafeAreaView from '../../common/SafeAreaView'
 import helper from '../../utils/helpers';
 import Header from './Header'
@@ -24,11 +24,12 @@ const Bottom = styled(View)`
 `
 class Chat extends Component {
     render() {
+        const { currentChat } = this.props;
         return (
             <SafeAreaView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
                 <Wrapper>
-                    <Header toProfile={this.toProfile} back={this.navigateBack} currentChat={this.props.currentChat} />
-                    <Content navigate={this.props.navigation.navigate} />
+                    <Header toProfile={this.toProfile} back={this.navigateBack} currentChat={currentChat} />
+                    <Content navigate={this.navigate} />
                     <Bottom>
                         <Input />
                     </Bottom>
@@ -42,9 +43,11 @@ class Chat extends Component {
     componentDidMount() {
     }
     componentWillUnmount() {
-        const { setCurrentChat, currentRoom, currentChat, user } = this.props;
-        setCurrentChat(null)
-        socket.emit('leave', { room: currentChat, viewer: user._id })
+        const { setRoom, setCurrentChat, setCurrentRoomId, currentRoom, currentChat, user } = this.props;
+        socket.emit('leave', { room: currentChat, viewer: user._id });
+        setCurrentChat(null);
+        setCurrentRoomId(null);
+        setRoom(null);
     }
     navigateBack = () => {
         const { currentRoom, navigation } = this.props;
@@ -54,6 +57,10 @@ class Chat extends Component {
         const { navigation } = this.props;
         const { navigate } = navigation;
         navigate('Profile')
+    }
+    navigate = (e) => {
+        const { navigation } = this.props;
+        navigation.navigate(e);
     }
 }
 
@@ -67,6 +74,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
+    setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
     setCurrentChat: _ => dispatch(setCurrentChat(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Chat)

@@ -57,8 +57,8 @@ class Content extends Component {
     render() {
         const { selectedMessage } = this.state
         const { search, user, dialogs, currentChat } = this.props;
-        console.log(currentChat);
-        const messages = [...dialogs].filter(e => e.room === currentChat)[0].messages;
+        const dialog = [...dialogs].filter(e => e.room === currentChat)[0];
+        const messages = dialog ? dialog.messages : [];
         const reversedMessages = [...messages].sort((x, y) => {
             return x.timeSent < y.timeSent
         });
@@ -105,20 +105,24 @@ class Content extends Component {
         selectedMessage: {},
     }
     componentDidMount() {
-        const { dialogs, messages, setDialogs, getMessages, currentRoomId, user } = this.props;
-        const newMessages = []
-        messages.map((e, i) => {
-            newMessages.push({ ...messages[i], viewers: e.sender._id !== user._id ? [...messages[i].viewers, user._id] : messages[i].viewers })
-        });
-        const newDialogs = [...dialogs]
-        const newDialog = newDialogs.filter(e => e._id === currentRoomId)[0]
-        if (newDialog) {
-            const newDialogIndex = newDialogs.findIndex(e => e._id === currentRoomId)
-            newDialogs[newDialogIndex] = newDialog
-            newDialog.messages = newMessages
-            getMessages(newMessages)
-            setDialogs(newDialogs)
-        }
+        // const { dialogs, messages, setDialogs, getMessages, currentRoomId, user } = this.props;
+        // const newMessages = [];
+        // messages.map((e, i) => {
+        //     newMessages.push({ 
+        //             ...messages[i], 
+        //             viewers: e.sender._id !== user._id ? 
+        //             [...messages[i].viewers, user._id] : 
+        //             messages[i].viewers })
+        // });
+        // const newDialogs = [...dialogs];
+        // const newDialog = newDialogs.filter(e => e._id === currentRoomId)[0];
+        // if (newDialog) {
+        //     const newDialogIndex = newDialogs.findIndex(e => e._id === currentRoomId);
+        //     newDialogs[newDialogIndex] = newDialog;
+        //     newDialog.messages = newMessages;
+        //     // getMessages(newMessages);
+        //     // setDialogs(newDialogs);
+        // }
 
     }
     turnToTask = e => {

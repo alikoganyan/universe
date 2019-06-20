@@ -39,7 +39,7 @@
     "rules":
     {
         // "no-console": 1,
-        // "react-native/no-inline-styles": 2,
+        "react-native/no-inline-styles": 2,
         "comma-dangle": 0,
         "react/prop-types": 0,
         "react/jsx-uses-vars": 1,
@@ -52,6 +52,7 @@
         "react/no-unsafe": "error",
         "react/no-unknown-property": "warn",
         "react-native/no-unused-styles": "warn",
-        "react-native/no-color-literals": "warn"
+        "react-native/no-color-literals": "warn",
+        "semi": 2
     }
 }

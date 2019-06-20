@@ -14,26 +14,31 @@ const initialState = {
     currentRoomId: null,
     messages: [],
 }
-const messageReducer = (state = initialState, action) => {
-    switch (action.type) {
+export default messageReducer = (state = initialState, action) => {
+    const { type, payload } = action;
+    switch (type) {
         case GET_MESSAGES:
-            return { ...state, messages: action.payload };
+            return { ...state, messages: [...payload] };
+
         case SET_ROOM:
-            return { ...state, currentRoom: action.payload };
+            return { ...state, currentRoom: payload };
+
         case ADD_MESSAGE:
-            return { ...state, messages: [...state.messages, action.payload] };
+            return { ...state, messages: [...state.messages, payload] };
+
         case STOP_SEARCH:
             return { ...state, search: false };
+
         case SET_CURRENT_CHAT:
-            return { ...state, currentChat: String(action.payload) };
-            break;
+            return { ...state, currentChat: payload };
+
         case SET_CURRENT_ROOM_ID:
-            return { ...state, currentRoomId: action.payload };
+            return { ...state, currentRoomId: payload };
+
         case START_SEARCH:
             return { ...state, search: true };
+
         default:
             return state;
     }
 }
-
-export default messageReducer
