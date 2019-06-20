@@ -66,8 +66,8 @@ import { Provider } from "react-redux";
 import devToolsEnhancer from "remote-redux-devtools";
 import { composeWithDevTools } from "redux-devtools-extension/logOnlyInProduction";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
-import { setUser, setAuth, setRegisterUserNumber } from './actions/userActions'
-import { socket, connectToSocket, disconnectFromSocket } from './utils/socket'
+import { setUser, setAuth, setRegisterUserNumber } from './actions/userActions';
+import { socket, connectToSocket, disconnectFromSocket } from './utils/socket';
 
 
 console.disableYellowBox = true;

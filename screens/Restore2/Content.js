@@ -94,7 +94,7 @@ class Content extends Component {
                         </NoCode>}
                 </ControlBar>
             </Wrapper>
-        )
+        );
     }
     state = {
         error: false,
@@ -104,10 +104,10 @@ class Content extends Component {
     componentDidMount() {
         const countdown = setInterval(() => {
             const { deadline } = this.state;
-            this.setState({ deadline: deadline - 1 })
+            this.setState({ deadline: deadline - 1 });
             if (deadline === 0)
-                clearInterval(countdown)
-        }, 1000)
+                clearInterval(countdown);
+        }, 1000);
 
     }
     handleChangeCode = e => {
@@ -118,14 +118,14 @@ class Content extends Component {
         if (code.length === 6) {
             this.checkCode();
         } else {
-            this.setState({ error: true })
+            this.setState({ error: true });
         }
     }
     checkCode = () => {
         const { navigate, register, setSms } = this.props;
         const { code } = this.state;
         const phone_number = register.phone;
-        setSms(code)
+        setSms(code);
         sendRequest({
             r_path: p_check_restore_password,
             method: 'post',
@@ -138,26 +138,26 @@ class Content extends Component {
             },
             failFunc: (err) => {
                 console.log(err);
-                this.setState({ error: true })
+                this.setState({ error: true });
             }
-        })
+        });
     }
     sendAgain = () => {
         this.setState({ deadline: 30 }, () => {
-            const { deadline } = this.state
-            this.checkCode()
+            const { deadline } = this.state;
+            this.checkCode();
             const countdown = setInterval(() => {
-                this.setState({ deadline: deadline - 1 })
+                this.setState({ deadline: deadline - 1 });
                 if (deadline === 0)
-                    clearInterval(countdown)
-            }, 1000)
-        })
+                    clearInterval(countdown);
+            }, 1000);
+        });
     }
 }
 const mapStateToProps = state => ({
     register: state.userReducer.register,
-})
+});
 const mapDispatchToProps = dispatch => ({
     setSms: _ => dispatch(setRegisterUserSms(_)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

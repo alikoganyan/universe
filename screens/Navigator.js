@@ -138,9 +138,9 @@ export const createRootNavigator = (logged = false) => {
         TaskEdit: { screen: TaskEdit },
         GroupEdit: { screen: GroupEdit },
     }, {
-        initialRouteName: logged ? "Dialogs" : "Restore3",
+        initialRouteName: logged ? "Dialogs" : "Login",
         headerMode: "none"
     });
 
     return createAppContainer(AppStackNavigator); 
-}
+};
