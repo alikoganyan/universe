@@ -10,7 +10,7 @@ import { p_settings } from '../../constants/api'
 import { setSettings } from '../../actions/userActions'
 
 const { Colors, sidePadding, fontSize, borderRadius, HeaderHeight } = helper;
-const { lightGrey1, blue, lightBlue, grey2 } = Colors;
+const { lightGrey1, blue, lightBlue, grey2, white, black } = Colors;
 const LangPickerPosed = posed.View({
     visible: { bottom: 170 },
     hidden: { bottom: -Dimensions.get('window').height }
@@ -116,10 +116,10 @@ const Toggle = (props) => {
             height: 20,
             borderRadius: 12,
             elevation: 3,
-            backgroundColor: '#fff', // rgb(102,134,205)
+            backgroundColor: white, // rgb(102,134,205)
         }}
         circleColorOn={blue}
-        circleColorOff='#fff'
+        circleColorOff={white}
         backgroundColorOn={lightBlue}
         backgroundColorOff={lightGrey1}
         switchOn={switchOn}
@@ -172,7 +172,7 @@ class Content extends Component {
                         <PolicyLink>Условия использования</PolicyLink>
                     </Policy>
                     <LangPicker pose={pickerOpened ? 'visible' : 'hidden'}>
-                        {Object.values(langs).map((e, i) => <TouchableOpacity key={i}><Text style={{ color: i === 0 ? blue : 'black' }}>{e}</Text></TouchableOpacity>)}
+                        {Object.values(langs).map((e, i) => <TouchableOpacity key={i}><Text style={{ color: i === 0 ? blue : black }}>{e}</Text></TouchableOpacity>)}
                         <TouchableOpacity onPress={this.pickerClose}><Text>Отменить</Text></TouchableOpacity>
                     </LangPicker>
                 </Wrapper>

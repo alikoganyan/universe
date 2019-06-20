@@ -73,7 +73,7 @@ class Content extends Component {
         const { active } = options;
         const { user, activeTask, tasks } = this.props
         const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
-        const tasksList = [...tasks].filter(e => e._id === user._id).map(e => e.tasks);
+        const tasksList = [...tasks].map(e => e.tasks);
         const outTasks = flatten(tasksList).filter(e => e.creator._id === user._id);
         return (
             <SafeAreaView>

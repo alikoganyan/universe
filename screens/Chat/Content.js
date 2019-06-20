@@ -56,7 +56,8 @@ const StyledImageBackground = styled(ImageBackground)`
 class Content extends Component {
     render() {
         const { selectedMessage } = this.state
-        const { messages, search, user } = this.props
+        const { search, user, dialogs, currentChat } = this.props;
+        const messages = [...dialogs].filter(e => e.room === currentChat)[0].messages;
         const reversedMessages = [...messages].sort((x, y) => {
             return x.timeSent < y.timeSent
         });
@@ -103,7 +104,9 @@ class Content extends Component {
         selectedMessage: {},
     }
     componentDidMount() {
-        const { dialogs, messages, setDialogs, getMessages, currentRoomId, user } = this.props;
+        const { dialogs, currentChat, setDialogs, getMessages, currentRoomId, user } = this.props;
+        const messages = [...dialogs].filter(e => e.room === currentChat)[0].messages;
+        // console.log({messages})
         const newMessages = []
         messages.map((e, i) => {
             newMessages.push({ ...messages[i], viewers: e.sender._id !== user._id ? [...messages[i].viewers, user._id] : messages[i].viewers })
@@ -114,7 +117,7 @@ class Content extends Component {
             const newDialogIndex = newDialogs.findIndex(e => e._id === currentRoomId)
             newDialogs[newDialogIndex] = newDialog
             newDialog.messages = newMessages
-            getMessages(newMessages)
+            // getMessages(newMessages)
             setDialogs(newDialogs)
         }
 
@@ -151,9 +154,9 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-    messages: state.messageReducer.messages,
     search: state.messageReducer.search,
     currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
     currentRoomId: state.messageReducer.currentRoomId,
     user: state.userReducer.user,
     dialogs: state.dialogsReducer.dialogs,

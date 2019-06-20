@@ -62,6 +62,7 @@ const BoxInner = styled(AnimatedBox)`
 const BoxItem = styled(Text)`
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     color: #A7B0BA;
+    width: 80%;
 `
 const BoxInnerItem = styled(View)`
     padding: 20px 0;

@@ -7,7 +7,7 @@ import { setRegisterUserSms } from '../../actions/userActions'
 import Button from '../../common/Button'
 import sendRequest from '../../utils/request'
 const { Colors } = helper;
-const { blue, grey1, lightGrey1, pink } = Colors;
+const { blue, grey1, lightGrey1, pink, black } = Colors;
 const Wrapper = styled(View)`
     flex: 1;
     padding: 0 20%;
@@ -77,7 +77,7 @@ class Content extends Component {
                 <PhoneNumber>
                     <StyledInput
                         autoFocus={true}
-                        style={{ color: error ? pink : 'black', borderBottomColor: error ? pink : lightGrey1 }}
+                        style={{ color: error ? pink : black, borderBottomColor: error ? pink : lightGrey1 }}
                         value={code}
                         maxLength={6}
                         onChangeText={this.handleChangeCode}

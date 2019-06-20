@@ -13,13 +13,15 @@ class FirstScreen extends Component {
         drawerLockedMode: 'locked-open',
     }
     render() {
-        const { logged, loaded } = this.state
+        const { logged, loaded } = this.state;
+        const { navigation } = this.props;
+        console.log('123')
         return loaded ? <View>
                             {
                                 logged ? 
                                     // <Text>Dialogs</Text> : 
-                                    <Dialogs navigation={this.props.navigation}/> : 
-                                    <Login navigation={this.props.navigation}/>
+                                    <Dialogs navigation={navigation}/> : 
+                                    <Login navigation={navigation}/>
                             }
                         </View> : <SplashScreen />
 
@@ -36,14 +38,15 @@ class FirstScreen extends Component {
         //     console.log(res, '123')
         //     if(value._id) this.setState({loaded: true})
         // });
-        AsyncStorage.getItem('user').then(res => {
+        AsyncStorage.getItem('user')
+        .then(res => {
             value = JSON.parse(res);
             if (value) {
                 // this.login() // restore
                 this.props.setUser({ ...value })
                 this.props.setAuth(value.access_token)
+                connectToSocket(value.access_token)
                 setTimeout(() => {
-                    connectToSocket()
                     console.log(value.access_token)
                     this.setState({ logged: true, phone: value.phone_number.slice(2), password: value.password })
                 }, 0)

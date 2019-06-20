@@ -85,6 +85,7 @@ const BoxInner = styled(AnimatedBox)`
 `
 const BoxItem = styled(Text)`
     color: #A7B0BA;
+    width: 80%;
 `
 const BoxInnerItem = styled(View)`
     padding: 10px;

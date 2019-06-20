@@ -10,7 +10,7 @@ import Button from '../../common/Button'
 import sendRequest from '../../utils/request'
 import { connectToSocket } from '../../utils/socket'
 const { Colors, fontSize } = helper;
-const { lightGrey1, blue, pink } = Colors;
+const { lightGrey1, blue, pink, black } = Colors;
 const { large, sm } = fontSize;
 const Wrapper = styled(View)`
     padding: 0 20%;
@@ -107,7 +107,7 @@ class Content extends Component {
                             placeholder={'XXX-XXX-XX-XX'}
                             keyboardType={'phone-pad'}
                             maxLength={10}
-                            style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10, color: invalidPhone ? pink : 'black', borderColor: invalidPhone ? pink : lightGrey1 }}
+                            style={{ margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10, color: invalidPhone ? pink : black, borderColor: invalidPhone ? pink : lightGrey1 }}
                         />
                     </PhoneNumber>
                     <ControlBar>
@@ -123,7 +123,7 @@ class Content extends Component {
                         value={password}
                         placeholder={'Пароль'}
                         secureTextEntry={true}
-                        style={{ color: invalidPassword ? pink : 'black', borderColor: invalidPassword ? pink : lightGrey1 }}
+                        style={{ color: invalidPassword ? pink : black, borderColor: invalidPassword ? pink : lightGrey1 }}
                     />
                     <ControlBar>
                         <TouchableOpacity onPress={this.restorePass}>
@@ -191,10 +191,12 @@ class Content extends Component {
                 const { access_token, data } = res
                 setAuth(access_token)
                 setUser(data)
-                connectToSocket()
                 this.storeUserData({ ...data, password, access_token })
                 this.setState({ loading: false })
-                setTimeout(() => navigate('Dialogs'), 0)
+                setTimeout(() => {
+                    connectToSocket(access_token);
+                    navigate('Dialogs');
+                }, 0)
             },
             failFunc: (err) => {
                 const phone = err.length ? err.filter(e => e.param === 'phone_number')[0] : err.phone_number;

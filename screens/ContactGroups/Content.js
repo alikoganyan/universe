@@ -91,6 +91,7 @@ const BoxItem = styled(Text)
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     color: #A7B0BA;
     flex: 1;
+    width: 80%;
 `
 const BoxInnerItem = styled(TouchableOpacity)
 `

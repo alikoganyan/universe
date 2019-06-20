@@ -13,6 +13,7 @@ import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 import { SearchShadow } from '../../assets/'
 const { Colors, sidePadding, fontSize, HeaderHeight, borderRadius } = helper;
+const { white, lightBlue2 } = Colors;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
     background-color: ${Colors.background};
@@ -44,7 +45,7 @@ class HeaderComponent extends Component {
         return (
             <Header
                 style={{
-                    shadowColor: Platform.OS === 'ios' ? '#191e5aca' : 'white',
+                    shadowColor: Platform.OS === 'ios' ? lightBlue2 : white,
                     shadowOffset: {
                         width: 0,
                         height: Platform.OS === 'ios' ? 1 : 25,

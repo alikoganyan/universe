@@ -41,7 +41,8 @@ const MessageOption = styled(TouchableOpacity)`
 class Content extends Component {
     render() {
         const { selectedMessage } = this.state
-        const { messages, search, user } = this.props
+        const { dialogs, currentChat, search, user } = this.props;
+        const messages = [...dialogs].filter(e => e.room === currentChat)[0].messages;
         const reversedMessages = [...messages].sort((x, y) => {
             return x.timeSent < y.timeSent
         });
@@ -120,9 +121,10 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-    messages: state.messageReducer.messages,
+    dialogs: state.dialogsReducer.dialogs,
     search: state.messageReducer.search,
     currentRoom: state.messageReducer.currentRoom,
+    currentChat: state.messageReducer.currentChat,
     user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({

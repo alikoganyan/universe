@@ -9,7 +9,7 @@ import sendRequest from '../../utils/request'
 import Button from '../../common/Button'
 import { connect } from 'react-redux'
 const { Colors, HeaderHeight, fontSize } = helper;
-const { blue, grey1, lightGrey1, pink } = Colors;
+const { blue, grey1, lightGrey1, pink, back } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
     padding-bottom: 10%;
@@ -103,7 +103,7 @@ class Content extends Component {
                         value={phone}
                         placeholder={'XXX-XXX-XX-XX'}
                         maxLength={10}
-                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? pink : 'black', borderColor: error ? pink : lightGrey1 }}
+                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? pink : black, borderColor: error ? pink : lightGrey1 }}
                         keyboardType={'phone-pad'} />
                 </PhoneNumber>
                 {

@@ -8,6 +8,9 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import helper from '../../utils/helpers'
 import ImageLoader from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Circle'
+import helpers from '../../utils/helpers'
+const { Colors } = helpers;
+const { grey4 } = Colors;
 const Wrapper = styled(View)`
     padding-top: 0px;
     background: white;
@@ -85,7 +88,7 @@ export default class Settings extends Component {
                                 const item = this.state.names[e];
                                 if (item.length > 0) {
                                     return <ContactsListItem key={`letter_${i}`}>
-                                        <Letter><Text style={{ fontSize: 18, color: '#6A6A6A' }}>{e}</Text></Letter>
+                                        <Letter><Text style={{ fontSize: 18, color: grey4 }}>{e}</Text></Letter>
                                         <Contact>{item.map((e, i) => <ContactInfo key={`contact_${i}`}>
                                             <ContactImage source={{ uri: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg' }} />
                                             <Text>{e.name}</Text>

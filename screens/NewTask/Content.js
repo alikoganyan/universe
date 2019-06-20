@@ -209,7 +209,8 @@ class Content extends Component {
                                 !taskName ||
                                 !taskText ||
                                 !deadlineDate ||
-                                !deadlineTime
+                                !deadlineTime ||
+                                !receivers.length
                             }
                             onPress={this.proceed}
                             background={purple}

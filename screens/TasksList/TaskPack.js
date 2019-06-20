@@ -182,9 +182,9 @@ class TaskPack extends Component {
     componentDidMount() {
         const { title, tasks, user } = this.props;
         const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
-        const tl = [...tasks].filter(e => title == 'inc' ? e._id === user._id : e._id !== user._id).map(e => e.tasks);
+        const tl = [...tasks].map(e => e.tasks);
         const outTasks = [...flatten(tl)].filter(e => e.creator._id === user._id);
-        const incTasks = [...flatten(tl)].filter(e => true);
+        const incTasks = [...flatten(tl)].filter(e => !!e.performers.filter(e => e._id === user._id)[0]);
         const tasksList = title == 'inc' ? incTasks : outTasks;
         this.setState({ taskPack: tasksList });
     }

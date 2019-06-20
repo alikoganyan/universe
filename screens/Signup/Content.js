@@ -9,7 +9,7 @@ import sendRequest from '../../utils/request'
 import { p_get_sms } from '../../constants/api'
 import Button from '../../common/Button'
 const { Colors, fontSize } = helper;
-const { lightGrey1, blue, pink } = Colors;
+const { lightGrey1, blue, pink, black } = Colors;
 const Wrapper = styled(View)`
     padding: 0 20%;
     justify-content: center;
@@ -102,7 +102,7 @@ class Content extends Component {
                         value={phone}
                         placeholder={'XXX-XXX-XX-XX'}
                         maxLength={10}
-                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? pink : 'black', borderColor: error ? pink : lightGrey1 }}
+                        style={{ margin: 0, width: '75%', flex: 1, textAlign: 'left', paddingLeft: 20, color: error ? pink : black, borderColor: error ? pink : lightGrey1 }}
                         keyboardType={'phone-pad'} />
                 </PhoneNumber>
                 {

@@ -4,7 +4,7 @@ const socketServer = 'http://ser.univ.team'
 const socketPath = '/socket.io'
 export let socket = null
 
-export const connectToSocket = () => {
+export const connectToSocket = (token) => {
     socket = io(socketServer, {
         reconnection: true,
         reconnectionDelay: 1000,
@@ -15,7 +15,7 @@ export const connectToSocket = () => {
         upgrade: false,
         secure: true,
         query: {
-            token: 'Bearer ' + store.getState().userReducer.auth
+            token: 'Bearer ' + token || store.getState().userReducer.auth
         }
     })
     if (socket) {

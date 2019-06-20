@@ -94,8 +94,10 @@ export default class AppComponent extends React.Component {
             if (value) {
                 store.dispatch(setUser(value));
                 store.dispatch(setAuth(value.access_token));
-                connectToSocket()
-                setTimeout(() => this.setState({ logged: true }), 0);
+                setTimeout(() => {
+                    connectToSocket(value.access_token);
+                    this.setState({ logged: true });
+                }, 0);
             }
 
         });
