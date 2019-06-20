@@ -1,16 +1,16 @@
-import React, { Component } from 'react'
-import { View, Text, SafeAreaView, ScrollView, Dimensions, FlatList, TouchableOpacity } from 'react-native'
-import TaskComponent from '../../common/Task'
-import styled from 'styled-components'
-import { connect } from 'react-redux'
-import { setActiveTask } from '../../actions/tasksActions'
-import helper from '../../utils/helpers'
+import React, { Component } from 'react';
+import { View, Text, SafeAreaView, ScrollView, Dimensions, FlatList, TouchableOpacity, InteractionManager } from 'react-native';
+import TaskComponent from '../../common/Task';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { setActiveTask } from '../../actions/tasksActions';
+import helper from '../../utils/helpers';
 const { Colors, HeaderHeight } = helper;
 const { purple, black, pink } = Colors;
 const Wrapper = styled(View)
 `
     margin-bottom: 50px;   
-`
+`;
 const TaskList = styled(FlatList)
 `
     padding: 10px 0;
@@ -18,7 +18,7 @@ const TaskList = styled(FlatList)
     flex-grow: 1;
     padding-bottom: 20px;
     z-index: 5;
-`
+`;
 const Options = styled(View)
 `
     display: flex;
@@ -30,7 +30,7 @@ const Options = styled(View)
     overflow: hidden;
     margin: 10px 0;
     max-width: 85%;
-`
+`;
 const Option = styled(Text)
 `
     color: ${({ active }) => active ? black : 'white'};
@@ -41,14 +41,14 @@ const Option = styled(Text)
     overflow: hidden;
     min-width: 30%;
     text-align: center;
-`
+`;
 const TaskWrapper = styled(View)
 `
     display: flex;
     align-items: flex-end;
     justify-content: flex-start;
     flex-direction: row;
-`
+`;
 const Shadow = styled(TouchableOpacity)
 `
     background: black;
@@ -59,20 +59,20 @@ const Shadow = styled(TouchableOpacity)
     position: absolute;
     top: -${HeaderHeight};
     left: 0;
-`
+`;
 const StyledScrollView = styled(ScrollView)
 `
     flexGrow: 1;
     zIndex: 10;
     width: 100%;
     height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
-`
+`;
 class Content extends Component {
     render() {
-        const { options } = this.state;
+        const { options, animationCompleted } = this.state;
         const { active } = options;
-        const { user, activeTask, tasks } = this.props
-        const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
+        const { user, activeTask, tasks } = this.props;
+        const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
         const tasksList = [...tasks].map(e => e.tasks);
         const outTasks = flatten(tasksList).filter(e => e.creator._id === user._id);
         return (
@@ -87,7 +87,7 @@ class Content extends Component {
                 </TouchableOpacity>)
               }
             </Options>
-            {outTasks && <TaskList
+            {outTasks && animationCompleted ? <TaskList
               data={outTasks}
               ListFooterComponent={<View   />}
               renderItem={({ item }) => {
@@ -114,14 +114,14 @@ class Content extends Component {
                       // marginRight: myTask ? 10 : 70,
                       // marginLeft: myTask ? 70 : 10,
                     }}>{item}</TaskComponent></TouchableOpacity>
-                </TaskWrapper>
+                </TaskWrapper>;
               }}
               keyExtractor={(item, index) => index.toString()}
-            />}
+            /> : null}
           </Wrapper>
         </StyledScrollView>
       </SafeAreaView>
-        )
+        );
     }
     state = {
         options: {
@@ -132,15 +132,23 @@ class Content extends Component {
                 'Не в работе'
             ]
         },
-        taskList: []
+        taskList: [],
+        animationCompleted: false
+    }
+    componentDidMount(){
+        InteractionManager.runAfterInteractions(() => {
+            this.setState({
+                animationCompleted: true,
+            });
+        });
     }
     unselect = () => {
-        const { setActiveTask } = this.props
-        setActiveTask({})
+        const { setActiveTask } = this.props;
+        setActiveTask({});
     }
     handleHold = (e) => {
-        const { setActiveTask } = this.props
-        setActiveTask(e)
+        const { setActiveTask } = this.props;
+        setActiveTask(e);
     }
     selectOption = (e) => {
         const { options } = this.state;
@@ -149,7 +157,7 @@ class Content extends Component {
         this.setState({ options: newOptions });
     }
     componentWillUnmount() {
-        this.unselect()
+        this.unselect();
     }
 }
 
@@ -158,8 +166,8 @@ const mapStateToProps = state => ({
     activeTask: state.tasksReducer.activeTask,
     tasks: state.tasksReducer.tasks,
     user: state.userReducer.user
-})
+});
 const mapDispatchToProps = dispatch => ({
     setActiveTask: _ => dispatch(setActiveTask(_))
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

@@ -1,24 +1,24 @@
-import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView } from 'react-native'
-import { BackIcon, EllipsisVIcon, ArrowDownIcon } from '../../assets/index'
-import styled from 'styled-components'
-import FloatingLabel from 'react-native-floating-labels'
+import React, { Component } from 'react';
+import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView, InteractionManager } from 'react-native';
+import { BackIcon, EllipsisVIcon, ArrowDownIcon } from '../../assets/index';
+import styled from 'styled-components';
+import FloatingLabel from 'react-native-floating-labels';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import helper from '../../utils/helpers'
-import DefaultAvatar from '../../common/DefaultAvatar'
-import RoundCheckbox from 'rn-round-checkbox'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import helper from '../../utils/helpers';
+import DefaultAvatar from '../../common/DefaultAvatar';
+import RoundCheckbox from 'rn-round-checkbox';
 import posed, { Transition } from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
-import ImageComponent from '../../common/Image'
+import ImageComponent from '../../common/Image';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
-import sendRequest from '../../utils/request'
-import { g_users } from '../../constants/api'
-import { setContacts, setAllUsers } from '../../actions/userActions'
-import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
-import { addFeedReceiver, setFeedReceivers } from '../../actions/participantsActions'
-import { setDialogs } from '../../actions/dialogsActions'
-import { connect } from 'react-redux'
+import sendRequest from '../../utils/request';
+import { g_users } from '../../constants/api';
+import { setContacts, setAllUsers } from '../../actions/userActions';
+import { getMessages, setRoom, addMessage } from '../../actions/messageActions';
+import { addFeedReceiver, setFeedReceivers } from '../../actions/participantsActions';
+import { setDialogs } from '../../actions/dialogsActions';
+import { connect } from 'react-redux';
 
 
 const { Colors, HeaderHeight } = helper;
@@ -39,13 +39,13 @@ const AnimatedScrollView = posed.View({
         transition: { duration: 300, ease: 'easeOut' }
     },
 
-})
+});
 const Animated = styled(AnimatedScrollView)
 `
     display: flex;
     flex-direction: row;
     width: ${Dimensions.get('window').width * 3};
-`
+`;
 const AnimatedBox = posed.View({
     visible: { flex: 1 },
     hidden: { flex: 0 }
@@ -60,7 +60,7 @@ const Wrapper = styled(View)
     background: white;
     margin-bottom: 110px;
     height: ${Dimensions.get('window').height - HeaderHeight - 20};
-`
+`;
 const ContactList = styled(ScrollView)
 `
     padding: 30px;
@@ -68,7 +68,7 @@ const ContactList = styled(ScrollView)
     max-width: ${Dimensions.get('window').width};
     overflow: hidden;
     flex: 1;
-`
+`;
 const Box = styled(View)
 `
     padding-top: 20px;
@@ -76,7 +76,7 @@ const Box = styled(View)
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
-`
+`;
 const BoxTitle = styled(TouchableOpacity)
 `
     display: flex;
@@ -84,7 +84,7 @@ const BoxTitle = styled(TouchableOpacity)
     justify-content: space-between;
     align-items: center;
     padding-bottom: 20px;
-`
+`;
 const BoxInner = styled(AnimatedBox)
 `
     padding: 20px 0;
@@ -93,12 +93,12 @@ const BoxInner = styled(AnimatedBox)
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
-`
+`;
 const BoxItem = styled(Text)
 `
     color: #A7B0BA;
     width: 80%;
-`
+`;
 const BoxInnerItem = styled(View)
 `
     padding: 10px;
@@ -107,31 +107,31 @@ const BoxInnerItem = styled(View)
     flex-direction: row;
     align-items: center;
 
-`
+`;
 const ContactImage = styled(Image)
 `
     width: 36px;
     height: 36px;
     border-radius: 18;
-`
+`;
 const ContactInfo = styled(View)
 `
     display: flex;
     align-items: flex-start;
     justify-content: center;
     margin-left: 10px;
-`
+`;
 const ContactName = styled(Text)
-``
+``;
 const ContactRole = styled(Text)
 `
     color: #A7B0BA;
 
-`
+`;
 const ArrowWrapper = styled(AnimatedArrowWrapper)
 `
     
-`
+`;
 const Options = styled(View)
 `
     display: flex;
@@ -142,7 +142,7 @@ const Options = styled(View)
     padding: 1px;
     border-radius: 13;
     overflow: hidden;
-`
+`;
 const Option = styled(Text)
 `
     color: ${({ active }) => active ? black : 'white'};
@@ -153,21 +153,21 @@ const Option = styled(Text)
     padding: 2px 10px;
     overflow: hidden;
     text-align: center;
-`
+`;
 const Group = styled(BoxInnerItem)
-``
+``;
 const GroupInfo = styled(ContactInfo)
-``
+``;
 const GroupTitle = styled(ContactName)
-``
+``;
 const GroupParticipants = styled(ContactRole)
-``
+``;
 const GroupImage = styled(ContactImage)
-``
+``;
 class Content extends Component {
     render() {
-        const { receivers } = this.props
-        const { users, collapsed, options, groups } = this.state;
+        const { receivers } = this.props;
+        const { users, collapsed, options, groups, animationCompleted } = this.state;
         const { department } = users;
         const { active } = options;
         return (
@@ -206,61 +206,63 @@ class Content extends Component {
                                                 </ArrowWrapper>
                                             </BoxTitle>
                                             <Collapsible collapsed={collapsed[i] || false}>
-                                                <BoxInner>
-                                                    {
-                                                        e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
-                                                            <BoxInnerItem>
-                                                                {
-                                                                    this.includes(e) ?
-                                                                        <RoundCheckbox
-                                                                            size={36}
-                                                                            backgroundColor={yellow}
-                                                                            checked={true}
-                                                                            onValueChange={() => this.addReceiver(e)}
-                                                                        />
-                                                                        : e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg' ?
-                                                                            <DefaultAvatar size={36} id={e._id} /> :
-                                                                            <ImageComponent 
-                                                                                source={{ uri: `http://ser.univ.team${e.image}` }}
+                                                {animationCompleted ? 
+                                                    <BoxInner>
+                                                        {
+                                                            e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
+                                                                <BoxInnerItem>
+                                                                    {
+                                                                        this.includes(e) ?
+                                                                            <RoundCheckbox
                                                                                 size={36}
+                                                                                backgroundColor={yellow}
+                                                                                checked={true}
+                                                                                onValueChange={() => this.addReceiver(e)}
                                                                             />
-                                                                }
-                                                                <ContactInfo>
-                                                                    <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
-                                                                    {e.role ? <ContactRole>{e.role.name || 'no role'}</ContactRole> : null}
-                                                                </ContactInfo>
-                                                            </BoxInnerItem>
-                                                        </TouchableOpacity>)
-                                                    }
-                                                </BoxInner>
+                                                                            : e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg' ?
+                                                                                <DefaultAvatar size={36} id={e._id} /> :
+                                                                                <ImageComponent 
+                                                                                    source={{ uri: `http://ser.univ.team${e.image}` }}
+                                                                                    size={36}
+                                                                                />
+                                                                    }
+                                                                    <ContactInfo>
+                                                                        <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
+                                                                        {e.role ? <ContactRole>{e.role.name || 'no role'}</ContactRole> : null}
+                                                                    </ContactInfo>
+                                                                </BoxInnerItem>
+                                                            </TouchableOpacity>)
+                                                        }
+                                                    </BoxInner> : null}
                                             </Collapsible>
                                         </Box>
                                     ))
                                 }
                             </ContactList>
                             <ContactList>
-                                <FlatList
-                                    style={{ paddingRight: 5, paddingLeft: 5, }}
-                                    ListHeaderComponent={<View style={{ margin: 35, }} />}
-                                    inverted={true}
-                                    data={groups}
-                                    renderItem={({ item, index }) => <Group key={index}>
-                                        <GroupImage />
-                                        <GroupInfo>
-                                            <GroupTitle>{item.title}</GroupTitle>
-                                            <GroupParticipants>{item.participants} участников</GroupParticipants>
-                                        </GroupInfo>
-                                    </Group>
-                                    }
-                                    keyExtractor={(item, index) => index.toString()}
-                                />
+                                {animationCompleted ? 
+                                    <FlatList
+                                        style={{ paddingRight: 5, paddingLeft: 5, }}
+                                        ListHeaderComponent={<View style={{ margin: 35, }} />}
+                                        inverted={true}
+                                        data={groups}
+                                        renderItem={({ item, index }) => <Group key={index}>
+                                            <GroupImage />
+                                            <GroupInfo>
+                                                <GroupTitle>{item.title}</GroupTitle>
+                                                <GroupParticipants>{item.participants} участников</GroupParticipants>
+                                            </GroupInfo>
+                                        </Group>
+                                        }
+                                        keyExtractor={(item, index) => index.toString()}
+                                    /> : null}
                             </ContactList>
                         </Animated>
                     </KeyboardAwareScrollView>
                 </Wrapper>
                 {/* </GestureRecognizer> */}
             </SafeAreaView>
-        )
+        );
     }
     state = {
         collapsed: [],
@@ -287,9 +289,15 @@ class Content extends Component {
             { title: 'длинное корпоративное название группы', participants: 15 },
             { title: 'длинное корпоративное название группы', participants: 15 },
             { title: 'длинное корпоративное название группы', participants: 15 },
-        ]
+        ],
+        animationCompleted: false
     }
     componentDidMount() {
+        InteractionManager.runAfterInteractions(() => {
+            this.setState({
+                animationCompleted: true,
+            });
+        });
         const { collapsed, users } = this.state;
         const { setContacts } = this.props;
         const newDCollapsed = [...collapsed]

@@ -1,24 +1,24 @@
-import React, { Component } from 'react'
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView, TouchableWithoutFeedback } from 'react-native'
-import { BackIcon, EllipsisVIcon, ArrowDownIcon } from '../../assets/index'
-import styled from 'styled-components'
-import FloatingLabel from 'react-native-floating-labels'
+import React, { Component } from 'react';
+import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, KeyboardAvoidingView, TouchableWithoutFeedback, InteractionManager } from 'react-native';
+import { BackIcon, EllipsisVIcon, ArrowDownIcon } from '../../assets/index';
+import styled from 'styled-components';
+import FloatingLabel from 'react-native-floating-labels';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
-import helper from '../../utils/helpers'
-import DefaultAvatar from '../../common/DefaultAvatar'
-import RoundCheckbox from 'rn-round-checkbox'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import helper from '../../utils/helpers';
+import DefaultAvatar from '../../common/DefaultAvatar';
+import RoundCheckbox from 'rn-round-checkbox';
 import posed, { Transition } from 'react-native-pose';
-import ImageComponent from '../../common/Image'
+import ImageComponent from '../../common/Image';
 import Collapsible from 'react-native-collapsible';
 import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures';
-import sendRequest from '../../utils/request'
-import { g_users } from '../../constants/api'
-import { setContacts, setAllUsers } from '../../actions/userActions'
-import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
-import { addDialogParticipant, setDialogParticipants } from '../../actions/participantsActions'
-import { setDialogs } from '../../actions/dialogsActions'
-import { connect } from 'react-redux'
+import sendRequest from '../../utils/request';
+import { g_users } from '../../constants/api';
+import { setContacts, setAllUsers } from '../../actions/userActions';
+import { getMessages, setRoom, addMessage } from '../../actions/messageActions';
+import { addDialogParticipant, setDialogParticipants } from '../../actions/participantsActions';
+import { setDialogs } from '../../actions/dialogsActions';
+import { connect } from 'react-redux';
 
 
 const { Colors } = helper;
@@ -39,12 +39,12 @@ const AnimatedScrollView = posed.View({
         transition: { duration: 300, ease: 'easeOut' }
     },
 
-})
+});
 const Animated = styled(AnimatedScrollView)`
     display: flex;
     flex-direction: row;
     width: ${Dimensions.get('window').width * 3};
-`
+`;
 const AnimatedBox = posed.View({
     visible: { flex: 1 },
     hidden: { flex: 0 }
@@ -58,28 +58,28 @@ const Wrapper = styled(View)`
     background: white;
     margin-bottom: 110px;
     
-`
+`;
 const ContactList = styled(ScrollView)`
     padding: 30px;
     padding-bottom: 10px;
     max-width: ${Dimensions.get('window').width};
     overflow: hidden;
     flex: 1;
-`
+`;
 const Box = styled(View)`
     padding-top: 20px;
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
-`
+`;
 const BoxTitle = styled(TouchableOpacity)`
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     padding-bottom: 20px;
     align-items: center;
-`
+`;
 const BoxInner = styled(AnimatedBox)`
     padding: 20px 0;
     padding-top: 20px;
@@ -87,36 +87,36 @@ const BoxInner = styled(AnimatedBox)`
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? 1 : 0}px;
-`
+`;
 const BoxItem = styled(Text)`
     color: #A7B0BA;
     width: 80%;
-`
+`;
 const BoxInnerItem = styled(View)`
     padding: 10px;
     padding-bottom: ${({ title }) => title ? 20 : 0}px;
     display: flex;
     flex-direction: row;
     align-items: center;
-`
+`;
 const ContactImage = styled(Image)`
     width: 36px;
     height: 36px;
     border-radius: 18;
-`
+`;
 const ContactInfo = styled(View)`
     margin-left: 10px;
-`
-const ContactName = styled(Text)``
+`;
+const ContactName = styled(Text)``;
 const ContactRole = styled(Text)`
     color: #A7B0BA;
     display: flex;
     align-items: flex-start;
     justify-content: center;
-`
+`;
 const ArrowWrapper = styled(AnimatedArrowWrapper)`
     
-`
+`;
 const Options = styled(View)`
     display: flex;
     align-self: center;
@@ -126,7 +126,7 @@ const Options = styled(View)`
     padding: 1px;
     border-radius: 13;
     overflow: hidden;
-`
+`;
 const Option = styled(Text)`
     color: ${({ active }) => active ? black : 'white'};
     background: ${({ active }) => active ? 'white' : 'transparent'};
@@ -136,16 +136,16 @@ const Option = styled(Text)`
     padding: 2px 10px;
     overflow: hidden;
     text-align: center;
-`
-const Group = styled(BoxInnerItem)``
-const GroupInfo = styled(ContactInfo)``
-const GroupTitle = styled(ContactName)``
-const GroupParticipants = styled(ContactRole)``
-const GroupImage = styled(ContactImage)``
+`;
+const Group = styled(BoxInnerItem)``;
+const GroupInfo = styled(ContactInfo)``;
+const GroupTitle = styled(ContactName)``;
+const GroupParticipants = styled(ContactRole)``;
+const GroupImage = styled(ContactImage)``;
 class Content extends Component {
     render() {
-        const { participants } = this.props
-        const { users, collapsed, options, groups, isSelected, usersToAdd } = this.state;
+        const { participants } = this.props;
+        const { users, collapsed, options, groups, isSelected, usersToAdd, animationCompleted } = this.state;
         const { department } = users;
         const { active } = options;
         return (
@@ -174,7 +174,8 @@ class Content extends Component {
                                             </ArrowWrapper>
                                         </BoxTitle>
                                         <Collapsible collapsed={collapsed[i] || false}>
-                                            <BoxInner>
+                                            {animationCompleted ? 
+                                                <BoxInner>
                                                 {
                                                     e.workers.map((e, i) => <TouchableWithoutFeedback key={e._id} onPress={() => this.addReceiver(e)}>
                                                         <BoxInnerItem>
@@ -200,7 +201,7 @@ class Content extends Component {
                                                         </BoxInnerItem>
                                                     </TouchableWithoutFeedback>)
                                                 }
-                                            </BoxInner>
+                                            </BoxInner> : null}
                                         </Collapsible>
                                     </Box>
                                 ))
@@ -210,7 +211,7 @@ class Content extends Component {
                 </Wrapper>
                 {/* </GestureRecognizer> */}
             </SafeAreaView>
-        )
+        );
     }
     state = {
         usersToAdd: [],
@@ -240,78 +241,84 @@ class Content extends Component {
             { title: 'длинное корпоративное название группы', participants: 15 },
             { title: 'длинное корпоративное название группы', participants: 15 },
             { title: 'длинное корпоративное название группы', participants: 15 },
-        ]
+        ],
+        animationCompleted: false
     }
     componentDidMount() {
-        const { participants } = this.props
+        InteractionManager.runAfterInteractions(() => {
+            this.setState({
+                animationCompleted: true,
+            });
+        });
+        const { participants } = this.props;
         const { collapsed, users} = this.state;
-        const newDCollapsed = [...collapsed]
+        const newDCollapsed = [...collapsed];
         for (let i = 0; i <= users.department.length; i++) {
-            newDCollapsed.push(false)
+            newDCollapsed.push(false);
         }
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newDCollapsed });
         sendRequest({
             r_path: g_users,
             method: 'get',
             success: (res) => {
-                this.props.setContacts(res.users)
-                const newUsers = { ...users }
-                newUsers.department[0].workers = res.users
-                this.setState({ users: newUsers })
+                this.props.setContacts(res.users);
+                const newUsers = { ...users };
+                newUsers.department[0].workers = res.users;
+                this.setState({ users: newUsers });
             },
             failFunc: (err) => {
-                console.log({ err })
+                console.log({ err });
             }
-        })
+        });
     }
     optionLeft = () => {
         const { options } = this.state;
-        const newState = { ...options }
-        const length = options.options.length
+        const newState = { ...options };
+        const length = options.options.length;
         newState.active = options.active < length - 1 ? options.active + 1 : 0;
-        this.setState({ options: newState })
+        this.setState({ options: newState });
 
     }
     optionRight = () => {
         const { options } = this.state;
-        const newState = { ...options }
-        const length = options.options.length
+        const newState = { ...options };
+        const length = options.options.length;
         newState.active = options.active > 0 ? options.active - 1 : length - 1;
-        this.setState({ options: newState })
+        this.setState({ options: newState });
 
     }
     addReceiver = (e) => {
         const { addReceiver, back, setReceivers, participants } = this.props;
         const { usersToAdd } = this.state;
-        const newReceivers = [...participants].filter(user => user._id !== e._id)
-        this.includes(e) ? setReceivers(newReceivers) : addReceiver(e)
+        const newReceivers = [...participants].filter(user => user._id !== e._id);
+        this.includes(e) ? setReceivers(newReceivers) : addReceiver(e);
     }
     includes = (e) => {
         const { participants } = this.props;
-        return !!participants.filter(user => e._id === user._id)[0]
+        return !!participants.filter(user => e._id === user._id)[0];
     }
     addAllReceivers = (e) => {
         const { addReceiver, back, participants, setReceivers } = this.props;
-        const newReceivers = JSON.stringify(e) === JSON.stringify(participants) ? [] : e
-        setReceivers(newReceivers)
+        const newReceivers = JSON.stringify(e) === JSON.stringify(participants) ? [] : e;
+        setReceivers(newReceivers);
     }
     collapseDepartment = (i) => {
         const { collapsed } = this.state;
-        const newDCollapsed = [...collapsed]
+        const newDCollapsed = [...collapsed];
         newDCollapsed[i] = false;
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newDCollapsed });
     }
     showDepartment = (i) => {
         const { collapsed } = this.state;
-        const newDCollapsed = [...collapsed]
+        const newDCollapsed = [...collapsed];
         newDCollapsed[i] = true;
-        this.setState({ collapsed: newDCollapsed })
+        this.setState({ collapsed: newDCollapsed });
     }
     selectOption = (e) => {
         const { options } = this.state;
-        const newState = { ...options }
+        const newState = { ...options };
         newState.active = e;
-        this.setState({ options: newState })
+        this.setState({ options: newState });
     }
 }
 
@@ -323,7 +330,7 @@ const mapStateToProps = state => ({
     user: state.userReducer.user,
     users: state.userReducer,
     participants: state.participantsReducer.dialog.participants
-})
+});
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
@@ -333,5 +340,5 @@ const mapDispatchToProps = dispatch => ({
     setContacts: _ => dispatch(setContacts(_)),
     addReceiver: _ => dispatch(addDialogParticipant(_)),
     setReceivers: _ => dispatch(setDialogParticipants(_)),
-})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+});
+export default connect(mapStateToProps, mapDispatchToProps)(Content);

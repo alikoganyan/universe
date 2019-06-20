@@ -8,16 +8,17 @@ import {
 	TouchableOpacity,
 	ScrollView,
 	Dimensions,
+	InteractionManager,
 } from 'react-native';
 import { CommentIcon, HeartIcon, HeartIconFilled, TriangleLeftIcon, TriangleRightIcon, CheckIcon, ArrowRightIcon } from '../../assets/index';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components';
 import helper from '../../utils/helpers';
-import ImageComponent from '../../common/Image'
+import ImageComponent from '../../common/Image';
 import DefaultAvatar from '../../common/DefaultAvatar';
 import { connect } from 'react-redux';
-import { setFeed } from '../../actions/newsActions'
-import { socket } from '../../utils/socket'
+import { setFeed } from '../../actions/newsActions';
+import { socket } from '../../utils/socket';
 const {
 	HeaderHeight,
 	sidePadding,
@@ -175,15 +176,16 @@ const SeeReceivers = styled(TouchableOpacity)`
 	padding-right: ${sidePadding}px;
 	padding: 10px;
 	padding-bottom: 0;
-`
+`;
 const SeeReceiversText = styled(Text)`
 	color: ${yellow};
-`
+`;
 class Content extends Component {
 	render() {
+		const { animationCompleted } = this.state;
 		const { feed } = this.props;
 		const { comments, likes, creator, receivers } = feed;
-		const { first_name, last_name, image, _id } = creator
+		const { first_name, last_name, image, _id } = creator;
 		const reversedCommnets = [...comments].reverse();
 		const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 		const date = new Date(feed.created_at);
@@ -224,47 +226,56 @@ class Content extends Component {
 					<SeeReceiversText>{receivers.length} получатели</SeeReceiversText>
 					<ArrowRightIcon left={true} noPaddingAll={true} />
 				</SeeReceivers>
-				<FlatList
-					style={{ paddingRight: 5, paddingLeft: 5 }}
-					ListHeaderComponent={<View style={{ margin: 110 }} />}
-					ListFooterComponent={<View style={{ margin: 5 }} />}
-					contentContainerStyle={{ alignItems: 'stretch' }}
-					keyboardDismissMode={'on-drag'}
-					inverted={true}
-					data={reversedCommnets}
-					renderItem={({ item }) => <this.Message>{item}</this.Message>}
-					keyExtractor={(item, index) => index.toString()}
-				/>
+				{animationCompleted ? <FlatList
+									style={{ paddingRight: 5, paddingLeft: 5 }}
+									ListHeaderComponent={<View style={{ margin: 110 }} />}
+									ListFooterComponent={<View style={{ margin: 5 }} />}
+									contentContainerStyle={{ alignItems: 'stretch' }}
+									keyboardDismissMode={'on-drag'}
+									inverted={true}
+									data={reversedCommnets}
+									renderItem={({ item }) => <this.Message>{item}</this.Message>}
+									keyExtractor={(item, index) => index.toString()}
+								/> : null}
 			</Wrapper>
 		);
 	}
 	state = {
 		height: null,
+		animationCompleted: false
 	};
+	componetnDidMount(){
+		InteractionManager.runAfterInteractions(() => {
+            this.setState({
+                animationCompleted: true,
+            });
+        });
+
+	}
 	componentWillUnmount() {
-		const { setFeed } = this.props
-		setFeed({})
+		const { setFeed } = this.props;
+		setFeed({});
 	}
 	getUnreadMessageHeight = e => {
 		this.setState({ height: e.nativeEvent.layout.height });
 	};
 	seeParticipants = (e) => {
-		const { navigate, feed } = this.props
-		navigate('FeedReceivers')
+		const { navigate, feed } = this.props;
+		navigate('FeedReceivers');
 	}
 	hitLike = (e) => {
-		const { feed, user, setFeed } = this.props
-		const { _id, comments } = feed
-		const newFeed = { ...feed }
+		const { feed, user, setFeed } = this.props;
+		const { _id, comments } = feed;
+		const newFeed = { ...feed };
 		const reversedCommnets = [...comments].reverse();
-		const newComment = reversedCommnets.filter(comment => comment._id === e)[0]
+		const newComment = reversedCommnets.filter(comment => comment._id === e)[0];
 		if (!newComment.likes.includes(user._id)) {
 			newComment.likes_сount += 1;
 			newComment.likes.push(user._id);
-			const newComments = [...reversedCommnets]
-			const index = newComments.findIndex(comment => comment._id === e)
-			newComments[index] = newComment
-			newFeed.comments = newComments
+			const newComments = [...reversedCommnets];
+			const index = newComments.findIndex(comment => comment._id === e);
+			newComments[index] = newComment;
+			newFeed.comments = newComments;
 			socket.emit('like_news', { _id, e });
 			setFeed(newFeed);
 		}
@@ -282,12 +293,12 @@ class Content extends Component {
 		const { children } = props;
 		const { user, feed } = this.props;
 		const { creator, created_at, likes_сount, text, _id, likes } = children;
-		const { first_name, last_name, image } = creator
+		const { first_name, last_name, image } = creator;
 		const myId = user._id;
-		const date = new Date(created_at)
+		const date = new Date(created_at);
 		const difference = Math.abs(new Date() - date) / 864e5;
-		const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
-		const time = difference < 1 ? `${date.getHours()}:${date.getMinutes()}` : daysOfTheWeek[date.getDay()]
+		const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+		const time = difference < 1 ? `${date.getHours()}:${date.getMinutes()}` : daysOfTheWeek[date.getDay()];
 		return myId === creator._id ?
 			<View style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
 				<MyMessage>
@@ -328,7 +339,7 @@ class Content extends Component {
 						</MessageDate>
 					</MessageInfo>
 				</InterlocutorsMessage>
-			</View>
+			</View>;
 	};
 }
 const mapStateToProps = state => ({
