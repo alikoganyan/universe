@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import { View, Text, Image } from 'react-native';
-import { BackIcon, EllipsisVIcon } from '../../assets/index';
 import styled from 'styled-components';
-import SafeAreaView from '../../common/SafeAreaView';
 import {
-    ActionSheetProvider,
-    connectActionSheet,
+  ActionSheetProvider,
+  connectActionSheet,
 } from '@expo/react-native-action-sheet';
+import { BackIcon, EllipsisVIcon } from '../../assets/index';
+import SafeAreaView from '../../common/SafeAreaView';
 import Header from './Header';
 import Content from './Content';
+
 const Wrapper = styled(View)`
     height: 100%;
 `;
@@ -21,21 +22,21 @@ const Bottom = styled(View)`
 `;
 
 export default class NewFeedReceivers extends Component {
-    render() {
-        return (
-            <ActionSheetProvider>
-                <SafeAreaView>
-                    <Wrapper>
-                        <Header back={this.navigateBack} />
-                        <Content back={this.navigateBack}/>
-                        <Bottom>
-                        </Bottom>
-                    </Wrapper>
-                </SafeAreaView>
-            </ActionSheetProvider>
-        );
-    }
+  render() {
+    return (
+      <ActionSheetProvider>
+        <SafeAreaView>
+          <Wrapper>
+            <Header back={this.navigateBack} />
+            <Content back={this.navigateBack} />
+            <Bottom />
+          </Wrapper>
+        </SafeAreaView>
+      </ActionSheetProvider>
+    );
+  }
+
     navigateBack = () => {
-        this.props.navigation.goBack();
+      this.props.navigation.goBack();
     }
 }

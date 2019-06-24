@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, TextInput } from 'react-native';
-import { CloseIcon } from '../../assets/index';
+import {
+  View, Text, Dimensions, TextInput
+} from 'react-native';
 import styled from 'styled-components';
-import helper from '../../utils/helpers';
 import { connect } from 'react-redux';
+import { CloseIcon } from '../../assets/index';
+import helper from '../../utils/helpers';
+
 const { sidePadding, HeaderHeight, fontSize } = helper;
 
 const Header = styled(View)`
@@ -36,45 +39,50 @@ const HeaderText = styled(Text)`
     left: -10px;
 `;
 class HeaderComponent extends Component {
-    render() {
-        return (
-            <Header>
-                <Left>
-                    <CloseIcon onPress={this.back} right />
-                    <HeaderText>Создание задачи</HeaderText>
-                </Left>
-            </Header>
-        );
-    }
+  render() {
+    return (
+      <Header>
+        <Left>
+          <CloseIcon onPress={this.back} right />
+          <HeaderText>Создание задачи</HeaderText>
+        </Left>
+      </Header>
+    );
+  }
+
     state = {
-        search: false,
-        find: ''
+      search: false,
+      find: ''
     }
+
     find = () => {
 
     }
+
     startSearch = () => {
-        this.setState({ search: true });
+      this.setState({ search: true });
     }
+
     stopSearch = () => {
-        this.setState({ search: false });
+      this.setState({ search: false });
     }
+
     addTask = () => {
-        const { navigate } = this.props;
-        navigate('NewTask');
+      const { navigate } = this.props;
+      navigate('NewTask');
     }
+
     back = () => {
-        const { back } = this.props;
-        back();
+      const { back } = this.props;
+      back();
     }
 }
 
 const mapStateToProps = state => ({
-        user: state.userReducer.user,
-        tasks: state.tasksReducer.tasks,
-    });
+  user: state.userReducer.user,
+  tasks: state.tasksReducer.tasks,
+});
 const mapDispatchToProps = dispatch => ({
-    setTasks: _ => dispatch(setTasks(_))
+  setTasks: _ => dispatch(setTasks(_))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);
-

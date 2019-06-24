@@ -1,9 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'react-native';
-import { BackIcon, ForwardIcon, LocationIcon, SearchIcon } from '../../assets/index';
+import {
+  View, Text, SafeAreaView, Image, Platform, TouchableOpacity
+} from 'react-native';
 import styled from 'styled-components';
+import {
+  BackIcon, ForwardIcon, LocationIcon, SearchIcon
+} from '../../assets/index';
 import helper from '../../utils/helpers';
-const { sidePadding, HeaderHeight, fontSize, Colors } = helper;
+
+const {
+  sidePadding, HeaderHeight, fontSize, Colors
+} = helper;
 const { grey3 } = Colors;
 const Header = styled(View)`
     width: 100%;
@@ -55,19 +62,20 @@ const HeaderText = styled(Text)`
     color: ${grey3};
 `;
 export default class HeaderComponent extends Component {
-    render() {
-        const { back } = this.props;
-        return (
-            <Header>
-                <Left>
-                    <BackIcon onPress={back} />
-                    <GroupImage />
-                    <HeaderText>Написать новость</HeaderText>
-                </Left>
-            </Header>
-        );
-    }
+  render() {
+    const { back } = this.props;
+    return (
+      <Header>
+        <Left>
+          <BackIcon onPress={back} />
+          <GroupImage />
+          <HeaderText>Написать новость</HeaderText>
+        </Left>
+      </Header>
+    );
+  }
+
     moveForward = () => {
-        this.props.back();
+      this.props.back();
     }
 }

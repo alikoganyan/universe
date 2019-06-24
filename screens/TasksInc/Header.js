@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { View, Text, Dimensions } from 'react-native';
-import { BackIcon, SearchIcon } from '../../assets/index';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { BackIcon, SearchIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
 import { startSearch } from '../../actions/messageActions';
+
 const { sidePadding, HeaderHeight, fontSize } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
@@ -33,23 +34,23 @@ const Right = styled(View)`
     margin-left: ${sidePadding}px;
 `;
 class HeaderComponent extends Component {
-    render() {
-        const { back } = this.props;
-        return (
-            <Header>
-                <Left>
-                    <BackIcon onPress={back} />
-                    <InfoChatName>Все входящие задачи</InfoChatName>
-                </Left>
-                <Right>
-                    <SearchIcon onPress={startSearch} />
-                </Right>
-            </Header>
-        );
-    }
+  render() {
+    const { back } = this.props;
+    return (
+      <Header>
+        <Left>
+          <BackIcon onPress={back} />
+          <InfoChatName>Все входящие задачи</InfoChatName>
+        </Left>
+        <Right>
+          <SearchIcon onPress={startSearch} />
+        </Right>
+      </Header>
+    );
+  }
 }
 const mapStateToProps = state => ({
-    currentTask: state.tasksReducer.currentTask,
+  currentTask: state.tasksReducer.currentTask,
 });
 const mapDispatchToProps = dispatch => ({
 });

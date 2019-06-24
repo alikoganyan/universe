@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { BackIcon } from '../../assets/index';
 import styled from 'styled-components';
+import { BackIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
+
 const { HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
@@ -20,17 +21,17 @@ const Left = styled(View)`
 `;
 
 export default class HeaderComponent extends Component {
-    render() {
-        const { back } = this.props;
-        return (
-            <Header>
-                <Left>
-                    <BackIcon onPress={back} />
-                    <Text>
+  render() {
+    const { back } = this.props;
+    return (
+      <Header>
+        <Left>
+          <BackIcon onPress={back} />
+          <Text>
                         Название группы
-                    </Text>
-                </Left>
-            </Header>
-        );
-    }
+          </Text>
+        </Left>
+      </Header>
+    );
+  }
 }

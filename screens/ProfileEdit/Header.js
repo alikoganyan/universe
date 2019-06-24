@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { BackIcon, } from '../../assets/index';
 import styled from 'styled-components';
-import helper from '../../utils/helpers';
 import { connect } from 'react-redux';
+import { BackIcon, } from '../../assets/index';
+import helper from '../../utils/helpers';
+
 const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
@@ -26,18 +27,19 @@ const MarginRight = styled(View)`
     margin-right: ${sidePadding}px;
 `;
 export default class HeaderComponent extends Component {
-    render() {
-        return (
-            <Header>
-                <Left>
-                    <MarginRight>
-                        <BackIcon onPress={this.props.back} />
-                    </MarginRight>
-                    <Text>Редактирование профиль</Text>
-                </Left>
-            </Header>
-        );
-    }
+  render() {
+    return (
+      <Header>
+        <Left>
+          <MarginRight>
+            <BackIcon onPress={this.props.back} />
+          </MarginRight>
+          <Text>Редактирование профиль</Text>
+        </Left>
+      </Header>
+    );
+  }
+
     editProfile = () => {
     }
 }

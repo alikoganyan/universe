@@ -1,11 +1,16 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
+import {
+  View, Text, Dimensions, TouchableOpacity
+} from 'react-native';
 import styled from 'styled-components';
-import helper from '../../utils/helpers';
 import { connect } from 'react-redux';
+import helper from '../../utils/helpers';
 import ImageComponent from '../../common/Image';
-import { BackIcon, CheckGreyIcon } from '../../assets/';
-const { sidePadding, HeaderHeight, fontSize, Colors } = helper;
+import { BackIcon, CheckGreyIcon } from '../../assets';
+
+const {
+  sidePadding, HeaderHeight, fontSize, Colors
+} = helper;
 const { grey3 } = Colors;
 const Header = styled(View)`
     width: 100%;
@@ -41,36 +46,39 @@ const HeaderText = styled(Text)`
     color: ${grey3};
 `;
 class HeaderComponent extends Component {
-    render() {
-        const { back, user, toProfile, receivers } = this.props;
-        const { image } = user;
-        return (
-            <Header>
-                <Left>
+  render() {
+    const {
+      back, user, toProfile, receivers
+    } = this.props;
+    const { image } = user;
+    return (
+      <Header>
+        <Left>
 
-                    <BackIcon onPress={back} right />
-                    <HeaderText>Получатели</HeaderText>
-                </Left>
-                <Right>
-                    {
-                        !receivers.length ?
+          <BackIcon onPress={back} right />
+          <HeaderText>Получатели</HeaderText>
+        </Left>
+        <Right>
+          {
+                        !receivers.length
+                          ? (
                             <TouchableOpacity onPress={toProfile}>
-                                <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
-                            </TouchableOpacity> : <CheckGreyIcon size={22} noPaddingAll={true} left={true} onPress={this.addParticipants} />
+                              <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size="header" />
+                            </TouchableOpacity>
+                          ) : <CheckGreyIcon size={22} noPaddingAll left onPress={this.addParticipants} />
                     }
-                </Right>
-            </Header>
-        );
-    }
+        </Right>
+      </Header>
+    );
+  }
 }
 
 const mapStateToProps = state => ({
-        user: state.userReducer.user,
-        tasks: state.tasksReducer.tasks,
-        receivers: state.participantsReducer.news.receivers,
-    });
+  user: state.userReducer.user,
+  tasks: state.tasksReducer.tasks,
+  receivers: state.participantsReducer.news.receivers,
+});
 const mapDispatchToProps = dispatch => ({
-    setTasks: _ => dispatch(setTasks(_))
+  setTasks: _ => dispatch(setTasks(_))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);
-

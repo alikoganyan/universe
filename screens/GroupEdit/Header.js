@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import { View, Dimensions } from 'react-native';
-import { CloseIcon } from '../../assets/index';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { CloseIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
+
 const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
@@ -30,20 +31,21 @@ const Top = styled(View)`
     width: 100%;
 `;
 class HeaderComponent extends Component {
-    render() {
-        return (
-            <Header>
-                <Top>
-                    <Left>
-                        <CloseIcon right onPress={this.back} />
-                    </Left>
-                </Top>
-            </Header>
-        );
-    }
+  render() {
+    return (
+      <Header>
+        <Top>
+          <Left>
+            <CloseIcon right onPress={this.back} />
+          </Left>
+        </Top>
+      </Header>
+    );
+  }
+
     back = () => {
-        const { back } = this.props;
-        back();
+      const { back } = this.props;
+      back();
     }
 }
 const mapStateToProps = state => ({

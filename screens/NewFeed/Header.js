@@ -1,19 +1,22 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
-    View,
-    Text,
-    Dimensions,
-} from "react-native";
+  View,
+  Text,
+  Dimensions,
+} from 'react-native';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
 import {
-    CloseIcon
-} from "../../assets/index";
-import { connect } from "react-redux";
-import styled from "styled-components";
-import helper from "../../utils/helpers";
-const { sidePadding, HeaderHeight, Colors, fontSize } = helper;
+  CloseIcon
+} from '../../assets/index';
+import helper from '../../utils/helpers';
+
+const {
+  sidePadding, HeaderHeight, Colors, fontSize
+} = helper;
 const { grey3 } = Colors;
 const Header = styled(View)`
-    width: ${Dimensions.get("window").width - sidePadding * 2}px;
+    width: ${Dimensions.get('window').width - sidePadding * 2}px;
     align-self: center;
     background: white;
     display: flex;
@@ -47,27 +50,28 @@ const HeaderText = styled(Text)`
     color: ${grey3};
 `;
 class HeaderComponent extends Component {
-    render() {
-        return (
-            <Header>
-                <Top>
-                    <Left>
-                        <CloseIcon right onPress={this.back} />
-                        <HeaderText>Создание новости</HeaderText>
-                    </Left>
-                    <Right></Right>
-                </Top>
-            </Header>
-        );
-    }
+  render() {
+    return (
+      <Header>
+        <Top>
+          <Left>
+            <CloseIcon right onPress={this.back} />
+            <HeaderText>Создание новости</HeaderText>
+          </Left>
+          <Right />
+        </Top>
+      </Header>
+    );
+  }
+
     back = () => {
-        const { back } = this.props;
-        back();
+      const { back } = this.props;
+      back();
     };
 }
 const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => ({});
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(HeaderComponent);

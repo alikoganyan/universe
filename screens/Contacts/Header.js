@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, Image, Platform, ActionSheetIOS } from 'react-native';
-import { BackIcon, BurgerIcon } from '../../assets/index';
+import {
+  View, Text, SafeAreaView, Image, Platform, ActionSheetIOS
+} from 'react-native';
 import styled from 'styled-components';
+import { BackIcon, BurgerIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
+
 const { HeaderHeight, Colors, fontSize } = helper;
 const { green, grey3 } = Colors;
 const Header = styled(View)`
@@ -33,18 +36,18 @@ const HeaderText = styled(Text)`
     color: ${grey3};
 `;
 export default class HeaderComponent extends Component {
-    render() {
-        return (
-            <Header>
-                <Center>
-                    <HeaderText>
+  render() {
+    return (
+      <Header>
+        <Center>
+          <HeaderText>
                         Настройки
-                    </HeaderText>
-                </Center>
-                <Right style={{ position: "absolute", right: 0, }}>
-                    <BurgerIcon />
-                </Right>
-            </Header>
-        );
-    }
+          </HeaderText>
+        </Center>
+        <Right style={{ position: 'absolute', right: 0, }}>
+          <BurgerIcon />
+        </Right>
+      </Header>
+    );
+  }
 }

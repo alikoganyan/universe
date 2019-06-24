@@ -11,26 +11,30 @@ const Wrapper = styled(View)`
     height: 100%;
 `;
 export default class Signup extends Component {
-    render() {
-        return (
-            <SafeAreaView behavior={'padding'}>
-                <Wrapper>
-                    <Header back={this.navigateBack} />
-                    <Content addParticipant={this.addParticipant} forward={this.moveForward} />
-                </Wrapper>
-            </SafeAreaView>
-        );
-    }
-    componentDidMount() {
+  render() {
+    return (
+      <SafeAreaView behavior="padding">
+        <Wrapper>
+          <Header back={this.navigateBack} />
+          <Content addParticipant={this.addParticipant} forward={this.moveForward} />
+        </Wrapper>
+      </SafeAreaView>
+    );
+  }
 
-    }
+  componentDidMount() {
+
+  }
+
     moveForward = () => {
-        this.props.navigation.navigate('News');
+      this.props.navigation.navigate('News');
     }
+
     navigateBack = () => {
-        this.props.navigation.goBack();
+      this.props.navigation.goBack();
     }
+
     addParticipant = () => {
-        this.props.navigation.navigate('NewFeedReceivers');
+      this.props.navigation.navigate('NewFeedReceivers');
     }
 }

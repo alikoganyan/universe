@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { View, TouchableOpacity } from 'react-native';
-import { BackIcon } from '../../assets/index';
 import styled from 'styled-components';
+import { BackIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
+
 const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
@@ -15,12 +16,12 @@ const Header = styled(View)`
     padding: 0 ${sidePadding}px;
 `;
 export default class HeaderComponent extends Component {
-    render() {
-        const { back } = this.props;
-        return (
-            <Header>
-                <BackIcon onPress={back} />
-            </Header>
-        );
-    }
+  render() {
+    const { back } = this.props;
+    return (
+      <Header>
+        <BackIcon onPress={back} />
+      </Header>
+    );
+  }
 }

@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, TouchableOpacity } from 'react-native';
-import { BackIcon, SearchIcon } from '../../assets/index';
+import {
+  View, Text, Dimensions, TouchableOpacity
+} from 'react-native';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { BackIcon, SearchIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
 import { startSearch } from '../../actions/messageActions';
 import ImageComponent from '../../common/Image';
 import DefaultAvatar from '../../common/DefaultAvatar';
+
 const { sidePadding, HeaderHeight, fontSize } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
@@ -49,33 +52,39 @@ const ToProfile = styled(TouchableOpacity)`
     margin-right: 20px;
 `;
 class HeaderComponent extends Component {
-    render() {
-        const { back, currentTask, toProfile } = this.props;
-        const { first_name, last_name, phone_number, tasks, image } = currentTask;
-        return (
-            <Header>
-                <Left>
-                    <BackIcon onPress={back} />
-                    <ToProfile onPress={toProfile}>
-                        {image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
-                            <DefaultAvatar size={'header'} style={{ marginLeft: 10 }} /> :
-                            <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
+  render() {
+    const { back, currentTask, toProfile } = this.props;
+    const {
+      first_name, last_name, phone_number, tasks, image
+    } = currentTask;
+    return (
+      <Header>
+        <Left>
+          <BackIcon onPress={back} />
+          <ToProfile onPress={toProfile}>
+            {image === '/images/default_group.png' || image === '/images/default_avatar.jpg'
+              ? <DefaultAvatar size="header" style={{ marginLeft: 10 }} />
+              : <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size="header" />
                         }
-                        <Info>
-                            <InfoChatName>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
-                            <InfoParticipants>{tasks && tasks.length ? tasks.length : ''} задач</InfoParticipants>
-                        </Info>
-                    </ToProfile>
-                </Left>
-                <Right>
-                    <SearchIcon onPress={startSearch} />
-                </Right>
-            </Header>
-        );
-    }
+            <Info>
+              <InfoChatName>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>
+              <InfoParticipants>
+                {tasks && tasks.length ? tasks.length : ''}
+                {' '}
+задач
+              </InfoParticipants>
+            </Info>
+          </ToProfile>
+        </Left>
+        <Right>
+          <SearchIcon onPress={startSearch} />
+        </Right>
+      </Header>
+    );
+  }
 }
 const mapStateToProps = state => ({
-    currentTask: state.tasksReducer.currentTask,
+  currentTask: state.tasksReducer.currentTask,
 });
 const mapDispatchToProps = dispatch => ({
 });

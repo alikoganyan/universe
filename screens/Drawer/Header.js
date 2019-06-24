@@ -2,7 +2,8 @@ import React, { Component } from 'react';
 import { Text, View, Dimensions } from 'react-native';
 import styled from 'styled-components';
 import helper from '../../utils/helpers';
-import { LogoText } from '../../assets/';
+import { LogoText } from '../../assets';
+
 const { sidePadding, Colors, HeaderHeight } = helper;
 const { blue, lightGrey3 } = Colors;
 const Wrapper = styled(View)`
@@ -24,9 +25,9 @@ const Header = styled(Text)`
     color: ${blue};
 `;
 export default function HeaderComponent(props) {
-    return (
-        <Wrapper>
-            <LogoText width={85} height={30} noPadding />
-        </Wrapper>
-    );
+  return (
+    <Wrapper>
+      <LogoText width={85} height={30} noPadding />
+    </Wrapper>
+  );
 }

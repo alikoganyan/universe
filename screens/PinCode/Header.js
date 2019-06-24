@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableOpacity } from 'react-native';
-import { ForwardIcon } from '../../assets/index';
+import {
+  View, Text, Image, TouchableOpacity
+} from 'react-native';
 import styled from 'styled-components';
+import { ForwardIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
+
 const { HeaderHeight, fontSize } = helper;
 
 const Header = styled(View)`
@@ -54,6 +57,7 @@ export default class HeaderComponent extends Component {
       </Header>
     );
   }
+
   moveForward = () => {
     this.props.back();
   };

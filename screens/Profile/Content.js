@@ -1,16 +1,23 @@
 import React, { Component } from 'react';
-import { View, Text, FlatList, TouchableOpacity, Dimensions, ScrollView } from 'react-native';
-import { TaskIcon, GroupIcon, FilesRedIcon, GroupIconGrey } from '../../assets/index';
+import {
+  View, Text, FlatList, TouchableOpacity, Dimensions, ScrollView
+} from 'react-native';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
+import {
+  TaskIcon, GroupIcon, FilesRedIcon, GroupIconGrey
+} from '../../assets/index';
 import Button from '../../common/Button';
 import { setRoom } from '../../actions/messageActions';
-import styled from 'styled-components';
 import helper from '../../utils/helpers';
 import ImageComponent from '../../common/Image';
-import { connect } from 'react-redux';
 import { socket } from '../../utils/socket';
 import { setDialogs } from '../../actions/dialogsActions';
 import DefaultAvatar from '../../common/DefaultAvatar';
-const { sidePadding, Colors, HeaderHeight, fontSize } = helper;
+
+const {
+  sidePadding, Colors, HeaderHeight, fontSize
+} = helper;
 const { border, grey3, pink } = Colors;
 const Wrapper = styled(View)`
     padding-top: 0px;
@@ -132,156 +139,195 @@ const ContactRole = styled(Text)`
     justify-content: center;
 `;
 class Content extends Component {
-    render() {
-        const { UserData, status } = this.state;
-        const { user, myProfile, currentDialog } = this.props;
+  render() {
+    const { UserData, status } = this.state;
+    const { user, myProfile, currentDialog } = this.props;
 
-        const { _id, image, last_name, first_name, phone_number, isGroup, participants, name, creator } = myProfile ? user : currentDialog;
-        const chatName = isGroup ? name : first_name ? `${first_name} ${last_name}` : phone_number;
-        const myGroup = creator && creator._id === user._id;
-        const sortedParticipants = creator && [...participants].sort((a, b) => b._id === creator._id);
-        return (
-            <Wrapper>
-                <StyledScrollView>
-                    <User >
-                        {
-                            image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
-                                <DefaultAvatar isGroup={isGroup} id={_id} size={80} /> :
-                                <ImageComponent 
-                                    size={80}
-                                    source={{ uri: `http://ser.univ.team${image}` }}
-                                    style={{marginTop: 0, marginBottom: 16, marginRight: 10, marginLeft: 10}}
+    const {
+      _id, image, last_name, first_name, phone_number, isGroup, participants, name, creator
+    } = myProfile ? user : currentDialog;
+    const chatName = isGroup ? name : first_name ? `${first_name} ${last_name}` : phone_number;
+    const myGroup = creator && creator._id === user._id;
+    const sortedParticipants = creator && [...participants].sort((a, b) => b._id === creator._id);
+    return (
+      <Wrapper>
+        <StyledScrollView>
+          <User>
+            {
+                            image === '/images/default_group.png' || image === '/images/default_avatar.jpg'
+                              ? <DefaultAvatar isGroup={isGroup} id={_id} size={80} />
+                              : (
+                                <ImageComponent
+                                  size={80}
+                                  source={{ uri: `http://ser.univ.team${image}` }}
+                                  style={{
+                                    marginTop: 0, marginBottom: 16, marginRight: 10, marginLeft: 10
+                                  }}
                                 />
+                              )
                         }
-                        <UserInfo>
-                            <UserName>
-                                <Name>{chatName}</Name>
-                            </UserName>
-                            {(!myProfile && !isGroup) && <UserStatus>{status}</UserStatus>}
-                            {(!myProfile && !isGroup) && <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>}
-                        </UserInfo>
-                    </User>
-                    {isGroup ?
-                        <>
-                            <PersonalData>
-                                {UserData.map((item, index) => item && item.isGroup && (!myProfile || !item.icon) && <Info key={index}>
-                                        <Data>
-                                            <Type>{item.type}</Type>
-                                            <Value>{item.value}</Value>
-                                            {item.icon && item.icon}
-                                        </Data>
-                                    </Info>)}
-                            </PersonalData>
-                            <Participants>
-                                <ParticipantsItem>
-                                    <GroupIconGrey noPaddingAll />
-                                    <ParticipantsText>Участники</ParticipantsText>
-                                </ParticipantsItem>
-                                <ParticipantsItem>
-                                    {!myGroup && <TouchableOpacity onPress={this.leaveGroup}>
-                                        <LeaveGroup>ВЫЙТИ ИЗ ГРУППЫ</LeaveGroup>
-                                    </TouchableOpacity>}
-                                </ParticipantsItem>
-                            </Participants>
-                            <FlatList
-                                style={{ paddingRight: 5, paddingLeft: 5, }}
-                                data={sortedParticipants}
-                                renderItem={({ item, index }) => {
-                                    const { first_name, last_name, role, image, phone_number } = item;
-                                    return (
-                                        <View style={{
-                                            display: 'flex',
-                                            flexDirection: 'row',
-                                            alignItems: 'center',
-                                            justifyContent: 'space-between',
-                                            padding: 10,
-                                        }}>
-                                            <BoxInnerItem>
-                                                {image === '/images/default_avatar.jpg' ?
-                                                    <DefaultAvatar size={36} /> :
-                                                    <ImageComponent 
-                                                        size={36}
-                                                        source={{ uri: `http://ser.univ.team${image}` }}
-                                                        style={{marginRight: 8}}
-                                                    />
+            <UserInfo>
+              <UserName>
+                <Name>{chatName}</Name>
+              </UserName>
+              {(!myProfile && !isGroup) && <UserStatus>{status}</UserStatus>}
+              {(!myProfile && !isGroup) && <SendMessage onPress={this.toChat}>Написать сообщение</SendMessage>}
+            </UserInfo>
+          </User>
+          {isGroup
+            ? (
+              <>
+                <PersonalData>
+                  {UserData.map((item, index) => item && item.isGroup && (!myProfile || !item.icon) && (
+                  <Info key={index}>
+                    <Data>
+                      <Type>{item.type}</Type>
+                      <Value>{item.value}</Value>
+                      {item.icon && item.icon}
+                    </Data>
+                  </Info>
+                  ))}
+                </PersonalData>
+                <Participants>
+                  <ParticipantsItem>
+                    <GroupIconGrey noPaddingAll />
+                    <ParticipantsText>Участники</ParticipantsText>
+                  </ParticipantsItem>
+                  <ParticipantsItem>
+                    {!myGroup && (
+                    <TouchableOpacity onPress={this.leaveGroup}>
+                      <LeaveGroup>ВЫЙТИ ИЗ ГРУППЫ</LeaveGroup>
+                    </TouchableOpacity>
+                    )}
+                  </ParticipantsItem>
+                </Participants>
+                <FlatList
+                  style={{ paddingRight: 5, paddingLeft: 5, }}
+                  data={sortedParticipants}
+                  renderItem={({ item, index }) => {
+                    const {
+                      first_name, last_name, role, image, phone_number
+                    } = item;
+                    return (
+                      <View style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: 10,
+                      }}
+                      >
+                        <BoxInnerItem>
+                          {image === '/images/default_avatar.jpg'
+                            ? <DefaultAvatar size={36} />
+                            : (
+                              <ImageComponent
+                                size={36}
+                                source={{ uri: `http://ser.univ.team${image}` }}
+                                style={{ marginRight: 8 }}
+                              />
+                            )
                                                 }
-                                                <ContactInfo>
-                                                    <ContactName>{first_name ? `${first_name} ${last_name}` : phone_number}</ContactName>
-                                                    {role && role.name && <ContactRole>{role.name}</ContactRole>}
-                                                </ContactInfo>
-                                            </BoxInnerItem>
-                                            <Text>{index === 0 && 'admin'}</Text>
-                                        </View>
-                                    );
-                                }}
-                                keyExtractor={(item, index) => index.toString()}
-                            />
-                        </> :
-                        <PersonalData>
-                            {UserData.map((item, index) => item && !item.isGroup && (!myProfile || !item.icon) && <Info key={index}>
-                                    <Data>
-                                        <Type>{item.type}</Type>
-                                        <Value>{item.value && (item.value.name ? item.value.name : item.value)}</Value>
-                                        {item.icon && item.icon}
-                                    </Data>
-                                </Info>)}
-                        </PersonalData>
+                          <ContactInfo>
+                            <ContactName>{first_name ? `${first_name} ${last_name}` : phone_number}</ContactName>
+                            {role && role.name && <ContactRole>{role.name}</ContactRole>}
+                          </ContactInfo>
+                        </BoxInnerItem>
+                        <Text>{index === 0 && 'admin'}</Text>
+                      </View>
+                    );
+                  }}
+                  keyExtractor={(item, index) => index.toString()}
+                />
+              </>
+            )
+            : (
+              <PersonalData>
+                {UserData.map((item, index) => item && !item.isGroup && (!myProfile || !item.icon) && (
+                <Info key={index}>
+                  <Data>
+                    <Type>{item.type}</Type>
+                    <Value>{item.value && (item.value.name ? item.value.name : item.value)}</Value>
+                    {item.icon && item.icon}
+                  </Data>
+                </Info>
+                ))}
+              </PersonalData>
+            )
                     }
-                    <View style={{ height: 10 }} />
-                </StyledScrollView>
-            </Wrapper>
+          <View style={{ height: 10 }} />
+        </StyledScrollView>
+      </Wrapper>
 
-        );
-    }
+    );
+  }
+
     state = {
-        userName: 'Константин Константинопольский',
-        status: 'В сети',
-        UserData: []
+      userName: 'Константин Константинопольский',
+      status: 'В сети',
+      UserData: []
     }
+
     componentDidMount() {
-        const { myProfile, user, currentDialog } = this.props;
-        const { role, phone_number, department } = myProfile ? user : currentDialog;
-        const newUserData = [
-            { type: 'Подразделение', value: department || 'без подразделения', isGroup: false },
-            { type: 'Должность', value: role ? role.length ? role.name : 'без должности' : 'без должности', isGroup: false },
-            { type: 'Личный', value: phone_number || 'без номера', isGroup: false },
-            !myProfile ? { type: 'Задачи', value: '4', icon: <TaskIcon />, isGroup: false } : undefined,
-            !myProfile ? { type: 'Общих групп', value: '32', icon: <GroupIcon />, isGroup: false } : undefined,
-            !myProfile ? { type: 'Пользователей', value: '4', icon: <GroupIcon />, isGroup: true } : undefined,
-            !myProfile ? { type: 'Задачи', value: '32', icon: <TaskIcon />, isGroup: true } : undefined,
-            !myProfile ? { type: 'Общих файлов', value: '10', icon: <FilesRedIcon />, isGroup: false } : undefined,
-            !myProfile ? { type: 'Общих файлов', value: '10', icon: <FilesRedIcon />, isGroup: true } : undefined,
-        ];
-        this.setState({ UserData: newUserData });
+      const { myProfile, user, currentDialog } = this.props;
+      const { role, phone_number, department } = myProfile ? user : currentDialog;
+      const newUserData = [
+        { type: 'Подразделение', value: department || 'без подразделения', isGroup: false },
+        { type: 'Должность', value: role ? role.length ? role.name : 'без должности' : 'без должности', isGroup: false },
+        { type: 'Личный', value: phone_number || 'без номера', isGroup: false },
+        !myProfile ? {
+          type: 'Задачи', value: '4', icon: <TaskIcon />, isGroup: false
+        } : undefined,
+        !myProfile ? {
+          type: 'Общих групп', value: '32', icon: <GroupIcon />, isGroup: false
+        } : undefined,
+        !myProfile ? {
+          type: 'Пользователей', value: '4', icon: <GroupIcon />, isGroup: true
+        } : undefined,
+        !myProfile ? {
+          type: 'Задачи', value: '32', icon: <TaskIcon />, isGroup: true
+        } : undefined,
+        !myProfile ? {
+          type: 'Общих файлов', value: '10', icon: <FilesRedIcon />, isGroup: false
+        } : undefined,
+        !myProfile ? {
+          type: 'Общих файлов', value: '10', icon: <FilesRedIcon />, isGroup: true
+        } : undefined,
+      ];
+      this.setState({ UserData: newUserData });
     }
+
     toChat = () => {
-        const { toChat, setRoom, user } = this.props;
-        const { id } = user;
-        socket.emit('select chat', { chatId: id, userId: id });
-        setRoom(id);
-        toChat();
+      const { toChat, setRoom, user } = this.props;
+      const { id } = user;
+      socket.emit('select chat', { chatId: id, userId: id });
+      setRoom(id);
+      toChat();
     }
+
     leaveGroup = () => {
-        const { currentRoom, currentDialog, setDialogs, dialog, toDialogs } = this.props;
-        const newDialogs = [...dialog].filter(e => e._id !== currentDialog._id);
-        setDialogs(newDialogs);
-        toDialogs();
-        console.log(`leave group ${currentRoom}`);
+      const {
+        currentRoom, currentDialog, setDialogs, dialog, toDialogs
+      } = this.props;
+      const newDialogs = [...dialog].filter(e => e._id !== currentDialog._id);
+      setDialogs(newDialogs);
+      toDialogs();
+      console.log(`leave group ${currentRoom}`);
     }
 }
 
 const mapStateToProps = state => ({
-    messages: state.messageReducer,
-    dialog: state.dialogsReducer.dialogs,
-    currentRoom: state.messageReducer.currentRoom,
-    currentChat: state.messageReducer.currentChat,
-    currentDialog: state.dialogsReducer.currentDialog,
-    user: state.userReducer.user,
+  messages: state.messageReducer,
+  dialog: state.dialogsReducer.dialogs,
+  currentRoom: state.messageReducer.currentRoom,
+  currentChat: state.messageReducer.currentChat,
+  currentDialog: state.dialogsReducer.currentDialog,
+  user: state.userReducer.user,
 });
 const mapDispatchToProps = dispatch => ({
-    getMessages: _ => dispatch(getMessages(_)),
-    setRoom: _ => dispatch(setRoom(_)),
-    setDialogs: _ => dispatch(setDialogs(_)),
-    addMessage: _ => dispatch(addMessage(_))
+  getMessages: _ => dispatch(getMessages(_)),
+  setRoom: _ => dispatch(setRoom(_)),
+  setDialogs: _ => dispatch(setDialogs(_)),
+  addMessage: _ => dispatch(addMessage(_))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

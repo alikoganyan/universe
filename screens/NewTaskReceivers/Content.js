@@ -1,37 +1,40 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, InteractionManager } from 'react-native';
-import { ArrowDownIcon } from '../../assets/index';
+import {
+  View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, Dimensions, InteractionManager
+} from 'react-native';
 import styled from 'styled-components';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import helper from '../../utils/helpers';
-import DefaultAvatar from '../../common/DefaultAvatar';
 import RoundCheckbox from 'rn-round-checkbox';
 import posed from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
+import { connect } from 'react-redux';
+import { ArrowDownIcon } from '../../assets/index';
+import helper from '../../utils/helpers';
+import DefaultAvatar from '../../common/DefaultAvatar';
 import sendRequest from '../../utils/request';
 import { g_users } from '../../constants/api';
 import { setContacts, setAllUsers } from '../../actions/userActions';
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions';
 import { addTaskReceiver, setTaskReceivers } from '../../actions/participantsActions';
 import { setDialogs } from '../../actions/dialogsActions';
-import { connect } from 'react-redux';
+
 const { Colors } = helper;
 const { purple } = Colors;
 const AnimatedScrollView = posed.View({
-    left: {
-        x: Dimensions.get('window').width,
-        transition: { duration: 300, ease: 'easeOut' }
-    },
-    center: {
-        x: 0,
-        transition: { duration: 300, ease: 'easeOut' },
-    },
+  left: {
+    x: Dimensions.get('window').width,
+    transition: { duration: 300, ease: 'easeOut' }
+  },
+  center: {
+    x: 0,
+    transition: { duration: 300, ease: 'easeOut' },
+  },
 
 
-    right: {
-        x: -Dimensions.get('window').width,
-        transition: { duration: 300, ease: 'easeOut' }
-    },
+  right: {
+    x: -Dimensions.get('window').width,
+    transition: { duration: 300, ease: 'easeOut' }
+  },
 
 });
 const Animated = styled(AnimatedScrollView)`
@@ -40,12 +43,12 @@ const Animated = styled(AnimatedScrollView)`
     width: ${Dimensions.get('window').width * 3};
 `;
 const AnimatedBox = posed.View({
-    visible: { flex: 1 },
-    hidden: { flex: 0 }
+  visible: { flex: 1 },
+  hidden: { flex: 0 }
 });
 const AnimatedArrowWrapper = posed.View({
-    down: { rotate: "0deg", },
-    right: { rotate: "-90deg", }
+  down: { rotate: '0deg', },
+  right: { rotate: '-90deg', }
 });
 const Wrapper = styled(View)`
     padding-top: 0px;
@@ -66,7 +69,7 @@ const Box = styled(View)`
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
-    border-bottom-width: ${({ last }) => last ? 1 : 0}px;
+    border-bottom-width: ${({ last }) => (last ? 1 : 0)}px;
 `;
 const BoxTitle = styled(TouchableOpacity)`
     display: flex;
@@ -81,7 +84,7 @@ const BoxInner = styled(AnimatedBox)`
     border: 1px solid #E8EBEE;
     border-width: 0;
     border-top-width: 1px;
-    border-bottom-width: ${({ last }) => last ? 1 : 0}px;
+    border-bottom-width: ${({ last }) => (last ? 1 : 0)}px;
 `;
 const BoxItem = styled(Text)`
     color: #A7B0BA;
@@ -89,7 +92,7 @@ const BoxItem = styled(Text)`
 `;
 const BoxInnerItem = styled(View)`
     padding: 10px;
-    padding-bottom: ${({ title }) => title ? 20 : 0}px;
+    padding-bottom: ${({ title }) => (title ? 20 : 0)}px;
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -120,223 +123,247 @@ const GroupTitle = styled(ContactName)``;
 const GroupParticipants = styled(ContactRole)``;
 const GroupImage = styled(ContactImage)``;
 class Content extends Component {
-    render() {
-        const { users, collapsed, options, groups, animationCompleted } = this.state;
-        const { department } = users;
-        const { active } = options;
-        return (
-            <SafeAreaView>
-                {/* <GestureRecognizer
+  render() {
+    const {
+      users, collapsed, options, groups, animationCompleted
+    } = this.state;
+    const { department } = users;
+    const { active } = options;
+    return (
+      <SafeAreaView>
+        {/* <GestureRecognizer
                     onSwipeLeft={this.optionLeft}
                     onSwipeRight={this.optionRight}
                 > */}
 
-                <Wrapper>
-                    <KeyboardAwareScrollView enableOnAndroid>
-                        {/* <Options>
+        <Wrapper>
+          <KeyboardAwareScrollView enableOnAndroid>
+            {/* <Options>
                             {
                                 options.options.map((e, i) => <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
                                     <Option active={active % 3 === i}>{e}</Option>
                                 </TouchableOpacity>)
                             }
                         </Options> */}
-                        <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
-                            <ContactList>
-                                {
+            <Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
+              <ContactList>
+                {
                                     department.map((e, i) => (
-                                        <Box key={i} last={i === department.length - 1}>
-                                            <BoxTitle onPress={() => collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i)}>
-                                                <>
-                                                    {/* <RoundCheckbox
+                                      <Box key={i} last={i === department.length - 1}>
+                                        <BoxTitle onPress={() => (collapsed[i] ? this.collapseDepartment(i) : this.showDepartment(i))}>
+                                          <>
+                                            {/* <RoundCheckbox
                                                         size={24}
                                                         checked={receivers.length === e.workers.length}
                                                         onValueChange={() => this.addAllReceivers(e.workers)}
                                                     /> */}
-                                                    <BoxItem title={true}>{e.title}</BoxItem>
-                                                </>
-                                                <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                                                    <ArrowDownIcon />
-                                                </ArrowWrapper>
-                                            </BoxTitle>
-                                            <Collapsible collapsed={collapsed[i] || false}>
-                                                {animationCompleted ? 
-                                                    <BoxInner>
-                                                        {
-                                                            e.workers.map((e, i) => <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
+                                            <BoxItem title>{e.title}</BoxItem>
+                                          </>
+                                          <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
+                                            <ArrowDownIcon />
+                                          </ArrowWrapper>
+                                        </BoxTitle>
+                                        <Collapsible collapsed={collapsed[i] || false}>
+                                          {animationCompleted
+                                            ? (
+                                              <BoxInner>
+                                                {
+                                                            e.workers.map((e, i) => (
+                                                              <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
                                                                 <BoxInnerItem>
-                                                                    {
-                                                                        this.includes(e) ?
+                                                                  {
+                                                                        this.includes(e)
+                                                                          ? (
                                                                             <RoundCheckbox
-                                                                                size={36}
-                                                                                backgroundColor={purple}
-                                                                                checked={true}
-                                                                                onValueChange={() => this.addReceiver(e)}
+                                                                              size={36}
+                                                                              backgroundColor={purple}
+                                                                              checked
+                                                                              onValueChange={() => this.addReceiver(e)}
                                                                             />
-                                                                            : e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg' ?
-                                                                                <DefaultAvatar size={36} id={e._id} /> :
-                                                                                <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
+                                                                          )
+                                                                          : e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg'
+                                                                            ? <DefaultAvatar size={36} id={e._id} />
+                                                                            : <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
                                                                     }
-                                                                    <ContactInfo>
-                                                                        <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
-                                                                        {e.role ? <ContactRole>{e.role.name || 'no role'}</ContactRole> : null}
-                                                                    </ContactInfo>
+                                                                  <ContactInfo>
+                                                                    <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>
+                                                                    {e.role ? <ContactRole>{e.role.name || 'no role'}</ContactRole> : null}
+                                                                  </ContactInfo>
                                                                 </BoxInnerItem>
-                                                            </TouchableOpacity>)
+                                                              </TouchableOpacity>
+                                                            ))
                                                         }
-                                                    </BoxInner> : null}
-                                            </Collapsible>
-                                        </Box>
+                                              </BoxInner>
+                                            ) : null}
+                                        </Collapsible>
+                                      </Box>
                                     ))
                                 }
-                            </ContactList>
-                            <ContactList>
-                                {animationCompleted ? 
-                                    <FlatList
-                                        style={{ paddingRight: 5, paddingLeft: 5, }}
-                                        ListHeaderComponent={<View style={{ margin: 35, }} />}
-                                        inverted={true}
-                                        data={groups}
-                                        renderItem={({ item, index }) => <Group key={index}>
-                                            <GroupImage />
-                                            <GroupInfo>
-                                                <GroupTitle>{item.title}</GroupTitle>
-                                                <GroupParticipants>{item.participants} участников</GroupParticipants>
-                                            </GroupInfo>
-                                        </Group>
+              </ContactList>
+              <ContactList>
+                {animationCompleted
+                  ? (
+                    <FlatList
+                      style={{ paddingRight: 5, paddingLeft: 5, }}
+                      ListHeaderComponent={<View style={{ margin: 35, }} />}
+                      inverted
+                      data={groups}
+                      renderItem={({ item, index }) => (
+                        <Group key={index}>
+                          <GroupImage />
+                          <GroupInfo>
+                            <GroupTitle>{item.title}</GroupTitle>
+                            <GroupParticipants>
+                              {item.participants}
+                              {' '}
+участников
+                            </GroupParticipants>
+                          </GroupInfo>
+                        </Group>
+                      )
                                         }
-                                        keyExtractor={(item, index) => index.toString()}
-                                    /> : null}
-                            </ContactList>
-                        </Animated>
-                    </KeyboardAwareScrollView>
-                </Wrapper>
-                {/* </GestureRecognizer> */}
-            </SafeAreaView>
-        );
-    }
+                      keyExtractor={(item, index) => index.toString()}
+                    />
+                  ) : null}
+              </ContactList>
+            </Animated>
+          </KeyboardAwareScrollView>
+        </Wrapper>
+        {/* </GestureRecognizer> */}
+      </SafeAreaView>
+    );
+  }
+
     state = {
-        collapsed: [],
-        users: {
-            department: [
-                {
-                    title: 'Отдел длинных корпоративных названий',
-                    workers: [],
-                },
-            ],
-        },
-        options: {
-            active: 1,
-            options: [
-                'Все',
-                'Пользователи',
-                'Группы'
-            ]
-        },
-        groups: [
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
-            { title: 'длинное корпоративное название группы', participants: 15 },
+      collapsed: [],
+      users: {
+        department: [
+          {
+            title: 'Отдел длинных корпоративных названий',
+            workers: [],
+          },
         ],
-        animationCompleted: false
+      },
+      options: {
+        active: 1,
+        options: [
+          'Все',
+          'Пользователи',
+          'Группы'
+        ]
+      },
+      groups: [
+        { title: 'длинное корпоративное название группы', participants: 15 },
+        { title: 'длинное корпоративное название группы', participants: 15 },
+        { title: 'длинное корпоративное название группы', participants: 15 },
+        { title: 'длинное корпоративное название группы', participants: 15 },
+        { title: 'длинное корпоративное название группы', participants: 15 },
+        { title: 'длинное корпоративное название группы', participants: 15 },
+        { title: 'длинное корпоративное название группы', participants: 15 },
+        { title: 'длинное корпоративное название группы', participants: 15 },
+      ],
+      animationCompleted: false
     }
+
     componentDidMount() {
-        InteractionManager.runAfterInteractions(() => {
-            this.setState({
-                animationCompleted: true,
-            });
+      InteractionManager.runAfterInteractions(() => {
+        this.setState({
+          animationCompleted: true,
         });
-        const { collapsed, users } = this.state;
-        const newDCollapsed = [...collapsed];
-        for (let i = 0; i <= users.department.length; i++) {
-            newDCollapsed.push(false);
+      });
+      const { collapsed, users } = this.state;
+      const newDCollapsed = [...collapsed];
+      for (let i = 0; i <= users.department.length; i++) {
+        newDCollapsed.push(false);
+      }
+      this.setState({ collapsed: newDCollapsed });
+      sendRequest({
+        r_path: g_users,
+        method: 'get',
+        success: (res) => {
+          this.props.setContacts(res.users);
+          const newUsers = { ...users };
+          newUsers.department[0].workers = res.users;
+          this.setState({ users: newUsers });
+        },
+        failFunc: (err) => {
+          console.log({ err });
         }
-        this.setState({ collapsed: newDCollapsed });
-        sendRequest({
-            r_path: g_users,
-            method: 'get',
-            success: (res) => {
-                this.props.setContacts(res.users);
-                const newUsers = { ...users };
-                newUsers.department[0].workers = res.users;
-                this.setState({ users: newUsers });
-            },
-            failFunc: (err) => {
-                console.log({ err });
-            }
-        });
+      });
     }
+
     optionLeft = () => {
-        const { collapsed } = this.state;
-        const newState = { ...options };
-        const length = options.options.length;
-        newState.active = options.active < length - 1 ? options.active + 1 : 0;
-        this.setState({ options: newState });
-
+      const { collapsed } = this.state;
+      const newState = { ...options };
+      const { length } = options.options;
+      newState.active = options.active < length - 1 ? options.active + 1 : 0;
+      this.setState({ options: newState });
     }
+
     optionRight = () => {
-        const { collapsed } = this.state;
-        const newState = { ...options };
-        const length = options.options.length;
-        newState.active = options.active > 0 ? options.active - 1 : length - 1;
-        this.setState({ options: newState });
+      const { collapsed } = this.state;
+      const newState = { ...options };
+      const { length } = options.options;
+      newState.active = options.active > 0 ? options.active - 1 : length - 1;
+      this.setState({ options: newState });
+    }
 
-    }
     addReceiver = (e) => {
-        const { setReceivers } = this.props;
-        setReceivers([e]);
+      const { setReceivers } = this.props;
+      setReceivers([e]);
     }
+
     addAllReceivers = (e) => {
-        const { receivers, setReceivers } = this.props;
-        const newReceivers = JSON.stringify(e) === JSON.stringify(receivers) ? [] : e;
-        setReceivers(newReceivers);
+      const { receivers, setReceivers } = this.props;
+      const newReceivers = JSON.stringify(e) === JSON.stringify(receivers) ? [] : e;
+      setReceivers(newReceivers);
     }
+
     includes = (e) => {
-        const { receivers } = this.props;
-        return !!receivers.filter(user => e._id === user._id)[0];
+      const { receivers } = this.props;
+      return !!receivers.filter(user => e._id === user._id)[0];
     }
+
     collapseDepartment = (i) => {
-        const { collapsed } = this.state;
-        const newDCollapsed = [...collapsed];
-        newDCollapsed[i] = false;
-        this.setState({ collapsed: newDCollapsed });
+      const { collapsed } = this.state;
+      const newDCollapsed = [...collapsed];
+      newDCollapsed[i] = false;
+      this.setState({ collapsed: newDCollapsed });
     }
+
     showDepartment = (i) => {
-        const { collapsed } = this.state;
-        const newDCollapsed = [...collapsed];
-        newDCollapsed[i] = true;
-        this.setState({ collapsed: newDCollapsed });
+      const { collapsed } = this.state;
+      const newDCollapsed = [...collapsed];
+      newDCollapsed[i] = true;
+      this.setState({ collapsed: newDCollapsed });
     }
+
     selectOption = (e) => {
-        const { options } = this.state;
-        const newState = { ...options };
-        newState.active = e;
-        this.setState({ options: newState });
+      const { options } = this.state;
+      const newState = { ...options };
+      newState.active = e;
+      this.setState({ options: newState });
     }
 }
 
 const mapStateToProps = state => ({
-    messages: state.messageReducer,
-    dialog: state.dialogsReducer.dialogs,
-    currentRoom: state.messageReducer.currentRoom,
-    currentChat: state.messageReducer.currentChat,
-    user: state.userReducer.user,
-    users: state.userReducer,
-    receivers: state.participantsReducer.tasks.receivers,
+  messages: state.messageReducer,
+  dialog: state.dialogsReducer.dialogs,
+  currentRoom: state.messageReducer.currentRoom,
+  currentChat: state.messageReducer.currentChat,
+  user: state.userReducer.user,
+  users: state.userReducer,
+  receivers: state.participantsReducer.tasks.receivers,
 });
 const mapDispatchToProps = dispatch => ({
-    getMessages: _ => dispatch(getMessages(_)),
-    setRoom: _ => dispatch(setRoom(_)),
-    setDialogs: _ => dispatch(setDialogs(_)),
-    addMessage: _ => dispatch(addMessage(_)),
-    setAllUsers: _ => dispatch(setAllUsers(_)),
-    setContacts: _ => dispatch(setContacts(_)),
-    addReceiver: _ => dispatch(addTaskReceiver(_)),
-    setReceivers: _ => dispatch(setTaskReceivers(_)),
+  getMessages: _ => dispatch(getMessages(_)),
+  setRoom: _ => dispatch(setRoom(_)),
+  setDialogs: _ => dispatch(setDialogs(_)),
+  addMessage: _ => dispatch(addMessage(_)),
+  setAllUsers: _ => dispatch(setAllUsers(_)),
+  setContacts: _ => dispatch(setContacts(_)),
+  addReceiver: _ => dispatch(addTaskReceiver(_)),
+  setReceivers: _ => dispatch(setTaskReceivers(_)),
 
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

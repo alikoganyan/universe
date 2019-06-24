@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, Image, Dimensions, Platform, ActionSheetIOS } from 'react-native';
-import { BackIcon, LocationIcon, EditIcon } from '../../assets/index';
+import {
+  View, Text, SafeAreaView, Image, Dimensions, Platform, ActionSheetIOS
+} from 'react-native';
 import styled from 'styled-components';
-import helper from '../../utils/helpers';
 import { connect } from 'react-redux';
+import { BackIcon, LocationIcon, EditIcon } from '../../assets/index';
+import helper from '../../utils/helpers';
+
 const { sidePadding, HeaderHeight } = helper;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - sidePadding * 2}px;
@@ -29,22 +32,22 @@ const Right = styled(View)`
     justify-content: flex-start;
 `;
 export default class HeaderComponent extends Component {
-    render() {
-        const { myProfile } = this.props;
-        return (
-            <Header>
-                <Left>
-                    <BackIcon onPress={this.props.back} />
-                </Left>
-                <Right>
-                    {myProfile && <EditIcon onPress={this.editProfile} />}
-                </Right>
-            </Header>
-        );
-    }
-    editProfile = () => {
-        const { edit } = this.props;
-        edit();
+  render() {
+    const { myProfile } = this.props;
+    return (
+      <Header>
+        <Left>
+          <BackIcon onPress={this.props.back} />
+        </Left>
+        <Right>
+          {myProfile && <EditIcon onPress={this.editProfile} />}
+        </Right>
+      </Header>
+    );
+  }
 
+    editProfile = () => {
+      const { edit } = this.props;
+      edit();
     }
 }

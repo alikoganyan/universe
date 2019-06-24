@@ -7,17 +7,18 @@ import Content from './Content';
 
 const Wrapper = styled(View)``;
 export default class NewPost extends Component {
-    render() {
-        return (
-            <SafeAreaView>
-                <Wrapper>
-                    <Header back={this.navigateBack} />
-                    <Content />
-                </Wrapper>
-            </SafeAreaView>
-        );
-    }
+  render() {
+    return (
+      <SafeAreaView>
+        <Wrapper>
+          <Header back={this.navigateBack} />
+          <Content />
+        </Wrapper>
+      </SafeAreaView>
+    );
+  }
+
     navigateBack = () => {
-        this.props.navigation.goBack();
+      this.props.navigation.goBack();
     }
 }

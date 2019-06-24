@@ -1,19 +1,25 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Dimensions } from 'react-native';
+import {
+  View, Text, SafeAreaView, FlatList, TouchableOpacity, Dimensions
+} from 'react-native';
 import styled from 'styled-components';
 import SwitchToggle from 'react-native-switch-toggle';
-import helper from '../../utils/helpers';
 import posed from 'react-native-pose';
 import { connect } from 'react-redux';
+import helper from '../../utils/helpers';
 import sendRequest from '../../utils/request';
 import { p_settings } from '../../constants/api';
 import { setSettings } from '../../actions/userActions';
 
-const { Colors, sidePadding, fontSize, borderRadius, HeaderHeight } = helper;
-const { lightGrey1, blue, lightBlue, grey2, white, black } = Colors;
+const {
+  Colors, sidePadding, fontSize, borderRadius, HeaderHeight
+} = helper;
+const {
+  lightGrey1, blue, lightBlue, grey2, white, black
+} = Colors;
 const LangPickerPosed = posed.View({
-    visible: { bottom: 170 },
-    hidden: { bottom: -Dimensions.get('window').height }
+  visible: { bottom: 170 },
+  hidden: { bottom: -Dimensions.get('window').height }
 });
 const Wrapper = styled(View)`
     padding-top: 0px;
@@ -31,7 +37,7 @@ const Box = styled(View)`
     border: 1px solid ${lightGrey1};
     border-width: 0;
     border-top-width: 1px;
-    border-bottom-width: ${({ last }) => last ? '1px' : 0};
+    border-bottom-width: ${({ last }) => (last ? '1px' : 0)};
 `;
 const Label = styled(Text)`
     flex: 2;
@@ -103,179 +109,200 @@ const CheckboxHolder = styled(View)`
     margin-bottom: 10px;
 `;
 const Toggle = (props) => {
-    const { switchOn, onPress } = props;
-    return <SwitchToggle
-        containerStyle={{
-            width: 34,
-            height: 14,
-            borderRadius: 20,
-            padding: 0.1
-        }}
-        circleStyle={{
-            width: 20,
-            height: 20,
-            borderRadius: 12,
-            elevation: 3,
-            backgroundColor: white, // rgb(102,134,205)
-        }}
-        circleColorOn={blue}
-        circleColorOff={white}
-        backgroundColorOn={lightBlue}
-        backgroundColorOff={lightGrey1}
-        switchOn={switchOn}
-        onPress={onPress}
-    />;
+  const { switchOn, onPress } = props;
+  return (
+    <SwitchToggle
+      containerStyle={{
+        width: 34,
+        height: 14,
+        borderRadius: 20,
+        padding: 0.1
+      }}
+      circleStyle={{
+        width: 20,
+        height: 20,
+        borderRadius: 12,
+        elevation: 3,
+        backgroundColor: white, // rgb(102,134,205)
+      }}
+      circleColorOn={blue}
+      circleColorOff={white}
+      backgroundColorOn={lightBlue}
+      backgroundColorOff={lightGrey1}
+      switchOn={switchOn}
+      onPress={onPress}
+    />
+  );
 };
 class Content extends Component {
-    render() {
-        const { settings, pickerOpened, langs } = this.state;
-        return (
-            <SafeAreaView>
-                <Wrapper>
-                    {pickerOpened && <Shadow activeOpacity={1} onPress={this.pickerClose}></Shadow>}
-                    <FlatList
-                        style={{ paddingRight: 5, paddingLeft: 5, maxHeight: 300 }}
-                        ListHeaderComponent={<View style={{ margin: 10, }} />}
-                        data={settings}
-                        scrollEnabled={false}
-                        renderItem={({ item, index }) => <Box key={index} last={index === settings.length - 1}>
-                                <Label>{item.label}</Label>
-                                <Status>{item.status || item.language}</Status>
-                                <Option>
-                                    {item.option.type === 'toggle' && <Toggle
-                                        onPress={() => this.handleToggle(item.label)}
-                                        switchOn={!!item.option.value}
-                                    />}
-                                    {item.option.type === 'link' && <TouchableOpacity onPress={this.selectOption}>
-                                        <Link>{item.option.value}</Link>
-                                    </TouchableOpacity>}
-                                </Option>
-                            </Box>}
-                        keyExtractor={(item, index) => index.toString()}
-                    />
-                    <CheckboxHolder>
-                        {this.state.agreements.map((e, i) => <Checkbox key={i}>
-                                <CheckBoxLabel>
-                                    <TouchableOpacity>
-                                        <LinkText>{e.linkText}</LinkText>
-                                    </TouchableOpacity>
-                                </CheckBoxLabel>
-                            </Checkbox>)}
-                    </CheckboxHolder>
-                    <Policy>
-                        <PolicyLink>Соглашение об использовании персональных данных</PolicyLink>
-                        <PolicyLink>Политика соглашения</PolicyLink>
-                        <PolicyLink>Условия использования</PolicyLink>
-                    </Policy>
-                    <LangPicker pose={pickerOpened ? 'visible' : 'hidden'}>
-                        {Object.values(langs).map((e, i) => <TouchableOpacity key={i}><Text style={{ color: i === 0 ? blue : black }}>{e}</Text></TouchableOpacity>)}
-                        <TouchableOpacity onPress={this.pickerClose}><Text>Отменить</Text></TouchableOpacity>
-                    </LangPicker>
-                </Wrapper>
-            </SafeAreaView>
-        );
-    }
-    state = {
-        switchOn: true,
-        langs: {
-            ru: 'Русский',
-            en: 'English',
-        },
-        pickerOpened: false,
-        settings: [
-            { item: 'language', label: 'Язык', status: 'ru', option: { type: 'link', value: 'изменить' } },
-            { item: 'notifications', label: 'Уведомления', status: 'Включены', option: { type: 'toggle', value: 1 } },
-            { item: 'sound', label: 'Звук', status: 'Включен', option: { type: 'toggle', value: 0 } },
-            { item: 'partition_contacts', label: 'Контакты', status: 'По подразделениям', option: { type: 'toggle', value: 0 } },
-        ],
-        agreements: [
-            {
-                value: false,
-                linkText: 'Условия использования',
-                linkComp: 'linkComp'
-            },
-            {
-                value: false,
-                linkText: 'Пользовательское соглашение',
-                linkComp: 'linkComp'
-            },
-            {
-                value: false,
-                linkText: 'Использование персональных данные',
-                linkComp: 'linkComp'
-            }
-        ]
-    }
-    componentDidMount() {
-        const { settings, langs } = this.state;
-        const { user } = this.props;
-        const newSettings = [...settings];
-        newSettings.map(e => {
-            if (e.item === 'language') {
-                e.option.value = 'Изменить';
-                e.status = langs[e.item];
-            }
-            else
-                e.option.value = user.settings[e.item];
-        });
-        setTimeout(() => {
+  render() {
+    const { settings, pickerOpened, langs } = this.state;
+    return (
+      <SafeAreaView>
+        <Wrapper>
+          {pickerOpened && <Shadow activeOpacity={1} onPress={this.pickerClose} />}
+          <FlatList
+            style={{ paddingRight: 5, paddingLeft: 5, maxHeight: 300 }}
+            ListHeaderComponent={<View style={{ margin: 10, }} />}
+            data={settings}
+            scrollEnabled={false}
+            renderItem={({ item, index }) => (
+              <Box key={index} last={index === settings.length - 1}>
+                <Label>{item.label}</Label>
+                <Status>{item.status || item.language}</Status>
+                <Option>
+                  {item.option.type === 'toggle' && (
+                  <Toggle
+                    onPress={() => this.handleToggle(item.label)}
+                    switchOn={!!item.option.value}
+                  />
+                  )}
+                  {item.option.type === 'link' && (
+                  <TouchableOpacity onPress={this.selectOption}>
+                    <Link>{item.option.value}</Link>
+                  </TouchableOpacity>
+                  )}
+                </Option>
+              </Box>
+            )}
+            keyExtractor={(item, index) => index.toString()}
+          />
+          <CheckboxHolder>
+            {this.state.agreements.map((e, i) => (
+              <Checkbox key={i}>
+                <CheckBoxLabel>
+                  <TouchableOpacity>
+                    <LinkText>{e.linkText}</LinkText>
+                  </TouchableOpacity>
+                </CheckBoxLabel>
+              </Checkbox>
+            ))}
+          </CheckboxHolder>
+          <Policy>
+            <PolicyLink>Соглашение об использовании персональных данных</PolicyLink>
+            <PolicyLink>Политика соглашения</PolicyLink>
+            <PolicyLink>Условия использования</PolicyLink>
+          </Policy>
+          <LangPicker pose={pickerOpened ? 'visible' : 'hidden'}>
+            {Object.values(langs).map((e, i) => <TouchableOpacity key={i}><Text style={{ color: i === 0 ? blue : black }}>{e}</Text></TouchableOpacity>)}
+            <TouchableOpacity onPress={this.pickerClose}><Text>Отменить</Text></TouchableOpacity>
+          </LangPicker>
+        </Wrapper>
+      </SafeAreaView>
+    );
+  }
 
-            this.setState({ settings: newSettings });
-        }, 0);
+    state = {
+      switchOn: true,
+      langs: {
+        ru: 'Русский',
+        en: 'English',
+      },
+      pickerOpened: false,
+      settings: [
+        {
+          item: 'language', label: 'Язык', status: 'ru', option: { type: 'link', value: 'изменить' }
+        },
+        {
+          item: 'notifications', label: 'Уведомления', status: 'Включены', option: { type: 'toggle', value: 1 }
+        },
+        {
+          item: 'sound', label: 'Звук', status: 'Включен', option: { type: 'toggle', value: 0 }
+        },
+        {
+          item: 'partition_contacts', label: 'Контакты', status: 'По подразделениям', option: { type: 'toggle', value: 0 }
+        },
+      ],
+      agreements: [
+        {
+          value: false,
+          linkText: 'Условия использования',
+          linkComp: 'linkComp'
+        },
+        {
+          value: false,
+          linkText: 'Пользовательское соглашение',
+          linkComp: 'linkComp'
+        },
+        {
+          value: false,
+          linkText: 'Использование персональных данные',
+          linkComp: 'linkComp'
+        }
+      ]
     }
-    pickerClose = () => {
-        this.setState({ pickerOpened: false });
-    }
-    handleToggle = () => {
-        const { settings } = this.state;
-        const newSettings = [...settings];
-        newSettings.filter(({ label }) => e === label)[0].option.value = !newSettings.filter(({ label }) => e === label)[0].option.value;
+
+    componentDidMount() {
+      const { settings, langs } = this.state;
+      const { user } = this.props;
+      const newSettings = [...settings];
+      newSettings.map((e) => {
+        if (e.item === 'language') {
+          e.option.value = 'Изменить';
+          e.status = langs[e.item];
+        } else e.option.value = user.settings[e.item];
+      });
+      setTimeout(() => {
         this.setState({ settings: newSettings });
+      }, 0);
     }
+
+    pickerClose = () => {
+      this.setState({ pickerOpened: false });
+    }
+
+    handleToggle = () => {
+      const { settings } = this.state;
+      const newSettings = [...settings];
+      newSettings.filter(({ label }) => e === label)[0].option.value = !newSettings.filter(({ label }) => e === label)[0].option.value;
+      this.setState({ settings: newSettings });
+    }
+
     selectOption = () => {
-        this.setState({ pickerOpened: true });
+      this.setState({ pickerOpened: true });
     }
+
     componentWillUnmount() {
-        const { settings } = this.state;
-        const { user } = this.props;
-        const userSettings = user.settings;
-        const reqBody = {
-            language: '',
-            notifications: '',
-            sound: '',
-            partition_contacts: '',
-        };
-        settings.map(e => reqBody[e.item] = e.item === 'language' ? e.status : e.option.value);
-        reqBody.language = 'ru';
-        JSON.stringify(reqBody) !== JSON.stringify(userSettings) && sendRequest({
-            r_path: p_settings,
-            method: 'patch',
-            attr: {
-                settings: reqBody,
-            },
-            success: (res) => {
-                console.log({ res });
-                setSettings(reqBody);
-            },
-            failFunc: (err) => {
-                console.log({ err });
-            }
-        });
+      const { settings } = this.state;
+      const { user } = this.props;
+      const userSettings = user.settings;
+      const reqBody = {
+        language: '',
+        notifications: '',
+        sound: '',
+        partition_contacts: '',
+      };
+      settings.map(e => reqBody[e.item] = e.item === 'language' ? e.status : e.option.value);
+      reqBody.language = 'ru';
+      JSON.stringify(reqBody) !== JSON.stringify(userSettings) && sendRequest({
+        r_path: p_settings,
+        method: 'patch',
+        attr: {
+          settings: reqBody,
+        },
+        success: (res) => {
+          console.log({ res });
+          setSettings(reqBody);
+        },
+        failFunc: (err) => {
+          console.log({ err });
+        }
+      });
     }
 }
 
 const mapStateToProps = state => ({
-    messages: state.messageReducer,
-    dialog: state.dialogsReducer.dialogs,
-    currentRoom: state.messageReducer.currentRoom,
-    currentChat: state.messageReducer.currentChat,
-    user: state.userReducer.user,
+  messages: state.messageReducer,
+  dialog: state.dialogsReducer.dialogs,
+  currentRoom: state.messageReducer.currentRoom,
+  currentChat: state.messageReducer.currentChat,
+  user: state.userReducer.user,
 });
 const mapDispatchToProps = dispatch => ({
-    getMessages: _ => dispatch(getMessages(_)),
-    setRoom: _ => dispatch(setRoom(_)),
-    setDialogs: _ => dispatch(setDialogs(_)),
-    addMessage: _ => dispatch(addMessage(_)),
-    setSettings: _ => dispatch(setSettings(_))
+  getMessages: _ => dispatch(getMessages(_)),
+  setRoom: _ => dispatch(setRoom(_)),
+  setDialogs: _ => dispatch(setDialogs(_)),
+  addMessage: _ => dispatch(addMessage(_)),
+  setSettings: _ => dispatch(setSettings(_))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

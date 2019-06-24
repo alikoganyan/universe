@@ -1,10 +1,10 @@
-import React, { Component } from "react";
-import { View, Text, Dimensions } from "react-native";
-import styled from "styled-components";
-import SafeAreaView from "../../common/SafeAreaView";
-import Header from "./Header";
-import Content from "./Content";
-import helper from "../../utils/helpers";
+import React, { Component } from 'react';
+import { View, Text, Dimensions } from 'react-native';
+import styled from 'styled-components';
+import SafeAreaView from '../../common/SafeAreaView';
+import Header from './Header';
+import Content from './Content';
+import helper from '../../utils/helpers';
 
 const { HeaderHeight } = helper;
 const Wrapper = styled(View)`
@@ -12,25 +12,28 @@ const Wrapper = styled(View)`
     padding-bottom: ${HeaderHeight};
 `;
 export default class Signup extends Component {
-    render() {
-        return (
-            <SafeAreaView behavior={"padding"}>
-                <Wrapper>
-                    <Header back={this.props.navigation.goBack} />
-                    <Content
-                        addParticipants={this.addParticipants}
-                        forward={this.moveForward}
-                        back={this.props.navigation.goBack}
-                    />
-                </Wrapper>
-            </SafeAreaView>
-        );
-    }
-    componentDidMount() {}
+  render() {
+    return (
+      <SafeAreaView behavior="padding">
+        <Wrapper>
+          <Header back={this.props.navigation.goBack} />
+          <Content
+            addParticipants={this.addParticipants}
+            forward={this.moveForward}
+            back={this.props.navigation.goBack}
+          />
+        </Wrapper>
+      </SafeAreaView>
+    );
+  }
+
+  componentDidMount() {}
+
     moveForward = () => {
-        this.props.navigation.navigate("TasksList");
+      this.props.navigation.navigate('TasksList');
     };
+
     addParticipants = () => {
-        this.props.navigation.navigate("NewTaskReceivers");
+      this.props.navigation.navigate('NewTaskReceivers');
     };
 }

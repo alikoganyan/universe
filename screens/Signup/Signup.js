@@ -12,26 +12,30 @@ const Wrapper = styled(View)`
     padding-bottom: ${HeaderHeight};
 `;
 export default class Signup extends Component {
-    render() {
-        return (
-            <SafeAreaView behavior={'padding'}>
-                <Wrapper>
-                    <Header back={this.navigateBack} />
-                    <Content forward={this.moveForward} navigate={this.navigate} />
-                </Wrapper>
-            </SafeAreaView>
-        );
-    }
+  render() {
+    return (
+      <SafeAreaView behavior="padding">
+        <Wrapper>
+          <Header back={this.navigateBack} />
+          <Content forward={this.moveForward} navigate={this.navigate} />
+        </Wrapper>
+      </SafeAreaView>
+    );
+  }
+
     navigateBack = () => {
-        this.props.navigation.goBack();
+      this.props.navigation.goBack();
     }
+
     componentDidMount() {
 
     }
+
     moveForward = () => {
-        this.props.navigation.navigate('Signup2');
+      this.props.navigation.navigate('Signup2');
     }
+
     navigate = (e) => {
-        this.props.navigation.navigate(e);
+      this.props.navigation.navigate(e);
     }
 }

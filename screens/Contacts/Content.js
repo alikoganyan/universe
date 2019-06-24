@@ -1,14 +1,17 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, TextInput, KeyboardAvoidingView } from 'react-native';
-import { BackIcon, EllipsisVIcon, SearchIcon } from '../../assets/index';
+import {
+  View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, ScrollView, TextInput, KeyboardAvoidingView
+} from 'react-native';
 import styled from 'styled-components';
 import FloatingLabel from 'react-native-floating-labels';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import helper from '../../utils/helpers';
 import ImageLoader from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Circle';
+import helper from '../../utils/helpers';
+import { BackIcon, EllipsisVIcon, SearchIcon } from '../../assets/index';
 import helpers from '../../utils/helpers';
+
 const { Colors } = helpers;
 const { grey4 } = Colors;
 const Wrapper = styled(View)`
@@ -74,102 +77,112 @@ const ContactInfo = styled(View)`
     margin-bottom: 10px;
 `;
 export default class Settings extends Component {
-    render() {
-        return (
-            <SafeAreaView>
-                <Wrapper>
-                    <InputWrapper>
-                        <StyledIcon name="search" />
-                        <Input placeholder={'найти'} />
-                    </InputWrapper>
-                    <KeyboardAwareScrollView enableOnAndroid>
-                        <ContactList>
-                            {Object.keys(this.state.names).map((e, i) => {
-                                const item = this.state.names[e];
-                                if (item.length > 0) {
-                                    return <ContactsListItem key={`letter_${i}`}>
-                                        <Letter><Text style={{ fontSize: 18, color: grey4 }}>{e}</Text></Letter>
-                                        <Contact>{item.map((e, i) => <ContactInfo key={`contact_${i}`}>
-                                            <ContactImage source={{ uri: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg' }} />
-                                            <Text>{e.name}</Text>
-                                        </ContactInfo>)}</Contact>
-                                    </ContactsListItem>;
-                                }
-                            })}
-                        </ContactList>
-                    </KeyboardAwareScrollView>
-                </Wrapper>
-            </SafeAreaView>
-        );
-    }
+  render() {
+    return (
+      <SafeAreaView>
+        <Wrapper>
+          <InputWrapper>
+            <StyledIcon name="search" />
+            <Input placeholder="найти" />
+          </InputWrapper>
+          <KeyboardAwareScrollView enableOnAndroid>
+            <ContactList>
+              {Object.keys(this.state.names).map((e, i) => {
+                const item = this.state.names[e];
+                if (item.length > 0) {
+                  return (
+                    <ContactsListItem key={`letter_${i}`}>
+                      <Letter><Text style={{ fontSize: 18, color: grey4 }}>{e}</Text></Letter>
+                      <Contact>
+                        {item.map((e, i) => (
+                          <ContactInfo key={`contact_${i}`}>
+                            <ContactImage source={{ uri: 'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg' }} />
+                            <Text>{e.name}</Text>
+                          </ContactInfo>
+                        ))}
+                      </Contact>
+                    </ContactsListItem>
+                  );
+                }
+              })}
+            </ContactList>
+          </KeyboardAwareScrollView>
+        </Wrapper>
+      </SafeAreaView>
+    );
+  }
+
     state = {
-        names: {
-            a: [],
-            b: [],
-            c: [],
-            d: [],
-            e: [],
-            f: [],
-            g: [],
-            h: [],
-            i: [],
-            j: [],
-            l: [],
-            m: [],
-            n: [],
-            o: [],
-            p: [],
-            q: [],
-            r: [],
-            s: [],
-            u: [],
-            v: [],
-            w: [],
-            x: [],
-            y: [],
-            z: [],
-        },
-        users: [
-            { name: "Noah", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "Liam", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "William", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "Mason", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "James", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "Benjamin", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "Jacob", uri: 'https://facebook.github.io/react/logo-og.png' },
+      names: {
+        a: [],
+        b: [],
+        c: [],
+        d: [],
+        e: [],
+        f: [],
+        g: [],
+        h: [],
+        i: [],
+        j: [],
+        l: [],
+        m: [],
+        n: [],
+        o: [],
+        p: [],
+        q: [],
+        r: [],
+        s: [],
+        u: [],
+        v: [],
+        w: [],
+        x: [],
+        y: [],
+        z: [],
+      },
+      users: [
+        { name: 'Noah', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Liam', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'William', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Mason', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'James', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Benjamin', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Jacob', uri: 'https://facebook.github.io/react/logo-og.png' },
 
-            { name: "Noah", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "Liam", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "William", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "Mason", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "James", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "Benjamin", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "Jacob", uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Noah', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Liam', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'William', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Mason', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'James', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Benjamin', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Jacob', uri: 'https://facebook.github.io/react/logo-og.png' },
 
-            { name: "Noah", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "Liam", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "William", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "Mason", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "James", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "Benjamin", uri: 'https://facebook.github.io/react/logo-og.png' },
-            { name: "Jacob", uri: 'https://facebook.github.io/react/logo-og.png' },
-        ]
+        { name: 'Noah', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Liam', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'William', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Mason', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'James', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Benjamin', uri: 'https://facebook.github.io/react/logo-og.png' },
+        { name: 'Jacob', uri: 'https://facebook.github.io/react/logo-og.png' },
+      ]
     }
+
     handleFocus = () => {
     }
+
     sortUsersByName = (users) => {
-        const { names } = this.state;
-        const newNames = { ...names };
-        const index = 0;
-        users.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1);
-        users.map(e => {
-            newNames[e.name[index].toLowerCase().toString()].push(e);
-        });
-        this.setState({
-            names: newNames
-        });
+      const { names } = this.state;
+      const newNames = { ...names };
+      const index = 0;
+      users.sort((a, b) => ((a.name.toLowerCase() > b.name.toLowerCase()) ? 1 : -1));
+      users.map((e) => {
+        newNames[e.name[index].toLowerCase().toString()].push(e);
+      });
+      this.setState({
+        names: newNames
+      });
     }
+
     componentDidMount() {
-        this.sortUsersByName(this.state.users);
+      this.sortUsersByName(this.state.users);
     }
 }

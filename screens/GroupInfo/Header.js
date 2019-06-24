@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
-import { View, Text, Platform, ActionSheetIOS } from 'react-native';
-import { BackIcon, EllipsisVIcon } from '../../assets/index';
-import styled from 'styled-components';
-import helper from '../../utils/helpers';
 import {
-    connectActionSheet,
+  View, Text, Platform, ActionSheetIOS
+} from 'react-native';
+import styled from 'styled-components';
+import {
+  connectActionSheet,
 } from '@expo/react-native-action-sheet';
+import { BackIcon, EllipsisVIcon } from '../../assets/index';
+import helper from '../../utils/helpers';
+
 const { HeaderHeight } = helper;
 const Header = styled(View)`
     width: 100%;
@@ -27,34 +30,35 @@ const Right = styled(View)`
     align-items: flex-end;
 `;
 
-export default @connectActionSheet 
-    class HeaderComponent extends Component {
-    render() {
-        const { back } = this.props;
-        return (
-            <Header>
-                <Left>
-                    <BackIcon onPress={back} />
-                    <Text>
+export default @connectActionSheet
+class HeaderComponent extends Component {
+  render() {
+    const { back } = this.props;
+    return (
+      <Header>
+        <Left>
+          <BackIcon onPress={back} />
+          <Text>
                         Информация о группе
-                    </Text>
-                </Left>
-                <Right>
-                    <EllipsisVIcon onPress={this.openModal} />
-                </Right>
-            </Header>
-        );
-    }
+          </Text>
+        </Left>
+        <Right>
+          <EllipsisVIcon onPress={this.openModal} />
+        </Right>
+      </Header>
+    );
+  }
+
     openModal = () => {
-        const options = Platform.OS === 'ios' ?
-            ['Отмена', 'Редактировать группу', 'Очистить историю'] :
-            ['Редактировать группу', 'Очистить историю'];
-        const cancelButtonIndex = 0;
-        this.props.showActionSheetWithOptions(
-            {
-                options,
-                cancelButtonIndex,
-            },
-        );
+      const options = Platform.OS === 'ios'
+        ? ['Отмена', 'Редактировать группу', 'Очистить историю']
+        : ['Редактировать группу', 'Очистить историю'];
+      const cancelButtonIndex = 0;
+      this.props.showActionSheetWithOptions(
+        {
+          options,
+          cancelButtonIndex,
+        },
+      );
     }
 }

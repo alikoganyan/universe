@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, Keyboard, TouchableOpacity } from 'react-native';
+import {
+  View, Text, Dimensions, Keyboard, TouchableOpacity
+} from 'react-native';
+import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { SearchIcon, BackIcon } from '../../assets/index';
 import { setDialogs } from '../../actions/dialogsActions';
 import ImageComponent from '../../common/Image';
 import DefaultAvatar from '../../common/DefaultAvatar';
-import { connect } from 'react-redux';
-import styled from 'styled-components';
 import helper from '../../utils/helpers';
 import { socket } from '../../utils/socket';
-const { Colors, sidePadding, fontSize, HeaderHeight } = helper;
+
+const {
+  Colors, sidePadding, fontSize, HeaderHeight
+} = helper;
 const { grey3 } = Colors;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
@@ -40,62 +45,66 @@ const Right = styled(Left)`
     justify-content: flex-end;
 `;
 class HeaderComponent extends Component {
-    render() {
-        const { user, toProfile, back } = this.props;
-        return (
-            <Header>
-                <Left>
-                    <BackIcon right onPress={back} />
-                    <HeaderText>Новый диалог</HeaderText>
-                </Left>
-                <Right>
-                    <SearchIcon right />
-                    <TouchableOpacity onPress={toProfile}>
-                        {user.image === '/images/default_group.png' || user.image === '/images/default_avatar.jpg' ?
-                            <DefaultAvatar size={'header'} /> :
-                            <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size={'header'} />
+  render() {
+    const { user, toProfile, back } = this.props;
+    return (
+      <Header>
+        <Left>
+          <BackIcon right onPress={back} />
+          <HeaderText>Новый диалог</HeaderText>
+        </Left>
+        <Right>
+          <SearchIcon right />
+          <TouchableOpacity onPress={toProfile}>
+            {user.image === '/images/default_group.png' || user.image === '/images/default_avatar.jpg'
+              ? <DefaultAvatar size="header" />
+              : <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size="header" />
                         }
-                    </TouchableOpacity>
-                </Right>
-            </Header>
-        );
-    }
-    state = {
-        input: '',
-        focused: false
-    }
-    componentDidMount() {
-        const { setDialogs } = this.props;
-        socket.on('find', ({ result }) => {
-            setDialogs(result);
-        });
-    }
-    handleInputChange = (e) => {
-        this.setState({ input: e });
-        e && socket.emit('find', { text: e });
+          </TouchableOpacity>
+        </Right>
+      </Header>
+    );
+  }
 
+    state = {
+      input: '',
+      focused: false
     }
+
+    componentDidMount() {
+      const { setDialogs } = this.props;
+      socket.on('find', ({ result }) => {
+        setDialogs(result);
+      });
+    }
+
+    handleInputChange = (e) => {
+      this.setState({ input: e });
+      e && socket.emit('find', { text: e });
+    }
+
     handleFocus = () => {
-        socket.emit('find');
-        this.setState({ focused: true });
+      socket.emit('find');
+      this.setState({ focused: true });
     }
+
     onBlur = () => {
-        const { user } = this.props;
-        this.setState({ focused: false });
-        socket.emit('dialogs', { userId: user.id });
-        Keyboard.dismiss();
+      const { user } = this.props;
+      this.setState({ focused: false });
+      socket.emit('dialogs', { userId: user.id });
+      Keyboard.dismiss();
     }
 }
 
 
 const mapStateToProps = state => ({
-    dialogs: state.dialogsReducer.dialogs,
-    messages: state.messageReducer.messages,
-    search: state.messageReducer.search,
-    drawer: state.drawerReducer.open,
-    user: state.userReducer.user
+  dialogs: state.dialogsReducer.dialogs,
+  messages: state.messageReducer.messages,
+  search: state.messageReducer.search,
+  drawer: state.drawerReducer.open,
+  user: state.userReducer.user
 });
 const mapDispatchToProps = dispatch => ({
-    setDialogs: _ => dispatch(setDialogs(_))
+  setDialogs: _ => dispatch(setDialogs(_))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);

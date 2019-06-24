@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions, TouchableOpacity, TextInput } from 'react-native';
-import { BackIcon, SearchIcon, EditIcon, CloseIcon } from '../../assets/index';
+import {
+  View, Text, Dimensions, TouchableOpacity, TextInput
+} from 'react-native';
 import styled from 'styled-components';
-import helper from '../../utils/helpers';
 import { connect } from 'react-redux';
+import {
+  BackIcon, SearchIcon, EditIcon, CloseIcon
+} from '../../assets/index';
+import helper from '../../utils/helpers';
 import { p_news_search } from '../../constants/api';
 import ImageComponent from '../../common/Image';
 import DefaultAvatar from '../../common/DefaultAvatar';
 import { setNews } from '../../actions/newsActions';
 import sendRequest from '../../utils/request';
+
 const { sidePadding, HeaderHeight, fontSize } = helper;
 
 const Header = styled(View)`
@@ -47,98 +52,110 @@ const Right = styled(Left)`
 // `
 
 class HeaderComponent extends Component {
-    render() {
-        const { back, user } = this.props;
-        const { search, find } = this.state;
-        const { image } = user;
-        return (
-            <Header>
-                <Left>
-                    {!search ?
-                        <>
-                            <BackIcon onPress={back} right />
-                            <HeaderText>Новости</HeaderText>
-                        </> :
-                        <>
-                            <SearchIcon />
-                            <Input placeholder="поиск" value={find} onChangeText={this.find} />
-                        </>
+  render() {
+    const { back, user } = this.props;
+    const { search, find } = this.state;
+    const { image } = user;
+    return (
+      <Header>
+        <Left>
+          {!search
+            ? (
+              <>
+                <BackIcon onPress={back} right />
+                <HeaderText>Новости</HeaderText>
+              </>
+            )
+            : (
+              <>
+                <SearchIcon />
+                <Input placeholder="поиск" value={find} onChangeText={this.find} />
+              </>
+            )
                     }
-                </Left>
-                <Right>
-                    {!search ?
-                        <>
-                            <EditIcon right onPress={this.editFeed}/>
-                            <SearchIcon right onPress={this.startSearch} />
-                            <TouchableOpacity onPress={this.toProfile}>
-                                {image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
-                                    <DefaultAvatar size={'header'} style={{ marginLeft: 10 }} /> :
-                                    <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size={'header'} />
+        </Left>
+        <Right>
+          {!search
+            ? (
+              <>
+                <EditIcon right onPress={this.editFeed} />
+                <SearchIcon right onPress={this.startSearch} />
+                <TouchableOpacity onPress={this.toProfile}>
+                  {image === '/images/default_group.png' || image === '/images/default_avatar.jpg'
+                    ? <DefaultAvatar size="header" style={{ marginLeft: 10 }} />
+                    : <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size="header" />
                                 }
-                            </TouchableOpacity>
-                        </> :
-                        <CloseIcon onPress={this.stopSearch} />
+                </TouchableOpacity>
+              </>
+            )
+            : <CloseIcon onPress={this.stopSearch} />
                     }
-                </Right>
-            </Header>
-        );
-    }
+        </Right>
+      </Header>
+    );
+  }
+
     state = {
-        search: false,
-        find: ''
+      search: false,
+      find: ''
     }
+
     toProfile = () => {
-        const { navigate } = this.props;
-        navigate('Profile');
+      const { navigate } = this.props;
+      navigate('Profile');
     }
+
     find = (e) => {
-        this.setState({ find: e });
-        e ? sendRequest({
-            r_path: p_news_search,
-            method: 'post',
-            attr: {
-                text: e,
-                withUser: true,
-            },
-            success: (res) => {
-                console.log({ res });
-            },
-            failFunc: (err) => {
-                console.log(err);
-            }
-        }) : sendRequest({
-            r_path: news,
-            method: 'get',
-            success: (res) => {
-                setNews(res.news);
-            },
-            failFunc: (err) => {
-                console.log(err);
-            }
-        });
+      this.setState({ find: e });
+      e ? sendRequest({
+        r_path: p_news_search,
+        method: 'post',
+        attr: {
+          text: e,
+          withUser: true,
+        },
+        success: (res) => {
+          console.log({ res });
+        },
+        failFunc: (err) => {
+          console.log(err);
+        }
+      }) : sendRequest({
+        r_path: news,
+        method: 'get',
+        success: (res) => {
+          setNews(res.news);
+        },
+        failFunc: (err) => {
+          console.log(err);
+        }
+      });
     }
+
     startSearch = () => {
-        this.setState({ search: true });
+      this.setState({ search: true });
     }
+
     stopSearch = () => {
-        this.setState({ search: false });
+      this.setState({ search: false });
     }
+
     addTask = () => {
-        const { navigate } = this.props;
-        navigate('NewFeed');
+      const { navigate } = this.props;
+      navigate('NewFeed');
     }
+
     editFeed = () => {
-        const { navigate } = this.props;
-        navigate('FeedEdit');
+      const { navigate } = this.props;
+      navigate('FeedEdit');
     }
 }
 
 const mapStateToProps = state => ({
-        user: state.userReducer.user,
-        tasks: state.tasksReducer.tasks,
-    });
+  user: state.userReducer.user,
+  tasks: state.tasksReducer.tasks,
+});
 const mapDispatchToProps = dispatch => ({
-    setNews: _ => dispatch(setNews(_))
+  setNews: _ => dispatch(setNews(_))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);
-

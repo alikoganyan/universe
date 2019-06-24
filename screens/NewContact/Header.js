@@ -1,9 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text } from 'react-native';
-import { BackIcon } from '../../assets/index';
 import styled from 'styled-components';
+import { BackIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
-const { HeaderHeight, sidePadding, Colors, fontSize } = helper;
+
+const {
+  HeaderHeight, sidePadding, Colors, fontSize
+} = helper;
 const { grey3 } = Colors;
 const Header = styled(View)`
     width: 100%;
@@ -36,20 +39,19 @@ const HeaderText = styled(Text)`
     color: ${grey3};
 `;
 export default class HeaderComponent extends Component {
-    render() {
-        return (
-            <Header>
-                <Left>
-                    <MarginRight>
-                        <BackIcon onPress={this.props.back} />
-                    </MarginRight>
-                    <HeaderText>
+  render() {
+    return (
+      <Header>
+        <Left>
+          <MarginRight>
+            <BackIcon onPress={this.props.back} />
+          </MarginRight>
+          <HeaderText>
                         Добавить Контакт
-                    </HeaderText>
-                </Left>
-                <Right>
-                </Right>
-            </Header>
-        );
-    }
+          </HeaderText>
+        </Left>
+        <Right />
+      </Header>
+    );
+  }
 }

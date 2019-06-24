@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'react-native';
-import { ForwardIcon, LocationIcon, CloseIcon } from '../../assets/index';
+import {
+  View, Text, SafeAreaView, Image, Platform, TouchableOpacity
+} from 'react-native';
 import styled from 'styled-components';
-import helper from '../../utils/helpers';
 import ImageLoader from 'react-native-image-progress';
 import ProgressBar from 'react-native-progress/Circle';
+import helper from '../../utils/helpers';
+import { ForwardIcon, LocationIcon, CloseIcon } from '../../assets/index';
+
 const { HeaderHeight, fontSize } = helper;
 const Header = styled(View)`
     width: 100%;
@@ -46,14 +49,15 @@ const Right = styled(TouchableOpacity)`
 `;
 
 export default class HeaderComponent extends Component {
-    render() {
-        return (
-            <Header>
-                <CloseIcon onPress={this.props.back}/>
-            </Header>
-        );
-    }
+  render() {
+    return (
+      <Header>
+        <CloseIcon onPress={this.props.back} />
+      </Header>
+    );
+  }
+
     moveForward = () => {
-        this.props.back();
+      this.props.back();
     }
 }

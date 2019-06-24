@@ -1,15 +1,22 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, Image, Platform, Dimensions, TouchableOpacity } from 'react-native';
-import { BackIcon, LocationIcon, SearchIcon, CloseIcon } from '../../assets/index';
+import {
+  View, Text, TextInput, Image, Platform, Dimensions, TouchableOpacity
+} from 'react-native';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import Icon from 'react-native-vector-icons/FontAwesome';
+import {
+  BackIcon, LocationIcon, SearchIcon, CloseIcon
+} from '../../assets/index';
 import helper from '../../utils/helpers';
 import { addMessage, startSearch, stopSearch } from '../../actions/messageActions';
-import Icon from 'react-native-vector-icons/FontAwesome';
 
 import ImageComponent from '../../common/Image';
 import DefaultAvatar from '../../common/DefaultAvatar';
-const { sidePadding, HeaderHeight, Colors, fontSize } = helper;
+
+const {
+  sidePadding, HeaderHeight, Colors, fontSize
+} = helper;
 const { border } = Colors;
 const Header = styled(View)`
     width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
@@ -87,21 +94,24 @@ const IconLeft = styled(Icon)`
     margin-left: ${sidePadding}px;
 `;
 class HeaderComponent extends Component {
-    render() {
-        const { back, search, startSearch, stopSearch, currentChat } = this.props;
-        return (
-            <Header>
-                <Top>
-                    <Left>
-                        <CloseIcon right onPress={this.back} />
-                    </Left>
-                </Top>
-            </Header>
-        );
-    }
+  render() {
+    const {
+      back, search, startSearch, stopSearch, currentChat
+    } = this.props;
+    return (
+      <Header>
+        <Top>
+          <Left>
+            <CloseIcon right onPress={this.back} />
+          </Left>
+        </Top>
+      </Header>
+    );
+  }
+
     back = () => {
-        const { back } = this.props;
-        back();
+      const { back } = this.props;
+      back();
     }
 }
 const mapStateToProps = state => ({

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { View } from 'react-native';
-import { BackIcon } from '../../assets/index';
 import styled from 'styled-components';
+import { BackIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
+
 const { sidePadding, HeaderHeight } = helper;
 
 const Header = styled(View)`
@@ -16,15 +17,16 @@ const Header = styled(View)`
     padding-left: ${sidePadding};
 `;
 export default class HeaderComponent extends Component {
-    render() {
-        return (
-            <Header>
-                <BackIcon onPress={this.goBack}/>
-            </Header>
-        );
-    }
+  render() {
+    return (
+      <Header>
+        <BackIcon onPress={this.goBack} />
+      </Header>
+    );
+  }
+
     goBack = () => {
-        const { back } = this.props;
-        back();
+      const { back } = this.props;
+      back();
     }
 }

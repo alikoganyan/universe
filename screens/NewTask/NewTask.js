@@ -12,23 +12,26 @@ const Wrapper = styled(View)`
     padding-bottom: ${HeaderHeight};
 `;
 export default class Signup extends Component {
-    render() {
-        const deafultValues = this.props.navigation.getParam('task', {});
-        return (
-            <SafeAreaView behavior={'padding'}>
-                <Wrapper>
-                    <Header back={this.props.navigation.goBack} />
-                    <Content addParticipants={this.addParticipants} forward={this.moveForward} deafultValues={deafultValues} />
-                </Wrapper>
-            </SafeAreaView>
-        );
-    }
-    componentDidMount() {
-    }
+  render() {
+    const deafultValues = this.props.navigation.getParam('task', {});
+    return (
+      <SafeAreaView behavior="padding">
+        <Wrapper>
+          <Header back={this.props.navigation.goBack} />
+          <Content addParticipants={this.addParticipants} forward={this.moveForward} deafultValues={deafultValues} />
+        </Wrapper>
+      </SafeAreaView>
+    );
+  }
+
+  componentDidMount() {
+  }
+
     moveForward = () => {
-        this.props.navigation.navigate('TasksList');
+      this.props.navigation.navigate('TasksList');
     }
+
     addParticipants = () => {
-        this.props.navigation.navigate('NewTaskReceivers');
+      this.props.navigation.navigate('NewTaskReceivers');
     }
 }

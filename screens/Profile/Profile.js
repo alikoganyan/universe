@@ -1,15 +1,17 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Dimensions, Platform, TouchableOpacity, AsyncStorage } from 'react-native';
-import { BackIcon, EllipsisVIcon } from '../../assets/index';
+import {
+  View, Text, Image, Dimensions, Platform, TouchableOpacity, AsyncStorage
+} from 'react-native';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import {
+  ActionSheetProvider,
+  connectActionSheet,
+} from '@expo/react-native-action-sheet';
+import { BackIcon, EllipsisVIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
 import SafeAreaView from '../../common/SafeAreaView';
-import { connect } from 'react-redux';
 import { setCurrentChat } from '../../actions/messageActions';
-import {
-    ActionSheetProvider,
-    connectActionSheet,
-} from '@expo/react-native-action-sheet';
 import { socket } from '../../utils/socket';
 import Header from './Header';
 import Content from './Content';
@@ -41,55 +43,59 @@ const LogoutText = styled(Text)`
     font-size: ${fontSize.sl};
 `;
 class Profile extends Component {
-    render() {
-        const { currentChat, user, currentDialog } = this.props;
-        const myProfile = !currentChat || currentDialog._id === user._id;
-        const myGroup = currentDialog.isGroup ? currentDialog.creator._id === user._id : false;
-        return (
-            <ActionSheetProvider>
-                <SafeAreaView behavior={'padding'}>
-                    <Wrapper>
-                        <Header edit={this.edit} back={this.navigateBack} myProfile={myProfile || myGroup} />
-                        <Content toChat={this.toChat} myProfile={myProfile} toDialogs={this.toDialogs} />
-                        <Bottom>
-                            {
+  render() {
+    const { currentChat, user, currentDialog } = this.props;
+    const myProfile = !currentChat || currentDialog._id === user._id;
+    const myGroup = currentDialog.isGroup ? currentDialog.creator._id === user._id : false;
+    return (
+      <ActionSheetProvider>
+        <SafeAreaView behavior="padding">
+          <Wrapper>
+            <Header edit={this.edit} back={this.navigateBack} myProfile={myProfile || myGroup} />
+            <Content toChat={this.toChat} myProfile={myProfile} toDialogs={this.toDialogs} />
+            <Bottom>
+              {
                                 myProfile && <Logout onPress={this.logout}><LogoutText>Выйти из аккаунта</LogoutText></Logout>
                             }
-                        </Bottom>
-                    </Wrapper>
-                </SafeAreaView>
-            </ActionSheetProvider>
-        );
-    }
+            </Bottom>
+          </Wrapper>
+        </SafeAreaView>
+      </ActionSheetProvider>
+    );
+  }
+
     navigateBack = () => {
-        this.props.navigation.goBack();
+      this.props.navigation.goBack();
     }
+
     toChat = () => {
-        const { currentChat, user } = this.props;
-        socket.emit('select chat', { chatId: currentChat.id, userId: user.id });
-        this.props.navigation.navigate('Chat');
+      const { currentChat, user } = this.props;
+      socket.emit('select chat', { chatId: currentChat.id, userId: user.id });
+      this.props.navigation.navigate('Chat');
     }
 
     toDialogs = () => {
-        this.props.navigation.navigate('Dialogs');
+      this.props.navigation.navigate('Dialogs');
     }
+
     logout = async () => {
-        const { navigation } = this.props;
-        await AsyncStorage.clear();
-        navigation.navigate('Login');
+      const { navigation } = this.props;
+      await AsyncStorage.clear();
+      navigation.navigate('Login');
     }
+
     edit = () => {
-        const { navigation, currentDialog } = this.props;
-        navigation.navigate(currentDialog.isGroup ? 'GroupEdit' : 'ProfileEdit', { currentDialog });
+      const { navigation, currentDialog } = this.props;
+      navigation.navigate(currentDialog.isGroup ? 'GroupEdit' : 'ProfileEdit', { currentDialog });
     }
 }
 
 const mapStateToProps = state => ({
-    user: state.userReducer.user,
-    currentChat: state.messageReducer.currentChat,
-    currentDialog: state.dialogsReducer.currentDialog
+  user: state.userReducer.user,
+  currentChat: state.messageReducer.currentChat,
+  currentDialog: state.dialogsReducer.currentDialog
 });
 const mapDispatchToProps = dispatch => ({
-    setUser: _ => dispatch(setUser(_)),
+  setUser: _ => dispatch(setUser(_)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

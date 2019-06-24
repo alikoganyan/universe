@@ -1,13 +1,19 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableOpacity, TextInput, Platform } from 'react-native';
+import {
+  View, Text, Image, TouchableOpacity, TextInput, Platform
+} from 'react-native';
+import styled from 'styled-components';
 import helper from '../../utils/helpers';
 import Button from '../../common/Button';
-import styled from 'styled-components';
 import { IntroIcon } from '../../assets/index';
 
 const { Colors, fontSize } = helper;
-const { border, blue, grey1, lightGrey1, lightGrey2 } = Colors;
-const { xs, xl, large, text } = fontSize;
+const {
+  border, blue, grey1, lightGrey1, lightGrey2
+} = Colors;
+const {
+  xs, xl, large, text
+} = fontSize;
 const Wrapper = styled(View)`
     padding-top: 50px;
     display: flex;
@@ -48,9 +54,9 @@ const Dots = styled(View)`
 const Dot = styled(View)`
     width: 10px;
     height: 10px;
-    background: ${({ active }) => active ? '#fff' : lightGrey1};
+    background: ${({ active }) => (active ? '#fff' : lightGrey1)};
     border-radius: 5;
-    margin-right: ${({ last }) => !last ? '20px' : 0};
+    margin-right: ${({ last }) => (!last ? '20px' : 0)};
 `;
 const HaveAccount = styled(View)`
     display: flex;
@@ -67,41 +73,44 @@ const Label = styled(Text)`
     font-size: ${text};
 `;
 export default class Content extends Component {
-    render() {
-        return (
-            <Wrapper>
-                <FirstTime>
-                    <Header>
+  render() {
+    return (
+      <Wrapper>
+        <FirstTime>
+          <Header>
                         Первый раз?
-                    </Header>
-                    <IntroIcon size={150} />
-                    <FirstTimeText>
+          </Header>
+          <IntroIcon size={150} />
+          <FirstTimeText>
                         Pariatur consectetur Lorem est irure et in ullamco. Proident pariatur labore aliquip fugiat ullamco sunt non. Laborum mollit velit amet
-                    </FirstTimeText>
-                    <Button onPress={this.goSignup} background={blue} color={'#fff'}>Зарегистрируйтесь</Button>
-                </FirstTime>
-                <Dots>
-                    <Dot active />
-                    <Dot />
-                    <Dot />
-                    <Dot last />
-                </Dots>
-                <HaveAccount>
-                    <Label>есть аккаунт?</Label>
-                    <TouchableOpacity onPress={this.goLogin}>
-                        <LogIn>войти</LogIn>
-                    </TouchableOpacity>
-                </HaveAccount>
-            </Wrapper>
-        );
-    }
+          </FirstTimeText>
+          <Button onPress={this.goSignup} background={blue} color="#fff">Зарегистрируйтесь</Button>
+        </FirstTime>
+        <Dots>
+          <Dot active />
+          <Dot />
+          <Dot />
+          <Dot last />
+        </Dots>
+        <HaveAccount>
+          <Label>есть аккаунт?</Label>
+          <TouchableOpacity onPress={this.goLogin}>
+            <LogIn>войти</LogIn>
+          </TouchableOpacity>
+        </HaveAccount>
+      </Wrapper>
+    );
+  }
+
     handleChange = (e) => { }
+
     goLogin = () => {
-        const { navigate } = this.props;
-        navigate('Login');
+      const { navigate } = this.props;
+      navigate('Login');
     }
+
     goSignup = () => {
-        const { navigate } = this.props;
-        navigate('Signup');
+      const { navigate } = this.props;
+      navigate('Signup');
     }
 }

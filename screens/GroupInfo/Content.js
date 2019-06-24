@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity } from 'react-native';
-import { BackIcon, EllipsisVIcon, MessageIndicatorIcon } from '../../assets/index';
+import {
+  View, Text, SafeAreaView, FlatList, Image, TouchableOpacity
+} from 'react-native';
 import styled from 'styled-components';
+import { BackIcon, EllipsisVIcon, MessageIndicatorIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
+
 const { fontSize } = helper;
 const Wrapper = styled(View)`
     padding-top: 0px;
@@ -84,76 +87,77 @@ const StyledFlatList = styled(FlatList)`
     height: 100%;
 `;
 export default class Content extends Component {
-    render() {
-        const { groupsList } = this.state;
-        const Participant = (props) => {
-            const { img, name, lastSeen } = props.children;
+  render() {
+    const { groupsList } = this.state;
+    const Participant = (props) => {
+      const { img, name, lastSeen } = props.children;
 
-            return (
-                <User>
-                    <ParticipantImage source={{ uri: img }} />
-                    <ParticipantInfo>
-                        <ParticipantName>{name}</ParticipantName>
-                        <ParticipantLastSeen>{lastSeen}</ParticipantLastSeen>
-                    </ParticipantInfo>
-                </User>
-            );
-        };
-        return (
-            <SafeAreaView>
-                <Wrapper>
-                    <Group>
-                        <GroupImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
-                        <GroupInfo>
-                            <GroupName>lol</GroupName>
-                            <GroupParticipants>12 participants</GroupParticipants>
-                        </GroupInfo>
-                    </Group>
-                    <Participants>
-                        <GoBack>
-                            <TouchableOpacity>
-                                <GoBackText>
+      return (
+        <User>
+          <ParticipantImage source={{ uri: img }} />
+          <ParticipantInfo>
+            <ParticipantName>{name}</ParticipantName>
+            <ParticipantLastSeen>{lastSeen}</ParticipantLastSeen>
+          </ParticipantInfo>
+        </User>
+      );
+    };
+    return (
+      <SafeAreaView>
+        <Wrapper>
+          <Group>
+            <GroupImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
+            <GroupInfo>
+              <GroupName>lol</GroupName>
+              <GroupParticipants>12 participants</GroupParticipants>
+            </GroupInfo>
+          </Group>
+          <Participants>
+            <GoBack>
+              <TouchableOpacity>
+                <GoBackText>
                                     Выйти и закрыть
-                                </GoBackText>
-                            </TouchableOpacity>
-                        </GoBack>
-                        <StyledFlatList
-                            data={groupsList}
-                            renderItem={({ item }) => <Participant>{item}</Participant>}
-                            keyExtractor={(item, index) => index.toString()}
-                        />
-                    </Participants>
-                </Wrapper>
-            </SafeAreaView>
-        );
-    }
+                </GoBackText>
+              </TouchableOpacity>
+            </GoBack>
+            <StyledFlatList
+              data={groupsList}
+              renderItem={({ item }) => <Participant>{item}</Participant>}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </Participants>
+        </Wrapper>
+      </SafeAreaView>
+    );
+  }
+
     state = {
-        groupsList: [
-            {
-                img: 'https://facebook.github.io/react/logo-og.png',
-                name: 'test',
-                lastSeen: '2 дня назад',
-            },
-            {
-                img: 'https://facebook.github.io/react/logo-og.png',
-                name: 'test',
-                lastSeen: '2 дня назад',
-            },
-            {
-                img: 'https://facebook.github.io/react/logo-og.png',
-                name: 'test',
-                lastSeen: '2 дня назад',
-            },
-            {
-                img: 'https://facebook.github.io/react/logo-og.png',
-                name: 'test',
-                lastSeen: '2 дня назад',
-            },
-            {
-                img: 'https://facebook.github.io/react/logo-og.png',
-                name: 'test',
-                lastSeen: '2 дня назад',
-            },
-        ]
+      groupsList: [
+        {
+          img: 'https://facebook.github.io/react/logo-og.png',
+          name: 'test',
+          lastSeen: '2 дня назад',
+        },
+        {
+          img: 'https://facebook.github.io/react/logo-og.png',
+          name: 'test',
+          lastSeen: '2 дня назад',
+        },
+        {
+          img: 'https://facebook.github.io/react/logo-og.png',
+          name: 'test',
+          lastSeen: '2 дня назад',
+        },
+        {
+          img: 'https://facebook.github.io/react/logo-og.png',
+          name: 'test',
+          lastSeen: '2 дня назад',
+        },
+        {
+          img: 'https://facebook.github.io/react/logo-og.png',
+          name: 'test',
+          lastSeen: '2 дня назад',
+        },
+      ]
     }
 }

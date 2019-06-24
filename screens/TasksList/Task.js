@@ -1,18 +1,19 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 import {
-	View,
-	Text,
-	TouchableHighlight,
-	Dimensions,
-	ActionSheetIOS,
-	Platform
-} from "react-native";
-import styled from "styled-components";
-import helper from "../../utils/helpers";
-import { TasksIcon } from "../../assets/index";
-import { setTask } from "../../actions/tasksActions";
-import ImageComponent from "../../common/Image";
-import { connect } from "react-redux";
+  View,
+  Text,
+  TouchableHighlight,
+  Dimensions,
+  ActionSheetIOS,
+  Platform
+} from 'react-native';
+import styled from 'styled-components';
+import { connect } from 'react-redux';
+import helper from '../../utils/helpers';
+import { TasksIcon } from '../../assets/index';
+import { setTask } from '../../actions/tasksActions';
+import ImageComponent from '../../common/Image';
+
 const { fontSize, sidePadding, Colors } = helper;
 const { purple, lightGrey1 } = Colors;
 
@@ -23,7 +24,7 @@ const Wrapper = styled(View)`
 	display: flex;
 	align-items: center;
 	padding: ${sidePadding}px 0 ${sidePadding * 2}px;
-	width: ${Dimensions.get("window").width - sidePadding * 2};
+	width: ${Dimensions.get('window').width - sidePadding * 2};
 `;
 const TaskText = styled(View)`
 	display: flex;
@@ -75,7 +76,7 @@ const NewMessages = styled(Text)`
 	color: white;
 	font-size: ${fontSize.text};
 	text-align: center;
-	padding-top: ${Platform.OS === "ios" ? 2 : 0}px;
+	padding-top: ${Platform.OS === 'ios' ? 2 : 0}px;
 `;
 
 const TaskStatus = styled(View)`
@@ -99,116 +100,125 @@ const TaskStatusAdditional = styled(Text)`
 	color: ${lightGrey1};
 `;
 class Tasks extends Component {
-	render() {
-		const { children } = this.props;
-		const { first_name, last_name, phone_number, image, tasks } = children;
-		let stat = "";
-		switch (tasks[tasks.length - 1].status) {
-			case "set":
-				stat = "В работе";
-				break;
-			case "done":
-				stat = "Выполнена";
-				break;
-			default: 
-				stat = "";
-				break;
-		}
-		const day = new Date(tasks[tasks.length - 1].created_at).getDay();
-		const daysOfTheWeek = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
-		return (
-			<TouchableHighlight
-				underlayColor="#2B7DE2"
-				onPress={() => this.handleClick(children)}
-				onLongPress={this.handleHold}
-				style={{
-					width: "100%",
-					paddingLeft: sidePadding,
-					paddingRight: sidePadding,
-					display: "flex",
-					alignItems: "center"
-				}}
-			>
-				<Wrapper>
-					<ImageComponent
-						size={50}
-						source={{ uri: `http://ser.univ.team${image}` }}
-						style={{ marginRight: sidePadding }}
-					/>
-					<TaskText>
-						<TaskTextInner>
-							<TaskTitle>
-								{first_name
-									? `${first_name} ${last_name}`
-									: phone_number}
-							</TaskTitle>
-							<TaskLastMessage numberOfLines={1}>
-								{tasks[tasks.length - 1].name}
-							</TaskLastMessage>
-							<TaskStatus>
-								<TaskStatusTextContainer>
-									<TasksIcon noPaddingAll />
-									<TaskStatusText>{stat}</TaskStatusText>
-								</TaskStatusTextContainer>
-								{tasks.length - 1 > 0 && (
-									<TaskStatusAdditional>
-										+{tasks.length - 1} задачи
-									</TaskStatusAdditional>
-								)}
-							</TaskStatus>
-						</TaskTextInner>
-						<TaskDate>
-							<LastMessageDate>
-								{daysOfTheWeek[day]}
-							</LastMessageDate>
-							{tasks.length > 0 && (
-								<UnreadMessages
-									onLayout={e =>
-										this.getUnreadMessageHeight(e)
+  render() {
+    const { children } = this.props;
+    const {
+      first_name, last_name, phone_number, image, tasks
+    } = children;
+    let stat = '';
+    switch (tasks[tasks.length - 1].status) {
+      case 'set':
+        stat = 'В работе';
+        break;
+      case 'done':
+        stat = 'Выполнена';
+        break;
+      default:
+        stat = '';
+        break;
+    }
+    const day = new Date(tasks[tasks.length - 1].created_at).getDay();
+    const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
+    return (
+      <TouchableHighlight
+        underlayColor="#2B7DE2"
+        onPress={() => this.handleClick(children)}
+        onLongPress={this.handleHold}
+        style={{
+				  width: '100%',
+				  paddingLeft: sidePadding,
+				  paddingRight: sidePadding,
+				  display: 'flex',
+				  alignItems: 'center'
+        }}
+      >
+        <Wrapper>
+          <ImageComponent
+            size={50}
+            source={{ uri: `http://ser.univ.team${image}` }}
+            style={{ marginRight: sidePadding }}
+          />
+          <TaskText>
+            <TaskTextInner>
+              <TaskTitle>
+                {first_name
+								  ? `${first_name} ${last_name}`
+								  : phone_number}
+              </TaskTitle>
+              <TaskLastMessage numberOfLines={1}>
+                {tasks[tasks.length - 1].name}
+              </TaskLastMessage>
+              <TaskStatus>
+                <TaskStatusTextContainer>
+                  <TasksIcon noPaddingAll />
+                  <TaskStatusText>{stat}</TaskStatusText>
+                </TaskStatusTextContainer>
+                {tasks.length - 1 > 0 && (
+                <TaskStatusAdditional>
+										+
+                  {tasks.length - 1}
+                  {' '}
+задачи
+                </TaskStatusAdditional>
+                )}
+              </TaskStatus>
+            </TaskTextInner>
+            <TaskDate>
+              <LastMessageDate>
+                {daysOfTheWeek[day]}
+              </LastMessageDate>
+              {tasks.length > 0 && (
+              <UnreadMessages
+                onLayout={e => this.getUnreadMessageHeight(e)
 									}
-								>
-									<NewMessages>{tasks.length}</NewMessages>
-								</UnreadMessages>
-							)}
-						</TaskDate>
-					</TaskText>
-				</Wrapper>
-			</TouchableHighlight>
-		);
-	}
+              >
+                <NewMessages>{tasks.length}</NewMessages>
+              </UnreadMessages>
+              )}
+            </TaskDate>
+          </TaskText>
+        </Wrapper>
+      </TouchableHighlight>
+    );
+  }
+
 	state = {
-		size: null
+	  size: null
 	};
+
 	handleHold = () => {
-		ActionSheetIOS.showActionSheetWithOptions(
-			{
-				options: ["Cancel", "Remove"],
-				destructiveButtonIndex: 1,
-				cancelButtonIndex: 0
-			},
-			buttonIndex => {}
-		);
+	  ActionSheetIOS.showActionSheetWithOptions(
+	    {
+	      options: ['Cancel', 'Remove'],
+	      destructiveButtonIndex: 1,
+	      cancelButtonIndex: 0
+	    },
+	    (buttonIndex) => {}
+	  );
 	};
-	handleClick = tasks => {
-		const { setTask, onPress } = this.props;
-		setTask(tasks);
-		onPress();
+
+	handleClick = (tasks) => {
+	  const { setTask, onPress } = this.props;
+	  setTask(tasks);
+	  onPress();
 	};
-	getUnreadMessageHeight = e => {
-		this.setState({ height: e.nativeEvent.layout.height });
+
+	getUnreadMessageHeight = (e) => {
+	  this.setState({ height: e.nativeEvent.layout.height });
 	};
-	getUnreadMessageWidth = e => {
-		this.setState({ width: e.nativeEvent.layout.width });
+
+	getUnreadMessageWidth = (e) => {
+	  this.setState({ width: e.nativeEvent.layout.width });
 	};
 }
 
 const mapStateToProps = state => ({
-	
+
 });
 const mapDispatchToProps = dispatch => ({
-	setTask: _ => dispatch(setTask(_))
+  setTask: _ => dispatch(setTask(_))
 });
 export default connect(
-	mapStateToProps,
-	mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(Tasks);

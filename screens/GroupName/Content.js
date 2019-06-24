@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, Image, TouchableOpacity } from 'react-native';
+import {
+  View, Text, SafeAreaView, Image, TouchableOpacity
+} from 'react-native';
 import styled from 'styled-components';
 import FloatingLabel from 'react-native-floating-labels';
 
@@ -40,37 +42,42 @@ const Cancel = styled(Create)`
     color: #B1B1B1;
 `;
 export default class Content extends Component {
-    render() {
-        const Input = (props) => {
-            const { children, password = false, value, style, editable } = props;
-            return <FloatingLabel
-                labelStyle={{ fontSize: 15 }}
-                inputStyle={{
-                    fontSize: 15,
-                    borderWidth: 0,
-                    borderBottomWidth: 1,
-                    display: 'flex',
-                }}
-                password={password}
-                value={value}
-                style={{ ...style }}
-                editable={editable}
-            >{children}</FloatingLabel>;
-
-        };
-        return (
-            <SafeAreaView>
-                <Wrapper>
-                    <Group>
-                        <GroupImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
-                    </Group>
-                    <Input>Название группы</Input>
-                    <ControlBox>
-                        <TouchableOpacity><Cancel>Отменить</Cancel></TouchableOpacity>
-                        <TouchableOpacity><Create>Создать группу</Create></TouchableOpacity>
-                    </ControlBox>
-                </Wrapper>
-            </SafeAreaView>
-        );
-    }
+  render() {
+    const Input = (props) => {
+      const {
+        children, password = false, value, style, editable
+      } = props;
+      return (
+        <FloatingLabel
+          labelStyle={{ fontSize: 15 }}
+          inputStyle={{
+            fontSize: 15,
+            borderWidth: 0,
+            borderBottomWidth: 1,
+            display: 'flex',
+          }}
+          password={password}
+          value={value}
+          style={{ ...style }}
+          editable={editable}
+        >
+          {children}
+        </FloatingLabel>
+      );
+    };
+    return (
+      <SafeAreaView>
+        <Wrapper>
+          <Group>
+            <GroupImage source={{ uri: 'https://facebook.github.io/react/logo-og.png' }} />
+          </Group>
+          <Input>Название группы</Input>
+          <ControlBox>
+            <TouchableOpacity><Cancel>Отменить</Cancel></TouchableOpacity>
+            <TouchableOpacity><Create>Создать группу</Create></TouchableOpacity>
+          </ControlBox>
+        </Wrapper>
+      </SafeAreaView>
+    );
+  }
 }

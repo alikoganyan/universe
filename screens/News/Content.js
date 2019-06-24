@@ -1,14 +1,19 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, Dimensions } from 'react-native';
-import { CommentIcon, HeartIcon } from '../../assets/index';
+import {
+  View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, Dimensions
+} from 'react-native';
 import styled from 'styled-components';
+import { connect } from 'react-redux';
+import { CommentIcon, HeartIcon } from '../../assets/index';
 import { setFeed } from '../../actions/newsActions';
 import helper from '../../utils/helpers';
-import { connect } from 'react-redux';
 import ImageComponent from '../../common/Image';
 import DefaultAvatar from '../../common/DefaultAvatar';
 import Loader from '../../common/Loader';
-const { borderRadius, Colors, fontSize, sidePadding, HeaderHeight } = helper;
+
+const {
+  borderRadius, Colors, fontSize, sidePadding, HeaderHeight
+} = helper;
 const { yellow, darkBlue2, grey2 } = Colors;
 const Wrapper = styled(View)`
     padding-bottom: 20px;   
@@ -94,74 +99,95 @@ const Reactionsext = styled(Text)`
 `;
 
 class Content extends Component {
-    render() {
-        const { news } = this.props;
-        const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec',];
-        return (
-            <SafeAreaView>
-                <Wrapper>
-                    {news.length ? <NewsList
-                        data={news}
-                        ListFooterComponent={<View style={{ margin: 10, }} />}
-                        renderItem={({ item }) => {
-                            const { created_at, first_name, last_name, phone_number, creator, text, comments, likes_сount } = item;
-                            const date = new Date(created_at);
-                            return <NewsItem onPress={() => this.proceed(item)}>
-                                <Sender>
-                                    {creator.image === '/images/default_avatar.jpg' ?
-                                        <DefaultAvatar size={"xs"} style={{ marginRight: 10 }} id={creator._id} /> :
-                                        <ImageComponent
-                                            source={{ uri: `http://ser.univ.team${creator.image}` }}
-                                            size={"xs"}
-                                            style={{ marginRight: 10 }} />
+  render() {
+    const { news } = this.props;
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec',];
+    return (
+      <SafeAreaView>
+        <Wrapper>
+          {news.length ? (
+            <NewsList
+              data={news}
+              ListFooterComponent={<View style={{ margin: 10, }} />}
+              renderItem={({ item }) => {
+                const {
+                  created_at, first_name, last_name, phone_number, creator, text, comments, likes_сount
+                } = item;
+                const date = new Date(created_at);
+                return (
+                  <NewsItem onPress={() => this.proceed(item)}>
+                    <Sender>
+                      {creator.image === '/images/default_avatar.jpg'
+                        ? <DefaultAvatar size="xs" style={{ marginRight: 10 }} id={creator._id} />
+                        : (
+                          <ImageComponent
+                            source={{ uri: `http://ser.univ.team${creator.image}` }}
+                            size="xs"
+                            style={{ marginRight: 10 }}
+                          />
+                        )
                                     }
-                                    <SenderInfo>
-                                        <SenderName numberOfLines={1}>{creator.first_name ?
-                                            `${creator.first_name} ${creator.last_name}` : creator.phone_number}</SenderName>
-                                        <TimeSent>
-                                            {date.getDate()}{' '}
-                                            {months[date.getMonth()]}{' '}
-                                            {date.getFullYear()}{' '}
-                                            {date.getHours()}:{date.getMinutes()}
-                                        </TimeSent>
-                                    </SenderInfo>
-                                </Sender>
-                                <NewsText numberOfLines={2}>{text}</NewsText>
-                                <NewsItemInfo>
-                                    <ShowAll>
-                                        <HashTag>ЧИТАТЬ ДАЛЕЕ</HashTag>
-                                    </ShowAll>
+                      <SenderInfo>
+                        <SenderName numberOfLines={1}>
+                          {creator.first_name
+                            ? `${creator.first_name} ${creator.last_name}` : creator.phone_number}
+                        </SenderName>
+                        <TimeSent>
+                          {date.getDate()}
+                          {' '}
+                          {months[date.getMonth()]}
+                          {' '}
+                          {date.getFullYear()}
+                          {' '}
+                          {date.getHours()}
+:
+                          {date.getMinutes()}
+                        </TimeSent>
+                      </SenderInfo>
+                    </Sender>
+                    <NewsText numberOfLines={2}>{text}</NewsText>
+                    <NewsItemInfo>
+                      <ShowAll>
+                        <HashTag>ЧИТАТЬ ДАЛЕЕ</HashTag>
+                      </ShowAll>
 
-                                    <Reactions>
-                                        <HeartIcon /><Reactionsext>{likes_сount}</Reactionsext>
-                                        <CommentIcon left /><Reactionsext>{comments.length}</Reactionsext>
-                                    </Reactions>
-                                </NewsItemInfo>
-                            </NewsItem>;
+                      <Reactions>
+                        <HeartIcon />
+                        <Reactionsext>{likes_сount}</Reactionsext>
+                        <CommentIcon left />
+                        <Reactionsext>{comments.length}</Reactionsext>
+                      </Reactions>
+                    </NewsItemInfo>
+                  </NewsItem>
+                );
+              }
                         }
-                        }
-                        keyExtractor={(item, index) => index.toString()}
-                    /> :
-                        <Loader hint={'Пока нет новостей'} style={{ flex: 1 }}></Loader>}
-                </Wrapper>
-            </SafeAreaView>
-        );
-    }
+              keyExtractor={(item, index) => index.toString()}
+            />
+          )
+            : <Loader hint="Пока нет новостей" style={{ flex: 1 }} />}
+        </Wrapper>
+      </SafeAreaView>
+    );
+  }
+
     state = {
     }
+
     componentDidMount() {
     }
+
     proceed = (e) => {
-        const { proceed, setFeed } = this.props;
-        setFeed(e);
-        proceed();
+      const { proceed, setFeed } = this.props;
+      setFeed(e);
+      proceed();
     }
 }
 
 const mapStateToProps = state => ({
-    news: state.newsReducer.news,
+  news: state.newsReducer.news,
 });
 const mapDispatchToProps = dispatch => ({
-    setFeed: _ => dispatch(setFeed(_)),
+  setFeed: _ => dispatch(setFeed(_)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

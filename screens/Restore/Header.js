@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, Image, Platform, TouchableOpacity } from 'react-native';
-import { BackIcon, LocationIcon, SearchIcon } from '../../assets/index';
+import {
+  View, Text, SafeAreaView, Image, Platform, TouchableOpacity
+} from 'react-native';
 import styled from 'styled-components';
+import { BackIcon, LocationIcon, SearchIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
+
 const { sidePadding, HeaderHeight } = helper;
 
 const Header = styled(View)`
@@ -44,15 +47,16 @@ const Right = styled(TouchableOpacity)`
 `;
 
 export default class HeaderComponent extends Component {
-    render() {
-        return (
-            <Header>
-                <BackIcon onPress={this.back} />
-            </Header>
-        );
-    }
+  render() {
+    return (
+      <Header>
+        <BackIcon onPress={this.back} />
+      </Header>
+    );
+  }
+
     back = () => {
-        const { back } = this.props;
-        back();
+      const { back } = this.props;
+      back();
     }
 }

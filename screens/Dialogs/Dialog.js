@@ -1,14 +1,22 @@
 import React, { Component } from 'react';
-import { View, Text, Image, TouchableHighlight, Dimensions, Platform, ActionSheetIOS } from 'react-native';
+import {
+  View, Text, Image, TouchableHighlight, Dimensions, Platform, ActionSheetIOS
+} from 'react-native';
 import styled from 'styled-components';
-import helper from '../../utils/helpers';
 import { connect } from 'react-redux';
-import ImageComponent from '../../common/Image';
+import helper from '../../utils/helpers';
 import DefaultAvatar from '../../common/DefaultAvatar';
 import { socket } from '../../utils/socket';
-import { FilesRedIcon, TaskIcon, LocationIcon, GroupIconWhite, UserIconWhite } from '../../assets/';
-const { fontSize, PressDelay, sidePadding, Colors } = helper;
-const { purple, lightColor, grey2, blue, green, yellow, grey3, lightGrey2, lightBlue, avatars } = Colors;
+import {
+  FilesRedIcon, TaskIcon, LocationIcon
+} from '../../assets';
+
+const {
+  fontSize, sidePadding, Colors
+} = helper;
+const {
+  purple, lightColor, grey2, blue, green, grey3, lightGrey2, lightBlue
+} = Colors;
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
@@ -120,21 +128,17 @@ const LastFileItemText = styled(Text)`
 `;
 const LastFiles = styled(Text)`
   font-size: ${fontSize.sm};
+  height: ${fontSize.sm};
   color: ${grey2};
-`;
-const ImagePlaceholder = styled(View)`
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
-  margin-top: 5px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 class Content extends Component {
   render() {
-    const { children, title, user, image, lastMessage, item, unreadMessages } = this.props;
-    const { phone, _id, creator, created_at, isGroup, participants } = item;
+    const {
+      title, user, image, lastMessage, item, unreadMessages
+    } = this.props;
+    const {
+      phone, _id, creator, created_at, isGroup, participants
+    } = item;
     const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     let lastTextMessage = lastMessage.filter(e => e.type === 'text');
     lastTextMessage = lastTextMessage.length ? lastTextMessage[lastTextMessage.length - 1].text : '';
@@ -143,103 +147,123 @@ class Content extends Component {
     const dayOfTheWeek = lastMessage.length ? daysOfTheWeek[lastMessageDate.getDay()] : undefined;
     const difference = Math.abs(new Date() - lastMessageDate) / 864e5;
     const timeCreatedAt = new Date(created_at);
-    const timeCreated = `${timeCreatedAt.getHours() >= 10 ? timeCreatedAt.getHours() :
-      '0' + timeCreatedAt.getHours()}:${timeCreatedAt.getMinutes() >= 10 ?
-        timeCreatedAt.getMinutes() :
-        '0' + timeCreatedAt.getMinutes()}`;
-    const time = difference >= 1 ? dayOfTheWeek :
-      `${lastMessageDate.getHours() >= 10 ? lastMessageDate.getHours() :
-        '0' + lastMessageDate.getHours()}:${lastMessageDate.getMinutes() >= 10 ?
-          lastMessageDate.getMinutes() :
-          '0' + lastMessageDate.getMinutes()}`;
-    let lastMessageType = '';
+    const timeCreated = `${timeCreatedAt.getHours() >= 10 ? timeCreatedAt.getHours()
+      : `0${timeCreatedAt.getHours()}`}:${timeCreatedAt.getMinutes() >= 10
+      ? timeCreatedAt.getMinutes()
+      : `0${timeCreatedAt.getMinutes()}`}`;
+    const time = difference >= 1 ? dayOfTheWeek
+      : `${lastMessageDate.getHours() >= 10 ? lastMessageDate.getHours()
+        : `0${lastMessageDate.getHours()}`}:${lastMessageDate.getMinutes() >= 10
+        ? lastMessageDate.getMinutes()
+        : `0${lastMessageDate.getMinutes()}`}`;
     let lastType = '';
-    if (lastMessage.length) switch (lastMessage[lastMessage.length - 1].type) {
-      case 'text':
-        lastType = blue;
-        lastMessageType = 'text';
-        break;
-      case 'task':
-        lastType = purple;
-        lastMessageType = 'task';
-        break;
-      case 'geo':
-        lastType = green;
-        lastMessageType = 'geo';
-        break;
-      default:
-        lastType = blue;
-        lastMessageType = 'image';
-        break;
+    if (lastMessage.length) {
+      switch (lastMessage[lastMessage.length - 1].type) {
+        case 'text':
+          lastType = blue;
+          break;
+        case 'task':
+          lastType = purple;
+          break;
+        case 'geo':
+          lastType = green;
+          break;
+        default:
+          lastType = blue;
+          break;
+      }
     }
     const chatImage = isGroup ? image : user._id === creator._id ? participants[0].image : creator.image;
     return (
       <TouchableHighlight
         underlayColor={lightBlue}
-        onPress={phone ?
-          () => this.newDialog(id) :
-          this.handleClick}
-        onLongPress={this.handleHold}>
+        onPress={phone
+          ? () => this.newDialog(_id)
+          : this.handleClick}
+        onLongPress={this.handleHold}
+      >
         <Wrapper>
           {
-            chatImage === '/images/default_group.png' || chatImage === '/images/default_avatar.jpg' ?
-              <DefaultAvatar isGroup={isGroup} id={item._id} size={'large'} /> :
-              <DialogImage
-                source={{ uri: `http://ser.univ.team${chatImage}` }}
-                size={"large"} />
+            chatImage === '/images/default_group.png' || chatImage === '/images/default_avatar.jpg'
+              ? <DefaultAvatar isGroup={isGroup} id={item._id} size="large" />
+              : (
+                <DialogImage
+                  source={{ uri: `http://ser.univ.team${chatImage}` }}
+                  size="large"
+                />
+              )
           }
           <DialogText>
             <DialogTextInner>
-              {title && <>
+              {title && (
+              <>
                 <DialogTitle>{title}</DialogTitle>
                 <DialogLastMessage numberOfLines={2}>
                   {lastTextMessage || 'no messages yet'}
                 </DialogLastMessage>
-                {lastFiles.length ? <LastFile>
-                  {lastFiles.map((e, i) => {
-                    const { filename, type } = e;
-                    return i < 2 && <LastFileItem key={i}>
-                      {type === 'image' && <FilesRedIcon noPaddingAll={true} size={10} />}
-                      {type === 'task' && <TaskIcon noPaddingAll={true} size={10} />}
-                      {type === 'geo' && <LocationIcon noPaddingAll={true} size={10} />}
-                      <LastFileItemText>
-                        {filename.length > 8 ? filename.substr(-8) : filename}
-                      </LastFileItemText>
-                    </LastFileItem>;
-                  })}
-                  {(lastFiles.length && lastFiles.length - 2) ? <LastFiles>+{lastFiles.length >= 2 ? lastFiles.length - 2 : lastFiles.length}</LastFiles> : <LastFiles />}
-                </LastFile> : <LastFiles />}
+                {lastFiles.length ? (
+                  <LastFile>
+                    {lastFiles.map((e, i) => {
+                      const { filename, type } = e;
+                      return i < 2 && (
+                      <LastFileItem key={i}>
+                        {type === 'image' && <FilesRedIcon noPaddingAll size={10} />}
+                        {type === 'task' && <TaskIcon noPaddingAll size={10} />}
+                        {type === 'geo' && <LocationIcon noPaddingAll size={10} />}
+                        <LastFileItemText>
+                          {filename.length > 8 ? filename.substr(-8) : filename}
+                        </LastFileItemText>
+                      </LastFileItem>
+                      );
+                    })}
+                    {(lastFiles.length && lastFiles.length - 2) ? (
+                      <LastFiles>
+                        +
+                        {lastFiles.length >= 2 ?
+                          lastFiles.length - 2 :
+                          lastFiles.length}
+                      </LastFiles>
+                    ) : <LastFiles />}
+                  </LastFile>
+                ) : <LastFile />}
               </>
+              )
               }
-              {phone && <>
+              {phone && (
+              <>
                 <View>
                   <Text>{phone}</Text>
                 </View>
-              </>}
+              </>
+              )}
             </DialogTextInner>
             <DialogDate>
               <LastMessageDate>{time || timeCreated}</LastMessageDate>
               <UnreadMessages>
-                {!!unreadMessages &&
+                {!!unreadMessages
+                  && (
                   <NewMessages color={lastType}>
                     <NewMessagesText>{unreadMessages}</NewMessagesText>
-                  </NewMessages>}
+                  </NewMessages>
+                  )}
               </UnreadMessages>
             </DialogDate>
           </DialogText>
 
-        </Wrapper >
-      </TouchableHighlight >
+        </Wrapper>
+      </TouchableHighlight>
     );
   }
+
   state = {
-    size: null
   }
+
   newDialog = (e) => {
     const { user } = this.props;
     socket.emit('set dialogs', { userId: user.id, dialogId: e });
     this.handleClick();
   }
+
   handleHold = () => {
     Platform.os === 'ios' && ActionSheetIOS.showActionSheetWithOptions(
       {
@@ -254,25 +278,24 @@ class Content extends Component {
       },
     );
   }
+
   handleClick = () => {
-    this.props.onClick();
+    const { onClick } = this.props;
+    onClick();
   }
-  getUnreadMessageHeight = (e) => {
-    this.setState({ height: e.nativeEvent.layout.height });
+
+  getUnreadMessageHeight = () => {
   }
-  getUnreadMessageWidth = (e) => {
-    this.setState({ width: e.nativeEvent.layout.width });
+
+  getUnreadMessageWidth = () => {
   }
 }
 const mapStateToProps = state => ({
-    messages: state.messageReducer.messages,
-    storeDialogs: state.messageReducer,
-    currentRoom: state.messageReducer.currentRoom,
-    user: state.userReducer.user
-  });
+  messages: state.messageReducer.messages,
+  storeDialogs: state.messageReducer,
+  currentRoom: state.messageReducer.currentRoom,
+  user: state.userReducer.user
+});
 const mapDispatchToProps = dispatch => ({
-  getMessages: _ => dispatch(getMessages(_)),
-  setRoom: _ => dispatch(setRoom(_)),
-  setDialogs: _ => dispatch(setDialogs(_))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

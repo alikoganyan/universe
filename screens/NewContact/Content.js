@@ -1,31 +1,31 @@
 import React, { Component } from 'react';
-import { View, Text, TextInput, ScrollView, Dimensions } from 'react-native';
-import helper from '../../utils/helpers';
+import {
+  View, Text, TextInput, ScrollView, Dimensions
+} from 'react-native';
 import styled from 'styled-components';
+import helper from '../../utils/helpers';
 import Button from '../../common/Button';
 import sendRequest from '../../utils/request';
 import { p_create_contact } from '../../constants/api';
+
 const { Colors } = helper;
 const { green, lightGrey1, grey2 } = Colors;
 
-const Wrapper = styled(View)
-`
+const Wrapper = styled(View)`
     padding: 10%;
     padding-top: 0;
     display: flex;
     justify-content: center;
     height: ${Dimensions.get('window').height}px;
 `;
-const PhoneNumber = styled(View)
-`
+const PhoneNumber = styled(View)`
     display: flex;
     flex-direction: row;
     margin-top: 10%;
     align-items: center;
     justify-content: space-between;
 `;
-const InputLabel = styled(Text)
-`
+const InputLabel = styled(Text)`
     margin-right: 20px;
     padding-bottom: 10px;
     padding-right:1%;
@@ -33,8 +33,7 @@ const InputLabel = styled(Text)
     text-align: right;
     color: ${grey2};
 `;
-const Input = styled(TextInput)
-`
+const Input = styled(TextInput)`
     border: 1px solid ${lightGrey1};
     border-width: 0;
     border-bottom-width: 1px;
@@ -43,116 +42,135 @@ const Input = styled(TextInput)
     font-size: 13px; 
 `;
 
-const ButtonBox = styled(View)
-`
+const ButtonBox = styled(View)`
     position: absolute;
     bottom: 15%;
     align-self: center;
 `;
 export default class Content extends Component {
-    render() {
-        const { phone, country, lastName, firstName, patronymic, post, email } = this.state;
-        return (
-            <ScrollView contentContainerStyle={{ flexGrow: 1 }}
-                keyboardShouldPersistTaps='handled'>
-                <Wrapper>
-                    <ScrollView style={{ height: '100%', paddingTop: '10%' }}>
-                        <PhoneNumber>
-                            <InputLabel style={{ flex: 4 }}>Телефон</InputLabel>
-                            <Input style={{ flex: 1, textAlign: 'center', paddingRight: 7, paddingLeft: 7 }} keyboardType={'phone-pad'} onChangeText={this.handleChangeCountry} value={country} />
-                            <Input style={{ flex: 7 }} keyboardType={'phone-pad'} placeholder={'XXX XXX XX XX'} onChangeText={this.handleChangePhone} value={phone} />
-                        </PhoneNumber>
-                        <PhoneNumber>
-                            <InputLabel style={{ flex: 4 }}>Фамилия</InputLabel>
-                            <Input style={{ flex: 9 }} placeholder={'Фамилия'} onChangeText={this.handleChangeLastName} value={lastName} />
-                        </PhoneNumber>
-                        <PhoneNumber>
-                            <InputLabel style={{ flex: 4 }}>Имя</InputLabel>
-                            <Input style={{ flex: 9 }} placeholder={'Имя'} onChangeText={this.handleChangeFirstName} value={firstName} />
-                        </PhoneNumber>
-                        <PhoneNumber>
-                            <InputLabel style={{ flex: 4 }}>Отчество</InputLabel>
-                            <Input style={{ flex: 9 }} placeholder={'Отчество'} onChangeText={this.handleChangePatronymic} value={patronymic} />
-                        </PhoneNumber>
-                        <PhoneNumber>
-                            <InputLabel style={{ flex: 4 }}>Должность</InputLabel>
-                            <Input style={{ flex: 9 }} placeholder={'Должность'} onChangeText={this.handleChangePost} value={post} />
-                        </PhoneNumber>
-                        <PhoneNumber>
-                            <InputLabel style={{ flex: 4 }}>Email</InputLabel>
-                            <Input style={{ flex: 9 }} keyboardType={'email-address'} placeholder={'Email'} onChangeText={this.handleChangeEmail} value={email} />
-                        </PhoneNumber>
-                    </ScrollView>
-                    <ButtonBox>
-                        <Button onPress={this.proceed} background ={green} color={'white'}>Добавить контакт</Button>
-                    </ButtonBox>
-                </Wrapper>
-            </ScrollView>
-        );
-    }
+  render() {
+    const {
+      phone, country, lastName, firstName, patronymic, post, email
+    } = this.state;
+    return (
+      <ScrollView
+        contentContainerStyle={{ flexGrow: 1 }}
+        keyboardShouldPersistTaps="handled"
+      >
+        <Wrapper>
+          <ScrollView style={{ height: '100%', paddingTop: '10%' }}>
+            <PhoneNumber>
+              <InputLabel style={{ flex: 4 }}>Телефон</InputLabel>
+              <Input
+                style={{
+                  flex: 1, textAlign: 'center', paddingRight: 7, paddingLeft: 7
+                }}
+                keyboardType="phone-pad"
+                onChangeText={this.handleChangeCountry}
+                value={country}
+              />
+              <Input style={{ flex: 7 }} keyboardType="phone-pad" placeholder="XXX XXX XX XX" onChangeText={this.handleChangePhone} value={phone} />
+            </PhoneNumber>
+            <PhoneNumber>
+              <InputLabel style={{ flex: 4 }}>Фамилия</InputLabel>
+              <Input style={{ flex: 9 }} placeholder="Фамилия" onChangeText={this.handleChangeLastName} value={lastName} />
+            </PhoneNumber>
+            <PhoneNumber>
+              <InputLabel style={{ flex: 4 }}>Имя</InputLabel>
+              <Input style={{ flex: 9 }} placeholder="Имя" onChangeText={this.handleChangeFirstName} value={firstName} />
+            </PhoneNumber>
+            <PhoneNumber>
+              <InputLabel style={{ flex: 4 }}>Отчество</InputLabel>
+              <Input style={{ flex: 9 }} placeholder="Отчество" onChangeText={this.handleChangePatronymic} value={patronymic} />
+            </PhoneNumber>
+            <PhoneNumber>
+              <InputLabel style={{ flex: 4 }}>Должность</InputLabel>
+              <Input style={{ flex: 9 }} placeholder="Должность" onChangeText={this.handleChangePost} value={post} />
+            </PhoneNumber>
+            <PhoneNumber>
+              <InputLabel style={{ flex: 4 }}>Email</InputLabel>
+              <Input style={{ flex: 9 }} keyboardType="email-address" placeholder="Email" onChangeText={this.handleChangeEmail} value={email} />
+            </PhoneNumber>
+          </ScrollView>
+          <ButtonBox>
+            <Button onPress={this.proceed} background={green} color="white">Добавить контакт</Button>
+          </ButtonBox>
+        </Wrapper>
+      </ScrollView>
+    );
+  }
+
     state = {
-        error: false,
-        phone: '',
-        country: '+7',
-        lastName: '',
-        firstName: '',
-        patronymic: '',
-        post: '',
-        email: '',
+      error: false,
+      phone: '',
+      country: '+7',
+      lastName: '',
+      firstName: '',
+      patronymic: '',
+      post: '',
+      email: '',
     }
+
     handleChangeCountry = (e) => {
-        this.setState({ country: e });
+      this.setState({ country: e });
     }
+
     handleChangePhone = (e) => {
-        this.setState({ phone: e });
+      this.setState({ phone: e });
     }
+
     handleChangeLastName = (e) => {
-        this.setState({ lastName: e });
+      this.setState({ lastName: e });
     }
+
     handleChangeFirstName = (e) => {
-        this.setState({ firstName: e });
+      this.setState({ firstName: e });
     }
+
     handleChangePatronymic = (e) => {
-        this.setState({ patronymic: e });
+      this.setState({ patronymic: e });
     }
+
     handleChangePost = (e) => {
-        this.setState({ post: e });
+      this.setState({ post: e });
     }
+
     handleChangeEmail = (e) => {
-        this.setState({ email: e });
+      this.setState({ email: e });
     }
+
     proceed = () => {
-        const {
-            phone,
-            country,
-            lastName,
-            firstName,
-            patronymic,
-            post,
-            email,
-        } = this.state;
-        const contact = {
-            phone_number: country.concat(phone),
-            email,
-            first_name: firstName,
-            middle_name: patronymic,
-            last_name: lastName,
-            post
-        };
-        sendRequest({
-            r_path: p_create_contact,
-            method: 'post',
-            attr: { contact },
-            success: (res) => {
-                console.log({ res });
-            },
-            failFunc: (err) => {
-                console.log(err);
-                const { phone_number } = err;
-                this.setState({
-                    invalidPhone: phone_number || null,
-                });
-            }
-        });
+      const {
+        phone,
+        country,
+        lastName,
+        firstName,
+        patronymic,
+        post,
+        email,
+      } = this.state;
+      const contact = {
+        phone_number: country.concat(phone),
+        email,
+        first_name: firstName,
+        middle_name: patronymic,
+        last_name: lastName,
+        post
+      };
+      sendRequest({
+        r_path: p_create_contact,
+        method: 'post',
+        attr: { contact },
+        success: (res) => {
+          console.log({ res });
+        },
+        failFunc: (err) => {
+          console.log(err);
+          const { phone_number } = err;
+          this.setState({
+            invalidPhone: phone_number || null,
+          });
+        }
+      });
     }
 }
