@@ -141,7 +141,6 @@ class Content extends Component {
       country: '+7',
       phone: '',
       error: false,
-      invalidPhone: false,
     }
 
     componentDidMount() { }
@@ -149,7 +148,7 @@ class Content extends Component {
     proceed = () => {
       const { country, phone } = this.state;
       const { setRegisterUserNumber, forward } = this.props;
-      phone_number = country.concat(phone);
+      const phone_number = country.concat(phone);
       if (!phone) {
         this.setState({ error: <ErrorText>Введите телефон</ErrorText> });
       }
@@ -169,13 +168,17 @@ class Content extends Component {
           },
           failFunc: (err) => {
             console.log(err);
-            const { phone_number } = err;
             this.setState({
-              invalidPhone: phone_number || null,
-              error: err.msg === 'Извините, функция недоступна. Попробуйте позже.' ? <ErrorText>{err.description || 'функция временно недоступна'}</ErrorText> : (
-                <TouchableOpacity onPress={this.login}>
-                  <ErrorText>Телефон уже зарегистрирован в системе </ErrorText>
-                  <ErrorTextLink>Авторизируйтесь</ErrorTextLink>
+              error: err.msg ? (
+                <ErrorText>
+                  {err.msg}
+                </ErrorText>
+              ) : (
+                <TouchableOpacity onPress={this.signup}>
+                  <ErrorText>
+                    Телефона нет в системе.
+                    <ErrorTextLink>Зарегистрируйтесь</ErrorTextLink>
+                  </ErrorText>
                 </TouchableOpacity>
               )
             });

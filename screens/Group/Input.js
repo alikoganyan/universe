@@ -131,8 +131,6 @@ class InputComponent extends Component {
 
     state = {
       text: '',
-      height: 0,
-      image: null,
       pickerOpened: false,
     }
 
@@ -175,9 +173,8 @@ class InputComponent extends Component {
           src: result.uri,
           viewers: [],
         };
-        addMessage(message);
         const newDialogs = [...dialogs];
-        const index = newDialogs.findIndex(e => e.room === currentChat);
+        // const index = newDialogs.findIndex(e => e.room === currentChat);
         // newDialogs[index] = res.dialog;
         setDialogs(newDialogs);
         sendRequest({
@@ -215,7 +212,7 @@ class InputComponent extends Component {
 
     sendMessage = () => {
       const {
-        currentChat, addMessage, user, setDialogs, dialogs
+        currentChat, user, setDialogs, dialogs
       } = this.props;
       const {
         _id, first_name, last_name, middle_name, image
@@ -236,39 +233,11 @@ class InputComponent extends Component {
         if (newDialog) {
           newDialog.messages = [...newDialog.messages, message];
           newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog;
-          const newDialogSorted = newDialogs.length && newDialogs.sort((a, b) => {
-            if (b.messages.length && a.messages.length) {
-              const aCreation = new Date(a.created_at);
-              const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at);
-              const aDate = aCreation > aLastMessage ? aCreation : aLastMessage;
-              const bCreation = new Date(b.created_at);
-              const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at);
-              const bDate = bCreation > bLastMessage ? bCreation : bLastMessage;
-              return bDate - aDate;
-            }
-            if (b.messages.length && !a.messages.length) {
-              const aCreation = new Date(a.created_at);
-              const bCreation = new Date(b.created_at);
-              const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at);
-              const bDate = bCreation > bLastMessage ? bCreation : bLastMessage;
-              return bDate - aCreation;
-            }
-            if (!b.messages.length && a.messages.length) {
-              const aCreation = new Date(a.created_at);
-              const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at);
-              const aDate = aCreation > aLastMessage ? aCreation : aLastMessage;
-              const bCreation = new Date(b.created_at);
-              return bCreation - aDate;
-            }
-            if (!b.messages.length && !a.messages.length) {
-              const aCreation = new Date(a.created_at);
-              const bCreation = new Date(b.created_at);
-              return bCreation - aCreation;
-            }
+          const newDialogSorted = newDialogs.sort((a, b) => {
+            if (b.messages.length && a.messages.length) return new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at);
           });
-          socket.emit('group_message', { room: currentChat, message: text });
-          addMessage(message);
           setDialogs(newDialogSorted);
+          socket.emit('group_message', { room: currentChat, message: text });
         }
       }
       this.setState({ text: '' });

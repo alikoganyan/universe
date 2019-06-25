@@ -17,7 +17,7 @@ import { setUser, setAuth, setRegisterUserNumber } from '../../actions/userActio
 import { p_login } from '../../constants/api';
 import Button from '../../common/Button';
 import sendRequest from '../../utils/request';
-import { socket, connectToSocket } from '../../utils/socket';
+import { connectToSocket } from '../../utils/socket';
 
 const { Colors, fontSize } = helper;
 const {
@@ -26,7 +26,7 @@ const {
     pink,
     black
 } = Colors;
-const { large, sm } = fontSize;
+const { large, sl } = fontSize;
 const Wrapper = styled(View)
 `
 	padding: 0 20%;
@@ -60,13 +60,13 @@ const PhoneNumber = styled(View)
 `;
 const ErrorText = styled(Text)
 `
-	font-size: ${sm};
+	font-size: ${sl};
 	margin-bottom: 10px;
 	text-align: center;
 `;
 const ForgotPass = styled(Text)
 `
-	font-size: ${sm};
+	font-size: ${sl};
 	margin-bottom: 10px;
 	color: ${blue};
 `;
@@ -125,27 +125,33 @@ class Content extends Component {
 				<Wrapper onPress={Keyboard.dismiss}>
 				<View>
 					<Title>
-									Авторизация
+						Авторизация
 					</Title>
 				</View>
 				<PhoneNumber err={invalidPhone}>
 					<Input
-					style={{ width: '20%' }}
-					inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
-					keyboardType="phone-pad"
-					value={country}
-					onChangeText={this.handleChangeCountry}
+						style={{ width: '20%' }}
+						inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
+						keyboardType="phone-pad"
+						value={country}
+						onChangeText={this.handleChangeCountry}
 					/>
 					<StyledInput
-					password
-					onChangeText={this.handleChangePhone}
-					value={phone}
-					placeholder="XXX-XXX-XX-XX"
-					keyboardType="phone-pad"
-					maxLength={10}
-					style={{
-						margin: 0, width: '78%', flex: 1, textAlign: 'left', paddingLeft: 10, color: invalidPhone ? pink : black, borderColor: invalidPhone ? pink : lightGrey1
-					}}
+						password
+						onChangeText={this.handleChangePhone}
+						value={phone}
+						placeholder="XXX-XXX-XX-XX"
+						keyboardType="phone-pad"
+						maxLength={10}
+						style={{
+							margin: 0,
+							width: '78%',
+							flex: 1,
+							textAlign: 'left',
+							paddingLeft: 10,
+							color: invalidPhone ? pink : black,
+							borderColor: invalidPhone ? pink : lightGrey1
+						}}
 					/>
 				</PhoneNumber>
 				<ControlBar>
@@ -166,14 +172,17 @@ class Content extends Component {
 					value={password}
 					placeholder="Пароль"
 					secureTextEntry
-					style={{ color: invalidPassword ? pink : black, borderColor: invalidPassword ? pink : lightGrey1 }}
+					style={{
+						color: invalidPassword ? pink : black,
+						borderColor: invalidPassword ? pink : lightGrey1
+					}}
 				/>
 				<ControlBar>
 					<TouchableOpacity onPress={this.restorePass}>
 					{invalidPassword ? (
 						<ErrorText>
 							Неверный пароль.
-						{' '}
+							{' '}
 						<ForgotPass>
 							Восстановить пароль?
 						</ForgotPass>
@@ -182,8 +191,7 @@ class Content extends Component {
 						<ForgotPass>
 							Забыли пароль?
 						</ForgotPass>
-					)
-									}
+					)}
 					</TouchableOpacity>
 					<TouchableOpacity onPress={navigateToDialogs}>
 					<Button onPress={this.login} background={blue} color="#fff">войти</Button>
@@ -196,24 +204,13 @@ class Content extends Component {
 
     state = {
         country: '+7',
-        // phone: Dimensions.get('window').width === 375 ? '9123456780' : Dimensions.get('window').width === 320 ? '9123456781' : '9123456782', // restore
-        // password: '1111', // restore
         phone: '',
         password: '',
         invalidPassword: false,
         invalidPhone: false,
     }
 
-    componentDidMount = () => {
-        // const { navigation, setUser } = this.props;
-        // AsyncStorage.getItem('user').then(res => {
-        //     value = JSON.parse(res);
-        //     if (value) {
-        //         this.setState({ phone: value.phone_number.slice(2), password: value.password })
-        //         this.login() // restore
-        //     }
-        // });
-    }
+    componentDidMount = () => { }
 
     storeUserData = async (user) => {
         try {

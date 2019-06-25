@@ -1,18 +1,14 @@
 import React, { Component } from 'react';
-import {
-  View, Text, SafeAreaView, Image, Platform, ActionSheetIOS, TouchableOpacity
-} from 'react-native';
+import { View, Text, TouchableOpacity } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { BackIcon, AddIcon, SearchIcon } from '../../assets/index';
+import { BackIcon, SearchIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
 import ImageComponent from '../../common/Image';
 import DefaultAvatar from '../../common/DefaultAvatar';
 
-const {
-  HeaderHeight, sidePadding, fontSize, Colors
-} = helper;
-const { green, grey3 } = Colors;
+const { HeaderHeight, sidePadding, fontSize, Colors } = helper;
+const { grey3 } = Colors;
 const Header = styled(View)`
     width: 100%;
     background: white;
@@ -34,17 +30,6 @@ const Right = styled(View)`
     flex-direction: row;
     align-items: center;
 `;
-const Center = styled(View)`
-`;
-const UserImage = styled(Image)`
-    width: 30px;
-    height: 30px;
-    border-radius: 15px;
-    margin-left:${sidePadding}px;
-`;
-const MarginRight = styled(View)`
-    margin-right: ${sidePadding}px;
-`;
 const HeaderText = styled(Text)`
     font-size: ${fontSize.header};
     position: relative;
@@ -58,28 +43,32 @@ class HeaderComponent extends Component {
     return (
       <Header>
         <Left>
-          <BackIcon onPress={this.props.back} right />
+          <BackIcon onPress={this.back} right />
           <HeaderText>
                         Контакты
           </HeaderText>
         </Left>
         <Right>
           <SearchIcon right />
-          {/* <AddIcon onPress={this.addContact} right /> */}
           <TouchableOpacity onPress={this.toProfile}>
             {user.image === '/images/default_group.png' || user.image === '/images/default_avatar.jpg'
               ? <DefaultAvatar size="header" style={{ marginLeft: 10 }} />
               : <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size="header" style={{ marginLeft: 10 }} />
-                        }
+            }
           </TouchableOpacity>
         </Right>
       </Header>
     );
   }
 
-    addContact = (e) => {
+    addContact = () => {
       const { navigate } = this.props;
       navigate('NewContact');
+    }
+
+    back = () => {
+      const { back } = this.props;
+      back();
     }
 
     toProfile = () => {
@@ -90,7 +79,5 @@ class HeaderComponent extends Component {
 const mapStateToProps = state => ({
   user: state.userReducer.user
 });
-const mapDispatchToProps = dispatch => ({
-  setDialogs: _ => dispatch(setDialogs(_))
-});
+const mapDispatchToProps = dispatch => ({});
 export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent);

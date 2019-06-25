@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, SafeAreaView, FlatList, Image, TouchableOpacity, Dimensions
+  View, Text, SafeAreaView, FlatList, TouchableOpacity, Dimensions
 } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -84,14 +84,6 @@ const Reactions = styled(View)`
     flex-direction: row;
     align-items: center;
 `;
-const LoaderWrapper = styled(View)`
-    display: flex;
-    justify-content: space-between;
-    flex-direction: row;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-`;
 const Reactionsext = styled(Text)`
     color: ${grey2};
     font-size: ${fontSize.sm};
@@ -111,7 +103,7 @@ class Content extends Component {
               ListFooterComponent={<View style={{ margin: 10, }} />}
               renderItem={({ item }) => {
                 const {
-                  created_at, first_name, last_name, phone_number, creator, text, comments, likes_сount
+                  created_at, creator, text, comments, likes_сount
                 } = item;
                 const date = new Date(created_at);
                 return (
@@ -174,7 +166,10 @@ class Content extends Component {
     state = {
     }
 
-    componentDidMount() {
+    componentDidMount() {}
+
+    componentWillUnmount() {
+      setFeed({});
     }
 
     proceed = (e) => {

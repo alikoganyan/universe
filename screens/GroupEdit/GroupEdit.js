@@ -6,34 +6,42 @@ import Header from './Header';
 import Content from './Content';
 
 const Wrapper = styled(View)`
-    height: 100%;
+	height: 100%;
 `;
 export default class Signup extends Component {
   render() {
-    const defaultValues = this.props.navigation.getParam('currentDialog', {});
-    return (
-      <SafeAreaView behavior="padding">
-        <Wrapper>
-          <Header back={this.back} />
-          <Content addParticipant={this.addParticipant} forward={this.moveForward} defaultValues={defaultValues} />
-        </Wrapper>
-      </SafeAreaView>
-    );
+	const { navigation } = this.props;
+	const defaultValues = navigation.getParam('currentDialog');
+	return (
+		<SafeAreaView behavior="padding">
+			<Wrapper>
+				<Header back={this.back} />
+				<Content
+					addParticipant={this.addParticipant}
+					forward={this.moveForward}
+					defaultValues={defaultValues}
+				/>
+			</Wrapper>
+		</SafeAreaView>
+	);
   }
 
   componentDidMount() {
 
   }
 
-    moveForward = () => {
-      this.props.navigation.navigate('Dialogs');
-    }
+	moveForward = () => {
+		const { navigation } = this.props;
+		navigation.navigate('Dialogs');
+	}
 
-    back = () => {
-      this.props.navigation.goBack();
-    }
+	back = () => {
+		const { navigation } = this.props;
+		navigation.goBack();
+	}
 
-    addParticipant = () => {
-      this.props.navigation.navigate('NewGroupParticipants');
-    }
+	addParticipant = () => {
+		const { navigation } = this.props;
+		navigation.navigate('NewGroupParticipants');
+	}
 }

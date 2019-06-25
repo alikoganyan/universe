@@ -1,10 +1,10 @@
-import axios from 'axios'
-import { store } from '../reducers/store'
-import { setAuth, setError } from '../actions/userActions'
+import axios from 'axios';
+import { store } from '../reducers/store';
+import { setAuth, setError } from '../actions/userActions';
+import { disconnectFromSocket, socket } from './socket';
+import NavigationProvider from './NavigationProvider';
 
-import { disconnectFromSocket, socket } from '../utils/socket'
-import NavigationProvider from './NavigationProvider'
-const SERVER_URL = 'http://ser.multiverse.plus/api'
+const SERVER_URL = 'http://ser.multiverse.plus/api';
 
 /**
  * Request function to get data from server
@@ -21,45 +21,44 @@ export default async function sendRequest({
 	attr = null,
 	config = {
 		headers: {
-			Authorization: 'Bearer ' + store.getState().userReducer.auth
+			Authorization: `Bearer ${store.getState().userReducer.auth}`
 		}
 	},
-	success = (res) => console.log(res),
+	success = (res) => {
+		console.log(res);
+	},
 	failFunc = null,
 	full_res = false
 }) {
 	try {
-		let response = null
+		let response = null;
 		if (method !== 'get') {
-			response = await axios[method](SERVER_URL + r_path, attr, config)
-		}
-		else {
-			response = await axios.get(SERVER_URL + r_path, config)
+			response = await axios[method](SERVER_URL + r_path, attr, config);
+		} else {
+			response = await axios.get(SERVER_URL + r_path, config);
 		}
 		if (full_res) {
-			success(response)
+			success(response);
 		} else {
-			success(response.data)
+			success(response.data);
 		}
 	} catch (err) {
-		const { response } = err
+		const { response } = err;
 		// console.log(response.data)
-		// console.log(response)
-		console.log('error in path -->', r_path)
+		// console.log(store.getState().userReducer.auth);
+		console.log('error in path -->', r_path, err);
 		if (!response || response.status === 500) {
-			store.dispatch(setError(true))
+			store.dispatch(setError(true));
 			if (failFunc) {
-				failFunc('Server error')
+				failFunc('Server error');
 			}
 		} else if (response.status === 401) {
-			store.dispatch(setAuth(null))
-			NavigationProvider.logoutNavigation()
+			store.dispatch(setAuth(null));
+			NavigationProvider.logoutNavigation();
 		} else {
-			if (failFunc) {
-				failFunc(response.data)
-			} else {
-				console.log(response)
-			}
+			failFunc ?
+				failFunc(response.data) :
+				console.log(response);
 		}
 	}
 }

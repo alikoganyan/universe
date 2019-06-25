@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, Dimensions } from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components';
 import SafeAreaView from '../../common/SafeAreaView';
 import Header from './Header';
@@ -8,30 +8,37 @@ import helper from '../../utils/helpers';
 
 const { HeaderHeight } = helper;
 const Wrapper = styled(View)`
-    height: 100%;
-    padding-bottom: ${HeaderHeight};
+	height: 100%;
+	padding-bottom: ${HeaderHeight};
 `;
 export default class Signup extends Component {
-  render() {
-    const deafultValues = this.props.navigation.getParam('task', {});
-    return (
-      <SafeAreaView behavior="padding">
-        <Wrapper>
-          <Header back={this.props.navigation.goBack} />
-          <Content addParticipants={this.addParticipants} forward={this.moveForward} deafultValues={deafultValues} />
-        </Wrapper>
-      </SafeAreaView>
-    );
-  }
+	render() {
+		const { navigation } = this.props;
+		const deafultValues = navigation.getParam('task', navigation.state.params || {});
+		console.log(navigation.state);
+		return (
+			<SafeAreaView behavior="padding">
+			<Wrapper>
+				<Header back={navigation.goBack} />
+				<Content
+					addParticipants={this.addParticipants}
+					forward={this.moveForward}
+					deafultValues={deafultValues}
+				/>
+			</Wrapper>
+			</SafeAreaView>
+		);
+	}
 
-  componentDidMount() {
-  }
+	componentDidMount() {}
 
-    moveForward = () => {
-      this.props.navigation.navigate('TasksList');
-    }
+	moveForward = () => {
+		const { navigation } = this.props;
+		navigation.navigate('TasksList');
+	}
 
-    addParticipants = () => {
-      this.props.navigation.navigate('NewTaskReceivers');
-    }
+	addParticipants = () => {
+		const { navigation } = this.props;
+		navigation.navigate('NewTaskReceivers');
+	}
 }

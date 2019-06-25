@@ -6,15 +6,17 @@ import {
     SET_ROOM,
     SET_CURRENT_CHAT,
     SET_CURRENT_ROOM_ID,
-} from '../actions/messageActions'
+} from '../actions/messageActions';
+
 const initialState = {
     search: false,
     currentRoom: null,
     currentChat: null,
     currentRoomId: null,
     messages: [],
-}
-export default messageReducer = (state = initialState, action) => {
+};
+
+export default (state = initialState, action) => {
     const { type, payload } = action;
     switch (type) {
         case GET_MESSAGES:
@@ -41,4 +43,4 @@ export default messageReducer = (state = initialState, action) => {
         default:
             return state;
     }
-}
+};

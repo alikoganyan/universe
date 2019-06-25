@@ -219,7 +219,7 @@ class InputComponent extends Component {
 
     sendMessage = () => {
       const {
-        currentDialog, currentRoom, user, addMessage, setDialogs, setCurrentChat, setRoom
+        currentDialog, currentRoom, user, setDialogs, setCurrentChat, setRoom
       } = this.props;
       const { text } = this.state;
       if (text) {
@@ -229,21 +229,18 @@ class InputComponent extends Component {
         };
         const newDialogs = [...dialogs];
         const newDialog = newDialogs.filter(event => event.room === currentChat)[0];
-        addMessage(message);
-        setTimeout(() => {
-          socket.emit('message', { receiver: currentRoom, message: text.trim() });
-          if (newDialog) {
-            newDialog.messages = [...newDialog.messages, message];
-            newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog;
-            const newDialogSorted = newDialogs.sort((a, b) => {
-              if (b.messages.length && a.messages.length) return new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at);
-            });
-            setDialogs(newDialogSorted);
-          } else {
-            setRoom(currentDialog._id);
-            setCurrentChat(`${user._id}_${currentDialog._id}`);
-          }
-        }, 0);
+        socket.emit('message', { receiver: currentRoom, message: text.trim() });
+        if (newDialog) {
+          newDialog.messages = [...newDialog.messages, message];
+          newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog;
+          const newDialogSorted = newDialogs.sort((a, b) => {
+            if (b.messages.length && a.messages.length) return new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at);
+          });
+          setDialogs(newDialogSorted);
+        } else {
+          setRoom(currentDialog._id);
+          setCurrentChat(`${user._id}_${currentDialog._id}`);
+        }
       }
       this.setState({ text: '' });
     }

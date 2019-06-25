@@ -1,22 +1,19 @@
 import {
 	createStore,
-	applyMiddleware,
   } from 'redux';
-import { persistReducer, persistStore } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
-import rootReducer from './rootReducer'
-import { composeWithDevTools } from 'redux-devtools-extension/logOnlyInProduction';
+import { persistReducer, persistStore } from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+import rootReducer from './rootReducer';
 import devToolsEnhancer from 'remote-redux-devtools';
-import thunk from 'redux-thunk';
 
 const persistConfig = {
 	key: 'root',
 	timeout: 0,
 	storage,
 	blacklist: ['error']
-}
+};
 
-const persistedReducer = persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer);
 
-export const store = createStore(rootReducer,  devToolsEnhancer())
-export const persistor = persistStore(store)
+export const store = createStore(rootReducer,  devToolsEnhancer());
+export const persistor = persistStore(store);

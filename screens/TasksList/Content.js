@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, FlatList, Dimensions, ScrollView
+  View, Text, Dimensions, ScrollView
 } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -27,7 +27,7 @@ const StyledScrollView = styled(ScrollView)`
 
 class Content extends Component {
   render() {
-    const { tasks, navigate, user } = this.props;
+    const { tasks, navigate } = this.props;
     // const incTasks = [...tasks].filter(e => e._id !== user._id)
     // const outTasks = [...tasks].filter(e => e._id === user._id)
     return (tasks && tasks.length) ? (
@@ -44,7 +44,7 @@ class Content extends Component {
                       <View style={{ flex: 1 }}>
                         <Loader hint="Пока нет задач">
                           <Text style={{ color: grey2, textAlign: 'center' }}>
-Поставьте вашу первую задачу, нажав на иконку &quot;плюс&quot;
+                            Поставьте вашу первую задачу, нажав на иконку &quot;плюс&quot;
                           </Text>
                         </Loader>
                       </View>
@@ -61,18 +61,18 @@ class Content extends Component {
     }
 
     componentDidMount() {
-      const { setTasks } = this.props;
+      const { setTasks, user } = this.props;
       sendRequest({
         r_path: g_users,
         method: 'get',
         success: ({ users }) => {
           const tasksList = [];
-          const userId = this.props.user._id;
+          // const userId = user._id;
           users.map((user) => {
             const { tasks } = user;
             tasks && tasks.map((e, i) => {
               // const amIReceiver = e.performers.filter(e => e._id === userId)[0];
-              const amICreator = e.creator._id === userId;
+              // const amICreator = e.creator._id === userId;
               // console.log(amIReceiver, amICreator);
               if (i === 0) {
                 tasksList.push(user);
@@ -88,6 +88,11 @@ class Content extends Component {
           console.log({ err });
         }
       });
+    }
+
+    componentWillUnmount() {
+      const { setTasks } = this.props;
+      setTasks([]);
     }
 
     toTasks = () => {

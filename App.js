@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import {
     BackHandler,
     AsyncStorage,
@@ -17,15 +17,14 @@ const Roboto = require('./assets/fonts/Roboto-Regular.ttf');
 
 console.disableYellowBox = true;
 
-export default class AppComponent extends React.Component {
+export default class AppComponent extends Component {
     render() {
         const { loaded, logged } = this.state;
-        const Navigator = createRootNavigator(logged);
+        const Navigator = createRootNavigator(loaded && logged);
         return (
             <Provider store={store}>
-				<StatusBar backgroundColor='white' barStyle='dark-content' />
+				<StatusBar backgroundColor="white" barStyle="dark-content" />
 				{loaded ? <Navigator /> : <SplashScreen />}
-				{/* this.state.loaded ? <App /> : <SplashScreen />  */}
 			</Provider>
         );
     }
@@ -40,6 +39,7 @@ export default class AppComponent extends React.Component {
             const value = JSON.parse(res);
             if (value) {
                 const dateDifference = Math.abs(new Date(value.lastLogin) - new Date()) / 36e5 < 1;
+                AsyncStorage.setItem('user', JSON.stringify({ ...value, lastLogin: new Date() }));
                 if (dateDifference) {
                     store.dispatch(setUser(value));
                     store.dispatch(setAuth(value.access_token));
@@ -60,4 +60,4 @@ export default class AppComponent extends React.Component {
 
         BackHandler.addEventListener('hardwareBackPress', () => {});
     }
-};
+}

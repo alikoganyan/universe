@@ -183,7 +183,7 @@ class Content extends Component {
                 date={deadlineDate}
                 mode="date"
                 confirmBtnText="Подтвердить"
-                format="DD-MM-YYYY"
+                format="YYYY-MM-DD"
                 cancelBtnText="Отменить"
                 customStyles={{
                   dateIcon: {
@@ -195,12 +195,12 @@ class Content extends Component {
                     borderBottomWidth: 1
                   }
                 }}
-                onDateChange={e => this.setState({ deadlineDate: e })
-                                }
+                onDateChange={e => this.setState({ deadlineDate: e })}
               />
               <DatePicker
                 date={deadlineTime}
-                mode="time"
+                mode="date"
+                format="HH:MM"
                 confirmBtnText="Подтвердить"
                 cancelBtnText="Отменить"
                 customStyles={{
@@ -213,8 +213,7 @@ class Content extends Component {
                     borderBottomWidth: 1
                   }
                 }}
-                onDateChange={e => this.setState({ deadlineTime: e })
-                                }
+                onDateChange={e => this.setState({ deadlineTime: e })}
               />
             </DeadlineTime>
           </DeadLine>
@@ -253,7 +252,7 @@ class Content extends Component {
             </Button>
             <TouchableOpacity onPress={this.deleteTask}>
               <DeleteTask>
-                             Удалить задачу
+                  Удалить задачу
               </DeleteTask>
             </TouchableOpacity>
           </ButtonBox>
@@ -300,30 +299,27 @@ class Content extends Component {
       addParticipants();
     };
 
-    deleteTask = (e) => {
-      const { activeTask } = this.props;
-      const { _id } = activeTask;
+    deleteTask = () => {
+      // const { activeTask } = this.props;
+      // const { _id } = activeTask;
+      console.log('try to delete');
       sendRequest({
-        r_path: p_tasks,
+        r_path: '/tasks',
         method: 'delete',
         attr: {
-          _id
+          _id: 1
         },
         success: () => {
-          // setCurrentTask({});
-          // const newTasks = [...tasks].filter(e => e._id !== _id)
-          // setTasks(newTasks);
-          // back();
-          console.log('deleted');
-          // getMessages(res.messages);
+          // console.log('deleted');
         },
         failFunc: (err) => {
-          console.log(err);
+          // console.log('not deleted');
+          // console.log(err);
         }
       });
     }
 
-    proceed = (e) => {
+    proceed = () => {
       const {
         back, activeTask, setTasks, setCurrentTask, tasks, currentTask
       } = this.props;
@@ -333,9 +329,18 @@ class Content extends Component {
       const {
         deadlineDate, deadlineTime, taskName, taskText
       } = this.state;
-      const deadline = this.jsCoreDateCreator(
-        `${deadlineDate}:${deadlineTime}`
-      );
+      const date = new Date(deadlineDate);
+      const dateY = date.getFullYear();
+      const dateM = date.getMonth();
+      const dateD = date.getDate();
+
+      const time = new Date(deadlineTime);
+      const timeH = time.getHours();
+      const timeM = time.getMinutes();
+
+
+      const deadline = this.jsCoreDateCreator(`${dateY}-${dateM}-${dateD} ${timeH}:${timeM}`);
+      console.log({ deadline }, deadlineTime);
       const newTask = {
         _id,
         name: taskName,
@@ -352,7 +357,7 @@ class Content extends Component {
       newTasks[index].tasks[taskIndex] = newTask;
       const newCurrentTask = { ...currentTask };
       const newTaskCreator = newCurrentTask.tasks[currentTaskIndex].creator;
-      newCurrentTask.tasks[currentTaskIndex] = { ...newTask, creator: { ...newTaskCreator } };
+      newCurrentTask.tasks[currentTaskIndex] = { ...activeTask, ...newTask, creator: { ...newTaskCreator } };
       sendRequest({
         r_path: p_tasks,
         method: 'patch',

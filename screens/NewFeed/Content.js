@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TextInput, Dimensions, ScrollView, TouchableOpacity
+  View, Text, TextInput, ScrollView, TouchableOpacity
 } from 'react-native';
-import FloatingLabel from 'react-native-floating-labels';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import helper from '../../utils/helpers';
@@ -16,7 +15,7 @@ import { p_news } from '../../constants/api';
 import { GroupIcon, CloseIcon } from '../../assets';
 import { setFeedReceivers } from '../../actions/participantsActions';
 
-const { Colors, HeaderHeight, sidePadding } = helper;
+const { Colors, sidePadding } = helper;
 const { lightGrey1, black, yellow } = Colors;
 const Wrapper = styled(View)`
     padding: 0 ${sidePadding * 2}px;
@@ -34,11 +33,7 @@ const StyledInput = styled(TextInput)`
     margin-bottom: 50px;
     ${({ style }) => style}
 `;
-const ButtonBox = styled(View)`
-    width: 170px;
-    align-self: center;
-`;
-const Recievers = styled(View)`lkljkljk
+const Recievers = styled(View)`
 `;
 const Reciever = styled(View)`
     display: flex;
@@ -51,9 +46,6 @@ const Reciever = styled(View)`
 const RecieverInfo = styled(View)`
     display: flex;
     justify-content: space-between;
-`;
-const Department = styled(Text)`
-    color: ${lightGrey1};
 `;
 const DialogsLabel = styled(View)`
     display: flex;
@@ -68,7 +60,7 @@ const AddReciever = styled(Text)`
 const RecieverComponent = (props) => {
   const { children, last = false, onDelete } = props;
   const {
-    image, first_name, last_name, phone_number, department
+    image, first_name, last_name, phone_number
   } = children;
   return (
     <Reciever last={last}>
@@ -123,7 +115,7 @@ class Content extends Component {
                 background={yellow}
                 color={black}
               >
-Продолжить
+                Продолжить
               </Button>
             </DialogsLabel>
           </Recievers>
@@ -138,9 +130,7 @@ class Content extends Component {
   }
 
     state = {
-      receivers: [],
       text: '',
-      err: false
     }
 
     componentDidMount() {}
@@ -157,9 +147,9 @@ class Content extends Component {
       addParticipant();
     }
 
-    proceed = (e) => {
+    proceed = () => {
       const {
-        id, receivers, forward, addFeed, user
+        receivers, forward, addFeed, user
       } = this.props;
       const { text } = this.state;
       let idList = [];
@@ -196,13 +186,10 @@ class Content extends Component {
             console.log({ err });
           }
         });
-      } else {
-        this.setState({ err: true });
       }
     }
 
     handleCountry = (e) => {
-      this.setState({ country: e });
     }
 
     handleChange = (e) => {

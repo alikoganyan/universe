@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import helper from '../../utils/helpers';
 import { setUser } from '../../actions/userActions';
 import Button from '../../common/Button';
+import { ImagePicker } from 'expo';
 import { p_update_group, p_delete_group } from '../../constants/api';
 import sendRequest from '../../utils/request';
 import ImageComponent from '../../common/Image';
@@ -132,7 +133,7 @@ class Content extends Component {
               background={green}
               color={black}
             >
-Продолжить
+              Продолжить
             </Button>
           </ButtonBox>
           <Receivers>
@@ -155,13 +156,12 @@ class Content extends Component {
 
     state = {
       text: '',
-      image: null
     }
 
     componentDidMount() {
       const { defaultValues, setParticipants } = this.props;
-      const { name, participants, image } = defaultValues;
-      this.setState({ text: name, image });
+      const { name, participants } = defaultValues;
+      this.setState({ text: name });
       setParticipants(participants);
     }
 
@@ -197,6 +197,7 @@ class Content extends Component {
         allowsEditing: false,
       });
       const { uri, type } = result;
+      const ext = uri.split('.')[uri.split('.').length - 1];
       const fileName = Math.random().toString(36).substring(7);
       const form = new FormData();
       form.append('file', {
@@ -204,7 +205,6 @@ class Content extends Component {
         name: `photo.${fileName}.${ext}`,
         type: `image/${type}`,
       });
-      this.setState({ image: form });
     }
 
     deleteParticipant = (e) => {
@@ -224,6 +224,7 @@ class Content extends Component {
         participants, forward, setParticipants, defaultValues
       } = this.props;
       const { name, _id } = defaultValues;
+      const { text } = this.state;
       let idList = [];
       participants.map((e) => {
         idList = [...idList, e._id];
@@ -232,13 +233,13 @@ class Content extends Component {
         r_path: p_update_group,
         method: 'post',
         attr: {
-          name,
+          name: text || name,
           participants: idList,
           group_id: _id,
         },
         success: (res) => {
           console.log({ res });
-          setTimeout(() => socket.emit('get_dialogs'), 500);
+          setTimeout(() => socket.emit('get_dialogs'), 0);
           setParticipants([]);
           forward();
         },
@@ -248,8 +249,7 @@ class Content extends Component {
       });
     }
 
-    handleCountry = (e) => {
-      this.setState({ country: e });
+    handleCountry = () => {
     }
 
     handleChange = (e) => {

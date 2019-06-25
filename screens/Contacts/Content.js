@@ -78,6 +78,7 @@ const ContactInfo = styled(View)`
 `;
 export default class Settings extends Component {
   render() {
+    const { names } = this.state;
     return (
       <SafeAreaView>
         <Wrapper>
@@ -87,8 +88,8 @@ export default class Settings extends Component {
           </InputWrapper>
           <KeyboardAwareScrollView enableOnAndroid>
             <ContactList>
-              {Object.keys(this.state.names).map((e, i) => {
-                const item = this.state.names[e];
+              {Object.keys(names).map((e, i) => {
+                const item = names[e];
                 if (item.length > 0) {
                   return (
                     <ContactsListItem key={`letter_${i}`}>
@@ -183,6 +184,7 @@ export default class Settings extends Component {
     }
 
     componentDidMount() {
-      this.sortUsersByName(this.state.users);
+      const { users } = this.state;
+      this.sortUsersByName(users);
     }
 }
