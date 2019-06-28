@@ -220,7 +220,7 @@ class TaskComponent extends Component {
                         {rightControl ? (
                             <>
                                 <Exit onPress={rightControl && this.unselect}><CloseTaskIcon /></Exit>
-                                <Edit onPress={this.editFeed}><EditIcon noPaddingAll marginRight={false} /></Edit>
+                                <Edit onPress={this.editFeed}><EditIcon nonClickable noPaddingAll marginRight={false} /></Edit>
                                 {(this.stat === 2) && <Accept onPress={undefined}><RedoIcon /></Accept>}
                                 {(this.stat === 2) && <Rearrange onPress={rightControl && this.complete}><StartIcon /></Rearrange>}
                             </>
@@ -237,7 +237,7 @@ class TaskComponent extends Component {
                                 left: 15,
                             }}>
                                 {
-                                    creator.image === '/images/default_group.png' || creator.image === '/images/default_avatar.jpg' ?
+                                    !creator.image || creator.image === '/images/default_group.png' || creator.image === '/images/default_avatar.jpg' ?
                                         <DefaultAvatar id={_id} size="header" /> :
                                         <ImageComponent size="header" source={{ uri: `http://ser.univ.team${creator.image}` }} />
                                 }
@@ -279,9 +279,9 @@ class TaskComponent extends Component {
                         {withReceiver ? (
                             <TaskBody>
                                 {
-                                        image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
-                                            <DefaultAvatar id={performer._id} size="header" /> :
-                                            <ImageComponent size="header" source={{ uri: `http://ser.univ.team${image}` }} />
+                                    !image || image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
+                                        <DefaultAvatar id={performer._id} size="header" /> :
+                                        <ImageComponent size="header" source={{ uri: `http://ser.univ.team${image}` }} />
                                 }
                                 <ReceiverInfo>
                                     <Text>

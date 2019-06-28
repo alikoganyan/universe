@@ -148,24 +148,24 @@ class TaskPack extends Component {
                   <TaskStatusText>{this.stat}</TaskStatusText>
                 </TaskStatusTextContainer>
                 {
-                      taskPack.length > 1
-                        ? (
-                          <TaskStatusAdditional>
-                          +
-                            {taskPack.length - 1}
-                            {' '}
-задач
-                          </TaskStatusAdditional>
-                        )
-                        : null
-                    }
+                  taskPack.length > 1
+                    ? (
+                      <TaskStatusAdditional>
+                        +
+                        {taskPack.length - 1}
+                        {' '}
+                        задач
+                      </TaskStatusAdditional>
+                    )
+                    : null
+                }
               </TaskStatus>
             </TaskTextInner>
             <TaskDate>
               <LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
               {taskPack.length ? (
-                <UnreadMessages onLayout={e => this.getUnreadMessageHeight(e)}>
-                  <NewMessages onLayout={e => this.getUnreadMessageWidth(e)}>{taskPack.length}</NewMessages>
+                <UnreadMessages>
+                  <NewMessages>{taskPack.length}</NewMessages>
                 </UnreadMessages>
               ) : null}
             </TaskDate>
@@ -177,7 +177,6 @@ class TaskPack extends Component {
   }
 
     state = {
-      size: null,
       taskPack: []
     }
 
@@ -187,7 +186,7 @@ class TaskPack extends Component {
       const tl = [...tasks].map(e => e.tasks);
       const outTasks = [...flatten(tl)].filter(e => e.creator._id === user._id);
       const incTasks = [...flatten(tl)].filter(e => !!e.performers.filter(e => e._id === user._id)[0]);
-      const tasksList = title == 'inc' ? incTasks : outTasks;
+      const tasksList = title === 'inc' ? incTasks : outTasks;
       this.setState({ taskPack: tasksList });
     }
 
@@ -205,14 +204,6 @@ class TaskPack extends Component {
     }
 
     handleClick = () => {}
-
-    getUnreadMessageHeight = (e) => {
-      this.setState({ height: e.nativeEvent.layout.height });
-    }
-
-    getUnreadMessageWidth = (e) => {
-      this.setState({ width: e.nativeEvent.layout.width });
-    }
 }
 const mapStateToProps = state => ({
   user: state.userReducer.user,

@@ -248,13 +248,13 @@ class Content extends Component {
               background={purple}
               color="white"
             >
-                            Редактировать задачу
+              Редактировать задачу
             </Button>
-            <TouchableOpacity onPress={this.deleteTask}>
+            {/* <TouchableOpacity onPress={this.deleteTask}> */}
               <DeleteTask>
                   Удалить задачу
               </DeleteTask>
-            </TouchableOpacity>
+            {/* </TouchableOpacity> */}
           </ButtonBox>
 
         </StyledScrollView>
@@ -300,7 +300,7 @@ class Content extends Component {
     };
 
     deleteTask = () => {
-      // const { activeTask } = this.props;
+      const { activeTask, back } = this.props;
       // const { _id } = activeTask;
       console.log('try to delete');
       sendRequest({
@@ -310,6 +310,7 @@ class Content extends Component {
           _id: 1
         },
         success: () => {
+          back();
           // console.log('deleted');
         },
         failFunc: (err) => {

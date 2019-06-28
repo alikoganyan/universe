@@ -30,7 +30,7 @@ class Content extends Component {
     const { tasks, navigate } = this.props;
     // const incTasks = [...tasks].filter(e => e._id !== user._id)
     // const outTasks = [...tasks].filter(e => e._id === user._id)
-    return (tasks && tasks.length) ? (
+    return tasks ? (
       <Wrapper>
         <StyledScrollView
           contentContainerStyle={{ flexGrow: 1 }}
@@ -39,17 +39,17 @@ class Content extends Component {
           <TaskPack title="inc" onPress={() => navigate('TasksInc')} />
           <TaskPack title="out" onPress={() => navigate('TasksOut')} last />
           {
-                  tasks.length ? tasks.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>)
-                    : (
-                      <View style={{ flex: 1 }}>
-                        <Loader hint="Пока нет задач">
-                          <Text style={{ color: grey2, textAlign: 'center' }}>
-                            Поставьте вашу первую задачу, нажав на иконку &quot;плюс&quot;
-                          </Text>
-                        </Loader>
-                      </View>
-                    )
-                }
+            tasks.length ? tasks.map((e, i) => <Task onPress={this.toTasks} key={i}>{e}</Task>)
+              : (
+                <View style={{ flex: 1 }}>
+                  <Loader hint="Пока нет задач">
+                    <Text style={{ color: grey2, textAlign: 'center' }}>
+                      Поставьте вашу первую задачу, нажав на иконку &quot;плюс&quot;
+                    </Text>
+                  </Loader>
+                </View>
+              )
+          }
           <View style={{ height: 20, width: '100%' }} />
         </StyledScrollView>
       </Wrapper>
@@ -57,11 +57,10 @@ class Content extends Component {
   }
 
     state = {
-      FlatListData: []
     }
 
     componentDidMount() {
-      const { setTasks, user } = this.props;
+      const { setTasks } = this.props;
       sendRequest({
         r_path: g_users,
         method: 'get',
@@ -80,8 +79,7 @@ class Content extends Component {
             });
           });
           setTimeout(() => {
-            // console.log({ tasksList });
-            setTasks(tasksList);
+            setTasks([...tasksList]);
           }, 0);
         },
         failFunc: (err) => {

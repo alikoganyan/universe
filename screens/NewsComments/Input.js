@@ -10,6 +10,7 @@ import { setFeed } from '../../actions/newsActions';
 import { p_send_file, p_news_add_comment } from '../../constants/api';
 import sendRequest from '../../utils/request';
 import { socket } from '../../utils/socket';
+import { BottomSheet } from 'react-native-btr';
 
 const {
   sidePadding, borderRadius, HeaderHeight, Colors
@@ -48,7 +49,7 @@ const Left = styled(View)`
     display: flex;
     flex-direction: row;
 `;
-const FilePicker = styled(FilePickerPosed)`
+const FilePicker = styled(View)`
     background: white;
     width: 94%;
     height: ${Dimensions.get('window').height * 0.3}px;
@@ -88,12 +89,18 @@ class InputComponent extends Component {
             />
           </Left>
         </Wrapper>
-        <FilePicker pose={pickerOpened ? 'visible' : 'hidden'}>
-          <TouchableOpacity onPress={this.selectPhoto}><Text>Фото или видео</Text></TouchableOpacity>
-          <TouchableOpacity onPress={this.selectFile}><Text>Файл</Text></TouchableOpacity>
-          <TouchableOpacity onPress={this.selectGeo}><Text>Мою локацию</Text></TouchableOpacity>
-          <TouchableOpacity onPress={this.unselect}><Text>Отменить</Text></TouchableOpacity>
-        </FilePicker>
+        <BottomSheet
+          visible={pickerOpened}
+          onBackButtonPress={this.unselect}
+          onBackdropPress={this.unselect}
+        >
+          <FilePicker>
+            <TouchableOpacity onPress={this.selectPhoto}><Text>Фото или видео</Text></TouchableOpacity>
+            <TouchableOpacity onPress={this.selectFile}><Text>Файл</Text></TouchableOpacity>
+            <TouchableOpacity onPress={this.selectGeo}><Text>Мою локацию</Text></TouchableOpacity>
+            <TouchableOpacity onPress={this.unselect}><Text>Отменить</Text></TouchableOpacity>
+          </FilePicker>
+        </BottomSheet>
       </>
     );
   }

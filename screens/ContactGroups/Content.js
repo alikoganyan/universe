@@ -31,7 +31,7 @@ import {
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions';
 import { socket } from '../../utils/socket';
 
-const { Colors, sidePadding } = helper;
+const { Colors, sidePadding, HeaderHeight } = helper;
 const {
 	green,
 	black,
@@ -71,15 +71,13 @@ const AnimatedArrowWrapper = posed.View({
 });
 const Wrapper = styled(View)
 `
-	padding: 0 ${sidePadding}px;
 	background: white;
 	margin-bottom: 40px;
-	
+	height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
 `;
 const ContactList = styled(ScrollView)
 `
-	padding: 20px;
-	padding-bottom: 10px;
+	padding: 20px 0px 10px 40px;
 	max-width: ${Dimensions.get('window').width - sidePadding * 2}px;
 	overflow: hidden;
 	margin-left: ${sidePadding}px;
@@ -173,6 +171,7 @@ const Option = styled(Text)
 	overflow: hidden;
 	text-align: center;
 `;
+
 class Content extends Component {
 	render() {
 		const { users, collapsed, options } = this.state;
@@ -190,160 +189,82 @@ class Content extends Component {
 		return (
 			<SafeAreaView>
 			<Wrapper>
-			<KeyboardAwareScrollView enableOnAndroid style={{ height: '100%' }}>
-				{allContacts.length ? (
-					<>
-					<Options>
-						{options.options.map((e, i) => (
-							<TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-								<Option active={active % 3 === i}>{e}</Option>
+				<KeyboardAwareScrollView enableOnAndroid style={{ height: '100%' }}>
+					{allContacts.length ? (
+						<>
+							<Options>
+								{options.options.map((e, i) => (
+									<TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+										<Option active={active % 3 === i}>{e}</Option>
+									</TouchableOpacity>
+								))}
+							</Options>
+							<Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
+								<ContactList style={{ width: '100%' }}>
+									<this.AllContacts allContacts={allContacts} />
+								</ContactList>
+								<ContactList>
+								{/* {department.map((e, i) => ( */}
+								{/* 	<Box key={i} last={i === department.length - 1}> */}
+								{/* 		<BoxTitle onPress={() => (collapsed[i] ? */}
+								{/* 			this.collapseDepartment(i) : */}
+								{/* 			this.showDepartment(i))} */}
+								{/* 		> */}
+								{/* 			<BoxItem numberOfLines={1} title>{e.title.name}</BoxItem> */}
+								{/* 			<ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}> */}
+								{/* 				<ArrowDownIcon /> */}
+								{/* 			</ArrowWrapper> */}
+								{/* 		</BoxTitle> */}
+								{/* 		<Collapsible collapsed={collapsed[i] || false}> */}
+								{/* 			<BoxInner> */}
+								{/* 				{e.users.map(e => ( */}
+								{/* 					<BoxInnerItem */}
+								{/* 						key={e._id} */}
+								{/* 						onPress={() => this.toChat(e)} */}
+								{/* 					> */}
+								{/* 						{ */}
+								{/* 						(!e.image || e.image === '/images/default_avatar.jpg') ? */}
+								{/* 							<DefaultAvatar isGroup={e.isGroup} id={e._id} size={36} /> : ( */}
+								{/* 								<ContactImage */}
+								{/* 									source={{ uri: `http://ser.univ.team${e.image}` }} */}
+								{/* 								/> */}
+								{/* 							) */}
+								{/* 						} */}
+								{/* 						<ContactInfo> */}
+								{/* 							<ContactName> */}
+								{/* 							{e.first_name ? */}
+								{/* 								`${e.first_name} ${e.last_name}` : */}
+								{/* 								e.phone_number */}
+								{/* 							} */}
+								{/* 							</ContactName> */}
+								{/* 							{e.role ? */}
+								{/* 								<ContactRole>{e.role.name}</ContactRole> : */}
+								{/* 								null */}
+								{/* 							} */}
+								{/* 						</ContactInfo> */}
+								{/* 					</BoxInnerItem> */}
+								{/* 				))} */}
+								{/* 			</BoxInner> */}
+								{/* 		</Collapsible> */}
+								{/* 	</Box> */}
+								{/* ))} */}
+								</ContactList>
+								<ContactList style={{ width: '100%' }}>
+									<this.GroupContacts />
+								</ContactList>
+							</Animated>
+						</>
+					) : (
+						<Loader hint="Пока нет диалогов" style={{ flex: 1, height: '100%' }}>
+							<TouchableOpacity onPress={this.toContacts}>
+								<Text style={{ color: grey2, textAlign: 'center' }}>
+									Откройте первый диалог, выбрав пользователя
+									<Text style={{ color: blue }}> на странице контактов</Text>
+								</Text>
 							</TouchableOpacity>
-						))}
-					</Options>
-					<Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
-						<ContactList style={{ width: '100%' }}>
-						<FlatList
-							style={{ paddingRight: 5, paddingLeft: 5, }}
-							data={allContacts}
-							renderItem={({ item, index }) => {
-								const {
-									participants, creator, _id, name, isGroup
-								} = item;
-								const chatItem = creator._id === user._id ?
-									participants[0] :
-									creator;
-								const {
-									first_name, last_name, phone_number, role, image
-								} = chatItem;
-								const chatName = isGroup ?
-									name :
-									first_name ?
-										`${first_name} ${last_name}` :
-										phone_number;
-								return item ? (
-									<BoxInnerItem key={index} onPress={() => this.toChat(item)}>
-										{
-											image === '/images/default_avatar.jpg' ? (
-												<DefaultAvatar
-													isGroup={isGroup}
-													id={_id}
-													size={36}
-												/>
-											) : (
-												<ContactImage
-													source={{ uri: `http://ser.univ.team${image}` }}
-												/>
-											)
-										}
-										<ContactInfo>
-											<ContactName>{chatName}</ContactName>
-											{isGroup && (
-												<ContactRole>
-													{`${participants.length + 1} участника`}
-												</ContactRole>
-											)}
-											{(!isGroup && role) && (
-												<ContactRole>
-													{role.name}
-												</ContactRole>
-											)}
-										</ContactInfo>
-									</BoxInnerItem>
-								) : null;
-							}}
-							keyExtractor={(item, index) => index.toString()}
-						/>
-						</ContactList>
-						<ContactList>
-						{department.map((e, i) => (
-							<Box key={i} last={i === department.length - 1}>
-								<BoxTitle onPress={() => (collapsed[i] ?
-									this.collapseDepartment(i) :
-									this.showDepartment(i))}
-								>
-									<BoxItem numberOfLines={1} title>{e.title.name}</BoxItem>
-									<ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-									<ArrowDownIcon />
-									</ArrowWrapper>
-								</BoxTitle>
-								<Collapsible collapsed={collapsed[i] || false}>
-									<BoxInner>
-										{e.users.map((e, i) => (
-											<BoxInnerItem
-												key={i}
-												onPress={() => this.toChat(e)}
-											>
-												{
-												e.image === '/images/default_avatar.jpg' ?
-													<DefaultAvatar isGroup={e.isGroup} id={e.item._id} size={36} /> : (
-														<ContactImage
-															source={{ uri: `http://ser.univ.team${e.image}` }}
-														/>
-													)
-												}
-												<ContactInfo>
-													<ContactName>
-													{e.first_name ?
-														`${e.first_name} ${e.last_name}` :
-														e.phone_number
-													}
-													</ContactName>
-													{e.role ?
-														<ContactRole>{e.role.name}</ContactRole> :
-														null
-													}
-												</ContactInfo>
-											</BoxInnerItem>
-										))}
-									</BoxInner>
-								</Collapsible>
-							</Box>
-						))}
-						</ContactList>
-						<ContactList style={{ width: '100%' }}>
-						<FlatList
-							style={{ paddingRight: 5, paddingLeft: 5, }}
-							data={dialogs}
-							renderItem={({ item, index }) => {
-							const {
-								participants, creator, _id, name, isGroup
-							} = item;
-							const chatItem = creator._id === user._id ? participants[0] : creator;
-							const { image } = chatItem;
-							return isGroup ? (
-								<BoxInnerItem key={index} onPress={() => this.toChat(item)}>
-									{
-										image === '/images/default_avatar.jpg'
-										? <DefaultAvatar isGroup={isGroup} id={_id} size={36} />
-										: <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
-									}
-								<ContactInfo>
-									<ContactName>{name}</ContactName>
-									<ContactRole>
-										{participants.length + 1}
-										{' '}
-										участника
-									</ContactRole>
-								</ContactInfo>
-								</BoxInnerItem>
-							) : null;
-							}}
-							keyExtractor={(item, index) => index.toString()}
-						/>
-						</ContactList>
-					</Animated>
-					</>
-				) : (
-					<Loader hint="Пока нет диалогов" style={{ flex: 1, height: '100%' }}>
-					<TouchableOpacity onPress={this.toContacts}>
-						<Text style={{ color: grey2, textAlign: 'center' }}>
-							Откройте первый диалог, выбрав пользователя
-							<Text style={{ color: blue }}> на странице контактов</Text>
-						</Text>
-					</TouchableOpacity>
-					</Loader>
-				)}
-			</KeyboardAwareScrollView>
+						</Loader>
+					)}
+				</KeyboardAwareScrollView>
 			</Wrapper>
 		</SafeAreaView>
 		);
@@ -364,6 +285,98 @@ class Content extends Component {
 		},
 	}
 
+	AllContacts = ({ allContacts }) => {
+		const { user } = this.props;
+		return (
+			<FlatList
+				style={{ paddingRight: 5, paddingLeft: 5, flex: 1 }}
+				data={allContacts}
+				renderItem={({ item }) => {
+					const {
+						participants, creator, _id, name, isGroup
+					} = item;
+					const chatItem = creator._id === user._id ?
+						participants[0] :
+						creator;
+					const {
+						first_name, last_name, phone_number, role, image
+					} = chatItem;
+					const chatName = isGroup ?
+						name :
+						first_name ?
+							`${first_name} ${last_name}` :
+							phone_number;
+					return item ? (
+						<BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
+							{
+								!image || image === '/images/default_avatar.jpg' ? (
+									<DefaultAvatar
+										isGroup={isGroup}
+										id={_id}
+										size={36}
+									/>
+								) : (
+									<ContactImage
+										source={{ uri: `http://ser.univ.team${image}` }}
+									/>
+								)
+							}
+							<ContactInfo>
+								<ContactName>{chatName}</ContactName>
+								{isGroup && (
+									<ContactRole>
+										{`${participants.length + 1} участника`}
+									</ContactRole>
+								)}
+								{(!isGroup && role) && (
+									<ContactRole>
+										{role.name}
+									</ContactRole>
+								)}
+							</ContactInfo>
+						</BoxInnerItem>
+					) : null;
+				}}
+				keyExtractor={(item, index) => index.toString()}
+			/>
+		);
+	}
+
+	GroupContacts = () => {
+		const { dialogs, user } = this.props;
+		return (
+			<FlatList
+				style={{ paddingRight: 5, paddingLeft: 5, flex: 1 }}
+				data={dialogs}
+				renderItem={({ item }) => {
+				const {
+					participants, creator, _id, name, isGroup
+				} = item;
+				const chatItem = creator._id === user._id ? participants[0] : creator;
+				const { image } = chatItem;
+				return isGroup ? (
+					<BoxInnerItem key={_id} onPress={() => this.toChat(item)}>
+						{
+							image === '/images/default_avatar.jpg'
+							? <DefaultAvatar isGroup={isGroup} id={_id} size={36} />
+							: <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+						}
+					<ContactInfo>
+						<ContactName>{name}</ContactName>
+						<ContactRole>
+							{participants.length + 1}
+							{' '}
+							участника
+						</ContactRole>
+					</ContactInfo>
+					</BoxInnerItem>
+				) : null;
+				}}
+				keyExtractor={(item, index) => index.toString()}
+			/>
+		);
+	}
+
 	componentDidMount() {
 		const { collapsed, users } = this.state;
 		const newCollapsed = [...collapsed];
@@ -378,12 +391,11 @@ class Content extends Component {
 				const newUsers = { ...users };
 				const newDepartment = [...users.department];
 				res.users.map((user) => {
-					const { users } = this.state;
-					const department = users.department
+					const department = newUsers.department
 						.filter(e => e.title.name === user.department.name ||
 							e.title.name === 'без департамента')[0];
 					if (department) {
-						const index = users.department
+						const index = newUsers.department
 							.findIndex(e => e.title.name === user.department.name ||
 								e.title.name === 'без департамента');
 						newDepartment[index].users.push(user);
@@ -395,8 +407,8 @@ class Content extends Component {
 						});
 					}
 					newUsers.department = [...newDepartment];
-					this.setState({ users: newUsers });
 				});
+				this.setState({ users: newUsers });
 			},
 			failFunc: (err) => {
 				console.log({ err });
@@ -487,12 +499,8 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-	messages: state.messageReducer,
 	dialogs: state.dialogsReducer.dialogs,
-	currentRoom: state.messageReducer.currentRoom,
 	user: state.userReducer.user,
-	users: state.userReducer,
-	contacts: state.userReducer.contacts,
 });
 const mapDispatchToProps = dispatch => ({
 	getMessages: _ => dispatch(getMessages(_)),
@@ -504,6 +512,5 @@ const mapDispatchToProps = dispatch => ({
 	setCurrentChat: _ => dispatch(setCurrentChat(_)),
 	setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
 	setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
-
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

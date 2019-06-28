@@ -90,7 +90,7 @@ class HeaderComponent extends Component {
                 <SearchIcon right onPress={this.startSearch} />
                 <AddIcon onPress={this.addTask} right />
                 <TouchableOpacity onPress={this.toProfile}>
-                  {user.image === '/images/default_group.png' || user.image === '/images/default_avatar.jpg'
+                  {!user.image || user.image === '/images/default_group.png' || user.image === '/images/default_avatar.jpg'
                     ? <DefaultAvatar size="header" />
                     : <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size="header" />
                                 }

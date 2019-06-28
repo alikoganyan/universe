@@ -80,9 +80,9 @@ class Content extends Component {
                     Восстановление пароля
         </Title>
         <Label>
-Вам отправлено sms с временным паролем,
+          Вам отправлено sms с временным паролем,
           {'\n'}
-введите его тут
+          введите его тут
         </Label>
         <PhoneNumber>
           <StyledInput
@@ -95,25 +95,28 @@ class Content extends Component {
           />
         </PhoneNumber>
         <ControlBar>
-          {(this.state.code.length === 6 && !error) ? <Button onPress={this.proceed} background={blue} color="#fff">Отправить</Button>
+          {(code.length === 6 && !error) ? <Button onPress={this.proceed} background={blue} color="#fff">Отправить</Button>
             : (
               <NoCode>
-                {error
-                                && (
-                                <TouchableOpacity onPress={this.sendAgain}>
-                                  <NoCodeLabel>
-Неверный пароль,
-                                    <NoCodeLabelLink>отправить sms повторно?</NoCodeLabelLink>
-                                  </NoCodeLabel>
-                                </TouchableOpacity>
-                                )}
+                {error && (
+                  <TouchableOpacity onPress={this.sendAgain}>
+                    <NoCodeLabel>
+                      Неверный пароль,
+                    <NoCodeLabelLink>отправить sms повторно?</NoCodeLabelLink>
+                  </NoCodeLabel>
+                </TouchableOpacity>
+                )}
                 {(deadline > 0 && !error) && (
                 <NoCodeTimer>
-Отправить sms повторно можно будет через 0:
+                  Отправить sms повторно можно будет через 0:
                   {deadline >= 10 ? deadline : `0${deadline}`}
                 </NoCodeTimer>
                 )}
-                {(deadline === 0 && !error) && <TouchableOpacity onPress={this.sendAgain}><NoCodeLabelLink>Отправить sms повторно</NoCodeLabelLink></TouchableOpacity>}
+                {(deadline === 0 && !error) && (
+                  <TouchableOpacity onPress={this.sendAgain}>
+                    <NoCodeLabelLink>Отправить sms повторно</NoCodeLabelLink>
+                  </TouchableOpacity>
+                )}
               </NoCode>
             )}
         </ControlBar>
@@ -160,7 +163,7 @@ class Content extends Component {
           phone_number,
           password: code,
         },
-        success: (res) => {
+        success: () => {
           navigate('Restore3');
         },
         failFunc: (err) => {

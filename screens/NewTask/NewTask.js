@@ -15,7 +15,6 @@ export default class Signup extends Component {
 	render() {
 		const { navigation } = this.props;
 		const deafultValues = navigation.getParam('task', navigation.state.params || {});
-		console.log(navigation.state);
 		return (
 			<SafeAreaView behavior="padding">
 			<Wrapper>

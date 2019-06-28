@@ -18,6 +18,7 @@ import helper from '../../utils/helpers';
 import Message from '../../common/Message';
 import { getMessages } from '../../actions/messageActions';
 import { setDialogs } from '../../actions/dialogsActions';
+import { setTaskReceivers } from '../../actions/participantsActions';
 
 const { HeaderHeight, borderRadius } = helper;
 const Wrapper = styled(View)`
@@ -136,11 +137,12 @@ class Content extends Component {
 	}
 
 	turnToTask = () => {
-		const { navigate } = this.props;
+		const { navigate, setTaskReceivers, currentDialog } = this.props;
 		const { selectedMessage } = this.state;
+		setTaskReceivers([currentDialog]);
 		const { text } = selectedMessage;
 		const task = {
-			text,
+			text
 		};
 		navigate({ routeName: 'NewTask', params: task });
 		this.unselect();
@@ -174,9 +176,11 @@ const mapStateToProps = state => ({
 	currentRoomId: state.messageReducer.currentRoomId,
 	user: state.userReducer.user,
 	dialogs: state.dialogsReducer.dialogs,
+	currentDialog: state.dialogsReducer.currentDialog,
 });
 const mapDispatchToProps = dispatch => ({
 	getMessages: _ => dispatch(getMessages(_)),
 	setDialogs: _ => dispatch(setDialogs(_)),
+	setTaskReceivers: _ => dispatch(setTaskReceivers(_))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

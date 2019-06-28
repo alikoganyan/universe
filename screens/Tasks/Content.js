@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import TaskComponent from '../../common/Task';
 import { setActiveTask } from '../../actions/tasksActions';
+import { setTaskReceivers } from '../../actions/participantsActions';
 import helper from '../../utils/helpers';
 
 const { Colors, HeaderHeight } = helper;
@@ -68,12 +69,12 @@ class Content extends Component {
           <Wrapper>
             <Options>
               {
-                                options.options.map((e, i) => (
-                                  <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                                    <Option active={active === i}>{e}</Option>
-                                  </TouchableOpacity>
-                                ))
-                            }
+                  options.options.map((e, i) => (
+                    <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+                      <Option active={active === i}>{e}</Option>
+                    </TouchableOpacity>
+                  ))
+              }
             </Options>
             {currentTask.tasks && animationCompleted ? (
               <TaskList
@@ -135,7 +136,6 @@ class Content extends Component {
           'Не в работе'
         ]
       },
-      taskList: [],
       animationCompleted: false,
     }
 
@@ -148,7 +148,8 @@ class Content extends Component {
     }
 
     editFeed = () => {
-      const { navigate } = this.props;
+      const { navigate, setTaskReceivers, activeTask} = this.props;
+      setTaskReceivers(activeTask.performers);
       navigate('TaskEdit');
     }
 
@@ -180,6 +181,7 @@ const mapStateToProps = state => ({
   user: state.userReducer.user
 });
 const mapDispatchToProps = dispatch => ({
-  setActiveTask: _ => dispatch(setActiveTask(_))
+  setActiveTask: _ => dispatch(setActiveTask(_)),
+  setTaskReceivers: _ => dispatch(setTaskReceivers(_))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

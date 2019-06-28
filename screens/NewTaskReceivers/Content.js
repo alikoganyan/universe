@@ -181,7 +181,7 @@ class Content extends Component {
                                                                               onValueChange={() => this.addReceiver(e)}
                                                                             />
                                                                           )
-                                                                          : e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg'
+                                                                          : !e.image || e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg'
                                                                             ? <DefaultAvatar size={36} id={e._id} />
                                                                             : <ContactImage source={{ uri: `http://ser.univ.team${e.image}` }} />
                                                                     }

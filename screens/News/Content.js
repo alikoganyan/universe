@@ -163,14 +163,9 @@ class Content extends Component {
     );
   }
 
-    state = {
-    }
+    state = {}
 
     componentDidMount() {}
-
-    componentWillUnmount() {
-      setFeed({});
-    }
 
     proceed = (e) => {
       const { proceed, setFeed } = this.props;

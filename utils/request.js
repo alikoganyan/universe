@@ -33,9 +33,28 @@ export default async function sendRequest({
 	try {
 		let response = null;
 		if (method !== 'get') {
-			response = await axios[method](SERVER_URL + r_path, attr, config);
+			if (method === 'delete') {
+				response = await axios.delete(SERVER_URL + r_path, {
+					headers: {
+						Authorization: `Bearer ${store.getState().userReducer.auth}`
+					},
+					data: attr
+				});
+			} else {
+				response = await axios[method](SERVER_URL + r_path, attr, {
+					...config,
+					headers: {
+						Authorization: `Bearer ${store.getState().userReducer.auth}`
+					}
+				});
+			}
 		} else {
-			response = await axios.get(SERVER_URL + r_path, config);
+			response = await axios.get(SERVER_URL + r_path, {
+				...config,
+				headers: {
+					Authorization: `Bearer ${store.getState().userReducer.auth}`
+				}
+			});
 		}
 		if (full_res) {
 			success(response);

@@ -73,9 +73,8 @@ const mapStateToProps = state => ({
   user: state.userReducer.user
 });
 const mapDispatchToProps = dispatch => ({
-  getMessages: _ => dispatch(getMessages(_)),
   setRoom: _ => dispatch(setRoom(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
-  setCurrentRoomId: _ => dispatch(setCurrentRoomId(_))
+  setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Chat);

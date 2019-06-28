@@ -1,13 +1,12 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import {
-  View, Text, TextInput, TouchableOpacity, Platform, Dimensions, Keyboard
+  View, TextInput, TouchableOpacity, Platform, Dimensions, Keyboard
 } from 'react-native';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import {
-  SearchIcon, BurgerIcon, CloseIcon, SearchShadow
+  BurgerIcon, CloseIcon
 } from '../../assets/index';
-import { openDrawer } from '../../actions/drawerActions';
 import { setDialogs } from '../../actions/dialogsActions';
 import ImageComponent from '../../common/Image';
 import DefaultAvatar from '../../common/DefaultAvatar';
@@ -15,7 +14,6 @@ import sendRequest from '../../utils/request';
 import { p_search_dialogs } from '../../constants/api';
 import helper from '../../utils/helpers';
 import { socket } from '../../utils/socket';
-
 
 const {
   Colors, sidePadding, fontSize, HeaderHeight, borderRadius
@@ -47,8 +45,8 @@ const Input = styled(TextInput)`
 `;
 class HeaderComponent extends Component {
   render() {
-    const { user } = this.props;
-    const { input } = this.state;
+    const { user, toggleDrawer } = this.props;
+    const { input, focused } = this.state;
     return (
       <Header
         style={{
@@ -63,18 +61,18 @@ class HeaderComponent extends Component {
           elevation: Platform.OS === 'ios' ? 1 : 4,
         }}
       >
-        <BurgerIcon onPress={this.props.toggleDrawer} right />
+        <BurgerIcon onPress={toggleDrawer} right />
         <Input
           value={input}
           onChangeText={this.handleInputChange}
           onFocus={this.handleFocus}
           placeholder="Поиск"
         />
-        {this.state.focused
+        {focused
           ? <CloseIcon onPress={this.onBlur} marginLeft={false} marginRight right />
           : (
             <TouchableOpacity onPress={this.toProfile} style={{ marginRight: sidePadding }}>
-              {user.image === '/images/default_group.png' || user.image === '/images/default_avatar.jpg'
+              {!user.image || user.image === '/images/default_group.png' || user.image === '/images/default_avatar.jpg'
                 ? <DefaultAvatar size="header" />
                 : <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size="header" />
                         }

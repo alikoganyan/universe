@@ -26,6 +26,7 @@ export default class GroupInfo extends Component {
   }
 
     navigateBack = () => {
-      this.props.navigation.goBack();
+      const { navigation } = this.props;
+      navigation.goBack();
     }
 }

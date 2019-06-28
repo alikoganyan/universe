@@ -2,19 +2,15 @@ import React, { Component } from 'react';
 import {
   View,
   Text,
-  SafeAreaView,
   FlatList,
   Image,
   TouchableOpacity,
-  ScrollView,
-  Dimensions,
   InteractionManager,
 } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import {
-  CommentIcon, HeartIcon, HeartIconFilled, TriangleLeftIcon, TriangleRightIcon, CheckIcon, ArrowRightIcon
+  CommentIcon, HeartIcon, HeartIconFilled, TriangleLeftIcon, TriangleRightIcon, ArrowRightIcon
 } from '../../assets/index';
 import helper from '../../utils/helpers';
 import ImageComponent from '../../common/Image';
@@ -23,7 +19,6 @@ import { setFeed } from '../../actions/newsActions';
 import { socket } from '../../utils/socket';
 
 const {
-  HeaderHeight,
   sidePadding,
   borderRadius,
   Colors,
@@ -190,17 +185,17 @@ class Content extends Component {
     const { animationCompleted } = this.state;
     const { feed } = this.props;
     const {
-      comments, likes, creator, receivers
+      comments, creator, receivers
     } = feed;
     const {
-      first_name, last_name, image, _id
+      first_name, last_name, image
     } = creator;
     const reversedCommnets = [...comments].reverse();
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
     const date = new Date(feed.created_at);
     return (
       <Wrapper>
-        <NewsItem onLayout={e => this.getUnreadMessageHeight(e)}>
+        <NewsItem>
           <Sender>
 
             {image === '/images/default_avatar.jpg'
@@ -221,7 +216,7 @@ class Content extends Component {
                 {date.getFullYear()}
                 {' '}
                 {date.getHours()}
-:
+                :
                 {date.getMinutes()}
               </TimeSent>
             </SenderInfo>
@@ -245,7 +240,7 @@ class Content extends Component {
           <SeeReceiversText>
             {receivers.length}
             {' '}
-получатели
+            получатели
           </SeeReceiversText>
           <ArrowRightIcon left noPaddingAll />
         </SeeReceivers>
@@ -268,7 +263,6 @@ class Content extends Component {
   }
 
 	state = {
-	  height: null,
 	  animationCompleted: false
 	};
 
@@ -285,12 +279,8 @@ class Content extends Component {
 	  setFeed({});
 	}
 
-	getUnreadMessageHeight = (e) => {
-	  this.setState({ height: e.nativeEvent.layout.height });
-	};
-
-	seeParticipants = (e) => {
-	  const { navigate, feed } = this.props;
+	seeParticipants = () => {
+	  const { navigate } = this.props;
 	  navigate('FeedReceivers');
 	}
 
@@ -374,8 +364,8 @@ class Content extends Component {
       <InterlocutorsMessageText>{text}</InterlocutorsMessageText>
       <MessageInfo>
         {likes.includes(user._id)
-          ? <HeartIconFilled style={{ paddingRight: 5 }} marginRight onPress={e => this.hitLike(feed._id, _id)} />
-          : <HeartIcon style={{ paddingRight: 5 }} marginRight onPress={e => this.hitLike(feed._id, _id)} />}
+          ? <HeartIconFilled style={{ paddingRight: 5 }} marginRight onPress={() => this.hitLike(feed._id, _id)} />
+          : <HeartIcon style={{ paddingRight: 5 }} marginRight onPress={() => this.hitLike(feed._id, _id)} />}
         <LikeText>{likes_сount}</LikeText>
         <MessageDate>
           {time}

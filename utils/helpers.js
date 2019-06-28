@@ -1,9 +1,11 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native';
-import CryptoJS from 'crypto-js'
-const encrypt = (e) => {
-    const chipertext = CryptoJS.AES.encrypt(JSON.stringify(data), 'key').toString()
-}
+import CryptoJS from 'crypto-js';
+
+const encrypt = (data) => {
+    const chipertext = CryptoJS.AES.encrypt(JSON.stringify(data), 'key').toString();
+};
 export default helper = {
+    minPassLength: 6,
     IconDarkColor: '#979897',
     IconLightColor: '#ABABAB',
     IconBlueColor: '#2B5275',

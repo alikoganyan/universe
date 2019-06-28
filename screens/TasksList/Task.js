@@ -125,11 +125,11 @@ class Tasks extends Component {
         onPress={() => this.handleClick(children)}
         onLongPress={this.handleHold}
         style={{
-				  width: '100%',
-				  paddingLeft: sidePadding,
-				  paddingRight: sidePadding,
-				  display: 'flex',
-				  alignItems: 'center'
+		  width: '100%',
+		  paddingLeft: sidePadding,
+		  paddingRight: sidePadding,
+		  display: 'flex',
+		  alignItems: 'center'
         }}
       >
         <Wrapper>
@@ -142,8 +142,8 @@ class Tasks extends Component {
             <TaskTextInner>
               <TaskTitle>
                 {first_name
-								  ? `${first_name} ${last_name}`
-								  : phone_number}
+				  ? `${first_name} ${last_name}`
+				  : phone_number}
               </TaskTitle>
               <TaskLastMessage numberOfLines={1}>
                 {tasks[tasks.length - 1].name}
@@ -155,10 +155,10 @@ class Tasks extends Component {
                 </TaskStatusTextContainer>
                 {tasks.length - 1 > 0 && (
                 <TaskStatusAdditional>
-										+
+				  +
                   {tasks.length - 1}
                   {' '}
-задачи
+				  задачи
                 </TaskStatusAdditional>
                 )}
               </TaskStatus>
@@ -168,10 +168,7 @@ class Tasks extends Component {
                 {daysOfTheWeek[day]}
               </LastMessageDate>
               {tasks.length > 0 && (
-              <UnreadMessages
-                onLayout={e => this.getUnreadMessageHeight(e)
-									}
-              >
+              <UnreadMessages>
                 <NewMessages>{tasks.length}</NewMessages>
               </UnreadMessages>
               )}
@@ -183,8 +180,12 @@ class Tasks extends Component {
   }
 
 	state = {
-	  size: null
 	};
+
+	componentWillUnmount() {
+		const { setTask } = this.props;
+	  	setTask({});
+	}
 
 	handleHold = () => {
 	  ActionSheetIOS.showActionSheetWithOptions(
@@ -202,19 +203,9 @@ class Tasks extends Component {
 	  setTask(tasks);
 	  onPress();
 	};
-
-	getUnreadMessageHeight = (e) => {
-	  this.setState({ height: e.nativeEvent.layout.height });
-	};
-
-	getUnreadMessageWidth = (e) => {
-	  this.setState({ width: e.nativeEvent.layout.width });
-	};
 }
 
-const mapStateToProps = state => ({
-
-});
+const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => ({
   setTask: _ => dispatch(setTask(_))
 });

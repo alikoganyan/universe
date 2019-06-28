@@ -14,7 +14,6 @@ import Loader from '../../common/Loader';
 import Congratulations from '../../common/Congratulations';
 import SafeAreaView from '../../common/SafeAreaView';
 import {
-	getMessages,
 	setRoom,
 	addMessage,
 	setCurrentChat,
@@ -84,6 +83,7 @@ class Dialogs extends Component {
 									image;
 								return (
 									<Dialog
+										key={item._id}
 										unreadMessages={unreadMessages}
 										lastMessage={messages}
 										onClick={() => this.toChat({ ...item })}
@@ -95,7 +95,7 @@ class Dialogs extends Component {
 									</Dialog>
 								);
 							}}
-							keyExtractor={(item, index) => index.toString()}
+							keyExtractor={(item, index) => item._id.toString()}
 						/>
 					) : (
 						<Loader style={{ flex: 1 }} hint="Пока нет диалогов">
@@ -152,7 +152,6 @@ class Dialogs extends Component {
 		// if (!socket.connected)
 		// connectToSocket();
 		socket.emit('get_dialogs', { id: user._id });
-		console.log('update');
 		// socket.removeEventListener('update_dialogs', this.setDialogsSocket);
 		// socket.removeEventListener('new_message', this.newMessageSocket);
 		// socket.removeEventListener('new_dialogs', this.socketNewDialog);
@@ -397,11 +396,10 @@ class Dialogs extends Component {
 			creator,
 			_id
 		} = e;
-		const roomId = room.split('_').filter(e => e !== user._id)[0];
+		const roomId = room.split('_').filter(e => Number(e) !== user._id)[0];
 		const currentDialog = isGroup ? { ...e } :
 			user._id === creator._id ? { ...participants[0] } : { ...creator };
-		console.log({ ...e, messages: [] });
-		setRoom(_id);
+		setRoom(roomId);
 		setCurrentRoomId(_id);
 		setCurrentChat(room);
 		setCurrentDialogs(currentDialog);
@@ -412,17 +410,14 @@ class Dialogs extends Component {
 
 
 const mapStateToProps = state => ({
-	messages: state.messageReducer.messages,
 	dialogs: state.dialogsReducer.dialogs,
 	currentRoomId: state.messageReducer.currentRoomId,
 	currentRoom: state.messageReducer.currentRoom,
 	currentChat: state.messageReducer.currentChat,
 	user: state.userReducer.user,
-	users: state.userReducer,
 	currentDialog: state.dialogsReducer.currentDialog
 });
 const mapDispatchToProps = dispatch => ({
-	getMessages: _ => dispatch(getMessages(_)),
 	setRoom: _ => dispatch(setRoom(_)),
 	setCurrentChat: _ => dispatch(setCurrentChat(_)),
 	setDialogs: _ => dispatch(setDialogs(_)),

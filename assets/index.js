@@ -1,44 +1,41 @@
-import React from 'react'
-import { View, Text, TouchableOpacity, Image, Dimensions } from 'react-native'
+import React from 'react';
+import { View, Text, TouchableOpacity, Image, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Ionicons } from '@expo/vector-icons';
-import styled from 'styled-components'
-import helper from '../utils/helpers'
-import ICONS from './icons'
-import SvgUri from '../utils/react-native-svg-uri';
+import styled from 'styled-components';
+import helper from '../utils/helpers';
+import ICONS from './icons';
 
 const { IconDarkColor,
     IconLightColor,
-    IconBlueColor,
     IconSize,
     IconSizeSmall,
     IconSizeLarge,
-    sidePadding } = helper;
+} = helper;
 
 const StyledTouchableOpacity = styled(TouchableOpacity)`
     margin-left: ${({ left }) => left ? Dimensions.get('window').height >= 1080 ? 30 : 12 : 0}px;
     margin-right: ${({ right }) => right ? Dimensions.get('window').height >= 1080 ? 30 : 12 : 0}px;
-    padding: ${({ noPadding, noPaddingAll }) => noPadding ? (noPaddingAll ? 0 : `0 12`) : (noPaddingAll ? 0 : `10px 12`)}px;
+    padding: ${({ noPadding, noPaddingAll }) => noPadding ? (noPaddingAll ? 0 : '0 12') : (noPaddingAll ? 0 : '10px 12')}px;
     position: relative;
     left: ${({ marginLeft, marginRight }) => marginLeft ? -12 : marginRight ? 12 : 0}px;
-`
+`;
 const StyledView = styled(View)`
     margin-left: ${({ left }) => left ? Dimensions.get('window').height >= 1080 ? 30 : 12 : 0}px;
     margin-right: ${({ right }) => right ? Dimensions.get('window').height >= 1080 ? 30 : 12 : 0}px;
-    padding: ${({ noPadding, noPaddingAll }) => noPadding ? (noPaddingAll ? 0 : `0 12`) : (noPaddingAll ? 0 : `10px 12`)}px;
+    padding: ${({ noPadding, noPaddingAll }) => noPadding ? (noPaddingAll ? 0 : '0 12') : (noPaddingAll ? 0 : '10px 12')}px;
     position: relative;
     left: ${({ marginLeft, marginRight }) => marginLeft ? -12 : marginRight ? 12 : 0}px;
-`
+`;
 const Left = styled(StyledTouchableOpacity)`
     margin-right: ${({ noPadding }) => noPadding ? 0 : 10}px;
     padding: ${({ noPadding }) => noPadding ? 0 : 10}px;
     ${({ style }) => style}
-`
+`;
 const Right = styled(StyledTouchableOpacity)`
     margin-left: ${({ noPadding }) => noPadding ? 0 : 10}px;
     padding: ${({ noPadding }) => noPadding ? 0 : 10}px;
     ${({ style }) => style}
-`
+`;
 // ${({ color }) => color || IconLightColor}
 const TriangleLeft = styled(View)`
     width: 0px;
@@ -55,9 +52,9 @@ const TriangleLeft = styled(View)`
     top: -5px;
     line-height: 0px;
     ${({ style }) => style};
-`
+`;
 const TriangleLeftInner = styled(TriangleLeft)`
-`
+`;
 
 const TriangleRight = styled(View)`
     width: 0px;
@@ -74,30 +71,30 @@ const TriangleRight = styled(View)`
     top: -5px;
     line-height: 0px;
     ${({ style }) => style};
-`
+`;
 const TriangleRightInner = styled(TriangleRight)`
-`
+`;
 
-const LeftWrapper = function (props) {
-    const { children, onPress } = props;
+const LeftWrapper = (props) => {
+    const { children, onPress, style, noPadding } = props;
     return (
-        <Left style={{ ...props.style }} onPress={props.props.onPress} noPadding={props.noPadding}>
+        <Left style={{ ...style }} onPress={onPress} noPadding={noPadding}>
             <Text>
                 {children}
             </Text>
         </Left>
-    )
-}
-const RightWrapper = function (props) {
+    );
+};
+const RightWrapper = (props) => {
     const { children } = props;
     return (
-        <Right style={{ ...props.style }} onPress={props.props.onPress} noPadding={props.noPadding}>
+        <Right>
             <Text>
                 {children}
             </Text>
         </Right>
-    )
-}
+    );
+};
 export function BackIcon(props) {
     const { onPress, left, right, noPadding, noPaddingAll, marginLeft = true } = props;
     return (
@@ -109,11 +106,11 @@ export function BackIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Arrow_back}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 export function ArrowRightIcon(props) {
     const { onPress, left, right, noPadding, noPaddingAll, marginLeft } = props;
@@ -126,11 +123,11 @@ export function ArrowRightIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Arrow_right_yellow}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 export function ForwardIcon(props) {
@@ -139,7 +136,7 @@ export function ForwardIcon(props) {
 
             <Icon name="angle-right" size={IconSize} color={IconDarkColor} />
         </LeftWrapper>
-    )
+    );
 }
 
 
@@ -150,7 +147,7 @@ export function EllipsisVIcon(props) {
             <Icon name="ellipsis-v" size={IconSize} color={IconDarkColor} />
 
         </RightWrapper>
-    )
+    );
 }
 
 
@@ -161,7 +158,7 @@ export function SmileIcon(props) {
             <Icon name="smile-o" size={IconSize} color={IconDarkColor} />
 
         </LeftWrapper>
-    )
+    );
 }
 
 export function FileIcon(props) {
@@ -175,11 +172,11 @@ export function FileIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.File}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 export function FilesRedIcon(props) {
     const { onPress, left, right, noPaddingAll, size } = props;
@@ -192,11 +189,11 @@ export function FilesRedIcon(props) {
             /> */}
             <Image
                 style={{ width: size || IconSize, height: size || IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Files_red}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 export function CameraIcon(props) {
@@ -207,7 +204,7 @@ export function CameraIcon(props) {
             <Icon name="camera" size={IconSize} color={IconDarkColor} />
 
         </RightWrapper>
-    )
+    );
 }
 
 
@@ -222,11 +219,11 @@ export function BurgerIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Menu}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 export function SearchIcon(props) {
@@ -240,44 +237,53 @@ export function SearchIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Search}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 
-export function TriangleLeftIcon({ color, colorInner = "#fff", style, hollow, styleInner }) {
+export function TriangleLeftIcon({ color, colorInner = '#fff', style, hollow, styleInner }) {
     return (
         <TriangleLeft color={color || IconDarkColor} style={{ ...style }}>
-            {hollow && <TriangleLeftInner color={colorInner} style={{
-                ...style,
-                position: 'relative',
-                borderRightWidth: 15,
-                borderTopWidth: 15,
-                top: -16,
-                left: 12.5,
-                ...styleInner,
-            }} />}
+            {hollow && (
+                <TriangleLeftInner
+                    color={colorInner}
+                    style={{
+                        ...style,
+                        position: 'relative',
+                        borderRightWidth: 15,
+                        borderTopWidth: 15,
+                        top: -16,
+                        left: 12.5,
+                        ...styleInner,
+                }} />
+            )}
         </TriangleLeft>
-    )
+    );
 }
 
-export function TriangleRightIcon({ color, colorInner = "#fff", style, hollow, styleInner }) {
+export function TriangleRightIcon({ color, colorInner = '#fff', style, hollow, styleInner }) {
     return (
         <TriangleRight color={color || IconDarkColor} style={{ ...style }}>
-            {hollow && <TriangleRightInner color={colorInner} style={{
-                ...style,
-                position: 'relative',
-                borderLeftWidth: 15,
-                borderBottomWidth: 15,
-                top: -1,
-                left: 2.5,
-                ...styleInner
-            }} />}
+            {hollow && (
+                <TriangleRightInner
+                    color={colorInner}
+                    style={{
+                        ...style,
+                        position: 'relative',
+                        borderLeftWidth: 15,
+                        borderBottomWidth: 15,
+                        top: -1,
+                        left: 2.5,
+                        ...styleInner
+                    }}
+                />
+            )}
         </TriangleRight>
-    )
+    );
 }
 
 export function LocationIcon(props) {
@@ -291,11 +297,11 @@ export function LocationIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Geolocation}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 export function ImageIcon(props) {
@@ -309,11 +315,11 @@ export function ImageIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Files_white}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 
@@ -328,48 +334,48 @@ export function ImageIconBlue(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Files}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
-export function MessageIndicatorIcon(props) {
+export function MessageIndicatorIcon() {
     return (
         <Text>
             <Icon name="check" size={IconSize} color={IconDarkColor} />
         </Text>
-    )
+    );
 }
 
 
 export function EditIcon(props) {
-    const { onPress, left, right, marginRight = true, noPaddingAll } = props;
-    return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right} marginRight={marginRight} noPaddingAll={noPaddingAll}>
-            {/* <SvgUri
-                width={IconSize}
-                height={IconSize}
-                source={SVG.Edit}
-            /> */}
+    const { onPress, left, right, marginRight = true, noPaddingAll, nonClickable = false } = props;
+    return (!nonClickable ? (
+            <StyledTouchableOpacity onPress={onPress} left={left} right={right} marginRight={marginRight} noPaddingAll={noPaddingAll}>
+                {/* <SvgUri
+                    width={IconSize}
+                    height={IconSize}
+                    source={SVG.Edit}
+                /> */}
+                <Image
+                    style={{ width: IconSize, height: IconSize }}
+                    resizeMode="contain"
+                    source={ICONS.Edit}
+                />
+            </StyledTouchableOpacity>
+        ) : (
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Edit}
             />
-        </StyledTouchableOpacity>
-    )
+        )
+    );
 }
 
 
-export function FunnelIcon(props) {
-    return (
-        <LeftWrapper props={props}>
-            <Ionicons name="ios-funnel" size={IconSize} color={IconDarkColor} />
-        </LeftWrapper>
-    )
-}
 export function HeartIcon(props) {
     const { onPress, left, right, marginRight } = props;
     return (
@@ -381,11 +387,11 @@ export function HeartIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSizeSmall, height: IconSizeSmall }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Likes}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 export function HeartIconFilled(props) {
     const { onPress, left, right, marginRight } = props;
@@ -398,11 +404,11 @@ export function HeartIconFilled(props) {
             /> */}
             <Image
                 style={{ width: IconSizeSmall, height: IconSizeSmall }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Like}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 export function CommentIcon(props) {
@@ -416,15 +422,15 @@ export function CommentIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSizeSmall, height: IconSizeSmall }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Comments}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 export function CloseIcon(props) {
-    const { onPress, style, left, right, noPadding, noPaddingAll, marginLeft = true, marginRight } = props
+    const { onPress, style, left, right, noPadding, noPaddingAll, marginLeft = true, marginRight } = props;
     return (
         <StyledTouchableOpacity onPress={onPress} style={style} left={left} right={right} noPadding={noPadding} noPaddingAll={noPaddingAll} marginLeft={marginLeft} marginRight={marginRight}>
             {/* <SvgUri
@@ -434,11 +440,11 @@ export function CloseIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Close}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 export function GroupIcon(props) {
     const { onPress, left, right, size, noPaddingAll } = props;
@@ -451,11 +457,11 @@ export function GroupIcon(props) {
             /> */}
             <Image
                 style={{ width: size || IconSize, height: size || IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Contacts}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 
@@ -470,11 +476,11 @@ export function GroupIconWhite(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Contacts_white}
             />
         </StyledView>
-    )
+    );
 }
 export function UserIconWhite(props) {
     const { left, right } = props;
@@ -487,16 +493,16 @@ export function UserIconWhite(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.User}
             />
         </StyledView>
-    )
+    );
 }
 export function GroupIconGrey(props) {
     const { onPress, left, right = true, noPaddingAll = true } = props;
     return (
-        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll} right={right}>
+        <StyledTouchableOpacity onPress={onPress} left={left} right={right} noPaddingAll={noPaddingAll}>
             {/* <SvgUri
                 width={IconSize}
                 height={IconSize}
@@ -504,11 +510,11 @@ export function GroupIconGrey(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Contacts_grey}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 export function TaskIcon(props) {
@@ -522,11 +528,11 @@ export function TaskIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Tasks}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 export function DialogsIcon(props) {
     const { onPress, left, right, size } = props;
@@ -539,11 +545,11 @@ export function DialogsIcon(props) {
             /> */}
             <Image
                 style={{ width: size || IconSize, height: size || IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Dialog}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 export function CheckGreyIcon(props) {
@@ -557,11 +563,11 @@ export function CheckGreyIcon(props) {
             /> */}
             <Image
                 style={{ width: size || IconSize, height: size || IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Task_delivered}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 export function CheckIcon(props) {
@@ -575,11 +581,11 @@ export function CheckIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Message_delivered}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 export function CheckAllIcon(props) {
@@ -593,11 +599,11 @@ export function CheckAllIcon(props) {
             /> */}
             <Image
                 style={{ width: IconSize, height: IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Message_read}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 export function PapperPlaneIcon(props) {
     const { onPress, left, right, size } = props;
@@ -610,11 +616,11 @@ export function PapperPlaneIcon(props) {
             /> */}
             <Image
                 style={{ width: size || IconSize, height: size || IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.New_dialog}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 export function FeedIcon(props) {
     const { onPress, left, right, size } = props;
@@ -627,11 +633,11 @@ export function FeedIcon(props) {
             /> */}
             <Image
                 style={{ width: size || IconSize, height: size || IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.News}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 export function TasksIcon(props) {
     const { onPress, left, right, noPaddingAll = true, size } = props;
@@ -644,11 +650,11 @@ export function TasksIcon(props) {
             /> */}
             <Image
                 style={{ width: size || IconSize, height: size || IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Tasks}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 export function SettingsIcon(props) {
     const { onPress, left, right, size } = props;
@@ -661,11 +667,11 @@ export function SettingsIcon(props) {
             /> */}
             <Image
                 style={{ width: size || IconSize, height: size || IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Settings}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 export function AddIcon(props) {
     const { onPress, left, right, size } = props;
@@ -678,11 +684,11 @@ export function AddIcon(props) {
             /> */}
             <Image
                 style={{ width: size || IconSize, height: size || IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Add}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 export function IntroIcon(props) {
@@ -696,11 +702,11 @@ export function IntroIcon(props) {
             /> */}
             <Image
                 style={{ width: size || IconSize, height: size || IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.Intro}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 
 export function LogoText(props) {
@@ -714,76 +720,75 @@ export function LogoText(props) {
             /> */}
             <Image
                 style={{ width: width || size || IconSize, height: height || size || IconSize }}
-                resizeMode={'contain'}
+                resizeMode="contain"
                 source={ICONS.logo_blue}
             />
         </StyledTouchableOpacity>
-    )
+    );
 }
 export function SearchShadow(props) {
     const { size } = props;
     return (
         <Image
             style={{ width: size || IconSize, height: size || IconSize }}
-            resizeMode={'contain'}
+            resizeMode="contain"
             source={ICONS.logo_blue}
         />
-    )
+    );
 }
 export function DoneIcon(props) {
     const { size } = props;
     return (
         <Image
             style={{ width: size || IconSize, height: size || IconSize }}
-            resizeMode={'contain'}
+            resizeMode="contain"
             source={ICONS.Done}
         />
-    )
+    );
 }
 export function StartIcon(props) {
     const { size } = props;
     return (
         <Image
             style={{ width: size || IconSize, height: size || IconSize }}
-            resizeMode={'contain'}
+            resizeMode="contain"
             source={ICONS.Start}
         />
-    )
+    );
 }
 export function RedoIcon(props) {
     const { size } = props;
     return (
         <Image
             style={{ width: size || IconSize, height: size || IconSize }}
-            resizeMode={'contain'}
+            resizeMode="contain"
             source={ICONS.Redo}
         />
-    )
+    );
 }
-export function CloseTaskIcon(props) {
-    const { size } = props;
+export function CloseTaskIcon() {
     return (
         <Image
             style={{ width: IconSize, height: IconSize }}
-            resizeMode={'contain'}
+            resizeMode="contain"
             source={ICONS.Close}
         />
-    )
+    );
 }
 export function LogoPlaceholder(props) {
-    const { size, width, height } = props;
+    const { width, height } = props;
     return (
         <Image
             style={{ width: width || IconSize, height: height || IconSize }}
-            resizeMode={'contain'}
+            resizeMode="contain"
             source={ICONS.logo_placeholder}
         />
-    )
+    );
 }
 
 
-export function ArrowDownIcon(props) {
+export function ArrowDownIcon() {
     return (
         <Icon name="angle-down" size={IconSizeLarge} color={IconDarkColor} />
-    )
+    );
 }

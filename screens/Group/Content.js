@@ -16,6 +16,7 @@ import { BottomSheet } from 'react-native-btr';
 import Message from '../../common/Message';
 import helper from '../../utils/helpers';
 import { chatBg } from '../../assets/images';
+import { setTaskReceivers } from '../../actions/participantsActions';
 
 const { HeaderHeight, borderRadius } = helper;
 const Wrapper = styled(View)`
@@ -158,5 +159,7 @@ const mapStateToProps = state => ({
 	currentChat: state.messageReducer.currentChat,
 	user: state.userReducer.user,
 });
-const mapDispatchToProps = dispatch => ({});
+const mapDispatchToProps = dispatch => ({
+  setTaskReceivers: _ => dispatch(setTaskReceivers(_))
+});
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

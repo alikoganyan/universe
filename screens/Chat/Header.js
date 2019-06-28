@@ -179,7 +179,7 @@ class HeaderComponent extends Component {
 				<BackIcon onPress={back} right />
 				<ToProfile onPress={this.toProfile}>
 				  {
-										image === '/images/default_group.png' || image === '/images/default_avatar.jpg'
+										!image || image === '/images/default_group.png' || image === '/images/default_avatar.jpg'
 										  ? <DefaultAvatar id={_id} size="header" />
 										  : <ImageComponent size="header" source={{ uri: `http://ser.univ.team${image}` }} />
 									}

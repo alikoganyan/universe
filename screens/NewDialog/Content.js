@@ -19,6 +19,7 @@ import sendRequest from '../../utils/request';
 import { g_users } from '../../constants/api';
 import ImageComponent from '../../common/Image';
 import { setContacts, setAllUsers } from '../../actions/userActions';
+import DefaultAvatar from '../../common/DefaultAvatar';
 import {
 	getMessages,
 	setRoom,
@@ -43,7 +44,7 @@ const Wrapper = styled(View)
 	padding-top: 0px;
 	background: white;
 	margin-bottom: 110px;
-	height: ${Dimensions.get('window').height - HeaderHeight}px;
+	height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
 	margin-top: ${HeaderHeight};
 `;
 const ContactList = styled(ScrollView)
@@ -92,18 +93,12 @@ const BoxInnerItem = styled(View)
 	flex-direction: row;
 	align-items: center;
 `;
-const ContactImage = styled(Image)
-`
-	width: 33px;
-	height: 33px;
-	border-radius: 16.5;
-	margin-right: 8px;
-`;
 const ContactInfo = styled(View)
 `
 	display: flex;
 	align-items: flex-start;
 	justify-content: center;
+	margin-left: 8px;
 `;
 const ContactName = styled(Text)
 `
@@ -175,14 +170,23 @@ class Content extends Component {
 														onPress={() => this.toChat(e)}
 													>
 														<BoxInnerItem>
-														<ImageComponent
-															size={33}
-															style={{ marginRight: 8 }}
-															source={{ uri: e.image ?
-																`http://ser.univ.team${e.image}` :
-																'http://simpleicon.com/wp-content/uploads/user1.png'
-															}}
-														/>
+														{
+															!e.image || e.image === '/images/default_avatar.jpg' ? (
+																<DefaultAvatar
+																	isGroup={e.isGroup}
+																	id={e._id}
+																	size={36}
+																/>
+															) : (
+																<ImageComponent
+																	size={33}
+																	source={{ uri: e.image ?
+																		`http://ser.univ.team${e.image}` :
+																		'http://simpleicon.com/wp-content/uploads/user1.png'
+																	}}
+																/>
+															)
+														}
 														<ContactInfo>
 															<ContactName>
 															{e.first_name ?

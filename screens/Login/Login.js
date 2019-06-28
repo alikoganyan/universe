@@ -17,7 +17,7 @@ const NoAccount = styled(View)`
 	bottom: 10;
 	width: 100%;
 	align-self: center;
-`;
+`; 
 const Label = styled(Text)`
 	color: ${lightColor};
 	font-size: ${fontSize.text};

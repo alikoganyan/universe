@@ -67,7 +67,7 @@ const ErrorText = styled(Text)
 const ForgotPass = styled(Text)
 `
 	font-size: ${sl};
-	margin-bottom: 10px;
+	margin-bottom: 15px;
 	color: ${blue};
 `;
 const StyledInput = styled(TextInput)
@@ -174,7 +174,7 @@ class Content extends Component {
 					secureTextEntry
 					style={{
 						color: invalidPassword ? pink : black,
-						borderColor: invalidPassword ? pink : lightGrey1
+						borderColor: invalidPassword ? pink : lightGrey1,
 					}}
 				/>
 				<ControlBar>

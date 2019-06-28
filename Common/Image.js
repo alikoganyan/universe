@@ -14,10 +14,10 @@ const StyledImage = styled(ImageLoader)
 export default function ImageComponent(props) {
     const { source, style, size = 'medium' } = props;
     return (
-        <StyledImage
-            size={size}
-            source={{ ...source, cache: 'force-cache' }}
-            style={{ ...style }}
-        />
+            <StyledImage
+                size={size}
+                source={{ ...source, cache: 'force-cache' }}
+                style={{ ...style }}
+            />
     );
 }

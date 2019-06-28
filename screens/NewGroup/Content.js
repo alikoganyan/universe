@@ -126,12 +126,12 @@ class Content extends Component {
               <AddReceiver>Добавить</AddReceiver>
             </TouchableOpacity>
             <Button
-              disabled={!text}
+              disabled={!participants.length || !text}
               onPress={this.proceed}
               background={green}
               color={black}
             >
-Продолжить
+              Продолжить
             </Button>
           </ButtonBox>
           <Receivers>
@@ -141,7 +141,13 @@ class Content extends Component {
             </DialogsLabel>
             <ScrollView style={{ maxHeight: 300 }}>
               {participants.map((e, i) => (
-                <ReceiverComponent key={i} onDelete={() => this.deleteParticipant(e)} last={i === participants.length}>{e}</ReceiverComponent>
+                <ReceiverComponent
+                  key={i}
+                  onDelete={() => this.deleteParticipant(e)}
+                  last={i === participants.length}
+                >
+                  {e}
+                </ReceiverComponent>
               ))}
             </ScrollView>
           </Receivers>

@@ -27,7 +27,7 @@ class News extends Component {
   }
 
   componentDidMount() {
-    const { setNews, news } = this.props;
+    const { setNews } = this.props;
     sendRequest({
       r_path: p_news,
       method: 'get',
@@ -40,17 +40,25 @@ class News extends Component {
     });
   }
 
-    navigateBack = () => {
-      this.props.navigation.goBack();
-    }
+  componentWillUnmount(){
+    const { setNews } = this.props;
+    setNews([]);
+  }
 
-    navigate = (e) => {
-      this.props.navigation.navigate(e);
-    }
+  navigateBack = () => {
+    const { navigation } = this.props;
+    navigation.goBack();
+  }
 
-    proceed = () => {
-      this.props.navigation.navigate('NewsComments');
-    }
+  navigate = (e) => {
+    const { navigation } = this.props;
+    navigation.navigate(e);
+  }
+
+  proceed = () => {
+    const { navigation } = this.props;
+    navigation.navigate('NewsComments');
+  }
 }
 const mapStateToProps = state => ({
   news: state.newsReducer.news

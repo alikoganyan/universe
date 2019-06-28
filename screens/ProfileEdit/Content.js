@@ -137,7 +137,7 @@ class Content extends Component {
       <Wrapper>
         <User>
           <TouchableOpacity onPress={this.selectImage}>
-            {image === '/images/default_group.png'
+            {!image || image === '/images/default_group.png'
                         || image === '/images/default_avatar.jpg' ? (
                           <DefaultAvatar size={80} />
               ) : (

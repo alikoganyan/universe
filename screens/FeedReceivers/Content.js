@@ -185,7 +185,7 @@ class Content extends Component {
                                                             e.workers.map((e, i) => (
                                                               <BoxInnerItem key={i}>
                                                                 {
-                                                                    e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg'
+                                                                    !e.image || e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg'
                                                                       ? <DefaultAvatar size={36} id={e._id} />
                                                                       : <ImageComponent size={36} source={{ uri: `http://ser.univ.team${e.image}` }} />
                                                                 }

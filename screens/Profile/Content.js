@@ -154,18 +154,18 @@ class Content extends Component {
         <StyledScrollView>
           <User>
             {
-                            image === '/images/default_group.png' || image === '/images/default_avatar.jpg'
-                              ? <DefaultAvatar isGroup={isGroup} id={_id} size={80} />
-                              : (
-                                <ImageComponent
-                                  size={80}
-                                  source={{ uri: `http://ser.univ.team${image}` }}
-                                  style={{
-                                    marginTop: 0, marginBottom: 16, marginRight: 10, marginLeft: 10
-                                  }}
-                                />
-                              )
-                        }
+              !image || image === '/images/default_group.png' || image === '/images/default_avatar.jpg'
+                ? <DefaultAvatar isGroup={isGroup} id={_id} size={80} />
+                : (
+                  <ImageComponent
+                    size={80}
+                    source={{ uri: `http://ser.univ.team${image}` }}
+                    style={{
+                      marginTop: 0, marginBottom: 16, marginRight: 10, marginLeft: 10
+                    }}
+                  />
+                )
+            }
             <UserInfo>
               <UserName>
                 <Name>{chatName}</Name>
@@ -178,8 +178,8 @@ class Content extends Component {
             ? (
               <>
                 <PersonalData>
-                  {UserData.map((item, index) => item && item.isGroup && (!myProfile || !item.icon) && (
-                  <Info key={index}>
+                  {UserData.map(item => item && item.isGroup && (!myProfile || !item.icon) && (
+                  <Info key={item._id}>
                     <Data>
                       <Type>{item.type}</Type>
                       <Value>{item.value}</Value>
@@ -201,10 +201,36 @@ class Content extends Component {
                     )}
                   </ParticipantsItem>
                 </Participants>
+                <View style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    padding: 10,
+                  }}
+                >
+                  <BoxInnerItem>
+                    {creator.image === '/images/default_avatar.jpg'
+                      ? <DefaultAvatar size={36} />
+                      : (
+                        <ImageComponent
+                          size={36}
+                          source={{ uri: `http://ser.univ.team${creator.image}` }}
+                          style={{ marginRight: 8 }}
+                        />
+                      )
+                    }
+                    <ContactInfo>
+                      <ContactName>{creator.first_name ? `${creator.first_name} ${creator.last_name}` : creator.phone_number}</ContactName>
+                      {creator.role && creator.role.name && <ContactRole>{creator.role.name}</ContactRole>}
+                    </ContactInfo>
+                  </BoxInnerItem>
+                  <Text>admin</Text>
+                </View>
                 <FlatList
                   style={{ paddingRight: 5, paddingLeft: 5, }}
                   data={sortedParticipants}
-                  renderItem={({ item, index }) => {
+                  renderItem={({ item }) => {
                     const {
                       first_name, last_name, role, image, phone_number
                     } = item;
@@ -233,17 +259,16 @@ class Content extends Component {
                             {role && role.name && <ContactRole>{role.name}</ContactRole>}
                           </ContactInfo>
                         </BoxInnerItem>
-                        <Text>{index === 0 && 'admin'}</Text>
                       </View>
                     );
                   }}
-                  keyExtractor={(item, index) => index.toString()}
+                  keyExtractor={item => item._id.toString()}
                 />
               </>
             )
             : (
               <PersonalData>
-                {UserData.map((item, index) => item && !item.isGroup && (!myProfile || !item.icon) && (
+                {UserData.map((item, index) => (item && !item.isGroup && (!myProfile || !item.icon)) && (
                 <Info key={index}>
                   <Data>
                     <Type>{item.type}</Type>
@@ -263,7 +288,6 @@ class Content extends Component {
   }
 
     state = {
-      userName: 'Константин Константинопольский',
       status: 'В сети',
       UserData: []
     }

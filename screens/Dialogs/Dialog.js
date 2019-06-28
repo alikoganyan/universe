@@ -184,51 +184,50 @@ class Content extends Component {
       >
         <Wrapper>
           {
-            chatImage === '/images/default_group.png' || chatImage === '/images/default_avatar.jpg'
-              ? <DefaultAvatar isGroup={isGroup} id={item._id} size="large" />
-              : (
-                <DialogImage
-                  source={{ uri: `http://ser.univ.team${chatImage}` }}
-                  size="large"
-                />
+            (!chatImage || chatImage === '/images/default_group.png' || chatImage === '/images/default_avatar.jpg') ?
+              <DefaultAvatar isGroup={isGroup} id={item._id} size="large" /> :
+              (
+                  <DialogImage
+                    source={{ uri: `http://ser.univ.team${chatImage}` }}
+                    size="large"
+                  />
               )
           }
           <DialogText>
             <DialogTextInner>
               {title && (
-              <>
-                <DialogTitle>{title}</DialogTitle>
-                <DialogLastMessage numberOfLines={2}>
-                  {lastTextMessage || 'no messages yet'}
-                </DialogLastMessage>
-                {lastFiles.length ? (
-                  <LastFile>
-                    {lastFiles.map((e, i) => {
-                      const { filename, type } = e;
-                      return i < 2 && (
-                      <LastFileItem key={i}>
-                        {type === 'image' && <FilesRedIcon noPaddingAll size={10} />}
-                        {type === 'task' && <TaskIcon noPaddingAll size={10} />}
-                        {type === 'geo' && <LocationIcon noPaddingAll size={10} />}
-                        <LastFileItemText>
-                          {filename.length > 8 ? filename.substr(-8) : filename}
-                        </LastFileItemText>
-                      </LastFileItem>
-                      );
-                    })}
-                    {(lastFiles.length && lastFiles.length - 2) ? (
-                      <LastFiles>
-                        +
-                        {lastFiles.length >= 2 ?
-                          lastFiles.length - 2 :
-                          lastFiles.length}
-                      </LastFiles>
-                    ) : <LastFiles />}
-                  </LastFile>
-                ) : <LastFile />}
-              </>
-              )
-              }
+                <>
+                  <DialogTitle>{title}</DialogTitle>
+                  <DialogLastMessage numberOfLines={2}>
+                    {lastTextMessage || 'no messages yet'}
+                  </DialogLastMessage>
+                  {lastFiles.length ? (
+                    <LastFile>
+                      {lastFiles.map((e, i) => {
+                        const { filename, type } = e;
+                        return i < 2 && (
+                        <LastFileItem key={i}>
+                          {type === 'image' && <FilesRedIcon noPaddingAll size={10} />}
+                          {type === 'task' && <TaskIcon noPaddingAll size={10} />}
+                          {type === 'geo' && <LocationIcon noPaddingAll size={10} />}
+                          <LastFileItemText>
+                            {filename.length > 8 ? filename.substr(-8) : filename}
+                          </LastFileItemText>
+                        </LastFileItem>
+                        );
+                      })}
+                      {(lastFiles.length && lastFiles.length - 2) ? (
+                        <LastFiles>
+                          +
+                          {lastFiles.length >= 2 ?
+                            lastFiles.length - 2 :
+                            lastFiles.length}
+                        </LastFiles>
+                      ) : <LastFiles />}
+                    </LastFile>
+                  ) : <LastFile />}
+                </>
+              )}
               {phone && (
               <>
                 <View>
@@ -240,12 +239,11 @@ class Content extends Component {
             <DialogDate>
               <LastMessageDate>{time || timeCreated}</LastMessageDate>
               <UnreadMessages>
-                {!!unreadMessages
-                  && (
+                {!!unreadMessages && (
                   <NewMessages color={lastType}>
                     <NewMessagesText>{unreadMessages}</NewMessagesText>
                   </NewMessages>
-                  )}
+                )}
               </UnreadMessages>
             </DialogDate>
           </DialogText>
@@ -291,9 +289,6 @@ class Content extends Component {
   }
 }
 const mapStateToProps = state => ({
-  messages: state.messageReducer.messages,
-  storeDialogs: state.messageReducer,
-  currentRoom: state.messageReducer.currentRoom,
   user: state.userReducer.user
 });
 const mapDispatchToProps = dispatch => ({

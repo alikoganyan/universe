@@ -1,20 +1,18 @@
 import React, { Component } from 'react';
 import {
-  View, Text, Image, Dimensions, Platform, TouchableOpacity, AsyncStorage
+  View, Text, Dimensions, TouchableOpacity, AsyncStorage
 } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import {
   ActionSheetProvider,
-  connectActionSheet,
 } from '@expo/react-native-action-sheet';
-import { BackIcon, EllipsisVIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
 import SafeAreaView from '../../common/SafeAreaView';
-import { setCurrentChat } from '../../actions/messageActions';
 import { socket } from '../../utils/socket';
 import Header from './Header';
 import Content from './Content';
+import { setDialogs } from '../../actions/dialogsActions';
 
 const { Colors, fontSize } = helper;
 const { pink } = Colors;
@@ -55,8 +53,8 @@ class Profile extends Component {
             <Content toChat={this.toChat} myProfile={myProfile} toDialogs={this.toDialogs} />
             <Bottom>
               {
-                                myProfile && <Logout onPress={this.logout}><LogoutText>Выйти из аккаунта</LogoutText></Logout>
-                            }
+                  myProfile && <Logout onPress={this.logout}><LogoutText>Выйти из аккаунта</LogoutText></Logout>
+              }
             </Bottom>
           </Wrapper>
         </SafeAreaView>
@@ -65,22 +63,25 @@ class Profile extends Component {
   }
 
     navigateBack = () => {
-      this.props.navigation.goBack();
+      const { navigation } = this.props;
+      navigation.goBack();
     }
 
     toChat = () => {
-      const { currentChat, user } = this.props;
+      const { currentChat, user, navigation } = this.props;
       socket.emit('select chat', { chatId: currentChat.id, userId: user.id });
-      this.props.navigation.navigate('Chat');
+      navigation.navigate('Chat');
     }
 
     toDialogs = () => {
-      this.props.navigation.navigate('Dialogs');
+      const { navigation } = this.props;
+      navigation.navigate('Dialogs');
     }
 
     logout = async () => {
-      const { navigation } = this.props;
+      const { navigation,setDialogs } = this.props;
       await AsyncStorage.clear();
+      setDialogs([]);
       navigation.navigate('Login');
     }
 
@@ -93,9 +94,10 @@ class Profile extends Component {
 const mapStateToProps = state => ({
   user: state.userReducer.user,
   currentChat: state.messageReducer.currentChat,
-  currentDialog: state.dialogsReducer.currentDialog
+  currentDialog: state.dialogsReducer.currentDialog,
+
 });
 const mapDispatchToProps = dispatch => ({
-  setUser: _ => dispatch(setUser(_)),
+  setDialogs: _ => dispatch(setDialogs(_))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Profile);

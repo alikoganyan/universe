@@ -33,7 +33,6 @@ class FirstScreen extends Component {
 			.then((res) => {
 				const value = JSON.parse(res);
 				const tokenActive = value;
-				console.log({ tokenActive });
 				if (value) {
 					setUser({ ...value });
 					setAuth(value.access_token);

@@ -10,6 +10,7 @@ import helper from '../../utils/helpers';
 import sendRequest from '../../utils/request';
 import { p_settings } from '../../constants/api';
 import { setSettings } from '../../actions/userActions';
+import { BottomSheet } from 'react-native-btr';
 
 const {
   Colors, sidePadding, fontSize, borderRadius, HeaderHeight
@@ -26,7 +27,6 @@ const Wrapper = styled(View)`
     background: white;
     margin-bottom: 110px;
     padding: 0 ${sidePadding}px;
-    height: 100%;
 `;
 const Box = styled(View)`
     display: flex;
@@ -66,7 +66,7 @@ const PolicyLink = styled(Link)`
     padding: 10px 0 20px;
 `;
 
-const LangPicker = styled(LangPickerPosed)`
+const LangPicker = styled(View)`
     background: white;
     width: 94%;
     bottom: 0;
@@ -136,11 +136,10 @@ const Toggle = (props) => {
 };
 class Content extends Component {
   render() {
-    const { settings, pickerOpened, langs } = this.state;
+    const { settings, pickerOpened, langs, agreements } = this.state;
     return (
       <SafeAreaView>
         <Wrapper>
-          {pickerOpened && <Shadow activeOpacity={1} onPress={this.pickerClose} />}
           <FlatList
             style={{ paddingRight: 5, paddingLeft: 5, maxHeight: 300 }}
             ListHeaderComponent={<View style={{ margin: 10, }} />}
@@ -168,7 +167,7 @@ class Content extends Component {
             keyExtractor={(item, index) => index.toString()}
           />
           <CheckboxHolder>
-            {this.state.agreements.map((e, i) => (
+            {agreements.map((e, i) => (
               <Checkbox key={i}>
                 <CheckBoxLabel>
                   <TouchableOpacity>
@@ -183,10 +182,16 @@ class Content extends Component {
             <PolicyLink>Политика соглашения</PolicyLink>
             <PolicyLink>Условия использования</PolicyLink>
           </Policy>
-          <LangPicker pose={pickerOpened ? 'visible' : 'hidden'}>
-            {Object.values(langs).map((e, i) => <TouchableOpacity key={i}><Text style={{ color: i === 0 ? blue : black }}>{e}</Text></TouchableOpacity>)}
-            <TouchableOpacity onPress={this.pickerClose}><Text>Отменить</Text></TouchableOpacity>
-          </LangPicker>
+          <BottomSheet
+            visible={pickerOpened}
+            onBackButtonPress={this.pickerClose}
+            onBackdropPress={this.pickerClose}
+          >
+            <LangPicker>
+              {Object.values(langs).map((e, i) => <TouchableOpacity key={i}><Text style={{ color: i === 0 ? blue : black }}>{e}</Text></TouchableOpacity>)}
+              <TouchableOpacity onPress={this.pickerClose}><Text>Отменить</Text></TouchableOpacity>
+            </LangPicker>
+          </BottomSheet>
         </Wrapper>
       </SafeAreaView>
     );
