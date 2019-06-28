@@ -204,50 +204,50 @@ class Content extends Component {
 									<this.AllContacts allContacts={allContacts} />
 								</ContactList>
 								<ContactList>
-								{/* {department.map((e, i) => ( */}
-								{/* 	<Box key={i} last={i === department.length - 1}> */}
-								{/* 		<BoxTitle onPress={() => (collapsed[i] ? */}
-								{/* 			this.collapseDepartment(i) : */}
-								{/* 			this.showDepartment(i))} */}
-								{/* 		> */}
-								{/* 			<BoxItem numberOfLines={1} title>{e.title.name}</BoxItem> */}
-								{/* 			<ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}> */}
-								{/* 				<ArrowDownIcon /> */}
-								{/* 			</ArrowWrapper> */}
-								{/* 		</BoxTitle> */}
-								{/* 		<Collapsible collapsed={collapsed[i] || false}> */}
-								{/* 			<BoxInner> */}
-								{/* 				{e.users.map(e => ( */}
-								{/* 					<BoxInnerItem */}
-								{/* 						key={e._id} */}
-								{/* 						onPress={() => this.toChat(e)} */}
-								{/* 					> */}
-								{/* 						{ */}
-								{/* 						(!e.image || e.image === '/images/default_avatar.jpg') ? */}
-								{/* 							<DefaultAvatar isGroup={e.isGroup} id={e._id} size={36} /> : ( */}
-								{/* 								<ContactImage */}
-								{/* 									source={{ uri: `http://ser.univ.team${e.image}` }} */}
-								{/* 								/> */}
-								{/* 							) */}
-								{/* 						} */}
-								{/* 						<ContactInfo> */}
-								{/* 							<ContactName> */}
-								{/* 							{e.first_name ? */}
-								{/* 								`${e.first_name} ${e.last_name}` : */}
-								{/* 								e.phone_number */}
-								{/* 							} */}
-								{/* 							</ContactName> */}
-								{/* 							{e.role ? */}
-								{/* 								<ContactRole>{e.role.name}</ContactRole> : */}
-								{/* 								null */}
-								{/* 							} */}
-								{/* 						</ContactInfo> */}
-								{/* 					</BoxInnerItem> */}
-								{/* 				))} */}
-								{/* 			</BoxInner> */}
-								{/* 		</Collapsible> */}
-								{/* 	</Box> */}
-								{/* ))} */}
+								{department.map((e, i) => (
+									<Box key={i} last={i === department.length - 1}>
+										<BoxTitle onPress={() => (collapsed[i] ?
+											this.collapseDepartment(i) :
+											this.showDepartment(i))}
+										>
+											<BoxItem numberOfLines={1} title>{e.title.name}</BoxItem>
+											<ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
+												<ArrowDownIcon />
+											</ArrowWrapper>
+										</BoxTitle>
+										<Collapsible collapsed={collapsed[i] || false}>
+											<BoxInner>
+												{e.users.map(e => (
+													<BoxInnerItem
+														key={e._id}
+														onPress={() => this.toChat(e)}
+													>
+														{
+														(!e.image || e.image === '/images/default_avatar.jpg') ?
+															<DefaultAvatar isGroup={e.isGroup} id={e._id} size={36} /> : (
+																<ContactImage
+																	source={{ uri: `http://ser.univ.team${e.image}` }}
+																/>
+															)
+														}
+														<ContactInfo>
+															<ContactName>
+															{e.first_name ?
+																`${e.first_name} ${e.last_name}` :
+																e.phone_number
+															}
+															</ContactName>
+															{e.role ?
+																<ContactRole>{e.role.name}</ContactRole> :
+																null
+															}
+														</ContactInfo>
+													</BoxInnerItem>
+												))}
+											</BoxInner>
+										</Collapsible>
+									</Box>
+								))}
 								</ContactList>
 								<ContactList style={{ width: '100%' }}>
 									<this.GroupContacts />
