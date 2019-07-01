@@ -60,6 +60,7 @@ const Animated = styled(AnimatedScrollView)
 	display: flex;
 	flex-direction: row;
 	width: ${Dimensions.get('window').width * 3};
+	flex: 1;
 `;
 const AnimatedBox = posed.View({
 	visible: { flex: 1 },
@@ -74,13 +75,13 @@ const Wrapper = styled(View)
 	background: white;
 	margin-bottom: 40px;
 	height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
+	overflow: hidden;
 `;
 const ContactList = styled(ScrollView)
 `
-	padding: 20px 0px 10px 40px;
-	max-width: ${Dimensions.get('window').width - sidePadding * 2}px;
+	padding: 20px 40px 10px;
+	max-width: 100%;
 	overflow: hidden;
-	margin-left: ${sidePadding}px;
 	flex: 1;
 `;
 const Box = styled(View)
@@ -174,104 +175,96 @@ const Option = styled(Text)
 
 class Content extends Component {
 	render() {
-		const { users, collapsed, options } = this.state;
-		const { user, dialogs } = this.props;
+		const { users, collapsed, options, allContacts } = this.state;
 		const { department } = users;
-		const allContacts = [...dialogs].filter(e => e.isGroup);
-		department.map((e) => {
-			e.users.map((e) => {
-				const chat = dialogs.filter(chat => chat._id === e._id)[0];
-				const nonExisting = { ...e, creator: e, participants: e, room: `${e._id}_${user._id}` };
-				allContacts.push(chat || nonExisting);
-			});
-		});
 		const { active } = options;
+		console.log('UPDATE');
 		return (
-			<SafeAreaView>
 			<Wrapper>
-				<KeyboardAwareScrollView enableOnAndroid style={{ height: '100%' }}>
-					{allContacts.length ? (
-						<>
-							<Options>
-								{options.options.map((e, i) => (
-									<TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-										<Option active={active % 3 === i}>{e}</Option>
-									</TouchableOpacity>
-								))}
-							</Options>
-							<Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
-								<ContactList style={{ width: '100%' }}>
-									<this.AllContacts allContacts={allContacts} />
-								</ContactList>
-								<ContactList>
-								{/* {department.map((e, i) => ( */}
-								{/* 	<Box key={i} last={i === department.length - 1}> */}
-								{/* 		<BoxTitle onPress={() => (collapsed[i] ? */}
-								{/* 			this.collapseDepartment(i) : */}
-								{/* 			this.showDepartment(i))} */}
-								{/* 		> */}
-								{/* 			<BoxItem numberOfLines={1} title>{e.title.name}</BoxItem> */}
-								{/* 			<ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}> */}
-								{/* 				<ArrowDownIcon /> */}
-								{/* 			</ArrowWrapper> */}
-								{/* 		</BoxTitle> */}
-								{/* 		<Collapsible collapsed={collapsed[i] || false}> */}
-								{/* 			<BoxInner> */}
-								{/* 				{e.users.map(e => ( */}
-								{/* 					<BoxInnerItem */}
-								{/* 						key={e._id} */}
-								{/* 						onPress={() => this.toChat(e)} */}
-								{/* 					> */}
-								{/* 						{ */}
-								{/* 						(!e.image || e.image === '/images/default_avatar.jpg') ? */}
-								{/* 							<DefaultAvatar isGroup={e.isGroup} id={e._id} size={36} /> : ( */}
-								{/* 								<ContactImage */}
-								{/* 									source={{ uri: `http://ser.univ.team${e.image}` }} */}
-								{/* 								/> */}
-								{/* 							) */}
-								{/* 						} */}
-								{/* 						<ContactInfo> */}
-								{/* 							<ContactName> */}
-								{/* 							{e.first_name ? */}
-								{/* 								`${e.first_name} ${e.last_name}` : */}
-								{/* 								e.phone_number */}
-								{/* 							} */}
-								{/* 							</ContactName> */}
-								{/* 							{e.role ? */}
-								{/* 								<ContactRole>{e.role.name}</ContactRole> : */}
-								{/* 								null */}
-								{/* 							} */}
-								{/* 						</ContactInfo> */}
-								{/* 					</BoxInnerItem> */}
-								{/* 				))} */}
-								{/* 			</BoxInner> */}
-								{/* 		</Collapsible> */}
-								{/* 	</Box> */}
-								{/* ))} */}
-								</ContactList>
-								<ContactList style={{ width: '100%' }}>
-									<this.GroupContacts />
-								</ContactList>
-							</Animated>
-						</>
-					) : (
-						<Loader hint="Пока нет диалогов" style={{ flex: 1, height: '100%' }}>
-							<TouchableOpacity onPress={this.toContacts}>
-								<Text style={{ color: grey2, textAlign: 'center' }}>
-									Откройте первый диалог, выбрав пользователя
-									<Text style={{ color: blue }}> на странице контактов</Text>
-								</Text>
-							</TouchableOpacity>
-						</Loader>
-					)}
-				</KeyboardAwareScrollView>
+				{allContacts.length ? (
+					<>
+						<Options>
+							{options.options.map((e, i) => (
+								<TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+									<Option active={active % 3 === i}>{e}</Option>
+								</TouchableOpacity>
+							))}
+						</Options>
+						<Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
+							<ContactList style={{ width: '100%' }} >
+								<this.AllContacts />
+							</ContactList>
+							<ContactList>
+								<FlatList
+									data={department}
+									renderItem={({ item, index }) => (
+										<Box key={item._id} last={index === department.length - 1}>
+											<BoxTitle onPress={() => (collapsed[index] ?
+												this.collapseDepartment(index) :
+												this.showDepartment(index))}
+											>
+												<BoxItem numberOfLines={1} title>{item.title.name}</BoxItem>
+												<ArrowWrapper pose={collapsed[index] ? 'right' : 'down'}>
+													<ArrowDownIcon />
+												</ArrowWrapper>
+											</BoxTitle>
+											<Collapsible collapsed={collapsed[index] || false}>
+												<BoxInner>
+													{item.users.map(e => (
+														<BoxInnerItem
+															key={e._id}
+															onPress={() => this.toChat(e)}
+														>
+															{
+															(!e.image || e.image === '/images/default_avatar.jpg') ?
+																<DefaultAvatar isGroup={e.isGroup} id={e._id} size={36} /> : (
+																	<ContactImage
+																		source={{ uri: `http://ser.univ.team${e.image}` }}
+																	/>
+																)
+															}
+															<ContactInfo>
+																<ContactName>
+																{e.first_name ?
+																	`${e.first_name} ${e.last_name}` :
+																	e.phone_number
+																}
+																</ContactName>
+																{e.role ?
+																	<ContactRole>{e.role.name}</ContactRole> :
+																	null
+																}
+															</ContactInfo>
+														</BoxInnerItem>
+													))}
+												</BoxInner>
+											</Collapsible>
+										</Box>
+									)}
+								/>
+							</ContactList>
+							<ContactList style={{ width: '100%' }}>
+								<this.GroupContacts />
+							</ContactList>
+						</Animated>
+					</>
+				) : (
+					<Loader hint="Пока нет диалогов" style={{ flex: 1, height: '100%' }}>
+						<TouchableOpacity onPress={this.toContacts}>
+							<Text style={{ color: grey2, textAlign: 'center' }}>
+								Откройте первый диалог, выбрав пользователя
+								<Text style={{ color: blue }}> на странице контактов</Text>
+							</Text>
+						</TouchableOpacity>
+					</Loader>
+				)}
 			</Wrapper>
-		</SafeAreaView>
 		);
 	}
 
 	state = {
 		collapsed: [],
+		allContacts: [],
 		users: {
 			department: [],
 		},
@@ -285,8 +278,9 @@ class Content extends Component {
 		},
 	}
 
-	AllContacts = ({ allContacts }) => {
+	AllContacts = () => {
 		const { user } = this.props;
+		const { allContacts } = this.state;
 		return (
 			<FlatList
 				style={{ paddingRight: 5, paddingLeft: 5, flex: 1 }}
@@ -307,20 +301,11 @@ class Content extends Component {
 							`${first_name} ${last_name}` :
 							phone_number;
 					return item ? (
-						<BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
-							{
-								!image || image === '/images/default_avatar.jpg' ? (
-									<DefaultAvatar
-										isGroup={isGroup}
-										id={_id}
-										size={36}
-									/>
-								) : (
-									<ContactImage
-										source={{ uri: `http://ser.univ.team${image}` }}
-									/>
-								)
-							}
+						<BoxInnerItem key={_id} onPress={() => this.toChat(item)}>
+							{ !image || image === '/images/default_avatar.jpg' || image === '/images/default_group.png' ?
+			                	<DefaultAvatar id={item._id} size={36} /> :
+								<ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+			                }
 							<ContactInfo>
 								<ContactName>{chatName}</ContactName>
 								{isGroup && (
@@ -337,7 +322,7 @@ class Content extends Component {
 						</BoxInnerItem>
 					) : null;
 				}}
-				keyExtractor={(item, index) => index.toString()}
+				keyExtractor={item => item._id.toString()}
 			/>
 		);
 	}
@@ -372,13 +357,26 @@ class Content extends Component {
 					</BoxInnerItem>
 				) : null;
 				}}
-				keyExtractor={(item, index) => index.toString()}
+				keyExtractor={item => item._id.toString()}
 			/>
 		);
 	}
 
 	componentDidMount() {
 		const { collapsed, users } = this.state;
+		const { user, dialogs } = this.props;
+		const { department } = users;
+		const allContacts = [...dialogs].filter(e => e._id !== user._id);
+		department.map((dep) => {
+			dep.users.map((e) => {
+				const exists = dialogs.findIndex(chat => chat._id === e._id) !== -1;
+				const chat = dialogs.filter(chat => chat._id === e._id && chat._id === user._id)[0];
+				const nonExisting = { ...e, creator: e, participants: e, room: `${e._id}_${user._id}` };
+				const conditon = exists || e._id !== user._id;
+				conditon && allContacts.push(chat || nonExisting);
+			});
+		});
+		setTimeout(() => this.setState({ allContacts }), 0);
 		const newCollapsed = [...collapsed];
 		users.department.map(() => {
 			newCollapsed.push(false);
@@ -387,6 +385,7 @@ class Content extends Component {
 			r_path: g_users,
 			method: 'get',
 			success: (res) => {
+				console.log('get users');
 				const { users } = this.state;
 				const newUsers = { ...users };
 				const newDepartment = [...users.department];

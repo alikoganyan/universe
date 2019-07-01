@@ -220,8 +220,13 @@ class InputComponent extends Component {
       const { text } = this.state;
       if (text) {
         const message = {
+          _id: Math.random().toString(36).substring(7),
           sender: {
-            _id, first_name, last_name, middle_name, image
+            _id,
+            first_name,
+            last_name,
+            middle_name,
+            image
           },
           text: text.trim(),
           created_at: new Date(),

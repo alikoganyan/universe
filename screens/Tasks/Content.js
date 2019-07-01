@@ -78,7 +78,7 @@ class Content extends Component {
             </Options>
             {currentTask.tasks && animationCompleted ? (
               <TaskList
-                data={currentTask.tasks}
+                data={currentTask.tasks_list}
                 ListFooterComponent={<TaskListFooter />}
                 renderItem={({ item }) => {
                   const myTask = item.creator._id === user._id;

@@ -23,9 +23,9 @@ export default class AppComponent extends Component {
         const Navigator = createRootNavigator(loaded && logged);
         return (
             <Provider store={store}>
-				<StatusBar backgroundColor="white" barStyle="dark-content" />
-				{loaded ? <Navigator /> : <SplashScreen />}
-			</Provider>
+                <StatusBar backgroundColor="white" barStyle="dark-content" />
+                {loaded ? <Navigator /> : <SplashScreen />}
+            </Provider>
         );
     }
 
@@ -38,18 +38,13 @@ export default class AppComponent extends Component {
         AsyncStorage.getItem('user').then((res) => {
             const value = JSON.parse(res);
             if (value) {
-                const dateDifference = Math.abs(new Date(value.lastLogin) - new Date()) / 36e5 < 1;
                 AsyncStorage.setItem('user', JSON.stringify({ ...value, lastLogin: new Date() }));
-                if (dateDifference) {
-                    store.dispatch(setUser(value));
-                    store.dispatch(setAuth(value.access_token));
-                    setTimeout(() => {
-                        connectToSocket(value.access_token);
-                        this.setState({ logged: true });
-                    }, 0);
-                } else {
-                    AsyncStorage.clear();
-                }
+                store.dispatch(setUser(value));
+                store.dispatch(setAuth(value.access_token));
+                connectToSocket(value.access_token);
+                setTimeout(() => {
+                    this.setState({ logged: true });
+                }, 0);
             }
         });
         await Font.loadAsync({

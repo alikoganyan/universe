@@ -158,7 +158,7 @@ class Content extends Component {
                   )}
                   {item.option.type === 'link' && (
                   <TouchableOpacity onPress={this.selectOption}>
-                    <Link>{item.option.value}</Link>
+                    <Link >{item.option.value}</Link>
                   </TouchableOpacity>
                   )}
                 </Option>
@@ -168,13 +168,15 @@ class Content extends Component {
           />
           <CheckboxHolder>
             {agreements.map((e, i) => (
-              <Checkbox key={i}>
-                <CheckBoxLabel>
-                  <TouchableOpacity>
-                    <LinkText>{e.linkText}</LinkText>
-                  </TouchableOpacity>
-                </CheckBoxLabel>
-              </Checkbox>
+              <TouchableOpacity key={i}>
+                <Checkbox>
+                  <CheckBoxLabel>
+                    <TouchableOpacity>
+                      <LinkText>{e.linkText}</LinkText>
+                    </TouchableOpacity>
+                  </CheckBoxLabel>
+                </Checkbox>
+              </TouchableOpacity>
             ))}
           </CheckboxHolder>
           <Policy>
@@ -198,7 +200,6 @@ class Content extends Component {
   }
 
     state = {
-      switchOn: true,
       langs: {
         ru: 'Русский',
         en: 'English',
@@ -222,17 +223,20 @@ class Content extends Component {
         {
           value: false,
           linkText: 'Условия использования',
-          linkComp: 'linkComp'
+          linkComp: 'linkComp',
+          link: '',
         },
         {
           value: false,
           linkText: 'Пользовательское соглашение',
-          linkComp: 'linkComp'
+          linkComp: 'linkComp',
+          link: '',
         },
         {
           value: false,
-          linkText: 'Использование персональных данные',
-          linkComp: 'linkComp'
+          linkText: 'Соглашение об Использовании персональных данных',
+          linkComp: 'linkComp',
+          link: '',
         }
       ]
     }

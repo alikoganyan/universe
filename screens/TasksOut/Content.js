@@ -59,8 +59,8 @@ class Content extends Component {
     const { active } = options;
     const { user, activeTask, tasks } = this.props;
     const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
-    const tasksList = [...tasks].map(e => e.tasks);
-    const outTasks = flatten(tasksList).filter(e => e.creator._id === user._id);
+    const tasksList = [...tasks].map(e => [...e.tasks, ...e.tasks_list]);
+    const outTasks = [...new Set(flatten([...tasksList, ...user.tasks]).filter(e => e.creator._id === user._id))];
     return (
       <SafeAreaView>
         {/* {activeTask._id && <Shadow onPress={this.unselect}></Shadow>} */}

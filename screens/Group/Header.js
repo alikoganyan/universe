@@ -113,7 +113,10 @@ class HeaderComponent extends Component {
               <>
                 <BackIcon onPress={back} right />
                 <ToProfile onPress={this.toProfile}>
-                  <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size="header" />
+                  {!image || image === '/images/default_avatar.jpg' || image === '/images/default_group.png' ?
+                    <DefaultAvatar id={_id} size="header" /> :
+                    <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size="header" />
+                  }
                   <Info>
                     <InfoChatName>{name}</InfoChatName>
                     {participants && (

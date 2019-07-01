@@ -1,11 +1,9 @@
 import React, { Component } from 'react';
-import { View, Text, Image } from 'react-native';
+import { View } from 'react-native';
 import styled from 'styled-components';
 import {
   ActionSheetProvider,
-  connectActionSheet,
 } from '@expo/react-native-action-sheet';
-import { BackIcon, EllipsisVIcon } from '../../assets/index';
 import SafeAreaView from '../../common/SafeAreaView';
 import Header from './Header';
 import Content from './Content';
@@ -23,12 +21,13 @@ const Bottom = styled(View)`
 
 export default class ContactGroups extends Component {
   render() {
+    const { navigation } = this.props;
     return (
       <ActionSheetProvider>
         <SafeAreaView>
           <Wrapper>
-            <Header back={this.navigateBack} navigate={this.props.navigation.navigate} />
-            <Content navigate={this.props.navigation.navigate} />
+            <Header back={this.navigateBack} navigate={navigation.navigate} />
+            <Content navigate={navigation.navigate} />
             <Bottom />
           </Wrapper>
         </SafeAreaView>
@@ -37,6 +36,7 @@ export default class ContactGroups extends Component {
   }
 
     navigateBack = () => {
-      this.props.navigation.goBack();
+      const { navigation } = this.props;
+      navigation.goBack();
     }
 }

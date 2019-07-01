@@ -6,11 +6,9 @@ import styled from 'styled-components';
 import { connect } from 'react-redux';
 import CheckBox from 'react-native-check-box';
 import helper from '../../utils/helpers';
-import { p_register } from '../../constants/api';
-import sendRequest from '../../utils/request';
 import Button from '../../common/Button';
 
-const { Colors, fontSize, HeaderHeight } = helper;
+const { Colors, fontSize } = helper;
 const {
   lightGrey1, blue, blueDisabled, pink
 } = Colors;
@@ -69,17 +67,17 @@ const LinkText = styled(Text)`
 `;
 class Content extends Component {
   render() {
-    const { btnDisabled } = this.state;
+    const { btnDisabled, agreements } = this.state;
     return (
       <Wrapper>
         <Title>
-                    Регистрация
+            Регистрация
         </Title>
         <SubTitle error={btnDisabled}>
                     Примите пользовательские соглашения
         </SubTitle>
         <PhoneNumber>
-          {this.state.agreements.map((e, i) => (
+          {agreements.map((e, i) => (
             <Checkbox key={i}>
               <CheckBox
                 checkBoxColor={blue}
@@ -104,7 +102,7 @@ class Content extends Component {
             background={!btnDisabled ? blue : blueDisabled}
             color="white"
           >
-зарегистрироваться
+            зарегистрироваться
           </Button>
         </ButtonBox>
       </Wrapper>
@@ -116,21 +114,21 @@ class Content extends Component {
       agreements: [
         {
           value: false,
-          label: 'Согласен с',
-          linkText: 'условия использования',
-          linkComp: 'linkComp'
+          linkText: 'Условия использования',
+          linkComp: 'linkComp',
+          link: '',
         },
         {
           value: false,
-          label: 'Согласен с',
-          linkText: 'пользовательским соглашением',
-          linkComp: 'linkComp'
+          linkText: 'Пользовательское соглашение',
+          linkComp: 'linkComp',
+          link: '',
         },
         {
           value: false,
-          label: 'Согласен на',
-          linkText: 'использование персональных данные',
-          linkComp: 'linkComp'
+          linkText: 'Соглашение об Использовании персональных данных',
+          linkComp: 'linkComp',
+          link: '',
         }
       ]
     }
@@ -139,14 +137,16 @@ class Content extends Component {
     }
 
     setInputState = (e) => {
-      const newAgreements = [...this.state.agreements];
+      const { agreements } = this.state;
+      const newAgreements = [...agreements];
       const item = newAgreements.filter(item => e.linkText === item.linkText)[0];
       item.value = !item.value;
       this.setState({ agreements: [...newAgreements], btnDisabled: false });
     }
 
     proceed = () => {
-      const checked = !this.state.agreements.filter(e => e.value === false)[0];
+      const { agreements } = this.state;
+      const checked = !agreements.filter(e => e.value === false)[0];
       this.setState({ btnDisabled: !checked });
       if (checked) {
         const { forward } = this.props;
@@ -159,6 +159,5 @@ const mapStateToProps = state => ({
   register: state.userReducer.register
 });
 const mapDispatchToProps = dispatch => ({
-  setUser: _ => dispatch(setUser(_)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

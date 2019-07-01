@@ -108,8 +108,8 @@ const TaskStatusAdditional = styled(Text)`
 `;
 class TaskPack extends Component {
   render() {
-    const { taskPack } = this.state;
-    const { title, last, onPress } = this.props;
+    const { title, last, onPress, tasksPack } = this.props;
+    const taskPack = [...new Set(tasksPack)];
     let day = '';
     const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     if (taskPack.length) {
@@ -177,18 +177,9 @@ class TaskPack extends Component {
   }
 
     state = {
-      taskPack: []
     }
 
-    componentDidMount() {
-      const { title, tasks, user } = this.props;
-      const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
-      const tl = [...tasks].map(e => e.tasks);
-      const outTasks = [...flatten(tl)].filter(e => e.creator._id === user._id);
-      const incTasks = [...flatten(tl)].filter(e => !!e.performers.filter(e => e._id === user._id)[0]);
-      const tasksList = title === 'inc' ? incTasks : outTasks;
-      this.setState({ taskPack: tasksList });
-    }
+    componentDidMount() {}
 
     handleHold = () => {
       ActionSheetIOS.showActionSheetWithOptions({

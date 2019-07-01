@@ -17,6 +17,7 @@ import Message from '../../common/Message';
 import helper from '../../utils/helpers';
 import { chatBg } from '../../assets/images';
 import { setTaskReceivers } from '../../actions/participantsActions';
+import { setDialogs } from '../../actions/dialogsActions';
 
 const { HeaderHeight, borderRadius } = helper;
 const Wrapper = styled(View)`
@@ -60,7 +61,6 @@ class Content extends Component {
 		return (
 			<>
 				<Wrapper search={search}>
-					{selectedMessage._id && <Shadow onPress={this.unselect} activeOpacity={1} />}
 					<ImageBackground source={chatBg} style={{ width: '100%', height: '100%' }}>
 						{animationCompleted ? (
 							<FlatList
@@ -90,6 +90,12 @@ class Content extends Component {
 					onBackdropPress={this.unselect}
 				>
 					<MessageOptions>
+						{selectedMessage._id && selectedMessage.sender._id === user._id && (
+								<MessageOption onPress={this.turnToTask}>
+									<Text>Сделать задачей</Text>
+								</MessageOption>
+						)}
+						<MessageOption><Text>Переслать</Text></MessageOption>
 						{
 							selectedMessage._id && selectedMessage.sender._id === user._id && (
 							<>
@@ -97,10 +103,10 @@ class Content extends Component {
 									<Text>Сделать задачей</Text>
 								</MessageOption>
 								<MessageOption><Text>Редактировать</Text></MessageOption>
+								{/* <MessageOption onPress={this.deleteMessage}><Text>Удалить</Text></MessageOption> */}
 							</>
 							)
 						}
-					<MessageOption><Text>Переслать</Text></MessageOption>
 					<MessageOption onPress={this.unselect}><Text>Отменить</Text></MessageOption>
 					</MessageOptions>
 				</BottomSheet>
@@ -114,11 +120,18 @@ class Content extends Component {
 	}
 
 	componentDidMount() {
+		const { dialogs, currentRoom, setDialogs, user } = this.props;
 		InteractionManager.runAfterInteractions(() => {
 			this.setState({
 				animationCompleted: true,
 			});
 		});
+		const dialog = dialogs.filter(dialog => dialog.room === currentRoom)[0];
+		const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentRoom);
+		const newDialogs = [...dialogs];
+		dialog.messages = [...dialog.messages].map(e => ({ ...e, viewers: [...e.viewers, user._id] }));
+		newDialogs[dialogIndex] = dialog;
+		setDialogs(newDialogs);
 	}
 
 	turnToTask = () => {
@@ -129,6 +142,18 @@ class Content extends Component {
 			text,
 		};
 		navigate({ routeName: 'NewTask', params: task });
+		this.unselect();
+	}
+
+	deleteMessage = () => {
+		const { dialogs, setDialogs, currentChat } = this.props;
+		const { selectedMessage } = this.state;
+		const dialog = dialogs.filter(dialog => dialog.room === currentChat)[0];
+		const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat);
+		dialog.messages = dialog.messages.filter(message => message._id !== selectedMessage._id);
+		const newDialogs = [...dialogs];
+		newDialogs[dialogIndex] = dialog;
+		setDialogs(newDialogs);
 		this.unselect();
 	}
 
@@ -156,10 +181,12 @@ const mapStateToProps = state => ({
 	dialogs: state.dialogsReducer.dialogs,
 	search: state.messageReducer.search,
 	currentRoom: state.messageReducer.currentRoom,
+	currentDialog: state.dialogsReducer.currentDialog,
 	currentChat: state.messageReducer.currentChat,
 	user: state.userReducer.user,
 });
 const mapDispatchToProps = dispatch => ({
-  setTaskReceivers: _ => dispatch(setTaskReceivers(_))
+  setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
+  setDialogs: _ => dispatch(setDialogs(_))
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

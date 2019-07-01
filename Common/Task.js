@@ -45,7 +45,7 @@ const Status = styled(View)
     display: flex;
     flex-direction: column;
 `;
-const StatusItem = styled(TouchableOpacity)
+const StatusItem = styled(View)
 `
     display: flex;
     justify-content: space-between;
@@ -267,7 +267,7 @@ class TaskComponent extends Component {
                         <Status>
                             <StatusText>{statuses[this.stat]}</StatusText>
                             <StatusStage>
-                                {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= this.stat} color={colors[i]} onPress={() => this.changeState(i)} />)}
+                                {statuses.map((e, i) => <StatusItem key={`statusState_${i}`} completed={i <= this.stat} color={colors[i]} />)}
                             </StatusStage>
                         </Status>
                         <TaskTitle>

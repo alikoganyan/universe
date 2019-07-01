@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import {
-  Text, View, TouchableOpacity, Dimensions
+  Text, View, TouchableOpacity
 } from 'react-native';
-import styled from 'styled-components';
 import { DrawerActions } from 'react-navigation-drawer';
+import styled from 'styled-components';
 import {
   PapperPlaneIcon, GroupIcon, FeedIcon, TasksIcon, SettingsIcon, DialogsIcon
 } from '../../assets';
@@ -27,7 +27,7 @@ const Link = styled(TouchableOpacity)`
     align-items: center;
     justify-content: flex-start;
     padding: ${topPadding} ${sidePadding}px;
-    padding-left: 0;
+    padding-left: 12px;
     width: 100%;
     height: 55px;
 `;
@@ -46,9 +46,9 @@ export default function ContentComponent(props) {
           navigate('Dialogs');
         }}
         >
-          <DialogsIcon size={20} />
+          <DialogsIcon size={20} nonClickable />
           <LinkText>
-                        Диалоги
+            Диалоги
           </LinkText>
         </Link>
         <Link onPress={() => {
@@ -56,9 +56,9 @@ export default function ContentComponent(props) {
           navigate('NewDialog');
         }}
         >
-          <PapperPlaneIcon size={20} />
+          <PapperPlaneIcon size={20} nonClickable />
           <LinkText>
-                        Новый диалог
+            Новый диалог
           </LinkText>
         </Link>
         <Link onPress={() => {
@@ -66,9 +66,9 @@ export default function ContentComponent(props) {
           navigate('ContactGroups');
         }}
         >
-          <GroupIcon noPadding size={20} />
+          <GroupIcon noPadding size={20} nonClickable />
           <LinkText>
-                        Контакты
+            Контакты
           </LinkText>
         </Link>
         <Link onPress={() => {
@@ -76,9 +76,9 @@ export default function ContentComponent(props) {
           navigate('News');
         }}
         >
-          <FeedIcon size={20} />
+          <FeedIcon size={20} nonClickable />
           <LinkText>
-                        Новости
+            Новости
           </LinkText>
         </Link>
         <Link onPress={() => {
@@ -86,9 +86,9 @@ export default function ContentComponent(props) {
           navigate('TasksList');
         }}
         >
-          <TasksIcon size={20} noPaddingAll={false} />
+          <TasksIcon size={20} nonClickable noPaddingAll={false} />
           <LinkText>
-                        Задачи
+            Задачи
           </LinkText>
         </Link>
         <Link onPress={() => {
@@ -96,9 +96,9 @@ export default function ContentComponent(props) {
           navigate('Settings');
         }}
         >
-          <SettingsIcon size={20} />
+          <SettingsIcon size={20} nonClickable />
           <LinkText>
-                        Настройки
+            Настройки
           </LinkText>
         </Link>
       </Content>
