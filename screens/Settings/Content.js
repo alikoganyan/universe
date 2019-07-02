@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Text, SafeAreaView, FlatList, TouchableOpacity, Dimensions } from 'react-native';
+import {View, Text, SafeAreaView, FlatList, TouchableOpacity, Dimensions, ActivityIndicator } from 'react-native';
 import styled from 'styled-components';
 import SwitchToggle from 'react-native-switch-toggle';
 import helper from '../../utils/helpers';
@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import sendRequest from '../../utils/request';
 import { p_settings } from '../../constants/api';
 import { setSettings } from '../../actions/userActions';
+import {trySignToPushes, requestDisablePushes } from '../../actions/pushesActions';
 
 const { Colors, sidePadding, fontSize, borderRadius, HeaderHeight } = helper;
 const { lightGrey1, blue, lightBlue, grey2, white, black } = Colors;
@@ -32,6 +33,7 @@ const Box = styled(View)`
     border-width: 0;
     border-top-width: 1px;
     border-bottom-width: ${({ last }) => last ? '1px' : 0};
+    margin-top: ${({ first }) => first ? '10px' : 0};
 `;
 const Label = styled(Text)`
     flex: 2;
@@ -102,6 +104,14 @@ const CheckboxHolder = styled(View)`
     justify-content: flex-end;
     margin-bottom: 10px;
 `;
+const Loading = styled(ActivityIndicator)`
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    background: #fff8;
+`;
 const Toggle = (props) => {
     const { switchOn, onPress } = props;
     return <SwitchToggle
@@ -129,13 +139,37 @@ const Toggle = (props) => {
 class Content extends Component {
     render() {
         const { settings, pickerOpened, langs } = this.state;
+        const {
+            user: {
+                settings: {
+                    notifications: {
+                        enable: isNotificationsEnabled = false,
+                    } = {}
+                } = {}
+            } = {},
+            pushesPermissions,
+            userPushesIsFetching,
+            permissionsIsFetching,
+            tokenIsFetching,
+        } = this.props;
         return (
             <SafeAreaView>
                 <Wrapper>
                     {pickerOpened && <Shadow activeOpacity={1} onPress={this.pickerClose}></Shadow>}
+                    <Box first>
+                        <Label>Пуш-уведомления</Label>
+                        <Status>{(pushesPermissions === 'granted' && isNotificationsEnabled) ? 'Включены' : 'Выключены'}</Status>
+                        <Option>
+                            <Toggle
+                                onPress={this.handleTogglePushes}
+                                switchOn={pushesPermissions === 'granted' && isNotificationsEnabled}
+                            />
+                        </Option>
+                        {(!!userPushesIsFetching || !!permissionsIsFetching || !!tokenIsFetching) && 
+                        <Loading animating size={'small'} />}
+                    </Box>
                     <FlatList
                         style={{ paddingRight: 5, paddingLeft: 5, maxHeight: 300 }}
-                        ListHeaderComponent={<View style={{ margin: 10, }} />}
                         data={settings}
                         scrollEnabled={false}
                         renderItem={({ item, index }) => <Box key={index} last={index === settings.length - 1}>
@@ -184,7 +218,7 @@ class Content extends Component {
         pickerOpened: false,
         settings: [
             { item: 'language', label: 'Язык', status: 'ru', option: { type: 'link', value: 'изменить' } },
-            { item: 'notifications', label: 'Уведомления', status: 'Включены', option: { type: 'toggle', value: 1 } },
+            { item: 'notifications', label: 'Новостные уведомления', status: 'Включены', option: { type: 'toggle', value: 1 } },
             { item: 'sound', label: 'Звук', status: 'Включен', option: { type: 'toggle', value: 0 } },
             { item: 'partition_contacts', label: 'Контакты', status: 'По подразделениям', option: { type: 'toggle', value: 0 } },
         ],
@@ -226,11 +260,29 @@ class Content extends Component {
     pickerClose = () => {
         this.setState({ pickerOpened: false });
     }
-    handleToggle = () => {
+    handleToggle = (e) => {
         const { settings } = this.state;
         const newSettings = [...settings];
         newSettings.filter(({ label }) => e === label)[0].option.value = !newSettings.filter(({ label }) => e === label)[0].option.value;
         this.setState({ settings: newSettings });
+    }
+    handleTogglePushes = () => {
+        const {
+            user: {
+                settings: {
+                    notifications: {
+                        enable: isNotificationsEnabled = false,
+                    } = {}
+                } = {}
+            } = {},
+            pushesPermissions,
+            pushesToken,
+        } = this.props;
+        if (isNotificationsEnabled && pushesPermissions === 'granted') {
+            this.props.requestDisablePushes(pushesToken);
+        } else {
+            this.props.trySignToPushes(false);
+        }
     }
     selectOption = () => {
         this.setState({ pickerOpened: true });
@@ -264,18 +316,25 @@ class Content extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    messages: state.messageReducer,
-    dialog: state.dialogsReducer.dialogs,
-    currentRoom: state.messageReducer.currentRoom,
-    currentChat: state.messageReducer.currentChat,
-    user: state.userReducer.user,
+const mapStateToProps = ({messageReducer, dialogsReducer, userReducer, pushesReducer}) => ({
+    messages: messageReducer,
+    dialog: dialogsReducer.dialogs,
+    currentRoom: messageReducer.currentRoom,
+    currentChat: messageReducer.currentChat,
+    user: userReducer.user,
+    pushesPermissions: pushesReducer.permissions,
+    pushesToken: pushesReducer.token,
+    userPushesIsFetching: pushesReducer.userPushesIsFetching,
+    permissionsIsFetching: pushesReducer.permissionsIsFetching,
+    tokenIsFetching: pushesReducer.tokenIsFetching,
 });
 const mapDispatchToProps = dispatch => ({
     getMessages: _ => dispatch(getMessages(_)),
     setRoom: _ => dispatch(setRoom(_)),
     setDialogs: _ => dispatch(setDialogs(_)),
     addMessage: _ => dispatch(addMessage(_)),
-    setSettings: _ => dispatch(setSettings(_))
+    setSettings: _ => dispatch(setSettings(_)),
+    trySignToPushes: trySignToPushes(dispatch),
+    requestDisablePushes: requestDisablePushes(dispatch),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

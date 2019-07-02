@@ -1,10 +1,12 @@
 import React, { Component } from 'react';
 import { View, Text, TouchableOpacity, TextInput, AsyncStorage, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native';
+import { Constants } from 'expo';
 import helper from '../../utils/helpers';
 import FloatingLabel from 'react-native-floating-labels';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
 import { setUser, setAuth, setRegisterUserNumber } from '../../actions/userActions';
+import { trySignToPushes } from '../../actions/pushesActions';
 import { p_login } from '../../constants/api';
 import Button from '../../common/Button';
 import sendRequest from '../../utils/request';
@@ -185,13 +187,28 @@ class Content extends Component {
             attr: {
                 phone_number,
                 password,
+                push_token: this.props.pushesToken,
+                deviceId: Constants.deviceId,
+                
             },
             success: (res) => {
                 const { setAuth, setUser, navigate } = this.props;
-                const { access_token, data } = res;
+                const {
+                  access_token,
+                  data,
+                  settings: {
+                      notifications: {
+                          enable: isPushesEnabled = false,
+                          initialized: isPushesAsked = false,
+                      } = {}
+                  } = {}
+                } = res;
                 setAuth(access_token);
                 setUser(data);
                 this.storeUserData({ ...data, password, access_token });
+                if (!isPushesAsked || isPushesEnabled) {
+                    this.props.trySignToPushes(true);
+                }
                 this.setState({ loading: false });
                 setTimeout(() => {
                     connectToSocket(access_token);
@@ -230,12 +247,14 @@ class Content extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    id: state.userReducer.id
+const mapStateToProps = ({userReducer, pushesReducer}) => ({
+    id: userReducer.id,
+    pushesToken: pushesReducer.token
 });
 const mapDispatchToProps = dispatch => ({
     setAuth: _ => dispatch(setAuth(_)),
     setUser: _ => dispatch(setUser(_)),
     setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
+    trySignToPushes: trySignToPushes(dispatch),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

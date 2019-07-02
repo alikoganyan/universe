@@ -1,5 +1,7 @@
 export const p_login = '/login'
+export const p_logout = '/profile/logout'
 export const p_register = '/register'
+export const p_notifications = '/profile/notifications'
 export const p_get_sms = '/get_sms'
 export const p_get_restore_password = '/get_restore_password'
 export const p_check_restore_password = '/check_restore_password'

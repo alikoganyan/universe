@@ -5,10 +5,11 @@ import {
     Dimensions,
     BackHandler,
     AsyncStorage,
-    StatusBar
+    StatusBar,
+    AppState,
 } from "react-native";
 import GlobalFont from "react-native-global-font";
-import { Font, Asset } from "expo";
+import { Font, Asset, Notifications } from "expo";
 import { store } from "./reducers/store";
 import { createRootNavigator } from './screens/Navigator';
 import {
@@ -67,6 +68,7 @@ import devToolsEnhancer from "remote-redux-devtools";
 import { composeWithDevTools } from "redux-devtools-extension/logOnlyInProduction";
 import { connectActionSheet } from "@expo/react-native-action-sheet";
 import { setUser, setAuth, setRegisterUserNumber } from './actions/userActions';
+import { getPushesPermissionStatusAndToken } from './actions/pushesActions';
 import { socket, connectToSocket, disconnectFromSocket } from './utils/socket';
 
 
@@ -88,7 +90,9 @@ export default class AppComponent extends React.Component {
         loaded: false,
         logged: false,
     };
+    appState = AppState.currentState;
     async componentDidMount() {
+        getPushesPermissionStatusAndToken(store.dispatch)();
         AsyncStorage.getItem('user').then(res => {
             value = JSON.parse(res);
             if (value) {
@@ -110,7 +114,17 @@ export default class AppComponent extends React.Component {
         this.setState({ loaded: true });
 
         BackHandler.addEventListener("hardwareBackPress", () => {});
+        AppState.addEventListener('change', this._handleAppStateChange);
+        this._notificationSubscription = Notifications.addListener(this._handleNotification);
     }
+    _handleAppStateChange = (nextAppState) => {
+        this.appState = nextAppState;
+    }
+    _handleNotification = (notification) => {
+        if (this.appState === 'active' && notification.origin === 'received') {
+            Notifications.dismissNotificationAsync(notification.notificationId);
+        }
+    };
     _loadResourcesAsync = async () => {
         return Promise.all([
             // Asset.loadAsync([

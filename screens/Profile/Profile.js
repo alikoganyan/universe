@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { View, Text, Image, Dimensions, Platform, TouchableOpacity, AsyncStorage } from 'react-native';
+import { View, Text, Image, Dimensions, Platform, TouchableOpacity, AsyncStorage, ActivityIndicator } from 'react-native';
+import { Constants } from 'expo';
 import { BackIcon, EllipsisVIcon } from '../../assets/index';
 import styled from 'styled-components';
 import helper from '../../utils/helpers';
@@ -11,8 +12,10 @@ import {
     connectActionSheet,
 } from '@expo/react-native-action-sheet';
 import { socket } from '../../utils/socket';
+import sendRequest from '../../utils/request';
 import Header from './Header';
 import Content from './Content';
+import { p_logout } from '../../constants/api';
 
 const { Colors, fontSize } = helper;
 const { pink } = Colors;
@@ -40,8 +43,18 @@ const LogoutText = styled(Text)`
     padding: 20px;
     font-size: ${fontSize.sl};
 `;
+const Loading = styled(ActivityIndicator)`
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #fff8;
+`;
 class Profile extends Component {
+    state = {
+        loading: false,
+    }
     render() {
+        const { loading } = this.state;
         const { currentChat, user, currentDialog } = this.props;
         const myProfile = !currentChat || currentDialog._id === user._id;
         const myGroup = currentDialog.isGroup ? currentDialog.creator._id === user._id : false;
@@ -56,6 +69,7 @@ class Profile extends Component {
                                 myProfile && <Logout onPress={this.logout}><LogoutText>Выйти из аккаунта</LogoutText></Logout>
                             }
                         </Bottom>
+                        {!!loading && <Loading animating size={'large'} />}
                     </Wrapper>
                 </SafeAreaView>
             </ActionSheetProvider>
@@ -75,8 +89,25 @@ class Profile extends Component {
     }
     logout = async () => {
         const { navigation } = this.props;
-        await AsyncStorage.clear();
-        navigation.navigate('Login');
+        this.setState({
+            loading: true,
+        }, async () => {
+            try {
+                await sendRequest({
+                    r_path: p_logout,
+                    method: 'post',
+                    attr: {
+                        push_token: this.props.pushesToken,
+                        deviceId: Constants.deviceId,
+                    },
+                    failFunc: (e) => console.log('request error: ', e)
+                });
+                await AsyncStorage.clear();
+            } catch (e) {
+                console.log('error: ', e);
+            }
+            this.setState({ loading: false }, () => navigation.navigate('Login'));
+        })
     }
     edit = () => {
         const { navigation, currentDialog } = this.props;
@@ -84,10 +115,16 @@ class Profile extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    user: state.userReducer.user,
-    currentChat: state.messageReducer.currentChat,
-    currentDialog: state.dialogsReducer.currentDialog
+const mapStateToProps = ({
+  userReducer,
+  messageReducer,
+  dialogsReducer,
+  pushesReducer
+}) => ({
+  user: userReducer.user,
+  currentChat: messageReducer.currentChat,
+  currentDialog: dialogsReducer.currentDialog,
+  pushesToken: pushesReducer.token
 });
 const mapDispatchToProps = dispatch => ({
     setUser: _ => dispatch(setUser(_)),

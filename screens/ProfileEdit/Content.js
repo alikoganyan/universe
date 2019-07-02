@@ -16,7 +16,7 @@ import FloatingLabel from "react-native-floating-labels";
 import helper from "../../utils/helpers";
 import { connect } from "react-redux";
 import ImageComponent from '../../common/Image';
-import { ImagePicker, Permissions } from "expo";
+import { ImagePicker, Permissions, Constants } from "expo";
 import { socket } from "../../utils/socket";
 import { p_profile, p_profile_avatar } from "../../constants/api";
 import sendRequest from "../../utils/request";
@@ -367,7 +367,8 @@ class Content extends Component {
                         last_name: last_name || userRedux.lastName,
                         new_password: password || userRedux.password,
                         repeat_password: repassword || userRedux.repassword
-                    }
+                    },
+                    deviceId: Constants.deviceId,
                 },
                 success: res => {
                     alterUser({
