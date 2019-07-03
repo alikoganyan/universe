@@ -1,1 +1,9 @@
-{}
+{
+  "expoServerPort": 19000,
+  "packagerPort": 19001,
+  "packagerPid": 93807,
+  "expoServerNgrokUrl": "https://xz-2vp.dr0kd3n.mobile-front.exp.direct",
+  "packagerNgrokUrl": "https://packager.xz-2vp.dr0kd3n.mobile-front.exp.direct",
+  "ngrokPid": 93820,
+  "devToolsPort": 19002
+}
