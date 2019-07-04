@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, TouchableOpacity } from 'react-native';
+import { Text, View, TouchableOpacity, BackHandler } from 'react-native';
 import styled from 'styled-components';
 import Content from './Content';
 import SafeAreaView from '../../common/SafeAreaView';
@@ -17,7 +17,7 @@ const NoAccount = styled(View)`
 	bottom: 10;
 	width: 100%;
 	align-self: center;
-`; 
+`;
 const Label = styled(Text)`
 	color: ${lightColor};
 	font-size: ${fontSize.text};
@@ -45,6 +45,18 @@ export default class PinCode extends Component {
 	  </SafeAreaView>
 	);
   }
+
+  	componentDidMount() {
+        BackHandler.addEventListener('hardwareBackPress', this._handleBackButton);
+  	}
+
+  	componentWillUnmount() {
+        BackHandler.removeEventListener('hardwareBackPress', this._handleBackButton);
+  	}
+
+  	_handleBackButton = () => {
+	    BackHandler.exitApp();
+	}
 
 	navigate = (e) => {
 	  const { navigation } = this.props;

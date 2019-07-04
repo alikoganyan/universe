@@ -260,7 +260,8 @@ class Dialogs extends Component {
 			dialogs,
 			addMessage,
 			setDialogs,
-			currentRoomId
+			currentRoomId,
+			user
 		} = this.props;
 		const message = e.message._id ? {
 			...e.message
@@ -308,7 +309,6 @@ class Dialogs extends Component {
 				}
 			});
 			setDialogs(newDialogSorted);
-			if (newDialog._id === currentRoomId) addMessage(message);
 		}
 	}
 

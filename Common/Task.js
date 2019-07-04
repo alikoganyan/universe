@@ -386,19 +386,20 @@ class TaskComponent extends Component {
     }
 
     changeState = (e) => {
-        const { activeTask, setActiveTask, setTasks, tasks, currentTask } = this.props;
+        const { activeTask, setActiveTask, setTasks, tasks, currentTask, user } = this.props;
         const newActiveTask = { ...activeTask };
         const { _id, name, description, deadline, performers } = newActiveTask;
         const newTasks = [...tasks];
         const newHolder = newTasks.filter(e => e._id === currentTask._id)[0];
-        const newTask = newHolder.tasks.filter(e => e._id === activeTask._id)[0];
+        const newTask = currentTask.tasks_list.filter(e => e._id === activeTask._id)[0];
         newTask.status = e;
-        const holderId = newHolder.tasks.findIndex(e => e._id === newTask._id);
+        const holderId = newHolder.tasks_list.findIndex(e => e._id === newTask._id);
         const tasksId = newTasks.findIndex(e => e._id === newHolder._id);
         newHolder.tasks[holderId] = newTask;
         newTasks[tasksId] = newHolder;
         setTasks(newTasks);
         setActiveTask(newTask);
+
         sendRequest({
             r_path: p_tasks,
             method: 'patch',

@@ -109,7 +109,8 @@ const TaskStatusAdditional = styled(Text)`
 class TaskPack extends Component {
   render() {
     const { title, last, onPress, tasksPack } = this.props;
-    const taskPack = [...new Set(tasksPack)];
+    const taskPack = [...new Set(tasksPack)].filter(task => task.status === 'set' || task.status === 'accepted');
+    console.log(taskPack);
     let day = '';
     const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
     if (taskPack.length) {
@@ -140,8 +141,19 @@ class TaskPack extends Component {
         <Wrapper last={last}>
           <TaskText>
             <TaskTextInner>
-              <TaskTitle>{title === 'inc' ? 'Все входящие задачи' : 'Все исходящие задачи'}</TaskTitle>
-              {taskPack.length ? <TaskLastMessage numberOfLines={1}>{taskPack[taskPack.length - 1].description}</TaskLastMessage> : null}
+              <TaskTitle>
+                {title === 'inc' ?
+                'Все входящие задачи' :
+                'Все исходящие задачи'}
+              </TaskTitle>
+              {taskPack.length ? (
+                  <TaskLastMessage
+                    numberOfLines={1}
+                  >
+                    {taskPack[taskPack.length - 1].description}
+                  </TaskLastMessage>
+                ) :
+              null}
               <TaskStatus>
                 <TaskStatusTextContainer>
                   <TasksIcon noPaddingAll />

@@ -88,10 +88,10 @@ class Content extends Component {
                       condition = true;
                       break;
                     case 1:
-                      condition = item.status !== 'cancelled';
+                      condition = item.status === 'set' || item.status === 'accepted';
                       break;
                     case 2:
-                      condition = item.status === 'cancelled';
+                      condition = item.status !== 'set' && item.status !== 'accepted';
                       break;
                     default:
                       break;
@@ -99,7 +99,7 @@ class Content extends Component {
                   if (condition) {
                     return (
                       <TaskWrapper>
-                        <TouchableOpacity style={{ flex: 1 }} onLongPress={e => this.handleHold(item)}>
+                        <TouchableOpacity style={{ flex: 1 }} onLongPress={() => this.handleHold(item)}>
                           <TaskComponent
                             triangleLeft={!myTask}
                             triangleRight={myTask}
@@ -148,7 +148,7 @@ class Content extends Component {
     }
 
     editFeed = () => {
-      const { navigate, setTaskReceivers, activeTask} = this.props;
+      const { navigate, setTaskReceivers, activeTask } = this.props;
       setTaskReceivers(activeTask.performers);
       navigate('TaskEdit');
     }

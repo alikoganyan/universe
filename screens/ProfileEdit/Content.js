@@ -10,17 +10,17 @@ import {
 import styled from 'styled-components';
 import FloatingLabel from 'react-native-floating-labels';
 import { connect } from 'react-redux';
-import { ImagePicker, Permissions } from 'expo';
 import { TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index';
 import Button from '../../common/Button';
 import { setRoom } from '../../actions/messageActions';
 import { alterUser, setUser } from '../../actions/userActions';
 import helper from '../../utils/helpers';
 import ImageComponent from '../../common/Image';
-import { socket } from '../../utils/socket';
-import { p_profile, p_profile_avatar } from '../../constants/api';
-import sendRequest from '../../utils/request';
-import DefaultAvatar from '../../common/DefaultAvatar';
+import { ImagePicker, Permissions, Constants } from "expo";
+import { socket } from "../../utils/socket";
+import { p_profile, p_profile_avatar } from "../../constants/api";
+import sendRequest from "../../utils/request";
+import DefaultAvatar from "../../common/DefaultAvatar";
 
 const { Colors, HeaderHeight, fontSize } = helper;
 const { grey2, blue, lightGrey1 } = Colors;
@@ -347,52 +347,54 @@ class Content extends Component {
     };
 
     apply = () => {
-      const { user } = this.state;
-      const { back, alterUser } = this.props;
-      const userRedux = this.props.user;
-      const {
-        first_name,
-        last_name,
-        middle_name,
-        email,
-        password,
-        repassword
-      } = user;
-      this.setState({
-        lastNameError: !last_name ? 'Не менее 2х символов' : '',
-        firstNameError: !first_name ? 'Не менее 2х символов' : '',
-        middleNameError: !middle_name ? 'Не менее 2х символов' : '',
-        emailError: !email ? 'Email не валиден' : ''
-      });
-      if (first_name && last_name && middle_name && email) {
-        sendRequest({
-          r_path: p_profile,
-          method: 'patch',
-          attr: {
-            user: {
-              email: email || userRedux.email,
-              first_name: first_name || userRedux.firstName,
-              middle_name: middle_name || userRedux.patronymic,
-              last_name: last_name || userRedux.lastName,
-              new_password: password || userRedux.password,
-              repeat_password: repassword || userRedux.repassword
-            }
-          },
-          success: (res) => {
-            alterUser({
-              email: email || userRedux.email,
-              first_name: first_name || userRedux.firstName,
-              middle_name: middle_name || userRedux.patronymic,
-              last_name: last_name || userRedux.lastName
+        const { user } = this.state;
+        const { back, alterUser } = this.props;
+        const userRedux = this.props.user;
+        const {
+            first_name,
+            last_name,
+            middle_name,
+            email,
+            password,
+            repassword
+        } = user;
+        this.setState({
+            lastNameError: !last_name ? "Не менее 2х символов" : "",
+            firstNameError: !first_name ? "Не менее 2х символов" : "",
+            middleNameError: !middle_name ? "Не менее 2х символов" : "",
+            emailError: !email ? "Email не валиден" : ""
+        });
+        if (first_name && last_name && middle_name && email) {
+            sendRequest({
+                r_path: p_profile,
+                method: "patch",
+                attr: {
+                    user: {
+                        email: email || userRedux.email,
+                        first_name: first_name || userRedux.firstName,
+                        middle_name: middle_name || userRedux.patronymic,
+                        last_name: last_name || userRedux.lastName,
+                        new_password: password || userRedux.password,
+                        repeat_password: repassword || userRedux.repassword
+                    },
+                    deviceId: Constants.deviceId,
+                },
+                success: () => {
+                    alterUser({
+                        email: email || userRedux.email,
+                        first_name: first_name || userRedux.firstName,
+                        middle_name: middle_name || userRedux.patronymic,
+                        last_name: last_name || userRedux.lastName
+                    });
+                    back();
+                },
+                failFunc: (err) => {
+                    console.log("pa_profile", { err });
+                }
             });
             back();
-          },
-          failFunc: (err) => {
-            console.log('pa_profile', { err });
           }
-        });
-      }
-    };
+        };
 }
 
 const mapStateToProps = state => ({
@@ -403,11 +405,8 @@ const mapStateToProps = state => ({
   user: state.userReducer.user
 });
 const mapDispatchToProps = dispatch => ({
-  getMessages: _ => dispatch(getMessages(_)),
   setRoom: _ => dispatch(setRoom(_)),
   setUser: _ => dispatch(setUser(_)),
-  setDialogs: _ => dispatch(setDialogs(_)),
-  addMessage: _ => dispatch(addMessage(_)),
   alterUser: _ => dispatch(alterUser(_))
 });
 export default connect(

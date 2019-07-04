@@ -9,7 +9,11 @@ import {
     SET_REGISTER_USER_SMS,
     ALTER_USER,
     SET_SETTINGS,
-} from '../actions/userActions'
+} from '../actions/userActions';
+import {
+    ENABLE_USER_PUSHES,
+    DISABLE_USER_PUSHES,
+} from '../actions/pushesActions';
 
 const initialState = {
     user: {},
@@ -45,6 +49,30 @@ const userReducer = (state = initialState, action) => {
             return { ...state, user: { ...state.user, email, first_name, last_name, middle_name } }
         case SET_SETTINGS:
             return { ...state, user: { ...state.user, settings: { ...action.payload } } }
+        case ENABLE_USER_PUSHES: {
+            let settings = state.user && state.user.settings ? state.user.settings : {};
+            settings = {
+                ...settings,
+                notifications: {
+                    ...settings.notifications,
+                    enable: true,
+                    initialized: true,
+                },
+            };
+            return {...state, user: {...state.user, settings}};
+        }
+        case DISABLE_USER_PUSHES: {
+            let settings = state.user && state.user.settings ? state.user.settings : {};
+            settings = {
+                ...settings,
+                notifications: {
+                    ...settings.notifications,
+                    enable: false,
+                    initialized: true,
+                },
+            };
+            return {...state, user: {...state.user, settings}};
+        }
         default:
             return state
     }

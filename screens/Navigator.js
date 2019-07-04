@@ -1,5 +1,5 @@
 import React from 'react';
-import { Dimensions } from 'react-native';
+import { Dimensions, Platform } from 'react-native';
 import {
   createStackNavigator,
   createAppContainer,
@@ -47,6 +47,7 @@ import {
   FeedReceivers,
   TaskEdit,
   GroupEdit,
+  IpadView,
 } from '.';
 
 
@@ -74,6 +75,7 @@ const createRootNavigator = (logged = false) => {
     ),
 
   });
+  const initialRouteName = Platform.isIpad ? 'IpadView' : logged ? 'Dialogs' : 'Login';
   const AppStackNavigator = createStackNavigator({
     Group: { screen: Group },
     Dialogs: {
@@ -125,6 +127,7 @@ const createRootNavigator = (logged = false) => {
     NewTaskReceivers: { screen: NewTaskReceivers },
     NewGroupParticipants: { screen: NewGroupParticipants },
     NewGroup: { screen: NewGroup },
+    IpadView: { screen: IpadView },
     FirstScreen: {
       screen: AppDrawerNavigator,
       transitionSpec: {
@@ -135,7 +138,7 @@ const createRootNavigator = (logged = false) => {
     TaskEdit: { screen: TaskEdit },
     GroupEdit: { screen: GroupEdit },
   }, {
-    initialRouteName: logged ? 'Dialogs' : 'Login',
+    initialRouteName,
     headerMode: 'none'
   });
 

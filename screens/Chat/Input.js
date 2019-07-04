@@ -52,7 +52,7 @@ const Input = styled(TextInput)`
     padding: 0;
     min-height: 30px;
     align-items: flex-start;
-    font-size: ${fontSize.sl};
+    font-size: ${fontSize.input};
     text-align-vertical: bottom;
 `;
 const Left = styled(View)`
@@ -223,34 +223,34 @@ class InputComponent extends Component {
       } = this.props;
       const { text } = this.state;
       if (text) {
-        const { dialogs, currentChat } = this.props;
-        const message = {
-          _id: Math.random().toString(36).substring(7),
-          room: currentRoom,
-          sender: { _id: user._id },
-          text: text.trim(),
-          created_at: new Date(),
-          type: 'text',
-          viewers: []
-        };
-        const newDialogs = [...dialogs];
-        const newDialog = newDialogs.filter(event => event.room === currentChat)[0];
+        // const { dialogs, currentChat } = this.props;
+        // const message = {
+        //   _id: Math.random().toString(36).substring(7),
+        //   room: currentRoom,
+        //   sender: { _id: user._id },
+        //   text: text.trim(),
+        //   created_at: new Date(),
+        //   type: 'text',
+        //   viewers: []
+        // };
+        // const newDialogs = [...dialogs];
+        // const newDialog = newDialogs.filter(event => event.room === currentChat)[0];
         socket.emit('message', { receiver: currentRoom, message: text.trim() });
-        if (newDialog) {
-          newDialog.messages = [...newDialog.messages, message];
-          newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog;
-          const newDialogSorted = newDialogs.sort((a, b) => {
-            if (b.messages.length && a.messages.length) {
-              const aDate = new Date(a.messages[a.messages.length - 1].created_at);
-              const bDate = new Date(b.messages[b.messages.length - 1].created_at);
-              return bDate - aDate;
-            }
-          });
-          setDialogs(newDialogSorted);
-        } else {
-          setRoom(currentDialog._id);
-          setCurrentChat(`${user._id}_${currentDialog._id}`);
-        }
+        // if (newDialog) {
+        //   newDialog.messages = [...newDialog.messages, message];
+        //   newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog;
+        //   const newDialogSorted = newDialogs.sort((a, b) => {
+        //     if (b.messages.length && a.messages.length) {
+        //       const aDate = new Date(a.messages[a.messages.length - 1].created_at);
+        //       const bDate = new Date(b.messages[b.messages.length - 1].created_at);
+        //       return bDate - aDate;
+        //     }
+        //   });
+        //   setDialogs(newDialogSorted);
+        // } else {
+        //   setRoom(currentDialog._id);
+        //   setCurrentChat(`${user._id}_${currentDialog._id}`);
+        // }
       }
       this.setState({ text: '' });
     }

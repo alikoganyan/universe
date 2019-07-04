@@ -57,7 +57,7 @@ class Content extends Component {
 		} = this.props;
 		const dialog = [...dialogs].filter(e => e.room === currentChat)[0];
 		const messages = dialog ? dialog.messages : [];
-		const reversedMessages = [...messages].sort((x, y) => x.timeSent < y.timeSent);
+		const reversedMessages = [...messages].sort((x, y) => new Date(y.created_at) - new Date(x.created_at));
 		return (
 			<>
 				<Wrapper search={search}>
@@ -120,16 +120,16 @@ class Content extends Component {
 	}
 
 	componentDidMount() {
-		const { dialogs, currentRoom, setDialogs, user } = this.props;
+		const { dialogs, currentChat, setDialogs, user } = this.props;
 		InteractionManager.runAfterInteractions(() => {
 			this.setState({
 				animationCompleted: true,
 			});
 		});
-		const dialog = dialogs.filter(dialog => dialog.room === currentRoom)[0];
-		const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentRoom);
+		const dialog = [...dialogs].filter(e => e.room === currentChat)[0];
+		const dialogIndex = [...dialogs].filter(e => e.room === currentChat);
 		const newDialogs = [...dialogs];
-		dialog.messages = [...dialog.messages].map(e => ({ ...e, viewers: [...e.viewers, user._id] }));
+		dialog.messages = dialog ? [...dialog.messages].map(e => ({ ...e, viewers: [...e.viewers, user._id] })) : [];
 		newDialogs[dialogIndex] = dialog;
 		setDialogs(newDialogs);
 	}

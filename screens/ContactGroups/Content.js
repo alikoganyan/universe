@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import {
 	View,
 	Text,
-	SafeAreaView,
 	FlatList,
 	Image,
 	TouchableOpacity,
@@ -10,7 +9,6 @@ import {
 	Dimensions
 } from 'react-native';
 import styled from 'styled-components';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import posed from 'react-native-pose';
 import Collapsible from 'react-native-collapsible';
 import { connect } from 'react-redux';
@@ -31,7 +29,7 @@ import {
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions';
 import { socket } from '../../utils/socket';
 
-const { Colors, sidePadding, HeaderHeight } = helper;
+const { Colors, HeaderHeight } = helper;
 const {
 	green,
 	black,
@@ -178,7 +176,6 @@ class Content extends Component {
 		const { users, collapsed, options, allContacts } = this.state;
 		const { department } = users;
 		const { active } = options;
-		console.log('UPDATE');
 		return (
 			<Wrapper>
 				{allContacts.length ? (
@@ -191,7 +188,7 @@ class Content extends Component {
 							))}
 						</Options>
 						<Animated pose={active === 0 ? 'left' : (active === 1 ? 'center' : 'right')}>
-							<ContactList style={{ width: '100%' }} >
+							<ContactList style={{ width: '100%' }}>
 								<this.AllContacts />
 							</ContactList>
 							<ContactList>
@@ -241,6 +238,7 @@ class Content extends Component {
 											</Collapsible>
 										</Box>
 									)}
+									keyExtractor={item => item.title._id.toString()}
 								/>
 							</ContactList>
 							<ContactList style={{ width: '100%' }}>

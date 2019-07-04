@@ -1,4 +1,5 @@
 export const p_login = '/login';
+export const p_logout = '/profile/logout';
 export const p_register = '/register';
 export const p_get_sms = '/get_sms';
 export const p_get_restore_password = '/get_restore_password';
@@ -21,3 +22,4 @@ export const p_tasks = '/tasks';
 export const p_profile_avatar = '/files/upload_avatar';
 export const p_update_group = '/dialogs/update_group';
 export const p_delete_group = '/dialogs/delete_group';
+export const p_notifications = '/profile/notifications'

@@ -66,13 +66,13 @@ const StyledImageBackground = styled(ImageBackground)`
 `;
 class Content extends Component {
 	render() {
-		const { selectedMessage, animationCompleted } = this.state;
+		const { selectedMessage, animationCompleted, optionsSelector } = this.state;
 		const {
 			search, user, dialogs, currentChat
 		} = this.props;
 		const dialog = [...dialogs].filter(e => e.room === currentChat)[0];
 		const messages = dialog ? dialog.messages : [];
-		const reversedMessages = [...messages].sort((x, y) => x.timeSent < y.timeSent);
+		const reversedMessages = [...messages].reverse().sort((x, y) => new Date(y.created_at) - new Date(x.created_at));
 		return (
 			<>
 				<Wrapper search={search}>
@@ -88,7 +88,8 @@ class Content extends Component {
 								renderItem={({ item, index }) => (
 									<TouchableOpacity
 										key={index}
-										onLongPress={() => this.handleHold(item)}
+										onLongPress={() => this.openOptions(true)}
+										onPress={() => this.handleHold(item)}
 									>
 										<Message>{item}</Message>
 									</TouchableOpacity>
@@ -99,7 +100,7 @@ class Content extends Component {
 					</StyledImageBackground>
 				</Wrapper>
 				<BottomSheet
-					visible={selectedMessage._id}
+					visible={optionsSelector}
 					onBackButtonPress={this.unselect}
 					onBackdropPress={this.unselect}
 				>
@@ -117,6 +118,7 @@ class Content extends Component {
 								<Text>Сделать задачей</Text>
 							</MessageOption>
 							<MessageOption><Text>Редактировать</Text></MessageOption>
+							{selectedMessage.type === 'image' && <MessageOption><Text>Сохранить</Text></MessageOption>}
 							{/* <MessageOption onPress={this.deleteMessage}><Text>Удалить</Text></MessageOption> */}
 						</>
 						)
@@ -131,6 +133,7 @@ class Content extends Component {
 	state = {
 		selectedMessage: {},
 		animationCompleted: false,
+		optionsSelector: false,
 	}
 
 	componentDidMount() {
@@ -173,7 +176,11 @@ class Content extends Component {
 	}
 
 	unselect = () => {
-		this.setState({ selectedMessage: {} });
+		this.setState({ selectedMessage: {}, optionsSelector: false });
+	}
+
+	openOptions = () => {
+		this.setState({ optionsSelector: true });
 	}
 
 	handleHold = (e) => {

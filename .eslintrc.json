@@ -38,6 +38,7 @@
     ],
     "rules":
     {
+        "import/no-cycle": 0,
         "no-console": 0,
         "no-confusing-arrow": 0,
         "comma-dangle": 0,

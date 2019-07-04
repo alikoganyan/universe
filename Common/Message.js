@@ -8,6 +8,7 @@ import MapView from 'react-native-maps';
 import { FileSystem } from 'expo';
 import LightBox from 'react-native-lightbox';
 import helper from '../utils/helpers';
+import { SingleImage } from 'react-native-zoom-lightbox';
 
 const { Colors, fontSize, borderRadius } = helper;
 const { myMessage, interlocatorMessage, pink } = Colors;
@@ -82,12 +83,12 @@ const MessageDate = styled(Text)
     color: ${({ color }) => color || '#ABABAB'};
 `;
 
-const MyMessageImage = styled(Image)
+const MyMessageImage = styled(SingleImage)
 `
-    min-height: 200px;
-    min-width: 100%;
-    max-height: 100%;
-    resize-mode: contain;
+    width: 100%;
+    min-width: 300px;
+    height: 300px;
+
 `;
 const InterlocutorsName = styled(InterlocutorsMessageText)
 `
@@ -177,14 +178,12 @@ class Message extends Component {
             return (myId === sender._id ? (
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <MyMessage background={background} style={{ padding: 0 }}>
-                        <LightBox style={{ flex: 1 }}>
                             <MyMessageImage
-                                source={{ uri: this.image || `http://ser.univ.team${src}`, cache: 'force-cache' }}
+                                uri={`http://ser.univ.team${src}`}
                                 width={width}
                                 height={height}
                                 resizeMode="contain"
                             />
-                        </LightBox>
                         <MessageInfo>
                             <MessageDate color="white">{finalTime}</MessageDate>
                             <Indicator color="white" read={messageRead} />
@@ -198,14 +197,10 @@ class Message extends Component {
                     <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
                         <TriangleRightIcon color={interlocatorMessage} />
                         <InterlocutorsMessage background={background}>
-                            <LightBox style={{ flex: 1 }}>
-                                <MyMessageImage
-                                    source={{ uri: this.image || `http://ser.univ.team${src}`, cache: 'force-cache' }}
-                                    width={width}
-                                    height={height}
-                                    resizeMode="contain"
-                                />
-                            </LightBox>
+                            <MyMessageImage
+                                uri={`http://ser.univ.team${src}`}
+                                resizeMode="contain"
+                            />
                             <MessageInfo>
                                 <MessageDate>{finalTime}</MessageDate>
                             </MessageInfo>

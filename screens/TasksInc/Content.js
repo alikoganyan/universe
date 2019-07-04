@@ -66,12 +66,7 @@ class Content extends Component {
   render() {
 	const { options, animationCompleted } = this.state;
 	const { active } = options;
-	const { user, activeTask, tasks } = this.props;
-	console.log({
-		tasks: tasks.length,
-		user: user.tasks.length,
-		combined: [...tasks, user.tasks].length
-	});
+	const { user, activeTask } = this.props;
 	const flatten = list => list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []);
 	const tasksList = [...user.tasks];
 	const incTasks = flatten(tasksList).filter(e => !!e.performers.filter(e => e._id === user._id)[0]);
@@ -101,11 +96,11 @@ class Content extends Component {
 					  condition = true;
 					  break;
 					case 1:
-					  condition = item.status !== 'cancelled';
-					  break;
-					case 2:
-					  condition = item.status === 'cancelled';
-					  break;
+                      condition = item.status === 'set' || item.status === 'accepted';
+                      break;
+                    case 2:
+                      condition = item.status !== 'set' && item.status !== 'accepted';
+                      break;
 					default:
 					  break;
 				  }

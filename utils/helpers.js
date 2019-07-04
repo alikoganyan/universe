@@ -95,7 +95,8 @@ export default helper = {
         text: 14,
         sl: 12,
         sm: 11,
-        md: 14
+        md: 14,
+        input: 14,
     },
     globalStyle: StyleSheet.create({
         droidSafeArea: {
