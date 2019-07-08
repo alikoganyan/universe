@@ -14,6 +14,7 @@ import { SplashScreen } from './screens';
 import { getPushesPermissionStatusAndToken } from './actions/pushesActions';
 import { connectToSocket } from './utils/socket';
 import { setUser, setAuth } from './actions/userActions';
+import { setDialogsUserId } from './actions/dialogsActions';
 
 const Roboto = require('./assets/fonts/Roboto-Regular.ttf');
 
@@ -45,6 +46,7 @@ export default class AppComponent extends Component {
             if (value) {
                 AsyncStorage.setItem('user', JSON.stringify({ ...value, lastLogin: new Date() }));
                 store.dispatch(setUser(value));
+                store.dispatch(setDialogsUserId(value._id));
                 store.dispatch(setAuth(value.access_token));
                 connectToSocket(value.access_token);
                 setTimeout(() => {

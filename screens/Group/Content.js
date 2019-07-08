@@ -18,6 +18,8 @@ import helper from '../../utils/helpers';
 import { chatBg } from '../../assets/images';
 import { setTaskReceivers } from '../../actions/participantsActions';
 import { setDialogs } from '../../actions/dialogsActions';
+import { d_message } from '../../constants/api';
+import sendRequest from '../../utils/request';
 
 const { HeaderHeight, borderRadius } = helper;
 const Wrapper = styled(View)`
@@ -103,7 +105,7 @@ class Content extends Component {
 									<Text>Сделать задачей</Text>
 								</MessageOption>
 								<MessageOption><Text>Редактировать</Text></MessageOption>
-								{/* <MessageOption onPress={this.deleteMessage}><Text>Удалить</Text></MessageOption> */}
+								<MessageOption onPress={this.deleteMessage}><Text>Удалить</Text></MessageOption>
 							</>
 							)
 						}
@@ -146,7 +148,7 @@ class Content extends Component {
 	}
 
 	deleteMessage = () => {
-		const { dialogs, setDialogs, currentChat } = this.props;
+		const { dialogs, setDialogs, currentChat, currentRoomId } = this.props;
 		const { selectedMessage } = this.state;
 		const dialog = dialogs.filter(dialog => dialog.room === currentChat)[0];
 		const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat);
@@ -154,6 +156,20 @@ class Content extends Component {
 		const newDialogs = [...dialogs];
 		newDialogs[dialogIndex] = dialog;
 		setDialogs(newDialogs);
+		sendRequest({
+			r_path: d_message,
+        	method: 'delete',
+        	attr: {
+        		dialog_id: currentRoomId,
+        		messages: [selectedMessage._id]
+        	},
+        	success: (res) => {
+        		console.log(res);
+        	},
+        	failFunc: (err) => {
+        		console.log(err);
+        	}
+		});
 		this.unselect();
 	}
 
@@ -163,17 +179,6 @@ class Content extends Component {
 
 	handleHold = (e) => {
 		this.setState({ selectedMessage: e });
-		Platform.os === 'ios' && ActionSheetIOS.showActionSheetWithOptions(
-		{
-			options: ['Отменить', 'Ответить', 'Копировать', 'Изменить', 'Удалить'],
-			cancelButtonIndex: 0,
-		},
-		(buttonIndex) => {
-			if (buttonIndex === 1) {
-			/* destructive action */
-			}
-		},
-		);
 	}
 }
 
@@ -183,6 +188,7 @@ const mapStateToProps = state => ({
 	currentRoom: state.messageReducer.currentRoom,
 	currentDialog: state.dialogsReducer.currentDialog,
 	currentChat: state.messageReducer.currentChat,
+	currentRoomId: state.messageReducer.currentRoomId,
 	user: state.userReducer.user,
 });
 const mapDispatchToProps = dispatch => ({

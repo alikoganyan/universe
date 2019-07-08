@@ -22,4 +22,5 @@ export const p_tasks = '/tasks';
 export const p_profile_avatar = '/files/upload_avatar';
 export const p_update_group = '/dialogs/update_group';
 export const p_delete_group = '/dialogs/delete_group';
-export const p_notifications = '/profile/notifications'
+export const p_notifications = '/profile/notifications';
+export const d_message = '/dialogs/delete_messages';

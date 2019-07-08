@@ -19,7 +19,7 @@
     ],
     "ios": {
       "buildNumber": "36",
-      "supportsTablet": false,
+      "supportsTablet": true,
       "bundleIdentifier": "team.amigo.media",
       "infoPlist": {
         "NSCameraUsageDescription": "Apperture uses the camera to add photos to albums and scan QR codes.",

@@ -16,9 +16,10 @@ import { BottomSheet } from 'react-native-btr';
 import { chatBg } from '../../assets/images';
 import helper from '../../utils/helpers';
 import Message from '../../common/Message';
-import { getMessages } from '../../actions/messageActions';
+import sendRequest from '../../utils/request';
 import { setDialogs } from '../../actions/dialogsActions';
 import { setTaskReceivers } from '../../actions/participantsActions';
+import { d_message } from '../../constants/api';
 
 const { HeaderHeight, borderRadius } = helper;
 const Wrapper = styled(View)`
@@ -88,7 +89,7 @@ class Content extends Component {
 								renderItem={({ item, index }) => (
 									<TouchableOpacity
 										key={index}
-										onLongPress={() => this.openOptions(true)}
+										onLongPress={() => this.openOptions(item)}
 										onPress={() => this.handleHold(item)}
 									>
 										<Message>{item}</Message>
@@ -114,12 +115,9 @@ class Content extends Component {
 					{
 						selectedMessage._id && selectedMessage.sender._id === user._id && (
 						<>
-							<MessageOption onPress={this.turnToTask}>
-								<Text>Сделать задачей</Text>
-							</MessageOption>
 							<MessageOption><Text>Редактировать</Text></MessageOption>
 							{selectedMessage.type === 'image' && <MessageOption><Text>Сохранить</Text></MessageOption>}
-							{/* <MessageOption onPress={this.deleteMessage}><Text>Удалить</Text></MessageOption> */}
+							<MessageOption onPress={this.deleteMessage}><Text>Удалить</Text></MessageOption>
 						</>
 						)
 					}
@@ -164,8 +162,30 @@ class Content extends Component {
 	}
 
 	deleteMessage = () => {
-		const { dialogs, setDialogs, currentChat } = this.props;
+		const { dialogs, setDialogs, currentChat, currentRoomId } = this.props;
 		const { selectedMessage } = this.state;
+		console.log({
+			r_path: d_message,
+        	method: 'delete',
+        	attr: {
+        		dialog_id: currentRoomId,
+        		messages: [selectedMessage._id]
+        	}
+		});
+		sendRequest({
+			r_path: d_message,
+        	method: 'delete',
+        	attr: {
+        		dialog_id: currentRoomId,
+        		messages: [selectedMessage._id]
+        	},
+        	success: (res) => {
+        		console.log(res);
+        	},
+        	failFunc: (err) => {
+        		console.log(err);
+        	}
+		});
 		const dialog = dialogs.filter(dialog => dialog.room === currentChat)[0];
 		const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat);
 		dialog.messages = dialog.messages.filter(message => message._id !== selectedMessage._id);
@@ -179,12 +199,14 @@ class Content extends Component {
 		this.setState({ selectedMessage: {}, optionsSelector: false });
 	}
 
-	openOptions = () => {
+	openOptions = (item) => {
+		this.handleHold(item);
 		this.setState({ optionsSelector: true });
 	}
 
 	handleHold = (e) => {
 		this.setState({ selectedMessage: e });
+		console.log(e);
 		Platform.os === 'ios' && ActionSheetIOS.showActionSheetWithOptions(
 		{
 			options: ['Отменить', 'Ответить', 'Копировать', 'Изменить', 'Удалить'],
@@ -202,6 +224,7 @@ class Content extends Component {
 const mapStateToProps = state => ({
 	search: state.messageReducer.search,
 	currentChat: state.messageReducer.currentChat,
+	currentRoomId: state.messageReducer.currentRoomId,
 	user: state.userReducer.user,
 	dialogs: state.dialogsReducer.dialogs,
 	currentDialog: state.dialogsReducer.currentDialog,

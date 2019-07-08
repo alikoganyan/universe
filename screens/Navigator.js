@@ -75,7 +75,7 @@ const createRootNavigator = (logged = false) => {
     ),
 
   });
-  const initialRouteName = Platform.isIpad ? 'IpadView' : logged ? 'Dialogs' : 'Login';
+  const initialRouteName = Platform.isPad ? 'IpadView' : logged ? 'Dialogs' : 'Login';
   const AppStackNavigator = createStackNavigator({
     Group: { screen: Group },
     Dialogs: {

@@ -1,12 +1,11 @@
 import React, { Component } from 'react';
-import { Text, View, Image } from 'react-native';
+import { Text, View } from 'react-native';
 import styled from 'styled-components';
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CheckAllIcon, ImageIcon, ImageIconBlue } from '../assets/index';
 import { connect } from 'react-redux';
 import ImageComponent from './Image';
 import MapView from 'react-native-maps';
 import { FileSystem } from 'expo';
-import LightBox from 'react-native-lightbox';
 import helper from '../utils/helpers';
 import { SingleImage } from 'react-native-zoom-lightbox';
 
@@ -37,6 +36,7 @@ const MyMessageText = styled(Text)
     padding: ${({ noPadding }) => noPadding ? 0 : 10}px;
     padding-bottom: 0;
     color: white;
+    font-size: ${fontSize.textSize};
 `;
 
 const InterlocutorsMessage = styled(MyMessage)

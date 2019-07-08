@@ -13,6 +13,11 @@ export default helper = {
     IconSizeSmall: 11,
     IconSizeLarge: 20,
     borderRadius: 8,
+    links: {
+        termsOfUse: 'https://agreement.univ.center/terms-of-use/',
+        agreement: 'https://agreement.univ.center/agreement/',
+        confidentiality: 'https://agreement.univ.center/confidentiality/',
+    },
     Colors: {
         white: '#fff',
         back: '#000',
@@ -97,6 +102,7 @@ export default helper = {
         sm: 11,
         md: 14,
         input: 14,
+        textSize: 16,
     },
     globalStyle: StyleSheet.create({
         droidSafeArea: {
