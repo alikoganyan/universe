@@ -72,7 +72,7 @@ class Content extends Component {
 			search, user, dialogs, currentChat
 		} = this.props;
 		const dialog = [...dialogs].filter(e => e.room === currentChat)[0];
-		const messages = dialog ? dialog.messages : [];
+		const messages = dialog ? [...dialog.messages] : [];
 		const reversedMessages = [...messages].reverse().sort((x, y) => new Date(y.created_at) - new Date(x.created_at));
 		return (
 			<>
@@ -142,11 +142,13 @@ class Content extends Component {
 			});
 		});
 		const dialog = dialogs.filter(dialog => dialog.participants[0]._id === currentDialog._id || dialog.creator._id === currentDialog._id)[0];
-		const dialogIndex = dialogs.findIndex(dialog => dialog.participants[0]._id === currentDialog._id || dialog.creator._id === currentDialog._id);
-		const messages = [...dialog.messages].map(message => ({ ...message, viewers: [...message.viewers, user._id] }));
-		const newDialogs = [...dialogs];
-		newDialogs[dialogIndex].messages = messages;
-		setDialogs(newDialogs);
+		if (dialog) {
+			const dialogIndex = dialogs.findIndex(dialog => dialog.participants[0]._id === currentDialog._id || dialog.creator._id === currentDialog._id);
+			const messages = [...dialog.messages].map(message => ({ ...message, viewers: [...message.viewers, user._id] }));
+			const newDialogs = [...dialogs];
+			newDialogs[dialogIndex].messages = messages;
+			setDialogs(newDialogs);
+		}
 	}
 
 	turnToTask = () => {

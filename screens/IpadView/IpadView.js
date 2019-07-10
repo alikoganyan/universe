@@ -19,7 +19,7 @@ const Header = styled(View)
 export default () => (
 	// <SafeAreaView>
 		<WebView
-			source={{ uri: 'http://univ.team' }}
+			source={{ uri: 'https://univ.team' }}
 			style={{ flex: 1 }}
 		/>
 	// </SafeAreaView>

@@ -143,7 +143,7 @@ class Content extends Component {
               ) : (
                 <ImageComponent
                   size={80}
-                  source={{ uri: `http://ser.univ.team${image}` }}
+                  source={{ uri: `https://ser.univ.team${image}` }}
                   style={{
                     marginTop: 0, marginBottom: 16, marginRight: 10, marginLeft: 10
                   }}

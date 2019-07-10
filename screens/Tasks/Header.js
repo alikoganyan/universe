@@ -64,7 +64,7 @@ class HeaderComponent extends Component {
           <ToProfile onPress={toProfile}>
             {!image || image === '/images/default_group.png' || image === '/images/default_avatar.jpg'
               ? <DefaultAvatar size="header" style={{ marginLeft: 10 }} />
-              : <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size="header" />
+              : <ImageComponent source={{ uri: `https://ser.univ.team${image}` }} size="header" />
                         }
             <Info>
               <InfoChatName>{first_name ? `${first_name} ${last_name}` : phone_number}</InfoChatName>

@@ -91,7 +91,7 @@ class HeaderComponent extends Component {
                 <TouchableOpacity onPress={this.toProfile}>
                   {!user.image || user.image === '/images/default_group.png' || user.image === '/images/default_avatar.jpg'
                     ? <DefaultAvatar size="header" style={{ marginLeft: 10 }} />
-                    : <ImageComponent source={{ uri: `http://ser.univ.team${user.image}` }} size="header" />
+                    : <ImageComponent source={{ uri: `https://ser.univ.team${user.image}` }} size="header" />
                                 }
                 </TouchableOpacity>
               </>

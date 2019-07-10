@@ -138,7 +138,11 @@ class Dialogs extends Component {
 		socket.on('need_update', this.socketNeedsUpdate);
 		socket.on('dialog_opened', this.socketDialogOpened);
 		socket.on('new_group', this.socketGetGroup);
-
+		socket.on('new_geo', (e) => {
+			const { geo_data, room, sender } = e;
+			console.log(e);
+			const newMessage = { ...e, type: 'geo', viewers: [], created_at: new Date(),  };
+		});
 		this.setState({ congratulations: !user.first_name });
 	}
 

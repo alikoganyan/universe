@@ -239,7 +239,7 @@ class TaskComponent extends Component {
                                 {
                                     !creator.image || creator.image === '/images/default_group.png' || creator.image === '/images/default_avatar.jpg' ?
                                         <DefaultAvatar id={_id} size="header" /> :
-                                        <ImageComponent size="header" source={{ uri: `http://ser.univ.team${creator.image}` }} />
+                                        <ImageComponent size="header" source={{ uri: `https://ser.univ.team${creator.image}` }} />
                                 }
                             </View>
                         )
@@ -281,7 +281,7 @@ class TaskComponent extends Component {
                                 {
                                     !image || image === '/images/default_group.png' || image === '/images/default_avatar.jpg' ?
                                         <DefaultAvatar id={performer._id} size="header" /> :
-                                        <ImageComponent size="header" source={{ uri: `http://ser.univ.team${image}` }} />
+                                        <ImageComponent size="header" source={{ uri: `https://ser.univ.team${image}` }} />
                                 }
                                 <ReceiverInfo>
                                     <Text>

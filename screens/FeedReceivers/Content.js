@@ -187,7 +187,7 @@ class Content extends Component {
                                                                 {
                                                                     !e.image || e.image === '/images/default_group.png' || e.image === '/images/default_avatar.jpg'
                                                                       ? <DefaultAvatar size={36} id={e._id} />
-                                                                      : <ImageComponent size={36} source={{ uri: `http://ser.univ.team${e.image}` }} />
+                                                                      : <ImageComponent size={36} source={{ uri: `https://ser.univ.team${e.image}` }} />
                                                                 }
                                                                 <ContactInfo>
                                                                   <ContactName>{e.first_name ? `${e.first_name} ${e.last_name}` : e.phone_number}</ContactName>

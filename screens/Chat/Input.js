@@ -205,14 +205,21 @@ class InputComponent extends Component {
     }
 
     selectGeo = async () => {
+      const { currentDialog } = this.props;
       this.unselect();
       const { status } = await Permissions.askAsync(Permissions.LOCATION);
+      const locationEnabled = await Location.getProviderStatusAsync().locationServicesEnabled;
       if (status !== 'granted') {
         alert('no location permission');
         return;
       }
-      const location = await Location.getCurrentPositionAsync({});
-      // this.setState({ location });
+      if (!locationEnabled) {
+        alert('location services are not enabled');
+        return;
+      }
+      const location = await Location.getCurrentPositionAsync();
+      console.log('geo', { receiver: currentDialog._id, geo_data: location.coords });
+      socket.emit('geo', { receiver: currentDialog._id, geo_data: location.coords });
     };
 
     discardSelect = () => { }
@@ -277,7 +284,6 @@ const mapDispatchToProps = dispatch => ({
   addMessage: _ => dispatch(addMessage(_)),
   startSearch: _ => dispatch(startSearch(_)),
   stopSearch: _ => dispatch(stopSearch(_)),
-  getMessages: _ => dispatch(getMessages(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),

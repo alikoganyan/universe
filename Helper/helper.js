@@ -1,7 +1,7 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native';
 import io from 'socket.io-client';
 // import { API_URL, API_PORT } from 'react-native-dotenv'
-const socketUrl = `http://80.93.191.147:3000`
+const socketUrl = `https://80.93.191.147:3000`
 export default helper = {
     IconDarkColor: '#979897',
     IconLightColor: '#ABABAB',

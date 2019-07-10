@@ -46,7 +46,7 @@ const DialogTextInner = styled(View)`
   width: ${Dimensions.get('window').width - 120}px;
 `;
 const DialogTitle = styled(Text)`
-  font-size: ${fontSize.md};
+  font-size: ${fontSize.dialogName};
   width: ${Dimensions.get('window').width - 20}px;
   color: #000000;
   font-weight: 400;
@@ -188,7 +188,7 @@ class Content extends Component {
               <DefaultAvatar isGroup={isGroup} id={item._id} size="large" /> :
               (
                   <DialogImage
-                    source={{ uri: `http://ser.univ.team${chatImage}` }}
+                    source={{ uri: `https://ser.univ.team${chatImage}` }}
                     size="large"
                   />
               )
@@ -210,9 +210,11 @@ class Content extends Component {
                           {type === 'image' && <FilesRedIcon noPaddingAll size={10} />}
                           {type === 'task' && <TaskIcon noPaddingAll size={10} />}
                           {type === 'geo' && <LocationIcon noPaddingAll size={10} />}
-                          <LastFileItemText>
-                            {filename.length > 8 ? filename.substr(-8) : filename}
-                          </LastFileItemText>
+                          {filename ? (
+                            <LastFileItemText>
+                              {filename.length > 8 ? filename.substr(-8) : filename}
+                            </LastFileItemText>
+                          ) : null}
                         </LastFileItem>
                         );
                       })}

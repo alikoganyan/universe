@@ -67,7 +67,7 @@ const RecieverComponent = (props) => {
       <View style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
         {image === '/images/default_avatar.jpg'
           ? <DefaultAvatar />
-          : <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} />
+          : <ImageComponent source={{ uri: `https://ser.univ.team${image}` }} />
             }
         <View style={{ flex: 1, marginLeft: 10 }}>
           <RecieverInfo>

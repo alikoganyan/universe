@@ -199,7 +199,7 @@ class Content extends Component {
                                                                     ? <DefaultAvatar size={36} id={e._id} />
                                                                     : (
                                                                       <ImageComponent
-                                                                        source={{ uri: `http://ser.univ.team${e.image}` }}
+                                                                        source={{ uri: `https://ser.univ.team${e.image}` }}
                                                                         size={36}
                                                                       />
                                                                     )

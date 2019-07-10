@@ -4,7 +4,7 @@ import { setAuth, setError } from '../actions/userActions';
 import { disconnectFromSocket, socket } from './socket';
 import NavigationProvider from './NavigationProvider';
 
-const SERVER_URL = 'http://ser.multiverse.plus/api';
+const SERVER_URL = 'https://ser.univ.team/api';
 
 /**
  * Request function to get data from server

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, Dimensions } from 'react-native';
 import styled from 'styled-components';
 import { TriangleLeftIcon, TriangleRightIcon, CheckIcon, CheckAllIcon, ImageIcon, ImageIconBlue } from '../assets/index';
 import { connect } from 'react-redux';
@@ -77,18 +77,14 @@ const MessageInfo = styled(View)
     padding: 0 10px 5px;
     width: 100%;
 `;
-
 const MessageDate = styled(Text)
 `
     color: ${({ color }) => color || '#ABABAB'};
 `;
-
 const MyMessageImage = styled(SingleImage)
 `
-    width: 100%;
-    min-width: 300px;
-    height: 300px;
-
+    min-width: 100%;
+    height: 250px;
 `;
 const InterlocutorsName = styled(InterlocutorsMessageText)
 `
@@ -163,7 +159,19 @@ const Indicator = ({ read = false, color }) => read ?
 class Message extends Component {
     render() {
         const { children, myId, background, withImage } = this.props;
-        const { viewers, text, sender, src, type, width, height, latitude, latitudeDelta, longitude, longitudeDelta, created_at, filename, size } = children;
+        const {
+            viewers,
+            text,
+            sender,
+            src,
+            type,
+            width,
+            height,
+            created_at,
+            filename,
+            size,
+            data
+        } = children;
         const date = new Date(created_at);
         const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'];
         const day = daysOfTheWeek[date.getDay()];
@@ -171,15 +179,17 @@ class Message extends Component {
         const hours = date.getHours() >= 10 ? date.getHours() : `0${date.getHours()}`;
         const time = `${hours}:${minutes}`;
         const finalTime = Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time;
-        const fileSize = size / 1024 > 1024 ? `${(size / (1024 * 2)).toFixed(1)}МБ` : `${(size / 1024).toFixed(1)}КБ`;
+        const fileSize = size / 1024 > 1024 ?
+            `${(size / (1024 * 2)).toFixed(1)}МБ` :
+            `${(size / 1024).toFixed(1)}КБ`;
         const messageRead = !!viewers.filter(e => e !== myId).length;
         if (type === 'image') {
-            this.readFile(src.split('file://')[1] ? src : `http://ser.univ.team${src}`, filename);
+            this.readFile(src.split('file://')[1] ? src : `https://ser.univ.team${src}`, filename);
             return (myId === sender._id ? (
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
                     <MyMessage background={background} style={{ padding: 0 }}>
                             <MyMessageImage
-                                uri={`http://ser.univ.team${src}`}
+                                uri={`https://ser.univ.team${src}`}
                                 width={width}
                                 height={height}
                                 resizeMode="contain"
@@ -193,12 +203,25 @@ class Message extends Component {
                 </View>
             ) : (
                 <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    {withImage ? <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} /> : null}
-                    <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
+                    {withImage ? (
+                        <ImageComponent
+                            style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                            size={30}
+                            source={{ uri: `https://ser.univ.team${sender.image}` }}
+                        />
+                    ) : null}
+                    <View
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            position: 'relative',
+                            left: withImage ? -5 : 0
+                        }}
+                    >
                         <TriangleRightIcon color={interlocatorMessage} />
                         <InterlocutorsMessage background={background}>
                             <MyMessageImage
-                                uri={`http://ser.univ.team${src}`}
+                                uri={`https://ser.univ.team${src}`}
                                 resizeMode="contain"
                             />
                             <MessageInfo>
@@ -225,8 +248,21 @@ class Message extends Component {
                 </View>
             ) : (
             <View style={{ display: 'flex', flexDirection: 'row' }}>
-                    {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
-                    <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -5 : 0 }}>
+                    {withImage && (
+                        <ImageComponent
+                            style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                            size={30}
+                            source={{ uri: `https://ser.univ.team${sender.image}` }}
+                        />
+                    )}
+                    <View
+                        style={{
+                            display: 'flex',
+                            flexDirection: 'row',
+                            position: 'relative',
+                            left: withImage ? -5 : 0
+                        }}
+                    >
                         <TriangleRightIcon color={background || interlocatorMessage} />
                         <InterlocutorsMessage background={background || interlocatorMessage}>
                             {withImage && (
@@ -252,23 +288,23 @@ class Message extends Component {
                 display: 'flex',
                 alignItems: 'flex-end'
             }}>
-                <MyMessage style={{ height: 150 }}>
+                <MyMessage
+                    style={{ height: 150, width: 300, marginLeft: 20 }}
+                >
                     <MapView
+                        scrollEnabled={false}
+                        rotateEnabled={false}
+                        pitchEnabled={false}
+                        zoomEnabled={false}
                         style={{ width: '99%', height: '98%', alignSelf: 'center' }}
                         region={{
-                            latitude,
-                            longitude,
-                            latitudeDelta,
-                            longitudeDelta,
+                          ...data,
+                          latitudeDelta: 0.0922,
+                          longitudeDelta: 0.0421,
                         }}
-                        tracksViewChanges={false} >
+                        tracksViewChanges={false}>
                         <MapView.Marker
-                            coordinate={{
-                                latitude,
-                                longitude,
-                                latitudeDelta,
-                                longitudeDelta,
-                            }}
+                            coordinate={data}
                             tracksViewChanges={false}
                         />
                     </MapView>
@@ -284,31 +320,42 @@ class Message extends Component {
             ) : (
                 <View style={{
                 display: 'flex',
-                alignItems: 'flex-end',
-                flexDirection: 'column'
+                alignItems: 'flex-start',
+                flexDirection: 'row'
             }}>
-                <InterlocutorsMessage style={{ height: 150, marginLeft: 20 }} background={pink}>
+                <ImageComponent
+                    style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                    size={30}
+                    source={{ uri: `https://ser.univ.team${sender.image}` }}
+                />
+                <InterlocutorsMessage
+                    style={{ height: 150, width: 300, marginLeft: 20 }}
+                    background={pink}
+                >
                     <MapView
-                        style={{ width: '99%', height: '98%', alignSelf: 'center' }}
-                        region={{
-                            latitude,
-                            longitude,
-                            latitudeDelta,
-                            longitudeDelta,
+                        scrollEnabled={false}
+                        rotateEnabled={false}
+                        pitchEnabled={false}
+                        zoomEnabled={false}
+                        style={{
+                            flex: 1,
+                            width: '100%',
+                            height: Dimensions.get('window').height,
+                            minHeight: 150,
                         }}
-                        tracksViewChanges={false}>
+                        region={{
+                          ...data,
+                          latitudeDelta: 0.0922,
+                          longitudeDelta: 0.0421,
+                        }}
+                        >
                         <MapView.Marker
-                            coordinate={{
-                                latitude,
-                                longitude,
-                                latitudeDelta,
-                                longitudeDelta,
-                            }}
+                            coordinate={data}
                             tracksViewChanges={false}
                         />
                     </MapView>
                     <MapViewStreet>
-                        <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
+                        <MapViewStreetText>ул. SМаши Порываевой, 34</MapViewStreetText>
                     </MapViewStreet>
                 </InterlocutorsMessage>
 
@@ -340,8 +387,21 @@ class Message extends Component {
                 </View>
                 ) : (
                     <View style={{ display: 'flex', flexDirection: 'row' }}>
-                        {withImage && <ImageComponent style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }} size={30} source={{ uri: `http://ser.univ.team${sender.image}` }} />}
-                        <View style={{ display: 'flex', flexDirection: 'row', position: 'relative', left: withImage ? -10 : 0 }}>
+                        {withImage && (
+                            <ImageComponent
+                                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                                size={30}
+                                source={{ uri: `https://ser.univ.team${sender.image}` }}
+                            />
+                        )}
+                        <View
+                            style={{
+                                display: 'flex',
+                                flexDirection: 'row',
+                                position: 'relative',
+                                left: withImage ? -10 : 0
+                            }}
+                        >
                             <TriangleRightIcon color={background || interlocatorMessage} />
                             <InterlocutorsMessage background={background || interlocatorMessage}>
                                 {withImage && (

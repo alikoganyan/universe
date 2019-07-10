@@ -43,7 +43,7 @@ const TaskTextInner = styled(View)
 `;
 const TaskTitle = styled(Text)
 `
-	font-size: ${fontSize.header};
+	font-size: ${fontSize.taskTitle};
 	margin-bottom: 1px;
 `;
 const LastMessageDate = styled(Text)
@@ -156,7 +156,7 @@ class Tasks extends Component {
 	        <Wrapper>
 	          <ImageComponent
 	            size={50}
-	            source={{ uri: `http://ser.univ.team${image}` }}
+	            source={{ uri: `https://ser.univ.team${image}` }}
 	            style={{ marginRight: sidePadding }}
 	          />
 	          <TaskText>

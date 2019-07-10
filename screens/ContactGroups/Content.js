@@ -216,7 +216,7 @@ class Content extends Component {
 															(!e.image || e.image === '/images/default_avatar.jpg') ?
 																<DefaultAvatar isGroup={e.isGroup} id={e._id} size={36} /> : (
 																	<ContactImage
-																		source={{ uri: `http://ser.univ.team${e.image}` }}
+																		source={{ uri: `https://ser.univ.team${e.image}` }}
 																	/>
 																)
 															}
@@ -302,7 +302,7 @@ class Content extends Component {
 						<BoxInnerItem key={_id} onPress={() => this.toChat(item)}>
 							{ !image || image === '/images/default_avatar.jpg' || image === '/images/default_group.png' ?
 			                	<DefaultAvatar id={item._id} size={36} /> :
-								<ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+								<ContactImage source={{ uri: `https://ser.univ.team${image}` }} />
 			                }
 							<ContactInfo>
 								<ContactName>{chatName}</ContactName>
@@ -342,7 +342,7 @@ class Content extends Component {
 						{
 							image === '/images/default_avatar.jpg'
 							? <DefaultAvatar isGroup={isGroup} id={_id} size={36} />
-							: <ContactImage source={{ uri: `http://ser.univ.team${image}` }} />
+							: <ContactImage source={{ uri: `https://ser.univ.team${image}` }} />
 						}
 					<ContactInfo>
 						<ContactName>{name}</ContactName>

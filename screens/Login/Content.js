@@ -123,8 +123,15 @@ class Content extends Component {
 					</Title>
 				</View>
 				<PhoneNumber err={invalidPhone}>
-					<Input
-						style={{ width: '20%' }}
+					<StyledInput
+						style={{
+							margin: 0,
+							width: '20%',
+							textAlign: 'left',
+							paddingLeft: 10,
+							color: invalidPhone ? pink : black,
+							borderColor: invalidPhone ? pink : lightGrey1
+						}}
 						inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
 						keyboardType="phone-pad"
 						value={country}

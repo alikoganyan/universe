@@ -96,13 +96,16 @@ export default helper = {
         xl: 30,
         xs: 24,
         large: 20,
-        header: 17,
+        header: 18,
         text: 14,
         sl: 12,
         sm: 11,
         md: 14,
-        input: 14,
+        input: 16,
         textSize: 16,
+        chatHeaderName: 17,
+        dialogName: 15,
+        taskTitle: 16,
     },
     globalStyle: StyleSheet.create({
         droidSafeArea: {

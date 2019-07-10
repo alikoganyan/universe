@@ -181,8 +181,8 @@ class Content extends Component {
 																<ImageComponent
 																	size={33}
 																	source={{ uri: e.image ?
-																		`http://ser.univ.team${e.image}` :
-																		'http://simpleicon.com/wp-content/uploads/user1.png'
+																		`https://ser.univ.team${e.image}` :
+																		'https://simpleicon.com/wp-content/uploads/user1.png'
 																	}}
 																/>
 															)

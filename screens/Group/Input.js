@@ -4,13 +4,13 @@ import {
 } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { ImagePicker, DocumentPicker, Permissions } from 'expo';
+import { ImagePicker, Permissions, Location } from 'expo';
 import posed from 'react-native-pose';
 import { BottomSheet } from 'react-native-btr';
 import { ImageIconBlue, PapperPlaneIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
 import {
-  addMessage, startSearch, stopSearch, getMessages
+  addMessage, startSearch, stopSearch
 } from '../../actions/messageActions';
 import { p_send_file } from '../../constants/api';
 import { setDialogs } from '../../actions/dialogsActions';
@@ -143,7 +143,7 @@ class InputComponent extends Component {
 
     selectPhoto = async () => {
       const {
-        currentChat, addMessage, setDialogs, dialogs, user
+        currentChat, setDialogs, dialogs
       } = this.props;
       this.unselect();
       const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
@@ -165,14 +165,6 @@ class InputComponent extends Component {
       });
       form.append('room', currentChat);
       if (!result.cancelled) {
-        const message = {
-          room: currentChat,
-          sender: { ...user },
-          created_at: new Date(),
-          type: 'image',
-          src: result.uri,
-          viewers: [],
-        };
         const newDialogs = [...dialogs];
         // const index = newDialogs.findIndex(e => e.room === currentChat);
         // newDialogs[index] = res.dialog;
@@ -201,18 +193,28 @@ class InputComponent extends Component {
     }
 
     selectGeo = async () => {
+      const { currentRoom } = this.props;
       this.unselect();
       const { status } = await Permissions.askAsync(Permissions.LOCATION);
+      const locationEnabled = await Location.getProviderStatusAsync().locationServicesEnabled;
       if (status !== 'granted') {
         alert('no location permission');
+        return;
       }
+      if (!locationEnabled) {
+        alert('location services are not enabled');
+        return;
+      }
+      const location = await Location.getCurrentPositionAsync();
+      console.log('geo_group', { receiver: currentRoom._id, geo_data: location.coords });
+      socket.emit('geo_group', { receiver: currentRoom._id, geo_data: location.coords });
     }
 
     discardSelect = () => { }
 
     sendMessage = () => {
       const {
-        currentChat, user, setDialogs, dialogs
+        currentChat
       } = this.props;
       // const {
       //   _id, first_name, last_name, middle_name, image
@@ -269,7 +271,6 @@ const mapDispatchToProps = dispatch => ({
   addMessage: _ => dispatch(addMessage(_)),
   startSearch: _ => dispatch(startSearch(_)),
   stopSearch: _ => dispatch(stopSearch(_)),
-  getMessages: _ => dispatch(getMessages(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
 });
 export default connect(mapStateToProps, mapDispatchToProps)(InputComponent);

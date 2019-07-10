@@ -113,7 +113,7 @@ class Content extends Component {
                         ? <DefaultAvatar size="xs" style={{ marginRight: 10 }} id={creator._id} />
                         : (
                           <ImageComponent
-                            source={{ uri: `http://ser.univ.team${creator.image}` }}
+                            source={{ uri: `https://ser.univ.team${creator.image}` }}
                             size="xs"
                             style={{ marginRight: 10 }}
                           />

@@ -36,7 +36,7 @@ const Info = styled(View)`
 `;
 const InfoChatName = styled(Text)`
     color: black;
-    font-size: ${fontSize.text};
+    font-size: ${fontSize.chatHeaderName};
 `;
 const InfoParticipants = styled(Text)`
     color: #5F7991;
@@ -115,7 +115,7 @@ class HeaderComponent extends Component {
                 <ToProfile onPress={this.toProfile}>
                   {!image || image === '/images/default_avatar.jpg' || image === '/images/default_group.png' ?
                     <DefaultAvatar id={_id} size="header" /> :
-                    <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size="header" />
+                    <ImageComponent source={{ uri: `https://ser.univ.team${image}` }} size="header" />
                   }
                   <Info>
                     <InfoChatName>{name}</InfoChatName>

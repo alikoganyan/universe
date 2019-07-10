@@ -200,7 +200,7 @@ class Content extends Component {
 
             {image === '/images/default_avatar.jpg'
               ? <DefaultAvatar size={30} style={{ marginRight: 10 }} />
-              : <Sendermage source={{ uri: `http://ser.univ.team${image}` }} />
+              : <Sendermage source={{ uri: `https://ser.univ.team${image}` }} />
 						}
             <SenderInfo>
               <SenderName>
@@ -349,7 +349,7 @@ class Content extends Component {
         <ImageComponent
           style={{ position: 'relative', left: 5, bottom: 5 }}
           source={{
-						  uri: `http://ser.univ.team${image}`,
+						  uri: `https://ser.univ.team${image}`,
           }}
         />
       )

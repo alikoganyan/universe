@@ -93,7 +93,7 @@ class HeaderComponent extends Component {
                                 !participants.length
                                   ? (
                                     <TouchableOpacity onPress={toProfile}>
-                                      <ImageComponent source={{ uri: `http://ser.univ.team${image}` }} size="header" />
+                                      <ImageComponent source={{ uri: `https://ser.univ.team${image}` }} size="header" />
                                     </TouchableOpacity>
                                   ) : <CheckGreyIcon size={22} noPaddingAll left onPress={this.addParticipants} />
                             }
