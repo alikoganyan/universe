@@ -196,18 +196,17 @@ class InputComponent extends Component {
       const { currentRoom } = this.props;
       this.unselect();
       const { status } = await Permissions.askAsync(Permissions.LOCATION);
-      const locationEnabled = await Location.getProviderStatusAsync().locationServicesEnabled;
       if (status !== 'granted') {
         alert('no location permission');
         return;
       }
-      if (!locationEnabled) {
-        alert('location services are not enabled');
-        return;
-      }
-      const location = await Location.getCurrentPositionAsync();
-      console.log('geo_group', { receiver: currentRoom._id, geo_data: location.coords });
-      socket.emit('geo_group', { receiver: currentRoom._id, geo_data: location.coords });
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          socket.emit('geo_group', { receiver: currentRoom._id, geo_data: position.coords });
+        },
+        error => alert(error.message),
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+      );
     }
 
     discardSelect = () => { }

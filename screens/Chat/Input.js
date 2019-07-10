@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import {
-  View, Text, TextInput, Dimensions, TouchableOpacity, Platform
+  View, Text, TextInput, Dimensions, TouchableOpacity, Platform, Linking, PermissionsAndroid
 } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -137,8 +137,7 @@ class InputComponent extends Component {
       pickerOpened: false,
     }
 
-    componentDidMount() {
-    }
+    componentDidMount() {}
 
     unselect = () => {
       this.setState({ pickerOpened: false });
@@ -207,26 +206,42 @@ class InputComponent extends Component {
     selectGeo = async () => {
       const { currentDialog } = this.props;
       this.unselect();
-      const { status } = await Permissions.askAsync(Permissions.LOCATION);
-      const locationEnabled = await Location.getProviderStatusAsync().locationServicesEnabled;
-      if (status !== 'granted') {
-        alert('no location permission');
-        return;
+      // const { status } = await Permissions.askAsync(Permissions.LOCATION);
+      // alert(status);
+      // if (status !== 'granted') {
+      //   alert('no location permission');
+      //   Linking.openURL('app-settings:');
+      //   return;
+      // }
+      try {
+        const granted = await PermissionsAndroid.request(
+          PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+          {},
+        );
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          alert('You can use the location');
+          navigator.geolocation.getCurrentPosition(
+            (position) => {
+              alert('geo sent')
+              socket.emit('geo', { receiver: currentDialog._id, geo_data: position.coords });
+            },
+            error => alert(error.message),
+            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+          );
+        } else {
+          alert('location permission denied');
+        }
+      } catch (err) {
+        alert(err);
       }
-      if (!locationEnabled) {
-        alert('location services are not enabled');
-        return;
-      }
-      const location = await Location.getCurrentPositionAsync();
-      console.log('geo', { receiver: currentDialog._id, geo_data: location.coords });
-      socket.emit('geo', { receiver: currentDialog._id, geo_data: location.coords });
+      
     };
 
     discardSelect = () => { }
 
     sendMessage = () => {
       const {
-        currentDialog, currentRoom, user, setDialogs, setCurrentChat, setRoom
+        currentRoom
       } = this.props;
       const { text } = this.state;
       if (text) {
