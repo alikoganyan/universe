@@ -211,7 +211,9 @@ class Content extends Component {
         invalidPhone: false,
     }
 
-    componentDidMount = () => { }
+    componentDidMount = () => {
+    	// console.log({ rn: DeviceInfo.getDeviceId(), ex: Constants.deviceId });
+    }
 
     storeUserData = async (user) => {
         try {
@@ -222,7 +224,7 @@ class Content extends Component {
     };
 
     login = () => {
-        const { setRegisterUserNumber } = this.props;
+        const { setRegisterUserNumber, pushesToken } = this.props;
         const { country, phone, password } = this.state;
         const phone_number = country.concat(phone);
         if (!phone || !phone.length) this.setState({ invalidPhone: true });
@@ -234,12 +236,11 @@ class Content extends Component {
             attr: {
                 phone_number,
                 password,
-                push_token: this.props.pushesToken,
-                deviceId: Constants.deviceId,
-                
+                push_token: pushesToken,
+                deviceId: Constants.deviceId,  
             },
             success: (res) => {
-                const { setAuth, setUser, navigate } = this.props;
+                const { setAuth, setUser, navigate, trySignToPushes } = this.props;
                 const {
                   access_token,
                   data,
@@ -254,7 +255,7 @@ class Content extends Component {
                 setUser(data);
                 this.storeUserData({ ...data, password, access_token });
                 if (!isPushesAsked || isPushesEnabled) {
-                    this.props.trySignToPushes(true);
+                    trySignToPushes(true);
                 }
                 this.setState({ loading: false });
                 setTimeout(() => {

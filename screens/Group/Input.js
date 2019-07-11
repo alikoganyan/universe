@@ -4,7 +4,7 @@ import {
 } from 'react-native';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { ImagePicker, Permissions, Location } from 'expo';
+import { ImagePicker, Permissions } from 'expo';
 import posed from 'react-native-pose';
 import { BottomSheet } from 'react-native-btr';
 import { ImageIconBlue, PapperPlaneIcon } from '../../assets/index';
