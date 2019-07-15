@@ -7,38 +7,40 @@ import { connect } from 'react-redux';
 import { ImagePicker, Permissions } from 'expo';
 import posed from 'react-native-pose';
 import { BottomSheet } from 'react-native-btr';
-import { ImageIconBlue, PapperPlaneIcon } from '../../assets/index';
+import { ImageIconBlue, PapperPlaneIcon, CloseIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
 import {
   addMessage, startSearch, stopSearch
 } from '../../actions/messageActions';
-import { p_send_file } from '../../constants/api';
+import { p_send_file, p_edit_message } from '../../constants/api';
 import { setDialogs } from '../../actions/dialogsActions';
+import { editMessage } from '../../actions/messageActions';
 import sendRequest from '../../utils/request';
 import { socket } from '../../utils/socket';
 
 const {
-  sidePadding, borderRadius, HeaderHeight, fontSize
+  sidePadding, borderRadius, HeaderHeight, fontSize, Colors
 } = helper;
+const { blue } = Colors;
 const FilePickerPosed = posed.View({
   visible: { bottom: 10 },
   hidden: { bottom: -250 }
 });
 const Wrapper = styled(View)`
     background: white;
-    width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
+    width: ${({edit}) => edit ? Dimensions.get('window').width : Dimensions.get('window').width - (sidePadding * 2)}px;
     left: 0;
-    bottom: 10px;
+    bottom: ${({edit}) => edit ? 0 : 10}px;
     align-self: center;
-    padding: 0 15px;
+    padding: ${({edit}) => edit ? `0 ${sidePadding}` : `0 15`}px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: ${Platform.OS === 'ios' ? 'center' : 'flex-start'};
     border-radius: ${borderRadius};
-    border-width: 1;
+    border-width: ${({edit}) => edit ? 0 : 1 };
     border-color: #ddd;
-    border-bottom-width: 1;
+    border-top-width: 1;
     min-height: 44px;
     max-height: 65px;
 `;
@@ -90,13 +92,49 @@ const Shadow = styled(TouchableOpacity)`
     top: -${Dimensions.get('window').height - HeaderHeight - 3};
     z-index: 2;
 `;
+const EditBox = styled(View)`
+    width: ${Dimensions.get('window').width}px;
+    padding: 0 ${sidePadding}px;
+    padding-right: 5px;
+    height: 60px;
+    background: white;
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+`;
+const EditMessage = styled(Text)`
+  color: ${blue};
+`;
+const EditMessageText = styled(Text)`
+  
+`;
+const EditBoxLeft = styled(View)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 80%;
+`; 
 class InputComponent extends Component {
   render() {
-    const { text, pickerOpened } = this.state;
+    const { text, pickerOpened, edit } = this.state;
+    const { editedMessage } = this.props;
     return (
       <>
-        {pickerOpened && <Shadow activeOpacity={1} onPress={this.unselect} />}
-        <Wrapper>
+        {
+          edit ? (
+            <EditBox>
+              <EditBoxLeft>
+                <EditMessage>Редактировать сообщение</EditMessage>
+                <EditMessageText numberOfLines={1}>{editedMessage.text}</EditMessageText>
+              </EditBoxLeft>
+              <Right><CloseIcon onPress={this.stopEditing} marginLeft={false} /></Right>  
+            </EditBox>
+          ) : null
+        }
+        <Wrapper edit={edit}>
           <Left>
             <Input
               placeholder="Написать сообщение"
@@ -106,7 +144,7 @@ class InputComponent extends Component {
             />
           </Left>
           <Right>
-            {text ? <PapperPlaneIcon onPress={this.sendMessage} /> : (
+            {text ? <PapperPlaneIcon onPress={edit ? this.confirmEditing : this.sendMessage} /> : (
               <ImageIconBlue
                 onPress={this.pickImage}
               />
@@ -131,14 +169,56 @@ class InputComponent extends Component {
 
     state = {
       text: '',
+      prevText: '',
+      edit: false,
       pickerOpened: false,
     }
 
-    componentDidMount() {
+    static getDerivedStateFromProps(nextProps, prevState) {
+      const propsChanged = JSON.stringify(nextProps.editedMessage) !== JSON.stringify(prevState.editedMessage);
+      if(nextProps.editedMessage && nextProps.editedMessage.text && propsChanged){
+        return {
+          ...nextProps,
+          edit: nextProps.editedMessage.text,
+          text: nextProps.editedMessage.text,
+        };
+      }
+      return nextProps;
+    }
+
+    confirmEditing = () => {
+      const { text } = this.state;
+      const { editedMessage: { _id }, dialogs, currentChat, setDialogs } = this.props;
+      const bodyReq = { text, message_id: _id };
+      sendRequest({
+        r_path: p_edit_message,
+        method: 'patch',
+        attr: bodyReq,
+        success: (res) => {
+          const newDialogs = [...dialogs];
+          const newDialog = newDialogs.filter(e => e.room === currentChat)[0];
+          const dialogIndex = newDialogs.findIndex(e => e.room === currentChat);
+          const msgIndex = newDialog.messages.findIndex(e => e._id === _id);
+          newDialog.messages[msgIndex].text = text;
+          newDialogs[dialogIndex] = newDialog;
+          setDialogs(newDialogs);
+          this.stopEditing();
+        },
+        failFunc: (err) => {
+          console.log({ err });
+        }
+      });
     }
 
     unselect = () => {
       this.setState({ pickerOpened: false });
+    }
+
+    stopEditing = () => {
+      const { fEditMessage } = this.props;
+      const { prevText } = this.state;
+      this.setState({ edit: false, text: prevText });
+      fEditMessage({});
     }
 
     selectPhoto = async () => {
@@ -202,7 +282,8 @@ class InputComponent extends Component {
       }
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          socket.emit('geo_group', { receiver: currentRoom._id, geo_data: position.coords });
+          console.log({ receiver: currentRoom, geo_data: position.coords });
+          socket.emit('geo_group', { receiver: currentRoom, geo_data: position.coords });
         },
         error => alert(error.message),
         { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
@@ -263,11 +344,12 @@ const mapStateToProps = state => ({
   currentRoom: state.messageReducer.currentRoom,
   currentChat: state.messageReducer.currentChat,
   dialogs: state.dialogsReducer.dialogs,
+  editedMessage: state.messageReducer.editMessage,
   id: state.userReducer.user._id,
   user: state.userReducer.user,
 });
 const mapDispatchToProps = dispatch => ({
-  addMessage: _ => dispatch(addMessage(_)),
+  fEditMessage: _ => dispatch(editMessage(_)),
   startSearch: _ => dispatch(startSearch(_)),
   stopSearch: _ => dispatch(stopSearch(_)),
   setDialogs: _ => dispatch(setDialogs(_)),

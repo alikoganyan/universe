@@ -9,38 +9,46 @@ import {
 } from 'expo';
 import posed from 'react-native-pose';
 import { BottomSheet } from 'react-native-btr';
-import { PapperPlaneIcon, ImageIconBlue } from '../../assets/index';
+import { PapperPlaneIcon, ImageIconBlue, CloseIcon } from '../../assets/index';
 import helper from '../../utils/helpers';
 import {
-  addMessage, startSearch, stopSearch, getMessages, setCurrentChat, setRoom, setCurrentRoomId
+  addMessage,
+  startSearch,
+  stopSearch,
+  getMessages,
+  setCurrentChat,
+  setRoom,
+  setCurrentRoomId
 } from '../../actions/messageActions';
-import { p_send_file } from '../../constants/api';
+import { p_send_file, p_edit_message } from '../../constants/api';
+import { editMessage } from '../../actions/messageActions';
 import { setDialogs } from '../../actions/dialogsActions';
 import sendRequest from '../../utils/request';
 import { socket } from '../../utils/socket';
 
 const {
-  sidePadding, borderRadius, HeaderHeight, fontSize
+  sidePadding, borderRadius, HeaderHeight, fontSize, Colors
 } = helper;
+const { blue } = Colors;
 const FilePickerPosed = posed.View({
   visible: { bottom: 10 },
   hidden: { bottom: -250 }
 });
 const Wrapper = styled(View)`
     background: white;
-    width: ${Dimensions.get('window').width - (sidePadding * 2)}px;
+    width: ${({edit}) => edit ? Dimensions.get('window').width : Dimensions.get('window').width - (sidePadding * 2)}px;
     left: 0;
-    bottom: 10px;
+    bottom: ${({edit}) => edit ? 0 : 10}px;
     align-self: center;
-    padding: 0 15px;
+    padding: ${({edit}) => edit ? `0 ${sidePadding}` : `0 15`}px;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
     align-items: ${Platform.OS === 'ios' ? 'center' : 'flex-start'};
     border-radius: ${borderRadius};
-    border-width: 1;
+    border-width: ${({edit}) => edit ? 0 : 1 };
     border-color: #ddd;
-    border-bottom-width: 1;
+    border-top-width: 1;
     min-height: 44px;
     max-height: 65px;
 `;
@@ -92,13 +100,48 @@ const Shadow = styled(TouchableOpacity)`
 const FilePickerOption = styled(TouchableOpacity)`
     z-index: 999;
 `;
+const EditBox = styled(View)`
+    width: ${Dimensions.get('window').width}px;
+    padding: 0 ${sidePadding}px;
+    padding-right: 5px;
+    height: 60px;
+    background: white;
+    align-self: center;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+`;
+const EditMessage = styled(Text)`
+  color: ${blue};
+`;
+const EditMessageText = styled(Text)`
+  
+`;
+const EditBoxLeft = styled(View)`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+`; 
 class InputComponent extends Component {
   render() {
-    const { text, pickerOpened } = this.state;
+    const { text, pickerOpened, edit } = this.state;
+    const { editedMessage } = this.props;
     return (
       <>
-        {pickerOpened && <Shadow activeOpacity={1} onPress={this.unselect} />}
-        <Wrapper>
+      	{
+      		edit ? (
+            <EditBox>
+              <EditBoxLeft>
+                <EditMessage>Редактировать сообщение</EditMessage>
+                <EditMessageText numberOfLines={1}>{editedMessage.text}</EditMessageText>
+              </EditBoxLeft>
+              <Right><CloseIcon onPress={this.stopEditing} marginLeft={false} /></Right>  
+            </EditBox>
+          ) : null
+      	}
+        <Wrapper edit={edit}>	
           <Left>
             <Input
               placeholder="Написать сообщение"
@@ -108,11 +151,14 @@ class InputComponent extends Component {
             />
           </Left>
           <Right>
-            {text ? <PapperPlaneIcon onPress={this.sendMessage} /> : (
-              <ImageIconBlue
-                onPress={this.pickImage}
-              />
-            )}
+            {text ?
+              <PapperPlaneIcon onPress={edit ? this.confirmEditing : this.sendMessage} /> :
+              (
+                <ImageIconBlue
+                  onPress={this.pickImage}
+                />
+              )
+            }
           </Right>
         </Wrapper>
         <BottomSheet
@@ -121,10 +167,18 @@ class InputComponent extends Component {
           onBackdropPress={this.unselect}
         >
           <FilePicker>
-            <FilePickerOption onPress={this.selectPhoto}><Text>Фото или видео</Text></FilePickerOption>
-            <FilePickerOption onPress={this.selectFile}><Text>Файл</Text></FilePickerOption>
-            <FilePickerOption onPress={this.selectGeo}><Text>Мою локацию</Text></FilePickerOption>
-            <FilePickerOption onPress={this.unselect}><Text>Отменить</Text></FilePickerOption>
+            <FilePickerOption onPress={this.selectPhoto}>
+              <Text>Фото или видео</Text>
+            </FilePickerOption>
+            <FilePickerOption onPress={this.selectFile}>
+              <Text>Файл</Text>
+            </FilePickerOption>
+            <FilePickerOption onPress={this.selectGeo}>
+              <Text>Мою локацию</Text>
+            </FilePickerOption>
+            <FilePickerOption onPress={this.unselect}>
+              <Text>Отменить</Text>
+            </FilePickerOption>
           </FilePicker>
         </BottomSheet>
 
@@ -134,13 +188,61 @@ class InputComponent extends Component {
 
     state = {
       text: '',
+      prevText: '',
+      edit: false,
       pickerOpened: false,
     }
 
-    componentDidMount() {}
+    componentWillUnmount() {
+      this.stopEditing();
+    	this.unselect();
+    }
+
+    static getDerivedStateFromProps(nextProps, prevState) {
+      const propsChanged = JSON.stringify(nextProps.editedMessage) !== JSON.stringify(prevState.editedMessage);
+    	if(nextProps.editedMessage && nextProps.editedMessage.text && propsChanged){
+    		return {
+    			...nextProps,
+          edit: nextProps.editedMessage.text,
+    			text: nextProps.editedMessage.text,
+    		};
+    	}
+    	return nextProps;
+    }
+
+    confirmEditing = () => {
+      const { text } = this.state;
+      const { editedMessage: { _id }, dialogs, currentChat, setDialogs } = this.props;
+      const bodyReq = { text, message_id: _id };
+      sendRequest({
+        r_path: p_edit_message,
+        method: 'patch',
+        attr: bodyReq,
+        success: (res) => {
+          const newDialogs = [...dialogs];
+          const newDialog = newDialogs.filter(e => e.room === currentChat)[0];
+          const dialogIndex = newDialogs.findIndex(e => e.room === currentChat);
+          const msgIndex = newDialog.messages.findIndex(e => e._id === _id);
+          newDialog.messages[msgIndex].text = text;
+          newDialogs[dialogIndex] = newDialog;
+          setDialogs(newDialogs);
+          this.stopEditing();
+        },
+        failFunc: (err) => {
+          console.log({ err });
+        }
+      });
+    }
 
     unselect = () => {
       this.setState({ pickerOpened: false });
+    }
+
+    stopEditing = () => {
+      const { fEditMessage } = this.props;
+      const { prevText } = this.state;
+      this.setState({ edit: false, text: prevText });
+      fEditMessage({});
     }
 
     selectPhoto = async () => {
@@ -203,6 +305,30 @@ class InputComponent extends Component {
       // let result = await DocumentPicker.getDocumentAsync({});
     }
 
+    async getGeolocationPromise() {
+    	await Location.requestPermissionsAsync();
+			  return new Promise((resolve, reject) => {
+			    navigator.geolocation.getCurrentPosition(
+			      position => {
+			        //geo
+			        resolve({
+			          latitude: position.coords.latitude,
+			          longitude: position.coords.longitude,
+			        });
+			      },
+			      error => {
+			        console.log('Geolocation error ', error);
+			        reject(error);
+			      },
+			      {
+			        enableHighAccuracy: false,
+			        timeout: 20000,
+			        maximumAge: 1000 * 10 * 60,
+			      }
+			    );
+			});
+		}
+
     selectGeo = async () => {
       const { currentDialog } = this.props;
       this.unselect();
@@ -218,15 +344,14 @@ class InputComponent extends Component {
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
           {},
         );
+        // alert(`${granted}, ${JSON.stringify(PermissionsAndroid.RESULTS.GRANTED)}`);
         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-          alert('You can use the location');
           navigator.geolocation.getCurrentPosition(
             (position) => {
-              alert('geo sent')
-              socket.emit('geo', { receiver: currentDialog._id, geo_data: position.coords });
+            	socket.emit('geo', { receiver: currentDialog._id, geo_data: position.coords });
             },
             error => alert(error.message),
-            { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
+            { timeout: 20000, maximumAge: 36e5 },
           );
         } else {
           alert('location permission denied');
@@ -234,6 +359,9 @@ class InputComponent extends Component {
       } catch (err) {
         alert(err);
       }
+      // this.getGeolocationPromise()
+	     //  .then(e => alert(JSON.stringify(e)))
+	     //  .catch(e => alert(JSON.stringify(e)));
       
     };
 
@@ -290,15 +418,14 @@ class InputComponent extends Component {
 const mapStateToProps = state => ({
   messages: state.messageReducer.messages,
   currentRoom: state.messageReducer.currentRoom,
+	editedMessage: state.messageReducer.editMessage,
   currentChat: state.messageReducer.currentChat,
   currentDialog: state.dialogsReducer.currentDialog,
   user: state.userReducer.user,
   dialogs: state.dialogsReducer.dialogs,
 });
 const mapDispatchToProps = dispatch => ({
-  addMessage: _ => dispatch(addMessage(_)),
-  startSearch: _ => dispatch(startSearch(_)),
-  stopSearch: _ => dispatch(stopSearch(_)),
+  fEditMessage: _ => dispatch(editMessage(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),

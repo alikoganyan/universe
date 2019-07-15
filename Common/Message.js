@@ -323,11 +323,13 @@ class Message extends Component {
                 alignItems: 'flex-start',
                 flexDirection: 'row'
             }}>
-                <ImageComponent
-                    style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-                    size={30}
-                    source={{ uri: `https://ser.univ.team${sender.image}` }}
-                />
+                {withImage ? (
+                    <ImageComponent
+                        style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                        size={30}
+                        source={{ uri: `https://ser.univ.team${sender.image}` }}
+                    />) : null
+                }
                 <InterlocutorsMessage
                     style={{ height: 150, width: 300, marginLeft: 20 }}
                     background={pink}

@@ -19,6 +19,7 @@ import Message from '../../common/Message';
 import sendRequest from '../../utils/request';
 import { setDialogs } from '../../actions/dialogsActions';
 import { setTaskReceivers } from '../../actions/participantsActions';
+import { editMessage } from '../../actions/messageActions';
 import { d_message } from '../../constants/api';
 
 const { HeaderHeight, borderRadius } = helper;
@@ -59,7 +60,7 @@ const StyledFlatList = styled(FlatList)`
 	z-index: 2;
 `;
 const FlatListHeader = styled(View)`
-	margin: 35px;
+	margin: ${({editing}) => editing ? 65 : 35}px;
 `;
 const StyledImageBackground = styled(ImageBackground)`
 	width: 100%;
@@ -69,9 +70,10 @@ class Content extends Component {
 	render() {
 		const { selectedMessage, animationCompleted, optionsSelector } = this.state;
 		const {
-			search, user, dialogs, currentChat
+			search, user, dialogs, currentChat, editedMessage
 		} = this.props;
 		const dialog = [...dialogs].filter(e => e.room === currentChat)[0];
+		const isEditing = !!editedMessage.text;
 		const messages = dialog ? [...dialog.messages] : [];
 		const reversedMessages = [...messages].reverse().sort((x, y) => new Date(y.created_at) - new Date(x.created_at));
 		return (
@@ -80,7 +82,7 @@ class Content extends Component {
 					<StyledImageBackground source={chatBg}>
 						{animationCompleted ? (
 							<StyledFlatList
-								ListHeaderComponent={<FlatListHeader />}
+								ListHeaderComponent={<FlatListHeader editing={isEditing}/>}
 								inverted
 								data={reversedMessages}
 								initialNumToRender={15}
@@ -115,7 +117,7 @@ class Content extends Component {
 					{
 						selectedMessage._id && selectedMessage.sender._id === user._id && (
 						<>
-							<MessageOption><Text>Редактировать</Text></MessageOption>
+							<MessageOption onPress={() => this.editMessage(selectedMessage)}><Text>Редактировать</Text></MessageOption>
 							{selectedMessage.type === 'image' && <MessageOption><Text>Сохранить</Text></MessageOption>}
 							<MessageOption onPress={this.deleteMessage}><Text>Удалить</Text></MessageOption>
 						</>
@@ -206,9 +208,14 @@ class Content extends Component {
 		this.setState({ optionsSelector: true });
 	}
 
+	editMessage = (message) => {
+		const { editMessage } = this.props;
+		this.unselect();
+		editMessage({ ...message });
+	}
+
 	handleHold = (e) => {
 		this.setState({ selectedMessage: e });
-		console.log(e);
 		Platform.os === 'ios' && ActionSheetIOS.showActionSheetWithOptions(
 		{
 			options: ['Отменить', 'Ответить', 'Копировать', 'Изменить', 'Удалить'],
@@ -226,12 +233,14 @@ class Content extends Component {
 const mapStateToProps = state => ({
 	search: state.messageReducer.search,
 	currentChat: state.messageReducer.currentChat,
+	editedMessage: state.messageReducer.editMessage,
 	currentRoomId: state.messageReducer.currentRoomId,
 	user: state.userReducer.user,
 	dialogs: state.dialogsReducer.dialogs,
 	currentDialog: state.dialogsReducer.currentDialog,
 });
 const mapDispatchToProps = dispatch => ({
+	editMessage: _ => dispatch(editMessage(_)),
 	setDialogs: _ => dispatch(setDialogs(_)),
 	setTaskReceivers: _ => dispatch(setTaskReceivers(_))
 });

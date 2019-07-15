@@ -19,6 +19,7 @@ import {
 	setCurrentChat,
 	setCurrentRoomId
 } from '../../actions/messageActions';
+import { Notifications } from 'expo';
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions';
 import { setAllUsers } from '../../actions/userActions';
 import helper from '../../utils/helpers';
@@ -123,6 +124,14 @@ class Dialogs extends Component {
 		// this.interval = setInterval(() => {
 		//  if (!socket.connected) connectToSocket()
 		// }, 2000)
+
+		Notifications.addListener((notification) => {
+			const { dialogs } = this.props;
+            const { room } = notification.data;
+            const dialog = [...dialogs].filter(chat => chat.room === room)[0];
+            this.toChat(dialog);
+        });
+
 		AppState.addEventListener('change', this._handleAppStateChange);
 
 		socket.emit('get_dialogs', { id: user._id });
@@ -138,11 +147,6 @@ class Dialogs extends Component {
 		socket.on('need_update', this.socketNeedsUpdate);
 		socket.on('dialog_opened', this.socketDialogOpened);
 		socket.on('new_group', this.socketGetGroup);
-		socket.on('new_geo', (e) => {
-			const { geo_data, room, sender } = e;
-			console.log(e);
-			const newMessage = { ...e, type: 'geo', viewers: [], created_at: new Date(),  };
-		});
 		this.setState({ congratulations: !user.first_name });
 	}
 
@@ -267,52 +271,56 @@ class Dialogs extends Component {
 			currentRoomId,
 			user
 		} = this.props;
-		const message = e.message._id ? {
-			...e.message
-		} : {
-			...e,
-			text: e.message,
-			type: 'text',
-			created_at: new Date(),
-			sender: { ...e.sender },
-			viewers: []
-		};
-		const newDialogs = [...dialogs];
-		const newDialog = newDialogs.filter(event => event.room === e.room)[0];
-		if (newDialog) {
-			newDialog.messages = [...newDialog.messages, message];
-			newDialogs[newDialogs.findIndex(event => event.room === e.room)] = newDialog;
-			const newDialogSorted = newDialogs.length && newDialogs.sort((a, b) => {
-				if (b.messages.length && a.messages.length) {
-					const aCreation = new Date(a.created_at);
-					const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at);
-					const aDate = aCreation > aLastMessage ? aCreation : aLastMessage;
-					const bCreation = new Date(b.created_at);
-					const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at);
-					const bDate = bCreation > bLastMessage ? bCreation : bLastMessage;
-					return bDate - aDate;
-				}
-				if (b.messages.length && !a.messages.length) {
-					const aCreation = new Date(a.created_at);
-					const bCreation = new Date(b.created_at);
-					const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at);
-					const bDate = bCreation > bLastMessage ? bCreation : bLastMessage;
-					return bDate - aCreation;
-				}
-				if (!b.messages.length && a.messages.length) {
-					const aCreation = new Date(a.created_at);
-					const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at);
-					const aDate = aCreation > aLastMessage ? aCreation : aLastMessage;
-					const bCreation = new Date(b.created_at);
-					return bCreation - aDate;
-				}
-				if (!b.messages.length && !a.messages.length) {
-					const aCreation = new Date(a.created_at);
-					const bCreation = new Date(b.created_at);
-					return bCreation - aCreation;
-				}
-			});
-			setDialogs(newDialogSorted);
+		try{
+			const message = (e.message && e.message._id) ? {
+				...e.message
+			} : {
+				...e,
+				text: e.text,
+				type: e.type,
+				created_at: new Date(),
+				sender: { ...e.sender },
+				viewers: []
+			};
+			const newDialogs = [...dialogs];
+			const newDialog = newDialogs.filter(event => event._id === e.dialog)[0];
+			if (newDialog) {
+				newDialog.messages = [...newDialog.messages, message];
+				newDialogs[newDialogs.findIndex(event => event._id === e.dialog)] = newDialog;
+				const newDialogSorted = newDialogs.length && newDialogs.sort((a, b) => {
+					if (b.messages.length && a.messages.length) {
+						const aCreation = new Date(a.created_at);
+						const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at);
+						const aDate = aCreation > aLastMessage ? aCreation : aLastMessage;
+						const bCreation = new Date(b.created_at);
+						const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at);
+						const bDate = bCreation > bLastMessage ? bCreation : bLastMessage;
+						return bDate - aDate;
+					}
+					if (b.messages.length && !a.messages.length) {
+						const aCreation = new Date(a.created_at);
+						const bCreation = new Date(b.created_at);
+						const bLastMessage = new Date(b.messages[b.messages.length - 1].created_at);
+						const bDate = bCreation > bLastMessage ? bCreation : bLastMessage;
+						return bDate - aCreation;
+					}
+					if (!b.messages.length && a.messages.length) {
+						const aCreation = new Date(a.created_at);
+						const aLastMessage = new Date(a.messages[a.messages.length - 1].created_at);
+						const aDate = aCreation > aLastMessage ? aCreation : aLastMessage;
+						const bCreation = new Date(b.created_at);
+						return bCreation - aDate;
+					}
+					if (!b.messages.length && !a.messages.length) {
+						const aCreation = new Date(a.created_at);
+						const bCreation = new Date(b.created_at);
+						return bCreation - aCreation;
+					}
+				});
+				setDialogs(newDialogSorted);
+			}
+		} catch(err){
+			alert(`${JSON.stringify(e)} cannot be processed [${err}]`);
 		}
 	}
 

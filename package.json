@@ -9,7 +9,8 @@
     "build:ios": "expo build:ios",
     "build:android": "expo build:android",
     "lint": "eslint ./screens/*.js ./screens/**/*.js",
-    "lint:fix": "eslint --fix ./screens/*.js ./screens/**/*.js"
+    "lint:fix": "eslint --fix ./screens/*.js ./screens/**/*.js",
+    "debug": "open 'rndebugger://set-debugger-loc?host=localhost&port=19001'"
   },
   "rnpm": {
     "assets": [

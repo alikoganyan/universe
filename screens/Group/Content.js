@@ -17,6 +17,7 @@ import Message from '../../common/Message';
 import helper from '../../utils/helpers';
 import { chatBg } from '../../assets/images';
 import { setTaskReceivers } from '../../actions/participantsActions';
+import { editMessage } from '../../actions/messageActions';
 import { setDialogs } from '../../actions/dialogsActions';
 import { d_message } from '../../constants/api';
 import sendRequest from '../../utils/request';
@@ -51,14 +52,18 @@ const MessageOptions = styled(View)`
 const MessageOption = styled(TouchableOpacity)`
 	padding-bottom: 30px;
 `;
+const FlatListHeader = styled(View)`
+	margin: ${({editing}) => editing ? 65 : 35}px;
+`;
 class Content extends Component {
 	render() {
 		const { selectedMessage, animationCompleted } = this.state;
 		const {
-			dialogs, currentChat, search, user
+			dialogs, currentChat, search, user, editedMessage
 		} = this.props;
 		const dialog = [...dialogs].filter(e => e.room === currentChat)[0];
 		const messages = dialog ? [...dialog.messages] : [];
+		const isEditing = !!editedMessage.text;
 		const reversedMessages = [...messages].sort((x, y) => new Date(y.created_at) - new Date(x.created_at));
 		return (
 			<>
@@ -67,7 +72,7 @@ class Content extends Component {
 						{animationCompleted ? (
 							<FlatList
 								style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
-								ListHeaderComponent={<View style={{ margin: 35, }} />}
+								ListHeaderComponent={<FlatListHeader editing={isEditing}/>}
 								inverted
 								data={reversedMessages}
 								keyboardDismissMode="on-drag"
@@ -101,10 +106,7 @@ class Content extends Component {
 						{
 							selectedMessage._id && selectedMessage.sender._id === user._id && (
 							<>
-								<MessageOption onPress={this.turnToTask}>
-									<Text>Сделать задачей</Text>
-								</MessageOption>
-								<MessageOption><Text>Редактировать</Text></MessageOption>
+								<MessageOption onPress={() => this.editMessage(selectedMessage)}><Text>Редактировать</Text></MessageOption>
 								<MessageOption onPress={this.deleteMessage}><Text>Удалить</Text></MessageOption>
 							</>
 							)
@@ -136,6 +138,12 @@ class Content extends Component {
 			newDialogs[dialogIndex] = dialog;
 			setDialogs(newDialogs);
 		}
+	}
+
+	editMessage = (message) => {
+		const { editMessage } = this.props;
+		this.unselect();
+		editMessage({ ...message });
 	}
 
 	turnToTask = () => {
@@ -188,12 +196,14 @@ const mapStateToProps = state => ({
 	dialogs: state.dialogsReducer.dialogs,
 	search: state.messageReducer.search,
 	currentRoom: state.messageReducer.currentRoom,
+	editedMessage: state.messageReducer.editMessage,
 	currentDialog: state.dialogsReducer.currentDialog,
 	currentChat: state.messageReducer.currentChat,
 	currentRoomId: state.messageReducer.currentRoomId,
 	user: state.userReducer.user,
 });
 const mapDispatchToProps = dispatch => ({
+	editMessage: _ => dispatch(editMessage(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
   setDialogs: _ => dispatch(setDialogs(_))
 });

@@ -6,6 +6,7 @@ import {
     SET_ROOM,
     SET_CURRENT_CHAT,
     SET_CURRENT_ROOM_ID,
+    EDIT_MESSAGE,
 } from '../actions/messageActions';
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
     currentRoom: null,
     currentChat: null,
     currentRoomId: null,
+    editMessage: {},
     messages: [],
 };
 
@@ -39,6 +41,9 @@ export default (state = initialState, action) => {
 
         case START_SEARCH:
             return { ...state, search: true };
+
+        case EDIT_MESSAGE:
+            return { ...state, editMessage: payload };
 
         default:
             return state;

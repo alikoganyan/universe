@@ -4,6 +4,7 @@ import {
     AsyncStorage,
     StatusBar,
     AppState,
+    Linking,
 } from 'react-native';
 import GlobalFont from 'react-native-global-font';
 import { Font, Notifications } from 'expo';
@@ -41,6 +42,7 @@ export default class AppComponent extends Component {
 
     async componentDidMount() {
         getPushesPermissionStatusAndToken(store.dispatch)();
+
         AsyncStorage.getItem('user').then((res) => {
             const value = JSON.parse(res);
             if (value) {
@@ -77,11 +79,16 @@ export default class AppComponent extends Component {
     }
 
     _handleNotification = (notification) => {
-        Notifications.setBadgeNumberAsync(notification.badge);
+        // Notifications.setBadgeNumberAsync(notification.badge);
+        // console.log({Notifications});
         if (this.appState === 'active' && notification.origin === 'received') {
             Notifications.dismissNotificationAsync(notification.notificationId);
         }
     };
+
+    __handleNotificationClick = (data) => {
+        console.log('CLICKED', data);
+    }
 
     _loadResourcesAsync = async () => Promise.all([
             // Asset.loadAsync([

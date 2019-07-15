@@ -24,3 +24,4 @@ export const p_update_group = '/dialogs/update_group';
 export const p_delete_group = '/dialogs/delete_group';
 export const p_notifications = '/profile/notifications';
 export const d_message = '/dialogs/delete_messages';
+export const p_edit_message = '/dialogs/edit_message';
