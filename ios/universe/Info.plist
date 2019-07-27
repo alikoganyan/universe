@@ -17,11 +17,11 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>2.0.27</string>
+	<string>2.0.50</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>50</string>
+	<string>2</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSAppTransportSecurity</key>
@@ -44,6 +44,10 @@
 	<key>NSCalendarsUsageDescription</key>
 	<string>Some description</string>
 	<key>NSCameraUsageDescription</key>
+	<string>Some description</string>
+	<key>NSContactsUsageDescription</key>
+	<string>Some description</string>
+	<key>NSLocationAlwaysUsageDescription</key>
 	<string>Some description</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Some description</string>
