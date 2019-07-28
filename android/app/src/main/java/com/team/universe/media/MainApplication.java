@@ -1,4 +1,4 @@
-package team.universe.media;
+package com.team.universe.media;
 
 import android.app.Application;
 

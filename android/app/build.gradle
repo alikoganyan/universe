@@ -102,7 +102,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "team.universe.media"
+        applicationId "com.team.universe.media"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionName "2.0.50"
