@@ -1,17 +1,14 @@
-// import {
-//   Permissions,
-//   Notifications,
-//   IntentLauncherAndroid,
-//   Constants
-// } from 'expo';
-import { Alert, Linking, Platform } from 'react-native'
+import { Alert, Platform } from 'react-native'
+import RNPermissions from 'react-native-permissions'
+import RNDeviceInfo from 'react-native-device-info'
+import firebase from 'react-native-firebase'
 import sendRequest from '../utils/request'
 import { p_notifications } from '../constants/api'
 
-export const GET_PERMISSION_STATUS = 'GET_PERMISSION_STATUS'
-export const ASK_PERMISSION_STATUS = 'ASK_PERMISSION_STATUS'
-export const PERMISSION_STATUS_FULFILLED = 'PERMISSION_STATUS_FULFILLED'
-export const PERMISSION_STATUS_REJECTED = 'PERMISSION_STATUS_REJECTED'
+export const GET_PERMISSION_STATUS = 'GET_PUSHES_PERMISSION_STATUS'
+export const ASK_PERMISSION_STATUS = 'ASK_PUSHES_PERMISSION_STATUS'
+export const PERMISSION_STATUS_FULFILLED = 'PUSHES_PERMISSION_STATUS_FULFILLED'
+export const PERMISSION_STATUS_REJECTED = 'PUSHES_PERMISSION_STATUS_REJECTED'
 export const GET_PUSH_TOKEN = 'GET_PUSH_TOKEN'
 export const PUSH_TOKEN_FULFILLED = 'PUSH_TOKEN_FULFILLED'
 export const PUSH_TOKEN_REJECTED = 'PUSH_TOKEN_REJECTED'
@@ -23,16 +20,15 @@ export const USER_PUSHES_REJECTED = 'USER_PUSHES_REJECTED'
 
 export const getPushesPermissionStatusAndToken = dispatch => async () => {
   try {
-    throw 'no-pushes'
     dispatch({ type: GET_PERMISSION_STATUS })
-    // const { status = '' } = await Permissions.getAsync(
-    //   Permissions.NOTIFICATIONS
-    // );
-    dispatch({ type: PERMISSION_STATUS_FULFILLED, payload: status })
-    if (status === 'granted') {
+    const isEnabled = await firebase.messaging().hasPermission()
+    dispatch({ type: PERMISSION_STATUS_FULFILLED, payload: isEnabled })
+    if (isEnabled) {
       dispatch({ type: GET_PUSH_TOKEN })
-      // const token = await Notifications.getExpoPushTokenAsync();
-      dispatch({ type: PUSH_TOKEN_FULFILLED, payload: token })
+      const fcmToken = await firebase.messaging().getToken()
+      if (fcmToken) {
+        dispatch({ type: PUSH_TOKEN_FULFILLED, payload: fcmToken })
+      }
     }
   } catch (error) {
     dispatch({ type: PERMISSION_STATUS_REJECTED })
@@ -41,76 +37,83 @@ export const getPushesPermissionStatusAndToken = dispatch => async () => {
 
 export const trySignToPushes = dispatch => async (firstTimeMode = false) => {
   try {
-    throw 'no-pushes'
     dispatch({ type: GET_PERMISSION_STATUS })
-    // const { status: existingStatus = '' } = await Permissions.getAsync(
-    //   Permissions.NOTIFICATIONS
-    // );
-    dispatch({ type: PERMISSION_STATUS_FULFILLED, payload: existingStatus })
-    // let finalStatus = existingStatus;
-    if (existingStatus !== 'granted') {
-      dispatch({ type: ASK_PERMISSION_STATUS })
-      // const { status } = await Permissions.askAsync(Permissions.NOTIFICATIONS);
-      // finalStatus = status;
-      dispatch({ type: PERMISSION_STATUS_FULFILLED, payload: finalStatus })
+    const isEnabled = await firebase.messaging().hasPermission()
+    dispatch({ type: PERMISSION_STATUS_FULFILLED, payload: isEnabled })
+    let fcmToken = ''
+    if (isEnabled) {
+      fcmToken = await firebase.messaging().getToken()
+    } else {
+      try {
+        dispatch({ type: ASK_PERMISSION_STATUS })
+        await firebase.messaging().requestPermission()
+        fcmToken = await firebase.messaging().getToken()
+        // console.log('fcmToken: ', fcmToken)
+      } catch (error) {
+        if (firstTimeMode) {
+          dispatch({ type: PUSH_TOKEN_REJECTED, payload: error })
+        } else {
+          if (Platform.OS === 'ios') {
+            if (RNPermissions.canOpenSettings()) {
+              Alert.alert(
+                'Ошибка',
+                'Для получения уведомлений необходимо включить их в настройках',
+                [
+                  { text: 'ОК', onPress: () => {} },
+                  {
+                    text: 'Настройки',
+                    onPress: () => {
+                      RNPermissions.openSettings()
+                    },
+                  },
+                ],
+              )
+            } else {
+              Alert.alert(
+                'Ошибка',
+                'Для получения уведомлений необходимо включить их в настройках',
+              )
+            }
+          } else {
+            Alert.alert(
+              'Ошибка',
+              'Для получения уведомлений необходимо включить их в настройках',
+            )
+          }
+        }
+      }
     }
-    if (!firstTimeMode && finalStatus !== 'granted') {
-      // Alert.alert(
-      //   'Ошибка',
-      //   'Необходимо разрешить доступ к уведомлениям в настройках',
-      //   [
-      //     { text: 'ОК', onPress: () => {} },
-      //     {
-      //       text: 'Настройки',
-      //       onPress: () => {
-      //         if (Platform.OS === 'android') {
-      //           IntentLauncherAndroid.startActivityAsync(
-      //             IntentLauncherAndroid.ACTION_APPLICATION_DETAILS_SETTINGS,
-      //             {},
-      //             `package:${Constants.manifest.android.package}`
-      //           );
-      //         } else {
-      //           Linking.canOpenURL('app-settings:') &&
-      //             Linking.openURL('app-settings:');
-      //         }
-      //       }
-      //     }
-      //   ]
-      // );
+
+    if (fcmToken) {
+      dispatch({ type: PUSH_TOKEN_FULFILLED, payload: fcmToken })
+      // console.log('fcmToken: ', fcmToken)
+      dispatch({ type: USER_PUSHES_REQUEST })
+      // console.log({
+      //   enable: true,
+      //   push_token: fcmToken,
+      //   deviceId: RNDeviceInfo.getDeviceId(),
+      //   platform: Platform.OS,
+      // })
+      sendRequest({
+        r_path: p_notifications,
+        method: 'patch',
+        attr: {
+          enable: true,
+          push_token: fcmToken,
+          deviceId: RNDeviceInfo.getDeviceId(),
+          platform: Platform.OS,
+        },
+        success: () => {
+          dispatch({ type: USER_PUSHES_FULFILLED })
+          dispatch({ type: ENABLE_USER_PUSHES })
+        },
+        failFunc: () => {
+          dispatch({ type: USER_PUSHES_REJECTED })
+          dispatch({ type: DISABLE_USER_PUSHES })
+        },
+        full_res: true,
+      })
     }
-    // if (finalStatus === 'granted') {
-    //   try {
-    //     dispatch({ type: GET_PUSH_TOKEN });
-    //     const token = await Notifications.getExpoPushTokenAsync();
-    //     dispatch({ type: PUSH_TOKEN_FULFILLED, payload: token });
-    //     dispatch({ type: USER_PUSHES_REQUEST });
-    //     console.log({
-    //       enable: true,
-    //       push_token: token,
-    //       deviceId: Constants.deviceId
-    //     });
-    //     sendRequest({
-    //       r_path: p_notifications,
-    //       method: 'patch',
-    //       attr: {
-    //         enable: true,
-    //         push_token: token,
-    //         deviceId: Constants.deviceId
-    //       },
-    //       success: () => {
-    //         dispatch({ type: USER_PUSHES_FULFILLED });
-    //         dispatch({ type: ENABLE_USER_PUSHES });
-    //       },
-    //       failFunc: () => {
-    //         dispatch({ type: USER_PUSHES_REJECTED });
-    //         dispatch({ type: DISABLE_USER_PUSHES });
-    //       },
-    //       full_res: true
-    //     });
-    //   } catch (e) {
-    //     dispatch({ type: PUSH_TOKEN_REJECTED });
-    //   }
-    // }
   } catch (error) {
     dispatch({ type: PERMISSION_STATUS_REJECTED })
   }
@@ -118,25 +121,25 @@ export const trySignToPushes = dispatch => async (firstTimeMode = false) => {
 
 export const requestDisablePushes = dispatch => async (token = '') => {
   try {
-    throw 'no-pushes'
-    // dispatch({ type: USER_PUSHES_REQUEST });
-    // sendRequest({
-    //   r_path: p_notifications,
-    //   method: 'patch',
-    //   attr: {
-    //     enable: false,
-    //     push_token: token,
-    //     deviceId: Constants.deviceId
-    //   },
-    //   success: () => {
-    //     dispatch({ type: USER_PUSHES_FULFILLED });
-    //     dispatch({ type: DISABLE_USER_PUSHES });
-    //   },
-    //   failFunc: () => {
-    //     dispatch({ type: USER_PUSHES_REJECTED });
-    //   },
-    //   full_res: true
-    // });
+    dispatch({ type: USER_PUSHES_REQUEST })
+    sendRequest({
+      r_path: p_notifications,
+      method: 'patch',
+      attr: {
+        enable: false,
+        push_token: token,
+        deviceId: RNDeviceInfo.getDeviceId(),
+        platform: Platform.OS,
+      },
+      success: () => {
+        dispatch({ type: USER_PUSHES_FULFILLED })
+        dispatch({ type: DISABLE_USER_PUSHES })
+      },
+      failFunc: () => {
+        dispatch({ type: USER_PUSHES_REJECTED })
+      },
+      full_res: true,
+    })
   } catch (e) {
     dispatch({ type: USER_PUSHES_REJECTED })
   }

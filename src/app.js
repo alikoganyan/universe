@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BackHandler, StatusBar, AppState, Linking } from 'react-native'
+import { BackHandler, StatusBar, AppState } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import GlobalFont from 'react-native-global-font'
 // import { Font, Notifications } from 'expo';
@@ -11,10 +11,11 @@ import { getPushesPermissionStatusAndToken } from './actions/pushesActions'
 import { connectToSocket } from './utils/socket'
 import { setUser, setAuth } from './actions/userActions'
 import { setDialogsUserId } from './actions/dialogsActions'
+import { createNotificationListeners } from './utils/fcm'
 
-const Roboto = require('./assets/fonts/Roboto-Regular.ttf')
+// const Roboto = require('./assets/fonts/Roboto-Regular.ttf')
 
-console.disableYellowBox = true
+// console.disableYellowBox = true
 
 export default class AppComponent extends Component {
   render() {
@@ -36,6 +37,7 @@ export default class AppComponent extends Component {
   appState = AppState.currentState
 
   async componentDidMount() {
+    createNotificationListeners()
     getPushesPermissionStatusAndToken(store.dispatch)()
 
     AsyncStorage.getItem('user').then(res => {
@@ -85,7 +87,7 @@ export default class AppComponent extends Component {
   }
 
   __handleNotificationClick = data => {
-    console.log('CLICKED', data)
+    // console.log('CLICKED', data)
   }
 
   _loadResourcesAsync = async () =>

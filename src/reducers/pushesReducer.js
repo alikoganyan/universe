@@ -14,7 +14,7 @@ import {
 const initialState = {
   permissionsIsFetching: false,
   permissionsIsError: false,
-  permissions: '',
+  permissions: false,
   tokenIsFetching: false,
   tokenIsError: false,
   token: '',
@@ -22,7 +22,7 @@ const initialState = {
   userPushesIsError: false,
 }
 
-export default pushesReducer = (state = initialState, action) => {
+const pushesReducer = (state = initialState, action) => {
   const { type, payload } = action
   switch (type) {
     case GET_PERMISSION_STATUS:
@@ -65,3 +65,5 @@ export default pushesReducer = (state = initialState, action) => {
       return state
   }
 }
+
+export default pushesReducer

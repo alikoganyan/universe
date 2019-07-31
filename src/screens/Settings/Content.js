@@ -140,7 +140,7 @@ class Content extends Component {
           notifications: { enable: isNotificationsEnabled = false } = {},
         } = {},
       } = {},
-      pushesPermissions,
+      pushesPermissionsGranted,
       userPushesIsFetching,
       permissionsIsFetching,
       tokenIsFetching,
@@ -156,16 +156,14 @@ class Content extends Component {
             <Box first>
               <Label>Уведомления</Label>
               <Status>
-                {pushesPermissions === 'granted' && isNotificationsEnabled
+                {pushesPermissionsGranted && isNotificationsEnabled
                   ? 'Включены'
                   : 'Выключены'}
               </Status>
               <Option>
                 <Toggle
                   onPress={this.handleTogglePushes}
-                  switchOn={
-                    pushesPermissions === 'granted' && isNotificationsEnabled
-                  }
+                  switchOn={pushesPermissionsGranted && isNotificationsEnabled}
                 />
               </Option>
               {(!!userPushesIsFetching ||
@@ -280,10 +278,10 @@ class Content extends Component {
 
   componentDidMount() {
     const { settings, langs } = this.state
-    const { user, pushesPermissions, isNotificationsEnabled } = this.props
+    const { user } = this.props
     const newSettings = [...settings]
     // console.log(settings)
-    newSettings.map(e => {
+    newSettings.forEach(e => {
       // console.log(e);
       if (e.item === 'language') {
         e.option.value = 'Изменить'
@@ -319,12 +317,12 @@ class Content extends Component {
           notifications: { enable: isNotificationsEnabled = false } = {},
         } = {},
       } = {},
-      pushesPermissions,
+      pushesPermissionsGranted,
       pushesToken,
       requestDisablePushes,
       trySignToPushes,
     } = this.props
-    if (isNotificationsEnabled && pushesPermissions === 'granted') {
+    if (isNotificationsEnabled && pushesPermissionsGranted) {
       requestDisablePushes(pushesToken)
     } else {
       trySignToPushes(false)
@@ -344,9 +342,10 @@ class Content extends Component {
       sound: '',
       partition_contacts: '',
     }
-    settings.map(e => {
-      if (e.item === 'notifications') return
-      reqBody[e.item] = e.item === 'language' ? 'ru' : !!e.option.value
+    settings.forEach(e => {
+      if (e.item === 'notifications') {
+        reqBody[e.item] = e.item === 'language' ? 'ru' : !!e.option.value
+      }
     })
     JSON.stringify(reqBody) !== JSON.stringify(userSettings) &&
       sendRequest({
@@ -356,11 +355,11 @@ class Content extends Component {
           settings: reqBody,
         },
         success: res => {
-          console.log({ res })
+          // console.log({ res })
           setSettings(reqBody)
         },
         failFunc: err => {
-          console.log({ err })
+          // console.log({ err })
         },
       })
   }
@@ -377,7 +376,7 @@ const mapStateToProps = ({
   currentRoom: messageReducer.currentRoom,
   currentChat: messageReducer.currentChat,
   user: userReducer.user,
-  pushesPermissions: pushesReducer.permissions,
+  pushesPermissionsGranted: pushesReducer.permissions,
   pushesToken: pushesReducer.token,
   userPushesIsFetching: pushesReducer.userPushesIsFetching,
   permissionsIsFetching: pushesReducer.permissionsIsFetching,

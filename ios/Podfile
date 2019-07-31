@@ -59,6 +59,9 @@ rn_path = '../node_modules/react-native'
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 
+  pod 'Firebase/Core'
+  pod 'Firebase/Messaging'
+
   target 'universeTests' do
     inherit! :search_paths
     # Pods for testing
