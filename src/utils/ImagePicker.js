@@ -1,3 +1,4 @@
+import { Platform, Alert } from 'react-native'
 import RNImagePicker from 'react-native-image-picker'
 import RNPermissions from 'react-native-permissions'
 
@@ -7,6 +8,7 @@ const pickerOptions = {
   chooseFromLibraryButtonTitle: 'Выбрать из галереи...',
   cancelButtonTitle: 'Отмена',
   mediaType: 'photo',
+  noData: true, // disable base64
   // maxWidth: 1300,
   // maxHeight: 1300,
   storageOptions: {
@@ -25,20 +27,20 @@ const pickerOptions = {
 
 const getImageFromPicker = (success, reject) => {
   RNImagePicker.showImagePicker(pickerOptions, response => {
-    console.log('Response = ', response)
+    // console.log('Response = ', response)
     if (response.didCancel) {
-      console.log('User cancelled image picker')
+      // console.log('User cancelled image picker')
       reject && reject()
       return null
     } else if (response.error) {
-      console.log('ImagePicker Error: ', response.error)
-      if (Platform.OS == 'ios') {
+      // console.log('ImagePicker Error: ', response.error)
+      if (Platform.OS === 'ios') {
         if (RNPermissions.canOpenSettings()) {
           Alert.alert(
             'Ошибка',
             'Для выбора фото из галереи или снимка камеры необходимо разрешить приложению доступ к соответствующим разделам в настройках',
             [
-              { text: 'ОК', onPress: () => console.log('OK Pressed') },
+              { text: 'ОК', onPress: () => {} },
               {
                 text: 'Настройки',
                 onPress: () => {

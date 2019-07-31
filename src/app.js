@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { BackHandler, StatusBar, AppState } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import GlobalFont from 'react-native-global-font'
+import firebase from 'react-native-firebase'
 // import { Font, Notifications } from 'expo';
 import { store } from './reducers/store'
 import { Provider } from 'react-redux'
@@ -38,7 +39,10 @@ export default class AppComponent extends Component {
 
   async componentDidMount() {
     createNotificationListeners()
+    firebase.notifications().setBadge(0)
     getPushesPermissionStatusAndToken(store.dispatch)()
+    // console.log('badge: ', await firebase.notifications().getBadge())
+    // console.log('setbadge: ', await firebase.notifications().setBadge(55))
 
     AsyncStorage.getItem('user').then(res => {
       const value = JSON.parse(res)

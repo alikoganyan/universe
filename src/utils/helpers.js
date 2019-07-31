@@ -1,14 +1,14 @@
 import { StyleSheet, Platform, Dimensions, PixelRatio } from 'react-native'
-import CryptoJS from 'crypto-js'
+// import CryptoJS from 'crypto-js'
 
 const { width, height } = Dimensions.get('window')
 
-const encrypt = data => {
-  const chipertext = CryptoJS.AES.encrypt(
-    JSON.stringify(data),
-    'key',
-  ).toString()
-}
+// const encrypt = data => {
+//   const chipertext = CryptoJS.AES.encrypt(
+//     JSON.stringify(data),
+//     'key',
+//   ).toString()
+// }
 export default {
   minPassLength: 6,
   IconDarkColor: '#979897',
@@ -52,7 +52,7 @@ export default {
     lightGrey1: '#b1b9c2',
     lightGrey2: '#f7f7f7',
     lightGrey3: '#ccc',
-    myMessage: '#4a83fa',
+    myMessage: '#588eff', //'#4a83fa',
     interlocatorMessage: '#F6F6F6',
     avatars: [
       '#f9d38a',
@@ -118,7 +118,7 @@ export default {
       paddingTop: Platform.OS === 'android' ? 25 : 0,
     },
   }),
-  encrypt,
+  // encrypt,
 }
 export function widthPercentageToDP(widthPercent) {
   const elemWidth = parseFloat(widthPercent)

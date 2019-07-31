@@ -1,4 +1,4 @@
-import { Alert } from 'react-native'
+import { Alert, Platform } from 'react-native'
 import firebase from 'react-native-firebase'
 
 export const createNotificationListeners = async () => {
@@ -8,6 +8,11 @@ export const createNotificationListeners = async () => {
   this.notificationListener = firebase
     .notifications()
     .onNotification(notification => {
+      if (Platform.OS === 'android') {
+        notification.android.setChannelId(
+          firebase.notifications.Android.Importance.Default,
+        )
+      }
       // const { title, body } = notification
       // this.showAlert(title, body);
       // console.log('NOTIFICATION: ', title, body)
