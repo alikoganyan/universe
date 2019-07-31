@@ -3,6 +3,7 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
+    "postinstall": "jetify",
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
     "clean": "rm -rf $TMPDIR/react-* && watchman watch-del-all && npm cache clean --force",
@@ -82,6 +83,7 @@
     "eslint-plugin-react-native": "^3.6.0",
     "husky": "^3.0.1",
     "jest": "^24.8.0",
+    "jetifier": "^1.6.3",
     "lint-staged": "^8.1.4",
     "metro-react-native-babel-preset": "^0.55.0",
     "prettier": "^1.16.4",

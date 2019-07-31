@@ -3,6 +3,9 @@ package com.team.universe.media;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.horcrux.svg.SvgPackage;
 import com.rnfs.RNFSPackage;
@@ -33,8 +36,8 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-            new RNGestureHandlerPackage()
+          new MainReactPackage()
+          ,new RNGestureHandlerPackage()
           ,new AsyncStoragePackage()
           ,new AutoGrowTextInputPackage()
           ,new VectorIconsPackage()
@@ -44,6 +47,9 @@ public class MainApplication extends Application implements ReactApplication {
           ,new ImagePickerPackage()
           ,new RNFSPackage()
           ,new SvgPackage()
+          ,new RNFirebasePackage()
+          ,new RNFirebaseMessagingPackage()
+          ,new RNFirebaseNotificationsPackage()
       );
     }
 

@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "744665062099",
+    "firebase_url": "https://amigo-messenger.firebaseio.com",
+    "project_id": "amigo-messenger",
+    "storage_bucket": "amigo-messenger.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:744665062099:android:6093792ef39e9460",
+        "android_client_info": {
+          "package_name": "com.team.universe.media"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "744665062099-27u9fpv545plekngjcriujdqsua40q3a.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB9xLEk03ButVcMfzsko_-vZvRXvA_xp24"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "744665062099-27u9fpv545plekngjcriujdqsua40q3a.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "744665062099-7t3lqpe71m79ujar6q03tlghrak43ujg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "team.amigo.media",
+                "app_store_id": "1447868526"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
