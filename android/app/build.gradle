@@ -106,7 +106,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionName "2.0.50"
-        versionCode 4
+        versionCode 6
         setProperty("archivesBaseName", "universe-$versionName($versionCode)")
     }
 
