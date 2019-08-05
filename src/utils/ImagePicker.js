@@ -44,7 +44,7 @@ const getImageFromPicker = (success, reject) => {
               {
                 text: 'Настройки',
                 onPress: () => {
-                  // console.log('Cancel Pressed');
+                  // console.log('Cancel Pressed')
                   RNPermissions.openSettings()
                 },
               },
@@ -66,10 +66,10 @@ const getImageFromPicker = (success, reject) => {
       return null
     } else if (response.customButton) {
       reject && reject()
-      // console.log('User tapped custom button: ', response.customButton);
-      // return null;
+      // console.log('User tapped custom button: ', response.customButton)
+      return null
     } else {
-      // console.log('response: ', response);
+      // console.log('response: ', response)
       success && success(response)
     }
   })

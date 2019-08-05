@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import {
   View,
   Text,
-  TextInput,
   Dimensions,
   TouchableOpacity,
   Platform,
@@ -18,11 +17,12 @@ import posed from 'react-native-pose'
 import { BottomSheet } from 'react-native-btr'
 import { PapperPlaneIcon, ImageIconBlue, CloseIcon } from '../../assets/index'
 import helper from '../../utils/helpers'
+import AutoHeightInput from '../../common/AutoHeightInput'
 import {
-  addMessage,
-  startSearch,
-  stopSearch,
-  getMessages,
+  // addMessage,
+  // startSearch,
+  // stopSearch,
+  // getMessages,
   setCurrentChat,
   setRoom,
   setCurrentRoomId,
@@ -34,7 +34,7 @@ import { setDialogs } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
 
-const { sidePadding, borderRadius, HeaderHeight, fontSize, Colors } = helper
+const { sidePadding, borderRadius, /*HeaderHeight,*/ fontSize, Colors } = helper
 const { blue } = Colors
 const FilePickerPosed = posed.View({
   visible: { bottom: 10 },
@@ -53,24 +53,28 @@ const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  align-items: ${Platform.OS === 'ios' ? 'center' : 'flex-start'};
+  ${'' /* align-items: ${Platform.OS === 'ios' ? 'center' : 'flex-start'}; */}
+  align-items: flex-start;
   border-radius: ${borderRadius};
   border-width: ${({ edit }) => (edit ? 0 : 1)};
   border-color: #ddd;
   border-top-width: 1;
   min-height: 44px;
-  max-height: 65px;
+  ${'' /* max-height: 65px; */}
 `
-const Input = styled(TextInput)`
+const Input = styled(AutoHeightInput)`
   display: flex;
   flex-direction: column;
   width: 100%;
   overflow: hidden;
-  padding: 0;
+  padding-horizontal: 0;
+  padding-top: ${Platform.OS === 'ios' ? '10px' : '14px'};
+  padding-bottom: ${Platform.OS === 'ios' ? '8px' : '0px'};
   min-height: 30px;
+  max-height: 100px;
   align-items: flex-start;
   font-size: ${fontSize.input};
-  text-align-vertical: bottom;
+  text-align-vertical: top;
 `
 const Left = styled(View)`
   display: flex;
@@ -81,8 +85,9 @@ const Left = styled(View)`
 `
 const Right = styled(View)`
   display: flex;
+  align-items: flex-start;
   flex-direction: row;
-  padding-top: ${Platform.OS === 'ios' ? 0 : 3}px;
+  padding-top: ${Platform.OS === 'ios' ? '2px' : '6px'};
 `
 const FilePicker = styled(FilePickerPosed)`
   background: white;
@@ -98,14 +103,14 @@ const FilePicker = styled(FilePickerPosed)`
   align-items: flex-start;
   z-index: 999;
 `
-const Shadow = styled(TouchableOpacity)`
-  position: absolute;
-  width: ${Dimensions.get('window').width};
-  height: ${Dimensions.get('window').height};
-  background: rgba(5, 5, 5, 0.3);
-  top: -${Dimensions.get('window').height - HeaderHeight * 3}px;
-  z-index: 990;
-`
+// const Shadow = styled(TouchableOpacity)`
+//   position: absolute;
+//   width: ${Dimensions.get('window').width};
+//   height: ${Dimensions.get('window').height};
+//   background: rgba(5, 5, 5, 0.3);
+//   top: -${Dimensions.get('window').height - HeaderHeight * 3}px;
+//   z-index: 990;
+// `
 const FilePickerOption = styled(TouchableOpacity)`
   z-index: 999;
 `
@@ -157,6 +162,7 @@ class InputComponent extends Component {
               onChangeText={e => this.handleChange(e)}
               value={text}
               blurOnSubmit={false}
+              autoHeight
             />
           </Left>
           <Right>
@@ -247,7 +253,7 @@ class InputComponent extends Component {
         this.stopEditing()
       },
       failFunc: err => {
-        console.log({ err })
+        // console.log({ err })
       },
     })
   }
@@ -306,7 +312,7 @@ class InputComponent extends Component {
             setDialogs(newDialogs)
           },
           failFunc: err => {
-            console.log({ err })
+            // console.log({ err })
           },
         })
       }
@@ -329,7 +335,7 @@ class InputComponent extends Component {
           })
         },
         error => {
-          console.log('Geolocation error ', error)
+          // console.log('Geolocation error ', error)
           reject(error)
         },
         {
@@ -345,12 +351,12 @@ class InputComponent extends Component {
     const { currentDialog } = this.props
     this.unselect()
     // const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    alert(status)
     let status
     await RNPermissions.request('location').then(response => {
-      console.log('RNPermissions location: ', response)
+      // console.log('RNPermissions location: ', response)
       status = response
     })
+    alert(status)
     if (status !== 'granted') {
       alert('no location permission')
       Linking.openURL('app-settings:')
