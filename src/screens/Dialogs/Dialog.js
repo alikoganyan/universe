@@ -30,13 +30,12 @@ const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 15px ${sidePadding}px 15px;
+  padding: 2px ${sidePadding}px 0px;
 `
 const DialogImage = styled(Image)`
   width: 50px;
   height: 50px;
   border-radius: 25px;
-  margin-top: 5px;
 `
 const DialogText = styled(View)`
   display: flex;
@@ -44,6 +43,7 @@ const DialogText = styled(View)`
   align-items: flex-start;
   justify-content: space-between;
   border: 0.5px solid ${lightGrey2};
+  padding-bottom: 2;
   border-width: 0;
   border-bottom-width: 1px;
 `
@@ -75,7 +75,6 @@ const DialogLastMessage = styled(Text)`
   padding-left: 10px;
   padding-top: 2px;
   min-height: 25px;
-  margin-bottom: 20px;
 `
 const DialogDate = styled(View)`
   right: ${sidePadding}px;
@@ -111,9 +110,8 @@ const NewMessagesText = styled(Text)`
   text-align: center;
 `
 const LastFile = styled(View)`
-  height: 20px;
   padding-left: 10px;
-  padding-bottom: 20px;
+  padding-top: 4px;
   flex-direction: row;
   justify-content: flex-start;
   align-items: center;
@@ -149,7 +147,11 @@ class Content extends Component {
     lastTextMessage = lastTextMessage.length
       ? lastTextMessage[lastTextMessage.length - 1].text
       : ''
-    const lastFiles = lastMessage.filter(e => e.type !== 'text')
+    const lastFiles =
+      lastMessage[lastMessage.length - 1] &&
+      lastMessage[lastMessage.length - 1].type !== 'text'
+        ? [lastMessage[lastMessage.length - 1]]
+        : []
     const lastMessageDate = lastMessage[lastMessage.length - 1]
       ? new Date(lastMessage[lastMessage.length - 1].created_at)
       : null
@@ -226,7 +228,7 @@ class Content extends Component {
                   <DialogLastMessage numberOfLines={2}>
                     {lastTextMessage || 'no messages yet'}
                   </DialogLastMessage>
-                  {lastFiles.length ? (
+                  {!!lastFiles.length && (
                     <LastFile>
                       {lastFiles.map((e, i) => {
                         const { filename, type } = e
@@ -264,8 +266,6 @@ class Content extends Component {
                         <LastFiles />
                       )}
                     </LastFile>
-                  ) : (
-                    <LastFile />
                   )}
                 </>
               )}
