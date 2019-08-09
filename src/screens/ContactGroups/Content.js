@@ -67,7 +67,7 @@ const Wrapper = styled(View)`
   overflow: hidden;
 `
 const ContactList = styled(ScrollView)`
-  padding: 20px 40px 10px;
+  padding: 20px 24px 10px;
   max-width: 100%;
   overflow: hidden;
   flex: 1;
@@ -94,7 +94,8 @@ const BoxInner = styled(AnimatedBox)`
 `
 const BoxItem = styled(Text)`
   padding-bottom: ${({ title }) => (title ? 20 : 0)}px;
-  color: #a7b0ba;
+  font-weight: 500;
+  font-size: 16px;
   flex: 1;
   width: 80%;
 `
@@ -116,9 +117,12 @@ const ContactInfo = styled(View)`
   justify-content: center;
   margin-left: 10px;
 `
-const ContactName = styled(Text)``
+const ContactName = styled(Text)`
+  font-weight: 500;
+  font-size: 16px;
+`
 const ContactRole = styled(Text)`
-  color: #a7b0ba;
+  font-weight: 500;
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)``
 const Options = styled(View)`
@@ -340,8 +344,8 @@ class Content extends Component {
     const { user, dialogs } = this.props
     const { department } = users
     const allContacts = [...dialogs].filter(e => e._id !== user._id)
-    department.map(dep => {
-      dep.users.map(e => {
+    department.forEach(dep => {
+      dep.users.forEach(e => {
         const exists = dialogs.findIndex(chat => chat._id === e._id) !== -1
         const chat = dialogs.filter(
           chat => chat._id === e._id && chat._id === user._id,
@@ -358,18 +362,18 @@ class Content extends Component {
     })
     setTimeout(() => this.setState({ allContacts }), 0)
     const newCollapsed = [...collapsed]
-    users.department.map(() => {
+    users.department.forEach(() => {
       newCollapsed.push(false)
     })
     sendRequest({
       r_path: g_users,
       method: 'get',
       success: res => {
-        console.log('get users')
+        // console.log('get users')
         const { users } = this.state
         const newUsers = { ...users }
         const newDepartment = [...users.department]
-        res.users.map(user => {
+        res.users.forEach(user => {
           const department = newUsers.department.filter(
             e =>
               e.title.name === user.department.name ||
@@ -393,7 +397,7 @@ class Content extends Component {
         this.setState({ users: newUsers })
       },
       failFunc: err => {
-        console.log({ err })
+        // console.log({ err })
       },
     })
     this.setState({ collapsed: newCollapsed })

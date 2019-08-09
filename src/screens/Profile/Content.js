@@ -91,10 +91,9 @@ const Value = styled(Text)`
   justify-content: flex-start;
 `
 const Type = styled(Value)`
-  color: #bababa;
   min-width: 110px;
   flex: 0;
-  font-size: ${fontSize.sm};
+  font-size: 13px;
 `
 const PersonalData = styled(View)`
   border: 1px solid #e6e6e6;
@@ -421,7 +420,7 @@ class Content extends Component {
 
   leaveGroup = () => {
     const {
-      currentRoom,
+      // currentRoom,
       currentDialog,
       setDialogs,
       dialog,
@@ -430,7 +429,7 @@ class Content extends Component {
     const newDialogs = [...dialog].filter(e => e._id !== currentDialog._id)
     setDialogs(newDialogs)
     toDialogs()
-    console.log(`leave group ${currentRoom}`)
+    // console.log(`leave group ${currentRoom}`)
   }
 }
 
@@ -443,10 +442,10 @@ const mapStateToProps = state => ({
   user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({
-  getMessages: _ => dispatch(getMessages(_)),
+  // getMessages: _ => dispatch(getMessages(_)),
   setRoom: _ => dispatch(setRoom(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
-  addMessage: _ => dispatch(addMessage(_)),
+  // addMessage: _ => dispatch(addMessage(_)),
 })
 export default connect(
   mapStateToProps,

@@ -79,7 +79,7 @@ const HashTag = styled(Text)`
 const NewsText = styled(Text)`
   color: ${darkBlue2};
   font-weight: 300;
-  font-size: 13px;
+  font-size: 14px;
 `
 const Reactions = styled(View)`
   display: flex;

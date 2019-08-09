@@ -158,7 +158,7 @@ const FeedText = styled(View)``
 
 const NewsText = styled(Text)`
   color: ${darkBlue2};
-  font-size: ${fontSize.sm};
+  font-size: 14;
   margin-left: 5px;
 `
 const LikeText = styled(Text)`

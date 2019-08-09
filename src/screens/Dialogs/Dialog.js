@@ -68,9 +68,9 @@ const LastMessageDate = styled(Text)`
   margin-bottom: 5px;
 `
 const DialogLastMessage = styled(Text)`
-  font-size: ${fontSize.sl};
   padding-right: 20px;
   color: ${grey2};
+  font-size: 14;
   font-weight: 400;
   padding-left: 10px;
   padding-top: 2px;
