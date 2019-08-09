@@ -675,7 +675,13 @@ export function CheckGreyIcon(props) {
 }
 
 export function CheckIcon(props) {
-  const { onPress, left = true, right, noPaddingAll = true } = props
+  const {
+    color = 'white',
+    onPress,
+    left = true,
+    right,
+    noPaddingAll = true,
+  } = props
   return (
     <StyledTouchableOpacity
       onPress={onPress}
@@ -691,14 +697,24 @@ export function CheckIcon(props) {
       <Image
         style={{ width: IconSize, height: IconSize }}
         resizeMode="contain"
-        source={ICONS.Message_delivered}
+        source={
+          color === 'white'
+            ? ICONS.Message_delivered
+            : ICONS.Message_delivered_black
+        }
       />
     </StyledTouchableOpacity>
   )
 }
 
 export function CheckAllIcon(props) {
-  const { onPress, left = true, right, noPaddingAll = true } = props
+  const {
+    color = 'white',
+    onPress,
+    left = true,
+    right,
+    noPaddingAll = true,
+  } = props
   return (
     <StyledTouchableOpacity
       onPress={onPress}
@@ -714,7 +730,9 @@ export function CheckAllIcon(props) {
       <Image
         style={{ width: IconSize, height: IconSize }}
         resizeMode="contain"
-        source={ICONS.Message_read}
+        source={
+          color === 'white' ? ICONS.Message_read : ICONS.Message_read_black
+        }
       />
     </StyledTouchableOpacity>
   )

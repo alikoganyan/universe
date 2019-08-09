@@ -13,7 +13,7 @@ import { connect } from 'react-redux'
 import ImageComponent from './Image'
 import MapView from 'react-native-maps'
 // import { FileSystem } from 'expo';
-import RNFS from 'react-native-fs'
+// import RNFS from 'react-native-fs'
 import helper from '../utils/helpers'
 import { SingleImage } from 'react-native-zoom-lightbox'
 
@@ -41,7 +41,6 @@ const MyMessageText = styled(Text)`
   text-align: left;
   padding: ${({ noPadding }) => (noPadding ? 0 : 10)}px;
   padding-bottom: 0;
-  color: white;
   font-size: ${fontSize.textSize};
 `
 
@@ -197,8 +196,8 @@ class Message extends Component {
               resizeMode="contain"
             />
             <MessageInfo>
-              <MessageDate color="white">{finalTime}</MessageDate>
-              <Indicator color="white" read={messageRead} />
+              <MessageDate color="black">{finalTime}</MessageDate>
+              <Indicator color="black" read={messageRead} />
             </MessageInfo>
           </MyMessage>
           <TriangleLeftIcon color={myMessage} />
@@ -240,8 +239,8 @@ class Message extends Component {
           <MyMessage background={background}>
             <MyMessageText>{text}</MyMessageText>
             <MessageInfo>
-              <MessageDate color="white">{finalTime}</MessageDate>
-              <Indicator color="white" read={messageRead} />
+              <MessageDate color="black">{finalTime}</MessageDate>
+              <Indicator color="black" read={messageRead} />
             </MessageInfo>
           </MyMessage>
           <TriangleLeftIcon color={background || myMessage} />
@@ -310,7 +309,7 @@ class Message extends Component {
               <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
               <MapViewStreetInfo>
                 <MapViewStreetTime>4:10</MapViewStreetTime>
-                <Indicator read={messageRead} />
+                <Indicator color="black" read={messageRead} />
               </MapViewStreetInfo>
             </MapViewStreet>
           </MyMessage>
@@ -374,8 +373,8 @@ class Message extends Component {
               </FileInfo>
             </FileInfoWrapper>
             <MessageInfo>
-              <MessageDate color="white">{finalTime}</MessageDate>
-              <Indicator color="white" read={messageRead} />
+              <MessageDate color="black">{finalTime}</MessageDate>
+              <Indicator color="black" read={messageRead} />
             </MessageInfo>
           </MyMessage>
           <TriangleLeftIcon color={background || myMessage} />

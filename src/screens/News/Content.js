@@ -45,6 +45,7 @@ const Sender = styled(View)`
 `
 const SenderName = styled(Text)`
   font-size: 13;
+  font-weight: 500;
 `
 const SenderInfo = styled(View)`
   display: flex;

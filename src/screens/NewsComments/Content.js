@@ -53,6 +53,7 @@ const Sendermage = styled(Image)`
 `
 const SenderName = styled(Text)`
   font-size: 13px;
+  font-weight: 500;
 `
 const SenderInfo = styled(View)`
   display: flex;
