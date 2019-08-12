@@ -52,7 +52,7 @@ export default {
     lightGrey1: '#b1b9c2',
     lightGrey2: '#f7f7f7',
     lightGrey3: '#ccc',
-    myMessage: '#00ffff', // '#588eff', '#4a83fa',
+    myMessage: '#d0d8df', // '#00ffff', '#588eff', '#4a83fa',
     interlocatorMessage: '#F6F6F6',
     avatars: [
       '#f9d38a',

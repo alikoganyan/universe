@@ -31,7 +31,10 @@ const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 2px ${sidePadding}px 0px;
+  padding: 2px ${sidePadding}px 2px;
+  border: 0.5px solid ${lightGrey2};
+  border-width: 0;
+  border-bottom-width: 1px;
 `
 const DialogImage = styled(Image)`
   width: 50px;
@@ -43,10 +46,6 @@ const DialogText = styled(View)`
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
-  border: 0.5px solid ${lightGrey2};
-  padding-bottom: 2;
-  border-width: 0;
-  border-bottom-width: 1px;
 `
 
 const DialogTextInner = styled(View)`
@@ -59,7 +58,7 @@ const DialogTitle = styled(Text)`
   font-size: ${fontSize.dialogName};
   width: ${Dimensions.get('window').width - 20}px;
   color: #000000;
-  font-weight: 400;
+  font-weight: 700;
   padding-left: 10px;
 `
 const LastMessageDate = styled(Text)`
