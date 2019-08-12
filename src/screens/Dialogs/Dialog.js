@@ -10,9 +10,10 @@ import {
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import helper from '../../utils/helpers'
+import helper, { getHamsterDate } from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { socket } from '../../utils/socket'
+
 import { FilesRedIcon, TaskIcon, LocationIcon } from '../../assets'
 
 const { fontSize, sidePadding, Colors } = helper
@@ -141,8 +142,7 @@ const LastFiles = styled(Text)`
 class Content extends Component {
   render() {
     const { title, user, image, lastMessage, item, unreadMessages } = this.props
-    const { phone, _id, creator, created_at, isGroup, participants } = item
-    const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+    const { phone, _id, creator, /*created_at,*/ isGroup, participants } = item
     let lastTextMessage = lastMessage.filter(e => e.type === 'text')
     lastTextMessage = lastTextMessage.length
       ? lastTextMessage[lastTextMessage.length - 1].text
@@ -155,32 +155,7 @@ class Content extends Component {
     const lastMessageDate = lastMessage[lastMessage.length - 1]
       ? new Date(lastMessage[lastMessage.length - 1].created_at)
       : null
-    const dayOfTheWeek = lastMessage.length
-      ? daysOfTheWeek[lastMessageDate.getDay()]
-      : undefined
-    const difference = Math.abs(new Date() - lastMessageDate) / 864e5
-    const timeCreatedAt = new Date(created_at)
-    const timeCreated = `${
-      timeCreatedAt.getHours() >= 10
-        ? timeCreatedAt.getHours()
-        : `0${timeCreatedAt.getHours()}`
-    }:${
-      timeCreatedAt.getMinutes() >= 10
-        ? timeCreatedAt.getMinutes()
-        : `0${timeCreatedAt.getMinutes()}`
-    }`
-    const time =
-      difference >= 1
-        ? dayOfTheWeek
-        : `${
-            lastMessageDate.getHours() >= 10
-              ? lastMessageDate.getHours()
-              : `0${lastMessageDate.getHours()}`
-          }:${
-            lastMessageDate.getMinutes() >= 10
-              ? lastMessageDate.getMinutes()
-              : `0${lastMessageDate.getMinutes()}`
-          }`
+    const dialogDate = getHamsterDate(lastMessageDate, true)
     let lastType = ''
     if (lastMessage.length) {
       switch (lastMessage[lastMessage.length - 1].type) {
@@ -278,7 +253,7 @@ class Content extends Component {
               )}
             </DialogTextInner>
             <DialogDate>
-              <LastMessageDate>{time || timeCreated}</LastMessageDate>
+              <LastMessageDate>{dialogDate}</LastMessageDate>
               <UnreadMessages>
                 {!!unreadMessages && (
                   <NewMessages color={lastType}>

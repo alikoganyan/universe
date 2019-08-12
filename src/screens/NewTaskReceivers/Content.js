@@ -17,7 +17,7 @@ import posed from 'react-native-pose'
 import Collapsible from 'react-native-collapsible'
 import { connect } from 'react-redux'
 import { ArrowDownIcon } from '../../assets/index'
-import helper from '../../utils/helpers'
+import helper, { getUsersByDepartments } from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import sendRequest from '../../utils/request'
 import { g_users } from '../../constants/api'
@@ -294,18 +294,18 @@ class Content extends Component {
       method: 'get',
       success: res => {
         this.props.setContacts(res.users)
-        const newUsers = { ...users }
-        newUsers.department[0].workers = res.users
-        this.setState({ users: newUsers })
+        // TODO: надо бы брать все из стора
+        const formatedUsers = getUsersByDepartments(res.users || [])
+        this.setState({ users: { department: formatedUsers } })
       },
       failFunc: err => {
-        console.log({ err })
+        // console.log({ err })
       },
     })
   }
 
   optionLeft = () => {
-    const { collapsed } = this.state
+    const { options } = this.state
     const newState = { ...options }
     const { length } = options.options
     newState.active = options.active < length - 1 ? options.active + 1 : 0
@@ -313,7 +313,7 @@ class Content extends Component {
   }
 
   optionRight = () => {
-    const { collapsed } = this.state
+    const { options } = this.state
     const newState = { ...options }
     const { length } = options.options
     newState.active = options.active > 0 ? options.active - 1 : length - 1

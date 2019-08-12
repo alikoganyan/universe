@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import helper from '../../utils/helpers'
+import helper, { getHamsterDate } from '../../utils/helpers'
 import { TasksIcon } from '../../assets/index'
 import { setIncTasks, setOutTasks } from '../../actions/tasksActions'
 
@@ -117,9 +117,8 @@ class TaskPack extends Component {
     const taskPack = [...new Set(tasksPack)].filter(
       task => task.status === 'set' || task.status === 'accepted',
     )
-    console.log(taskPack)
-    let day = ''
-    const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+    // console.log(taskPack)
+    let date = ''
     if (taskPack.length) {
       switch (taskPack[taskPack.length - 1].status) {
         case 'set':
@@ -141,7 +140,7 @@ class TaskPack extends Component {
           this.stat = ''
           break
       }
-      day = new Date(taskPack[taskPack.length - 1].created_at).getDay()
+      date = getHamsterDate(taskPack[taskPack.length - 1].created_at, true)
     }
     return (
       <TouchableHighlight
@@ -175,7 +174,7 @@ class TaskPack extends Component {
               </TaskStatus>
             </TaskTextInner>
             <TaskDate>
-              <LastMessageDate>{daysOfTheWeek[day]}</LastMessageDate>
+              <LastMessageDate>{date}</LastMessageDate>
               {taskPack.length ? (
                 <UnreadMessages>
                   <NewMessages>{taskPack.length}</NewMessages>

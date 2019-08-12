@@ -17,7 +17,7 @@ import posed from 'react-native-pose'
 import Collapsible from 'react-native-collapsible'
 import { connect } from 'react-redux'
 import { ArrowDownIcon } from '../../assets/index'
-import helper from '../../utils/helpers'
+import helper, { getUsersByDepartments } from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
@@ -150,7 +150,7 @@ const GroupImage = styled(ContactImage)``
 class Content extends Component {
   render() {
     const { receivers } = this.props
-    const { users, collapsed, options, groups, animationCompleted } = this.state
+    const { users, collapsed, options, animationCompleted } = this.state
     const { department } = users
     const { active } = options
     return (
@@ -250,14 +250,14 @@ class Content extends Component {
                     style={{ paddingRight: 5, paddingLeft: 5 }}
                     ListHeaderComponent={<View style={{ margin: 35 }} />}
                     inverted
-                    data={groups}
+                    data={department}
                     renderItem={({ item, index }) => (
                       <Group key={index}>
                         <GroupImage />
                         <GroupInfo>
                           <GroupTitle>{item.title}</GroupTitle>
                           <GroupParticipants>
-                            {item.participants} участников
+                            {item.workers ? item.workers.length : 0} участников
                           </GroupParticipants>
                         </GroupInfo>
                       </Group>
@@ -319,12 +319,12 @@ class Content extends Component {
       method: 'get',
       success: res => {
         setContacts(res.users)
-        const newUsers = { ...users }
-        newUsers.department[0].workers = res.users
-        this.setState({ users: newUsers })
+        // TODO: надо бы брать все из стора
+        const formatedUsers = getUsersByDepartments(res.users || [])
+        this.setState({ users: { department: formatedUsers } })
       },
       failFunc: err => {
-        console.log({ err })
+        // console.log({ err })
       },
     })
   }

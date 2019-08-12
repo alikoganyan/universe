@@ -14,7 +14,7 @@ import ImageComponent from './Image'
 import MapView from 'react-native-maps'
 // import { FileSystem } from 'expo';
 // import RNFS from 'react-native-fs'
-import helper from '../utils/helpers'
+import helper, { getHamsterDate } from '../utils/helpers'
 import { SingleImage } from 'react-native-zoom-lightbox'
 
 const { Colors, fontSize, borderRadius } = helper
@@ -166,16 +166,7 @@ class Message extends Component {
       size,
       data,
     } = children
-    const date = new Date(created_at)
-    const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
-    const day = daysOfTheWeek[date.getDay()]
-    const minutes =
-      date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`
-    const hours =
-      date.getHours() >= 10 ? date.getHours() : `0${date.getHours()}`
-    const time = `${hours}:${minutes}`
-    const finalTime =
-      Math.abs(date - new Date()) / (1000 * 60 * 60 * 24) > 1 ? day : time
+    const finalTime = getHamsterDate(created_at)
     const fileSize =
       size / 1024 > 1024
         ? `${(size / (1024 * 2)).toFixed(1)}МБ`
@@ -268,8 +259,7 @@ class Message extends Component {
             >
               {withImage && (
                 <InterlocutorsName>
-                  {sender.first_name}
-                  {sender.last_name}
+                  {`${sender.first_name} ${sender.last_name}`}
                 </InterlocutorsName>
               )}
               <InterlocutorsMessageText>{text}</InterlocutorsMessageText>
@@ -402,8 +392,7 @@ class Message extends Component {
             >
               {withImage && (
                 <InterlocutorsName>
-                  {sender.first_name}
-                  {sender.last_name}
+                  {`${sender.first_name} ${sender.last_name}`}
                 </InterlocutorsName>
               )}
               <FileInfoWrapper>

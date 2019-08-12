@@ -157,3 +157,66 @@ export function validateEmail(email) {
   var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
   return re.test(String(email).toLowerCase())
 }
+
+export const getUsersByDepartments = (users = []) => {
+  const usersByDepartments = []
+  users &&
+    users.length &&
+    users.forEach(item => {
+      const { department: { _id: dId = 0, name: dTitle = '' } = {} } = item
+      const dIndex = usersByDepartments.findIndex(({ id = 0 }) => id === dId)
+      if (dIndex !== -1) {
+        usersByDepartments[dIndex].workers.push(item)
+      } else {
+        usersByDepartments.push({ id: dId, title: dTitle, workers: [item] })
+      }
+    })
+  return usersByDepartments
+}
+
+export const declOfNum = (number, titles) => {
+  const cases = [2, 0, 1, 1, 1, 2]
+  return titles[
+    number % 100 > 4 && number % 100 < 20
+      ? 2
+      : cases[number % 10 < 5 ? number % 10 : 5]
+  ]
+}
+
+export const getHamsterDate = (dateStr, minify = false) => {
+  const date = new Date(dateStr)
+  const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
+  const dayName = daysOfTheWeek[date.getDay()]
+  const minutes =
+    date.getMinutes() >= 10 ? date.getMinutes() : `0${date.getMinutes()}`
+  const hours = date.getHours() >= 10 ? date.getHours() : `0${date.getHours()}`
+  const time = `${hours}:${minutes}`
+  const yearAgo = new Date()
+  yearAgo.setFullYear(yearAgo.getFullYear() - 1)
+  const weekAgo = new Date()
+  weekAgo.setDate(weekAgo.getDate() - 7)
+  const dayAgo = new Date()
+  dayAgo.setDate(dayAgo.getDate() - 1)
+  let day = date.getDate()
+  if (day < 10) day = `0${day}`
+  let month = date.getMonth() + 1
+  if (month < 10) month = `0${month}`
+
+  if (minify) {
+    return date < yearAgo
+      ? `${day}.${month}.${date.getFullYear()}`
+      : date < weekAgo
+      ? `${day}.${month}`
+      : date < dayAgo
+      ? `${dayName}`
+      : time
+  } else {
+    return date < yearAgo
+      ? `${day}.${month}.${date.getFullYear()} ${time}`
+      : date < weekAgo
+      ? `${day}.${month} ${time}`
+      : date < dayAgo
+      ? `${dayName} ${time}`
+      : time
+  }
+}

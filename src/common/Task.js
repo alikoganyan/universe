@@ -16,7 +16,7 @@ import sendRequest from '../utils/request'
 import { p_tasks } from '../constants/api'
 import ImageComponent from './Image'
 import DefaultAvatar from './DefaultAvatar'
-import helper from '../utils/helpers'
+import helper, { getHamsterDate } from '../utils/helpers'
 
 const { Colors, fontSize, borderRadius } = helper
 const { red, yellow, green, purple, grey1 } = Colors
@@ -86,8 +86,8 @@ const TaskBodyText = styled(Text)`
 const TaskDeadline = styled(View)`
   display: flex;
   flex-direction: column;
-  width: 100%;
-  flex: 7;
+  flexgrow: 1;
+  width: 0;
 `
 const TaskDeadlineLabel = styled(Text)`
   color: ${grey1};
@@ -103,9 +103,6 @@ const TaskPostTime = styled(View)`
   align-items: center;
   justify-content: flex-end;
   padding: 0;
-  width: 100%;
-  margin-right: 10px;
-  flex: 2;
 `
 const TaskFooter = styled(View)`
   display: flex;
@@ -219,7 +216,7 @@ class TaskComponent extends Component {
         break
     }
     const deadlineDate = new Date(deadline)
-    const creationDate = new Date(created_at)
+    const creationDate = getHamsterDate(created_at)
     const rightControl = activeTask._id === _id
     const leftControl = activeTask._id === _id
     return (
@@ -372,12 +369,7 @@ class TaskComponent extends Component {
                 </TaskDeadlineLabel>
               </TaskDeadline>
               <TaskPostTime>
-                <TaskPostTimeText>
-                  {creationDate.getHours()}:
-                  {creationDate.getMinutes() < 10
-                    ? `0${creationDate.getMinutes()}`
-                    : creationDate.getMinutes()}
-                </TaskPostTimeText>
+                <TaskPostTimeText>{creationDate}</TaskPostTimeText>
                 {/* {triangleRight && <Indicator />} */}
               </TaskPostTime>
             </TaskFooter>
@@ -446,7 +438,7 @@ class TaskComponent extends Component {
       setTasks,
       tasks,
       currentTask,
-      user,
+      // user,
     } = this.props
     const newActiveTask = { ...activeTask }
     const { _id, name, description, deadline, performers } = newActiveTask
@@ -480,7 +472,7 @@ class TaskComponent extends Component {
         // console.log({res})
       },
       failFunc: err => {
-        console.log(err)
+        // console.log(err)
       },
     })
   }

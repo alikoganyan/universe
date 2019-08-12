@@ -3,26 +3,22 @@ import {
   View,
   Text,
   SafeAreaView,
-  FlatList,
-  Image,
+  // Image,
   TouchableOpacity,
   ScrollView,
   Dimensions,
-  KeyboardAvoidingView,
   TouchableWithoutFeedback,
   InteractionManager,
 } from 'react-native'
 import styled from 'styled-components'
-import FloatingLabel from 'react-native-floating-labels'
-import Icon from 'react-native-vector-icons/FontAwesome'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import RoundCheckbox from 'rn-round-checkbox'
-import posed, { Transition } from 'react-native-pose'
+import posed from 'react-native-pose'
 import Collapsible from 'react-native-collapsible'
-import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures'
+// import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures'
 import { connect } from 'react-redux'
-import { BackIcon, EllipsisVIcon, ArrowDownIcon } from '../../assets/index'
-import helper from '../../utils/helpers'
+import { ArrowDownIcon } from '../../assets/index'
+import helper, { getUsersByDepartments } from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
@@ -36,27 +32,27 @@ import {
 import { setDialogs } from '../../actions/dialogsActions'
 
 const { Colors } = helper
-const { green, black } = Colors
-const AnimatedScrollView = posed.View({
-  left: {
-    x: Dimensions.get('window').width,
-    transition: { duration: 300, ease: 'easeOut' },
-  },
-  center: {
-    x: 0,
-    transition: { duration: 300, ease: 'easeOut' },
-  },
+const { green } = Colors
+// const AnimatedScrollView = posed.View({
+//   left: {
+//     x: Dimensions.get('window').width,
+//     transition: { duration: 300, ease: 'easeOut' },
+//   },
+//   center: {
+//     x: 0,
+//     transition: { duration: 300, ease: 'easeOut' },
+//   },
 
-  right: {
-    x: -Dimensions.get('window').width,
-    transition: { duration: 300, ease: 'easeOut' },
-  },
-})
-const Animated = styled(AnimatedScrollView)`
-  display: flex;
-  flex-direction: row;
-  width: ${Dimensions.get('window').width * 3};
-`
+//   right: {
+//     x: -Dimensions.get('window').width,
+//     transition: { duration: 300, ease: 'easeOut' },
+//   },
+// })
+// const Animated = styled(AnimatedScrollView)`
+//   display: flex;
+//   flex-direction: row;
+//   width: ${Dimensions.get('window').width * 3};
+// `
 const AnimatedBox = posed.View({
   visible: { flex: 1 },
   hidden: { flex: 0 },
@@ -110,11 +106,11 @@ const BoxInnerItem = styled(View)`
   flex-direction: row;
   align-items: center;
 `
-const ContactImage = styled(Image)`
-  width: 36px;
-  height: 36px;
-  border-radius: 18;
-`
+// const ContactImage = styled(Image)`
+//   width: 36px;
+//   height: 36px;
+//   border-radius: 18;
+// `
 const ContactInfo = styled(View)`
   margin-left: 10px;
 `
@@ -126,45 +122,45 @@ const ContactRole = styled(Text)`
   justify-content: center;
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)``
-const Options = styled(View)`
-  display: flex;
-  align-self: center;
-  background: ${green};
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 1px;
-  border-radius: 13;
-  overflow: hidden;
-`
-const Option = styled(Text)`
-  color: ${({ active }) => (active ? black : 'white')};
-  background: ${({ active }) => (active ? 'white' : 'transparent')};
-  min-width: 20%;
-  margin: 1px;
-  border-radius: 10;
-  padding: 2px 10px;
-  overflow: hidden;
-  text-align: center;
-`
-const Group = styled(BoxInnerItem)``
-const GroupInfo = styled(ContactInfo)``
-const GroupTitle = styled(ContactName)``
-const GroupParticipants = styled(ContactRole)``
-const GroupImage = styled(ContactImage)``
+// const Options = styled(View)`
+//   display: flex;
+//   align-self: center;
+//   background: ${green};
+//   flex-direction: row;
+//   justify-content: space-between;
+//   padding: 1px;
+//   border-radius: 13;
+//   overflow: hidden;
+// `
+// const Option = styled(Text)`
+//   color: ${({ active }) => (active ? black : 'white')};
+//   background: ${({ active }) => (active ? 'white' : 'transparent')};
+//   min-width: 20%;
+//   margin: 1px;
+//   border-radius: 10;
+//   padding: 2px 10px;
+//   overflow: hidden;
+//   text-align: center;
+// `
+// const Group = styled(BoxInnerItem)``
+// const GroupInfo = styled(ContactInfo)``
+// const GroupTitle = styled(ContactName)``
+// const GroupParticipants = styled(ContactRole)``
+// const GroupImage = styled(ContactImage)``
 class Content extends Component {
   render() {
     const { participants } = this.props
     const {
       users,
       collapsed,
-      options,
-      groups,
-      isSelected,
-      usersToAdd,
+      // options,
+      // groups,
+      // isSelected,
+      // usersToAdd,
       animationCompleted,
     } = this.state
     const { department } = users
-    const { active } = options
+    // const { active } = options
     return (
       <SafeAreaView>
         {/* <GestureRecognizer
@@ -257,7 +253,7 @@ class Content extends Component {
     users: {
       department: [
         {
-          title: 'Отдел длинных корпоративных названий',
+          title: 'Отдел длинных корпоративных названий1',
           workers: [],
         },
       ],
@@ -285,7 +281,7 @@ class Content extends Component {
         animationCompleted: true,
       })
     })
-    const { participants } = this.props
+    // const { participants } = this.props
     const { collapsed, users } = this.state
     const newDCollapsed = [...collapsed]
     for (let i = 0; i <= users.department.length; i++) {
@@ -297,12 +293,12 @@ class Content extends Component {
       method: 'get',
       success: res => {
         this.props.setContacts(res.users)
-        const newUsers = { ...users }
-        newUsers.department[0].workers = res.users
-        this.setState({ users: newUsers })
+        // TODO: надо бы брать все из стора
+        const formatedUsers = getUsersByDepartments(res.users || [])
+        this.setState({ users: { department: formatedUsers } })
       },
       failFunc: err => {
-        console.log({ err })
+        // console.log({ err })
       },
     })
   }
@@ -324,8 +320,8 @@ class Content extends Component {
   }
 
   addReceiver = e => {
-    const { addReceiver, back, setReceivers, participants } = this.props
-    const { usersToAdd } = this.state
+    const { addReceiver, /*back,*/ setReceivers, participants } = this.props
+    // const { usersToAdd } = this.state
     const newReceivers = [...participants].filter(user => user._id !== e._id)
     this.includes(e) ? setReceivers(newReceivers) : addReceiver(e)
   }
@@ -336,7 +332,7 @@ class Content extends Component {
   }
 
   addAllReceivers = e => {
-    const { addReceiver, back, participants, setReceivers } = this.props
+    const { /*addReceiver, back,*/ participants, setReceivers } = this.props
     const newReceivers =
       JSON.stringify(e) === JSON.stringify(participants) ? [] : e
     setReceivers(newReceivers)
