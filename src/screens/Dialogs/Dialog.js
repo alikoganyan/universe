@@ -31,10 +31,11 @@ const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: flex-start;
-  padding: 2px ${sidePadding}px 2px;
+  padding: 4px ${sidePadding}px 2px;
   border: 0.5px solid ${lightGrey2};
   border-width: 0;
   border-bottom-width: 1px;
+  height: 60px;
 `
 const DialogImage = styled(Image)`
   width: 50px;
@@ -58,7 +59,7 @@ const DialogTitle = styled(Text)`
   font-size: ${fontSize.dialogName};
   width: ${Dimensions.get('window').width - 20}px;
   color: #000000;
-  font-weight: 700;
+  font-weight: ${({ isGroup }) => (isGroup ? 400 : 700)};
   padding-left: 10px;
 `
 const LastMessageDate = styled(Text)`
@@ -72,9 +73,9 @@ const DialogLastMessage = styled(Text)`
   color: ${grey2};
   font-size: 14;
   font-weight: 400;
+  line-height: 15;
   padding-left: 10px;
   padding-top: 2px;
-  min-height: 25px;
 `
 const DialogDate = styled(View)`
   right: ${sidePadding}px;
@@ -177,6 +178,15 @@ class Content extends Component {
       : user._id === creator._id
       ? participants[0].image
       : creator.image
+    const lastGroupSender =
+      isGroup &&
+      lastMessage &&
+      lastMessage.length &&
+      lastMessage[lastMessage.length - 1]
+        ? lastMessage[lastMessage.length - 1].sender || {}
+        : {}
+    const lastGroupSenderName = `${lastGroupSender.first_name ||
+      ''} ${lastGroupSender.last_name || ''}`
     return (
       <TouchableHighlight
         underlayColor={lightBlue}
@@ -187,7 +197,7 @@ class Content extends Component {
           {!chatImage ||
           chatImage === '/images/default_group.png' ||
           chatImage === '/images/default_avatar.jpg' ? (
-            <DefaultAvatar isGroup={isGroup} id={item._id} size="large" />
+            <DefaultAvatar isGroup={isGroup} id={item._id} size={50} />
           ) : (
             <DialogImage
               source={{ uri: `https://ser.univ.team${chatImage}` }}
@@ -198,8 +208,15 @@ class Content extends Component {
             <DialogTextInner>
               {title && (
                 <>
-                  <DialogTitle>{title}</DialogTitle>
-                  <DialogLastMessage numberOfLines={2}>
+                  <DialogTitle numberOfLines={1} isGroup={isGroup}>
+                    {title}
+                  </DialogTitle>
+                  {!!isGroup && (
+                    <DialogTitle numberOfLines={1}>
+                      {lastGroupSenderName}
+                    </DialogTitle>
+                  )}
+                  <DialogLastMessage numberOfLines={isGroup ? 1 : 2}>
                     {lastTextMessage || 'no messages yet'}
                   </DialogLastMessage>
                   {!!lastFiles.length && (
