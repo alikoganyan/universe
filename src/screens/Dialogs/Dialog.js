@@ -35,7 +35,7 @@ const Wrapper = styled(View)`
   border: 0.5px solid ${lightGrey2};
   border-width: 0;
   border-bottom-width: 1px;
-  height: 60px;
+  min-height: 60px;
 `
 const DialogImage = styled(Image)`
   width: 50px;
