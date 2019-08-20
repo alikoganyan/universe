@@ -29,8 +29,53 @@ const StyledFlatList = styled(FlatList)`
 `
 
 class Dialogs extends Component {
+  _renderItem = dialog => {
+    const { user } = this.props
+    const { item } = dialog
+    const {
+      creator,
+      participants,
+      messages,
+      name,
+      text,
+      isGroup,
+      room,
+      image,
+    } = item
+    const unreadMessages = messages.filter(
+      e => !e.viewers.includes(user._id) && e.sender._id !== user._id,
+    ).length
+    const chatName = !isGroup
+      ? user._id !== creator._id
+        ? creator.first_name
+          ? `${creator.first_name} ${creator.last_name}`
+          : creator.phone_number
+        : participants[0] && participants[0].first_name
+        ? `${participants[0].first_name} ${participants[0].last_name}`
+        : participants[0].phone_number
+      : name || room
+    const chatImage = !isGroup
+      ? user._id === creator
+        ? user.image
+        : participants[0].image
+      : image
+    return (
+      <Dialog
+        key={item._id}
+        unreadMessages={unreadMessages}
+        lastMessage={messages}
+        onClick={() => this.toChat({ ...item })}
+        image={chatImage}
+        title={chatName}
+        item={item}
+      >
+        {text}
+      </Dialog>
+    )
+  }
+
   render() {
-    const { dialogs, user, navigation } = this.props
+    const { dialogs, navigation } = this.props
     const { congratulations } = this.state
     return (
       <SafeAreaView behavior="padding">
@@ -64,50 +109,7 @@ class Dialogs extends Component {
               initialNumToRender={20}
               data={dialogs}
               keyboardShouldPersistTaps="always"
-              renderItem={dialog => {
-                const { item } = dialog
-                const {
-                  creator,
-                  participants,
-                  messages,
-                  name,
-                  text,
-                  isGroup,
-                  room,
-                  image,
-                } = item
-                const unreadMessages = messages.filter(
-                  e =>
-                    !e.viewers.includes(user._id) && e.sender._id !== user._id,
-                ).length
-                const chatName = !isGroup
-                  ? user._id !== creator._id
-                    ? creator.first_name
-                      ? `${creator.first_name} ${creator.last_name}`
-                      : creator.phone_number
-                    : participants[0] && participants[0].first_name
-                    ? `${participants[0].first_name} ${participants[0].last_name}`
-                    : participants[0].phone_number
-                  : name || room
-                const chatImage = !isGroup
-                  ? user._id === creator
-                    ? user.image
-                    : participants[0].image
-                  : image
-                return (
-                  <Dialog
-                    key={item._id}
-                    unreadMessages={unreadMessages}
-                    lastMessage={messages}
-                    onClick={() => this.toChat({ ...item })}
-                    image={chatImage}
-                    title={chatName}
-                    item={item}
-                  >
-                    {text}
-                  </Dialog>
-                )
-              }}
+              renderItem={this._renderItem}
               keyExtractor={(item, index) => item._id.toString()}
             />
           ) : (
@@ -207,7 +209,7 @@ class Dialogs extends Component {
       // } else {
       // }
       newDialog.messages &&
-        newDialog.messages.map(e => {
+        newDialog.messages.forEach(e => {
           newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
         })
       newDialogs[newDialogIndex] = newDialog
@@ -226,7 +228,8 @@ class Dialogs extends Component {
     const { setDialogs } = this.props
     const newDialogs = e.dialogs.length ? [...e.dialogs] : []
     const newDialogsSorted = newDialogs.length
-      ? newDialogs.sort((a, b) => {
+      ? // eslint-disable-next-line array-callback-return
+        newDialogs.sort((a, b) => {
           if (b.messages.length && a.messages.length) {
             const aCreation = new Date(a.created_at)
             const aLastMessage = new Date(
@@ -284,7 +287,10 @@ class Dialogs extends Component {
   }
 
   newMessageSocket = e => {
-    const { dialogs, addMessage, setDialogs, currentRoomId, user } = this.props
+    const {
+      dialogs,
+      setDialogs /*addMessage, currentRoomId, user*/,
+    } = this.props
     try {
       const message =
         e.message && e.message._id
@@ -308,6 +314,7 @@ class Dialogs extends Component {
         ] = newDialog
         const newDialogSorted =
           newDialogs.length &&
+          // eslint-disable-next-line array-callback-return
           newDialogs.sort((a, b) => {
             if (b.messages.length && a.messages.length) {
               const aCreation = new Date(a.created_at)
@@ -389,6 +396,7 @@ class Dialogs extends Component {
     const { user, dialogs } = this.props
     const chat = chatId
       .split('room')[1]
+      // eslint-disable-next-line no-useless-escape
       .replace(/\_/, '')
       .replace(senderId, '')
     const newFlatListData = [...dialogs]
@@ -408,7 +416,7 @@ class Dialogs extends Component {
     const { user } = this.props
     const { dialogs, messages, unread } = e
     const newDialogs = []
-    dialogs.map(e => {
+    dialogs.forEach(e => {
       const message = messages.filter(message => {
         const room =
           user.id >= e.id ? `room${user.id}_${e.id}` : `room${e.id}_${user.id}`

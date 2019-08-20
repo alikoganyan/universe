@@ -27,13 +27,13 @@ const {
   lightBlue,
 } = Colors
 const Wrapper = styled(View)`
-  flex: 1;
   flex-direction: row;
   align-items: center;
   padding: 4px ${sidePadding}px 2px;
   border: 0.5px solid ${lightGrey2};
   border-width: 0;
   border-bottom-width: 1px;
+  width: 100%;
   height: 70px;
 `
 const DialogImage = styled(Image)`
