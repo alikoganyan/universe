@@ -3,11 +3,8 @@ import {
   View,
   Text,
   FlatList,
-  Dimensions,
-  ImageBackground,
+  // ImageBackground,
   TouchableOpacity,
-  ActionSheetIOS,
-  Platform,
   InteractionManager,
 } from 'react-native'
 import styled from 'styled-components'
@@ -28,14 +25,6 @@ const Wrapper = styled(View)`
   margin-bottom: ${({ search }) => (search ? HeaderHeight * 2 : HeaderHeight)};
   z-index: 1;
 `
-const Shadow = styled(TouchableOpacity)`
-  position: absolute;
-  width: ${Dimensions.get('window').width};
-  height: ${Dimensions.get('window').height};
-  background: rgba(5, 5, 5, 0.3);
-  top: -${HeaderHeight - 3}px;
-  z-index: 4;
-`
 const MessageOptions = styled(View)`
   background: white;
   width: 94%;
@@ -55,6 +44,13 @@ const MessageOption = styled(TouchableOpacity)`
 const FlatListHeader = styled(View)`
   margin: ${({ editing }) => (editing ? 65 : 35)}px;
 `
+
+// const StyledImageBackground = styled(ImageBackground)`
+const StyledImageBackground = styled(View)`
+  width: 100%;
+  height: 100%;
+  background: #d0d8df;
+`
 class Content extends Component {
   render() {
     const { selectedMessage, animationCompleted } = this.state
@@ -68,10 +64,7 @@ class Content extends Component {
     return (
       <>
         <Wrapper search={search}>
-          <ImageBackground
-            source={chatBg}
-            style={{ width: '100%', height: '100%' }}
-          >
+          <StyledImageBackground source={chatBg}>
             {animationCompleted ? (
               <FlatList
                 style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
@@ -86,7 +79,7 @@ class Content extends Component {
                     key={index}
                     onLongPress={() => this.handleHold(item)}
                   >
-                    <Message withImage read={!!item.viewers.length}>
+                    <Message withImage read={!!item.viewers.length} isGroup>
                       {item}
                     </Message>
                   </TouchableOpacity>
@@ -94,7 +87,7 @@ class Content extends Component {
                 keyExtractor={(item, index) => index.toString()}
               />
             ) : null}
-          </ImageBackground>
+          </StyledImageBackground>
         </Wrapper>
         <BottomSheet
           visible={selectedMessage._id}
@@ -194,10 +187,10 @@ class Content extends Component {
         messages: [selectedMessage._id],
       },
       success: res => {
-        console.log(res)
+        // console.log(res)
       },
       failFunc: err => {
-        console.log(err)
+        // console.log(err)
       },
     })
     this.unselect()

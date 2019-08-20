@@ -66,8 +66,8 @@ const TaskWrapper = styled(View)`
 //     left: 0;
 // `;
 const StyledScrollView = styled(ScrollView)`
-  flexgrow: 1;
-  zindex: 10;
+  flex-grow: 1;
+  z-index: 10;
   width: 100%;
   height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
 `

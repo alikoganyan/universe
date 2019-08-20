@@ -11,7 +11,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { CommentIcon, HeartIcon } from '../../assets/index'
 import { setFeed } from '../../actions/newsActions'
-import helper from '../../utils/helpers'
+import helper, { getHamsterDate } from '../../utils/helpers'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import Loader from '../../common/Loader'
@@ -97,20 +97,6 @@ const Reactionsext = styled(Text)`
 class Content extends Component {
   render() {
     const { news } = this.props
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'June',
-      'July',
-      'Aug',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec',
-    ]
     return (
       <SafeAreaView>
         <Wrapper>
@@ -126,7 +112,7 @@ class Content extends Component {
                   comments,
                   likes_сount,
                 } = item
-                const date = new Date(created_at)
+                const date = getHamsterDate(created_at)
                 return (
                   <NewsItem onPress={() => this.proceed(item)}>
                     <Sender>
@@ -151,11 +137,7 @@ class Content extends Component {
                             ? `${creator.first_name} ${creator.last_name}`
                             : creator.phone_number}
                         </SenderName>
-                        <TimeSent>
-                          {date.getDate()} {months[date.getMonth()]}{' '}
-                          {date.getFullYear()} {date.getHours()}:
-                          {date.getMinutes()}
-                        </TimeSent>
+                        <TimeSent>{date}</TimeSent>
                       </SenderInfo>
                     </Sender>
                     <NewsText numberOfLines={2}>{text}</NewsText>

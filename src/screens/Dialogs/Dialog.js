@@ -4,7 +4,6 @@ import {
   Text,
   Image,
   TouchableHighlight,
-  Dimensions,
   Platform,
   ActionSheetIOS,
 } from 'react-native'
@@ -14,7 +13,7 @@ import helper, { getHamsterDate } from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { socket } from '../../utils/socket'
 
-import { FilesRedIcon, TaskIcon, LocationIcon } from '../../assets'
+// import { FilesRedIcon, TaskIcon, LocationIcon } from '../../assets'
 
 const { fontSize, sidePadding, Colors } = helper
 const {
@@ -23,44 +22,48 @@ const {
   grey2,
   blue,
   green,
-  grey3,
+  // grey3,
   lightGrey2,
   lightBlue,
 } = Colors
 const Wrapper = styled(View)`
-  display: flex;
+  flex: 1;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center;
   padding: 4px ${sidePadding}px 2px;
   border: 0.5px solid ${lightGrey2};
   border-width: 0;
   border-bottom-width: 1px;
-  min-height: 60px;
+  height: 70px;
 `
 const DialogImage = styled(Image)`
-  width: 50px;
-  height: 50px;
-  border-radius: 25px;
+  width: ${({ size }) => (size ? size : 50)}px;
+  height: ${({ size }) => (size ? size : 50)}px;
+  border-radius: ${({ size }) => (size ? size / 2 : 25)}px;
 `
 const DialogText = styled(View)`
-  display: flex;
+  flex: 1;
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
+  padding-left: 10px;
 `
 
 const DialogTextInner = styled(View)`
-  display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  width: ${Dimensions.get('window').width - 120}px;
+  flex-grow: 1;
+  width: 0;
 `
 const DialogTitle = styled(Text)`
   font-size: ${fontSize.dialogName};
-  width: ${Dimensions.get('window').width - 20}px;
   color: #000000;
-  font-weight: ${({ isGroup }) => (isGroup ? 400 : 700)};
-  padding-left: 10px;
+  font-weight: 700;
+`
+const GroupRespondent = styled(Text)`
+  font-size: ${fontSize.sl};
+  color: #000000;
+  font-weight: 500;
 `
 const LastMessageDate = styled(Text)`
   color: ${grey2};
@@ -69,24 +72,19 @@ const LastMessageDate = styled(Text)`
   margin-bottom: 5px;
 `
 const DialogLastMessage = styled(Text)`
-  padding-right: 20px;
   color: ${grey2};
   font-size: 14;
   font-weight: 400;
   line-height: 15;
-  padding-left: 10px;
   padding-top: 2px;
 `
 const DialogDate = styled(View)`
-  right: ${sidePadding}px;
   color: ${lightColor};
   font-size: ${fontSize.sm};
-  display: flex;
   justify-content: center;
   margin-bottom: 2px;
+  padding-left: 4px;
   text-align: center;
-  width: 40px;
-  margin-left: 5px;
 `
 const UnreadMessages = styled(View)`
   display: flex;
@@ -110,55 +108,54 @@ const NewMessagesText = styled(Text)`
   font-size: ${fontSize.text};
   text-align: center;
 `
-const LastFile = styled(View)`
-  padding-left: 10px;
-  padding-top: 4px;
-  flex-direction: row;
-  justify-content: flex-start;
-  align-items: center;
-`
-const LastFileItem = styled(View)`
-  height: 20px;
-  border: 0.3px ${grey3};
-  border-radius: 10px;
-  overflow: hidden;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  width: 42%;
-  margin-right: 5px;
-`
-const LastFileItemText = styled(Text)`
-  font-size: ${fontSize.sm};
-  color: ${grey3};
-  margin-left: 5px;
-`
-const LastFiles = styled(Text)`
-  font-size: ${fontSize.sm};
-  height: ${fontSize.sm};
-  color: ${grey2};
-`
+// const LastFile = styled(View)`
+//   padding-left: 10px;
+//   padding-top: 4px;
+//   flex-direction: row;
+//   justify-content: flex-start;
+//   align-items: center;
+// `
+// const LastFileItem = styled(View)`
+//   height: 20px;
+//   border: 0.3px ${grey3};
+//   border-radius: 10px;
+//   overflow: hidden;
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: center;
+//   align-items: center;
+//   width: 42%;
+//   margin-right: 5px;
+// `
+// const LastFileItemText = styled(Text)`
+//   font-size: ${fontSize.sm};
+//   color: ${grey3};
+//   margin-left: 5px;
+// `
+// const LastFiles = styled(Text)`
+//   font-size: ${fontSize.sm};
+//   height: ${fontSize.sm};
+//   color: ${grey2};
+// `
 class Content extends Component {
   render() {
     const { title, user, image, lastMessage, item, unreadMessages } = this.props
     const { phone, _id, creator, /*created_at,*/ isGroup, participants } = item
-    let lastTextMessage = lastMessage.filter(e => e.type === 'text')
-    lastTextMessage = lastTextMessage.length
-      ? lastTextMessage[lastTextMessage.length - 1].text
-      : ''
-    const lastFiles =
-      lastMessage[lastMessage.length - 1] &&
-      lastMessage[lastMessage.length - 1].type !== 'text'
-        ? [lastMessage[lastMessage.length - 1]]
-        : []
-    const lastMessageDate = lastMessage[lastMessage.length - 1]
-      ? new Date(lastMessage[lastMessage.length - 1].created_at)
+
+    const latestMessage = lastMessage[lastMessage.length - 1] || {}
+    // let lastTextMessage = lastMessage.filter(e => e.type === 'text')
+    // lastTextMessage = lastTextMessage.length
+    //   ? lastTextMessage[lastTextMessage.length - 1].text
+    //   : ''
+    // const lastFiles =
+    //   latestMessage && latestMessage.type !== 'text' ? [latestMessage] : []
+    const lastMessageDate = latestMessage
+      ? new Date(latestMessage.created_at)
       : null
     const dialogDate = getHamsterDate(lastMessageDate, true)
     let lastType = ''
     if (lastMessage.length) {
-      switch (lastMessage[lastMessage.length - 1].type) {
+      switch (latestMessage.type) {
         case 'text':
           lastType = blue
           break
@@ -179,11 +176,8 @@ class Content extends Component {
       ? participants[0].image
       : creator.image
     const lastGroupSender =
-      isGroup &&
-      lastMessage &&
-      lastMessage.length &&
-      lastMessage[lastMessage.length - 1]
-        ? lastMessage[lastMessage.length - 1].sender || {}
+      isGroup && lastMessage && lastMessage.length && latestMessage
+        ? latestMessage.sender || {}
         : {}
     const lastGroupSenderName = `${lastGroupSender.first_name ||
       ''} ${lastGroupSender.last_name || ''}`
@@ -197,11 +191,11 @@ class Content extends Component {
           {!chatImage ||
           chatImage === '/images/default_group.png' ||
           chatImage === '/images/default_avatar.jpg' ? (
-            <DefaultAvatar isGroup={isGroup} id={item._id} size={50} />
+            <DefaultAvatar isGroup={isGroup} id={item._id} size={56} />
           ) : (
             <DialogImage
               source={{ uri: `https://ser.univ.team${chatImage}` }}
-              size="large"
+              size={56}
             />
           )}
           <DialogText>
@@ -212,14 +206,27 @@ class Content extends Component {
                     {title}
                   </DialogTitle>
                   {!!isGroup && (
-                    <DialogTitle numberOfLines={1}>
+                    <GroupRespondent numberOfLines={1}>
                       {lastGroupSenderName}
-                    </DialogTitle>
+                    </GroupRespondent>
                   )}
-                  <DialogLastMessage numberOfLines={isGroup ? 1 : 2}>
-                    {lastTextMessage || 'no messages yet'}
-                  </DialogLastMessage>
-                  {!!lastFiles.length && (
+                  {latestMessage.type === 'text' ? (
+                    <DialogLastMessage numberOfLines={isGroup ? 1 : 2}>
+                      {latestMessage.text || 'no messages yet'}
+                    </DialogLastMessage>
+                  ) : (
+                    <DialogLastMessage numberOfLines={1}>
+                      {latestMessage.type === 'image'
+                        ? 'Изображение'
+                        : latestMessage.type === 'task'
+                        ? 'Задача'
+                        : latestMessage.type === 'geo'
+                        ? 'Геолокация'
+                        : 'Вложение'}
+                    </DialogLastMessage>
+                  )}
+
+                  {/* {!!lastFiles.length && (
                     <LastFile>
                       {lastFiles.map((e, i) => {
                         const { filename, type } = e
@@ -246,18 +253,18 @@ class Content extends Component {
                           )
                         )
                       })}
-                      {lastFiles.length && lastFiles.length - 2 ? (
+                      {lastFiles.length && lastFiles.length - 1 ? (
                         <LastFiles>
                           +
-                          {lastFiles.length >= 2
-                            ? lastFiles.length - 2
+                          {lastFiles.length > 1
+                            ? lastFiles.length - 1
                             : lastFiles.length}
                         </LastFiles>
                       ) : (
-                        <LastFiles />
+                        <LastFiles>123</LastFiles>
                       )}
                     </LastFile>
-                  )}
+                  )} */}
                 </>
               )}
               {phone && (

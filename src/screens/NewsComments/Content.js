@@ -17,7 +17,7 @@ import {
   TriangleRightIcon,
   ArrowRightIcon,
 } from '../../assets/index'
-import helper from '../../utils/helpers'
+import helper, { getHamsterDate } from '../../utils/helpers'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { setFeed } from '../../actions/newsActions'
@@ -186,21 +186,7 @@ class Content extends Component {
     const { comments, creator, receivers } = feed
     const { first_name, last_name, image } = creator
     const reversedCommnets = [...comments].reverse()
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'June',
-      'July',
-      'Aug',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec',
-    ]
-    const date = new Date(feed.created_at)
+    const date = getHamsterDate(feed.created_at)
     return (
       <Wrapper>
         <NewsItem>
@@ -214,10 +200,7 @@ class Content extends Component {
               <SenderName>
                 {first_name} {last_name}
               </SenderName>
-              <TimeSent>
-                {date.getDate()} {months[date.getMonth()]} {date.getFullYear()}{' '}
-                {date.getHours()}:{date.getMinutes()}
-              </TimeSent>
+              <TimeSent>{date}</TimeSent>
             </SenderInfo>
           </Sender>
           <FeedText>
@@ -309,13 +292,7 @@ class Content extends Component {
     const { creator, created_at, likes_сount, text, _id, likes } = children
     const { first_name, last_name, image } = creator
     const myId = user._id
-    const date = new Date(created_at)
-    const difference = Math.abs(new Date() - date) / 864e5
-    const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
-    const time =
-      difference < 1
-        ? `${date.getHours()}:${date.getMinutes()}`
-        : daysOfTheWeek[date.getDay()]
+    const date = getHamsterDate(created_at)
     return myId === creator._id ? (
       <View style={{ display: 'flex', flexDirection: 'row', flex: 1 }}>
         <MyMessage>
@@ -323,7 +300,7 @@ class Content extends Component {
           <MessageInfo>
             <HeartIcon style={{ paddingRight: 5 }} />
             <LikeText color={darkBlue2}>{likes_сount}</LikeText>
-            <MessageDate color={darkBlue2}>{time}</MessageDate>
+            <MessageDate color={darkBlue2}>{date}</MessageDate>
           </MessageInfo>
         </MyMessage>
         <TriangleLeftIcon color={yellow} />
@@ -370,7 +347,7 @@ class Content extends Component {
               />
             )}
             <LikeText>{likes_сount}</LikeText>
-            <MessageDate>{time}</MessageDate>
+            <MessageDate>{date}</MessageDate>
           </MessageInfo>
         </InterlocutorsMessage>
       </View>

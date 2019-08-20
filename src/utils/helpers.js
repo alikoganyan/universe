@@ -53,7 +53,7 @@ export default {
     lightGrey2: '#f7f7f7',
     lightGrey3: '#ccc',
     myMessage: '#effedd', // '#00ffff', '#588eff', '#4a83fa',
-    interlocatorMessage: '#F6F6F6',
+    interlocatorMessage: '#fff', //'#F6F6F6',
     avatars: [
       '#f9d38a',
       '#fdc22d',
@@ -183,7 +183,7 @@ export const declOfNum = (number, titles) => {
   ]
 }
 
-export const getHamsterDate = (dateStr, minify = false) => {
+export const getHamsterDate = (dateStr, minify = true) => {
   const date = new Date(dateStr)
   const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
   const dayName = daysOfTheWeek[date.getDay()]
@@ -197,6 +197,7 @@ export const getHamsterDate = (dateStr, minify = false) => {
   weekAgo.setDate(weekAgo.getDate() - 7)
   const dayAgo = new Date()
   dayAgo.setDate(dayAgo.getDate() - 1)
+  const isYesterday = dayAgo.getDate() === date.getDate()
   let day = date.getDate()
   if (day < 10) day = `0${day}`
   let month = date.getMonth() + 1
@@ -208,7 +209,9 @@ export const getHamsterDate = (dateStr, minify = false) => {
       : date < weekAgo
       ? `${day}.${month}`
       : date < dayAgo
-      ? `${dayName}`
+      ? isYesterday
+        ? 'Вчера'
+        : `${dayName}`
       : time
   } else {
     return date < yearAgo
@@ -216,7 +219,9 @@ export const getHamsterDate = (dateStr, minify = false) => {
       : date < weekAgo
       ? `${day}.${month} ${time}`
       : date < dayAgo
-      ? `${dayName} ${time}`
+      ? isYesterday
+        ? `Вчера, ${time}`
+        : `${dayName} ${time}`
       : time
   }
 }

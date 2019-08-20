@@ -86,7 +86,7 @@ const TaskBodyText = styled(Text)`
 const TaskDeadline = styled(View)`
   display: flex;
   flex-direction: column;
-  flexgrow: 1;
+  flex-grow: 1;
   width: 0;
 `
 const TaskDeadlineLabel = styled(Text)`

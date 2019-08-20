@@ -65,7 +65,7 @@ const InterlocutorsMessageText = styled(MyMessageText)`
   flex-direction: column;
   justify-content: flex-end;
   text-align: left;
-  color: #54585d;
+  color: ${({ isGroupName }) => (isGroupName ? helper.Colors.blue : '#54585d')};
   border-radius: 3;
   overflow: hidden;
   padding-bottom: 0;
@@ -152,7 +152,13 @@ const Indicator = ({ read = false, color }) =>
 
 class Message extends Component {
   render() {
-    const { children, myId, background, withImage } = this.props
+    const {
+      children,
+      myId,
+      background,
+      isGroup = false,
+      withImage,
+    } = this.props
     const {
       viewers,
       text,
@@ -258,7 +264,7 @@ class Message extends Component {
               background={background || interlocatorMessage}
             >
               {withImage && (
-                <InterlocutorsName>
+                <InterlocutorsName isGroupName={isGroup}>
                   {`${sender.first_name} ${sender.last_name}`}
                 </InterlocutorsName>
               )}
@@ -391,7 +397,7 @@ class Message extends Component {
               background={background || interlocatorMessage}
             >
               {withImage && (
-                <InterlocutorsName>
+                <InterlocutorsName isGroupName={isGroup}>
                   {`${sender.first_name} ${sender.last_name}`}
                 </InterlocutorsName>
               )}

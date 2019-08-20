@@ -3,8 +3,7 @@ import {
   View,
   Text,
   FlatList,
-  Dimensions,
-  ImageBackground,
+  // ImageBackground,
   TouchableOpacity,
   ActionSheetIOS,
   Platform,
@@ -28,14 +27,6 @@ const Wrapper = styled(View)`
   margin-bottom: ${({ search }) => (search ? HeaderHeight * 2 : HeaderHeight)};
   z-index: 1;
   position: relative;
-`
-const Shadow = styled(TouchableOpacity)`
-  position: absolute;
-  width: ${Dimensions.get('window').width};
-  height: ${Dimensions.get('window').height};
-  background: rgba(5, 5, 5, 0.3);
-  top: -${HeaderHeight - 3}px;
-  z-index: 4;
 `
 const MessageOptions = styled(View)`
   background: white;
@@ -62,9 +53,11 @@ const StyledFlatList = styled(FlatList)`
 const FlatListHeader = styled(View)`
   margin: ${({ editing }) => (editing ? 65 : 35)}px;
 `
-const StyledImageBackground = styled(ImageBackground)`
+// const StyledImageBackground = styled(ImageBackground)`
+const StyledImageBackground = styled(View)`
   width: 100%;
   height: 100%;
+  background: #d0d8df;
 `
 class Content extends Component {
   render() {
@@ -191,14 +184,14 @@ class Content extends Component {
   deleteMessage = () => {
     const { dialogs, setDialogs, currentChat, currentRoomId } = this.props
     const { selectedMessage } = this.state
-    console.log({
-      r_path: d_message,
-      method: 'delete',
-      attr: {
-        dialog_id: currentRoomId,
-        messages: [selectedMessage._id],
-      },
-    })
+    // console.log({
+    //   r_path: d_message,
+    //   method: 'delete',
+    //   attr: {
+    //     dialog_id: currentRoomId,
+    //     messages: [selectedMessage._id],
+    //   },
+    // })
     sendRequest({
       r_path: d_message,
       method: 'delete',
@@ -207,10 +200,10 @@ class Content extends Component {
         messages: [selectedMessage._id],
       },
       success: res => {
-        console.log(res)
+        // console.log(res)
       },
       failFunc: err => {
-        console.log(err)
+        // console.log(err)
       },
     })
     const dialog = dialogs.filter(dialog => dialog.room === currentChat)[0]
