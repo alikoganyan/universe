@@ -8,6 +8,7 @@ import {
   ActionSheetIOS,
   Platform,
   InteractionManager,
+  Alert,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -121,7 +122,7 @@ class Content extends Component {
                     <Text>Сохранить</Text>
                   </MessageOption>
                 )}
-                <MessageOption onPress={this.deleteMessage}>
+                <MessageOption onPress={this.messageDeleteConfirmation}>
                   <Text>Удалить</Text>
                 </MessageOption>
               </>
@@ -179,6 +180,13 @@ class Content extends Component {
     }
     navigate({ routeName: 'NewTask', params: task })
     this.unselect()
+  }
+
+  messageDeleteConfirmation = () => {
+    Alert.alert('Внимание', 'Вы уверены что хотите удалить сообщение', [
+      { text: 'Нет' },
+      { text: 'Да', onPress: this.deleteMessage },
+    ])
   }
 
   deleteMessage = () => {
