@@ -66,6 +66,7 @@ const Input = props => {
     inputStyle,
     labelStyle,
     keyboardType,
+    ...rest
   } = props
   return (
     <FloatingLabel
@@ -83,6 +84,7 @@ const Input = props => {
       keyboardType={keyboardType}
       style={{ ...style }}
       editable={editable}
+      {...rest}
     >
       {children}
     </FloatingLabel>
@@ -98,7 +100,7 @@ class Content extends Component {
         <PhoneNumber>
           <Input
             value={country}
-            onPress={this.handleCountry}
+            onChangeText={this.handleCountry}
             style={{ width: '20%' }}
             inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
             keyboardType="phone-pad"
