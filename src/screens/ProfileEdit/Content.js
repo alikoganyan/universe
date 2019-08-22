@@ -1,14 +1,6 @@
 import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  TextInput,
-} from 'react-native'
+import { View, Text, TouchableOpacity, TextInput } from 'react-native'
 import styled from 'styled-components'
-import FloatingLabel from 'react-native-floating-labels'
 import { connect } from 'react-redux'
 import { TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
 import Button from '../../common/Button'
@@ -36,12 +28,6 @@ const User = styled(View)`
   justify-content: flex-start;
   padding-bottom: 20px;
   margin-bottom: 10px;
-`
-const UserImage = styled(Image)`
-  width: 80px;
-  height: 80px;
-  border-radius: 40;
-  margin: 0 10px 0px;
 `
 const UserInfo = styled(View)`
   display: flex;
@@ -121,7 +107,7 @@ class Content extends Component {
   render() {
     const {
       user,
-      permissionError,
+      // permissionError,
       lastNameError,
       firstNameError,
       middleNameError,
@@ -275,35 +261,28 @@ class Content extends Component {
   selectImage = () => {
     const { user, setUser } = this.props
     getImageFromPicker(result => {
-      const { uri, type } = result
-      const ext = uri.split('.')[uri.split('.').length - 1]
+      const { imageFormData = {} } = result
       const form = new FormData()
-      const fileName = Math.random()
-        .toString(36)
-        .substring(7)
-      form.append('file', {
-        uri,
-        name: `photo.${fileName}.${ext}`,
-        type: `image/${type}`,
-      })
+      form.append('file', imageFormData)
       if (!result.cancelled) {
         sendRequest({
           r_path: p_profile_avatar,
           method: 'post',
           attr: form,
-          // config: {
-          //     headers: {
-          //         'Content-Type': 'multipart/form-data'
-          //     }
-          // },
+          config: {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
           success: res => {
+            // console.log('res: ', res)
             const newUser = { ...user }
             newUser.image = res.newImage
             setUser(newUser)
             this.setState({ user: newUser })
           },
           failFunc: err => {
-            console.log({ err })
+            // console.log({ err })
           },
         })
       }
@@ -368,7 +347,7 @@ class Content extends Component {
           back()
         },
         failFunc: err => {
-          console.log('pa_profile', { err })
+          // console.log('pa_profile', { err })
         },
       })
       back()

@@ -19,7 +19,7 @@ import { PapperPlaneIcon, ImageIconBlue, CloseIcon } from '../../assets/index'
 import helper from '../../utils/helpers'
 import AutoHeightInput from '../../common/AutoHeightInput'
 import {
-  // addMessage,
+  addMessage,
   // startSearch,
   // stopSearch,
   // getMessages,
@@ -177,12 +177,12 @@ class InputComponent extends Component {
         </Wrapper>
         <BottomSheet
           visible={pickerOpened}
-          onBackButtonPress={this.unselect}
-          onBackdropPress={this.unselect}
+          onBackButtonPress={this._hideBottomSheetMenu}
+          onBackdropPress={this._hideBottomSheetMenu}
         >
           <FilePicker>
             <FilePickerOption onPress={this.selectPhoto}>
-              <Text>Фото или видео</Text>
+              <Text>Фото</Text>
             </FilePickerOption>
             <FilePickerOption onPress={this.selectFile}>
               <Text>Файл</Text>
@@ -190,7 +190,7 @@ class InputComponent extends Component {
             <FilePickerOption onPress={this.selectGeo}>
               <Text>Мою локацию</Text>
             </FilePickerOption>
-            <FilePickerOption onPress={this.unselect}>
+            <FilePickerOption onPress={this._hideBottomSheetMenu}>
               <Text>Отменить</Text>
             </FilePickerOption>
           </FilePicker>
@@ -208,7 +208,7 @@ class InputComponent extends Component {
 
   componentWillUnmount() {
     this.stopEditing()
-    this.unselect()
+    this._hideBottomSheetMenu()
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -258,7 +258,7 @@ class InputComponent extends Component {
     })
   }
 
-  unselect = () => {
+  _hideBottomSheetMenu = () => {
     this.setState({ pickerOpened: false })
   }
 
@@ -271,26 +271,18 @@ class InputComponent extends Component {
 
   selectPhoto = async () => {
     const { currentChat, addMessage, setDialogs, dialogs, user } = this.props
-    this.unselect()
     getImageFromPicker(result => {
-      const { uri, type } = result
-      const fileName = Math.random()
-        .toString(36)
-        .substring(7)
+      const { imageFormData = {}, uri } = result
       const form = new FormData()
-      const ext = uri.split('.')[uri.split('.').length - 1]
-      form.append('file', {
-        uri,
-        name: `photo.${fileName}.${ext}`,
-        type: `image/${type}`,
-      })
+      this._hideBottomSheetMenu()
+      form.append('file', imageFormData)
       form.append('room', currentChat)
       const message = {
         room: currentChat,
         sender: { ...user },
         created_at: new Date(),
         type: 'image',
-        src: result.uri,
+        src: uri,
         viewers: [],
       }
       if (!result.cancelled) {
@@ -299,12 +291,13 @@ class InputComponent extends Component {
           r_path: p_send_file,
           method: 'post',
           attr: form,
-          // config: {
-          //     headers: {
-          //         'Content-Type': 'multipart/form-data'
-          //     }
-          // },
+          config: {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
           success: res => {
+            // console.log('load success: ', { res })
             socket.emit('file', { room: currentChat })
             const newDialogs = [...dialogs]
             const index = newDialogs.findIndex(e => e.room === currentChat)
@@ -312,11 +305,11 @@ class InputComponent extends Component {
             setDialogs(newDialogs)
           },
           failFunc: err => {
-            // console.log({ err })
+            // console.log('load err: ', { err })
           },
         })
       }
-    })
+    }, this._hideBottomSheetMenu)
   }
 
   selectFile = async () => {
@@ -349,7 +342,7 @@ class InputComponent extends Component {
 
   selectGeo = async () => {
     const { currentDialog } = this.props
-    this.unselect()
+    this._hideBottomSheetMenu()
     // const { status } = await Permissions.askAsync(Permissions.LOCATION);
     let status
     await RNPermissions.request('location').then(response => {
@@ -449,6 +442,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   fEditMessage: _ => dispatch(editMessage(_)),
+  addMessage: _ => dispatch(addMessage(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),

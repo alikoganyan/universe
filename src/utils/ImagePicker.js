@@ -25,6 +25,23 @@ const pickerOptions = {
   },
 }
 
+const parseImageResponse = (response = {}) => {
+  const { fileName = '', uri = '', type = '' } = response
+  const resultFileName =
+    fileName || (uri ? uri.substring(uri.lastIndexOf('/') + 1) : 'image.jpg')
+  const fileNameType = fileName ? /(?:\.([^.]+))?$/.exec(fileName)[0] : ''
+  const fileUriType = uri ? /(?:\.([^.]+))?$/.exec(uri)[0] : ''
+  const resultType = type || fileNameType || fileUriType || 'image/jpeg'
+  return {
+    ...response,
+    imageFormData: {
+      uri,
+      name: resultFileName,
+      type: resultType,
+    },
+  }
+}
+
 const getImageFromPicker = (success, reject) => {
   RNImagePicker.showImagePicker(pickerOptions, response => {
     // console.log('Response = ', response)
@@ -70,7 +87,7 @@ const getImageFromPicker = (success, reject) => {
       return null
     } else {
       // console.log('response: ', response)
-      success && success(response)
+      success && success(parseImageResponse(response))
     }
   })
 }

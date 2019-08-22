@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-// import { ImagePicker, Permissions } from 'expo';
+import getImageFromPicker from '../../utils/ImagePicker'
 import RNPermissions from 'react-native-permissions'
 import posed from 'react-native-pose'
 import { BottomSheet } from 'react-native-btr'
@@ -27,7 +27,7 @@ import { setDialogs } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
 
-const { sidePadding, borderRadius, HeaderHeight, fontSize, Colors } = helper
+const { sidePadding, borderRadius, /*HeaderHeight,*/ fontSize, Colors } = helper
 const { blue } = Colors
 const FilePickerPosed = posed.View({
   visible: { bottom: 10 },
@@ -93,14 +93,14 @@ const FilePicker = styled(FilePickerPosed)`
   align-items: flex-start;
   z-index: 4;
 `
-const Shadow = styled(TouchableOpacity)`
-  position: absolute;
-  width: ${Dimensions.get('window').width};
-  height: ${Dimensions.get('window').height};
-  background: rgba(5, 5, 5, 0.3);
-  top: -${Dimensions.get('window').height - HeaderHeight - 3};
-  z-index: 2;
-`
+// const Shadow = styled(TouchableOpacity)`
+//   position: absolute;
+//   width: ${Dimensions.get('window').width};
+//   height: ${Dimensions.get('window').height};
+//   background: rgba(5, 5, 5, 0.3);
+//   top: -${Dimensions.get('window').height - HeaderHeight - 3};
+//   z-index: 2;
+// `
 const EditBox = styled(View)`
   width: ${Dimensions.get('window').width}px;
   padding: 0 ${sidePadding}px;
@@ -164,12 +164,12 @@ class InputComponent extends Component {
         </Wrapper>
         <BottomSheet
           visible={pickerOpened}
-          onBackButtonPress={this.unselect}
-          onBackdropPress={this.unselect}
+          onBackButtonPress={this._hideBottomSheetMenu}
+          onBackdropPress={this._hideBottomSheetMenu}
         >
           <FilePicker>
             <TouchableOpacity onPress={this.selectPhoto}>
-              <Text>Фото или видео</Text>
+              <Text>Фото</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={this.selectFile}>
               <Text>Файл</Text>
@@ -177,7 +177,7 @@ class InputComponent extends Component {
             <TouchableOpacity onPress={this.selectGeo}>
               <Text>Мою локацию</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.unselect}>
+            <TouchableOpacity onPress={this._hideBottomSheetMenu}>
               <Text>Отменить</Text>
             </TouchableOpacity>
           </FilePicker>
@@ -235,12 +235,12 @@ class InputComponent extends Component {
         this.stopEditing()
       },
       failFunc: err => {
-        console.log({ err })
+        // console.log({ err })
       },
     })
   }
 
-  unselect = () => {
+  _hideBottomSheetMenu = () => {
     this.setState({ pickerOpened: false })
   }
 
@@ -252,45 +252,45 @@ class InputComponent extends Component {
   }
 
   selectPhoto = async () => {
-    const { currentChat, setDialogs, dialogs } = this.props
-    this.unselect()
-
+    const { currentChat, setDialogs, dialogs, user } = this.props
     getImageFromPicker(result => {
-      const { uri, type } = result
-      const ext = uri.split('.')[uri.split('.').length - 1]
-      const fileName = Math.random()
-        .toString(36)
-        .substring(7)
+      const { imageFormData = {}, uri } = result
       const form = new FormData()
-      form.append('file', {
-        uri,
-        name: `photo.${fileName}.${ext}`,
-        type: `image/${type}`,
-      })
+      this._hideBottomSheetMenu()
+      form.append('file', imageFormData)
       form.append('room', currentChat)
+      const message = {
+        room: currentChat,
+        sender: { ...user },
+        created_at: new Date(),
+        type: 'image',
+        src: uri,
+        viewers: [],
+      }
       if (!result.cancelled) {
-        const newDialogs = [...dialogs]
-        // const index = newDialogs.findIndex(e => e.room === currentChat);
-        // newDialogs[index] = res.dialog;
-        setDialogs(newDialogs)
+        addMessage(message)
         sendRequest({
           r_path: p_send_file,
           method: 'post',
           attr: form,
-          // config: {
-          //     headers: {
-          //         'Content-Type': 'multipart/form-data'
-          //     }
-          // },
-          success: () => {
+          config: {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+          success: res => {
             socket.emit('file', { room: currentChat })
+            const newDialogs = [...dialogs]
+            const index = newDialogs.findIndex(e => e.room === currentChat)
+            newDialogs[index] = res.dialog
+            setDialogs(newDialogs)
           },
           failFunc: err => {
-            console.log({ err })
+            // console.log({ err })
           },
         })
       }
-    })
+    }, this._hideBottomSheetMenu)
   }
 
   selectFile = async () => {
@@ -299,12 +299,12 @@ class InputComponent extends Component {
 
   selectGeo = async () => {
     const { currentRoom } = this.props
-    this.unselect()
+    this._hideBottomSheetMenu()
     // const { status } = await Permissions.askAsync(Permissions.LOCATION);
 
     let status
     await RNPermissions.request('location').then(response => {
-      console.log('RNPermissions location: ', response)
+      // console.log('RNPermissions location: ', response)
       status = response
     })
     if (status !== 'granted') {
@@ -313,7 +313,7 @@ class InputComponent extends Component {
     }
     navigator.geolocation.getCurrentPosition(
       position => {
-        console.log({ receiver: currentRoom, geo_data: position.coords })
+        // console.log({ receiver: currentRoom, geo_data: position.coords })
         socket.emit('geo_group', {
           receiver: currentRoom,
           geo_data: position.coords,
@@ -381,6 +381,7 @@ const mapStateToProps = state => ({
   user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({
+  addMessage: _ => dispatch(addMessage(_)),
   fEditMessage: _ => dispatch(editMessage(_)),
   startSearch: _ => dispatch(startSearch(_)),
   stopSearch: _ => dispatch(stopSearch(_)),
