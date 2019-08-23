@@ -16,18 +16,22 @@ import { BottomSheet } from 'react-native-btr'
 import { ImageIconBlue, PapperPlaneIcon, CloseIcon } from '../../assets/index'
 import helper from '../../utils/helpers'
 import {
-  addMessage,
   startSearch,
   stopSearch,
   editMessage,
+  forwardMessage,
 } from '../../actions/messageActions'
-import { p_send_file, p_edit_message } from '../../constants/api'
+import {
+  p_send_file,
+  p_edit_message,
+  p_forward_message,
+} from '../../constants/api'
 import { setDialogs } from '../../actions/dialogsActions'
 
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
 
-const { sidePadding, borderRadius, HeaderHeight, fontSize, Colors } = helper
+const { sidePadding, borderRadius, fontSize, Colors } = helper
 const { blue } = Colors
 const FilePickerPosed = posed.View({
   visible: { bottom: 10 },
@@ -93,15 +97,15 @@ const FilePicker = styled(FilePickerPosed)`
   align-items: flex-start;
   z-index: 4;
 `
-const Shadow = styled(TouchableOpacity)`
-  position: absolute;
-  width: ${Dimensions.get('window').width};
-  height: ${Dimensions.get('window').height};
-  background: rgba(5, 5, 5, 0.3);
-  top: -${Dimensions.get('window').height - HeaderHeight - 3};
-  z-index: 2;
-`
-const EditBox = styled(View)`
+// const Shadow = styled(TouchableOpacity)`
+//   position: absolute;
+//   width: ${Dimensions.get('window').width};
+//   height: ${Dimensions.get('window').height};
+//   background: rgba(5, 5, 5, 0.3);
+//   top: -${Dimensions.get('window').height - HeaderHeight - 3};
+//   z-index: 2;
+// `
+const MessageBox = styled(View)`
   width: ${Dimensions.get('window').width}px;
   padding: 0 ${sidePadding}px;
   padding-right: 5px;
@@ -113,11 +117,11 @@ const EditBox = styled(View)`
   justify-content: space-between;
   align-items: center;
 `
-const EditMessage = styled(Text)`
+const Message = styled(Text)`
   color: ${blue};
 `
-const EditMessageText = styled(Text)``
-const EditBoxLeft = styled(View)`
+const MessageText = styled(Text)``
+const MessageBoxLeft = styled(View)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -126,42 +130,56 @@ const EditBoxLeft = styled(View)`
 `
 class InputComponent extends Component {
   render() {
-    const { text, pickerOpened, edit } = this.state
-    const { editedMessage } = this.props
+    const { text, pickerOpened, edit, forward } = this.state
+    const { editedMessage, forwardedMessage } = this.props
+
     return (
       <>
         {edit ? (
-          <EditBox>
-            <EditBoxLeft>
-              <EditMessage>Редактировать сообщение</EditMessage>
-              <EditMessageText numberOfLines={1}>
-                {editedMessage.text}
-              </EditMessageText>
-            </EditBoxLeft>
+          <MessageBox>
+            <MessageBoxLeft>
+              <Message>Редактировать сообщение</Message>
+              <MessageText numberOfLines={1}>{editedMessage.text}</MessageText>
+            </MessageBoxLeft>
             <Right>
               <CloseIcon onPress={this.stopEditing} marginLeft={false} />
             </Right>
-          </EditBox>
+          </MessageBox>
         ) : null}
-        <Wrapper edit={edit}>
-          <Left>
-            <Input
-              placeholder="Написать сообщение"
-              onChangeText={e => this.handleChange(e)}
-              value={text}
-              blurOnSubmit={false}
-            />
-          </Left>
-          <Right>
-            {text ? (
-              <PapperPlaneIcon
-                onPress={edit ? this.confirmEditing : this.sendMessage}
+        {forward ? (
+          <MessageBox>
+            <MessageBoxLeft>
+              <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
+              <MessageText numberOfLines={1}>
+                {forwardedMessage.text}
+              </MessageText>
+            </MessageBoxLeft>
+            <Right>
+              <CloseIcon onPress={this.stopForwarding} marginLeft={false} />
+              <PapperPlaneIcon onPress={this.confirmForwarding} />
+            </Right>
+          </MessageBox>
+        ) : (
+          <Wrapper edit={edit}>
+            <Left>
+              <Input
+                placeholder="Написать сообщение"
+                onChangeText={e => this.handleChange(e)}
+                value={text}
+                blurOnSubmit={false}
               />
-            ) : (
-              <ImageIconBlue onPress={this.pickImage} />
-            )}
-          </Right>
-        </Wrapper>
+            </Left>
+            <Right>
+              {text ? (
+                <PapperPlaneIcon
+                  onPress={edit ? this.confirmEditing : this.sendMessage}
+                />
+              ) : (
+                <ImageIconBlue onPress={this.pickImage} />
+              )}
+            </Right>
+          </Wrapper>
+        )}
         <BottomSheet
           visible={pickerOpened}
           onBackButtonPress={this.unselect}
@@ -191,6 +209,7 @@ class InputComponent extends Component {
     prevText: '',
     edit: false,
     pickerOpened: false,
+    forward: false,
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -206,6 +225,16 @@ class InputComponent extends Component {
         ...nextProps,
         edit: nextProps.editedMessage.text,
         text: nextProps.editedMessage.text,
+      }
+    }
+    if (
+      nextProps.forwardedMessage &&
+      nextProps.forwardedMessage.text &&
+      propsChanged
+    ) {
+      return {
+        ...nextProps,
+        forward: nextProps.forwardedMessage.text,
       }
     }
     return nextProps
@@ -235,7 +264,7 @@ class InputComponent extends Component {
         this.stopEditing()
       },
       failFunc: err => {
-        console.log({ err })
+        // console.log({ err })
       },
     })
   }
@@ -255,6 +284,7 @@ class InputComponent extends Component {
     const { currentChat, setDialogs, dialogs } = this.props
     this.unselect()
 
+    // eslint-disable-next-line no-undef
     getImageFromPicker(result => {
       const { uri, type } = result
       const ext = uri.split('.')[uri.split('.').length - 1]
@@ -286,7 +316,7 @@ class InputComponent extends Component {
             socket.emit('file', { room: currentChat })
           },
           failFunc: err => {
-            console.log({ err })
+            // console.log({ err })
           },
         })
       }
@@ -304,7 +334,7 @@ class InputComponent extends Component {
 
     let status
     await RNPermissions.request('location').then(response => {
-      console.log('RNPermissions location: ', response)
+      // console.log('RNPermissions location: ', response)
       status = response
     })
     if (status !== 'granted') {
@@ -313,7 +343,7 @@ class InputComponent extends Component {
     }
     navigator.geolocation.getCurrentPosition(
       position => {
-        console.log({ receiver: currentRoom, geo_data: position.coords })
+        // console.log({ receiver: currentRoom, geo_data: position.coords })
         socket.emit('geo_group', {
           receiver: currentRoom,
           geo_data: position.coords,
@@ -369,6 +399,33 @@ class InputComponent extends Component {
   pickImage = async () => {
     this.setState({ pickerOpened: true })
   }
+
+  confirmForwarding = () => {
+    const {
+      forwardedMessage: { _id, text },
+      currentRoomId,
+      currentChat,
+    } = this.props
+    const bodyReq = { message_id: _id, dialog_id: currentRoomId }
+    sendRequest({
+      r_path: p_forward_message,
+      method: 'post',
+      attr: bodyReq,
+      success: res => {
+        this.stopForwarding()
+        socket.emit('group_message', { room: currentChat, message: text })
+      },
+      failFunc: err => {
+        // console.log(err)
+      },
+    })
+  }
+
+  stopForwarding = () => {
+    const { forwardMessage } = this.props
+    this.setState({ forward: false })
+    forwardMessage({})
+  }
 }
 
 const mapStateToProps = state => ({
@@ -379,12 +436,15 @@ const mapStateToProps = state => ({
   editedMessage: state.messageReducer.editMessage,
   id: state.userReducer.user._id,
   user: state.userReducer.user,
+  forwardedMessage: state.messageReducer.forwardMessage,
+  currentRoomId: state.messageReducer.currentRoomId,
 })
 const mapDispatchToProps = dispatch => ({
   fEditMessage: _ => dispatch(editMessage(_)),
   startSearch: _ => dispatch(startSearch(_)),
   stopSearch: _ => dispatch(stopSearch(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
+  forwardMessage: _ => dispatch(forwardMessage(_)),
 })
 export default connect(
   mapStateToProps,

@@ -8,7 +8,6 @@ import {
   setRoom,
 } from '../../actions/messageActions'
 import SafeAreaView from '../../common/SafeAreaView'
-import helper from '../../utils/helpers'
 import Header from './Header'
 import Input from './Input'
 import Content from './Content'
@@ -35,7 +34,10 @@ class Chat extends Component {
             back={this.navigateBack}
             currentChat={this.props.currentChat}
           />
-          <Content navigate={this.props.navigation.navigate} />
+          <Content
+            navigate={this.props.navigation.navigate}
+            goBack={this.props.navigation.goBack}
+          />
           <Bottom>
             <Input />
           </Bottom>

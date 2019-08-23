@@ -27,8 +27,13 @@ import {
   setRoom,
   setCurrentRoomId,
   editMessage,
+  forwardMessage,
 } from '../../actions/messageActions'
-import { p_send_file, p_edit_message } from '../../constants/api'
+import {
+  p_send_file,
+  p_edit_message,
+  p_forward_message,
+} from '../../constants/api'
 
 import { setDialogs } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
@@ -114,7 +119,7 @@ const FilePicker = styled(FilePickerPosed)`
 const FilePickerOption = styled(TouchableOpacity)`
   z-index: 999;
 `
-const EditBox = styled(View)`
+const MessageBox = styled(View)`
   width: ${Dimensions.get('window').width}px;
   padding: 0 ${sidePadding}px;
   padding-right: 5px;
@@ -126,11 +131,11 @@ const EditBox = styled(View)`
   justify-content: space-between;
   align-items: center;
 `
-const EditMessage = styled(Text)`
+const Message = styled(Text)`
   color: ${blue};
 `
-const EditMessageText = styled(Text)``
-const EditBoxLeft = styled(View)`
+const MessageText = styled(Text)``
+const MessageBoxLeft = styled(View)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -138,43 +143,56 @@ const EditBoxLeft = styled(View)`
 `
 class InputComponent extends Component {
   render() {
-    const { text, pickerOpened, edit } = this.state
-    const { editedMessage } = this.props
+    const { text, pickerOpened, edit, forward } = this.state
+    const { editedMessage, forwardedMessage } = this.props
     return (
       <>
         {edit ? (
-          <EditBox>
-            <EditBoxLeft>
-              <EditMessage>Редактировать сообщение</EditMessage>
-              <EditMessageText numberOfLines={1}>
-                {editedMessage.text}
-              </EditMessageText>
-            </EditBoxLeft>
+          <MessageBox>
+            <MessageBoxLeft>
+              <Message>Редактировать сообщение</Message>
+              <MessageText numberOfLines={1}>{editedMessage.text}</MessageText>
+            </MessageBoxLeft>
             <Right>
               <CloseIcon onPress={this.stopEditing} marginLeft={false} />
             </Right>
-          </EditBox>
+          </MessageBox>
         ) : null}
-        <Wrapper edit={edit}>
-          <Left>
-            <Input
-              placeholder="Написать сообщение"
-              onChangeText={e => this.handleChange(e)}
-              value={text}
-              blurOnSubmit={false}
-              autoHeight
-            />
-          </Left>
-          <Right>
-            {text ? (
-              <PapperPlaneIcon
-                onPress={edit ? this.confirmEditing : this.sendMessage}
+        {forward ? (
+          <MessageBox>
+            <MessageBoxLeft>
+              <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
+              <MessageText numberOfLines={1}>
+                {forwardedMessage.text}
+              </MessageText>
+            </MessageBoxLeft>
+            <Right>
+              <CloseIcon onPress={this.stopForwarding} marginLeft={false} />
+              <PapperPlaneIcon onPress={this.confirmForwarding} />
+            </Right>
+          </MessageBox>
+        ) : (
+          <Wrapper edit={edit}>
+            <Left>
+              <Input
+                placeholder="Написать сообщение"
+                onChangeText={e => this.handleChange(e)}
+                value={text}
+                blurOnSubmit={false}
+                autoHeight
               />
-            ) : (
-              <ImageIconBlue onPress={this.pickImage} />
-            )}
-          </Right>
-        </Wrapper>
+            </Left>
+            <Right>
+              {text ? (
+                <PapperPlaneIcon
+                  onPress={edit ? this.confirmEditing : this.sendMessage}
+                />
+              ) : (
+                <ImageIconBlue onPress={this.pickImage} />
+              )}
+            </Right>
+          </Wrapper>
+        )}
         <BottomSheet
           visible={pickerOpened}
           onBackButtonPress={this.unselect}
@@ -204,6 +222,7 @@ class InputComponent extends Component {
     prevText: '',
     edit: false,
     pickerOpened: false,
+    forward: false,
   }
 
   componentWillUnmount() {
@@ -224,6 +243,16 @@ class InputComponent extends Component {
         ...nextProps,
         edit: nextProps.editedMessage.text,
         text: nextProps.editedMessage.text,
+      }
+    }
+    if (
+      nextProps.forwardedMessage &&
+      nextProps.forwardedMessage.text &&
+      propsChanged
+    ) {
+      return {
+        ...nextProps,
+        forward: nextProps.forwardedMessage.text,
       }
     }
     return nextProps
@@ -436,6 +465,33 @@ class InputComponent extends Component {
     // const { status_roll } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
     this.setState({ pickerOpened: true })
   }
+
+  confirmForwarding = () => {
+    const {
+      forwardedMessage: { _id, text },
+      currentRoomId,
+      currentRoom,
+    } = this.props
+    const bodyReq = { message_id: _id, dialog_id: currentRoomId }
+    sendRequest({
+      r_path: p_forward_message,
+      method: 'post',
+      attr: bodyReq,
+      success: res => {
+        this.stopForwarding()
+        socket.emit('message', { receiver: currentRoom, message: text })
+      },
+      failFunc: err => {
+        // console.log(err)
+      },
+    })
+  }
+
+  stopForwarding = () => {
+    const { forwardMessage } = this.props
+    this.setState({ forward: false })
+    forwardMessage({})
+  }
 }
 
 const mapStateToProps = state => ({
@@ -446,6 +502,8 @@ const mapStateToProps = state => ({
   currentDialog: state.dialogsReducer.currentDialog,
   user: state.userReducer.user,
   dialogs: state.dialogsReducer.dialogs,
+  forwardedMessage: state.messageReducer.forwardMessage,
+  currentRoomId: state.messageReducer.currentRoomId,
 })
 const mapDispatchToProps = dispatch => ({
   fEditMessage: _ => dispatch(editMessage(_)),
@@ -453,6 +511,7 @@ const mapDispatchToProps = dispatch => ({
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setRoom: _ => dispatch(setRoom(_)),
+  forwardMessage: _ => dispatch(forwardMessage(_)),
 })
 export default connect(
   mapStateToProps,

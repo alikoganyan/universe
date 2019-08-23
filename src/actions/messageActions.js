@@ -7,6 +7,7 @@ export const GET_MESSAGES = 'GET_MESSAGES'
 export const SET_ROOM = 'SET_ROOM'
 export const SET_CURRENT_CHAT = 'SET_CURRENT_CHAT'
 export const SET_CURRENT_ROOM_ID = 'SET_CURRENT_ROOM_ID'
+export const FORWARD_MESSAGE = 'FORWARD_MESSAGE'
 
 export const addMessage = payload => ({
   type: ADD_MESSAGE,
@@ -43,5 +44,10 @@ export const setCurrentChat = payload => ({
 
 export const setCurrentRoomId = payload => ({
   type: SET_CURRENT_ROOM_ID,
+  payload,
+})
+
+export const forwardMessage = payload => ({
+  type: FORWARD_MESSAGE,
   payload,
 })

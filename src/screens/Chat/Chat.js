@@ -1,28 +1,19 @@
 import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  Image,
-  KeyboardAvoidingView,
-  Dimensions,
-  Platform,
-} from 'react-native'
+import { View, Platform } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { BackIcon } from '../../assets/index'
 import {
   setCurrentChat,
   setCurrentRoomId,
   setRoom,
+  getMessages,
 } from '../../actions/messageActions'
 import SafeAreaView from '../../common/SafeAreaView'
-import helper from '../../utils/helpers'
 import Header from './Header'
 import Input from './Input'
 import Content from './Content'
 import { socket } from '../../utils/socket'
 
-const { HeaderHeight } = helper
 const Wrapper = styled(View)`
   height: 100%;
   overflow: hidden;
@@ -45,7 +36,7 @@ class Chat extends Component {
             back={this.navigateBack}
             currentChat={currentChat}
           />
-          <Content navigate={this.navigate} />
+          <Content navigate={this.navigate} goBack={this.navigateBack} />
           <Bottom>
             <Input />
           </Bottom>
@@ -65,7 +56,6 @@ class Chat extends Component {
       setRoom,
       setCurrentChat,
       setCurrentRoomId,
-      currentRoom,
       currentChat,
       user,
     } = this.props
@@ -76,7 +66,7 @@ class Chat extends Component {
   }
 
   navigateBack = () => {
-    const { currentRoom, navigation } = this.props
+    const { navigation } = this.props
     navigation.goBack()
   }
 

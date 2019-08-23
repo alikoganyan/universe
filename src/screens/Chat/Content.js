@@ -19,7 +19,7 @@ import Message from '../../common/Message'
 import sendRequest from '../../utils/request'
 import { setDialogs } from '../../actions/dialogsActions'
 import { setTaskReceivers } from '../../actions/participantsActions'
-import { editMessage } from '../../actions/messageActions'
+import { editMessage, forwardMessage } from '../../actions/messageActions'
 import { d_message } from '../../constants/api'
 
 const { HeaderHeight, borderRadius } = helper
@@ -107,7 +107,7 @@ class Content extends Component {
                 <Text>Сделать задачей</Text>
               </MessageOption>
             )}
-            <MessageOption>
+            <MessageOption onPress={() => this.forwardMessage(selectedMessage)}>
               <Text>Переслать</Text>
             </MessageOption>
             {selectedMessage._id && selectedMessage.sender._id === user._id && (
@@ -261,6 +261,13 @@ class Content extends Component {
         },
       )
   }
+
+  forwardMessage = message => {
+    const { forwardMessage, goBack } = this.props
+    this.unselect()
+    forwardMessage(message)
+    goBack()
+  }
 }
 
 const mapStateToProps = state => ({
@@ -276,6 +283,7 @@ const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
+  forwardMessage: _ => dispatch(forwardMessage(_)),
 })
 export default connect(
   mapStateToProps,

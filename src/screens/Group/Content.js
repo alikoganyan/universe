@@ -15,7 +15,7 @@ import Message from '../../common/Message'
 import helper from '../../utils/helpers'
 import { chatBg } from '../../assets/images'
 import { setTaskReceivers } from '../../actions/participantsActions'
-import { editMessage } from '../../actions/messageActions'
+import { editMessage, forwardMessage } from '../../actions/messageActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { d_message } from '../../constants/api'
 import sendRequest from '../../utils/request'
@@ -101,7 +101,7 @@ class Content extends Component {
                 <Text>Сделать задачей</Text>
               </MessageOption>
             )}
-            <MessageOption>
+            <MessageOption onPress={() => this.forwardMessage(selectedMessage)}>
               <Text>Переслать</Text>
             </MessageOption>
             {selectedMessage._id && selectedMessage.sender._id === user._id && (
@@ -211,6 +211,13 @@ class Content extends Component {
   handleHold = e => {
     this.setState({ selectedMessage: e })
   }
+
+  forwardMessage = message => {
+    const { forwardMessage, goBack } = this.props
+    this.unselect()
+    forwardMessage(message)
+    goBack()
+  }
 }
 
 const mapStateToProps = state => ({
@@ -227,6 +234,7 @@ const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
+  forwardMessage: _ => dispatch(forwardMessage(_)),
 })
 export default connect(
   mapStateToProps,
