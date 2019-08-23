@@ -9,7 +9,7 @@ import {
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-// import { ImagePicker, Permissions } from 'expo';
+import getImageFromPicker from '../../utils/ImagePicker'
 import RNPermissions from 'react-native-permissions'
 import posed from 'react-native-pose'
 import { BottomSheet } from 'react-native-btr'
@@ -20,6 +20,7 @@ import {
   stopSearch,
   editMessage,
   forwardMessage,
+  addMessage,
 } from '../../actions/messageActions'
 import {
   p_send_file,
@@ -31,7 +32,7 @@ import { setDialogs } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
 
-const { sidePadding, borderRadius, fontSize, Colors } = helper
+const { sidePadding, borderRadius, /*HeaderHeight,*/ fontSize, Colors } = helper
 const { blue } = Colors
 const FilePickerPosed = posed.View({
   visible: { bottom: 10 },
@@ -182,12 +183,12 @@ class InputComponent extends Component {
         )}
         <BottomSheet
           visible={pickerOpened}
-          onBackButtonPress={this.unselect}
-          onBackdropPress={this.unselect}
+          onBackButtonPress={this._hideBottomSheetMenu}
+          onBackdropPress={this._hideBottomSheetMenu}
         >
           <FilePicker>
             <TouchableOpacity onPress={this.selectPhoto}>
-              <Text>Фото или видео</Text>
+              <Text>Фото</Text>
             </TouchableOpacity>
             <TouchableOpacity onPress={this.selectFile}>
               <Text>Файл</Text>
@@ -195,7 +196,7 @@ class InputComponent extends Component {
             <TouchableOpacity onPress={this.selectGeo}>
               <Text>Мою локацию</Text>
             </TouchableOpacity>
-            <TouchableOpacity onPress={this.unselect}>
+            <TouchableOpacity onPress={this._hideBottomSheetMenu}>
               <Text>Отменить</Text>
             </TouchableOpacity>
           </FilePicker>
@@ -269,7 +270,7 @@ class InputComponent extends Component {
     })
   }
 
-  unselect = () => {
+  _hideBottomSheetMenu = () => {
     this.setState({ pickerOpened: false })
   }
 
@@ -281,46 +282,45 @@ class InputComponent extends Component {
   }
 
   selectPhoto = async () => {
-    const { currentChat, setDialogs, dialogs } = this.props
-    this.unselect()
-
-    // eslint-disable-next-line no-undef
+    const { currentChat, setDialogs, dialogs, user } = this.props
     getImageFromPicker(result => {
-      const { uri, type } = result
-      const ext = uri.split('.')[uri.split('.').length - 1]
-      const fileName = Math.random()
-        .toString(36)
-        .substring(7)
+      const { imageFormData = {}, uri } = result
       const form = new FormData()
-      form.append('file', {
-        uri,
-        name: `photo.${fileName}.${ext}`,
-        type: `image/${type}`,
-      })
+      this._hideBottomSheetMenu()
+      form.append('file', imageFormData)
       form.append('room', currentChat)
+      const message = {
+        room: currentChat,
+        sender: { ...user },
+        created_at: new Date(),
+        type: 'image',
+        src: uri,
+        viewers: [],
+      }
       if (!result.cancelled) {
-        const newDialogs = [...dialogs]
-        // const index = newDialogs.findIndex(e => e.room === currentChat);
-        // newDialogs[index] = res.dialog;
-        setDialogs(newDialogs)
+        addMessage(message)
         sendRequest({
           r_path: p_send_file,
           method: 'post',
           attr: form,
-          // config: {
-          //     headers: {
-          //         'Content-Type': 'multipart/form-data'
-          //     }
-          // },
-          success: () => {
+          config: {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+          success: res => {
             socket.emit('file', { room: currentChat })
+            const newDialogs = [...dialogs]
+            const index = newDialogs.findIndex(e => e.room === currentChat)
+            newDialogs[index] = res.dialog
+            setDialogs(newDialogs)
           },
           failFunc: err => {
             // console.log({ err })
           },
         })
       }
-    })
+    }, this._hideBottomSheetMenu)
   }
 
   selectFile = async () => {
@@ -329,7 +329,7 @@ class InputComponent extends Component {
 
   selectGeo = async () => {
     const { currentRoom } = this.props
-    this.unselect()
+    this._hideBottomSheetMenu()
     // const { status } = await Permissions.askAsync(Permissions.LOCATION);
 
     let status
@@ -440,6 +440,7 @@ const mapStateToProps = state => ({
   currentRoomId: state.messageReducer.currentRoomId,
 })
 const mapDispatchToProps = dispatch => ({
+  addMessage: _ => dispatch(addMessage(_)),
   fEditMessage: _ => dispatch(editMessage(_)),
   startSearch: _ => dispatch(startSearch(_)),
   stopSearch: _ => dispatch(stopSearch(_)),
