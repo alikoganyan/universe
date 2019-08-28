@@ -3,14 +3,11 @@ import {
   View,
   Text,
   TextInput,
-  Image,
-  Platform,
   Dimensions,
   TouchableOpacity,
 } from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import Icon from 'react-native-vector-icons/FontAwesome'
 import {
   BackIcon,
   LocationIcon,
@@ -29,13 +26,7 @@ import {
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 
-const {
-  sidePadding,
-  HeaderHeight,
-  HeaderHeightInner,
-  Colors,
-  fontSize,
-} = helper
+const { sidePadding, HeaderHeight, Colors, fontSize } = helper
 const { border } = Colors
 
 const Input = styled(TextInput)`
@@ -58,6 +49,7 @@ const Info = styled(View)`
 const InfoChatName = styled(Text)`
   color: black;
   font-size: ${fontSize.chatHeaderName};
+  font-family: OpenSans-Bold;
 `
 const InfoParticipants = styled(Text)`
   color: #5f7991;
@@ -239,13 +231,7 @@ class HeaderComponent extends Component {
   focusInput = e => {}
 
   find = e => {
-    const {
-      getMessages,
-      dialogs,
-      currentRoom,
-      currentChat,
-      currentRoomId,
-    } = this.props
+    const { getMessages, dialogs, currentRoom, currentRoomId } = this.props
     e
       ? sendRequest({
           r_path: p_search_messages,
@@ -258,7 +244,7 @@ class HeaderComponent extends Component {
             getMessages(res.messages)
           },
           failFunc: err => {
-            console.log(err)
+            // console.log(err)
           },
         })
       : getMessages(

@@ -700,7 +700,7 @@ export function CheckIcon(props) {
         source={
           color === 'white'
             ? ICONS.Message_delivered
-            : ICONS.Message_delivered_black
+            : ICONS.Message_delivered_blue
         }
       />
     </StyledTouchableOpacity>
@@ -731,7 +731,7 @@ export function CheckAllIcon(props) {
         style={{ width: IconSize, height: IconSize }}
         resizeMode="contain"
         source={
-          color === 'white' ? ICONS.Message_read : ICONS.Message_read_black
+          color === 'white' ? ICONS.Message_read : ICONS.Message_read_blue
         }
       />
     </StyledTouchableOpacity>

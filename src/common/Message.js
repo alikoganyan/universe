@@ -42,6 +42,8 @@ const MyMessageText = styled(Text)`
   padding: ${({ noPadding }) => (noPadding ? 0 : 10)}px;
   padding-bottom: 0;
   font-size: ${fontSize.textSize};
+  font-family: OpenSans;
+  color: ${Colors.black};
 `
 
 const InterlocutorsMessage = styled(MyMessage)`
@@ -65,11 +67,13 @@ const InterlocutorsMessageText = styled(MyMessageText)`
   flex-direction: column;
   justify-content: flex-end;
   text-align: left;
-  color: ${({ isGroupName }) => (isGroupName ? helper.Colors.blue : '#54585d')};
+  color: ${({ isGroupName }) =>
+    isGroupName ? helper.Colors.blue : Colors.black};
   border-radius: 3;
   overflow: hidden;
   padding-bottom: 0;
   flex-wrap: wrap;
+  font-family: OpenSans;
 `
 const MessageInfo = styled(View)`
   display: flex;

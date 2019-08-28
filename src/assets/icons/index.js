@@ -24,8 +24,10 @@ const Likes = require('./Likes.png')
 const Menu = require('./Menu.png')
 const Message_delivered = require('./Message_delivered.png')
 const Message_delivered_black = require('./Message_delivered_black.png')
+const Message_delivered_blue = require('./Message_delivered_blue.png')
 const Message_read = require('./Message_read.png')
 const Message_read_black = require('./Message_read_black.png')
+const Message_read_blue = require('./Message_read_blue.png')
 const New_dialog = require('./New_dialog.png')
 const News = require('./News.png')
 const Photo_white = require('./Photo_white.png')
@@ -69,8 +71,10 @@ export default {
   Menu,
   Message_delivered,
   Message_delivered_black,
+  Message_delivered_blue,
   Message_read,
   Message_read_black,
+  Message_read_blue,
   New_dialog,
   News,
   Photo_white,

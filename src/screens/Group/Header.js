@@ -8,7 +8,6 @@ import {
 } from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import Icon from 'react-native-vector-icons/FontAwesome'
 import {
   BackIcon,
   LocationIcon,
@@ -45,6 +44,7 @@ const Info = styled(View)`
 const InfoChatName = styled(Text)`
   color: black;
   font-size: ${fontSize.chatHeaderName};
+  font-family: OpenSans-Bold;
 `
 const InfoParticipants = styled(Text)`
   color: #5f7991;
@@ -192,7 +192,7 @@ class HeaderComponent extends Component {
             getMessages(res.messages)
           },
           failFunc: err => {
-            console.log(err)
+            // console.log(err)
           },
         })
       : getMessages(
