@@ -74,9 +74,9 @@ const GroupRespondent = styled(Text)`
 `
 const LastMessageDate = styled(Text)`
   color: ${({ color }) => color || '#a3a3a3'};
-  font-size: 12;
+  font-size: 13px;
   text-align: center;
-  margin-bottom: 5px;
+  margin-bottom: 3px;
   font-family: OpenSans;
 `
 const DialogLastMessage = styled(Text)`
@@ -100,14 +100,14 @@ const UnreadMessages = styled(View)`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 25px;
+  min-height: 20px;
 `
 const NewMessages = styled(View)`
   background: ${({ color }) => color || purple};
   padding: 2.5px;
   overflow: hidden;
-  min-width: 25px;
-  height: 25px;
+  min-width: 20px;
+  height: 20px;
   border-radius: 12.5;
   display: flex;
   justify-content: center;
@@ -117,6 +117,7 @@ const NewMessagesText = styled(Text)`
   color: white;
   font-size: ${fontSize.text};
   text-align: center;
+  font-size: 13px;
 `
 // const LastFile = styled(View)`
 //   padding-left: 10px;
