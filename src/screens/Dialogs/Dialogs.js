@@ -28,6 +28,13 @@ const StyledFlatList = styled(FlatList)`
   height: 100%;
 `
 
+const Title = styled(Text)`
+  font-family: 'OpenSans-Bold';
+  font-size: 30px;
+  color: ${Colors.black};
+  padding: 8px 16px;
+`
+
 class Dialogs extends Component {
   _renderItem = dialog => {
     const { user } = this.props
@@ -80,6 +87,7 @@ class Dialogs extends Component {
     return (
       <SafeAreaView behavior="padding">
         <Wrapper>
+          <Title>Диалоги</Title>
           <Header
             toProfile={this.toProfile}
             toggleDrawer={navigation.openDrawer}
@@ -101,7 +109,7 @@ class Dialogs extends Component {
           ) : null}
           {dialogs.length ? (
             <StyledFlatList
-              ListHeaderComponent={<View style={{ margin: 30 }} />}
+              ListHeaderComponent={<View style={{ margin: 28 }} />}
               ref={ref => {
                 this.flatList = ref
               }}

@@ -52,8 +52,9 @@ const InfoChatName = styled(Text)`
   font-family: OpenSans-Bold;
 `
 const InfoParticipants = styled(Text)`
-  color: #5f7991;
+  color: ${Colors.jumbo};
   font-size: ${fontSize.sm};
+  font-family: OpenSans;
 `
 const Left = styled(View)`
   display: flex;
@@ -160,7 +161,12 @@ class HeaderComponent extends Component {
           <Left>
             {!search ? (
               <>
-                <BackIcon onPress={back} right />
+                <BackIcon
+                  marginLeft={false}
+                  noPaddingAll
+                  onPress={back}
+                  right
+                />
                 <ToProfile onPress={this.toProfile}>
                   {!image ||
                   image === '/images/default_group.png' ||

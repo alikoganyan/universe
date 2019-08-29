@@ -53,7 +53,7 @@ export default {
     lightGrey2: '#f7f7f7',
     lightGrey3: '#ccc',
     myMessage: '#dcf8c6', // '#00ffff', '#588eff', '#4a83fa',
-    interlocatorMessage: '#fff', //'#F6F6F6',
+    interlocatorMessage: '#f7f7f7', //'#F6F6F6',
     avatars: [
       '#f9d38a',
       '#fdc22d',
@@ -81,6 +81,8 @@ export default {
       '#5cc687',
     ],
     silver: '#cacaca',
+    jumbo: '#818086',
+    norway: '#A8BE9D',
   },
   imageSize: {
     small: 20,

@@ -993,3 +993,21 @@ export function LogoPlaceholder(props) {
 export function ArrowDownIcon() {
   return <Icon name="angle-down" size={IconSizeLarge} color={IconDarkColor} />
 }
+
+export function CameraIconBlue(props) {
+  const { onPress, left, right, size } = props
+  return (
+    <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+      {/* <SvgUri
+                width={size || IconSize}
+                height={size || IconSize}
+                source={SVG.Add}
+            /> */}
+      <Image
+        style={{ width: size || IconSize, height: size || IconSize }}
+        resizeMode="contain"
+        source={ICONS.Camera_blue}
+      />
+    </StyledTouchableOpacity>
+  )
+}

@@ -5,6 +5,7 @@ const Arrow_back = require('./Arrow_back.png')
 const Arrow_back_blue = require('./Arrow_back_blue.png')
 const Arrow_down_light = require('./Arrow_down_light.png')
 const Dialog = require('./Dialog.png')
+const Camera_blue = require('./Camera_blue.png')
 const Close = require('./Close.png')
 const Close_light = require('./Close_light.png')
 const Comments = require('./Comments.png')
@@ -57,6 +58,7 @@ export default {
   Arrow_back_blue,
   Arrow_down_light,
   Dialog,
+  Camera_blue,
   Close,
   Close_light,
   Comments,

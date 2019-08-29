@@ -35,7 +35,7 @@ const Header = styled(View)`
   padding: 10px 0;
   z-index: 1;
   left: ${sidePadding}px;
-  margin-top: 10px;
+  margin-top: 58px;
 `
 const Input = styled(TextInput)`
   flex: 1;
@@ -130,7 +130,7 @@ class HeaderComponent extends Component {
           setDialogs(newDialogs)
         },
         failFunc: err => {
-          console.log(err)
+          // console.log(err)
         },
       })
     } else {

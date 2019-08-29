@@ -19,12 +19,13 @@ const { fontSize, sidePadding, Colors } = helper
 const {
   purple,
   lightColor,
-  grey2,
+  // grey2,
   blue,
   green,
   // grey3,
   lightGrey2,
   lightBlue,
+  jumbo,
 } = Colors
 const Wrapper = styled(View)`
   flex-direction: row;
@@ -58,25 +59,33 @@ const DialogTextInner = styled(View)`
 const DialogTitle = styled(Text)`
   font-size: ${fontSize.dialogName};
   color: #000000;
-  font-weight: 700;
+  font-family: 'OpenSans-Semibold';
+  textShadowColor: ${Colors.black};
+  textShadowOffset: {width: 0, height: 0};
+  textShadowRadius: 0.01;
 `
 const GroupRespondent = styled(Text)`
-  font-size: ${fontSize.sl};
+  font-size: 14;
   color: #000000;
-  font-weight: 500;
+  font-family: OpenSans;
+  textShadowColor: ${Colors.black};
+  textShadowOffset: {width: 0, height: 0};
+  textShadowRadius: 0.01;
 `
 const LastMessageDate = styled(Text)`
-  color: ${grey2};
-  font-size: ${fontSize.sl};
+  color: ${({ color }) => color || '#a3a3a3'};
+  font-size: 12;
   text-align: center;
   margin-bottom: 5px;
+  font-family: OpenSans;
 `
 const DialogLastMessage = styled(Text)`
-  color: ${grey2};
+  color: ${jumbo};
   font-size: 14;
   font-weight: 400;
   line-height: 15;
   padding-top: 2px;
+  font-family: OpenSans;
 `
 const DialogDate = styled(View)`
   color: ${lightColor};
@@ -85,6 +94,7 @@ const DialogDate = styled(View)`
   margin-bottom: 2px;
   padding-left: 4px;
   text-align: center;
+  align-items: flex-end;
 `
 const UnreadMessages = styled(View)`
   display: flex;
@@ -276,7 +286,9 @@ class Content extends Component {
               )}
             </DialogTextInner>
             <DialogDate>
-              <LastMessageDate>{dialogDate}</LastMessageDate>
+              <LastMessageDate color={unreadMessages ? lastType : ''}>
+                {dialogDate}
+              </LastMessageDate>
               <UnreadMessages>
                 {!!unreadMessages && (
                   <NewMessages color={lastType}>

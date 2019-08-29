@@ -17,9 +17,9 @@ import posed from 'react-native-pose'
 import { BottomSheet } from 'react-native-btr'
 import {
   PapperPlaneIcon,
-  ImageIconBlue,
   CloseIcon,
   AddIconBlue,
+  CameraIconBlue,
 } from '../../assets/index'
 import helper from '../../utils/helpers'
 import AutoHeightInput from '../../common/AutoHeightInput'
@@ -59,7 +59,7 @@ const Wrapper = styled(View)`
   left: 0;
   bottom: 0;
   align-self: center;
-  padding-horizontal: 15px;
+  padding-horizontal: 10px;
   padding-vertical: 5px;
   display: flex;
   flex-direction: row;
@@ -197,7 +197,7 @@ class InputComponent extends Component {
         ) : (
           <Wrapper isTopItem={edit || reply}>
             <Left>
-              <AddIconBlue />
+              <AddIconBlue size={20} onPress={this.pickImage} />
             </Left>
             <Body>
               <Input
@@ -212,7 +212,7 @@ class InputComponent extends Component {
               {text ? (
                 <PapperPlaneIcon onPress={this.handleSendPress} />
               ) : (
-                <ImageIconBlue onPress={this.pickImage} />
+                <CameraIconBlue size={20} onPress={this.pickImage} />
               )}
             </Right>
           </Wrapper>

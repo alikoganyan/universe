@@ -42,8 +42,11 @@ const MyMessageText = styled(Text)`
   padding: ${({ noPadding }) => (noPadding ? 0 : 10)}px;
   padding-bottom: 0;
   font-size: ${fontSize.textSize};
-  font-family: OpenSans;
+  font-family: 'OpenSans';
   color: ${Colors.black};
+  textShadowColor: ${Colors.black};
+  textShadowOffset: {width: 0, height: 0};
+  textShadowRadius: 0.01;
 `
 
 const InterlocutorsMessage = styled(MyMessage)`
@@ -73,7 +76,7 @@ const InterlocutorsMessageText = styled(MyMessageText)`
   overflow: hidden;
   padding-bottom: 0;
   flex-wrap: wrap;
-  font-family: OpenSans;
+  font-family: 'OpenSans';
 `
 const MessageInfo = styled(View)`
   display: flex;
@@ -84,7 +87,9 @@ const MessageInfo = styled(View)`
   width: 100%;
 `
 const MessageDate = styled(Text)`
-  color: ${({ color }) => color || '#ABABAB'};
+  color: ${({ color }) => color || Colors.jumbo};
+  font-family: 'OpenSans';
+  font-size: 11px;
 `
 const MyMessageImage = styled(SingleImage)`
   min-width: 100%;
@@ -197,7 +202,7 @@ class Message extends Component {
               resizeMode="contain"
             />
             <MessageInfo>
-              <MessageDate color="black">{finalTime}</MessageDate>
+              <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
               <Indicator color="black" read={messageRead} />
             </MessageInfo>
           </MyMessage>
@@ -240,7 +245,7 @@ class Message extends Component {
           <MyMessage background={background}>
             <MyMessageText>{text}</MyMessageText>
             <MessageInfo>
-              <MessageDate color="black">{finalTime}</MessageDate>
+              <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
               <Indicator color="black" read={messageRead} />
             </MessageInfo>
           </MyMessage>
@@ -373,7 +378,7 @@ class Message extends Component {
               </FileInfo>
             </FileInfoWrapper>
             <MessageInfo>
-              <MessageDate color="black">{finalTime}</MessageDate>
+              <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
               <Indicator color="black" read={messageRead} />
             </MessageInfo>
           </MyMessage>

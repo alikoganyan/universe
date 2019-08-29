@@ -15,7 +15,11 @@ import Message from '../../common/Message'
 import helper from '../../utils/helpers'
 import { chatBg } from '../../assets/images'
 import { setTaskReceivers } from '../../actions/participantsActions'
-import { editMessage, forwardMessage } from '../../actions/messageActions'
+import {
+  editMessage,
+  forwardMessage,
+  replyMessage,
+} from '../../actions/messageActions'
 import { setDialogs } from '../../actions/dialogsActions'
 import { d_message } from '../../constants/api'
 import sendRequest from '../../utils/request'
@@ -95,9 +99,13 @@ class Content extends Component {
           onBackdropPress={this.unselect}
         >
           <MessageOptions>
-            {selectedMessage._id && selectedMessage.sender._id === user._id && (
+            {selectedMessage._id && selectedMessage.sender._id === user._id ? (
               <MessageOption onPress={this.turnToTask}>
                 <Text>Сделать задачей</Text>
+              </MessageOption>
+            ) : (
+              <MessageOption onPress={() => this.replyMessage(selectedMessage)}>
+                <Text>Ответить</Text>
               </MessageOption>
             )}
             <MessageOption onPress={() => this.forwardMessage(selectedMessage)}>
@@ -217,6 +225,12 @@ class Content extends Component {
     forwardMessage(message)
     goBack()
   }
+
+  replyMessage = message => {
+    const { replyMessage } = this.props
+    this.unselect()
+    replyMessage(message)
+  }
 }
 
 const mapStateToProps = state => ({
@@ -234,6 +248,7 @@ const mapDispatchToProps = dispatch => ({
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
+  replyMessage: _ => dispatch(replyMessage(_)),
 })
 export default connect(
   mapStateToProps,

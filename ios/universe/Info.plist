@@ -99,6 +99,8 @@
 		<string>Zocial.ttf</string>
 		<string>OpenSans-Bold.ttf</string>
 		<string>OpenSans.ttf</string>
+		<string>OpenSans-Semibold.ttf</string>
+		<string>EncodeSansSemiExpanded-Medium.ttf</string>
 	</array>
 	<key>UIBackgroundModes</key>
 	<array>
