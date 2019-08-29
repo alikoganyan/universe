@@ -8,6 +8,7 @@ import {
   SET_CURRENT_ROOM_ID,
   EDIT_MESSAGE,
   FORWARD_MESSAGE,
+  REPLY_MESSAGE,
 } from '../actions/messageActions'
 
 const initialState = {
@@ -18,6 +19,7 @@ const initialState = {
   editMessage: {},
   messages: [],
   forwardMessage: {},
+  replyMessage: {},
 }
 
 export default (state = initialState, action) => {
@@ -49,6 +51,9 @@ export default (state = initialState, action) => {
 
     case FORWARD_MESSAGE:
       return { ...state, forwardMessage: payload }
+
+    case REPLY_MESSAGE:
+      return { ...state, replyMessage: payload }
 
     default:
       return state

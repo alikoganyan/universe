@@ -15,7 +15,12 @@ import RNPermissions from 'react-native-permissions'
 import getImageFromPicker from '../../utils/ImagePicker'
 import posed from 'react-native-pose'
 import { BottomSheet } from 'react-native-btr'
-import { PapperPlaneIcon, ImageIconBlue, CloseIcon } from '../../assets/index'
+import {
+  PapperPlaneIcon,
+  ImageIconBlue,
+  CloseIcon,
+  AddIconBlue,
+} from '../../assets/index'
 import helper from '../../utils/helpers'
 import AutoHeightInput from '../../common/AutoHeightInput'
 import {
@@ -28,11 +33,13 @@ import {
   setCurrentRoomId,
   editMessage,
   forwardMessage,
+  replyMessage,
 } from '../../actions/messageActions'
 import {
   p_send_file,
   p_edit_message,
   p_forward_message,
+  p_reply_message,
 } from '../../constants/api'
 
 import { setDialogs } from '../../actions/dialogsActions'
@@ -45,26 +52,25 @@ const FilePickerPosed = posed.View({
   visible: { bottom: 10 },
   hidden: { bottom: -250 },
 })
+
 const Wrapper = styled(View)`
   background: white;
-  width: ${({ edit }) =>
-    edit
-      ? Dimensions.get('window').width
-      : Dimensions.get('window').width - sidePadding * 2}px;
+  width: ${Dimensions.get('window').width};
   left: 0;
-  bottom: ${({ edit }) => (edit ? 0 : 10)}px;
+  bottom: 0;
   align-self: center;
-  padding: ${({ edit }) => (edit ? `0 ${sidePadding}` : `0 15`)}px;
+  padding-horizontal: 15px;
+  padding-vertical: 5px;
   display: flex;
   flex-direction: row;
   justify-content: space-between;
+  align-items: center;
   ${'' /* align-items: ${Platform.OS === 'ios' ? 'center' : 'flex-start'}; */}
-  align-items: flex-start;
-  border-radius: ${borderRadius};
-  border-width: ${({ edit }) => (edit ? 0 : 1)};
-  border-color: #ddd;
+  border-width: ${({ isTopItem }) => (isTopItem ? 0 : 1)};
+  border-color: ${Colors.silver};
   border-top-width: 1;
   min-height: 44px;
+  background-color: #f4f4f4;
   ${'' /* max-height: 65px; */}
 `
 const Input = styled(AutoHeightInput)`
@@ -72,19 +78,26 @@ const Input = styled(AutoHeightInput)`
   flex-direction: column;
   width: 100%;
   overflow: hidden;
-  padding-horizontal: 0;
-  padding-top: ${Platform.OS === 'ios' ? '10px' : '14px'};
-  padding-bottom: ${Platform.OS === 'ios' ? '8px' : '0px'};
-  min-height: 30px;
-  max-height: 100px;
+  padding-horizontal: 12px;
+  padding-top: ${Platform.OS === 'ios' ? '8px' : '10px'};
+  padding-bottom: ${Platform.OS === 'ios' ? '6px' : '0px'};
   align-items: flex-start;
   font-size: ${fontSize.input};
   text-align-vertical: top;
+  background-color: #ffffff;
+  border-radius: 20px;
+  border-width: 1px;
+  border-color: ${Colors.silver};
 `
 const Left = styled(View)`
   display: flex;
+  align-items: flex-start;
   flex-direction: row;
-  width: 90%;
+`
+const Body = styled(View)`
+  display: flex;
+  flex-direction: row;
+  flex: 1;
   align-items: center;
   justify-content: center;
 `
@@ -92,7 +105,6 @@ const Right = styled(View)`
   display: flex;
   align-items: flex-start;
   flex-direction: row;
-  padding-top: ${Platform.OS === 'ios' ? '2px' : '6px'};
 `
 const FilePicker = styled(FilePickerPosed)`
   background: white;
@@ -143,8 +155,8 @@ const MessageBoxLeft = styled(View)`
 `
 class InputComponent extends Component {
   render() {
-    const { text, pickerOpened, edit, forward } = this.state
-    const { editedMessage, forwardedMessage } = this.props
+    const { text, pickerOpened, edit, forward, reply } = this.state
+    const { editedMessage, forwardedMessage, repliedMessage } = this.props
     return (
       <>
         {edit ? (
@@ -155,6 +167,17 @@ class InputComponent extends Component {
             </MessageBoxLeft>
             <Right>
               <CloseIcon onPress={this.stopEditing} marginLeft={false} />
+            </Right>
+          </MessageBox>
+        ) : null}
+        {reply ? (
+          <MessageBox>
+            <MessageBoxLeft>
+              <Message>Ответить</Message>
+              <MessageText numberOfLines={1}>{repliedMessage.text}</MessageText>
+            </MessageBoxLeft>
+            <Right>
+              <CloseIcon onPress={this.stopReply} marginLeft={false} />
             </Right>
           </MessageBox>
         ) : null}
@@ -172,8 +195,11 @@ class InputComponent extends Component {
             </Right>
           </MessageBox>
         ) : (
-          <Wrapper edit={edit}>
+          <Wrapper isTopItem={edit || reply}>
             <Left>
+              <AddIconBlue />
+            </Left>
+            <Body>
               <Input
                 placeholder="Написать сообщение"
                 onChangeText={e => this.handleChange(e)}
@@ -181,12 +207,10 @@ class InputComponent extends Component {
                 blurOnSubmit={false}
                 autoHeight
               />
-            </Left>
+            </Body>
             <Right>
               {text ? (
-                <PapperPlaneIcon
-                  onPress={edit ? this.confirmEditing : this.sendMessage}
-                />
+                <PapperPlaneIcon onPress={this.handleSendPress} />
               ) : (
                 <ImageIconBlue onPress={this.pickImage} />
               )}
@@ -223,21 +247,30 @@ class InputComponent extends Component {
     edit: false,
     pickerOpened: false,
     forward: false,
+    reply: false,
   }
 
   componentWillUnmount() {
     this.stopEditing()
+    this.stopReply()
     this._hideBottomSheetMenu()
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const propsChanged =
+    const editChanged =
       JSON.stringify(nextProps.editedMessage) !==
       JSON.stringify(prevState.editedMessage)
+    const forwarChanged =
+      JSON.stringify(nextProps.forwardedMessage) !==
+      JSON.stringify(prevState.forwardedMessage)
+    const replyChanged =
+      JSON.stringify(nextProps.repliedMessage) !==
+      JSON.stringify(prevState.repliedMessage)
+
     if (
       nextProps.editedMessage &&
       nextProps.editedMessage.text &&
-      propsChanged
+      editChanged
     ) {
       return {
         ...nextProps,
@@ -248,11 +281,21 @@ class InputComponent extends Component {
     if (
       nextProps.forwardedMessage &&
       nextProps.forwardedMessage.text &&
-      propsChanged
+      forwarChanged
     ) {
       return {
         ...nextProps,
         forward: nextProps.forwardedMessage.text,
+      }
+    }
+    if (
+      nextProps.repliedMessage &&
+      nextProps.repliedMessage.text &&
+      replyChanged
+    ) {
+      return {
+        ...nextProps,
+        reply: nextProps.repliedMessage.text,
       }
     }
     return nextProps
@@ -485,6 +528,45 @@ class InputComponent extends Component {
     this.setState({ forward: false })
     forwardMessage({})
   }
+
+  stopReply = () => {
+    const { replyMessage } = this.props
+    this.setState({ reply: false })
+    replyMessage({})
+  }
+
+  confirmReplay = () => {
+    const {
+      repliedMessage: { _id },
+      currentRoomId,
+    } = this.props
+    // const { text } = this.state
+    const bodyReq = { message_id: _id, dialog_id: currentRoomId }
+    sendRequest({
+      r_path: p_reply_message,
+      method: 'post',
+      attr: bodyReq,
+      success: res => {
+        this.stopForwarding()
+        socket.emit('get_dialog', { id: currentRoomId })
+      },
+      failFunc: err => {
+        // console.log(err.response, err)
+      },
+    })
+  }
+
+  handleSendPress = () => {
+    const { edit, reply } = this.state
+
+    if (edit) {
+      this.confirmEditing()
+    } else if (reply) {
+      this.confirmReplay()
+    } else {
+      this.sendMessage()
+    }
+  }
 }
 
 const mapStateToProps = state => ({
@@ -497,6 +579,7 @@ const mapStateToProps = state => ({
   dialogs: state.dialogsReducer.dialogs,
   forwardedMessage: state.messageReducer.forwardMessage,
   currentRoomId: state.messageReducer.currentRoomId,
+  repliedMessage: state.messageReducer.replyMessage,
 })
 const mapDispatchToProps = dispatch => ({
   fEditMessage: _ => dispatch(editMessage(_)),
@@ -506,6 +589,7 @@ const mapDispatchToProps = dispatch => ({
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setRoom: _ => dispatch(setRoom(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
+  replyMessage: _ => dispatch(replyMessage(_)),
 })
 export default connect(
   mapStateToProps,

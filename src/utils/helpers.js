@@ -80,6 +80,7 @@ export default {
       '#aed263',
       '#5cc687',
     ],
+    silver: '#cacaca',
   },
   imageSize: {
     small: 20,

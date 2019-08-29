@@ -124,7 +124,7 @@ export function BackIcon(props) {
       <Image
         style={{ width: IconSize, height: IconSize }}
         resizeMode="contain"
-        source={ICONS.Arrow_back}
+        source={ICONS.Arrow_back_blue}
       />
     </StyledTouchableOpacity>
   )
@@ -256,7 +256,7 @@ export function SearchIcon(props) {
       <Image
         style={{ width: IconSize, height: IconSize }}
         resizeMode="contain"
-        source={ICONS.Search}
+        source={ICONS.Search_blue}
       />
     </StyledTouchableOpacity>
   )
@@ -333,7 +333,7 @@ export function LocationIcon(props) {
       <Image
         style={{ width: IconSize, height: IconSize }}
         resizeMode="contain"
-        source={ICONS.Geolocation}
+        source={ICONS.Geolocation_blue}
       />
     </StyledTouchableOpacity>
   )
@@ -854,6 +854,24 @@ export function AddIcon(props) {
         style={{ width: size || IconSize, height: size || IconSize }}
         resizeMode="contain"
         source={ICONS.Add}
+      />
+    </StyledTouchableOpacity>
+  )
+}
+
+export function AddIconBlue(props) {
+  const { onPress, left, right, size } = props
+  return (
+    <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+      {/* <SvgUri
+                width={size || IconSize}
+                height={size || IconSize}
+                source={SVG.Add}
+            /> */}
+      <Image
+        style={{ width: size || IconSize, height: size || IconSize }}
+        resizeMode="contain"
+        source={ICONS.Add_blue}
       />
     </StyledTouchableOpacity>
   )

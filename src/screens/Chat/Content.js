@@ -3,7 +3,7 @@ import {
   View,
   Text,
   FlatList,
-  // ImageBackground,
+  ImageBackground,
   TouchableOpacity,
   ActionSheetIOS,
   Platform,
@@ -19,7 +19,11 @@ import Message from '../../common/Message'
 import sendRequest from '../../utils/request'
 import { setDialogs } from '../../actions/dialogsActions'
 import { setTaskReceivers } from '../../actions/participantsActions'
-import { editMessage, forwardMessage } from '../../actions/messageActions'
+import {
+  editMessage,
+  forwardMessage,
+  replyMessage,
+} from '../../actions/messageActions'
 import { d_message } from '../../constants/api'
 
 const { HeaderHeight, borderRadius } = helper
@@ -55,10 +59,9 @@ const FlatListHeader = styled(View)`
   margin: ${({ editing }) => (editing ? 65 : 35)}px;
 `
 // const StyledImageBackground = styled(ImageBackground)`
-const StyledImageBackground = styled(View)`
+const StyledImageBackground = styled(ImageBackground)`
   width: 100%;
   height: 100%;
-  background: #d0d8df;
 `
 class Content extends Component {
   render() {
@@ -102,9 +105,13 @@ class Content extends Component {
           onBackdropPress={this.unselect}
         >
           <MessageOptions>
-            {selectedMessage._id && selectedMessage.sender._id === user._id && (
+            {selectedMessage._id && selectedMessage.sender._id === user._id ? (
               <MessageOption onPress={this.turnToTask}>
                 <Text>Сделать задачей</Text>
+              </MessageOption>
+            ) : (
+              <MessageOption onPress={() => this.replyMessage(selectedMessage)}>
+                <Text>Ответить</Text>
               </MessageOption>
             )}
             <MessageOption onPress={() => this.forwardMessage(selectedMessage)}>
@@ -268,6 +275,12 @@ class Content extends Component {
     forwardMessage(message)
     goBack()
   }
+
+  replyMessage = message => {
+    const { replyMessage } = this.props
+    this.unselect()
+    replyMessage(message)
+  }
 }
 
 const mapStateToProps = state => ({
@@ -284,6 +297,7 @@ const mapDispatchToProps = dispatch => ({
   setDialogs: _ => dispatch(setDialogs(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
+  replyMessage: _ => dispatch(replyMessage(_)),
 })
 export default connect(
   mapStateToProps,

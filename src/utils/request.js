@@ -1,10 +1,15 @@
 import axios from 'axios'
 import { store } from '../reducers/store'
 import { setAuth, setError } from '../actions/userActions'
-import { disconnectFromSocket, socket } from './socket'
+// import { disconnectFromSocket, socket } from './socket'
 import NavigationProvider from './NavigationProvider'
 
 const SERVER_URL = 'https://ser.univ.team/api'
+
+axios.interceptors.request.use(request => {
+  // console.log('Starting Request', request)
+  return request
+})
 
 /**
  * Request function to get data from server
@@ -25,7 +30,7 @@ export default async function sendRequest({
     },
   },
   success = res => {
-    console.log(res)
+    // console.log(res)
   },
   failFunc = null,
   full_res = false,
@@ -65,7 +70,7 @@ export default async function sendRequest({
     const { response } = err
     // console.log(response.data)
     // console.log(store.getState().userReducer.auth);
-    console.log('error in path -->', r_path, err)
+    // console.log('error in path -->', r_path, err)
     if (!response || response.status === 500) {
       store.dispatch(setError(true))
       if (failFunc) {
@@ -75,6 +80,7 @@ export default async function sendRequest({
       store.dispatch(setAuth(null))
       NavigationProvider.logoutNavigation()
     } else {
+      // eslint-disable-next-line no-console
       failFunc ? failFunc(response.data) : console.log(response)
     }
   }

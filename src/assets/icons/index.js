@@ -1,5 +1,8 @@
 const Add = require('./Add.png')
+const Add_blue = require('./Add_blue.png')
+
 const Arrow_back = require('./Arrow_back.png')
+const Arrow_back_blue = require('./Arrow_back_blue.png')
 const Arrow_down_light = require('./Arrow_down_light.png')
 const Dialog = require('./Dialog.png')
 const Close = require('./Close.png')
@@ -17,6 +20,7 @@ const Files = require('./Files.png')
 const Geolocation = require('./Geolocation.png')
 const Geolocation_green = require('./Geolocation_green.png')
 const Geolocation_red = require('./Geolocation_red.png')
+const Geolocation_blue = require('./Geolocation_blue.png')
 const Intro = require('./Intro.png')
 const Like = require('./Like.png')
 const Likes_grey = require('./Likes_grey.png')
@@ -33,6 +37,7 @@ const News = require('./News.png')
 const Photo_white = require('./Photo_white.png')
 const Play = require('./Play.png')
 const Search = require('./Search.png')
+const Search_blue = require('./Search_blue.png')
 const Settings = require('./Settings.png')
 const Task_delivered = require('./Task_delivered.png')
 const Task_read = require('./Task_read.png')
@@ -47,7 +52,9 @@ const Arrow_right_yellow = require('./Arrow_right_yellow.png')
 
 export default {
   Add,
+  Add_blue,
   Arrow_back,
+  Arrow_back_blue,
   Arrow_down_light,
   Dialog,
   Close,
@@ -64,6 +71,7 @@ export default {
   Geolocation,
   Geolocation_green,
   Geolocation_red,
+  Geolocation_blue,
   Intro,
   Like,
   Likes_grey,
@@ -80,6 +88,7 @@ export default {
   Photo_white,
   Play,
   Search,
+  Search_blue,
   Settings,
   Task_delivered,
   Task_read,

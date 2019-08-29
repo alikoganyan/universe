@@ -3,7 +3,7 @@ import {
   View,
   Text,
   FlatList,
-  // ImageBackground,
+  ImageBackground,
   TouchableOpacity,
   InteractionManager,
   Alert,
@@ -47,10 +47,9 @@ const FlatListHeader = styled(View)`
 `
 
 // const StyledImageBackground = styled(ImageBackground)`
-const StyledImageBackground = styled(View)`
+const StyledImageBackground = styled(ImageBackground)`
   width: 100%;
   height: 100%;
-  background: #d0d8df;
 `
 class Content extends Component {
   render() {
