@@ -18,6 +18,7 @@ import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
+import { WriteMessageBlue } from '../../assets'
 
 const { Colors } = helper
 const { blue, grey2, lightColor } = Colors
@@ -32,7 +33,14 @@ const Title = styled(Text)`
   font-family: 'OpenSans-Bold';
   font-size: 30px;
   color: ${Colors.black};
-  padding: 8px 16px;
+  padding: 0 16px 8px;
+`
+
+const PreHeader = styled(View)`
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  padding: 0 8px;
 `
 
 class Dialogs extends Component {
@@ -82,16 +90,14 @@ class Dialogs extends Component {
   }
 
   render() {
-    const { dialogs, navigation } = this.props
+    const { dialogs } = this.props
     const { congratulations } = this.state
     return (
       <SafeAreaView behavior="padding">
+        <PreHeader>
+          <WriteMessageBlue />
+        </PreHeader>
         <Wrapper>
-          <Title>Диалоги</Title>
-          <Header
-            toProfile={this.toProfile}
-            toggleDrawer={navigation.openDrawer}
-          />
           {congratulations ? (
             <Congratulations
               title="Поздравляем с регистрацией."
@@ -109,10 +115,10 @@ class Dialogs extends Component {
           ) : null}
           {dialogs.length ? (
             <StyledFlatList
-              ListHeaderComponent={<View style={{ margin: 28 }} />}
               ref={ref => {
                 this.flatList = ref
               }}
+              ListHeaderComponent={this._renderListHeader}
               keyboardDismissMode="on-drag"
               initialNumToRender={20}
               data={dialogs}
@@ -175,6 +181,20 @@ class Dialogs extends Component {
   componentWillUnmount() {
     // disconnectFromSocket()
     // AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  _renderListHeader = () => {
+    const { navigation } = this.props
+
+    return (
+      <>
+        <Title>Диалоги</Title>
+        <Header
+          toProfile={this.toProfile}
+          toggleDrawer={navigation.openDrawer}
+        />
+      </>
+    )
   }
 
   _handleAppStateChange = () => {

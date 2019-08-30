@@ -1,99 +1,62 @@
 import React, { Component } from 'react'
-import {
-  View,
-  TextInput,
-  TouchableOpacity,
-  Platform,
-  Dimensions,
-  Keyboard,
-} from 'react-native'
+import { View, TextInput, Dimensions, Keyboard } from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
-import { BurgerIcon, CloseIcon } from '../../assets/index'
+import { CloseIcon, SearchIconGray } from '../../assets/index'
 import { setDialogs } from '../../actions/dialogsActions'
-import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
 import sendRequest from '../../utils/request'
 import { p_search_dialogs } from '../../constants/api'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 
-const { Colors, sidePadding, fontSize, HeaderHeight, borderRadius } = helper
-const { white, lightBlue2 } = Colors
+const { sidePadding, fontSize, HeaderHeight } = helper
 const Header = styled(View)`
   width: ${Dimensions.get('window').width - sidePadding * 2}px;
-  background-color: ${Colors.background};
-  border: 1px solid ${Colors.border};
-  border-radius: ${borderRadius};
+  background-color: #f4f4f4;
+  border-radius: 10px;
   font-size: ${fontSize.header};
-  height: ${44};
+  height: 37px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  position: absolute;
   padding: 10px 0;
   z-index: 1;
   left: ${sidePadding}px;
-  margin-top: 58px;
+  margin-bottom: 13px;
+  margin-top: 3px;
 `
 const Input = styled(TextInput)`
   flex: 1;
   height: ${HeaderHeight};
   position: relative;
   left: -4px;
-  font-size: ${fontSize.sm};
+  font-size: ${fontSize.input};
 `
+
 class HeaderComponent extends Component {
   render() {
-    const { user, toggleDrawer } = this.props
     const { input, focused } = this.state
     return (
-      <Header
-        style={{
-          shadowColor: Platform.OS === 'ios' ? lightBlue2 : white,
-          shadowOffset: {
-            width: 0,
-            height: Platform.OS === 'ios' ? 1 : 25,
-          },
-          shadowOpacity: Platform.OS === 'ios' ? 0.1 : 1,
-          shadowRadius: 4,
-
-          elevation: Platform.OS === 'ios' ? 1 : 4,
-        }}
-      >
-        <BurgerIcon onPress={toggleDrawer} right />
-        <Input
-          value={input}
-          onChangeText={this.handleInputChange}
-          onFocus={this.handleFocus}
-          placeholder="Поиск"
-        />
-        {focused ? (
-          <CloseIcon
-            onPress={this.onBlur}
-            marginLeft={false}
-            marginRight
-            right
+      <>
+        <Header>
+          <SearchIconGray />
+          <Input
+            value={input}
+            onChangeText={this.handleInputChange}
+            onFocus={this.handleFocus}
+            placeholder="Поиск"
           />
-        ) : (
-          <TouchableOpacity
-            onPress={this.toProfile}
-            style={{ marginRight: sidePadding }}
-          >
-            {!user.image ||
-            user.image === '/images/default_group.png' ||
-            user.image === '/images/default_avatar.jpg' ? (
-              <DefaultAvatar size="header" />
-            ) : (
-              <ImageComponent
-                source={{ uri: `https://ser.univ.team${user.image}` }}
-                size="header"
-              />
-            )}
-          </TouchableOpacity>
-        )}
-      </Header>
+          {focused && (
+            <CloseIcon
+              onPress={this.onBlur}
+              marginLeft={false}
+              marginRight
+              right
+            />
+          )}
+        </Header>
+      </>
     )
   }
 

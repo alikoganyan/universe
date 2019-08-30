@@ -1,10 +1,12 @@
 import React from 'react'
-import { Dimensions, Platform } from 'react-native'
+import { Dimensions, Platform, Text } from 'react-native'
 import {
   createStackNavigator,
   createAppContainer,
   createDrawerNavigator,
+  createBottomTabNavigator,
 } from 'react-navigation'
+import styled from 'styled-components'
 import {
   Group,
   Dialogs,
@@ -49,11 +51,96 @@ import {
   GroupEdit,
   IpadView,
 } from '.'
+import {
+  NewsMenuIcon,
+  ContactsMenuIcon,
+  DialogMenuIcon,
+  TasksMenuIcon,
+  SettingsMenuIcon,
+} from '../assets'
+
+const Label = styled(Text)`
+  margin-top: 3;
+  margin-bottom: -5;
+  font-family: 'OpenSans';
+  font-size: 10;
+  color: ${({ color }) => color};
+  text-align: center;
+`
+
+const tabBarNavigation = () => {
+  return createBottomTabNavigator(
+    {
+      News: {
+        screen: News,
+        navigationOptions: ({ navigation }) => ({
+          tabBarIcon: ({ focused }) => <NewsMenuIcon focused={focused} />,
+          tabBarLabel: ({ focused }) => (
+            <Label color={focused ? '#fdb557' : '#a3a3a3'}>Новости</Label>
+          ),
+          navigation,
+        }),
+      },
+      Contacts: {
+        screen: Contacts,
+        navigationOptions: ({ navigation }) => ({
+          tabBarIcon: ({ focused }) => <ContactsMenuIcon focused={focused} />,
+          tabBarLabel: ({ focused }) => (
+            <Label color={focused ? '#70d0af' : '#a3a3a3'}>Контакты</Label>
+          ),
+          navigation,
+        }),
+      },
+      Dialogs: {
+        screen: Dialogs,
+        navigationOptions: ({ navigation }) => ({
+          tabBarIcon: ({ focused }) => <DialogMenuIcon focused={focused} />,
+          tabBarLabel: ({ focused }) => (
+            <Label color={focused ? '#4a83fa' : '#a3a3a3'}>Диалоги</Label>
+          ),
+          navigation,
+        }),
+      },
+      Tasks: {
+        screen: Tasks,
+        navigationOptions: ({ navigation }) => ({
+          tabBarIcon: ({ focused }) => <TasksMenuIcon focused={focused} />,
+          tabBarLabel: ({ focused }) => (
+            <Label color={focused ? '#8b81c5' : '#a3a3a3'}>Задачи</Label>
+          ),
+          navigation,
+        }),
+      },
+      Settings: {
+        screen: Settings,
+        navigationOptions: ({ navigation }) => ({
+          tabBarIcon: ({ focused }) => <SettingsMenuIcon focused={focused} />,
+          tabBarLabel: ({ focused }) => (
+            <Label color={focused ? '#f96281' : '#a3a3a3'}>Настройки</Label>
+          ),
+          navigation,
+        }),
+      },
+    },
+    {
+      initialRouteName: 'Dialogs',
+      backBehavior: 'Dialogs',
+      // resetOnBlur: true,
+      tabBarOptions: {
+        style: {
+          paddingVertical: 8,
+        },
+        showIcon: true,
+        inactiveTintColor: '#a3a3a3',
+      },
+    },
+  )
+}
 
 const createRootNavigator = (logged = false) => {
   const DialogDrawerNavigator = createDrawerNavigator(
     {
-      Home: { screen: Dialogs },
+      Home: { screen: tabBarNavigation() },
     },
     {
       drawerWidth: Dimensions.get('window').width * 0.8,
@@ -113,15 +200,11 @@ const createRootNavigator = (logged = false) => {
       Restore3: { screen: Restore3 },
       GroupInfo: { screen: GroupInfo },
       GroupName: { screen: GroupName },
-      Settings: { screen: Settings },
-      Contacts: { screen: Contacts },
-      News: { screen: News },
       NewPost: { screen: NewPost },
       CreateTask: { screen: CreateTask },
       Profile: { screen: Profile },
       ContactGroups: { screen: ContactGroups },
       NewsComments: { screen: NewsComments },
-      Tasks: { screen: Tasks },
       TasksInc: { screen: TasksInc },
       TasksOut: { screen: TasksOut },
       TasksList: { screen: TasksList },

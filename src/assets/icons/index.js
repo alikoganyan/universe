@@ -39,6 +39,7 @@ const Photo_white = require('./Photo_white.png')
 const Play = require('./Play.png')
 const Search = require('./Search.png')
 const Search_blue = require('./Search_blue.png')
+const Search_gray = require('./Search_gray.png')
 const Settings = require('./Settings.png')
 const Task_delivered = require('./Task_delivered.png')
 const Task_read = require('./Task_read.png')
@@ -50,6 +51,17 @@ const Redo = require('./Redo.png')
 const Done = require('./Done.png')
 const Start = require('./Start.png')
 const Arrow_right_yellow = require('./Arrow_right_yellow.png')
+const Write_message_blue = require('./Write-message_blue.png')
+const Menu_contacts = require('./Menu_contacts.png')
+const Menu_contacts_active = require('./Menu_contacts_active.png')
+const Menu_dialog = require('./Menu_dialog.png')
+const Menu_dialog_active = require('./Menu_dialog_active.png')
+const Menu_news = require('./Menu_news.png')
+const Menu_news_active = require('./Menu_news_active.png')
+const Menu_settings = require('./Menu_settings.png')
+const Menu_settings_active = require('./Menu_settings_active.png')
+const Menu_tasks = require('./Menu_tasks.png')
+const Menu_tasks_active = require('./Menu_tasks_active.png')
 
 export default {
   Add,
@@ -91,6 +103,7 @@ export default {
   Play,
   Search,
   Search_blue,
+  Search_gray,
   Settings,
   Task_delivered,
   Task_read,
@@ -103,4 +116,15 @@ export default {
   User,
   Start,
   Arrow_right_yellow,
+  Write_message_blue,
+  Menu_contacts,
+  Menu_dialog_active,
+  Menu_news,
+  Menu_settings,
+  Menu_tasks,
+  Menu_contacts_active,
+  Menu_dialog,
+  Menu_news_active,
+  Menu_settings_active,
+  Menu_tasks_active,
 }

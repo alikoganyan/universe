@@ -262,6 +262,19 @@ export function SearchIcon(props) {
   )
 }
 
+export function SearchIconGray(props) {
+  const { left, right } = props
+  return (
+    <StyledView left={left} right={right}>
+      <Image
+        style={{ width: IconSize, height: IconSize }}
+        resizeMode="contain"
+        source={ICONS.Search_gray}
+      />
+    </StyledView>
+  )
+}
+
 export function TriangleLeftIcon({
   color,
   colorInner = '#fff',
@@ -1009,5 +1022,78 @@ export function CameraIconBlue(props) {
         source={ICONS.Camera_blue}
       />
     </StyledTouchableOpacity>
+  )
+}
+
+export function WriteMessageBlue(props) {
+  const { onPress, left, right } = props
+  return (
+    <StyledTouchableOpacity onPress={onPress} left={left} right={right}>
+      {/* <SvgUri
+                width={IconSize}
+                height={IconSize}
+                source={SVG.Search}
+            /> */}
+      <Image
+        style={{ width: IconSize, height: IconSize }}
+        resizeMode="contain"
+        source={ICONS.Write_message_blue}
+      />
+    </StyledTouchableOpacity>
+  )
+}
+
+export function NewsMenuIcon(props) {
+  const { size, focused } = props
+  return (
+    <Image
+      style={{ width: size || IconSize, height: size || IconSize }}
+      resizeMode="contain"
+      source={focused ? ICONS.Menu_news_active : ICONS.Menu_news}
+    />
+  )
+}
+
+export function ContactsMenuIcon(props) {
+  const { size, focused } = props
+  return (
+    <Image
+      style={{ width: size || IconSize, height: size || IconSize }}
+      resizeMode="contain"
+      source={focused ? ICONS.Menu_contacts_active : ICONS.Menu_contacts}
+    />
+  )
+}
+
+export function DialogMenuIcon(props) {
+  const { size, focused } = props
+  return (
+    <Image
+      style={{ width: size || IconSize, height: size || IconSize }}
+      resizeMode="contain"
+      source={focused ? ICONS.Menu_dialog_active : ICONS.Menu_dialog}
+    />
+  )
+}
+
+export function TasksMenuIcon(props) {
+  const { size, focused } = props
+  return (
+    <Image
+      style={{ width: size || IconSize, height: size || IconSize }}
+      resizeMode="contain"
+      source={focused ? ICONS.Menu_tasks_active : ICONS.Menu_tasks}
+    />
+  )
+}
+
+export function SettingsMenuIcon(props) {
+  const { size, focused } = props
+  return (
+    <Image
+      style={{ width: size || IconSize, height: size || IconSize }}
+      resizeMode="contain"
+      source={focused ? ICONS.Menu_settings_active : ICONS.Menu_settings}
+    />
   )
 }
