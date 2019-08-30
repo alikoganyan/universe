@@ -138,6 +138,7 @@ const tabBarNavigation = () => {
 }
 
 const createRootNavigator = (logged = false) => {
+  // eslint-disable-next-line no-unused-vars
   const DialogDrawerNavigator = createDrawerNavigator(
     {
       Home: { screen: tabBarNavigation() },
@@ -164,6 +165,7 @@ const createRootNavigator = (logged = false) => {
       contentComponent: ({ navigation }) => (
         <DrawerComponent navigation={navigation} />
       ),
+      drawerLockMode: 'locked-open',
     },
   )
   const initialRouteName = Platform.isPad
@@ -174,13 +176,7 @@ const createRootNavigator = (logged = false) => {
   const AppStackNavigator = createStackNavigator(
     {
       Group: { screen: Group },
-      Dialogs: {
-        screen: DialogDrawerNavigator,
-        headerLeft: null,
-        navigationOptions: {
-          gesturesEnabled: false,
-        },
-      },
+      Dialogs: tabBarNavigation(),
       Chat: { screen: Chat },
       Login: {
         screen: Login,

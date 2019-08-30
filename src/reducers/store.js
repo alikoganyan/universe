@@ -14,11 +14,11 @@ const persistConfig = {
   blacklist: ['error'],
 }
 
-persistReducer(persistConfig, rootReducer)
+const persistedReducer = persistReducer(persistConfig, rootReducer)
 
 // export const store = createStore(rootReducer);
 // export const store = createStore(rootReducer, composeWithDevTools())
 export const store = __DEV__
-  ? createStore(rootReducer, applyMiddleware(logger))
-  : createStore(rootReducer)
+  ? createStore(persistedReducer, applyMiddleware(logger))
+  : createStore(persistedReducer)
 export const persistor = persistStore(store)
