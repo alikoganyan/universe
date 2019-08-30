@@ -74,6 +74,7 @@ const Input = props => {
     inputStyle,
     labelStyle,
     keyboardType,
+    ...rest
   } = props
   return (
     <FloatingLabel
@@ -91,6 +92,7 @@ const Input = props => {
       value={value}
       style={{ ...style }}
       editable={editable}
+      {...rest}
     >
       {children}
     </FloatingLabel>
@@ -106,7 +108,7 @@ class Content extends Component {
         <PhoneNumber>
           <Input
             value={country}
-            onPress={this.handleCountry}
+            onChangeText={this.handleCountry}
             style={{ width: '20%' }}
             inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
             keyboardType="phone-pad"
@@ -195,7 +197,7 @@ class Content extends Component {
           setTimeout(() => navigate('Restore2'), 0)
         },
         failFunc: err => {
-          console.log(err)
+          // console.log(err)
           this.setState({
             error: err.msg ? (
               <ErrorText>{err.msg}</ErrorText>
