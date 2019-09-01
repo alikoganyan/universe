@@ -106,6 +106,8 @@ export function BackIcon(props) {
     noPadding,
     noPaddingAll,
     marginLeft = true,
+    size = IconSize,
+    ...rest
   } = props
   return (
     <StyledTouchableOpacity
@@ -115,6 +117,7 @@ export function BackIcon(props) {
       noPadding={noPadding}
       noPaddingAll={noPaddingAll}
       marginLeft={marginLeft}
+      {...rest}
     >
       {/* <SvgUri
                 width={IconSize}
@@ -122,7 +125,7 @@ export function BackIcon(props) {
                 source={SVG.Arrow_back}
             /> */}
       <Image
-        style={{ width: IconSize, height: IconSize }}
+        style={{ width: size, height: size }}
         resizeMode="contain"
         source={ICONS.Arrow_back_blue}
       />

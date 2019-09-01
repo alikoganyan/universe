@@ -166,15 +166,16 @@ class HeaderComponent extends Component {
                   noPaddingAll
                   onPress={back}
                   right
+                  size={23}
                 />
                 <ToProfile onPress={this.toProfile}>
                   {!image ||
                   image === '/images/default_group.png' ||
                   image === '/images/default_avatar.jpg' ? (
-                    <DefaultAvatar id={_id} size="header" />
+                    <DefaultAvatar id={_id} size={42} />
                   ) : (
                     <ImageComponent
-                      size="header"
+                      size={42}
                       source={{ uri: `https://ser.univ.team${image}` }}
                     />
                   )}

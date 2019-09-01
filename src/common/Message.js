@@ -441,6 +441,7 @@ class Message extends Component {
         </View>
       )
     }
+    return null
   }
 
   state = {}

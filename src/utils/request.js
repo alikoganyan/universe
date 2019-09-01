@@ -7,7 +7,6 @@ import NavigationProvider from './NavigationProvider'
 const SERVER_URL = 'https://ser.univ.team/api'
 
 axios.interceptors.request.use(request => {
-  // console.log('Starting Request', request)
   return request
 })
 

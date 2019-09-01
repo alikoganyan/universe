@@ -190,7 +190,7 @@ class InputComponent extends Component {
         ) : (
           <Wrapper isTopItem={edit || reply}>
             <Left>
-              <AddIconBlue size={20} />
+              <AddIconBlue size={20} onPress={this.pickImage} />
             </Left>
             <Body>
               <Input
@@ -204,7 +204,7 @@ class InputComponent extends Component {
               {text ? (
                 <PapperPlaneIcon onPress={this.handleSendPress} />
               ) : (
-                <CameraIconBlue size={20} onPress={this.pickImage} />
+                <CameraIconBlue size={20} onPress={this.selectPhoto} />
               )}
             </Right>
           </Wrapper>
@@ -335,7 +335,12 @@ class InputComponent extends Component {
   }
 
   selectPhoto = async () => {
-    const { currentChat, setDialogs, dialogs, user } = this.props
+    const {
+      currentChat,
+      setDialogs: setDialogsProp,
+      dialogs,
+      user,
+    } = this.props
     getImageFromPicker(result => {
       const { imageFormData = {}, uri } = result
       const form = new FormData()
@@ -366,7 +371,7 @@ class InputComponent extends Component {
             const newDialogs = [...dialogs]
             const index = newDialogs.findIndex(e => e.room === currentChat)
             newDialogs[index] = res.dialog
-            setDialogs(newDialogs)
+            setDialogsProp(newDialogs)
           },
           failFunc: err => {
             // console.log({ err })

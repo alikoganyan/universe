@@ -212,7 +212,7 @@ class InputComponent extends Component {
               {text ? (
                 <PapperPlaneIcon onPress={this.handleSendPress} />
               ) : (
-                <CameraIconBlue size={20} onPress={this.pickImage} />
+                <CameraIconBlue size={20} onPress={this.selectPhoto} />
               )}
             </Right>
           </Wrapper>
@@ -342,7 +342,13 @@ class InputComponent extends Component {
   }
 
   selectPhoto = async () => {
-    const { currentChat, addMessage, setDialogs, dialogs, user } = this.props
+    const {
+      currentChat,
+      addMessage: addMessageProp,
+      setDialogs: setDialogsProp,
+      dialogs,
+      user,
+    } = this.props
     getImageFromPicker(result => {
       const { imageFormData = {}, uri } = result
       const form = new FormData()
@@ -358,7 +364,7 @@ class InputComponent extends Component {
         viewers: [],
       }
       if (!result.cancelled) {
-        addMessage(message)
+        addMessageProp(message)
         sendRequest({
           r_path: p_send_file,
           method: 'post',
@@ -374,7 +380,7 @@ class InputComponent extends Component {
             const newDialogs = [...dialogs]
             const index = newDialogs.findIndex(e => e.room === currentChat)
             newDialogs[index] = res.dialog
-            setDialogs(newDialogs)
+            setDialogsProp(newDialogs)
           },
           failFunc: err => {
             // console.log('load err: ', { err })
@@ -540,8 +546,8 @@ class InputComponent extends Component {
       repliedMessage: { _id },
       currentRoomId,
     } = this.props
-    // const { text } = this.state
-    const bodyReq = { message_id: _id, dialog_id: currentRoomId }
+    const { text } = this.state
+    const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
     sendRequest({
       r_path: p_reply_message,
       method: 'post',

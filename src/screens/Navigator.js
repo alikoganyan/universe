@@ -23,7 +23,6 @@ import {
   GroupInfo,
   GroupName,
   Settings,
-  Contacts,
   News,
   NewPost,
   CreateTask,
@@ -81,7 +80,7 @@ const TabBarNavigation = createBottomTabNavigator(
       }),
     },
     Contacts: {
-      screen: Contacts,
+      screen: ContactGroups,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused }) => <ContactsMenuIcon focused={focused} />,
         tabBarLabel: ({ focused }) => (
@@ -197,7 +196,6 @@ const createRootNavigator = (logged = false) => {
       NewPost: { screen: NewPost },
       CreateTask: { screen: CreateTask },
       Profile: { screen: Profile },
-      ContactGroups: { screen: ContactGroups },
       NewsComments: { screen: NewsComments },
       TasksInc: { screen: TasksInc },
       TasksOut: { screen: TasksOut },

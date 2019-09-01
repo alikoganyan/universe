@@ -97,14 +97,14 @@ class Dialogs extends Component {
   }
 
   render() {
-    const { dialogs } = this.props
+    const { dialogs, navigation } = this.props
     const { congratulations, scrolled } = this.state
     return (
       <SafeAreaView behavior="padding">
         <PreHeader>
           <View style={{ width: 53 }} />
           {scrolled && <SubTitle>Диалоги</SubTitle>}
-          <WriteMessageBlue />
+          <WriteMessageBlue onPress={() => navigation.navigate('NewDialog')} />
         </PreHeader>
         <Wrapper>
           {congratulations ? (
