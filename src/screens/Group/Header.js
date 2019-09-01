@@ -102,7 +102,7 @@ const Input = styled(TextInput)`
 const ToProfile = styled(TouchableOpacity)`
   display: flex;
   flex-direction: row;
-  margin-right: 20px;
+  margin-right: 10px;
 `
 
 class HeaderComponent extends Component {
@@ -133,7 +133,7 @@ class HeaderComponent extends Component {
                     />
                   )}
                   <Info>
-                    <InfoChatName>{name}</InfoChatName>
+                    <InfoChatName numberOfLines={1}>{name}</InfoChatName>
                     {participants && (
                       <InfoParticipants>
                         {participants.length + 1} участника

@@ -57,7 +57,7 @@ const StyledImageBackground = styled(ImageBackground)`
 `
 class Content extends Component {
   render() {
-    const { selectedMessage, animationCompleted } = this.state
+    const { selectedMessage } = this.state
     const { dialogs, currentChat, search, user, editedMessage } = this.props
     const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const messages = dialog ? [...dialog.messages] : []
@@ -69,28 +69,26 @@ class Content extends Component {
       <>
         <Wrapper search={search}>
           <StyledImageBackground source={chatBg}>
-            {animationCompleted ? (
-              <FlatList
-                style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
-                ListHeaderComponent={<FlatListHeader editing={isEditing} />}
-                inverted
-                data={reversedMessages}
-                keyboardDismissMode="on-drag"
-                initialNumToRender={10}
-                animated
-                renderItem={({ item, index }) => (
-                  <TouchableOpacity
-                    key={index}
-                    onLongPress={() => this.handleHold(item)}
-                  >
-                    <Message withImage read={!!item.viewers.length} isGroup>
-                      {item}
-                    </Message>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            ) : null}
+            <FlatList
+              style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
+              ListHeaderComponent={<FlatListHeader editing={isEditing} />}
+              inverted
+              data={reversedMessages}
+              keyboardDismissMode="on-drag"
+              initialNumToRender={10}
+              animated
+              renderItem={({ item, index }) => (
+                <TouchableOpacity
+                  key={index}
+                  onLongPress={() => this.handleHold(item)}
+                >
+                  <Message withImage read={!!item.viewers.length} isGroup>
+                    {item}
+                  </Message>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
           </StyledImageBackground>
         </Wrapper>
         <BottomSheet

@@ -205,7 +205,10 @@ class Content extends Component {
             <DefaultAvatar isGroup={isGroup} id={item._id} size={56} />
           ) : (
             <DialogImage
-              source={{ uri: `https://ser.univ.team${chatImage}` }}
+              source={{
+                uri: `https://ser.univ.team${chatImage}`,
+                cache: 'force-cache',
+              }}
               size={56}
             />
           )}

@@ -214,7 +214,10 @@ class Message extends Component {
             <ImageComponent
               style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
               size={30}
-              source={{ uri: `https://ser.univ.team${sender.image}` }}
+              source={{
+                uri: `https://ser.univ.team${sender.image}`,
+                cache: 'force-cache',
+              }}
             />
           ) : null}
           <View
@@ -257,7 +260,10 @@ class Message extends Component {
             <ImageComponent
               style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
               size={30}
-              source={{ uri: `https://ser.univ.team${sender.image}` }}
+              source={{
+                uri: `https://ser.univ.team${sender.image}`,
+                cache: 'force-cache',
+              }}
             />
           )}
           <View
@@ -331,7 +337,10 @@ class Message extends Component {
             <ImageComponent
               style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
               size={30}
-              source={{ uri: `https://ser.univ.team${sender.image}` }}
+              source={{
+                uri: `https://ser.univ.team${sender.image}`,
+                cache: 'force-cache',
+              }}
             />
           ) : null}
           <InterlocutorsMessage
@@ -390,7 +399,10 @@ class Message extends Component {
             <ImageComponent
               style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
               size={30}
-              source={{ uri: `https://ser.univ.team${sender.image}` }}
+              source={{
+                uri: `https://ser.univ.team${sender.image}`,
+                cache: 'force-cache',
+              }}
             />
           )}
           <View

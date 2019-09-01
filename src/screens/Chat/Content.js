@@ -65,7 +65,7 @@ const StyledImageBackground = styled(ImageBackground)`
 `
 class Content extends Component {
   render() {
-    const { selectedMessage, animationCompleted, optionsSelector } = this.state
+    const { selectedMessage, optionsSelector } = this.state
     const { search, user, dialogs, currentChat, editedMessage } = this.props
     const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const isEditing = !!editedMessage.text
@@ -73,30 +73,29 @@ class Content extends Component {
     const reversedMessages = [...messages]
       .reverse()
       .sort((x, y) => new Date(y.created_at) - new Date(x.created_at))
+
     return (
       <>
         <Wrapper search={search}>
           <StyledImageBackground source={chatBg}>
-            {animationCompleted ? (
-              <StyledFlatList
-                ListHeaderComponent={<FlatListHeader editing={isEditing} />}
-                inverted
-                data={reversedMessages}
-                initialNumToRender={15}
-                keyboardDismissMode="on-drag"
-                animated
-                renderItem={({ item, index }) => (
-                  <TouchableOpacity
-                    key={index}
-                    onLongPress={() => this.openOptions(item)}
-                    onPress={() => this.handleHold(item)}
-                  >
-                    <Message>{item}</Message>
-                  </TouchableOpacity>
-                )}
-                keyExtractor={(item, index) => index.toString()}
-              />
-            ) : null}
+            <StyledFlatList
+              ListHeaderComponent={<FlatListHeader editing={isEditing} />}
+              inverted
+              data={reversedMessages}
+              initialNumToRender={15}
+              keyboardDismissMode="on-drag"
+              animated
+              renderItem={({ item, index }) => (
+                <TouchableOpacity
+                  key={index}
+                  onLongPress={() => this.openOptions(item)}
+                  onPress={() => this.handleHold(item)}
+                >
+                  <Message>{item}</Message>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
           </StyledImageBackground>
         </Wrapper>
         <BottomSheet

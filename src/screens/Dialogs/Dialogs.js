@@ -39,8 +39,15 @@ const Title = styled(Text)`
 const PreHeader = styled(View)`
   display: flex;
   flex-direction: row;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
   padding: 0 8px;
+`
+
+const SubTitle = styled(Text)`
+  font-family: 'OpenSans-Bold';
+  font-size: 15px;
+  color: ${Colors.black};
 `
 
 class Dialogs extends Component {
@@ -91,10 +98,12 @@ class Dialogs extends Component {
 
   render() {
     const { dialogs } = this.props
-    const { congratulations } = this.state
+    const { congratulations, scrolled } = this.state
     return (
       <SafeAreaView behavior="padding">
         <PreHeader>
+          <View style={{ width: 53 }} />
+          {scrolled && <SubTitle>Диалоги</SubTitle>}
           <WriteMessageBlue />
         </PreHeader>
         <Wrapper>
@@ -125,6 +134,8 @@ class Dialogs extends Component {
               keyboardShouldPersistTaps="always"
               renderItem={this._renderItem}
               keyExtractor={(item, index) => item._id.toString()}
+              onScroll={this.handleScroll}
+              contentContainerStyle={{ paddingBottom: 110 }}
             />
           ) : (
             <Loader style={{ flex: 1 }} hint="Пока нет диалогов">
@@ -143,6 +154,7 @@ class Dialogs extends Component {
 
   state = {
     congratulations: false,
+    scrolled: false,
   }
 
   componentDidMount() {
@@ -487,6 +499,16 @@ class Dialogs extends Component {
     setCurrentDialogs(currentDialog)
     socket.emit('view', { room, viewer: user._id })
     navigation.navigate(e.isGroup ? 'Group' : 'Chat')
+  }
+
+  handleScroll = event => {
+    const { y } = event.nativeEvent.contentOffset
+    const { scrolled } = this.state
+    if (y > 38 && !scrolled) {
+      this.setState({ scrolled: true })
+    } else if (y < 38 && scrolled) {
+      this.setState({ scrolled: false })
+    }
   }
 }
 

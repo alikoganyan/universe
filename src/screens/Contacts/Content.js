@@ -1,23 +1,9 @@
 import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  SafeAreaView,
-  FlatList,
-  Image,
-  TouchableOpacity,
-  ScrollView,
-  TextInput,
-  KeyboardAvoidingView,
-} from 'react-native'
+import { View, Text, SafeAreaView, ScrollView, TextInput } from 'react-native'
 import styled from 'styled-components'
-import FloatingLabel from 'react-native-floating-labels'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import ImageLoader from 'react-native-image-progress'
-import ProgressBar from 'react-native-progress/Circle'
-import helper from '../../utils/helpers'
-import { BackIcon, EllipsisVIcon, SearchIcon } from '../../assets/index'
 import helpers from '../../utils/helpers'
 
 const { Colors } = helpers
@@ -54,7 +40,6 @@ const ContactsListItem = styled(View)`
   flex-direction: row;
   align-items: flex-start;
 `
-const UserName = styled(Text)``
 const ContactImage = styled(ImageLoader)`
   width: 50;
   height: 50;
@@ -108,6 +93,7 @@ export default class Settings extends Component {
                               source={{
                                 uri:
                                   'https://visualpharm.com/assets/30/User-595b40b85ba036ed117da56f.svg',
+                                cache: 'force-cache',
                               }}
                             />
                             <Text>{e.name}</Text>
@@ -117,6 +103,7 @@ export default class Settings extends Component {
                     </ContactsListItem>
                   )
                 }
+                return null
               })}
             </ContactList>
           </KeyboardAwareScrollView>
@@ -186,6 +173,7 @@ export default class Settings extends Component {
     const newNames = { ...names }
     const index = 0
     users.sort((a, b) => (a.name.toLowerCase() > b.name.toLowerCase() ? 1 : -1))
+    // eslint-disable-next-line array-callback-return
     users.map(e => {
       newNames[e.name[index].toLowerCase().toString()].push(e)
     })

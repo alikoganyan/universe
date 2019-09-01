@@ -68,80 +68,78 @@ const Label = styled(Text)`
   text-align: center;
 `
 
-const tabBarNavigation = () => {
-  return createBottomTabNavigator(
-    {
-      News: {
-        screen: News,
-        navigationOptions: ({ navigation }) => ({
-          tabBarIcon: ({ focused }) => <NewsMenuIcon focused={focused} />,
-          tabBarLabel: ({ focused }) => (
-            <Label color={focused ? '#fdb557' : '#a3a3a3'}>Новости</Label>
-          ),
-          navigation,
-        }),
-      },
-      Contacts: {
-        screen: Contacts,
-        navigationOptions: ({ navigation }) => ({
-          tabBarIcon: ({ focused }) => <ContactsMenuIcon focused={focused} />,
-          tabBarLabel: ({ focused }) => (
-            <Label color={focused ? '#70d0af' : '#a3a3a3'}>Контакты</Label>
-          ),
-          navigation,
-        }),
-      },
-      Dialogs: {
-        screen: Dialogs,
-        navigationOptions: ({ navigation }) => ({
-          tabBarIcon: ({ focused }) => <DialogMenuIcon focused={focused} />,
-          tabBarLabel: ({ focused }) => (
-            <Label color={focused ? '#4a83fa' : '#a3a3a3'}>Диалоги</Label>
-          ),
-          navigation,
-        }),
-      },
-      Tasks: {
-        screen: Tasks,
-        navigationOptions: ({ navigation }) => ({
-          tabBarIcon: ({ focused }) => <TasksMenuIcon focused={focused} />,
-          tabBarLabel: ({ focused }) => (
-            <Label color={focused ? '#8b81c5' : '#a3a3a3'}>Задачи</Label>
-          ),
-          navigation,
-        }),
-      },
-      Settings: {
-        screen: Settings,
-        navigationOptions: ({ navigation }) => ({
-          tabBarIcon: ({ focused }) => <SettingsMenuIcon focused={focused} />,
-          tabBarLabel: ({ focused }) => (
-            <Label color={focused ? '#f96281' : '#a3a3a3'}>Настройки</Label>
-          ),
-          navigation,
-        }),
-      },
+const TabBarNavigation = createBottomTabNavigator(
+  {
+    News: {
+      screen: News,
+      navigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused }) => <NewsMenuIcon focused={focused} />,
+        tabBarLabel: ({ focused }) => (
+          <Label color={focused ? '#fdb557' : '#a3a3a3'}>Новости</Label>
+        ),
+        navigation,
+      }),
     },
-    {
-      initialRouteName: 'Dialogs',
-      backBehavior: 'Dialogs',
-      // resetOnBlur: true,
-      tabBarOptions: {
-        style: {
-          paddingVertical: 8,
-        },
-        showIcon: true,
-        inactiveTintColor: '#a3a3a3',
-      },
+    Contacts: {
+      screen: Contacts,
+      navigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused }) => <ContactsMenuIcon focused={focused} />,
+        tabBarLabel: ({ focused }) => (
+          <Label color={focused ? '#70d0af' : '#a3a3a3'}>Контакты</Label>
+        ),
+        navigation,
+      }),
     },
-  )
-}
+    Dialogs: {
+      screen: Dialogs,
+      navigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused }) => <DialogMenuIcon focused={focused} />,
+        tabBarLabel: ({ focused }) => (
+          <Label color={focused ? '#4a83fa' : '#a3a3a3'}>Диалоги</Label>
+        ),
+        navigation,
+      }),
+    },
+    Tasks: {
+      screen: Tasks,
+      navigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused }) => <TasksMenuIcon focused={focused} />,
+        tabBarLabel: ({ focused }) => (
+          <Label color={focused ? '#8b81c5' : '#a3a3a3'}>Задачи</Label>
+        ),
+        navigation,
+      }),
+    },
+    Settings: {
+      screen: Settings,
+      navigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused }) => <SettingsMenuIcon focused={focused} />,
+        tabBarLabel: ({ focused }) => (
+          <Label color={focused ? '#f96281' : '#a3a3a3'}>Настройки</Label>
+        ),
+        navigation,
+      }),
+    },
+  },
+  {
+    initialRouteName: 'Dialogs',
+    backBehavior: 'Dialogs',
+    // resetOnBlur: true,
+    tabBarOptions: {
+      style: {
+        paddingVertical: 8,
+      },
+      showIcon: true,
+      inactiveTintColor: '#a3a3a3',
+    },
+  },
+)
 
 const createRootNavigator = (logged = false) => {
   // eslint-disable-next-line no-unused-vars
   const DialogDrawerNavigator = createDrawerNavigator(
     {
-      Home: { screen: tabBarNavigation() },
+      Home: { screen: TabBarNavigation },
     },
     {
       drawerWidth: Dimensions.get('window').width * 0.8,
@@ -176,7 +174,7 @@ const createRootNavigator = (logged = false) => {
   const AppStackNavigator = createStackNavigator(
     {
       Group: { screen: Group },
-      Dialogs: tabBarNavigation(),
+      Dialogs: TabBarNavigation,
       Chat: { screen: Chat },
       Login: {
         screen: Login,

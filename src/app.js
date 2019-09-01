@@ -16,7 +16,8 @@ import { createNotificationListeners } from './utils/fcm'
 
 // const Roboto = require('./assets/fonts/Roboto-Regular.ttf')
 
-// console.disableYellowBox = true
+// eslint-disable-next-line no-console
+console.disableYellowBox = true
 
 export default class AppComponent extends Component {
   render() {
