@@ -100,7 +100,7 @@ const TabBarNavigation = createBottomTabNavigator(
       }),
     },
     Tasks: {
-      screen: Tasks,
+      screen: TasksList,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused }) => <TasksMenuIcon focused={focused} />,
         tabBarLabel: ({ focused }) => (
@@ -199,7 +199,7 @@ const createRootNavigator = (logged = false) => {
       NewsComments: { screen: NewsComments },
       TasksInc: { screen: TasksInc },
       TasksOut: { screen: TasksOut },
-      TasksList: { screen: TasksList },
+      Tasks: { screen: Tasks },
       NewContact: { screen: NewContact },
       NewDialog: { screen: NewDialog },
       FirstInstall: { screen: FirstInstall },
