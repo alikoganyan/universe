@@ -8,20 +8,17 @@ import {
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import posed from 'react-native-pose'
 import helper from '../../utils/helpers'
 import { setFeed } from '../../actions/newsActions'
 import { p_send_file, p_news_add_comment } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
 import { BottomSheet } from 'react-native-btr'
+import { startSearch, stopSearch } from '../../actions/messageActions'
 
 const { sidePadding, borderRadius, HeaderHeight, Colors } = helper
 const { orange, grey2 } = Colors
-const FilePickerPosed = posed.View({
-  visible: { bottom: 10 },
-  hidden: { bottom: -250 },
-})
+
 const Wrapper = styled(View)`
   background: white;
   width: ${Dimensions.get('window').width - sidePadding * 2}px;
@@ -41,11 +38,9 @@ const Wrapper = styled(View)`
 const Input = styled(TextInput)`
   font-size: 15px;
   height: 30px;
-  display: flex;
-  flex-direction: column;
   width: 85%;
-  z-index: 50;
   overflow: hidden;
+  padding: 0;
 `
 const Left = styled(View)`
   display: flex;
@@ -173,10 +168,10 @@ class InputComponent extends Component {
           text,
         },
         success: res => {
-          console.log({ res })
+          // console.log({ res })
         },
         failFunc: err => {
-          console.log({ err })
+          // console.log({ err })
         },
       })
       this.setState({ text: '' })
@@ -197,28 +192,28 @@ class InputComponent extends Component {
       name: 'image',
       type: 'image/jpeg',
     })
-    if (!result.cancelled) {
-      sendRequest({
-        r_path: p_send_file,
-        method: 'post',
-        attr: {
-          file: form,
-          room: '0_1',
+    // if (!result.cancelled) {
+    sendRequest({
+      r_path: p_send_file,
+      method: 'post',
+      attr: {
+        file: form,
+        room: '0_1',
+      },
+      config: {
+        headers: {
+          'Content-Type': 'multipart/form-data',
         },
-        config: {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
-        },
-        success: res => {
-          console.log({ res })
-          socket.emit('file', { room: currentRoom })
-        },
-        failFunc: err => {
-          console.log({ err })
-        },
-      })
-    }
+      },
+      success: res => {
+        // console.log({ res })
+        socket.emit('file', { room: currentRoom })
+      },
+      failFunc: err => {
+        // console.log({ err })
+      },
+    })
+    // }
   }
 }
 
