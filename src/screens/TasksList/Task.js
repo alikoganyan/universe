@@ -102,8 +102,7 @@ const TaskStatusAdditional = styled(Text)`
 class Tasks extends Component {
   render() {
     const { children } = this.props
-    const { first_name, last_name, phone_number, image, tasks_list } = children
-    const tasks = [...tasks_list]
+    const { first_name, last_name, phone_number, image, tasks } = children
     let stat = ''
     let day = ''
     const daysOfTheWeek = ['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс']
