@@ -339,7 +339,6 @@ class Message extends Component {
               size={30}
               source={{
                 uri: `https://ser.univ.team${sender.image}`,
-                cache: 'force-cache',
               }}
             />
           ) : null}
@@ -401,7 +400,6 @@ class Message extends Component {
               size={30}
               source={{
                 uri: `https://ser.univ.team${sender.image}`,
-                cache: 'force-cache',
               }}
             />
           )}
