@@ -223,9 +223,9 @@ class InputComponent extends Component {
           onBackdropPress={this._hideBottomSheetMenu}
         >
           <FilePicker>
-            <FilePickerOption onPress={this.selectPhoto}>
+            {/* <FilePickerOption onPress={this.selectPhoto}>
               <Text>Фото</Text>
-            </FilePickerOption>
+            </FilePickerOption> */}
             <FilePickerOption onPress={this.selectFile}>
               <Text>Файл</Text>
             </FilePickerOption>

@@ -215,9 +215,9 @@ class InputComponent extends Component {
           onBackdropPress={this._hideBottomSheetMenu}
         >
           <FilePicker>
-            <TouchableOpacity onPress={this.selectPhoto}>
+            {/* <TouchableOpacity onPress={this.selectPhoto}>
               <Text>Фото</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
             <TouchableOpacity onPress={this.selectFile}>
               <Text>Файл</Text>
             </TouchableOpacity>
