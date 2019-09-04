@@ -49,6 +49,7 @@ import {
   TaskEdit,
   GroupEdit,
   IpadView,
+  WebView,
 } from '.'
 import {
   NewsMenuIcon,
@@ -221,6 +222,7 @@ const createRootNavigator = (logged = false) => {
       FeedReceivers: { screen: FeedReceivers },
       TaskEdit: { screen: TaskEdit },
       GroupEdit: { screen: GroupEdit },
+      WebView: { screen: WebView },
     },
     {
       initialRouteName,

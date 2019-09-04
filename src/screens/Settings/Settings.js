@@ -16,7 +16,7 @@ export default class GroupInfo extends Component {
         <SafeAreaView>
           <Wrapper>
             <Header back={this.navigateBack} />
-            <Content />
+            <Content navigate={this.props.navigation.navigate} />
           </Wrapper>
         </SafeAreaView>
       </ActionSheetProvider>

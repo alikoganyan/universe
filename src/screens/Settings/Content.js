@@ -144,6 +144,7 @@ class Content extends Component {
       userPushesIsFetching,
       permissionsIsFetching,
       tokenIsFetching,
+      navigate,
     } = this.props
     return (
       <SafeAreaView>
@@ -154,7 +155,7 @@ class Content extends Component {
             }}
           >
             <Box first>
-              <Label>Уведомления</Label>
+              <Label numberOfLines={1}>Уведомления</Label>
               <Status>
                 {pushesPermissionsGranted && isNotificationsEnabled
                   ? 'Включены'
@@ -176,7 +177,7 @@ class Content extends Component {
               scrollEnabled={false}
               renderItem={({ item, index }) => (
                 <Box key={index} last={index === settings.length - 1}>
-                  <Label>{item.label}</Label>
+                  <Label numberOfLines={1}>{item.label}</Label>
                   <Status>{item.status || item.language}</Status>
                   <Option>
                     {item.option.type === 'toggle' && (
@@ -199,7 +200,9 @@ class Content extends Component {
               {agreements.map((e, i) => (
                 <Checkbox key={i}>
                   <CheckBoxLabel>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => navigate('WebView', { uri: e.link })}
+                    >
                       <LinkText>{e.linkText}</LinkText>
                     </TouchableOpacity>
                   </CheckBoxLabel>
@@ -259,19 +262,19 @@ class Content extends Component {
         value: false,
         linkText: 'Условия использования',
         linkComp: 'linkComp',
-        link: '',
+        link: 'https://www.google.com/',
       },
       {
         value: false,
         linkText: 'Пользовательское соглашение',
         linkComp: 'linkComp',
-        link: '',
+        link: 'https://www.google.com/',
       },
       {
         value: false,
         linkText: 'Соглашение об Использовании персональных данных',
         linkComp: 'linkComp',
-        link: '',
+        link: 'https://www.google.com/',
       },
     ],
   }

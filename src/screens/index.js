@@ -41,6 +41,7 @@ import TaskEdit from './TaskEdit/TaskEdit'
 import GroupEdit from './GroupEdit/GroupEdit'
 import FirstScreen from './FirstScreen/FirstScreen'
 import IpadView from './IpadView/IpadView'
+import WebView from './WebView'
 
 export {
   Group,
@@ -86,4 +87,5 @@ export {
   GroupEdit,
   FirstScreen,
   IpadView,
+  WebView,
 }
