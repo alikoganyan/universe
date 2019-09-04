@@ -24,7 +24,7 @@ import {
 import helper from '../../utils/helpers'
 import AutoHeightInput from '../../common/AutoHeightInput'
 import {
-  addMessage,
+  // addMessage,
   // startSearch,
   // stopSearch,
   // getMessages,
@@ -42,7 +42,12 @@ import {
   p_reply_message,
 } from '../../constants/api'
 
-import { setDialogs } from '../../actions/dialogsActions'
+import {
+  setDialogs,
+  addUploadMessage,
+  removeUploadMessage,
+  updateUploadMessageProgress,
+} from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
 
@@ -344,50 +349,77 @@ class InputComponent extends Component {
   selectPhoto = async () => {
     const {
       currentChat,
-      addMessage: addMessageProp,
       setDialogs: setDialogsProp,
+      addUploadMessage,
+      removeUploadMessage,
+      updateUploadMessageProgress,
       dialogs,
       user,
     } = this.props
-    getImageFromPicker(result => {
-      const { imageFormData = {}, uri } = result
-      const form = new FormData()
-      this._hideBottomSheetMenu()
-      form.append('file', imageFormData)
-      form.append('room', currentChat)
-      const message = {
-        room: currentChat,
-        sender: { ...user },
-        created_at: new Date(),
-        type: 'image',
-        src: uri,
-        viewers: [],
-      }
-      if (!result.cancelled) {
-        addMessageProp(message)
-        sendRequest({
-          r_path: p_send_file,
-          method: 'post',
-          attr: form,
-          config: {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-          success: res => {
-            // console.log('load success: ', { res })
-            socket.emit('file', { room: currentChat })
-            const newDialogs = [...dialogs]
-            const index = newDialogs.findIndex(e => e.room === currentChat)
-            newDialogs[index] = res.dialog
-            setDialogsProp(newDialogs)
-          },
-          failFunc: err => {
-            // console.log('load err: ', { err })
-          },
+    getImageFromPicker(
+      result => {
+        const { imageFormData = {}, uri } = result
+        const form = new FormData()
+        this._hideBottomSheetMenu()
+        form.append('file', imageFormData)
+        form.append('room', currentChat)
+        const tempMessageId = Date.now()
+        addUploadMessage({
+          room: currentChat,
+          src: uri,
+          type: 'image',
+          isUploaded: true,
+          created_at: new Date(),
+          sender: { ...user },
+          tempId: tempMessageId,
+          viewers: [],
+          enableUploadProgress: true,
+          uploadProgress: 0,
         })
-      }
-    }, this._hideBottomSheetMenu)
+        if (!result.cancelled) {
+          sendRequest({
+            r_path: p_send_file,
+            method: 'post',
+            attr: form,
+            config: {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              onUploadProgress: progressEvent => {
+                const uploadProgress = Math.round(
+                  (progressEvent.loaded * 100) / progressEvent.total,
+                )
+                updateUploadMessageProgress({
+                  room: currentChat,
+                  tempId: tempMessageId,
+                  uploadProgress,
+                })
+              },
+            },
+            success: res => {
+              // console.log('load success: ', { res })
+              socket.emit('file', { room: currentChat })
+              const newDialogs = [...dialogs]
+              const index = newDialogs.findIndex(e => e.room === currentChat)
+              newDialogs[index] = res.dialog
+              setDialogsProp(newDialogs)
+            },
+            failFunc: err => {
+              // console.log('load err: ', { err })
+              removeUploadMessage({
+                room: currentChat,
+                tempId: tempMessageId,
+              })
+            },
+          })
+        }
+      },
+      this._hideBottomSheetMenu,
+      {
+        maxWidth: 1500,
+        maxHeight: 1500,
+      },
+    )
   }
 
   selectFile = async () => {
@@ -589,7 +621,9 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   fEditMessage: _ => dispatch(editMessage(_)),
-  addMessage: _ => dispatch(addMessage(_)),
+  addUploadMessage: _ => dispatch(addUploadMessage(_)),
+  removeUploadMessage: _ => dispatch(removeUploadMessage(_)),
+  updateUploadMessageProgress: _ => dispatch(updateUploadMessageProgress(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),

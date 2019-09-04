@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Dimensions } from 'react-native'
+import { Text, View, Dimensions, ActivityIndicator } from 'react-native'
 import styled from 'styled-components'
 import {
   TriangleLeftIcon,
@@ -19,6 +19,24 @@ import { SingleImage } from 'react-native-zoom-lightbox'
 
 const { Colors, fontSize, borderRadius } = helper
 const { myMessage, interlocatorMessage, pink } = Colors
+
+const UploadProgressContainer = styled(View)`
+  width: 100%;
+  height: 250px;
+  position: absolute;
+  top: 0;
+  background: #0008;
+  align-items: center;
+  justify-content: center;
+  border-radius: ${borderRadius};
+`
+
+const UploadProgressText = styled(Text)`
+  color: ${Colors.white};
+  font-family: 'OpenSans';
+  font-size: 14px;
+  padding: 8px;
+`
 
 const MyMessage = styled(View)`
   display: flex;
@@ -180,6 +198,9 @@ class Message extends Component {
       filename,
       size,
       data,
+      isUploaded,
+      enableUploadProgress,
+      uploadProgress,
     } = children
     const finalTime = getHamsterDate(created_at)
     const fileSize =
@@ -187,7 +208,7 @@ class Message extends Component {
         ? `${(size / (1024 * 2)).toFixed(1)}МБ`
         : `${(size / 1024).toFixed(1)}КБ`
     const messageRead = !!viewers.filter(e => e !== myId).length
-    if (type === 'image') {
+    if (type === 'image' && !isUploaded) {
       this.readFile(
         src.split('file://')[1] ? src : `https://ser.univ.team${src}`,
         filename,
@@ -239,6 +260,30 @@ class Message extends Component {
               </MessageInfo>
             </InterlocutorsMessage>
           </View>
+        </View>
+      )
+    }
+    if (type === 'image' && isUploaded) {
+      return (
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <MyMessage background={background} style={{ padding: 0 }}>
+            <MyMessageImage
+              uri={src}
+              width={width}
+              height={height}
+              resizeMode="contain"
+            />
+            <UploadProgressContainer>
+              <ActivityIndicator animating color={Colors.white} size="large" />
+              {!!enableUploadProgress && (
+                <UploadProgressText>{uploadProgress}%</UploadProgressText>
+              )}
+            </UploadProgressContainer>
+            <MessageInfo>
+              <MessageDate color={Colors.norway}>Загрузка...</MessageDate>
+            </MessageInfo>
+          </MyMessage>
+          <TriangleLeftIcon color={myMessage} />
         </View>
       )
     }
