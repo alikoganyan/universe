@@ -7,7 +7,6 @@ import firebase from 'react-native-firebase'
 import { store } from './reducers/store'
 import { Provider } from 'react-redux'
 import createRootNavigator from './screens/Navigator'
-import { SplashScreen } from './screens'
 import { getPushesPermissionStatusAndToken } from './actions/pushesActions'
 import { connectToSocket } from './utils/socket'
 import { setUser, setAuth } from './actions/userActions'
@@ -23,10 +22,11 @@ export default class AppComponent extends Component {
   render() {
     const { loaded, logged } = this.state
     const Navigator = createRootNavigator(loaded && logged)
+
     return (
       <Provider store={store}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
-        {loaded ? <Navigator /> : <SplashScreen />}
+        {loaded ? <Navigator /> : null}
       </Provider>
     )
   }
@@ -45,27 +45,28 @@ export default class AppComponent extends Component {
     // console.log('badge: ', await firebase.notifications().getBadge())
     // console.log('setbadge: ', await firebase.notifications().setBadge(55))
 
-    AsyncStorage.getItem('user').then(res => {
-      const value = JSON.parse(res)
-      if (value) {
-        AsyncStorage.setItem(
-          'user',
-          JSON.stringify({ ...value, lastLogin: new Date() }),
-        )
-        store.dispatch(setUser(value))
-        store.dispatch(setDialogsUserId(value._id))
-        store.dispatch(setAuth(value.access_token))
-        connectToSocket(value.access_token)
-        setTimeout(() => {
+    AsyncStorage.getItem('user')
+      .then(res => {
+        const value = JSON.parse(res)
+        if (value) {
+          AsyncStorage.setItem(
+            'user',
+            JSON.stringify({ ...value, lastLogin: new Date() }),
+          )
+          store.dispatch(setUser(value))
+          store.dispatch(setDialogsUserId(value._id))
+          store.dispatch(setAuth(value.access_token))
+          connectToSocket(value.access_token)
           this.setState({ logged: true })
-        }, 0)
-      }
-    })
+        }
+      })
+      .finally(() => {
+        this.setState({ loaded: true })
+      })
     // await Font.loadAsync({
     //     'Roboto-Regular': Roboto
     // });
     GlobalFont.applyGlobal('Roboto-Regular')
-    this.setState({ loaded: true })
     BackHandler.addEventListener('hardwareBackPress', this._handleBackButton)
     AppState.addEventListener('change', this._handleAppStateChange)
     // this._notificationSubscription = Notifications.addListener(this._handleNotification);
