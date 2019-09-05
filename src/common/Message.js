@@ -16,6 +16,7 @@ import MapView from 'react-native-maps'
 // import RNFS from 'react-native-fs'
 import helper, { getHamsterDate } from '../utils/helpers'
 import { SingleImage } from 'react-native-zoom-lightbox'
+import LinearGradient from 'react-native-linear-gradient'
 
 const { Colors, fontSize, borderRadius } = helper
 const { myMessage, interlocatorMessage, pink } = Colors
@@ -33,6 +34,7 @@ const MyMessage = styled(View)`
   position: relative;
   flex-grow: 1;
   z-index: 1;
+  overflow: hidden;
 `
 
 const MyMessageText = styled(Text)`
@@ -61,6 +63,7 @@ const InterlocutorsMessage = styled(MyMessage)`
   border-bottom-right-radius: ${borderRadius};
   border-bottom-left-radius: 0;
   max-width: 80%;
+  overflow: hidden;
 `
 
 const InterlocutorsMessageText = styled(MyMessageText)`
@@ -89,7 +92,10 @@ const MessageInfo = styled(View)`
 const MessageDate = styled(Text)`
   color: ${({ color }) => color || Colors.jumbo};
   font-family: 'OpenSans';
-  font-size: 11px;
+  font-size: 12px;
+  textShadowColor: ${Colors.white};
+  textShadowOffset: {width: 0, height: 0};
+  textShadowRadius: 0.01;
 `
 const MyMessageImage = styled(SingleImage)`
   min-width: 100%;
@@ -201,10 +207,22 @@ class Message extends Component {
               height={height}
               resizeMode="contain"
             />
-            <MessageInfo>
-              <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
-              <Indicator color="black" read={messageRead} />
-            </MessageInfo>
+            <LinearGradient
+              start={{ x: 0, y: 0.5 }}
+              end={{ x: 1.0, y: 1.0 }}
+              colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
+              style={{
+                position: 'absolute',
+                right: 0,
+                bottom: 0,
+                borderBottomRightRadius: 10,
+              }}
+            >
+              <MessageInfo>
+                <MessageDate color={Colors.white}>{finalTime}</MessageDate>
+                <Indicator color="black" read={messageRead} />
+              </MessageInfo>
+            </LinearGradient>
           </MyMessage>
           <TriangleLeftIcon color={myMessage} />
         </View>
@@ -234,9 +252,16 @@ class Message extends Component {
                 uri={`https://ser.univ.team${src}`}
                 resizeMode="contain"
               />
-              <MessageInfo>
-                <MessageDate>{finalTime}</MessageDate>
-              </MessageInfo>
+              <LinearGradient
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1.0, y: 1.0 }}
+                colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
+                style={{ position: 'absolute', right: 0, bottom: 0 }}
+              >
+                <MessageInfo>
+                  <MessageDate color={Colors.white}>{finalTime}</MessageDate>
+                </MessageInfo>
+              </LinearGradient>
             </InterlocutorsMessage>
           </View>
         </View>

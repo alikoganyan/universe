@@ -151,6 +151,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-linear-gradient')
     implementation project(':react-native-firebase')
     implementation "com.google.android.gms:play-services-base:${rootProject.ext.googlePlayServicesVersion}"
     implementation "com.google.firebase:firebase-core:17.0.1"

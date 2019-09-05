@@ -62,6 +62,8 @@ rn_path = '../node_modules/react-native'
   pod 'Firebase/Core'
   pod 'Firebase/Messaging'
 
+  pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
+
   target 'universeTests' do
     inherit! :search_paths
     # Pods for testing
