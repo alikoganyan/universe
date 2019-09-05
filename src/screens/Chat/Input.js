@@ -5,14 +5,11 @@ import {
   Dimensions,
   TouchableOpacity,
   Platform,
-  Linking,
-  PermissionsAndroid,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-// import { ImagePicker, DocumentPicker, Permissions, Location } from 'expo';
-import RNPermissions from 'react-native-permissions'
 import getImageFromPicker from '../../utils/ImagePicker'
+import getGeoCoords from '../../utils/geolocation'
 import posed from 'react-native-pose'
 import { BottomSheet } from 'react-native-btr'
 import {
@@ -452,45 +449,15 @@ class InputComponent extends Component {
 
   selectGeo = async () => {
     const { currentDialog } = this.props
+    const coords = await getGeoCoords()
     this._hideBottomSheetMenu()
-    // const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    let status
-    await RNPermissions.request('location').then(response => {
-      // console.log('RNPermissions location: ', response)
-      status = response
-    })
-    alert(status)
-    if (status !== 'granted') {
-      alert('no location permission')
-      Linking.openURL('app-settings:')
-      return
+    if (coords) {
+      const { latitude, longitude } = coords
+      socket.emit('geo', {
+        receiver: currentDialog._id,
+        geo_data: { latitude, longitude },
+      })
     }
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {},
-      )
-      // alert(`${granted}, ${JSON.stringify(PermissionsAndroid.RESULTS.GRANTED)}`);
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            socket.emit('geo', {
-              receiver: currentDialog._id,
-              geo_data: position.coords,
-            })
-          },
-          error => alert(error.message),
-          { timeout: 20000, maximumAge: 36e5 },
-        )
-      } else {
-        alert('location permission denied')
-      }
-    } catch (err) {
-      alert(err)
-    }
-    // this.getGeolocationPromise()
-    //  .then(e => alert(JSON.stringify(e)))
-    //  .catch(e => alert(JSON.stringify(e)));
   }
 
   discardSelect = () => {}

@@ -10,7 +10,7 @@ import {
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import getImageFromPicker from '../../utils/ImagePicker'
-import RNPermissions from 'react-native-permissions'
+import getGeoCoords from '../../utils/geolocation'
 import posed from 'react-native-pose'
 import { BottomSheet } from 'react-native-btr'
 import {
@@ -420,29 +420,15 @@ class InputComponent extends Component {
 
   selectGeo = async () => {
     const { currentRoom } = this.props
+    const coords = await getGeoCoords()
     this._hideBottomSheetMenu()
-    // const { status } = await Permissions.askAsync(Permissions.LOCATION);
-
-    let status
-    await RNPermissions.request('location').then(response => {
-      // console.log('RNPermissions location: ', response)
-      status = response
-    })
-    if (status !== 'granted') {
-      alert('no location permission')
-      return
+    if (coords) {
+      const { latitude, longitude } = coords
+      socket.emit('geo_group', {
+        room: currentRoom,
+        geo_data: { latitude, longitude },
+      })
     }
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        // console.log({ receiver: currentRoom, geo_data: position.coords })
-        socket.emit('geo_group', {
-          receiver: currentRoom,
-          geo_data: position.coords,
-        })
-      },
-      error => alert(error.message),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-    )
   }
 
   discardSelect = () => {}

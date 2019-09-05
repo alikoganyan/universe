@@ -117,16 +117,14 @@ const InterlocutorsName = styled(InterlocutorsMessageText)`
   margin-bottom: 0;
 `
 const MapViewStreet = styled(View)`
-  height: 30;
-  width: 99%;
-  align-self: center;
   background: rgba(0, 0, 0, 0.3);
   position: absolute;
-  top: 120;
+  bottom: 0;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 5px 10px;
   font-size: ${fontSize.sm};
 `
@@ -362,9 +360,9 @@ class Message extends Component {
               <MapView.Marker coordinate={data} tracksViewChanges={false} />
             </MapView>
             <MapViewStreet>
-              <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
+              {/* <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText> */}
               <MapViewStreetInfo>
-                <MapViewStreetTime>4:10</MapViewStreetTime>
+                <MapViewStreetTime>{finalTime}</MapViewStreetTime>
                 <Indicator color="black" read={messageRead} />
               </MapViewStreetInfo>
             </MapViewStreet>
