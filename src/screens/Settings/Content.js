@@ -262,19 +262,19 @@ class Content extends Component {
         value: false,
         linkText: 'Условия использования',
         linkComp: 'linkComp',
-        link: 'https://www.google.com/',
+        link: 'agreement.univ.center/1',
       },
       {
         value: false,
         linkText: 'Пользовательское соглашение',
         linkComp: 'linkComp',
-        link: 'https://www.google.com/',
+        link: 'agreement.univ.center/2',
       },
       {
         value: false,
         linkText: 'Соглашение об Использовании персональных данных',
         linkComp: 'linkComp',
-        link: 'https://www.google.com/',
+        link: 'agreement.univ.center/3',
       },
     ],
   }
