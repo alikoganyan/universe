@@ -10,7 +10,7 @@ import {
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import getImageFromPicker from '../../utils/ImagePicker'
-import RNPermissions from 'react-native-permissions'
+import getGeoCoords from '../../utils/geolocation'
 import posed from 'react-native-pose'
 import { BottomSheet } from 'react-native-btr'
 import {
@@ -34,7 +34,12 @@ import {
   p_forward_message,
   p_reply_message,
 } from '../../constants/api'
-import { setDialogs } from '../../actions/dialogsActions'
+import {
+  setDialogs,
+  addUploadMessage,
+  removeUploadMessage,
+  updateUploadMessageProgress,
+} from '../../actions/dialogsActions'
 
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
@@ -338,47 +343,75 @@ class InputComponent extends Component {
     const {
       currentChat,
       setDialogs: setDialogsProp,
+      addUploadMessage,
+      removeUploadMessage,
+      updateUploadMessageProgress,
       dialogs,
       user,
     } = this.props
-    getImageFromPicker(result => {
-      const { imageFormData = {}, uri } = result
-      const form = new FormData()
-      this._hideBottomSheetMenu()
-      form.append('file', imageFormData)
-      form.append('room', currentChat)
-      const message = {
-        room: currentChat,
-        sender: { ...user },
-        created_at: new Date(),
-        type: 'image',
-        src: uri,
-        viewers: [],
-      }
-      if (!result.cancelled) {
-        addMessage(message)
-        sendRequest({
-          r_path: p_send_file,
-          method: 'post',
-          attr: form,
-          config: {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-          success: res => {
-            socket.emit('file', { room: currentChat })
-            const newDialogs = [...dialogs]
-            const index = newDialogs.findIndex(e => e.room === currentChat)
-            newDialogs[index] = res.dialog
-            setDialogsProp(newDialogs)
-          },
-          failFunc: err => {
-            // console.log({ err })
-          },
+    getImageFromPicker(
+      result => {
+        const { imageFormData = {}, uri } = result
+        const form = new FormData()
+        this._hideBottomSheetMenu()
+        form.append('file', imageFormData)
+        form.append('room', currentChat)
+        const tempMessageId = Date.now()
+        addUploadMessage({
+          room: currentChat,
+          src: uri,
+          type: 'image',
+          isUploaded: true,
+          created_at: new Date(),
+          sender: { ...user },
+          tempId: tempMessageId,
+          viewers: [],
+          enableUploadProgress: true,
+          uploadProgress: 0,
         })
-      }
-    }, this._hideBottomSheetMenu)
+        if (!result.cancelled) {
+          sendRequest({
+            r_path: p_send_file,
+            method: 'post',
+            attr: form,
+            config: {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              onUploadProgress: progressEvent => {
+                const uploadProgress = Math.round(
+                  (progressEvent.loaded * 100) / progressEvent.total,
+                )
+                updateUploadMessageProgress({
+                  room: currentChat,
+                  tempId: tempMessageId,
+                  uploadProgress,
+                })
+              },
+            },
+            success: res => {
+              socket.emit('file', { room: currentChat })
+              const newDialogs = [...dialogs]
+              const index = newDialogs.findIndex(e => e.room === currentChat)
+              newDialogs[index] = res.dialog
+              setDialogsProp(newDialogs)
+            },
+            failFunc: err => {
+              // console.log({ err })
+              removeUploadMessage({
+                room: currentChat,
+                tempId: tempMessageId,
+              })
+            },
+          })
+        }
+      },
+      this._hideBottomSheetMenu,
+      {
+        maxWidth: 1500,
+        maxHeight: 1500,
+      },
+    )
   }
 
   selectFile = async () => {
@@ -387,29 +420,15 @@ class InputComponent extends Component {
 
   selectGeo = async () => {
     const { currentRoom } = this.props
+    const coords = await getGeoCoords()
     this._hideBottomSheetMenu()
-    // const { status } = await Permissions.askAsync(Permissions.LOCATION);
-
-    let status
-    await RNPermissions.request('location').then(response => {
-      // console.log('RNPermissions location: ', response)
-      status = response
-    })
-    if (status !== 'granted') {
-      alert('no location permission')
-      return
+    if (coords) {
+      const { latitude, longitude } = coords
+      socket.emit('geo_group', {
+        room: currentRoom,
+        geo_data: { latitude, longitude },
+      })
     }
-    navigator.geolocation.getCurrentPosition(
-      position => {
-        // console.log({ receiver: currentRoom, geo_data: position.coords })
-        socket.emit('geo_group', {
-          receiver: currentRoom,
-          geo_data: position.coords,
-        })
-      },
-      error => alert(error.message),
-      { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
-    )
   }
 
   discardSelect = () => {}
@@ -539,6 +558,9 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   addMessage: _ => dispatch(addMessage(_)),
+  addUploadMessage: _ => dispatch(addUploadMessage(_)),
+  removeUploadMessage: _ => dispatch(removeUploadMessage(_)),
+  updateUploadMessageProgress: _ => dispatch(updateUploadMessageProgress(_)),
   fEditMessage: _ => dispatch(editMessage(_)),
   startSearch: _ => dispatch(startSearch(_)),
   stopSearch: _ => dispatch(stopSearch(_)),

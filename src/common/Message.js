@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Dimensions } from 'react-native'
+import { Text, View, Dimensions, ActivityIndicator } from 'react-native'
 import styled from 'styled-components'
 import {
   TriangleLeftIcon,
@@ -20,6 +20,24 @@ import LinearGradient from 'react-native-linear-gradient'
 
 const { Colors, fontSize, borderRadius } = helper
 const { myMessage, interlocatorMessage, pink } = Colors
+
+const UploadProgressContainer = styled(View)`
+  width: 100%;
+  height: 250px;
+  position: absolute;
+  top: 0;
+  background: #0008;
+  align-items: center;
+  justify-content: center;
+  border-radius: ${borderRadius};
+`
+
+const UploadProgressText = styled(Text)`
+  color: ${Colors.white};
+  font-family: 'OpenSans';
+  font-size: 14px;
+  padding: 8px;
+`
 
 const MyMessage = styled(View)`
   display: flex;
@@ -105,16 +123,14 @@ const InterlocutorsName = styled(InterlocutorsMessageText)`
   margin-bottom: 0;
 `
 const MapViewStreet = styled(View)`
-  height: 30;
-  width: 99%;
-  align-self: center;
   background: rgba(0, 0, 0, 0.3);
   position: absolute;
-  top: 120;
+  bottom: 0;
+  width: 100%;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   padding: 5px 10px;
   font-size: ${fontSize.sm};
 `
@@ -186,6 +202,9 @@ class Message extends Component {
       filename,
       size,
       data,
+      isUploaded,
+      enableUploadProgress,
+      uploadProgress,
     } = children
     const finalTime = getHamsterDate(created_at)
     const fileSize =
@@ -193,7 +212,7 @@ class Message extends Component {
         ? `${(size / (1024 * 2)).toFixed(1)}МБ`
         : `${(size / 1024).toFixed(1)}КБ`
     const messageRead = !!viewers.filter(e => e !== myId).length
-    if (type === 'image') {
+    if (type === 'image' && !isUploaded) {
       this.readFile(
         src.split('file://')[1] ? src : `https://ser.univ.team${src}`,
         filename,
@@ -264,6 +283,30 @@ class Message extends Component {
               </LinearGradient>
             </InterlocutorsMessage>
           </View>
+        </View>
+      )
+    }
+    if (type === 'image' && isUploaded) {
+      return (
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <MyMessage background={background} style={{ padding: 0 }}>
+            <MyMessageImage
+              uri={src}
+              width={width}
+              height={height}
+              resizeMode="contain"
+            />
+            <UploadProgressContainer>
+              <ActivityIndicator animating color={Colors.white} size="large" />
+              {!!enableUploadProgress && (
+                <UploadProgressText>{uploadProgress}%</UploadProgressText>
+              )}
+            </UploadProgressContainer>
+            <MessageInfo>
+              <MessageDate color={Colors.norway}>Загрузка...</MessageDate>
+            </MessageInfo>
+          </MyMessage>
+          <TriangleLeftIcon color={myMessage} />
         </View>
       )
     }
@@ -342,9 +385,9 @@ class Message extends Component {
               <MapView.Marker coordinate={data} tracksViewChanges={false} />
             </MapView>
             <MapViewStreet>
-              <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText>
+              {/* <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText> */}
               <MapViewStreetInfo>
-                <MapViewStreetTime>4:10</MapViewStreetTime>
+                <MapViewStreetTime>{finalTime}</MapViewStreetTime>
                 <Indicator color="black" read={messageRead} />
               </MapViewStreetInfo>
             </MapViewStreet>

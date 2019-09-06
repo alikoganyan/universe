@@ -5,14 +5,11 @@ import {
   Dimensions,
   TouchableOpacity,
   Platform,
-  Linking,
-  PermissionsAndroid,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-// import { ImagePicker, DocumentPicker, Permissions, Location } from 'expo';
-import RNPermissions from 'react-native-permissions'
 import getImageFromPicker from '../../utils/ImagePicker'
+import getGeoCoords from '../../utils/geolocation'
 import posed from 'react-native-pose'
 import { BottomSheet } from 'react-native-btr'
 import {
@@ -24,7 +21,7 @@ import {
 import helper from '../../utils/helpers'
 import AutoHeightInput from '../../common/AutoHeightInput'
 import {
-  addMessage,
+  // addMessage,
   // startSearch,
   // stopSearch,
   // getMessages,
@@ -42,7 +39,12 @@ import {
   p_reply_message,
 } from '../../constants/api'
 
-import { setDialogs } from '../../actions/dialogsActions'
+import {
+  setDialogs,
+  addUploadMessage,
+  removeUploadMessage,
+  updateUploadMessageProgress,
+} from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
 
@@ -344,50 +346,77 @@ class InputComponent extends Component {
   selectPhoto = async () => {
     const {
       currentChat,
-      addMessage: addMessageProp,
       setDialogs: setDialogsProp,
+      addUploadMessage,
+      removeUploadMessage,
+      updateUploadMessageProgress,
       dialogs,
       user,
     } = this.props
-    getImageFromPicker(result => {
-      const { imageFormData = {}, uri } = result
-      const form = new FormData()
-      this._hideBottomSheetMenu()
-      form.append('file', imageFormData)
-      form.append('room', currentChat)
-      const message = {
-        room: currentChat,
-        sender: { ...user },
-        created_at: new Date(),
-        type: 'image',
-        src: uri,
-        viewers: [],
-      }
-      if (!result.cancelled) {
-        addMessageProp(message)
-        sendRequest({
-          r_path: p_send_file,
-          method: 'post',
-          attr: form,
-          config: {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-          success: res => {
-            // console.log('load success: ', { res })
-            socket.emit('file', { room: currentChat })
-            const newDialogs = [...dialogs]
-            const index = newDialogs.findIndex(e => e.room === currentChat)
-            newDialogs[index] = res.dialog
-            setDialogsProp(newDialogs)
-          },
-          failFunc: err => {
-            // console.log('load err: ', { err })
-          },
+    getImageFromPicker(
+      result => {
+        const { imageFormData = {}, uri } = result
+        const form = new FormData()
+        this._hideBottomSheetMenu()
+        form.append('file', imageFormData)
+        form.append('room', currentChat)
+        const tempMessageId = Date.now()
+        addUploadMessage({
+          room: currentChat,
+          src: uri,
+          type: 'image',
+          isUploaded: true,
+          created_at: new Date(),
+          sender: { ...user },
+          tempId: tempMessageId,
+          viewers: [],
+          enableUploadProgress: true,
+          uploadProgress: 0,
         })
-      }
-    }, this._hideBottomSheetMenu)
+        if (!result.cancelled) {
+          sendRequest({
+            r_path: p_send_file,
+            method: 'post',
+            attr: form,
+            config: {
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
+              onUploadProgress: progressEvent => {
+                const uploadProgress = Math.round(
+                  (progressEvent.loaded * 100) / progressEvent.total,
+                )
+                updateUploadMessageProgress({
+                  room: currentChat,
+                  tempId: tempMessageId,
+                  uploadProgress,
+                })
+              },
+            },
+            success: res => {
+              // console.log('load success: ', { res })
+              socket.emit('file', { room: currentChat })
+              const newDialogs = [...dialogs]
+              const index = newDialogs.findIndex(e => e.room === currentChat)
+              newDialogs[index] = res.dialog
+              setDialogsProp(newDialogs)
+            },
+            failFunc: err => {
+              // console.log('load err: ', { err })
+              removeUploadMessage({
+                room: currentChat,
+                tempId: tempMessageId,
+              })
+            },
+          })
+        }
+      },
+      this._hideBottomSheetMenu,
+      {
+        maxWidth: 1500,
+        maxHeight: 1500,
+      },
+    )
   }
 
   selectFile = async () => {
@@ -420,45 +449,15 @@ class InputComponent extends Component {
 
   selectGeo = async () => {
     const { currentDialog } = this.props
+    const coords = await getGeoCoords()
     this._hideBottomSheetMenu()
-    // const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    let status
-    await RNPermissions.request('location').then(response => {
-      // console.log('RNPermissions location: ', response)
-      status = response
-    })
-    alert(status)
-    if (status !== 'granted') {
-      alert('no location permission')
-      Linking.openURL('app-settings:')
-      return
+    if (coords) {
+      const { latitude, longitude } = coords
+      socket.emit('geo', {
+        receiver: currentDialog._id,
+        geo_data: { latitude, longitude },
+      })
     }
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-        {},
-      )
-      // alert(`${granted}, ${JSON.stringify(PermissionsAndroid.RESULTS.GRANTED)}`);
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            socket.emit('geo', {
-              receiver: currentDialog._id,
-              geo_data: position.coords,
-            })
-          },
-          error => alert(error.message),
-          { timeout: 20000, maximumAge: 36e5 },
-        )
-      } else {
-        alert('location permission denied')
-      }
-    } catch (err) {
-      alert(err)
-    }
-    // this.getGeolocationPromise()
-    //  .then(e => alert(JSON.stringify(e)))
-    //  .catch(e => alert(JSON.stringify(e)));
   }
 
   discardSelect = () => {}
@@ -589,7 +588,9 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   fEditMessage: _ => dispatch(editMessage(_)),
-  addMessage: _ => dispatch(addMessage(_)),
+  addUploadMessage: _ => dispatch(addUploadMessage(_)),
+  removeUploadMessage: _ => dispatch(removeUploadMessage(_)),
+  updateUploadMessageProgress: _ => dispatch(updateUploadMessageProgress(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
