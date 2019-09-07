@@ -1,10 +1,10 @@
 import React from 'react'
 import styled from 'styled-components'
 import helper from '../utils/helpers'
-import ImageLoader from 'react-native-image-progress'
+import { CachedImage } from 'react-native-cached-image'
 
 const { imageSize } = helper
-const StyledImage = styled(ImageLoader)`
+const StyledImage = styled(CachedImage)`
   width: ${({ size }) => (typeof size === 'number' ? size : imageSize[size])};
   height: ${({ size }) => (typeof size === 'number' ? size : imageSize[size])};
   border-radius: ${({ size }) =>

@@ -97,6 +97,8 @@ PODS:
     - React/Core (= 0.59.8)
   - react-native-document-picker (3.2.4):
     - React
+  - react-native-fetch-blob (0.10.6):
+    - React/Core
   - react-native-google-maps (0.25.0):
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 3.1.0)
@@ -182,6 +184,7 @@ DEPENDENCIES:
   - Google-Maps-iOS-Utils
   - GoogleMaps
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
+  - react-native-fetch-blob (from `../node_modules/react-native-fetch-blob`)
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-maps (from `../node_modules/react-native-maps`)
@@ -235,6 +238,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native"
   react-native-document-picker:
     :path: "../node_modules/react-native-document-picker"
+  react-native-fetch-blob:
+    :path: "../node_modules/react-native-fetch-blob"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-image-picker:
@@ -276,6 +281,7 @@ SPEC CHECKSUMS:
   Protobuf: 3f617b9a6e73605565086864c9bc26b2bf2dd5a3
   React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
   react-native-document-picker: c36bf5f067a581657ecaf7124dcd921a8be19061
+  react-native-fetch-blob: 2bef9be702de8726f4d7bf58d2345579aaaee60d
   react-native-google-maps: 88d750ad441b19c24885f20d43a55ecac25939b5
   react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
   react-native-maps: 190c02ca533fddac5bb49cf17bdece3644612107
@@ -287,6 +293,6 @@ SPEC CHECKSUMS:
   RNSVG: a53a5de0d90ec96a6502cc3a4534dfcc0c130622
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-PODFILE CHECKSUM: d78697bad4d0d372bf34d621034f9f4b891ce10d
+PODFILE CHECKSUM: 21c6c1850f062d8c46307850b131fb3b31fa0f9e
 
 COCOAPODS: 1.6.0

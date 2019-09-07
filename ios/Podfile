@@ -64,6 +64,8 @@ rn_path = '../node_modules/react-native'
 
   pod 'BVLinearGradient', :path => '../node_modules/react-native-linear-gradient'
 
+  pod 'react-native-fetch-blob', :path => '../node_modules/react-native-fetch-blob'
+
   target 'universeTests' do
     inherit! :search_paths
     # Pods for testing

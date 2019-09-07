@@ -2,13 +2,13 @@ import React, { Component } from 'react'
 import {
   View,
   Text,
-  Image,
   TouchableHighlight,
   Platform,
   ActionSheetIOS,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import { CachedImage } from 'react-native-cached-image'
 import helper, { getHamsterDate } from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { socket } from '../../utils/socket'
@@ -37,7 +37,7 @@ const Wrapper = styled(View)`
   width: 100%;
   height: 74px;
 `
-const DialogImage = styled(Image)`
+const DialogImage = styled(CachedImage)`
   width: ${({ size }) => (size ? size : 50)}px;
   height: ${({ size }) => (size ? size : 50)}px;
   border-radius: ${({ size }) => (size ? size / 2 : 25)}px;
@@ -207,7 +207,6 @@ class Content extends Component {
             <DialogImage
               source={{
                 uri: `https://ser.univ.team${chatImage}`,
-                cache: 'force-cache',
               }}
               size={56}
             />
