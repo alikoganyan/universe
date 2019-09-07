@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList, TouchableOpacity, AppState } from 'react-native'
+import { View, Text, Animated, TouchableOpacity, AppState } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import Header from './Header'
@@ -25,15 +25,17 @@ const { blue, grey2, lightColor } = Colors
 const Wrapper = styled(View)`
   height: 100%;
 `
-const StyledFlatList = styled(FlatList)`
+const StyledFlatList = styled(Animated.FlatList)`
   height: 100%;
 `
 
-const Title = styled(Text)`
+const Title = styled(Animated.Text)`
   font-family: 'OpenSans-Bold';
   font-size: 30px;
   color: ${Colors.black};
   padding: 0 16px 8px;
+  background-color: ${Colors.white};
+  z-index: 2;
 `
 
 const PreHeader = styled(View)`
@@ -44,7 +46,7 @@ const PreHeader = styled(View)`
   padding: 0 8px;
 `
 
-const SubTitle = styled(Text)`
+const SubTitle = styled(Animated.Text)`
   font-family: 'OpenSans-Bold';
   font-size: 15px;
   color: ${Colors.black};
@@ -98,12 +100,16 @@ class Dialogs extends Component {
 
   render() {
     const { dialogs, navigation } = this.props
-    const { congratulations, scrolled } = this.state
+    const { congratulations } = this.state
+    const opacity = this.scrollY.interpolate({
+      inputRange: [0, 90, 91],
+      outputRange: [0, 0, 1],
+    })
     return (
       <SafeAreaView behavior="padding">
         <PreHeader>
           <View style={{ width: 53 }} />
-          {scrolled && <SubTitle>Диалоги</SubTitle>}
+          <SubTitle style={{ opacity }}>Диалоги</SubTitle>
           <WriteMessageBlue onPress={() => navigation.navigate('NewDialog')} />
         </PreHeader>
         <Wrapper>
@@ -130,12 +136,23 @@ class Dialogs extends Component {
               ListHeaderComponent={this._renderListHeader}
               keyboardDismissMode="on-drag"
               initialNumToRender={20}
-              data={dialogs}
+              data={[...dialogs, ...dialogs, ...dialogs]}
               keyboardShouldPersistTaps="always"
               renderItem={this._renderItem}
               keyExtractor={(item, index) => item._id.toString()}
-              onScroll={this.handleScroll}
               contentContainerStyle={{ paddingBottom: 110 }}
+              scrollEventThrottle={16}
+              // Declarative API for animations ->
+              onScroll={Animated.event(
+                [
+                  {
+                    nativeEvent: { contentOffset: { y: this.scrollY } },
+                  },
+                ],
+                {
+                  useNativeDriver: true, // <- Native Driver used for animated events
+                },
+              )}
             />
           ) : (
             <Loader style={{ flex: 1 }} hint="Пока нет диалогов">
@@ -156,6 +173,7 @@ class Dialogs extends Component {
     congratulations: false,
     scrolled: false,
   }
+  scrollY = new Animated.Value(0)
 
   componentDidMount() {
     const { user } = this.props
@@ -198,9 +216,14 @@ class Dialogs extends Component {
   _renderListHeader = () => {
     const { navigation } = this.props
 
+    const translateY = this.scrollY.interpolate({
+      inputRange: [0, 50, 51],
+      outputRange: [0, 50, 50],
+    })
+
     return (
       <>
-        <Title>Диалоги</Title>
+        <Title style={{ transform: [{ translateY }] }}>Диалоги</Title>
         <Header
           toProfile={this.toProfile}
           toggleDrawer={navigation.openDrawer}
@@ -504,9 +527,9 @@ class Dialogs extends Component {
   handleScroll = event => {
     const { y } = event.nativeEvent.contentOffset
     const { scrolled } = this.state
-    if (y > 38 && !scrolled) {
+    if (y >= 50 && !scrolled) {
       this.setState({ scrolled: true })
-    } else if (y < 38 && scrolled) {
+    } else if (y < 50 && scrolled) {
       this.setState({ scrolled: false })
     }
   }
