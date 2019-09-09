@@ -63,11 +63,11 @@
 		87BF413772824B4589B4B556 /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8298711A54564CB3B65B46BD /* FontAwesome5_Brands.ttf */; };
 		9476AE8EA27B48428D10360A /* Roboto-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 26FE04776C584ED38FE6BE6C /* Roboto-Italic.ttf */; };
 		9945BBDC9CB84BD5889D552D /* Roboto-Black.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 78F8CCA0E0314B838FF20ABE /* Roboto-Black.ttf */; };
+		A0B585EB2325BC0500BE48DF /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		A57CFD7CCF8B4CBF99BD45E2 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FDFE178893284568B8FA7EF3 /* FontAwesome5_Solid.ttf */; };
 		A7D944C3568B438D83BADACB /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 41DDD7626B314CDAA2433339 /* libRNVectorIcons.a */; };
 		A81A602B123A42CE9D265553 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E8AAFEF476E435CB57C6B82 /* EvilIcons.ttf */; };
 		AC2D87DCCA314CB782A15A81 /* Roboto-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60B3ED286F2041E699FBA60E /* Roboto-ThinItalic.ttf */; };
-		ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */ = {isa = PBXBuildFile; fileRef = ADBDB9271DFEBF0700ED6528 /* libRCTBlob.a */; };
 		AE68DB912BC2444F955B54B3 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B40021CD7934A62B6979E49 /* OpenSans-Semibold.ttf */; };
 		BDD03C4067A94C6BAE34D7C7 /* libRNFirebase.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 475D6A0EEBC34E73AB65234A /* libRNFirebase.a */; };
 		BDEEFA89761C49FC8A2272A6 /* Roboto-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 4947D665BF394886B53CFA4B /* Roboto-Light.ttf */; };
@@ -489,8 +489,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A0B585EB2325BC0500BE48DF /* libRCTBlob.a in Frameworks */,
 				ED297163215061F000B7C4FE /* JavaScriptCore.framework in Frameworks */,
-				ADBDB9381DFEBF1600ED6528 /* libRCTBlob.a in Frameworks */,
 				11D1A2F320CAFA9E000508D9 /* libRCTAnimation.a in Frameworks */,
 				146834051AC3E58100842450 /* libReact.a in Frameworks */,
 				00C302E51ABCBA2D00DB3ED1 /* libRCTActionSheet.a in Frameworks */,
@@ -1658,7 +1658,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = team.amigo.media;
 				PRODUCT_NAME = universe;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
@@ -1691,7 +1691,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = team.amigo.media;
 				PRODUCT_NAME = universe;
 				PROVISIONING_PROFILE_SPECIFIER = "";
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
