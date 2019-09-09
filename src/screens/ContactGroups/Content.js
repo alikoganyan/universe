@@ -155,6 +155,7 @@ class Content extends Component {
     const { users, collapsed, options, allContacts } = this.state
     const { department } = users
     const { active } = options
+
     return (
       <Wrapper>
         {allContacts.length ? (
@@ -174,6 +175,7 @@ class Content extends Component {
               </ContactList>
               <ContactList>
                 <FlatList
+                  contentContainerStyle={{ paddingBottom: 49 }}
                   data={department}
                   renderItem={({ item, index }) => (
                     <Box key={item._id} last={index === department.length - 1}>

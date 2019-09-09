@@ -104,6 +104,7 @@ class Content extends Component {
             <NewsList
               data={news}
               ListFooterComponent={<View style={{ margin: 10 }} />}
+              contentContainerStyle={{ paddingBottom: 49 }}
               renderItem={({ item }) => {
                 const {
                   created_at,

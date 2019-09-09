@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React, { Component } from 'react'
 import { View, Text, Dimensions, ScrollView } from 'react-native'
 import styled from 'styled-components'
@@ -25,12 +26,12 @@ const StyledScrollView = styled(ScrollView)`
 
 class Content extends Component {
   render() {
-    const { tasks, navigate, user } = this.props
+    const { tasks, navigate } = this.props
     const { incTasks, outTasks } = this.state
     return tasks ? (
       <Wrapper>
         <StyledScrollView
-          contentContainerStyle={{ flexGrow: 1 }}
+          contentContainerStyle={{ flexGrow: 1, paddingBottom: 49 }}
           keyboardShouldPersistTaps="handled"
         >
           <TaskPack
@@ -74,13 +75,13 @@ class Content extends Component {
   }
 
   componentDidMount = async () => {
-    const { setTasks, user } = this.props
+    const { setTasks: setTasksProp, user } = this.props
     await this._getUsers()
     const tasks = this._getTasks()
 
     const flatten = list =>
       list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
-    setTasks(tasks)
+    setTasksProp(tasks)
     const outTasks = [...tasks].map(e =>
       [...e.tasks, ...e.tasks_list, ...user.tasks].filter(
         task => task.creator._id === user._id,
@@ -119,8 +120,8 @@ class Content extends Component {
   }
 
   componentWillUnmount() {
-    const { setTasks } = this.props
-    setTasks([])
+    const { setTasks: setTasksProp } = this.props
+    setTasksProp([])
   }
 
   toTasks = () => {
@@ -129,7 +130,6 @@ class Content extends Component {
   }
 
   _getUsers = () => {
-    const { user } = this.props
     return new Promise((resolve, reject) => {
       sendRequest({
         r_path: g_users,
@@ -138,7 +138,6 @@ class Content extends Component {
           this.setState({ users: [...res.users] }, () => resolve(res.users))
         },
         failFunc: err => {
-          console.log({ err })
           reject()
         },
       })

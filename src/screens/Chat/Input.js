@@ -347,9 +347,9 @@ class InputComponent extends Component {
     const {
       currentChat,
       setDialogs: setDialogsProp,
-      addUploadMessage,
-      removeUploadMessage,
-      updateUploadMessageProgress,
+      addUploadMessage: addUploadMessageProp,
+      removeUploadMessage: removeUploadMessageProp,
+      updateUploadMessageProgress: updateUploadMessageProgressProp,
       dialogs,
       user,
     } = this.props
@@ -361,7 +361,7 @@ class InputComponent extends Component {
         form.append('file', imageFormData)
         form.append('room', currentChat)
         const tempMessageId = Date.now()
-        addUploadMessage({
+        addUploadMessageProp({
           room: currentChat,
           src: uri,
           type: 'image',
@@ -386,7 +386,7 @@ class InputComponent extends Component {
                 const uploadProgress = Math.round(
                   (progressEvent.loaded * 100) / progressEvent.total,
                 )
-                updateUploadMessageProgress({
+                updateUploadMessageProgressProp({
                   room: currentChat,
                   tempId: tempMessageId,
                   uploadProgress,
@@ -403,7 +403,7 @@ class InputComponent extends Component {
             },
             failFunc: err => {
               // console.log('load err: ', { err })
-              removeUploadMessage({
+              removeUploadMessageProp({
                 room: currentChat,
                 tempId: tempMessageId,
               })

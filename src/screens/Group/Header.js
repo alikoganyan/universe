@@ -40,11 +40,13 @@ const Header = styled(View)`
 const Info = styled(View)`
   display: flex;
   margin-left: 10px;
+  flex: 1;
 `
 const InfoChatName = styled(Text)`
   color: black;
-  font-size: ${fontSize.chatHeaderName};
+  font-size: ${fontSize.text};
   font-family: OpenSans-Bold;
+  flex: 1;
 `
 const InfoParticipants = styled(Text)`
   color: ${Colors.jumbo};
@@ -55,7 +57,8 @@ const Left = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center;
-  max-width: 200px;
+  flex: 1;
+  padding-right: 10px;
 `
 const Right = styled(View)`
   display: flex;
@@ -134,7 +137,9 @@ class HeaderComponent extends Component {
                     />
                   )}
                   <Info>
-                    <InfoChatName numberOfLines={1}>{name}</InfoChatName>
+                    <InfoChatName numberOfLines={1} ellipsizeMode="tail">
+                      {name}
+                    </InfoChatName>
                     {participants && (
                       <InfoParticipants>
                         {participants.length + 1} участника

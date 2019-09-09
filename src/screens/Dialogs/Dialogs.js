@@ -136,7 +136,7 @@ class Dialogs extends Component {
               ListHeaderComponent={this._renderListHeader}
               keyboardDismissMode="on-drag"
               initialNumToRender={20}
-              data={[...dialogs, ...dialogs, ...dialogs]}
+              data={dialogs}
               keyboardShouldPersistTaps="always"
               renderItem={this._renderItem}
               keyExtractor={(item, index) => item._id.toString()}
