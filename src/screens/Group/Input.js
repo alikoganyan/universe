@@ -1,18 +1,10 @@
 import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  TextInput,
-  Dimensions,
-  TouchableOpacity,
-  Platform,
-} from 'react-native'
+import { View, Text, TextInput, Dimensions, Platform } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import getImageFromPicker from '../../utils/ImagePicker'
 import getGeoCoords from '../../utils/geolocation'
-import posed from 'react-native-pose'
-import { BottomSheet } from 'react-native-btr'
+import ActionSheet from 'react-native-actionsheet'
 import {
   PapperPlaneIcon,
   CloseIcon,
@@ -44,12 +36,8 @@ import {
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
 
-const { sidePadding, borderRadius, /*HeaderHeight,*/ fontSize, Colors } = helper
+const { sidePadding, /*HeaderHeight,*/ fontSize, Colors } = helper
 const { blue } = Colors
-const FilePickerPosed = posed.View({
-  visible: { bottom: 10 },
-  hidden: { bottom: -250 },
-})
 
 const Wrapper = styled(View)`
   background: white;
@@ -105,28 +93,6 @@ const Right = styled(View)`
   align-items: center;
   justify-content: center;
 `
-const FilePicker = styled(FilePickerPosed)`
-  background: white;
-  width: 94%;
-  height: ${Dimensions.get('window').height * 0.3}px;
-  position: absolute;
-  margin: 0 3%;
-  padding: 2% 7%;
-  bottom: 10px;
-  border-radius: ${borderRadius};
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  z-index: 4;
-`
-// const Shadow = styled(TouchableOpacity)`
-//   position: absolute;
-//   width: ${Dimensions.get('window').width};
-//   height: ${Dimensions.get('window').height};
-//   background: rgba(5, 5, 5, 0.3);
-//   top: -${Dimensions.get('window').height - HeaderHeight - 3};
-//   z-index: 2;
-// `
 const MessageBox = styled(View)`
   width: ${Dimensions.get('window').width}px;
   padding: 0 ${sidePadding}px;
@@ -152,7 +118,7 @@ const MessageBoxLeft = styled(View)`
 `
 class InputComponent extends Component {
   render() {
-    const { text, pickerOpened, edit, forward, reply } = this.state
+    const { text, edit, forward, reply } = this.state
     const { editedMessage, forwardedMessage, repliedMessage } = this.props
 
     return (
@@ -195,7 +161,7 @@ class InputComponent extends Component {
         ) : (
           <Wrapper isTopItem={edit || reply}>
             <Left>
-              <AddIconBlue size={20} onPress={this.pickImage} />
+              <AddIconBlue size={20} onPress={this._showActionSheet} />
             </Left>
             <Body>
               <Input
@@ -214,26 +180,24 @@ class InputComponent extends Component {
             </Right>
           </Wrapper>
         )}
-        <BottomSheet
-          visible={pickerOpened}
-          onBackButtonPress={this._hideBottomSheetMenu}
-          onBackdropPress={this._hideBottomSheetMenu}
-        >
-          <FilePicker>
-            {/* <TouchableOpacity onPress={this.selectPhoto}>
-              <Text>Фото</Text>
-            </TouchableOpacity> */}
-            <TouchableOpacity onPress={this.selectFile}>
-              <Text>Файл</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this.selectGeo}>
-              <Text>Мою локацию</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={this._hideBottomSheetMenu}>
-              <Text>Отменить</Text>
-            </TouchableOpacity>
-          </FilePicker>
-        </BottomSheet>
+        <ActionSheet
+          ref={node => (this.ActionSheet = node)}
+          title="Вложение"
+          options={['Файл', 'Мою локацию', 'Отменить']}
+          cancelButtonIndex={2}
+          onPress={index => {
+            switch (index) {
+              case 0:
+                this.selectFile()
+                break
+              case 1:
+                this.selectGeo()
+                break
+              default:
+                break
+            }
+          }}
+        />
       </>
     )
   }
@@ -242,7 +206,6 @@ class InputComponent extends Component {
     text: '',
     prevText: '',
     edit: false,
-    pickerOpened: false,
     forward: false,
     reply: false,
   }
@@ -250,7 +213,6 @@ class InputComponent extends Component {
   componentWillUnmount() {
     this.stopEditing()
     this.stopReply()
-    this._hideBottomSheetMenu()
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
@@ -328,10 +290,6 @@ class InputComponent extends Component {
     })
   }
 
-  _hideBottomSheetMenu = () => {
-    this.setState({ pickerOpened: false })
-  }
-
   stopEditing = () => {
     const { fEditMessage } = this.props
     const { prevText } = this.state
@@ -353,7 +311,6 @@ class InputComponent extends Component {
       result => {
         const { imageFormData = {}, uri } = result
         const form = new FormData()
-        this._hideBottomSheetMenu()
         form.append('file', imageFormData)
         form.append('room', currentChat)
         const tempMessageId = Date.now()
@@ -406,7 +363,7 @@ class InputComponent extends Component {
           })
         }
       },
-      this._hideBottomSheetMenu,
+      () => {},
       {
         maxWidth: 1500,
         maxHeight: 1500,
@@ -421,7 +378,6 @@ class InputComponent extends Component {
   selectGeo = async () => {
     const { currentRoom } = this.props
     const coords = await getGeoCoords()
-    this._hideBottomSheetMenu()
     if (coords) {
       const { latitude, longitude } = coords
       socket.emit('geo_group', {
@@ -473,8 +429,8 @@ class InputComponent extends Component {
     this.setState({ text: e })
   }
 
-  pickImage = async () => {
-    this.setState({ pickerOpened: true })
+  _showActionSheet = async () => {
+    this.ActionSheet && this.ActionSheet.show()
   }
 
   confirmForwarding = () => {
