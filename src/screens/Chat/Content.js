@@ -66,7 +66,14 @@ const StyledImageBackground = styled(ImageBackground)`
 class Content extends Component {
   render() {
     const { selectedMessage, optionsSelector } = this.state
-    const { search, user, dialogs, currentChat, editedMessage } = this.props
+    const {
+      search,
+      user,
+      dialogs,
+      currentChat,
+      editedMessage,
+      navigate,
+    } = this.props
     const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const isEditing = !!editedMessage.text
     const messages = dialog ? [...dialog.messages] : []
@@ -91,7 +98,7 @@ class Content extends Component {
                   onLongPress={() => this.openOptions(item)}
                   onPress={() => this.handleHold(item)}
                 >
-                  <Message>{item}</Message>
+                  <Message navigate={navigate}>{item}</Message>
                 </TouchableOpacity>
               )}
               keyExtractor={(item, index) => index.toString()}

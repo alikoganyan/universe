@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, Dimensions, ActivityIndicator } from 'react-native'
+import { Text, View, ActivityIndicator, StyleSheet } from 'react-native'
 import styled from 'styled-components'
 import {
   TriangleLeftIcon,
@@ -12,6 +12,7 @@ import {
 import { connect } from 'react-redux'
 import ImageComponent from './Image'
 import MapView from 'react-native-maps'
+import { CachedImage } from 'react-native-cached-image'
 // import { FileSystem } from 'expo';
 // import RNFS from 'react-native-fs'
 import helper, { getHamsterDate } from '../utils/helpers'
@@ -119,6 +120,11 @@ const MyMessageImage = styled(SingleImage)`
   min-width: 100%;
   height: 250px;
 `
+
+const MyMessageCachedImage = styled(CachedImage)`
+  min-width: 100%;
+  height: 250px;
+`
 const InterlocutorsName = styled(InterlocutorsMessageText)`
   margin-bottom: 0;
 `
@@ -133,9 +139,6 @@ const MapViewStreet = styled(View)`
   justify-content: flex-end;
   padding: 5px 10px;
   font-size: ${fontSize.sm};
-`
-const MapViewStreetText = styled(Text)`
-  color: white;
 `
 const MapViewStreetInfo = styled(View)`
   display: flex;
@@ -189,6 +192,7 @@ class Message extends Component {
       background,
       isGroup = false,
       withImage,
+      navigate,
     } = this.props
     const {
       viewers,
@@ -220,11 +224,13 @@ class Message extends Component {
       return myId === sender._id ? (
         <View style={{ display: 'flex', flexDirection: 'row' }}>
           <MyMessage background={background} style={{ padding: 0 }}>
-            <MyMessageImage
-              uri={`https://ser.univ.team${src}`}
-              width={width}
-              height={height}
-              resizeMode="contain"
+            <MyMessageCachedImage
+              style={{ width }}
+              source={{
+                uri: `https://ser.univ.team${src}`,
+                cache: 'force-cache',
+              }}
+              resizeMode="cover"
             />
             <LinearGradient
               start={{ x: 0, y: 0.5 }}
@@ -267,9 +273,13 @@ class Message extends Component {
           >
             <TriangleRightIcon color={interlocatorMessage} />
             <InterlocutorsMessage background={background}>
-              <MyMessageImage
-                uri={`https://ser.univ.team${src}`}
-                resizeMode="contain"
+              <MyMessageCachedImage
+                style={{ width }}
+                source={{
+                  uri: `https://ser.univ.team${src}`,
+                  cache: 'force-cache',
+                }}
+                resizeMode="cover"
               />
               <LinearGradient
                 start={{ x: 0, y: 0.5 }}
@@ -361,37 +371,57 @@ class Message extends Component {
       )
     }
     if (type === 'geo') {
+      const { latitude = 0, longitude = 0 } = data ? data : {}
       return myId === sender._id ? (
         <View
           style={{
-            display: 'flex',
+            flexDirection: 'row',
             alignItems: 'flex-end',
+            marginRight: 10,
           }}
         >
-          <MyMessage style={{ height: 150, width: 300, marginLeft: 20 }}>
+          <MyMessage style={{ height: 150, width: '100%' }}>
             <MapView
               scrollEnabled={false}
               rotateEnabled={false}
               pitchEnabled={false}
               zoomEnabled={false}
-              style={{ width: '99%', height: '98%', alignSelf: 'center' }}
+              provider="google"
+              style={StyleSheet.absoluteFillObject}
               region={{
                 ...data,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
+                latitudeDelta: 0.02,
+                longitudeDelta: 0.02,
               }}
               tracksViewChanges={false}
+              onPress={() => {
+                navigate &&
+                  navigate({
+                    routeName: 'MapView',
+                    params: {
+                      title: 'Геолокация',
+                      latitude,
+                      longitude,
+                    },
+                  })
+              }}
             >
-              <MapView.Marker coordinate={data} tracksViewChanges={false} />
+              <MapView.Marker
+                coordinate={{
+                  latitude,
+                  longitude,
+                }}
+                tracksViewChanges={false}
+              />
             </MapView>
             <MapViewStreet>
-              {/* <MapViewStreetText>ул. Маши Порываевой, 34</MapViewStreetText> */}
               <MapViewStreetInfo>
                 <MapViewStreetTime>{finalTime}</MapViewStreetTime>
                 <Indicator color="black" read={messageRead} />
               </MapViewStreetInfo>
             </MapViewStreet>
           </MyMessage>
+          <TriangleLeftIcon color={myMessage} />
         </View>
       ) : (
         <View
@@ -410,33 +440,57 @@ class Message extends Component {
               }}
             />
           ) : null}
-          <InterlocutorsMessage
-            style={{ height: 150, width: 300, marginLeft: 20 }}
-            background={pink}
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              position: 'relative',
+              left: withImage ? -5 : 0,
+            }}
           >
-            <MapView
-              scrollEnabled={false}
-              rotateEnabled={false}
-              pitchEnabled={false}
-              zoomEnabled={false}
-              style={{
-                flex: 1,
-                width: '100%',
-                height: Dimensions.get('window').height,
-                minHeight: 150,
-              }}
-              region={{
-                ...data,
-                latitudeDelta: 0.0922,
-                longitudeDelta: 0.0421,
-              }}
+            <TriangleRightIcon color={interlocatorMessage} />
+            <InterlocutorsMessage
+              style={{ height: 150, width: '100%' }}
+              background={background || interlocatorMessage}
             >
-              <MapView.Marker coordinate={data} tracksViewChanges={false} />
-            </MapView>
-            <MapViewStreet>
-              <MapViewStreetText>ул. SМаши Порываевой, 34</MapViewStreetText>
-            </MapViewStreet>
-          </InterlocutorsMessage>
+              <MapView
+                scrollEnabled={false}
+                rotateEnabled={false}
+                pitchEnabled={false}
+                zoomEnabled={false}
+                provider="google"
+                style={StyleSheet.absoluteFillObject}
+                region={{
+                  latitude,
+                  longitude,
+                  latitudeDelta: 0.02,
+                  longitudeDelta: 0.02,
+                }}
+                onPress={() => {
+                  navigate &&
+                    navigate({
+                      routeName: 'MapView',
+                      params: {
+                        title: 'Геолокация',
+                        latitude,
+                        longitude,
+                      },
+                    })
+                }}
+              >
+                <MapView.Marker
+                  coordinate={{
+                    latitude,
+                    longitude,
+                  }}
+                  tracksViewChanges={false}
+                />
+              </MapView>
+              <MapViewStreet style={{ justifyContent: 'flex-start' }}>
+                <MapViewStreetTime>{finalTime}</MapViewStreetTime>
+              </MapViewStreet>
+            </InterlocutorsMessage>
+          </View>
         </View>
       )
     }

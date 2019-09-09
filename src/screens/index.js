@@ -42,6 +42,7 @@ import GroupEdit from './GroupEdit/GroupEdit'
 import FirstScreen from './FirstScreen/FirstScreen'
 import IpadView from './IpadView/IpadView'
 import WebView from './WebView'
+import MapView from './MapView'
 
 export {
   Group,
@@ -88,4 +89,5 @@ export {
   FirstScreen,
   IpadView,
   WebView,
+  MapView,
 }

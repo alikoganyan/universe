@@ -58,7 +58,14 @@ const StyledImageBackground = styled(ImageBackground)`
 class Content extends Component {
   render() {
     const { selectedMessage } = this.state
-    const { dialogs, currentChat, search, user, editedMessage } = this.props
+    const {
+      dialogs,
+      currentChat,
+      search,
+      user,
+      editedMessage,
+      navigate,
+    } = this.props
     const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const messages = dialog ? [...dialog.messages] : []
     const isEditing = !!editedMessage.text
@@ -82,7 +89,12 @@ class Content extends Component {
                   key={index}
                   onLongPress={() => this.handleHold(item)}
                 >
-                  <Message withImage read={!!item.viewers.length} isGroup>
+                  <Message
+                    withImage
+                    read={!!item.viewers.length}
+                    isGroup
+                    navigate={navigate}
+                  >
                     {item}
                   </Message>
                 </TouchableOpacity>
