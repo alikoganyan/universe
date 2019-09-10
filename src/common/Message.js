@@ -12,7 +12,7 @@ import {
 import { connect } from 'react-redux'
 import ImageComponent from './Image'
 import MapView from 'react-native-maps'
-import { CachedImage } from 'react-native-cached-image'
+import FastImage from 'react-native-fast-image'
 // import { FileSystem } from 'expo';
 // import RNFS from 'react-native-fs'
 import helper, { getHamsterDate } from '../utils/helpers'
@@ -121,7 +121,7 @@ const MyMessageImage = styled(SingleImage)`
   height: 250px;
 `
 
-const MyMessageCachedImage = styled(CachedImage)`
+const MyMessageCachedImage = styled(FastImage)`
   min-width: 100%;
   height: 250px;
 `
@@ -228,9 +228,8 @@ class Message extends Component {
               style={{ width }}
               source={{
                 uri: `https://ser.univ.team${src}`,
-                cache: 'force-cache',
               }}
-              resizeMode="cover"
+              resizeMode={FastImage.resizeMode.cover}
             />
             <LinearGradient
               start={{ x: 0, y: 0.5 }}
@@ -259,7 +258,6 @@ class Message extends Component {
               size={30}
               source={{
                 uri: `https://ser.univ.team${sender.image}`,
-                cache: 'force-cache',
               }}
             />
           ) : null}
@@ -277,9 +275,8 @@ class Message extends Component {
                 style={{ width }}
                 source={{
                   uri: `https://ser.univ.team${src}`,
-                  cache: 'force-cache',
                 }}
-                resizeMode="cover"
+                resizeMode={FastImage.resizeMode.cover}
               />
               <LinearGradient
                 start={{ x: 0, y: 0.5 }}
@@ -340,7 +337,6 @@ class Message extends Component {
               size={30}
               source={{
                 uri: `https://ser.univ.team${sender.image}`,
-                cache: 'force-cache',
               }}
             />
           )}
