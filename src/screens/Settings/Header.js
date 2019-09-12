@@ -1,61 +1,21 @@
 import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
+import { Text } from 'react-native'
 import styled from 'styled-components'
-import { connect } from 'react-redux'
-import { BackIcon } from '../../assets/index'
 import helper from '../../utils/helpers'
-import ImageComponent from '../../common/Image'
 
-const { sidePadding, HeaderHeight } = helper
-const Header = styled(View)`
-  width: 100%;
-  background: white;
-  height: ${HeaderHeight};
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding-right: ${sidePadding}px;
-  padding-left: ${sidePadding}px;
-`
-const Left = styled(View)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-const Right = styled(View)`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
+const { Colors } = helper
+const Title = styled(Text)`
+  font-family: 'OpenSans-Bold';
+  font-size: 30px;
+  color: ${Colors.black};
+  margin-top: 37px;
+  padding: 0 16px 8px;
+  background-color: ${Colors.white};
+  z-index: 2;
 `
 class HeaderComponent extends Component {
   render() {
-    const { back } = this.props
-    // const { image } = user;
-    return (
-      <Header>
-        <Left>
-          <BackIcon right onPress={back} />
-          <Text>Настройки</Text>
-        </Left>
-        <Right>
-          <ImageComponent source={{ uri: 'image' }} />
-        </Right>
-      </Header>
-    )
+    return <Title>Настройки</Title>
   }
 }
-const mapStateToProps = state => ({
-  messages: state.messageReducer,
-  dialog: state.dialogsReducer.dialogs,
-  currentRoom: state.messageReducer.currentRoom,
-  currentChat: state.messageReducer.currentChat,
-  user: state.userReducer.user,
-})
-const mapDispatchToProps = dispatch => ({
-  setCurrentChat: _ => dispatch(setCurrentChat(_)),
-})
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(HeaderComponent)
+export default HeaderComponent

@@ -138,17 +138,6 @@ const TabBarNavigation = createBottomTabNavigator(
 
 const createRootNavigator = (logged = false) => {
   // eslint-disable-next-line no-unused-vars
-  const DialogDrawerNavigator = createDrawerNavigator(
-    {
-      Home: { screen: TabBarNavigation },
-    },
-    {
-      drawerWidth: Dimensions.get('window').width * 0.8,
-      contentComponent: ({ navigation }) => (
-        <DrawerComponent navigation={navigation} />
-      ),
-    },
-  )
   const AppDrawerNavigator = createDrawerNavigator(
     {
       Home: {

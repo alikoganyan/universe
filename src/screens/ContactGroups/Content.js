@@ -2,11 +2,10 @@ import React, { Component } from 'react'
 import {
   View,
   Text,
-  FlatList,
   Image,
   TouchableOpacity,
-  ScrollView,
   Dimensions,
+  Animated,
 } from 'react-native'
 import styled from 'styled-components'
 import posed from 'react-native-pose'
@@ -28,6 +27,8 @@ import {
 } from '../../actions/messageActions'
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import { socket } from '../../utils/socket'
+import Header from './Header'
+import TabPreHeader from '../../common/TabPreHeader'
 
 const { Colors, HeaderHeight } = helper
 const { green, black, grey2, blue } = Colors
@@ -46,7 +47,7 @@ const AnimatedScrollView = posed.View({
     transition: { duration: 300, ease: 'easeOut' },
   },
 })
-const Animated = styled(AnimatedScrollView)`
+const AnimatedScroll = styled(AnimatedScrollView)`
   display: flex;
   flex-direction: row;
   width: ${Dimensions.get('window').width * 3};
@@ -66,8 +67,9 @@ const Wrapper = styled(View)`
   height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
   overflow: hidden;
 `
-const ContactList = styled(ScrollView)`
+const ContactList = styled(Animated.FlatList)`
   padding: 20px 24px 10px;
+  padding-top: 128px;
   max-width: 100%;
   overflow: hidden;
   flex: 1;
@@ -78,6 +80,7 @@ const Box = styled(View)`
   border-width: 0;
   border-top-width: 1px;
   border-bottom-width: ${({ last }) => (last ? 1 : 0)}px;
+  margin-top: ${({ first }) => (first ? 16 : 0)};
 `
 const BoxTitle = styled(TouchableOpacity)`
   display: flex;
@@ -98,6 +101,7 @@ const BoxItem = styled(Text)`
   font-size: 16px;
   flex: 1;
   width: 80%;
+  color: #80868b;
 `
 const BoxInnerItem = styled(TouchableOpacity)`
   padding: 20px 5px;
@@ -125,7 +129,7 @@ const ContactRole = styled(Text)`
   font-weight: 500;
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)``
-const Options = styled(View)`
+const Options = styled(Animated.View)`
   display: flex;
   align-self: center;
   background: ${green};
@@ -134,7 +138,7 @@ const Options = styled(View)`
   border-radius: 14;
   padding: 1px;
   overflow: hidden;
-  width: 90%;
+  width: 80%;
 `
 const Option = styled(Text)`
   color: ${({ active }) => (active ? black : 'white')};
@@ -150,106 +154,145 @@ const Option = styled(Text)`
   text-align: center;
 `
 
+const Title = styled(Animated.Text)`
+  font-family: 'OpenSans-Bold';
+  font-size: 30px;
+  color: ${Colors.black};
+  padding: 0 16px 8px;
+  background-color: ${Colors.white};
+  z-index: 2;
+`
+
+const Head = styled(Animated.View)`
+  position: absolute;
+  top: 37px;
+  z-index: 1;
+  width: ${Dimensions.get('window').width};
+`
+
 class Content extends Component {
   render() {
-    const { users, collapsed, options, allContacts } = this.state
+    const { users, collapsed, options } = this.state
     const { department } = users
     const { active } = options
+    const { navigate } = this.props
 
+    const opacity = this.scrollY.interpolate({
+      inputRange: [0, 90, 91],
+      outputRange: [0, 0, 1],
+    })
+    const contentTranslateY = this.scrollY.interpolate({
+      inputRange: [0, 200, 201],
+      outputRange: [0, -200, -200],
+    })
+    const titleTranslateY = this.scrollY.interpolate({
+      inputRange: [0, 50, 51],
+      outputRange: [0, 50, 50],
+    })
     return (
       <Wrapper>
-        {allContacts.length ? (
-          <>
-            <Options>
-              {options.options.map((e, i) => (
-                <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                  <Option active={active % 3 === i}>{e}</Option>
-                </TouchableOpacity>
-              ))}
-            </Options>
-            <Animated
-              pose={active === 0 ? 'left' : active === 1 ? 'center' : 'right'}
-            >
-              <ContactList style={{ width: '100%' }}>
-                <this.AllContacts />
-              </ContactList>
-              <ContactList>
-                <FlatList
-                  contentContainerStyle={{ paddingBottom: 49 }}
-                  data={department}
-                  renderItem={({ item, index }) => (
-                    <Box key={item._id} last={index === department.length - 1}>
-                      <BoxTitle
-                        onPress={() =>
-                          collapsed[index]
-                            ? this.collapseDepartment(index)
-                            : this.showDepartment(index)
-                        }
-                      >
-                        <BoxItem numberOfLines={1} title>
-                          {item.title.name}
-                        </BoxItem>
-                        <ArrowWrapper
-                          pose={collapsed[index] ? 'right' : 'down'}
-                        >
-                          <ArrowDownIcon />
-                        </ArrowWrapper>
-                      </BoxTitle>
-                      <Collapsible collapsed={collapsed[index] || false}>
-                        <BoxInner>
-                          {item.users.map(e => (
-                            <BoxInnerItem
-                              key={e._id}
-                              onPress={() => this.toChat(e)}
-                            >
-                              {!e.image ||
-                              e.image === '/images/default_avatar.jpg' ? (
-                                <DefaultAvatar
-                                  isGroup={e.isGroup}
-                                  id={e._id}
-                                  size={36}
-                                />
-                              ) : (
-                                <ContactImage
-                                  source={{
-                                    uri: `https://ser.univ.team${e.image}`,
-                                  }}
-                                />
-                              )}
-                              <ContactInfo>
-                                <ContactName>
-                                  {e.first_name
-                                    ? `${e.first_name} ${e.last_name}`
-                                    : e.phone_number}
-                                </ContactName>
-                                {e.role ? (
-                                  <ContactRole>{e.role.name}</ContactRole>
-                                ) : null}
-                              </ContactInfo>
-                            </BoxInnerItem>
-                          ))}
-                        </BoxInner>
-                      </Collapsible>
-                    </Box>
-                  )}
-                  keyExtractor={item => item.title._id.toString()}
-                />
-              </ContactList>
-              <ContactList style={{ width: '100%' }}>
-                <this.GroupContacts />
-              </ContactList>
-            </Animated>
-          </>
-        ) : (
-          <Loader hint="Пока нет диалогов" style={{ flex: 1, height: '100%' }}>
-            <TouchableOpacity onPress={this.toContacts}>
-              <Text style={{ color: grey2, textAlign: 'center' }}>
-                Откройте первый диалог, выбрав пользователя
-                <Text style={{ color: blue }}> на странице контактов</Text>
-              </Text>
-            </TouchableOpacity>
-          </Loader>
-        )}
+        <TabPreHeader
+          onWritePress={() => navigate('NewContact')}
+          title="Контакты"
+          opacity={opacity}
+        />
+        <Head style={{ transform: [{ translateY: contentTranslateY }] }}>
+          <Title style={{ transform: [{ translateY: titleTranslateY }] }}>
+            Контакты
+          </Title>
+          <Header />
+          <Options>
+            {options.options.map((e, i) => (
+              <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+                <Option active={active % 3 === i}>{e}</Option>
+              </TouchableOpacity>
+            ))}
+          </Options>
+        </Head>
+        <AnimatedScroll
+          pose={active === 0 ? 'left' : active === 1 ? 'center' : 'right'}
+        >
+          <this.AllContacts />
+          <ContactList
+            bounces={false}
+            contentContainerStyle={{
+              paddingBottom: 49,
+              paddingHorizontal: Dimensions.get('window').width * 0.11,
+            }}
+            data={department}
+            ListEmptyComponent={this._renderEmptyComponent}
+            onScrollEndDrag={e =>
+              (this.usersRef = e.nativeEvent.contentOffset.y)
+            }
+            renderItem={({ item, index }) => (
+              <Box
+                key={item._id}
+                first={!index}
+                last={index === department.length - 1}
+              >
+                <BoxTitle
+                  onPress={() =>
+                    collapsed[index]
+                      ? this.collapseDepartment(index)
+                      : this.showDepartment(index)
+                  }
+                >
+                  <BoxItem numberOfLines={1} title>
+                    {item.title.name}
+                  </BoxItem>
+                  <ArrowWrapper pose={collapsed[index] ? 'right' : 'down'}>
+                    <ArrowDownIcon />
+                  </ArrowWrapper>
+                </BoxTitle>
+                <Collapsible collapsed={collapsed[index] || false}>
+                  <BoxInner>
+                    {item.users.map(e => (
+                      <BoxInnerItem key={e._id} onPress={() => this.toChat(e)}>
+                        {!e.image ||
+                        e.image === '/images/default_avatar.jpg' ? (
+                          <DefaultAvatar
+                            isGroup={e.isGroup}
+                            id={e._id}
+                            size={36}
+                          />
+                        ) : (
+                          <ContactImage
+                            source={{
+                              uri: `https://ser.univ.team${e.image}`,
+                            }}
+                          />
+                        )}
+                        <ContactInfo>
+                          <ContactName>
+                            {e.first_name
+                              ? `${e.first_name} ${e.last_name}`
+                              : e.phone_number}
+                          </ContactName>
+                          {e.role ? (
+                            <ContactRole>{e.role.name}</ContactRole>
+                          ) : null}
+                        </ContactInfo>
+                      </BoxInnerItem>
+                    ))}
+                  </BoxInner>
+                </Collapsible>
+              </Box>
+            )}
+            keyExtractor={item => item.title._id.toString()}
+            scrollEventThrottle={16}
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: { contentOffset: { y: this.scrollY } },
+                },
+              ],
+              {
+                useNativeDriver: true,
+              },
+            )}
+          />
+          <this.GroupContacts />
+        </AnimatedScroll>
       </Wrapper>
     )
   }
@@ -265,14 +308,32 @@ class Content extends Component {
       options: ['Все', 'Пользователи', 'Группы'],
     },
   }
+  scrollY = new Animated.Value(0)
+  usersRef = 0
+  allRef = 0
+  groupRef = 0
+
+  _renderEmptyComponent = () => (
+    <Loader hint="Пока нет диалогов" style={{ flex: 1, height: '100%' }}>
+      <TouchableOpacity onPress={this.toContacts}>
+        <Text style={{ color: grey2, textAlign: 'center' }}>
+          Откройте первый диалог, выбрав пользователя
+          <Text style={{ color: blue }}> на странице контактов</Text>
+        </Text>
+      </TouchableOpacity>
+    </Loader>
+  )
 
   AllContacts = () => {
     const { user } = this.props
     const { allContacts } = this.state
     return (
-      <FlatList
+      <ContactList
+        bounces={false}
         style={{ paddingRight: 5, paddingLeft: 5, flex: 1 }}
         data={allContacts}
+        ListEmptyComponent={this._renderEmptyComponent}
+        onScrollEndDrag={e => (this.allRef = e.nativeEvent.contentOffset.y)}
         renderItem={({ item }) => {
           const { participants, creator, _id, name, isGroup } = item
           const chatItem = creator._id === user._id ? participants[0] : creator
@@ -306,6 +367,17 @@ class Content extends Component {
           ) : null
         }}
         keyExtractor={item => item._id.toString()}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: { contentOffset: { y: this.scrollY } },
+            },
+          ],
+          {
+            useNativeDriver: true,
+          },
+        )}
       />
     )
   }
@@ -313,9 +385,12 @@ class Content extends Component {
   GroupContacts = () => {
     const { dialogs, user } = this.props
     return (
-      <FlatList
+      <ContactList
+        bounces={false}
         style={{ paddingRight: 5, paddingLeft: 5, flex: 1 }}
         data={dialogs}
+        ListEmptyComponent={this._renderEmptyComponent}
+        onScrollEndDrag={e => (this.groupRef = e.nativeEvent.contentOffset.y)}
         renderItem={({ item }) => {
           const { participants, creator, _id, name, isGroup } = item
           const chatItem = creator._id === user._id ? participants[0] : creator
@@ -337,6 +412,17 @@ class Content extends Component {
           ) : null
         }}
         keyExtractor={item => item._id.toString()}
+        scrollEventThrottle={16}
+        onScroll={Animated.event(
+          [
+            {
+              nativeEvent: { contentOffset: { y: this.scrollY } },
+            },
+          ],
+          {
+            useNativeDriver: true,
+          },
+        )}
       />
     )
   }
@@ -435,7 +521,24 @@ class Content extends Component {
     this.setState({ collapsed: newDCollapsed })
   }
 
+  setAnimatedValue = e => {
+    switch (e) {
+      case 0:
+        this.scrollY = new Animated.Value(this.allRef)
+        break
+      case 1:
+        this.scrollY = new Animated.Value(this.usersRef)
+        break
+      case 2:
+        this.scrollY = new Animated.Value(this.groupRef)
+        break
+      default:
+        this.scrollY = new Animated.Value(0)
+    }
+  }
+
   selectOption = e => {
+    this.setAnimatedValue(e)
     const { options } = this.state
     const newState = { ...options }
     newState.active = e

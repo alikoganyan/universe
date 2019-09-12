@@ -18,7 +18,7 @@ import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import { setAllUsers } from '../../actions/userActions'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
-import { WriteMessageBlue } from '../../assets'
+import TabPreHeader from '../../common/TabPreHeader'
 
 const { Colors } = helper
 const { blue, grey2, lightColor } = Colors
@@ -36,20 +36,6 @@ const Title = styled(Animated.Text)`
   padding: 0 16px 8px;
   background-color: ${Colors.white};
   z-index: 2;
-`
-
-const PreHeader = styled(View)`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 8px;
-`
-
-const SubTitle = styled(Animated.Text)`
-  font-family: 'OpenSans-Bold';
-  font-size: 15px;
-  color: ${Colors.black};
 `
 
 class Dialogs extends Component {
@@ -107,11 +93,11 @@ class Dialogs extends Component {
     })
     return (
       <SafeAreaView behavior="padding">
-        <PreHeader>
-          <View style={{ width: 53 }} />
-          <SubTitle style={{ opacity }}>Диалоги</SubTitle>
-          <WriteMessageBlue onPress={() => navigation.navigate('NewDialog')} />
-        </PreHeader>
+        <TabPreHeader
+          onWritePress={() => navigation.navigate('NewDialog')}
+          title="Диалоги"
+          opacity={opacity}
+        />
         <Wrapper>
           {congratulations ? (
             <Congratulations
@@ -128,42 +114,31 @@ class Dialogs extends Component {
               </TouchableOpacity>
             </Congratulations>
           ) : null}
-          {dialogs.length ? (
-            <StyledFlatList
-              ref={ref => {
-                this.flatList = ref
-              }}
-              ListHeaderComponent={this._renderListHeader}
-              keyboardDismissMode="on-drag"
-              initialNumToRender={20}
-              data={dialogs}
-              keyboardShouldPersistTaps="always"
-              renderItem={this._renderItem}
-              keyExtractor={(item, index) => item._id.toString()}
-              contentContainerStyle={{ paddingBottom: 110 }}
-              scrollEventThrottle={16}
-              // Declarative API for animations ->
-              onScroll={Animated.event(
-                [
-                  {
-                    nativeEvent: { contentOffset: { y: this.scrollY } },
-                  },
-                ],
+          <StyledFlatList
+            ref={ref => {
+              this.flatList = ref
+            }}
+            ListHeaderComponent={this._renderListHeader}
+            ListEmptyComponent={this._renderEmptyComponent}
+            keyboardDismissMode="on-drag"
+            initialNumToRender={20}
+            data={dialogs}
+            keyboardShouldPersistTaps="always"
+            renderItem={this._renderItem}
+            keyExtractor={(item, index) => item._id.toString()}
+            contentContainerStyle={{ paddingBottom: 110 }}
+            scrollEventThrottle={16}
+            onScroll={Animated.event(
+              [
                 {
-                  useNativeDriver: true, // <- Native Driver used for animated events
+                  nativeEvent: { contentOffset: { y: this.scrollY } },
                 },
-              )}
-            />
-          ) : (
-            <Loader style={{ flex: 1 }} hint="Пока нет диалогов">
-              <TouchableOpacity onPress={this.toContacts}>
-                <Text style={{ color: grey2, textAlign: 'center' }}>
-                  Откройте первый диалог, выбрав пользователя
-                  <Text style={{ color: blue }}> на странице контактов</Text>
-                </Text>
-              </TouchableOpacity>
-            </Loader>
-          )}
+              ],
+              {
+                useNativeDriver: true,
+              },
+            )}
+          />
         </Wrapper>
       </SafeAreaView>
     )
@@ -214,8 +189,6 @@ class Dialogs extends Component {
   }
 
   _renderListHeader = () => {
-    const { navigation } = this.props
-
     const translateY = this.scrollY.interpolate({
       inputRange: [0, 50, 51],
       outputRange: [0, 50, 50],
@@ -224,13 +197,21 @@ class Dialogs extends Component {
     return (
       <>
         <Title style={{ transform: [{ translateY }] }}>Диалоги</Title>
-        <Header
-          toProfile={this.toProfile}
-          toggleDrawer={navigation.openDrawer}
-        />
+        <Header />
       </>
     )
   }
+
+  _renderEmptyComponent = () => (
+    <Loader style={{ flex: 1 }} hint="Пока нет диалогов">
+      <TouchableOpacity onPress={this.toContacts}>
+        <Text style={{ color: grey2, textAlign: 'center' }}>
+          Откройте первый диалог, выбрав пользователя
+          <Text style={{ color: blue }}> на странице контактов</Text>
+        </Text>
+      </TouchableOpacity>
+    </Loader>
+  )
 
   _handleAppStateChange = () => {
     const { user } = this.props

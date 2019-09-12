@@ -1,6 +1,6 @@
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react'
-import { View, Text, Dimensions, ScrollView } from 'react-native'
+import { View, Text, Dimensions, Animated } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import Task from './Task'
@@ -10,6 +10,8 @@ import helper from '../../utils/helpers'
 import sendRequest from '../../utils/request'
 import { g_users } from '../../constants/api'
 import { setTasks } from '../../actions/tasksActions'
+import Header from './Header'
+import TabPreHeader from '../../common/TabPreHeader'
 
 const { HeaderHeight, Colors } = helper
 const { grey2 } = Colors
@@ -17,27 +19,61 @@ const Wrapper = styled(View)`
   max-height: ${Dimensions.get('window').height - HeaderHeight}px;
   display: flex;
   align-self: center;
-  align-items: center;
-  justify-content: center;
 `
-const StyledScrollView = styled(ScrollView)`
+const StyledScrollView = styled(Animated.ScrollView)`
   height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
+`
+const Title = styled(Animated.Text)`
+  font-family: 'OpenSans-Bold';
+  font-size: 30px;
+  color: ${Colors.black};
+  padding: 0 16px 8px;
+  background-color: ${Colors.white};
+  z-index: 2;
 `
 
 class Content extends Component {
   render() {
     const { tasks, navigate } = this.props
     const { incTasks, outTasks } = this.state
+    const opacity = this.scrollY.interpolate({
+      inputRange: [0, 90, 91],
+      outputRange: [0, 0, 1],
+    })
+    const translateY = this.scrollY.interpolate({
+      inputRange: [0, 50, 51],
+      outputRange: [0, 50, 50],
+    })
+
     return tasks ? (
       <Wrapper>
+        <TabPreHeader
+          onWritePress={() => navigate('NewTask')}
+          title="Задачи"
+          opacity={opacity}
+        />
         <StyledScrollView
           contentContainerStyle={{ flexGrow: 1, paddingBottom: 49 }}
           keyboardShouldPersistTaps="handled"
+          scrollEventThrottle={16}
+          onScroll={Animated.event(
+            [
+              {
+                nativeEvent: { contentOffset: { y: this.scrollY } },
+              },
+            ],
+            {
+              useNativeDriver: true,
+            },
+          )}
         >
+          <Title style={{ transform: [{ translateY }] }}>Задачи</Title>
+          <Header />
           <TaskPack
             title="inc"
             tasksPack={incTasks}
             onPress={() => navigate('TasksInc')}
+            first
           />
           <TaskPack
             title="out"
@@ -73,6 +109,7 @@ class Content extends Component {
     incTasks: [],
     outTasks: [],
   }
+  scrollY = new Animated.Value(0)
 
   componentDidMount = async () => {
     const { setTasks: setTasksProp, user } = this.props

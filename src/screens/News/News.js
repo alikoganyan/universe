@@ -1,12 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
+import { View } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { BackIcon } from '../../assets/index'
 import SafeAreaView from '../../common/SafeAreaView'
 import sendRequest from '../../utils/request'
 import { p_news } from '../../constants/api'
-import Header from './Header'
 import Content from './Content'
 import { setNews } from '../../actions/newsActions'
 
@@ -19,8 +17,10 @@ class News extends Component {
     return (
       <SafeAreaView behavior="padding">
         <Wrapper>
-          <Header back={this.navigateBack} navigate={this.navigate} />
-          <Content proceed={this.proceed} />
+          <Content
+            proceed={this.proceed}
+            navigate={this.props.navigation.navigate}
+          />
         </Wrapper>
       </SafeAreaView>
     )
@@ -35,7 +35,7 @@ class News extends Component {
         setNews(res.news)
       },
       failFunc: err => {
-        console.log(err)
+        // console.log(err)
       },
     })
   }

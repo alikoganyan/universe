@@ -1,140 +1,79 @@
-import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  SafeAreaView,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  TextInput,
-} from 'react-native'
+import React, { PureComponent } from 'react'
+import { View, Dimensions, TextInput } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import {
-  BackIcon,
-  AddIcon,
-  SearchIcon,
-  BurgerIcon,
-  EditIcon,
-  FunnelIcon,
-  CloseIcon,
-} from '../../assets/index'
+import { CloseIcon, SearchIconGray } from '../../assets/index'
 import helper from '../../utils/helpers'
-import { p_news_search, g_users, p_news } from '../../constants/api'
-import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
+import { p_news_search, p_news } from '../../constants/api'
 import { setNews } from '../../actions/newsActions'
 import sendRequest from '../../utils/request'
 
-const { sidePadding, HeaderHeight, fontSize } = helper
+const { sidePadding, fontSize, HeaderHeight } = helper
+
+const Wrapper = styled(View)`
+  border-bottom-color: #e8ebee;
+  border-bottom-width: 1px;
+  padding-bottom: 12px;
+  margin-bottom: 13px;
+`
+
 const Header = styled(View)`
-  width: 100%;
-  background: white;
-  height: ${HeaderHeight};
+  width: ${Dimensions.get('window').width - sidePadding * 2}px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  font-size: ${fontSize.header};
+  height: 37px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding-right: ${sidePadding}px;
-  padding-left: ${sidePadding}px;
+  padding: 10px 0;
+  z-index: 1;
+  left: ${sidePadding}px;
+  margin-top: 3px;
 `
-const Left = styled(View)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  flex: 6;
-`
-const Center = styled(View)``
 const Input = styled(TextInput)`
-  margin-left: ${Dimensions.get('window').width * 0.085};
   flex: 1;
-`
-const HeaderText = styled(Text)`
-  font-size: ${fontSize.header};
+  height: ${HeaderHeight};
   position: relative;
-  left: -10px;
-`
-const Right = styled(Left)`
-  justify-content: flex-end;
-  flex: 1;
-`
-// const UserImage = styled(Image)`
-//     background: red;
-//     width: 30px;
-//     height: 30px;
-//     border-radius: 15px;
-//     margin-left:${sidePadding}px;
-// `
-const MarginRight = styled(View)`
-  margin-right: ${Dimensions.get('window').width * 0.085};
-  display: flex;
-  flex-direction: row;
-  align-items: center;
+  left: -4px;
+  font-size: ${fontSize.input};
 `
 
-class HeaderComponent extends Component {
+class HeaderComponent extends PureComponent {
   render() {
-    const { back, user } = this.props
-    const { search, find } = this.state
-    const { image } = user
+    const { focused, input } = this.state
     return (
-      <Header>
-        <Left>
-          {!search ? (
-            <>
-              <BackIcon onPress={back} right />
-              <HeaderText>Новости</HeaderText>
-            </>
-          ) : (
-            <>
-              <SearchIcon />
-              <Input
-                placeholder="поиск"
-                value={find}
-                onChangeText={this.find}
-              />
-            </>
+      <Wrapper>
+        <Header>
+          <SearchIconGray />
+          <Input
+            value={input}
+            onChangeText={this.handleInputChange}
+            onFocus={this.handleFocus}
+            placeholder="Поиск"
+          />
+          {focused && (
+            <CloseIcon
+              onPress={this.onBlur}
+              marginLeft={false}
+              marginRight
+              right
+            />
           )}
-        </Left>
-        <Right>
-          {!search ? (
-            <>
-              <SearchIcon right onPress={this.startSearch} />
-              <AddIcon onPress={this.addTask} right />
-              <TouchableOpacity onPress={this.toProfile}>
-                {!user.image ||
-                user.image === '/images/default_group.png' ||
-                user.image === '/images/default_avatar.jpg' ? (
-                  <DefaultAvatar size="header" />
-                ) : (
-                  <ImageComponent
-                    source={{ uri: `https://ser.univ.team${user.image}` }}
-                    size="header"
-                  />
-                )}
-              </TouchableOpacity>
-            </>
-          ) : (
-            <CloseIcon onPress={this.stopSearch} marginLeft={false} />
-          )}
-        </Right>
-      </Header>
+        </Header>
+      </Wrapper>
     )
   }
 
   state = {
-    search: false,
-    find: '',
+    focused: false,
+    input: '',
   }
 
-  toProfile = () => {
-    const { navigate } = this.props
-    navigate('Profile')
-  }
-
-  find = e => {
+  handleInputChange = e => {
     const { setNews } = this.props
-    this.setState({ find: e })
+    this.setState({ input: e })
     e && e.length >= 2
       ? sendRequest({
           r_path: p_news_search,
@@ -147,7 +86,7 @@ class HeaderComponent extends Component {
             setNews(res.news)
           },
           failFunc: err => {
-            console.log(err)
+            // console.log(err)
           },
         })
       : sendRequest({
@@ -157,33 +96,29 @@ class HeaderComponent extends Component {
             setNews(res.news)
           },
           failFunc: err => {
-            console.log(err)
+            // console.log(err)
           },
         })
-  }
-
-  startSearch = () => {
-    this.setState({ search: true })
-  }
-
-  stopSearch = () => {
-    this.setState({ search: false })
   }
 
   addTask = e => {
     const { navigate } = this.props
     navigate('NewFeed')
   }
+
+  handleFocus = () => {
+    this.setState({ focused: true })
+  }
+
+  onBlur = () => {
+    this.setState({ focused: false, input: '' })
+  }
 }
 
-const mapStateToProps = state => ({
-  user: state.userReducer.user,
-  tasks: state.tasksReducer.tasks,
-})
 const mapDispatchToProps = dispatch => ({
   setNews: _ => dispatch(setNews(_)),
 })
 export default connect(
-  mapStateToProps,
+  null,
   mapDispatchToProps,
 )(HeaderComponent)

@@ -24,7 +24,7 @@ const Wrapper = styled(View)`
   border: 0.3px solid ${lightGrey1};
   border-width: 0;
   width: ${Dimensions.get('window').width - sidePadding * 2};
-  border-top-width: 0.3px;
+  border-top-width: ${({ first }) => (first ? 0 : 0.3)}px;
   border-bottom-width: ${({ last }) => (last ? 0.3 : 0)}px;
 `
 const TaskText = styled(View)`
@@ -113,7 +113,7 @@ const TaskStatusAdditional = styled(Text)`
 `
 class TaskPack extends Component {
   render() {
-    const { title, last, onPress, tasksPack } = this.props
+    const { title, last, onPress, tasksPack, first } = this.props
     const taskPack = [...new Set(tasksPack)].filter(
       task => task.status === 'set' || task.status === 'accepted',
     )
@@ -148,7 +148,7 @@ class TaskPack extends Component {
         onPress={onPress}
         onLongPress={this.handleHold}
       >
-        <Wrapper last={last}>
+        <Wrapper first={first} last={last}>
           <TaskText>
             <TaskTextInner>
               <TaskTitle>

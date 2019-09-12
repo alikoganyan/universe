@@ -1,132 +1,81 @@
+/* eslint-disable array-callback-return */
 import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-  TextInput,
-} from 'react-native'
+import { View, Dimensions, TextInput } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { BackIcon, AddIcon, SearchIcon, CloseIcon } from '../../assets/index'
+import { CloseIcon, SearchIconGray } from '../../assets/index'
 import helper from '../../utils/helpers'
 import { p_tasks_search, g_users } from '../../constants/api'
-import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
 import sendRequest from '../../utils/request'
 import { setTasks } from '../../actions/tasksActions'
 
-const { sidePadding, HeaderHeight, fontSize, HeaderHeightInner } = helper
-
+const { sidePadding, fontSize, HeaderHeight } = helper
+const Wrapper = styled(View)`
+  border-bottom-color: #e8ebee;
+  border-bottom-width: 1px;
+  padding-bottom: 12px;
+  margin-bottom: 13px;
+`
 const Header = styled(View)`
-  width: 100%;
-  background: white;
-  height: ${HeaderHeight};
+  width: ${Dimensions.get('window').width - sidePadding * 2}px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  font-size: ${fontSize.header};
+  height: 37px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding-top: ${(HeaderHeightInner - sidePadding) / 2}px;
-  padding-bottom: ${(HeaderHeightInner - sidePadding) / 2}px;
-  padding-right: ${sidePadding}px;
-  padding-left: ${sidePadding}px;
-`
-const Left = styled(View)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  height: ${HeaderHeightInner};
-  flex: 6;
+  padding: 10px 0;
+  z-index: 1;
+  left: ${sidePadding}px;
+  margin-top: 3px;
 `
 const Input = styled(TextInput)`
-  margin-left: ${Dimensions.get('window').width * 0.085};
   flex: 1;
-`
-const Right = styled(Left)`
-  justify-content: flex-end;
-  flex: 1;
-`
-// const UserImage = styled(Image)`
-//     background: red;
-//     width: 30px;
-//     height: 30px;
-//     border-radius: 15px;
-//     margin-left:${sidePadding}px;
-// `
-
-const HeaderText = styled(Text)`
-  font-size: ${fontSize.header};
+  height: ${HeaderHeight};
   position: relative;
-  left: -10px;
+  left: -4px;
+  font-size: ${fontSize.input};
 `
 class HeaderComponent extends Component {
   render() {
-    const { back, user } = this.props
-    const { search, find } = this.state
-    const { image } = user
+    const { input, focused } = this.state
     return (
-      <Header>
-        <Left>
-          {!search ? (
-            <>
-              <BackIcon onPress={back} right />
-              <HeaderText>Задачи</HeaderText>
-            </>
-          ) : (
-            <>
-              <SearchIcon />
-              <Input
-                placeholder="поиск"
-                value={find}
-                onChangeText={this.find}
-                autoFocus
-              />
-            </>
+      <Wrapper>
+        <Header>
+          <SearchIconGray />
+          <Input
+            value={input}
+            onChangeText={this.handleInputChange}
+            onFocus={this.handleFocus}
+            placeholder="Поиск"
+          />
+          {focused && (
+            <CloseIcon
+              onPress={this.onBlur}
+              marginLeft={false}
+              marginRight
+              right
+            />
           )}
-        </Left>
-        <Right>
-          {!search ? (
-            <>
-              <SearchIcon right onPress={this.startSearch} />
-              <AddIcon onPress={this.addTask} right />
-              <TouchableOpacity onPress={this.toProfile}>
-                {!user.image ||
-                user.image === '/images/default_group.png' ||
-                user.image === '/images/default_avatar.jpg' ? (
-                  <DefaultAvatar size="header" style={{ marginLeft: 10 }} />
-                ) : (
-                  <ImageComponent
-                    source={{ uri: `https://ser.univ.team${user.image}` }}
-                    size="header"
-                  />
-                )}
-              </TouchableOpacity>
-            </>
-          ) : (
-            <CloseIcon onPress={this.stopSearch} marginLeft={false} />
-          )}
-        </Right>
-      </Header>
+        </Header>
+      </Wrapper>
     )
   }
 
   state = {
-    search: false,
-    find: '',
+    input: '',
+    focused: false,
   }
 
   componentWillUnmount() {
     this.stopSearch()
   }
 
-  toProfile = () => {
-    const { navigate } = this.props
-    navigate('Profile')
-  }
-
-  find = e => {
-    const { setTasks } = this.props
-    this.setState({ find: e })
+  handleInputChange = e => {
+    // const { setTasks } = this.props
+    this.setState({ input: e })
     e && e.length >= 2
       ? sendRequest({
           r_path: p_tasks_search,
@@ -151,7 +100,7 @@ class HeaderComponent extends Component {
             // }, 0)
           },
           failFunc: err => {
-            console.log(err)
+            // console.log(err)
           },
         })
       : sendRequest({
@@ -176,22 +125,17 @@ class HeaderComponent extends Component {
             }, 0)
           },
           failFunc: err => {
-            console.log({ err })
+            // console.log({ err })
           },
         })
   }
 
-  startSearch = () => {
-    this.setState({ search: true })
+  handleFocus = () => {
+    this.setState({ focused: true })
   }
 
-  stopSearch = () => {
-    this.setState({ search: false, find: '' })
-  }
-
-  addTask = () => {
-    const { navigate } = this.props
-    navigate('NewTask')
+  onBlur = () => {
+    this.setState({ focused: false, input: '' })
   }
 }
 

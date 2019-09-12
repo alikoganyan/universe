@@ -1,91 +1,82 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Dimensions, TextInput } from 'react-native'
 import styled from 'styled-components'
-import { connect } from 'react-redux'
-import { BackIcon, SearchIcon } from '../../assets/index'
+import { SearchIconGray, CloseIcon } from '../../assets/index'
 import helper from '../../utils/helpers'
-import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
 
-const { HeaderHeight, sidePadding, fontSize, Colors } = helper
-const { grey3 } = Colors
+const { sidePadding, fontSize, HeaderHeight } = helper
+
+const Wrapper = styled(View)`
+  border-bottom-color: #e8ebee;
+  border-bottom-width: 1px;
+  padding-bottom: 12px;
+  margin-bottom: 13px;
+`
 const Header = styled(View)`
-  width: 100%;
-  background: white;
-  height: ${HeaderHeight};
+  width: ${Dimensions.get('window').width - sidePadding * 2}px;
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  font-size: ${fontSize.header};
+  height: 37px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  padding-right: ${sidePadding}px;
-  padding-left: ${sidePadding}px;
+  padding: 10px 0;
+  z-index: 1;
+  left: ${sidePadding}px;
+  margin-top: 3px;
 `
-const Left = styled(View)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-const Right = styled(View)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
-const HeaderText = styled(Text)`
-  font-size: ${fontSize.header};
+const Input = styled(TextInput)`
+  flex: 1;
+  height: ${HeaderHeight};
   position: relative;
-  left: -10px;
-  color: ${grey3};
+  left: -4px;
+  font-size: ${fontSize.input};
 `
 
 class HeaderComponent extends Component {
   render() {
-    const { user } = this.props
+    const { input, focused } = this.state
     return (
-      <Header>
-        <Left>
-          <BackIcon onPress={this.back} right />
-          <HeaderText>Контакты</HeaderText>
-        </Left>
-        <Right>
-          <SearchIcon right />
-          <TouchableOpacity onPress={this.toProfile}>
-            {!user.image ||
-            user.image === '/images/default_group.png' ||
-            user.image === '/images/default_avatar.jpg' ? (
-              <DefaultAvatar size="header" style={{ marginLeft: 10 }} />
-            ) : (
-              <ImageComponent
-                source={{ uri: `https://ser.univ.team${user.image}` }}
-                size="header"
-                style={{ marginLeft: 10 }}
-              />
-            )}
-          </TouchableOpacity>
-        </Right>
-      </Header>
+      <Wrapper>
+        <Header>
+          <SearchIconGray />
+          <Input
+            value={input}
+            onChangeText={this.handleInputChange}
+            onFocus={this.handleFocus}
+            placeholder="Поиск"
+          />
+          {focused && (
+            <CloseIcon
+              onPress={this.onBlur}
+              marginLeft={false}
+              marginRight
+              right
+            />
+          )}
+        </Header>
+      </Wrapper>
     )
   }
 
-  addContact = () => {
-    const { navigate } = this.props
-    navigate('NewContact')
+  state = {
+    input: '',
+    focused: false,
   }
 
-  back = () => {
-    const { back } = this.props
-    back()
+  handleInputChange = e => {
+    this.setState({ input: e })
   }
 
-  toProfile = () => {
-    const { navigate } = this.props
-    navigate('Profile')
+  handleFocus = () => {
+    this.setState({ focused: true })
+  }
+
+  onBlur = () => {
+    this.setState({ focused: false, input: '' })
   }
 }
-const mapStateToProps = state => ({
-  user: state.userReducer.user,
-})
-const mapDispatchToProps = dispatch => ({})
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(HeaderComponent)
+
+export default HeaderComponent

@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, Dimensions } from 'react-native'
 import styled from 'styled-components'
-import Header from './Header'
 import Content from './Content'
 import SafeAreaView from '../../common/SafeAreaView'
 import helper from '../../utils/helpers'
@@ -16,7 +15,6 @@ export default class Tasks extends Component {
     return (
       <SafeAreaView behavior="padding">
         <Wrapper>
-          <Header navigate={this.navigate} back={this.navigateBack} />
           <Content navigate={this.navigate} />
         </Wrapper>
       </SafeAreaView>

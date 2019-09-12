@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { View, TextInput, Dimensions, Keyboard } from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
@@ -10,6 +10,13 @@ import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 
 const { sidePadding, fontSize, HeaderHeight } = helper
+
+const Wrapper = styled(View)`
+  border-bottom-color: #e8ebee;
+  border-bottom-width: 1px;
+  padding-bottom: 12px;
+  margin-bottom: 13px;
+`
 const Header = styled(View)`
   width: ${Dimensions.get('window').width - sidePadding * 2}px;
   background-color: #f4f4f4;
@@ -23,7 +30,6 @@ const Header = styled(View)`
   padding: 10px 0;
   z-index: 1;
   left: ${sidePadding}px;
-  margin-bottom: 13px;
   margin-top: 3px;
 `
 const Input = styled(TextInput)`
@@ -34,11 +40,11 @@ const Input = styled(TextInput)`
   font-size: ${fontSize.input};
 `
 
-class HeaderComponent extends Component {
+class HeaderComponent extends PureComponent {
   render() {
     const { input, focused } = this.state
     return (
-      <>
+      <Wrapper>
         <Header>
           <SearchIconGray />
           <Input
@@ -56,7 +62,7 @@ class HeaderComponent extends Component {
             />
           )}
         </Header>
-      </>
+      </Wrapper>
     )
   }
 
@@ -70,11 +76,6 @@ class HeaderComponent extends Component {
     socket.on('find', ({ result }) => {
       setDialogs(result)
     })
-  }
-
-  toProfile = e => {
-    const { toProfile } = this.props
-    toProfile()
   }
 
   handleInputChange = e => {
