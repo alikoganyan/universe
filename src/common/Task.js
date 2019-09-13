@@ -23,9 +23,6 @@ const { red, yellow, green, purple, grey1 } = Colors
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
-  flex: 5;
-  max-width: 300px;
-  align-self: flex-start;
   justify-content: flex-end;
 `
 const MessageDate = styled(Text)`

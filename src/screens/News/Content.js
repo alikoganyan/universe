@@ -32,10 +32,9 @@ const NewsItem = styled(TouchableOpacity)`
   background: white;
   padding: 20px;
   padding-bottom: 10px;
-  margin-bottom: 10px;
   border: 0.5px solid ${yellow};
   border-radius: ${borderRadius};
-  marginhorizontal: ${sidePadding}px;
+  margin: 0 ${sidePadding}px 10px;
 `
 const Sender = styled(View)`
   display: flex;

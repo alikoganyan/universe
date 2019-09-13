@@ -27,26 +27,32 @@ const TaskList = styled(FlatList)`
   padding-bottom: 20px;
   z-index: 5;
 `
+const OptionsWrapper = styled(View)`
+  padding: 0 15px;
+  width: 100%;
+`
 const Options = styled(View)`
   display: flex;
   align-self: center;
   background: ${purple};
   flex-direction: row;
-  border-radius: 14;
+  justify-content: space-between;
+  border-radius: 16;
   padding: 1px;
   overflow: hidden;
   margin: 10px 0;
-  max-width: 85%;
+  width: 100%;
 `
 const Option = styled(Text)`
   color: ${({ active }) => (active ? black : 'white')};
   background: ${({ active }) => (active ? 'white' : 'transparent')};
   margin: 1px;
-  border-radius: 10;
+  border-radius: 15;
   padding: 2px 0;
   overflow: hidden;
   min-width: 30%;
   text-align: center;
+  padding: 8px 10px 7px;
 `
 const TaskWrapper = styled(View)`
   display: flex;
@@ -80,13 +86,18 @@ class Content extends Component {
         {/* {activeTask._id && <Shadow onPress={this.unselect}></Shadow>} */}
         <StyledScrollView keyboardShouldPersistTaps="handled">
           <Wrapper>
-            <Options>
-              {options.options.map((e, i) => (
-                <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                  <Option active={active === i}>{e}</Option>
-                </TouchableOpacity>
-              ))}
-            </Options>
+            <OptionsWrapper>
+              <Options>
+                {options.options.map((e, i) => (
+                  <TouchableOpacity
+                    key={i}
+                    onPress={() => this.selectOption(i)}
+                  >
+                    <Option active={active === i}>{e}</Option>
+                  </TouchableOpacity>
+                ))}
+              </Options>
+            </OptionsWrapper>
             {outTasks && animationCompleted ? (
               <TaskList
                 data={outTasks}
