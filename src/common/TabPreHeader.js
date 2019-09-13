@@ -12,7 +12,7 @@ const PreHeader = styled(View)`
   justify-content: space-between;
   align-items: center;
   padding: 0 8px 12px;
-  backgroundcolor: #ffffff;
+  background-color: #ffffff;
   z-index: 2;
 `
 

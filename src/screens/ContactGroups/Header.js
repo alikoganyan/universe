@@ -10,7 +10,6 @@ const Wrapper = styled(View)`
   border-bottom-color: #e8ebee;
   border-bottom-width: 1px;
   padding-bottom: 12px;
-  margin-bottom: 13px;
 `
 const Header = styled(View)`
   width: ${Dimensions.get('window').width - sidePadding * 2}px;

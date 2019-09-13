@@ -30,7 +30,7 @@ import { socket } from '../../utils/socket'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
 
-const { Colors, HeaderHeight } = helper
+const { Colors, HeaderHeight, sidePadding } = helper
 const { green, black, grey2, blue } = Colors
 const AnimatedScrollView = posed.View({
   left: {
@@ -68,7 +68,7 @@ const Wrapper = styled(View)`
   overflow: hidden;
 `
 const ContactList = styled(Animated.FlatList)`
-  padding: 20px 24px 10px;
+  padding: 20px 16px 10px;
   padding-top: 128px;
   max-width: 100%;
   overflow: hidden;
@@ -129,16 +129,20 @@ const ContactRole = styled(Text)`
   font-weight: 500;
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)``
+const OptionsWrap = styled(Animated.View)`
+  padding-top: 13px;
+  background-color: #ffffff;
+`
 const Options = styled(Animated.View)`
   display: flex;
   align-self: center;
   background: ${green};
   flex-direction: row;
   justify-content: space-between;
-  border-radius: 14;
+  border-radius: 16;
   padding: 1px;
   overflow: hidden;
-  width: 80%;
+  width: ${Dimensions.get('window').width - sidePadding * 2}px;
 `
 const Option = styled(Text)`
   color: ${({ active }) => (active ? black : 'white')};
@@ -148,8 +152,8 @@ const Option = styled(Text)`
     active ? 'rgba(0, 0, 0, 0.1)' : 'transparent'};
   border-style: solid;
   min-width: 27%;
-  border-radius: 13;
-  padding: 4px 10px 3px;
+  border-radius: 15;
+  padding: 8px 10px 7px;
   overflow: hidden;
   text-align: center;
 `
@@ -182,8 +186,8 @@ class Content extends Component {
       outputRange: [0, 0, 1],
     })
     const contentTranslateY = this.scrollY.interpolate({
-      inputRange: [0, 200, 201],
-      outputRange: [0, -200, -200],
+      inputRange: [0, 100, 101],
+      outputRange: [0, -100, -100],
     })
     const titleTranslateY = this.scrollY.interpolate({
       inputRange: [0, 50, 51],
@@ -201,13 +205,15 @@ class Content extends Component {
             Контакты
           </Title>
           <Header />
-          <Options>
-            {options.options.map((e, i) => (
-              <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                <Option active={active % 3 === i}>{e}</Option>
-              </TouchableOpacity>
-            ))}
-          </Options>
+          <OptionsWrap>
+            <Options>
+              {options.options.map((e, i) => (
+                <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+                  <Option active={active % 3 === i}>{e}</Option>
+                </TouchableOpacity>
+              ))}
+            </Options>
+          </OptionsWrap>
         </Head>
         <AnimatedScroll
           pose={active === 0 ? 'left' : active === 1 ? 'center' : 'right'}
@@ -215,10 +221,7 @@ class Content extends Component {
           <this.AllContacts />
           <ContactList
             bounces={false}
-            contentContainerStyle={{
-              paddingBottom: 49,
-              paddingHorizontal: Dimensions.get('window').width * 0.11,
-            }}
+            contentContainerStyle={{ paddingBottom: 49 }}
             data={department}
             ListEmptyComponent={this._renderEmptyComponent}
             onScrollEndDrag={e =>
@@ -330,7 +333,7 @@ class Content extends Component {
     return (
       <ContactList
         bounces={false}
-        style={{ paddingRight: 5, paddingLeft: 5, flex: 1 }}
+        contentContainerStyle={{ paddingBottom: 49 }}
         data={allContacts}
         ListEmptyComponent={this._renderEmptyComponent}
         onScrollEndDrag={e => (this.allRef = e.nativeEvent.contentOffset.y)}
@@ -387,7 +390,7 @@ class Content extends Component {
     return (
       <ContactList
         bounces={false}
-        style={{ paddingRight: 5, paddingLeft: 5, flex: 1 }}
+        contentContainerStyle={{ paddingBottom: 49 }}
         data={dialogs}
         ListEmptyComponent={this._renderEmptyComponent}
         onScrollEndDrag={e => (this.groupRef = e.nativeEvent.contentOffset.y)}
