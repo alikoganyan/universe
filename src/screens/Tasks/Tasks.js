@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
+import { View } from 'react-native'
 import styled from 'styled-components'
-import { BackIcon } from '../../assets/index'
 import SafeAreaView from '../../common/SafeAreaView'
 
 import Header from './Header'
@@ -11,7 +10,7 @@ const Wrapper = styled(View)`
   height: 100%;
 `
 
-export default class News extends Component {
+export default class Tasks extends Component {
   render() {
     return (
       <SafeAreaView>

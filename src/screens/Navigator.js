@@ -101,7 +101,7 @@ const TabBarNavigation = createBottomTabNavigator(
         navigation,
       }),
     },
-    Tasks: {
+    TasksTab: {
       screen: TasksList,
       navigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused }) => <TasksMenuIcon focused={focused} />,
