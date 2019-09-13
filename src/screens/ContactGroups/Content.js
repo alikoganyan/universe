@@ -68,7 +68,7 @@ const Wrapper = styled(View)`
   overflow: hidden;
 `
 const ContactList = styled(Animated.FlatList)`
-  padding: 20px 16px 10px;
+  padding: 20px 16px 0;
   padding-top: 128px;
   max-width: 100%;
   overflow: hidden;
@@ -221,12 +221,10 @@ class Content extends Component {
           <this.AllContacts />
           <ContactList
             bounces={false}
-            contentContainerStyle={{ paddingBottom: 49 }}
+            contentContainerStyle={{ paddingBottom: 140 }}
             data={department}
             ListEmptyComponent={this._renderEmptyComponent}
-            onScrollEndDrag={e =>
-              (this.usersRef = e.nativeEvent.contentOffset.y)
-            }
+            ref={ref => (this.usersRef = ref)}
             renderItem={({ item, index }) => (
               <Box
                 key={item._id}
@@ -312,9 +310,6 @@ class Content extends Component {
     },
   }
   scrollY = new Animated.Value(0)
-  usersRef = 0
-  allRef = 0
-  groupRef = 0
 
   _renderEmptyComponent = () => (
     <Loader hint="Пока нет диалогов" style={{ flex: 1, height: '100%' }}>
@@ -333,10 +328,10 @@ class Content extends Component {
     return (
       <ContactList
         bounces={false}
-        contentContainerStyle={{ paddingBottom: 49 }}
+        contentContainerStyle={{ paddingBottom: 140 }}
         data={allContacts}
         ListEmptyComponent={this._renderEmptyComponent}
-        onScrollEndDrag={e => (this.allRef = e.nativeEvent.contentOffset.y)}
+        ref={ref => (this.allRef = ref)}
         renderItem={({ item }) => {
           const { participants, creator, _id, name, isGroup } = item
           const chatItem = creator._id === user._id ? participants[0] : creator
@@ -390,10 +385,10 @@ class Content extends Component {
     return (
       <ContactList
         bounces={false}
-        contentContainerStyle={{ paddingBottom: 49 }}
+        contentContainerStyle={{ paddingBottom: 140 }}
         data={dialogs}
         ListEmptyComponent={this._renderEmptyComponent}
-        onScrollEndDrag={e => (this.groupRef = e.nativeEvent.contentOffset.y)}
+        ref={ref => (this.groupRef = ref)}
         renderItem={({ item }) => {
           const { participants, creator, _id, name, isGroup } = item
           const chatItem = creator._id === user._id ? participants[0] : creator
@@ -527,13 +522,13 @@ class Content extends Component {
   setAnimatedValue = e => {
     switch (e) {
       case 0:
-        this.scrollY = new Animated.Value(this.allRef)
+        this.allRef.getNode().scrollToOffset({ offset: 0, animated: false })
         break
       case 1:
-        this.scrollY = new Animated.Value(this.usersRef)
+        this.usersRef.getNode().scrollToOffset({ offset: 0, animated: false })
         break
       case 2:
-        this.scrollY = new Animated.Value(this.groupRef)
+        this.groupRef.getNode().scrollToOffset({ offset: 0, animated: false })
         break
       default:
         this.scrollY = new Animated.Value(0)
@@ -541,11 +536,12 @@ class Content extends Component {
   }
 
   selectOption = e => {
-    this.setAnimatedValue(e)
-    const { options } = this.state
-    const newState = { ...options }
-    newState.active = e
-    this.setState({ options: newState })
+    const {
+      options,
+      options: { active },
+    } = this.state
+    this.setAnimatedValue(active)
+    this.setState({ options: { ...options, active: e } })
   }
 
   toChat = e => {
