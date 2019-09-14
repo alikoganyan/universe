@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {
   View,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
   Dimensions,
   ActionSheetIOS,
   Platform,
@@ -121,8 +121,7 @@ class Tasks extends Component {
       }
     }
     return tasks.length ? (
-      <TouchableHighlight
-        underlayColor="#2B7DE2"
+      <TouchableOpacity
         onPress={() => this.handleClick(children)}
         onLongPress={this.handleHold}
         style={{
@@ -169,7 +168,7 @@ class Tasks extends Component {
             </TaskDate>
           </TaskText>
         </Wrapper>
-      </TouchableHighlight>
+      </TouchableOpacity>
     ) : (
       <View />
     )

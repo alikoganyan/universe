@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View, TouchableOpacity } from 'react-native'
+import { Text, View, TouchableOpacity, Dimensions } from 'react-native'
 import styled from 'styled-components'
 import {
   CloseTaskIcon,
@@ -41,6 +41,7 @@ const Task = styled(View)`
   border: 1px solid ${({ borderColor }) => borderColor || purple};
   border-radius: ${borderRadius};
   align-self: flex-end;
+  max-width: ${Dimensions.get('window').width - 95}px;
 `
 const Status = styled(View)`
   display: flex;
