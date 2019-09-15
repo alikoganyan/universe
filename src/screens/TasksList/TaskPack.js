@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import {
   View,
   Text,
-  TouchableHighlight,
+  TouchableOpacity,
   Dimensions,
   ActionSheetIOS,
   Platform,
@@ -117,7 +117,7 @@ class TaskPack extends Component {
     const taskPack = [...new Set(tasksPack)].filter(
       task => task.status === 'set' || task.status === 'accepted',
     )
-    // console.log(taskPack)
+
     let date = ''
     if (taskPack.length) {
       switch (taskPack[taskPack.length - 1].status) {
@@ -143,11 +143,7 @@ class TaskPack extends Component {
       date = getHamsterDate(taskPack[taskPack.length - 1].created_at, true)
     }
     return (
-      <TouchableHighlight
-        underlayColor="#2B7DE2"
-        onPress={onPress}
-        onLongPress={this.handleHold}
-      >
+      <TouchableOpacity onPress={onPress} onLongPress={this.handleHold}>
         <Wrapper first={first} last={last}>
           <TaskText>
             <TaskTextInner>
@@ -183,7 +179,7 @@ class TaskPack extends Component {
             </TaskDate>
           </TaskText>
         </Wrapper>
-      </TouchableHighlight>
+      </TouchableOpacity>
     )
   }
 
