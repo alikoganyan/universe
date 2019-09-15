@@ -1,5 +1,11 @@
 import React, { Component } from 'react'
-import { Text, View, ActivityIndicator, StyleSheet } from 'react-native'
+import {
+  Text,
+  View,
+  ActivityIndicator,
+  TouchableOpacity,
+  StyleSheet,
+} from 'react-native'
 import styled from 'styled-components'
 import {
   TriangleLeftIcon,
@@ -140,6 +146,17 @@ const MapViewStreet = styled(View)`
   padding: 5px 10px;
   font-size: ${fontSize.sm};
 `
+const ShadowTopContainer = styled(View)`
+  background: rgba(0, 0, 0, 0.3);
+  position: absolute;
+  top: 0;
+  width: 100%;
+`
+const WhiteTopText = styled(Text)`
+  font-size: ${fontSize.md};
+  color: ${Colors.white};
+  padding: 5px 10px;
+`
 const MapViewStreetInfo = styled(View)`
   display: flex;
   flex-direction: row;
@@ -187,12 +204,13 @@ const Indicator = ({ read = false, color }) =>
 class Message extends Component {
   render() {
     const {
-      children,
+      item,
       myId,
       background,
       isGroup = false,
       withImage,
-      navigate,
+      onLongPressMessage,
+      onPressMessage,
     } = this.props
     const {
       viewers,
@@ -209,7 +227,7 @@ class Message extends Component {
       isUploaded,
       enableUploadProgress,
       uploadProgress,
-    } = children
+    } = item
     const finalTime = getHamsterDate(created_at)
     const fileSize =
       size / 1024 > 1024
@@ -222,55 +240,13 @@ class Message extends Component {
         filename,
       )
       return myId === sender._id ? (
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <MyMessage background={background} style={{ padding: 0 }}>
-            <MyMessageCachedImage
-              style={{ width }}
-              source={{
-                uri: `https://ser.univ.team${src}`,
-              }}
-              resizeMode={FastImage.resizeMode.cover}
-            />
-            <LinearGradient
-              start={{ x: 0, y: 0.5 }}
-              end={{ x: 1.0, y: 1.0 }}
-              colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
-              style={{
-                position: 'absolute',
-                right: 0,
-                bottom: 0,
-                borderBottomRightRadius: 10,
-              }}
-            >
-              <MessageInfo>
-                <MessageDate color={Colors.white}>{finalTime}</MessageDate>
-                <Indicator color="black" read={messageRead} />
-              </MessageInfo>
-            </LinearGradient>
-          </MyMessage>
-          <TriangleLeftIcon color={myMessage} />
-        </View>
-      ) : (
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          {withImage ? (
-            <ImageComponent
-              style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-              size={30}
-              source={{
-                uri: `https://ser.univ.team${sender.image}`,
-              }}
-            />
-          ) : null}
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              position: 'relative',
-              left: withImage ? -5 : 0,
-            }}
-          >
-            <TriangleRightIcon color={interlocatorMessage} />
-            <InterlocutorsMessage background={background}>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onPressMessage}
+          onLongPress={onLongPressMessage}
+        >
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <MyMessage background={background} style={{ padding: 0 }}>
               <MyMessageCachedImage
                 style={{ width }}
                 source={{
@@ -282,15 +258,76 @@ class Message extends Component {
                 start={{ x: 0, y: 0.5 }}
                 end={{ x: 1.0, y: 1.0 }}
                 colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
-                style={{ position: 'absolute', right: 0, bottom: 0 }}
+                style={{
+                  position: 'absolute',
+                  right: 0,
+                  bottom: 0,
+                  borderBottomRightRadius: 10,
+                }}
               >
                 <MessageInfo>
                   <MessageDate color={Colors.white}>{finalTime}</MessageDate>
+                  <Indicator color="black" read={messageRead} />
                 </MessageInfo>
               </LinearGradient>
-            </InterlocutorsMessage>
+            </MyMessage>
+            <TriangleLeftIcon color={myMessage} />
           </View>
-        </View>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onPressMessage}
+          onLongPress={onLongPressMessage}
+        >
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            {withImage ? (
+              <ImageComponent
+                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                size={30}
+                source={{
+                  uri: `https://ser.univ.team${sender.image}`,
+                }}
+              />
+            ) : null}
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                position: 'relative',
+                left: withImage ? -5 : 0,
+              }}
+            >
+              <TriangleRightIcon color={interlocatorMessage} />
+              <InterlocutorsMessage background={background}>
+                <MyMessageCachedImage
+                  style={{ width }}
+                  source={{
+                    uri: `https://ser.univ.team${src}`,
+                  }}
+                  resizeMode={FastImage.resizeMode.cover}
+                />
+                <LinearGradient
+                  start={{ x: 0, y: 0.5 }}
+                  end={{ x: 1.0, y: 1.0 }}
+                  colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
+                  style={{ position: 'absolute', right: 0, bottom: 0 }}
+                >
+                  <MessageInfo>
+                    <MessageDate color={Colors.white}>{finalTime}</MessageDate>
+                  </MessageInfo>
+                </LinearGradient>
+                {withImage && (
+                  <ShadowTopContainer>
+                    <WhiteTopText>
+                      {`${sender.first_name} ${sender.last_name}`}
+                    </WhiteTopText>
+                  </ShadowTopContainer>
+                )}
+              </InterlocutorsMessage>
+            </View>
+          </View>
+        </TouchableOpacity>
       )
     }
     if (type === 'image' && isUploaded) {
@@ -319,51 +356,63 @@ class Message extends Component {
     }
     if (type === 'text' || !type) {
       return myId === sender._id ? (
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <MyMessage background={background}>
-            <MyMessageText>{text}</MyMessageText>
-            <MessageInfo>
-              <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
-              <Indicator color="black" read={messageRead} />
-            </MessageInfo>
-          </MyMessage>
-          <TriangleLeftIcon color={background || myMessage} />
-        </View>
-      ) : (
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          {withImage && (
-            <ImageComponent
-              style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-              size={30}
-              source={{
-                uri: `https://ser.univ.team${sender.image}`,
-              }}
-            />
-          )}
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              position: 'relative',
-              left: withImage ? -5 : 0,
-            }}
-          >
-            <TriangleRightIcon color={background || interlocatorMessage} />
-            <InterlocutorsMessage
-              background={background || interlocatorMessage}
-            >
-              {withImage && (
-                <InterlocutorsName isGroupName={isGroup}>
-                  {`${sender.first_name} ${sender.last_name}`}
-                </InterlocutorsName>
-              )}
-              <InterlocutorsMessageText>{text}</InterlocutorsMessageText>
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onPressMessage}
+          onLongPress={onLongPressMessage}
+        >
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <MyMessage background={background}>
+              <MyMessageText>{text}</MyMessageText>
               <MessageInfo>
-                <MessageDate>{finalTime}</MessageDate>
+                <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
+                <Indicator color="black" read={messageRead} />
               </MessageInfo>
-            </InterlocutorsMessage>
+            </MyMessage>
+            <TriangleLeftIcon color={background || myMessage} />
           </View>
-        </View>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onPressMessage}
+          onLongPress={onLongPressMessage}
+        >
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            {withImage && (
+              <ImageComponent
+                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                size={30}
+                source={{
+                  uri: `https://ser.univ.team${sender.image}`,
+                }}
+              />
+            )}
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                position: 'relative',
+                left: withImage ? -5 : 0,
+              }}
+            >
+              <TriangleRightIcon color={background || interlocatorMessage} />
+              <InterlocutorsMessage
+                background={background || interlocatorMessage}
+              >
+                {withImage && (
+                  <InterlocutorsName isGroupName={isGroup}>
+                    {`${sender.first_name} ${sender.last_name}`}
+                  </InterlocutorsName>
+                )}
+                <InterlocutorsMessageText>{text}</InterlocutorsMessageText>
+                <MessageInfo>
+                  <MessageDate>{finalTime}</MessageDate>
+                </MessageInfo>
+              </InterlocutorsMessage>
+            </View>
+          </View>
+        </TouchableOpacity>
       )
     }
     if (type === 'geo') {
@@ -390,17 +439,8 @@ class Message extends Component {
                 longitudeDelta: 0.02,
               }}
               tracksViewChanges={false}
-              onPress={() => {
-                navigate &&
-                  navigate({
-                    routeName: 'MapView',
-                    params: {
-                      title: 'Геолокация',
-                      latitude,
-                      longitude,
-                    },
-                  })
-              }}
+              onPress={onPressMessage}
+              onLongPress={onLongPressMessage}
             >
               <MapView.Marker
                 coordinate={{
@@ -462,17 +502,8 @@ class Message extends Component {
                   latitudeDelta: 0.02,
                   longitudeDelta: 0.02,
                 }}
-                onPress={() => {
-                  navigate &&
-                    navigate({
-                      routeName: 'MapView',
-                      params: {
-                        title: 'Геолокация',
-                        latitude,
-                        longitude,
-                      },
-                    })
-                }}
+                onPress={onPressMessage}
+                onLongPress={onLongPressMessage}
               >
                 <MapView.Marker
                   coordinate={{
@@ -482,6 +513,13 @@ class Message extends Component {
                   tracksViewChanges={false}
                 />
               </MapView>
+              {withImage && (
+                <ShadowTopContainer>
+                  <WhiteTopText>
+                    {`${sender.first_name} ${sender.last_name}`}
+                  </WhiteTopText>
+                </ShadowTopContainer>
+              )}
               <MapViewStreet style={{ justifyContent: 'flex-start' }}>
                 <MapViewStreetTime>{finalTime}</MapViewStreetTime>
               </MapViewStreet>
@@ -492,69 +530,81 @@ class Message extends Component {
     }
     if (type === 'file') {
       return myId === sender._id ? (
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <MyMessage background={background}>
-            <FileInfoWrapper>
-              <FileIcon>
-                <ImageIconBlue />
-              </FileIcon>
-              <FileInfo>
-                <MyMessageText noPadding>{filename}</MyMessageText>
-                <FileSize>{fileSize}</FileSize>
-              </FileInfo>
-            </FileInfoWrapper>
-            <MessageInfo>
-              <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
-              <Indicator color="black" read={messageRead} />
-            </MessageInfo>
-          </MyMessage>
-          <TriangleLeftIcon color={background || myMessage} />
-        </View>
-      ) : (
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          {withImage && (
-            <ImageComponent
-              style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-              size={30}
-              source={{
-                uri: `https://ser.univ.team${sender.image}`,
-              }}
-            />
-          )}
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              position: 'relative',
-              left: withImage ? -10 : 0,
-            }}
-          >
-            <TriangleRightIcon color={background || interlocatorMessage} />
-            <InterlocutorsMessage
-              background={background || interlocatorMessage}
-            >
-              {withImage && (
-                <InterlocutorsName isGroupName={isGroup}>
-                  {`${sender.first_name} ${sender.last_name}`}
-                </InterlocutorsName>
-              )}
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onPressMessage}
+          onLongPress={onLongPressMessage}
+        >
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            <MyMessage background={background}>
               <FileInfoWrapper>
-                <FileIcon background={pink}>
-                  <ImageIcon />
+                <FileIcon>
+                  <ImageIconBlue />
                 </FileIcon>
                 <FileInfo>
-                  <InterlocutorsMessageText noPadding>
-                    {filename}
-                  </InterlocutorsMessageText>
-                  <FileSize color={pink}>{fileSize}</FileSize>
+                  <MyMessageText noPadding>{filename}</MyMessageText>
+                  <FileSize>{fileSize}</FileSize>
                 </FileInfo>
               </FileInfoWrapper>
               <MessageInfo>
-                <MessageDate>{finalTime}</MessageDate>
+                <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
+                <Indicator color="black" read={messageRead} />
               </MessageInfo>
-            </InterlocutorsMessage>
+            </MyMessage>
+            <TriangleLeftIcon color={background || myMessage} />
           </View>
-        </View>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onPressMessage}
+          onLongPress={onLongPressMessage}
+        >
+          <View style={{ display: 'flex', flexDirection: 'row' }}>
+            {withImage && (
+              <ImageComponent
+                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                size={30}
+                source={{
+                  uri: `https://ser.univ.team${sender.image}`,
+                }}
+              />
+            )}
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                position: 'relative',
+                left: withImage ? -10 : 0,
+              }}
+            >
+              <TriangleRightIcon color={background || interlocatorMessage} />
+              <InterlocutorsMessage
+                background={background || interlocatorMessage}
+              >
+                {withImage && (
+                  <InterlocutorsName isGroupName={isGroup}>
+                    {`${sender.first_name} ${sender.last_name}`}
+                  </InterlocutorsName>
+                )}
+                <FileInfoWrapper>
+                  <FileIcon background={pink}>
+                    <ImageIcon />
+                  </FileIcon>
+                  <FileInfo>
+                    <InterlocutorsMessageText noPadding>
+                      {filename}
+                    </InterlocutorsMessageText>
+                    <FileSize color={pink}>{fileSize}</FileSize>
+                  </FileInfo>
+                </FileInfoWrapper>
+                <MessageInfo>
+                  <MessageDate>{finalTime}</MessageDate>
+                </MessageInfo>
+              </InterlocutorsMessage>
+            </View>
+          </View>
+        </TouchableOpacity>
       )
     }
     return null

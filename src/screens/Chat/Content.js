@@ -6,7 +6,6 @@ import {
   ImageBackground,
   TouchableOpacity,
   ActionSheetIOS,
-  Platform,
   InteractionManager,
   Alert,
 } from 'react-native'
@@ -16,6 +15,7 @@ import { BottomSheet } from 'react-native-btr'
 import { chatBg } from '../../assets/images'
 import helper from '../../utils/helpers'
 import Message from '../../common/Message'
+import ImagesViewer from '../../common/ImagesViewer'
 import sendRequest from '../../utils/request'
 import { setDialogs } from '../../actions/dialogsActions'
 import { setTaskReceivers } from '../../actions/participantsActions'
@@ -65,15 +65,14 @@ const StyledImageBackground = styled(ImageBackground)`
 `
 class Content extends Component {
   render() {
-    const { selectedMessage, optionsSelector } = this.state
     const {
-      search,
-      user,
-      dialogs,
-      currentChat,
-      editedMessage,
-      navigate,
-    } = this.props
+      selectedMessage,
+      optionsSelector,
+      previewImages,
+      previewImagesIndex,
+      previewImagesIsVisible,
+    } = this.state
+    const { search, user, dialogs, currentChat, editedMessage } = this.props
     const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const isEditing = !!editedMessage.text
     const messages = dialog ? [...dialog.messages] : []
@@ -93,18 +92,23 @@ class Content extends Component {
               keyboardDismissMode="on-drag"
               animated
               renderItem={({ item, index }) => (
-                <TouchableOpacity
+                <Message
                   key={index}
-                  onLongPress={() => this.openOptions(item)}
-                  onPress={() => this.handleHold(item)}
-                >
-                  <Message navigate={navigate}>{item}</Message>
-                </TouchableOpacity>
+                  item={item}
+                  onLongPressMessage={() => this._onLongPressMessage(item)}
+                  onPressMessage={() => this._onPressMessage(item)}
+                />
               )}
               keyExtractor={(item, index) => index.toString()}
             />
           </StyledImageBackground>
         </Wrapper>
+        <ImagesViewer
+          isVisible={previewImagesIsVisible}
+          images={previewImages}
+          index={previewImagesIndex}
+          onClose={this._onCLosePreviewImages}
+        />
         <BottomSheet
           visible={optionsSelector}
           onBackButtonPress={this.unselect}
@@ -153,6 +157,9 @@ class Content extends Component {
     selectedMessage: {},
     animationCompleted: false,
     optionsSelector: false,
+    previewImages: [],
+    previewImagesIndex: 0,
+    previewImagesIsVisible: false,
   }
 
   componentDidMount() {
@@ -242,20 +249,56 @@ class Content extends Component {
     this.setState({ selectedMessage: {}, optionsSelector: false })
   }
 
-  openOptions = item => {
-    this.handleHold(item)
-    this.setState({ optionsSelector: true })
+  _onPressMessage = item => {
+    const { navigate, dialogs, currentChat } = this.props
+    const {
+      _id = 0,
+      type = '',
+      data: { latitude = 0, longitude = 0 } = {},
+    } = item
+    switch (type) {
+      case 'geo':
+        navigate &&
+          navigate({
+            routeName: 'MapView',
+            params: {
+              title: 'Геолокация',
+              latitude,
+              longitude,
+            },
+          })
+        break
+      case 'image':
+        {
+          const dialog = dialogs.filter(
+            dialog => dialog.room === currentChat,
+          )[0]
+          const dialogMessages = dialog.messages || []
+          let dialogImages = []
+          let imageIndex = 0
+          dialogMessages.forEach(message => {
+            if (message.type === 'image') {
+              dialogImages.push(`https://ser.univ.team${message.src}`)
+              if (message._id === _id) {
+                imageIndex = dialogImages.length - 1
+              }
+            }
+          })
+          this.setState({
+            previewImages: dialogImages,
+            previewImagesIndex: imageIndex,
+            previewImagesIsVisible: true,
+          })
+        }
+        break
+
+      default:
+        break
+    }
   }
 
-  editMessage = message => {
-    const { editMessage } = this.props
-    this.unselect()
-    editMessage({ ...message })
-  }
-
-  handleHold = e => {
-    this.setState({ selectedMessage: e })
-    Platform.os === 'ios' &&
+  _onLongPressMessage = item => {
+    this.setState({ optionsSelector: true, selectedMessage: item }, () => {
       ActionSheetIOS.showActionSheetWithOptions(
         {
           options: [
@@ -273,6 +316,21 @@ class Content extends Component {
           }
         },
       )
+    })
+  }
+
+  _onCLosePreviewImages = () => {
+    this.setState({
+      previewImages: [],
+      previewImagesIndex: 0,
+      previewImagesIsVisible: false,
+    })
+  }
+
+  editMessage = message => {
+    const { editMessage } = this.props
+    this.unselect()
+    editMessage({ ...message })
   }
 
   forwardMessage = message => {
