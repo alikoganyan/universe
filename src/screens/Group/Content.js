@@ -12,6 +12,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { BottomSheet } from 'react-native-btr'
 import Message from '../../common/Message'
+import ImagesViewer from '../../common/ImagesViewer'
 import helper from '../../utils/helpers'
 import { chatBg } from '../../assets/images'
 import { setTaskReceivers } from '../../actions/participantsActions'
@@ -57,15 +58,13 @@ const StyledImageBackground = styled(ImageBackground)`
 `
 class Content extends Component {
   render() {
-    const { selectedMessage } = this.state
     const {
-      dialogs,
-      currentChat,
-      search,
-      user,
-      editedMessage,
-      navigate,
-    } = this.props
+      selectedMessage,
+      previewImagesIsVisible,
+      previewImages,
+      previewImagesIndex,
+    } = this.state
+    const { dialogs, currentChat, search, user, editedMessage } = this.props
     const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const messages = dialog ? [...dialog.messages] : []
     const isEditing = !!editedMessage.text
@@ -85,24 +84,26 @@ class Content extends Component {
               initialNumToRender={10}
               animated
               renderItem={({ item, index }) => (
-                <TouchableOpacity
+                <Message
                   key={index}
+                  withImage
+                  read={!!item.viewers.length}
+                  isGroup
+                  item={item}
                   onLongPress={() => this.handleHold(item)}
-                >
-                  <Message
-                    withImage
-                    read={!!item.viewers.length}
-                    isGroup
-                    navigate={navigate}
-                  >
-                    {item}
-                  </Message>
-                </TouchableOpacity>
+                  onPressMessage={() => this._onPressMessage(item)}
+                />
               )}
               keyExtractor={(item, index) => index.toString()}
             />
           </StyledImageBackground>
         </Wrapper>
+        <ImagesViewer
+          isVisible={previewImagesIsVisible}
+          images={previewImages}
+          index={previewImagesIndex}
+          onClose={this._onCLosePreviewImages}
+        />
         <BottomSheet
           visible={selectedMessage._id}
           onBackButtonPress={this.unselect}
@@ -145,6 +146,9 @@ class Content extends Component {
   state = {
     selectedMessage: {},
     animationCompleted: false,
+    previewImages: [],
+    previewImagesIndex: 0,
+    previewImagesIsVisible: false,
   }
 
   componentDidMount() {
@@ -227,6 +231,62 @@ class Content extends Component {
 
   handleHold = e => {
     this.setState({ selectedMessage: e })
+  }
+
+  _onPressMessage = item => {
+    const { navigate, dialogs, currentChat } = this.props
+    const {
+      _id = 0,
+      type = '',
+      data: { latitude = 0, longitude = 0 } = {},
+    } = item
+    switch (type) {
+      case 'geo':
+        navigate &&
+          navigate({
+            routeName: 'MapView',
+            params: {
+              title: 'Геолокация',
+              latitude,
+              longitude,
+            },
+          })
+        break
+      case 'image':
+        {
+          const dialog = dialogs.filter(
+            dialog => dialog.room === currentChat,
+          )[0]
+          const dialogMessages = dialog.messages || []
+          let dialogImages = []
+          let imageIndex = 0
+          dialogMessages.forEach(message => {
+            if (message.type === 'image') {
+              dialogImages.push(`https://ser.univ.team${message.src}`)
+              if (message._id === _id) {
+                imageIndex = dialogImages.length - 1
+              }
+            }
+          })
+          this.setState({
+            previewImages: dialogImages,
+            previewImagesIndex: imageIndex,
+            previewImagesIsVisible: true,
+          })
+        }
+        break
+
+      default:
+        break
+    }
+  }
+
+  _onCLosePreviewImages = () => {
+    this.setState({
+      previewImages: [],
+      previewImagesIndex: 0,
+      previewImagesIsVisible: false,
+    })
   }
 
   forwardMessage = message => {
