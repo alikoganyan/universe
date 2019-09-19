@@ -11,6 +11,7 @@ import {
 import AsyncStorage from '@react-native-community/async-storage'
 // import { Constants } from 'expo';
 import RNDeviceInfo from 'react-native-device-info'
+import PhoneInput from 'react-native-phone-input'
 import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
@@ -76,6 +77,17 @@ const StyledInput = styled(TextInput)`
   color: black;
   ${({ style }) => style};
 `
+const StyledPhoneInput = styled(PhoneInput)`
+  border: 1px solid ${lightGrey1};
+  border-width: 0;
+  border-bottom-width: 1px;
+  padding-bottom: ${Platform.OS === 'ios' ? 11 : 6}px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: black;
+  ${({ style }) => style};
+`
+// eslint-disable-next-line no-unused-vars
 const Input = props => {
   const {
     keyboardType = 'default',
@@ -114,15 +126,10 @@ const Input = props => {
     </FloatingLabel>
   )
 }
+
 class Content extends Component {
   render() {
-    const {
-      invalidPassword,
-      invalidPhone,
-      country,
-      phone,
-      password,
-    } = this.state
+    const { invalidPassword, invalidPhone, phone, password } = this.state
     const { navigateToDialogs } = this.props
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -131,7 +138,7 @@ class Content extends Component {
             <Title>Авторизация</Title>
           </View>
           <PhoneNumber err={invalidPhone}>
-            <StyledInput
+            {/* <StyledInput
               style={{
                 margin: 0,
                 width: '20%',
@@ -144,14 +151,18 @@ class Content extends Component {
               keyboardType="phone-pad"
               value={country}
               onChangeText={this.handleChangeCountry}
-            />
-            <StyledInput
+              editable={false}
+            /> */}
+            <StyledPhoneInput
               password
-              onChangeText={this.handleChangePhone}
+              onChangePhoneNumber={this.handleChangePhone}
+              allowZeroAfterCountryCode={false}
+              initialCountry="ru"
               value={phone}
               placeholder="XXX-XXX-XX-XX"
               keyboardType="phone-pad"
-              maxLength={10}
+              onSelectCountry={this.onSelectCountry}
+              ref={ref => (this.inputRef = ref)}
               style={{
                 margin: 0,
                 width: '78%',
@@ -207,14 +218,21 @@ class Content extends Component {
 
   state = {
     country: '+7',
-    phone: '',
+    phone: '+7',
     password: '',
     invalidPassword: false,
     invalidPhone: false,
   }
+  inputRef = null
 
   componentDidMount = () => {
     // console.log({ rn: DeviceInfo.getDeviceId(), ex: Constants.deviceId });
+  }
+
+  onSelectCountry = country => {
+    this.setState({
+      phone: `+${this.inputRef.getCountryCode(country)}`,
+    })
   }
 
   storeUserData = async user => {
@@ -227,9 +245,9 @@ class Content extends Component {
 
   login = () => {
     const { setRegisterUserNumber, pushesToken } = this.props
-    const { country, phone, password } = this.state
-    const phone_number = country.concat(phone)
-    if (!phone || !phone.length) this.setState({ invalidPhone: true })
+    const { phone: phone_number, password } = this.state
+    if (!this.inputRef.isValidNumber()) this.setState({ invalidPhone: true })
+
     if (!password || password.length < 4)
       this.setState({ invalidPassword: true })
     setTimeout(

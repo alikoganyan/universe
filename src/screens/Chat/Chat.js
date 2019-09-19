@@ -29,7 +29,7 @@ class Chat extends Component {
   render() {
     const { currentChat } = this.props
     return (
-      <SafeAreaView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
+      <SafeAreaView behavior="padding" enabled={Platform.OS === 'ios'}>
         <Wrapper>
           <Header
             toProfile={this.toProfile}

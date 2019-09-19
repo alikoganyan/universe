@@ -27,7 +27,7 @@ const Bottom = styled(View)`
 class Chat extends Component {
   render() {
     return (
-      <SafeAreaView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
+      <SafeAreaView behavior="padding" enabled={Platform.OS === 'ios'}>
         <Wrapper>
           <Header
             toProfile={this.toProfile}

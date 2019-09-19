@@ -28,7 +28,7 @@ const SingUp = styled(Text)`
 export default class PinCode extends Component {
   render() {
     return (
-      <SafeAreaView behavior="padding">
+      <SafeAreaView behavior="padding" enabled={false}>
         <Wrapper>
           <Content navigate={this.navigate} />
           <NoAccount>

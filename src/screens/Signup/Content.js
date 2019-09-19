@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Platform } from 'react-native'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import PhoneInput from 'react-native-phone-input'
 import helper from '../../utils/helpers'
 import { setUser, setRegisterUserNumber } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
@@ -33,16 +34,7 @@ const PhoneNumber = styled(View)`
   flex-direction: row;
   align-items: flex-end;
 `
-const StyledInput = styled(TextInput)`
-  border: 1px solid ${lightGrey1};
-  border-width: 0;
-  border-bottom-width: 1px;
-  padding-bottom: 10px;
-  text-align: center;
-  margin-bottom: 10px;
-  margin-left: 20px;
-  ${({ style }) => style};
-`
+
 const ButtonBox = styled(View)`
   width: 170px;
   align-self: center;
@@ -56,6 +48,17 @@ const ErrorTextLink = styled(ErrorText)`
   color: ${blue};
   padding-top: 10px;
 `
+const StyledPhoneInput = styled(PhoneInput)`
+  border: 1px solid ${lightGrey1};
+  border-width: 0;
+  border-bottom-width: 1px;
+  padding-bottom: ${Platform.OS === 'ios' ? 11 : 6}px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: black;
+  ${({ style }) => style};
+`
+// eslint-disable-next-line no-unused-vars
 const Input = props => {
   const {
     children,
@@ -92,35 +95,31 @@ const Input = props => {
 }
 class Content extends Component {
   render() {
-    const { country, phone, error } = this.state
+    const { phone, error } = this.state
     return (
       <Wrapper>
         <Title>Регистрация</Title>
         <SubTitle>Телефон</SubTitle>
         <PhoneNumber>
-          <Input
-            value={country}
-            onChangeText={this.handleCountry}
-            style={{ width: '20%' }}
-            inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
-            keyboardType="phone-pad"
-          />
-          <StyledInput
+          <StyledPhoneInput
             password
-            onChangeText={this.handlePhone}
+            onChangePhoneNumber={this.handlePhone}
+            allowZeroAfterCountryCode={false}
+            initialCountry="ru"
             value={phone}
             placeholder="XXX-XXX-XX-XX"
-            maxLength={10}
+            keyboardType="phone-pad"
+            onSelectCountry={this.onSelectCountry}
+            ref={ref => (this.inputRef = ref)}
             style={{
               margin: 0,
-              width: '75%',
+              width: '95%',
               flex: 1,
               textAlign: 'left',
-              paddingLeft: 20,
+              paddingLeft: 10,
               color: error ? pink : black,
               borderColor: error ? pink : lightGrey1,
             }}
-            keyboardType="phone-pad"
           />
         </PhoneNumber>
         {error ? <View>{error}</View> : null}
@@ -135,25 +134,31 @@ class Content extends Component {
 
   state = {
     country: '+7',
-    phone: '',
+    phone: '+7',
     error: false,
   }
+  inputRef = null
 
   componentDidMount() {}
 
+  onSelectCountry = country => {
+    this.setState({
+      phone: `+${this.inputRef.getCountryCode(country)}`,
+    })
+  }
+
   proceed = () => {
-    const { country, phone } = this.state
+    const { phone: phone_number } = this.state
     const { setRegisterUserNumber, forward } = this.props
-    const phone_number = country.concat(phone)
-    if (!phone) {
+    if (!phone_number) {
       this.setState({ error: <ErrorText>Введите телефон</ErrorText> })
     }
-    if (phone && phone.length < 9) {
+    if (!this.inputRef.isValidNumber()) {
       this.setState({
         error: <ErrorText>Проверьте правильность введенного номера</ErrorText>,
       })
     }
-    if (phone_number && phone && phone.length >= 9) {
+    if (phone_number && this.inputRef.isValidNumber()) {
       setRegisterUserNumber(phone_number)
       sendRequest({
         r_path: p_get_sms,
@@ -165,7 +170,6 @@ class Content extends Component {
           forward()
         },
         failFunc: err => {
-          console.log(err)
           this.setState({
             error: err.msg ? (
               <ErrorText>{err.msg}</ErrorText>

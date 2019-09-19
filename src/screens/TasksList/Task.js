@@ -4,11 +4,11 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  ActionSheetIOS,
   Platform,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import ActionSheet from 'react-native-action-sheet'
 import helper from '../../utils/helpers'
 import { TasksIcon } from '../../assets/index'
 import { setTask } from '../../actions/tasksActions'
@@ -182,13 +182,16 @@ class Tasks extends Component {
   }
 
   handleHold = () => {
-    ActionSheetIOS.showActionSheetWithOptions(
+    ActionSheet.showActionSheetWithOptions(
       {
         options: ['Cancel', 'Remove'],
-        destructiveButtonIndex: 1,
-        cancelButtonIndex: 0,
+        cancelButtonIndex: 1,
+        destructiveButtonIndex: 0,
+        tintColor: 'blue',
       },
-      buttonIndex => {},
+      buttonIndex => {
+        // console.log('button clicked :', buttonIndex)
+      },
     )
   }
 
