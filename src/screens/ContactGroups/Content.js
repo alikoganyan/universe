@@ -328,7 +328,7 @@ class Content extends Component {
     return (
       <ContactList
         bounces={false}
-        contentContainerStyle={{ paddingBottom: 140 }}
+        contentContainerStyle={{ paddingBottom: 140, paddingTop: 10 }}
         data={allContacts}
         ListEmptyComponent={this._renderEmptyComponent}
         ref={ref => (this.allRef = ref)}
@@ -385,7 +385,7 @@ class Content extends Component {
     return (
       <ContactList
         bounces={false}
-        contentContainerStyle={{ paddingBottom: 140 }}
+        contentContainerStyle={{ paddingBottom: 140, paddingTop: 10 }}
         data={dialogs}
         ListEmptyComponent={this._renderEmptyComponent}
         ref={ref => (this.groupRef = ref)}
