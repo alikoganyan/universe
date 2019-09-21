@@ -12,15 +12,11 @@ import { connect } from 'react-redux'
 import DatePicker from 'react-native-datepicker'
 import helper from '../../utils/helpers'
 import { setUser } from '../../actions/userActions'
-import {
-  addReceiver,
-  setReceivers,
-  setTaskReceivers,
-} from '../../actions/participantsActions'
+import { setTaskReceivers } from '../../actions/participantsActions'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import Button from '../../common/Button'
-import { p_tasks } from '../../constants/api/'
+import { p_tasks } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import { setTasks, setCurrentTask } from '../../actions/tasksActions'
 import { GroupIcon, CloseIcon } from '../../assets'
@@ -166,7 +162,7 @@ class Content extends Component {
           <DeadLine>
             <DialogsLabel>
               <GroupIcon />
-              <DialogsLabelText>Дедлайн</DialogsLabelText>
+              <DialogsLabelText>Срок исполнения</DialogsLabelText>
             </DialogsLabel>
             <DeadlineTime>
               <DatePicker
@@ -281,9 +277,9 @@ class Content extends Component {
   }
 
   deleteTask = () => {
-    const { activeTask, back } = this.props
+    const { back } = this.props
     // const { _id } = activeTask;
-    console.log('try to delete')
+    // console.log('try to delete')
     sendRequest({
       r_path: '/tasks',
       method: 'delete',
@@ -324,7 +320,7 @@ class Content extends Component {
     const deadline = this.jsCoreDateCreator(
       `${dateY}-${dateM}-${dateD} ${timeH}:${timeM}`,
     )
-    console.log({ deadline }, deadlineTime)
+    // console.log({ deadline }, deadlineTime)
     const newTask = {
       _id,
       name: taskName,
@@ -363,7 +359,7 @@ class Content extends Component {
         // getMessages(res.messages);
       },
       failFunc: err => {
-        console.log(err)
+        // console.log(err)
       },
     })
   }
@@ -397,8 +393,6 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
-  addReceiver: _ => dispatch(addReceiver(_)),
-  setReceivers: _ => dispatch(setReceivers(_)),
   setCurrentTask: _ => dispatch(setCurrentTask(_)),
   setTasks: _ => dispatch(setTasks(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),

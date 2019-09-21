@@ -7,27 +7,22 @@ import {
   ScrollView,
   TouchableOpacity,
 } from 'react-native'
-import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import DatePicker from 'react-native-datepicker'
 import helper from '../../utils/helpers'
 import { setUser } from '../../actions/userActions'
-import {
-  addReceiver,
-  setReceivers,
-  setTaskReceivers,
-} from '../../actions/participantsActions'
+import { setTaskReceivers } from '../../actions/participantsActions'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import Button from '../../common/Button'
-import { p_create_task } from '../../constants/api/'
+import { p_create_task } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import { setTasks } from '../../actions/tasksActions'
 import { GroupIcon, CloseIcon } from '../../assets'
 
 const { Colors, HeaderHeight, sidePadding } = helper
-const { lightGrey1, black, purple } = Colors
+const { lightGrey1, purple } = Colors
 const Wrapper = styled(View)`
   padding: 0 ${sidePadding}px;
   display: flex;
@@ -125,21 +120,21 @@ class Content extends Component {
   render() {
     const { receivers } = this.props
     const { taskName, taskText, deadlineDate, deadlineTime } = this.state
-    const months = [
-      'Jan',
-      'Feb',
-      'Mar',
-      'Apr',
-      'May',
-      'June',
-      'July',
-      'Aug',
-      'Sept',
-      'Oct',
-      'Nov',
-      'Dec',
-    ]
-    const date = new Date()
+    // const months = [
+    //   'Jan',
+    //   'Feb',
+    //   'Mar',
+    //   'Apr',
+    //   'May',
+    //   'June',
+    //   'July',
+    //   'Aug',
+    //   'Sept',
+    //   'Oct',
+    //   'Nov',
+    //   'Dec',
+    // ]
+    // const date = new Date()
     return (
       <Wrapper>
         <StyledScrollView
@@ -173,7 +168,7 @@ class Content extends Component {
           <DeadLine>
             <DialogsLabel>
               <GroupIcon />
-              <DialogsLabelText>Дедлайн</DialogsLabelText>
+              <DialogsLabelText>Срок исполнения</DialogsLabelText>
             </DialogsLabel>
             <DeadlineTime>
               <DatePicker
@@ -266,8 +261,8 @@ class Content extends Component {
   }
 
   componentDidMount() {
-    const { deafultValues, setTaskReceivers } = this.props
-    const { text, participants } = deafultValues
+    const { deafultValues } = this.props
+    const { text } = deafultValues
     this.setState({ taskText: text })
     // setTaskReceivers(participants)
   }
@@ -335,11 +330,11 @@ class Content extends Component {
         },
       },
       success: res => {
-        console.log(res)
+        // console.log(res)
         forward()
       },
       failFunc: err => {
-        console.log(err)
+        // console.log(err)
       },
     })
   }
@@ -371,8 +366,6 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
-  addReceiver: _ => dispatch(addReceiver(_)),
-  setReceivers: _ => dispatch(setReceivers(_)),
   setTasks: _ => dispatch(setTasks(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
 })
