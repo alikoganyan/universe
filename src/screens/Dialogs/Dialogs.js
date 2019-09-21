@@ -126,7 +126,7 @@ class Dialogs extends Component {
             keyboardShouldPersistTaps="always"
             renderItem={this._renderItem}
             keyExtractor={(item, index) => item._id.toString()}
-            contentContainerStyle={{ paddingBottom: 110 }}
+            contentContainerStyle={{ paddingBottom: 60 }}
             scrollEventThrottle={16}
             onScroll={Animated.event(
               [

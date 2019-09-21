@@ -94,7 +94,9 @@ class Content extends Component {
             </OptionsWrapper>
             {currentTask.tasks && animationCompleted ? (
               <TaskList
-                data={currentTask.tasks_list}
+                data={currentTask.tasks_list.sort(
+                  (a, b) => new Date(b.created_at) - new Date(a.created_at),
+                )}
                 ListFooterComponent={<TaskListFooter />}
                 renderItem={({ item }) => {
                   const myTask = item.creator._id === user._id

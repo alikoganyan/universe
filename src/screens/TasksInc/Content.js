@@ -85,9 +85,9 @@ class Content extends Component {
     const flatten = list =>
       list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
     const tasksList = [...user.tasks]
-    const incTasks = flatten(tasksList).filter(
-      e => !!e.performers.filter(e => e._id === user._id)[0],
-    )
+    const incTasks = flatten(tasksList)
+      .filter(e => !!e.performers.filter(e => e._id === user._id)[0])
+      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
 
     return (
       <SafeAreaView>
@@ -133,6 +133,7 @@ class Content extends Component {
                         <TouchableOpacity
                           style={{ flex: 1 }}
                           onLongPress={() => this.handleHold(item)}
+                          disabled
                         >
                           <TaskComponent
                             triangleLeft

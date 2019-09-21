@@ -76,11 +76,12 @@ class Content extends Component {
     const tasksList = [...tasks].map(e => [...e.tasks, ...e.tasks_list])
     const outTasks = [
       ...new Set(
-        flatten([...tasksList, ...user.tasks]).filter(
-          e => e.creator._id === user._id,
-        ),
+        flatten([...tasksList, ...user.tasks])
+          .filter(e => e.creator._id === user._id)
+          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)),
       ),
     ]
+
     return (
       <SafeAreaView>
         {/* {activeTask._id && <Shadow onPress={this.unselect}></Shadow>} */}
