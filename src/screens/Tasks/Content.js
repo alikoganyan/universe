@@ -120,6 +120,7 @@ class Content extends Component {
                         <TouchableOpacity
                           style={{ flex: 1 }}
                           onLongPress={() => this.handleHold(item)}
+                          disabled={!myTask}
                         >
                           <TaskComponent
                             triangleLeft={!myTask}
