@@ -11,6 +11,8 @@ import {
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { BottomSheet } from 'react-native-btr'
+import moment from 'moment'
+import 'moment/locale/ru'
 import Message from '../../common/Message'
 import ImagesViewer from '../../common/ImagesViewer'
 import helper from '../../utils/helpers'
@@ -56,6 +58,18 @@ const StyledImageBackground = styled(ImageBackground)`
   width: 100%;
   height: 100%;
 `
+const DateContainer = styled(View)`
+  position: absolute;
+  top: 65px;
+  z-index: 10;
+  width: 100%;
+  align-items: center;
+`
+const DateView = styled(View)`
+  background-color: #ececec;
+  border-radius: 20px;
+  padding: 3px 5px;
+`
 class Content extends Component {
   render() {
     const {
@@ -83,6 +97,10 @@ class Content extends Component {
               keyboardDismissMode="on-drag"
               initialNumToRender={10}
               animated
+              onViewableItemsChanged={this.onViewableItemsChanged}
+              viewabilityConfig={{
+                itemVisiblePercentThreshold: 50,
+              }}
               renderItem={({ item, index }) => (
                 <Message
                   key={index}
@@ -139,6 +157,11 @@ class Content extends Component {
             </MessageOption>
           </MessageOptions>
         </BottomSheet>
+        <DateContainer>
+          <DateView>
+            <Text>{this.getMessageDate()}</Text>
+          </DateView>
+        </DateContainer>
       </>
     )
   }
@@ -149,9 +172,11 @@ class Content extends Component {
     previewImages: [],
     previewImagesIndex: 0,
     previewImagesIsVisible: false,
+    currentDate: '',
   }
 
   componentDidMount() {
+    moment.locale('ru')
     const { dialogs, currentChat, setDialogs, user } = this.props
     InteractionManager.runAfterInteractions(() => {
       this.setState({
@@ -170,6 +195,83 @@ class Content extends Component {
         : []
       newDialogs[dialogIndex] = dialog
       setDialogs(newDialogs)
+    }
+  }
+
+  getMessageDate = () => {
+    const { currentDate } = this.state
+    const [now] = new Date().toISOString().split('T')
+
+    const diff = (new Date(currentDate) - new Date(now)) / (3600 * 24) / 1000
+
+    if (diff === 0) {
+      return 'Сегодня'
+    } else if (diff === 1) {
+      return 'Вчера'
+    } else if (this.isSameWeek(currentDate, now)) {
+      return this.getDayOfWeek(new Date(currentDate).getDay())
+    } else if (
+      new Date(currentDate).getFullYear() === new Date(now).getFullYear()
+    ) {
+      return moment(currentDate).format('DD MMMM')
+    }
+
+    return moment(currentDate).format('DD MMMM YYYY г.')
+  }
+
+  isSameWeek(firstDay, secondDay, offset) {
+    var firstMoment = moment(firstDay)
+    var secondMoment = moment(secondDay)
+
+    var startOfWeek = function(_moment, _offset) {
+      return _moment.add(
+        'days',
+        _moment.weekday() * -1 +
+          (_moment.weekday() >= 7 + _offset ? 7 + _offset : _offset),
+      )
+    }
+
+    return startOfWeek(firstMoment, offset).isSame(
+      startOfWeek(secondMoment, offset),
+      'day',
+    )
+  }
+
+  getDayOfWeek(day) {
+    switch (day) {
+      case 0:
+        return 'Понедельник'
+      case 1:
+        return 'Вторник'
+      case 2:
+        return 'Среда'
+      case 3:
+        return 'Четверг'
+      case 4:
+        return 'Пятница'
+      case 5:
+        return 'Суббота'
+      case 6:
+        return 'Воскресенье'
+      default:
+        return null
+    }
+  }
+
+  onViewableItemsChanged = ({ viewableItems, changed }) => {
+    const { currentDate } = this.state
+    const item = viewableItems[viewableItems.length - 1]
+    if (item) {
+      const [date] = item.item.created_at.split('T')
+      if (!currentDate) {
+        this.setState({
+          currentDate: date,
+        })
+      } else if (new Date(date) - new Date(currentDate)) {
+        this.setState({
+          currentDate: date,
+        })
+      }
     }
   }
 

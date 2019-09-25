@@ -347,7 +347,10 @@ class InputComponent extends Component {
               },
             },
             success: res => {
-              socket.emit('file', { room: currentChat })
+              socket.emit('file', {
+                room: currentChat,
+                dialog_id: res.dialog._id,
+              })
               const newDialogs = [...dialogs]
               const index = newDialogs.findIndex(e => e.room === currentChat)
               newDialogs[index] = res.dialog

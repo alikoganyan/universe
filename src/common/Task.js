@@ -41,7 +41,7 @@ const Task = styled(View)`
   border: 1px solid ${({ borderColor }) => borderColor || purple};
   border-radius: ${borderRadius};
   align-self: flex-end;
-  max-width: ${Dimensions.get('window').width - 95}px;
+  max-width: ${Dimensions.get('window').width - 110}px;
 `
 const Status = styled(View)`
   display: flex;
@@ -466,8 +466,8 @@ class TaskComponent extends Component {
           status: e,
         },
       },
-      success: () => {
-        // console.log({res})
+      success: res => {
+        // console.log(res)
       },
       failFunc: err => {
         // console.log(err)

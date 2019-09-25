@@ -4,11 +4,11 @@ import {
   Text,
   TouchableOpacity,
   Dimensions,
-  ActionSheetIOS,
   Platform,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import ActionSheet from 'react-native-action-sheet'
 import helper, { getHamsterDate } from '../../utils/helpers'
 import { TasksIcon } from '../../assets/index'
 import { setIncTasks, setOutTasks } from '../../actions/tasksActions'
@@ -188,7 +188,7 @@ class TaskPack extends Component {
   componentDidMount() {}
 
   handleHold = () => {
-    ActionSheetIOS.showActionSheetWithOptions(
+    ActionSheet.showActionSheetWithOptions(
       {
         options: ['Cancel', 'Remove'],
         destructiveButtonIndex: 1,

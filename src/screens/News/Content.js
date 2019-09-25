@@ -129,7 +129,8 @@ class Content extends Component {
               return (
                 <NewsItem onPress={() => this.proceed(item)}>
                   <Sender>
-                    {creator.image === '/images/default_avatar.jpg' ? (
+                    {creator.image === '/images/default_avatar.jpg' ||
+                    !creator.image ? (
                       <DefaultAvatar
                         size="xs"
                         style={{ marginRight: 10 }}

@@ -11,13 +11,14 @@ import {
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import CheckBox from 'react-native-check-box'
 import TaskComponent from '../../common/Task'
 import { setActiveTask } from '../../actions/tasksActions'
 import { setTaskReceivers } from '../../actions/participantsActions'
 import helper from '../../utils/helpers'
 
 const { Colors, HeaderHeight } = helper
-const { purple, black, pink } = Colors
+const { purple, pink } = Colors
 const Wrapper = styled(View)`
   margin-bottom: 50px;
 `
@@ -31,35 +32,27 @@ const TaskList = styled(FlatList)`
 const OptionsWrapper = styled(View)`
   padding: 0 15px;
   width: 100%;
-`
-const Options = styled(View)`
   display: flex;
   align-self: center;
-  background: ${purple};
   flex-direction: row;
   justify-content: space-between;
-  border-radius: 16;
-  padding: 1px;
   overflow: hidden;
   margin: 10px 0;
-  width: 100%;
-`
-const Option = styled(Text)`
-  color: ${({ active }) => (active ? black : 'white')};
-  background: ${({ active }) => (active ? 'white' : 'transparent')};
-  margin: 1px;
-  border-radius: 15;
-  padding: 2px 0;
-  overflow: hidden;
-  min-width: 30%;
-  text-align: center;
-  padding: 8px 10px 7px;
 `
 const TaskWrapper = styled(View)`
   display: flex;
   align-items: flex-end;
   justify-content: flex-start;
   flex-direction: row;
+`
+const CheckBoxWrapper = styled(TouchableOpacity)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+`
+const CheckLabel = styled(Text)`
+  margin-left: 10px;
+  margin-top: 3px;
 `
 const StyledScrollView = styled(ScrollView)`
   flex-grow: 1;
@@ -70,77 +63,64 @@ const StyledScrollView = styled(ScrollView)`
 const TaskListFooter = styled(View)`
   margin: 0;
 `
+const statuses = { accepted: 0, set: 1, cancelled: 1, completed: 2, done: 2 }
+
 class Content extends Component {
   render() {
     const { options, animationCompleted } = this.state
     const { active } = options
     const { currentTask, user, activeTask } = this.props
+
     return (
       <SafeAreaView>
         {/* {activeTask._id && <Shadow onPress={this.unselect}></Shadow>} */}
         <StyledScrollView keyboardShouldPersistTaps="handled">
           <Wrapper>
             <OptionsWrapper>
-              <Options>
-                {options.options.map((e, i) => (
-                  <TouchableOpacity
-                    key={i}
-                    onPress={() => this.selectOption(i)}
-                  >
-                    <Option active={active === i}>{e}</Option>
-                  </TouchableOpacity>
-                ))}
-              </Options>
+              {options.options.map((e, i) => (
+                <CheckBoxWrapper onPress={() => this.selectOption(i)} key={i}>
+                  <CheckBox
+                    isChecked={active.includes(i)}
+                    onClick={() => this.selectOption(i)}
+                    checkBoxColor="#8b81c5"
+                  />
+                  <CheckLabel>{e}</CheckLabel>
+                </CheckBoxWrapper>
+              ))}
             </OptionsWrapper>
             {currentTask.tasks && animationCompleted ? (
               <TaskList
-                data={currentTask.tasks_list.sort(
-                  (a, b) => new Date(b.created_at) - new Date(a.created_at),
-                )}
+                data={currentTask.tasks_list
+                  .sort(
+                    (a, b) => new Date(b.created_at) - new Date(a.created_at),
+                  )
+                  .filter(item => active.includes(statuses[item.status]))}
                 ListFooterComponent={<TaskListFooter />}
                 renderItem={({ item }) => {
                   const myTask = item.creator._id === user._id
-                  let condition = true
-                  switch (active) {
-                    case 0:
-                      condition = true
-                      break
-                    case 1:
-                      condition =
-                        item.status === 'set' || item.status === 'accepted'
-                      break
-                    case 2:
-                      condition =
-                        item.status !== 'set' && item.status !== 'accepted'
-                      break
-                    default:
-                      break
-                  }
-                  if (condition) {
-                    return (
-                      <TaskWrapper>
-                        <TouchableOpacity
-                          style={{ flex: 1 }}
-                          onLongPress={() => this.handleHold(item)}
-                          disabled={!myTask}
+
+                  return (
+                    <TaskWrapper>
+                      <TouchableOpacity
+                        style={{ flex: 1 }}
+                        onLongPress={() => this.handleHold(item)}
+                      >
+                        <TaskComponent
+                          triangleLeft={!myTask}
+                          triangleRight={myTask}
+                          borderColor={myTask ? pink : purple}
+                          editFeed={this.editFeed}
+                          style={{
+                            zIndex: activeTask._id === item._id ? 5 : 1,
+                            // marginRight: myTask ? 10 : 70,
+                            // marginLeft: myTask ? 70 : 10,
+                          }}
                         >
-                          <TaskComponent
-                            triangleLeft={!myTask}
-                            triangleRight={myTask}
-                            borderColor={myTask ? pink : purple}
-                            editFeed={this.editFeed}
-                            style={{
-                              zIndex: activeTask._id === item._id ? 5 : 1,
-                              // marginRight: myTask ? 10 : 70,
-                              // marginLeft: myTask ? 70 : 10,
-                            }}
-                          >
-                            {item}
-                          </TaskComponent>
-                        </TouchableOpacity>
-                      </TaskWrapper>
-                    )
-                  }
+                          {item}
+                        </TaskComponent>
+                      </TouchableOpacity>
+                    </TaskWrapper>
+                  )
                 }}
                 keyExtractor={(item, index) => index.toString()}
               />
@@ -153,8 +133,8 @@ class Content extends Component {
 
   state = {
     options: {
-      active: 1,
-      options: ['Все', 'В работе', 'Не в работе'],
+      active: [1],
+      options: ['В работе', 'Не в работе', 'Сдано'],
     },
     animationCompleted: false,
   }
@@ -186,7 +166,12 @@ class Content extends Component {
   selectOption = e => {
     const { options } = this.state
     const newOptions = { ...options }
-    newOptions.active = e
+    const index = newOptions.active.indexOf(e)
+    if (index > -1) {
+      newOptions.active.splice(index, 1)
+    } else {
+      newOptions.active.push(e)
+    }
     this.setState({ options: newOptions })
   }
 

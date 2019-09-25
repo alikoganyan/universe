@@ -13,6 +13,7 @@ import helper from '../../utils/helpers'
 import { TasksIcon } from '../../assets/index'
 import { setTask } from '../../actions/tasksActions'
 import ImageComponent from '../../common/Image'
+import DefaultAvatar from '../../common/DefaultAvatar'
 
 const { fontSize, sidePadding, Colors } = helper
 const { purple, lightGrey1 } = Colors
@@ -133,11 +134,15 @@ class Tasks extends Component {
         }}
       >
         <Wrapper>
-          <ImageComponent
-            size={50}
-            source={{ uri: `https://ser.univ.team${image}` }}
-            style={{ marginRight: sidePadding }}
-          />
+          {image ? (
+            <ImageComponent
+              size={50}
+              source={{ uri: `https://ser.univ.team${image}` }}
+              style={{ marginRight: sidePadding }}
+            />
+          ) : (
+            <DefaultAvatar size={50} style={{ marginRight: sidePadding }} />
+          )}
           <TaskText>
             <TaskTextInner>
               <TaskTitle>
