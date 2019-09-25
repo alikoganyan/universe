@@ -333,6 +333,8 @@ class InputComponent extends Component {
     form.append('file', formDataObject)
     form.append('room', currentChat)
     const tempMessageId = Date.now()
+    let prevProgress = 0
+    const progressMultiplier = 10
     addUploadMessageProp({
       room: currentChat,
       src: imageUri,
@@ -357,11 +359,14 @@ class InputComponent extends Component {
           const uploadProgress = Math.round(
             (progressEvent.loaded * 100) / progressEvent.total,
           )
-          updateUploadMessageProgressProp({
-            room: currentChat,
-            tempId: tempMessageId,
-            uploadProgress,
-          })
+          if (uploadProgress >= prevProgress + progressMultiplier) {
+            prevProgress = uploadProgress
+            updateUploadMessageProgressProp({
+              room: currentChat,
+              tempId: tempMessageId,
+              uploadProgress,
+            })
+          }
         },
       },
       success: res => {
