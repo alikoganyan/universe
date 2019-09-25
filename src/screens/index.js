@@ -43,6 +43,7 @@ import FirstScreen from './FirstScreen/FirstScreen'
 import IpadView from './IpadView/IpadView'
 import WebView from './WebView'
 import MapView from './MapView'
+import VideoView from './VideoView'
 
 export {
   Group,
@@ -90,4 +91,5 @@ export {
   IpadView,
   WebView,
   MapView,
+  VideoView,
 }

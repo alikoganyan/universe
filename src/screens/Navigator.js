@@ -51,6 +51,7 @@ import {
   IpadView,
   WebView,
   MapView,
+  VideoView,
 } from '.'
 import {
   NewsMenuIcon,
@@ -214,6 +215,7 @@ const createRootNavigator = (logged = false) => {
       GroupEdit: { screen: GroupEdit },
       WebView: { screen: WebView },
       MapView: { screen: MapView },
+      VideoView: { screen: VideoView },
     },
     {
       initialRouteName,

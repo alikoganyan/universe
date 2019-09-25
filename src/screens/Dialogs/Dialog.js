@@ -235,7 +235,9 @@ class Content extends Component {
                         ? 'Задача'
                         : latestMessage.type === 'geo'
                         ? 'Геолокация'
-                        : 'Вложение'}
+                        : latestMessage.type === 'video'
+                        ? 'Видео'
+                        : 'Файл'}
                     </DialogLastMessage>
                   )}
 
