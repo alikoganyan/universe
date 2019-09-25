@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ActionSheet from 'react-native-actionsheet'
 import getImageFromPicker from '../../utils/ImagePicker'
+import RNDocumentPicker from 'react-native-document-picker'
 import getGeoCoords from '../../utils/geolocation'
 import {
   PapperPlaneIcon,
@@ -163,7 +164,7 @@ class InputComponent extends Component {
         ) : (
           <Wrapper isTopItem={edit || reply}>
             <Left>
-              <AddIconBlue size={20} onPress={this._showActionSheet} />
+              <AddIconBlue size={20} onPress={this._showActionSheetPlus} />
             </Left>
             <Body>
               <Input
@@ -178,23 +179,32 @@ class InputComponent extends Component {
               {text ? (
                 <PapperPlaneIcon onPress={this.handleSendPress} />
               ) : (
-                <CameraIconBlue size={20} onPress={this.selectPhoto} />
+                <CameraIconBlue
+                  size={20}
+                  onPress={() =>
+                    this._selectMedia({
+                      mediaType: 'mixed',
+                      maxWidth: 1500,
+                      maxHeight: 1500,
+                    })
+                  }
+                />
               )}
             </Right>
           </Wrapper>
         )}
         <ActionSheet
-          ref={node => (this.ActionSheet = node)}
+          ref={node => (this.ActionSheetPlus = node)}
           title="Вложение"
           options={['Файл', 'Мою локацию', 'Отменить']}
           cancelButtonIndex={2}
           onPress={index => {
             switch (index) {
               case 0:
-                this.selectFile()
+                this._selectFile()
                 break
               case 1:
-                this.selectGeo()
+                this._selectGeo()
                 break
               default:
                 break
@@ -299,7 +309,19 @@ class InputComponent extends Component {
     fEditMessage({})
   }
 
-  selectPhoto = async () => {
+  _selectMedia = async (options = {}) => {
+    getImageFromPicker(
+      result => {
+        const { imageFormData = {}, uri = '' } = result
+        let imageSrc = /\.(gif|jpg|jpeg|tiff|png)$/i.test(uri) ? uri : ''
+        this._startSendingFile(imageFormData, imageSrc)
+      },
+      () => {},
+      options,
+    )
+  }
+
+  _startSendingFile = (formDataObject = {}, imageUri = '') => {
     const {
       currentChat,
       setDialogs: setDialogsProp,
@@ -309,76 +331,113 @@ class InputComponent extends Component {
       dialogs,
       user,
     } = this.props
-    getImageFromPicker(
-      result => {
-        const { imageFormData = {}, uri } = result
-        const form = new FormData()
-        form.append('file', imageFormData)
-        form.append('room', currentChat)
-        const tempMessageId = Date.now()
-        addUploadMessageProp({
+    const form = new FormData()
+    form.append('file', formDataObject)
+    form.append('room', currentChat)
+    const tempMessageId = Date.now()
+    let prevProgress = 0
+    const progressMultiplier = 10
+    addUploadMessageProp({
+      room: currentChat,
+      src: imageUri,
+      type: imageUri ? 'image' : 'file',
+      isUploaded: true,
+      created_at: new Date(),
+      sender: { ...user },
+      tempId: tempMessageId,
+      viewers: [],
+      enableUploadProgress: true,
+      uploadProgress: 0,
+    })
+    sendRequest({
+      r_path: p_send_file,
+      method: 'post',
+      attr: form,
+      config: {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+        onUploadProgress: progressEvent => {
+          const uploadProgress = Math.round(
+            (progressEvent.loaded * 100) / progressEvent.total,
+          )
+          if (uploadProgress >= prevProgress + progressMultiplier) {
+            prevProgress = uploadProgress
+            updateUploadMessageProgressProp({
+              room: currentChat,
+              tempId: tempMessageId,
+              uploadProgress,
+            })
+          }
+        },
+      },
+      success: res => {
+        // console.log('load success: ', { res })
+        socket.emit('file', { room: currentChat })
+        const newDialogs = [...dialogs]
+        const index = newDialogs.findIndex(e => e.room === currentChat)
+        newDialogs[index] = res.dialog
+        setDialogsProp(newDialogs)
+      },
+      failFunc: err => {
+        // console.log('load err: ', { err })
+        removeUploadMessageProp({
           room: currentChat,
-          src: uri,
-          type: 'image',
-          isUploaded: true,
-          created_at: new Date(),
-          sender: { ...user },
           tempId: tempMessageId,
-          viewers: [],
-          enableUploadProgress: true,
-          uploadProgress: 0,
         })
-        if (!result.cancelled) {
-          sendRequest({
-            r_path: p_send_file,
-            method: 'post',
-            attr: form,
-            config: {
-              headers: {
-                'Content-Type': 'multipart/form-data',
-              },
-              onUploadProgress: progressEvent => {
-                const uploadProgress = Math.round(
-                  (progressEvent.loaded * 100) / progressEvent.total,
-                )
-                updateUploadMessageProgressProp({
-                  room: currentChat,
-                  tempId: tempMessageId,
-                  uploadProgress,
-                })
-              },
-            },
-            success: res => {
-              socket.emit('file', {
-                room: currentChat,
-                dialog_id: res.dialog._id,
-                participant: res.dialog.participants[0]._id,
-              })
-              const newDialogs = [...dialogs]
-              const index = newDialogs.findIndex(e => e.room === currentChat)
-              newDialogs[index] = res.dialog
-              setDialogsProp(newDialogs)
-            },
-            failFunc: err => {
-              // console.log('load err: ', { err })
-              removeUploadMessageProp({
-                room: currentChat,
-                tempId: tempMessageId,
-              })
-            },
-          })
-        }
+        // if (!result.cancelled) {
+        //   sendRequest({
+        //     r_path: p_send_file,
+        //     method: 'post',
+        //     attr: form,
+        //     config: {
+        //       headers: {
+        //         'Content-Type': 'multipart/form-data',
+        //       },
+        //       onUploadProgress: progressEvent => {
+        //         const uploadProgress = Math.round(
+        //           (progressEvent.loaded * 100) / progressEvent.total,
+        //         )
+        //         updateUploadMessageProgressProp({
+        //           room: currentChat,
+        //           tempId: tempMessageId,
+        //           uploadProgress,
+        //         })
+        //       },
+        //     },
+        //     success: res => {
+        //       socket.emit('file', {
+        //         room: currentChat,
+        //         dialog_id: res.dialog._id,
+        //         participant: res.dialog.participants[0]._id,
+        //       })
+        //       const newDialogs = [...dialogs]
+        //       const index = newDialogs.findIndex(e => e.room === currentChat)
+        //       newDialogs[index] = res.dialog
+        //       setDialogsProp(newDialogs)
+        //     },
+        //     failFunc: err => {
+        //       // console.log('load err: ', { err })
+        //       removeUploadMessageProp({
+        //         room: currentChat,
+        //         tempId: tempMessageId,
+        //       })
+        //     },
+        //   })
+        // }
       },
-      () => {},
-      {
-        maxWidth: 1500,
-        maxHeight: 1500,
-      },
-    )
+    })
   }
 
-  selectFile = async () => {
-    // let result = await DocumentPicker.getDocumentAsync({});
+  _selectFile = async () => {
+    try {
+      const data = await RNDocumentPicker.pick({
+        type: [RNDocumentPicker.types.allFiles],
+      })
+      if (data) {
+        this._startSendingFile(data)
+      }
+    } catch (err) {}
   }
 
   async getGeolocationPromise() {
@@ -405,7 +464,7 @@ class InputComponent extends Component {
     })
   }
 
-  selectGeo = async () => {
+  _selectGeo = async () => {
     const { currentDialog } = this.props
     const coords = await getGeoCoords()
     if (coords) {
@@ -459,8 +518,8 @@ class InputComponent extends Component {
     this.setState({ text: e })
   }
 
-  _showActionSheet = async () => {
-    this.ActionSheet && this.ActionSheet.show()
+  _showActionSheetPlus = async () => {
+    this.ActionSheetPlus && this.ActionSheetPlus.show()
   }
 
   confirmForwarding = () => {

@@ -341,6 +341,7 @@ class Content extends Component {
       _id = 0,
       type = '',
       data: { latitude = 0, longitude = 0 } = {},
+      src = '',
     } = item
     switch (type) {
       case 'geo':
@@ -351,6 +352,16 @@ class Content extends Component {
               title: 'Геолокация',
               latitude,
               longitude,
+            },
+          })
+        break
+      case 'video':
+        navigate &&
+          navigate({
+            routeName: 'VideoView',
+            params: {
+              title: 'Видео',
+              uri: `https://ser.univ.team${src}`,
             },
           })
         break

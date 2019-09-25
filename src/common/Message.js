@@ -134,7 +134,7 @@ const MyMessageCachedImage = styled(FastImage)`
 const InterlocutorsName = styled(InterlocutorsMessageText)`
   margin-bottom: 0;
 `
-const MapViewStreet = styled(View)`
+const BottomLine = styled(View)`
   background: rgba(0, 0, 0, 0.3);
   position: absolute;
   bottom: 0;
@@ -157,15 +157,39 @@ const WhiteTopText = styled(Text)`
   color: ${Colors.white};
   padding: 5px 10px;
 `
-const MapViewStreetInfo = styled(View)`
+const BottomLineInfo = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
 `
-const MapViewStreetTime = styled(Text)`
+const BottomLineTime = styled(Text)`
   color: white;
 `
+const VideoPinBorder = styled(View)`
+  width: 70px;
+  height: 70px;
+  border-radius: 35px;
+  border: 1px solid ${Colors.white};
+  align-items: center;
+  justify-content: center;
+  align-self: center;
+`
+
+const VideoPinTriangle = styled(View)`
+  width: 0;
+  height: 0;
+  margin-left: 5px;
+  background: transparent;
+  border-style: solid;
+  border-top-width: 10px;
+  border-top-color: transparent;
+  border-bottom-width: 10px;
+  border-bottom-color: transparent;
+  border-left-width: 20px;
+  border-left-color: ${Colors.white};
+`
+
 const FileInfoWrapper = styled(View)`
   display: flex;
   flex-direction: row;
@@ -192,7 +216,7 @@ const FileInfo = styled(View)`
   justify-content: center;
 `
 const FileSize = styled(Text)`
-  color: ${({ color }) => color || 'white'};
+  color: ${({ color }) => color || 'black'};
 `
 const Indicator = ({ read = false, color }) =>
   read ? (
@@ -450,12 +474,12 @@ class Message extends Component {
                 tracksViewChanges={false}
               />
             </MapView>
-            <MapViewStreet>
-              <MapViewStreetInfo>
-                <MapViewStreetTime>{finalTime}</MapViewStreetTime>
+            <BottomLine>
+              <BottomLineInfo>
+                <BottomLineTime>{finalTime}</BottomLineTime>
                 <Indicator color="black" read={messageRead} />
-              </MapViewStreetInfo>
-            </MapViewStreet>
+              </BottomLineInfo>
+            </BottomLine>
           </MyMessage>
           <TriangleLeftIcon color={myMessage} />
         </View>
@@ -520,15 +544,108 @@ class Message extends Component {
                   </WhiteTopText>
                 </ShadowTopContainer>
               )}
-              <MapViewStreet style={{ justifyContent: 'flex-start' }}>
-                <MapViewStreetTime>{finalTime}</MapViewStreetTime>
-              </MapViewStreet>
+              <BottomLine style={{ justifyContent: 'flex-start' }}>
+                <BottomLineTime>{finalTime}</BottomLineTime>
+              </BottomLine>
             </InterlocutorsMessage>
           </View>
         </View>
       )
     }
-    if (type === 'file') {
+
+    if (type === 'video') {
+      return myId === sender._id ? (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onPressMessage}
+          onLongPress={onLongPressMessage}
+        >
+          <View
+            style={{
+              flexDirection: 'row',
+              alignItems: 'flex-end',
+              marginRight: 10,
+            }}
+          >
+            <MyMessage
+              style={{
+                height: 150,
+                width: '100%',
+                backgroundColor: Colors.black,
+              }}
+            >
+              <VideoPinBorder>
+                <VideoPinTriangle />
+              </VideoPinBorder>
+              <BottomLine>
+                <BottomLineInfo>
+                  <BottomLineTime>{finalTime}</BottomLineTime>
+                  <Indicator color="black" read={messageRead} />
+                </BottomLineInfo>
+              </BottomLine>
+            </MyMessage>
+            <TriangleLeftIcon color={myMessage} />
+          </View>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity
+          activeOpacity={0.8}
+          onPress={onPressMessage}
+          onLongPress={onLongPressMessage}
+        >
+          <View
+            style={{
+              display: 'flex',
+              alignItems: 'flex-start',
+              flexDirection: 'row',
+            }}
+          >
+            {withImage ? (
+              <ImageComponent
+                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                size={30}
+                source={{
+                  uri: `https://ser.univ.team${sender.image}`,
+                }}
+              />
+            ) : null}
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                position: 'relative',
+                left: withImage ? -5 : 0,
+              }}
+            >
+              <TriangleRightIcon color={interlocatorMessage} />
+              <InterlocutorsMessage
+                style={{
+                  height: 150,
+                  width: '100%',
+                  backgroundColor: Colors.black,
+                }}
+                background={background || interlocatorMessage}
+              >
+                <VideoPinBorder>
+                  <VideoPinTriangle />
+                </VideoPinBorder>
+                {withImage && (
+                  <ShadowTopContainer>
+                    <WhiteTopText>
+                      {`${sender.first_name} ${sender.last_name}`}
+                    </WhiteTopText>
+                  </ShadowTopContainer>
+                )}
+                <BottomLine style={{ justifyContent: 'flex-start' }}>
+                  <BottomLineTime>{finalTime}</BottomLineTime>
+                </BottomLine>
+              </InterlocutorsMessage>
+            </View>
+          </View>
+        </TouchableOpacity>
+      )
+    }
+    if (type === 'file' && !isUploaded) {
       return myId === sender._id ? (
         <TouchableOpacity
           activeOpacity={0.8}
@@ -605,6 +722,31 @@ class Message extends Component {
             </View>
           </View>
         </TouchableOpacity>
+      )
+    }
+
+    if (type === 'file' && isUploaded) {
+      return (
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <MyMessage background={background} style={{ padding: 0 }}>
+            <UploadProgressContainer
+              style={{
+                height: 100,
+                backgroundColor: Colors.black,
+                position: 'relative',
+              }}
+            >
+              <ActivityIndicator animating color={Colors.white} size="large" />
+              {!!enableUploadProgress && (
+                <UploadProgressText>{uploadProgress}%</UploadProgressText>
+              )}
+            </UploadProgressContainer>
+            <MessageInfo>
+              <MessageDate color={Colors.norway}>Загрузка...</MessageDate>
+            </MessageInfo>
+          </MyMessage>
+          <TriangleLeftIcon color={myMessage} />
+        </View>
       )
     }
     return null

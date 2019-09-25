@@ -106,7 +106,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionName "2.0.50"
-        versionCode 31
+        versionCode 35
         setProperty("archivesBaseName", "universe-$versionName($versionCode)")
     }
 
@@ -151,6 +151,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-video')
     implementation project(':react-native-action-sheet')
     implementation project(':react-native-fast-image')
     implementation project(':react-native-linear-gradient')

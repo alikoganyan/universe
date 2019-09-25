@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { SafeAreaView, Text, View, StyleSheet } from 'react-native'
-import MapView from 'react-native-maps'
+import { SafeAreaView, Text, View } from 'react-native'
+import RNVideoPlayer from 'react-native-video-player'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { BackIcon } from '../../assets'
 
-const { sidePadding, HeaderHeight, fontSize } = helper
+const { sidePadding, HeaderHeight, fontSize, Colors } = helper
 const Header = styled(View)`
   width: 100%;
   background: white;
@@ -33,12 +33,12 @@ const Right = styled(View)`
   width: ${sidePadding * 2}px;
 `
 
-export default class MapViewScreen extends Component {
+export default class VideoViewScreen extends Component {
   render() {
     const {
       navigation: {
         goBack,
-        state: { params: { title, latitude = 0, longitude = 0 } = {} } = {},
+        state: { params: { title, uri = '' } = {} } = {},
       } = {},
     } = this.props
     return (
@@ -56,30 +56,19 @@ export default class MapViewScreen extends Component {
           <Right />
         </Header>
         <View style={{ flex: 1 }}>
-          <MapView
-            scrollEnabled
-            rotateEnabled
-            pitchEnabled
-            zoomEnabled
-            showsScale
-            showsCompass
-            zoomControlEnabled
-            showsUserLocation
-            showsMyLocationButton
-            style={StyleSheet.absoluteFillObject}
-            provider="google"
-            region={{
-              latitude,
-              longitude,
-              latitudeDelta: 0.02,
-              longitudeDelta: 0.02,
+          <RNVideoPlayer
+            endWithThumbnail
+            video={{ uri }}
+            ref={r => (this.player = r)}
+            customStyles={{
+              wrapper: {
+                flex: 1,
+                backgroundColor: Colors.black,
+                justifyContent: 'center',
+              },
             }}
-          >
-            <MapView.Marker
-              coordinate={{ latitude, longitude }}
-              tracksViewChanges={false}
-            />
-          </MapView>
+            disableControlsAutoHide
+          />
         </View>
       </SafeAreaView>
     )

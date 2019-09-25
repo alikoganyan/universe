@@ -67,6 +67,8 @@ rn_path = '../node_modules/react-native'
 
   pod 'react-native-fast-image', :path => '../node_modules/react-native-fast-image'
 
+  pod 'react-native-video', :path => '../node_modules/react-native-video'
+
   target 'universeTests' do
     inherit! :search_paths
     # Pods for testing
