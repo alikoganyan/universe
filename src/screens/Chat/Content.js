@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   InteractionManager,
   Alert,
-  ActionSheetIOS,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -412,23 +411,23 @@ class Content extends Component {
 
   _onLongPressMessage = item => {
     this.setState({ optionsSelector: true, selectedMessage: item }, () => {
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: [
-            'Отменить',
-            'Ответить',
-            'Копировать',
-            'Изменить',
-            'Удалить',
-          ],
-          cancelButtonIndex: 0,
-        },
-        buttonIndex => {
-          if (buttonIndex === 1) {
-            /* destructive action */
-          }
-        },
-      )
+      // ActionSheetIOS.showActionSheetWithOptions(
+      //   {
+      //     options: [
+      //       'Отменить',
+      //       'Ответить',
+      //       'Копировать',
+      //       'Изменить',
+      //       'Удалить',
+      //     ],
+      //     cancelButtonIndex: 0,
+      //   },
+      //   buttonIndex => {
+      //     if (buttonIndex === 1) {
+      //       /* destructive action */
+      //     }
+      //   },
+      // )
     })
   }
 
