@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
   InteractionManager,
   Alert,
+  ActionSheetIOS,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { BottomSheet } from 'react-native-btr'
 import moment from 'moment'
 import 'moment/locale/ru'
-import ActionSheet from 'react-native-action-sheet'
 import { chatBg } from '../../assets/images'
 import helper from '../../utils/helpers'
 import Message from '../../common/Message'
@@ -412,7 +412,7 @@ class Content extends Component {
 
   _onLongPressMessage = item => {
     this.setState({ optionsSelector: true, selectedMessage: item }, () => {
-      ActionSheet.showActionSheetWithOptions(
+      ActionSheetIOS.showActionSheetWithOptions(
         {
           options: [
             'Отменить',
