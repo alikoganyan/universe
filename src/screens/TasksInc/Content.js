@@ -12,6 +12,7 @@ import {
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import CheckBox from 'react-native-check-box'
+import _ from 'lodash'
 import TaskComponent from '../../common/Task'
 import { setActiveTask } from '../../actions/tasksActions'
 import helper from '../../utils/helpers'
@@ -70,19 +71,20 @@ const CheckLabel = styled(Text)`
   margin-left: 10px;
   margin-top: 3px;
 `
-const statuses = { accepted: 0, set: 1, cancelled: 1, completed: 2, done: 2 }
+const statuses = {
+  in_work: 0,
+  set: 1,
+  canceled: 1,
+  accepted: 1,
+  completed: 2,
+  done: 2,
+}
 
 class Content extends Component {
   render() {
     const { options, animationCompleted } = this.state
     const { active } = options
-    const { user, activeTask } = this.props
-    const flatten = list =>
-      list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
-    const tasksList = [...user.tasks]
-    const incTasks = flatten(tasksList)
-      .filter(e => !!e.performers.filter(e => e._id === user._id)[0])
-      .sort((a, b) => new Date(b.created_at) - new Date(a.created_at))
+    const { activeTask, tasksInc } = this.props
 
     return (
       <SafeAreaView>
@@ -101,9 +103,9 @@ class Content extends Component {
                 </CheckBoxWrapper>
               ))}
             </OptionsWrapper>
-            {incTasks && animationCompleted ? (
+            {!_.isEmpty(tasksInc) && animationCompleted ? (
               <TaskList
-                data={incTasks.filter(item =>
+                data={tasksInc.filter(item =>
                   active.includes(statuses[item.status]),
                 )}
                 ListFooterComponent={<View />}
@@ -123,6 +125,7 @@ class Content extends Component {
                             // marginRight: myTask ? 10 : 70,
                             // marginLeft: myTask ? 70 : 10,
                           }}
+                          inc
                         >
                           {item}
                         </TaskComponent>
@@ -187,6 +190,7 @@ const mapStateToProps = state => ({
   activeTask: state.tasksReducer.activeTask,
   tasks: state.tasksReducer.tasks,
   user: state.userReducer.user,
+  tasksInc: state.tasksReducer.tasksInc,
 })
 const mapDispatchToProps = dispatch => ({
   setActiveTask: _ => dispatch(setActiveTask(_)),

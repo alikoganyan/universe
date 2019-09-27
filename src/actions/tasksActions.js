@@ -4,6 +4,7 @@ export const SET_INC_TASK = 'SET_INC_TASK'
 export const SET_OUT_TASK = 'SET_OUT_TASK'
 export const SET_ACTIVE_TASK = 'SET_ACTIVE_TASK'
 export const SET_CURRENT_TASK = 'SET_CURRENT_TASK'
+export const SET_TASK_LIST = 'SET_TASK_LIST'
 
 export const setTasks = payload => ({
   type: SET_TASKS,
@@ -27,5 +28,10 @@ export const setActiveTask = payload => ({
 })
 export const setCurrentTask = payload => ({
   type: SET_CURRENT_TASK,
+  payload,
+})
+
+export const setTaskList = payload => ({
+  type: SET_TASK_LIST,
   payload,
 })

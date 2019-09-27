@@ -11,7 +11,7 @@ import {
   EditIcon,
 } from '../assets'
 import { connect } from 'react-redux'
-import { setTasks, setActiveTask } from '../actions/tasksActions'
+import { setTasks, setActiveTask, setTaskList } from '../actions/tasksActions'
 import sendRequest from '../utils/request'
 import { p_tasks } from '../constants/api'
 import ImageComponent from './Image'
@@ -52,7 +52,7 @@ const StatusItem = styled(View)`
   justify-content: space-between;
   align-items: center;
   flex-direction: row;
-  width: 24%;
+  width: 14%;
   height: 3px;
   border-radius: 2;
   background: ${({ completed, color }) => (completed ? color : '#D9D9D9')};
@@ -158,7 +158,14 @@ const ReceiverInfo = styled(View)`
   justify-content: flex-start;
   margin-left: 10px;
 `
-
+const statuses_index = {
+  in_work: 3,
+  set: 0,
+  canceled: 2,
+  accepted: 1,
+  completed: 4,
+  done: 5,
+}
 class TaskComponent extends Component {
   render() {
     const {
@@ -182,37 +189,21 @@ class TaskComponent extends Component {
       performers,
     } = children
     const performer = performers[0]
+
     const { first_name, last_name, phone_number, post, image } = withImage
       ? creator
       : performer
     const statuses = [
       'ЗАДАЧА ПОСТАВЛЕНА',
       'ПРИНЯЛ В РАБОТУ',
+      'ОТКЛОНЕНА',
+      'В РАБОТЕ',
       'ВЫПОЛНЕНА',
-      'ПРИНЯТА',
+      'СДАНА',
     ]
-    const colors = [red, yellow, green, purple]
-    this.stat = ''
-    switch (status) {
-      case 'set':
-        this.stat = 0
-        break
-      case 'accepted':
-        this.stat = 1
-        break
-      case 'done':
-        this.stat = 2
-        break
-      case 'completed':
-        this.stat = 3
-        break
-      case 'cancelled':
-        this.stat = 4
-        break
-      default:
-        this.stat = -1
-        break
-    }
+    const colors = [red, red, red, yellow, green, purple]
+    this.stat = statuses_index[status]
+
     const deadlineDate = new Date(deadline)
     const creationDate = getHamsterDate(created_at)
     const rightControl = activeTask._id === _id
@@ -228,7 +219,7 @@ class TaskComponent extends Component {
           <ControlBar style={{ alignItems: 'flex-end' }}>
             {rightControl ? (
               <>
-                <Exit onPress={rightControl && this.unselect}>
+                <Exit onPress={() => this.reject(status)}>
                   <CloseTaskIcon />
                 </Exit>
                 <Edit onPress={this.editFeed}>
@@ -239,7 +230,12 @@ class TaskComponent extends Component {
                     <RedoIcon />
                   </Accept>
                 )}
-                {this.stat === 2 && (
+                {this.stat === 4 && (
+                  <Accept onPress={leftControl && this.done}>
+                    <DoneIcon />
+                  </Accept>
+                )}
+                {this.stat === 0 && (
                   <Rearrange onPress={rightControl && this.complete}>
                     <StartIcon />
                   </Rearrange>
@@ -389,11 +385,16 @@ class TaskComponent extends Component {
           <ControlBar>
             {leftControl ? (
               <>
-                <Exit onPress={leftControl && this.unselect}>
+                <Exit onPress={() => this.reject(status)}>
                   <CloseTaskIcon />
                 </Exit>
                 {this.stat === 1 && (
-                  <Accept onPress={leftControl && this.done}>
+                  <Accept onPress={leftControl && this.toWork}>
+                    <DoneIcon />
+                  </Accept>
+                )}
+                {this.stat === 3 && (
+                  <Accept onPress={leftControl && this.complete}>
                     <DoneIcon />
                   </Accept>
                 )}
@@ -417,6 +418,10 @@ class TaskComponent extends Component {
     editFeed()
   }
 
+  toWork = () => {
+    this.changeState('in_work')
+  }
+
   done = () => {
     this.changeState('done')
   }
@@ -429,30 +434,27 @@ class TaskComponent extends Component {
     this.changeState('accepted')
   }
 
-  changeState = e => {
-    const {
-      activeTask,
-      setActiveTask,
-      setTasks,
-      tasks,
-      currentTask,
-      // user,
-    } = this.props
-    const newActiveTask = { ...activeTask }
-    const { _id, name, description, deadline, performers } = newActiveTask
-    const newTasks = [...tasks]
-    const newHolder = newTasks.filter(e => e._id === currentTask._id)[0]
-    const newTask = currentTask.tasks_list.filter(
-      e => e._id === activeTask._id,
-    )[0]
-    newTask.status = e
-    const holderId = newHolder.tasks_list.findIndex(e => e._id === newTask._id)
-    const tasksId = newTasks.findIndex(e => e._id === newHolder._id)
-    newHolder.tasks[holderId] = newTask
-    newTasks[tasksId] = newHolder
-    setTasks(newTasks)
-    setActiveTask(newTask)
+  completed = () => {
+    this.changeState('completed')
+  }
 
+  changeState = e => {
+    const { activeTask, tasksInc, tasksOut, inc } = this.props
+    const { _id, name, description, deadline, performers } = activeTask
+
+    if (inc) {
+      const list = [...tasksInc]
+      const taskId = list.findIndex(item => item._id === _id)
+      list[taskId].status = e
+
+      this.props.setTaskList({ tasksInc: list, tasksOut })
+    } else {
+      const list = [...tasksOut]
+      const taskId = list.findIndex(item => item._id === _id)
+      list[taskId].status = e
+
+      this.props.setTaskList({ tasksInc, tasksOut: list })
+    }
     sendRequest({
       r_path: p_tasks,
       method: 'patch',
@@ -484,7 +486,14 @@ class TaskComponent extends Component {
 
   componentDidMount() {}
 
-  componenWillUmount() {
+  componentWillUnmount() {
+    this.unselect()
+  }
+
+  reject = status => {
+    if (status === 'set') {
+      this.changeState('canceled')
+    }
     this.unselect()
   }
 }
@@ -494,10 +503,13 @@ const mapStateToProps = state => ({
   activeTask: state.tasksReducer.activeTask,
   currentTask: state.tasksReducer.currentTask,
   user: state.userReducer.user,
+  tasksInc: state.tasksReducer.tasksInc,
+  tasksOut: state.tasksReducer.tasksOut,
 })
 const mapDispatchToProps = dispatch => ({
   setTasks: _ => dispatch(setTasks(_)),
   setActiveTask: _ => dispatch(setActiveTask(_)),
+  setTaskList: _ => dispatch(setTaskList(_)),
 })
 export default connect(
   mapStateToProps,
