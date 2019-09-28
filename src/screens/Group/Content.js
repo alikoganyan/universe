@@ -108,7 +108,7 @@ class Content extends Component {
                   read={!!item.viewers.length}
                   isGroup
                   item={item}
-                  onLongPress={() => this.handleHold(item)}
+                  onLongPressMessage={() => this.handleHold(item)}
                   onPressMessage={() => this._onPressMessage(item)}
                 />
               )}
