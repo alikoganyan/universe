@@ -3,30 +3,30 @@ PODS:
   - BVLinearGradient (2.5.6):
     - React
   - DoubleConversion (1.1.6)
-  - Firebase/Core (6.8.1):
+  - Firebase/Core (6.9.0):
     - Firebase/CoreOnly
-    - FirebaseAnalytics (= 6.1.1)
-  - Firebase/CoreOnly (6.8.1):
-    - FirebaseCore (= 6.2.3)
-  - Firebase/Messaging (6.8.1):
+    - FirebaseAnalytics (= 6.1.2)
+  - Firebase/CoreOnly (6.9.0):
+    - FirebaseCore (= 6.3.0)
+  - Firebase/Messaging (6.9.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 4.1.4)
-  - FirebaseAnalytics (6.1.1):
-    - FirebaseCore (~> 6.2)
+  - FirebaseAnalytics (6.1.2):
+    - FirebaseCore (~> 6.3)
     - FirebaseInstanceID (~> 4.2)
-    - GoogleAppMeasurement (= 6.1.1)
+    - GoogleAppMeasurement (= 6.1.2)
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
     - GoogleUtilities/Network (~> 6.0)
     - "GoogleUtilities/NSData+zlib (~> 6.0)"
     - nanopb (~> 0.3)
   - FirebaseAnalyticsInterop (1.4.0)
-  - FirebaseCore (6.2.3):
+  - FirebaseCore (6.3.0):
     - FirebaseCoreDiagnostics (~> 1.0)
     - FirebaseCoreDiagnosticsInterop (~> 1.0)
     - GoogleUtilities/Environment (~> 6.2)
     - GoogleUtilities/Logger (~> 6.2)
-  - FirebaseCoreDiagnostics (1.0.1):
+  - FirebaseCoreDiagnostics (1.1.0):
     - FirebaseCoreDiagnosticsInterop (~> 1.0)
     - GoogleDataTransportCCTSupport (~> 1.0)
     - GoogleUtilities/Environment (~> 6.2)
@@ -36,7 +36,7 @@ PODS:
     - FirebaseCore (~> 6.0)
     - GoogleUtilities/Environment (~> 6.0)
     - GoogleUtilities/UserDefaults (~> 6.0)
-  - FirebaseMessaging (4.1.4):
+  - FirebaseMessaging (4.1.5):
     - FirebaseAnalyticsInterop (~> 1.3)
     - FirebaseCore (~> 6.2)
     - FirebaseInstanceID (~> 4.1)
@@ -66,45 +66,45 @@ PODS:
     - GoogleMaps
   - Google-Maps-iOS-Utils/QuadTree (2.1.0):
     - GoogleMaps
-  - GoogleAppMeasurement (6.1.1):
+  - GoogleAppMeasurement (6.1.2):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
     - GoogleUtilities/Network (~> 6.0)
     - "GoogleUtilities/NSData+zlib (~> 6.0)"
     - nanopb (~> 0.3)
-  - GoogleDataTransport (1.2.0)
-  - GoogleDataTransportCCTSupport (1.0.3):
-    - GoogleDataTransport (~> 1.2)
+  - GoogleDataTransport (2.0.0)
+  - GoogleDataTransportCCTSupport (1.1.0):
+    - GoogleDataTransport (~> 2.0)
     - nanopb
   - GoogleMaps (3.1.0):
     - GoogleMaps/Maps (= 3.1.0)
   - GoogleMaps/Base (3.1.0)
   - GoogleMaps/Maps (3.1.0):
     - GoogleMaps/Base
-  - GoogleUtilities/AppDelegateSwizzler (6.2.5):
+  - GoogleUtilities/AppDelegateSwizzler (6.3.0):
     - GoogleUtilities/Environment
     - GoogleUtilities/Logger
     - GoogleUtilities/Network
-  - GoogleUtilities/Environment (6.2.5)
-  - GoogleUtilities/Logger (6.2.5):
+  - GoogleUtilities/Environment (6.3.0)
+  - GoogleUtilities/Logger (6.3.0):
     - GoogleUtilities/Environment
-  - GoogleUtilities/MethodSwizzler (6.2.5):
+  - GoogleUtilities/MethodSwizzler (6.3.0):
     - GoogleUtilities/Logger
-  - GoogleUtilities/Network (6.2.5):
+  - GoogleUtilities/Network (6.3.0):
     - GoogleUtilities/Logger
     - "GoogleUtilities/NSData+zlib"
     - GoogleUtilities/Reachability
-  - "GoogleUtilities/NSData+zlib (6.2.5)"
-  - GoogleUtilities/Reachability (6.2.5):
+  - "GoogleUtilities/NSData+zlib (6.3.0)"
+  - GoogleUtilities/Reachability (6.3.0):
     - GoogleUtilities/Logger
-  - GoogleUtilities/UserDefaults (6.2.5):
+  - GoogleUtilities/UserDefaults (6.3.0):
     - GoogleUtilities/Logger
   - nanopb (0.3.901):
     - nanopb/decode (= 0.3.901)
     - nanopb/encode (= 0.3.901)
   - nanopb/decode (0.3.901)
   - nanopb/encode (0.3.901)
-  - Protobuf (3.9.0)
+  - Protobuf (3.9.2)
   - React (0.59.8):
     - React/Core (= 0.59.8)
   - react-native-document-picker (3.2.4):
@@ -182,17 +182,17 @@ PODS:
     - React
   - RNCAsyncStorage (1.6.1):
     - React
-  - RNDeviceInfo (2.3.2):
+  - RNDeviceInfo (2.3.0):
     - React
   - RNFS (2.14.1):
     - React
   - RNGestureHandler (1.3.0):
     - React
-  - RNSVG (9.6.4):
+  - RNSVG (9.5.3):
     - React
-  - SDWebImage (5.1.1):
-    - SDWebImage/Core (= 5.1.1)
-  - SDWebImage/Core (5.1.1)
+  - SDWebImage (5.2.0):
+    - SDWebImage/Core (= 5.2.0)
+  - SDWebImage/Core (5.2.0)
   - yoga (0.59.8.React)
 
 DEPENDENCIES:
@@ -232,7 +232,7 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  trunk:
     - boost-for-react-native
     - Firebase
     - FirebaseAnalytics
@@ -294,40 +294,40 @@ SPEC CHECKSUMS:
   boost-for-react-native: 39c7adb57c4e60d6c5479dd8623128eb5b3f0f2c
   BVLinearGradient: e3aad03778a456d77928f594a649e96995f1c872
   DoubleConversion: bb338842f62ab1d708ceb63ec3d999f0f3d98ecd
-  Firebase: 9cbe4e5b5eaafa05dc932be58b7c8c3820d71e88
-  FirebaseAnalytics: 843c7f64a8f9c79f0d03281197ebe7bb1d58d477
+  Firebase: 2d750c54cda57d5a6ae31212cfe5cc813c6be7e4
+  FirebaseAnalytics: 5d9ccbf46ed25d3ec9304d263f85bddf1e93e2d2
   FirebaseAnalyticsInterop: d48b6ab67bcf016a05e55b71fc39c61c0cb6b7f3
-  FirebaseCore: e9d9bd1dae61c1e82bc1e0e617a9d832392086a0
-  FirebaseCoreDiagnostics: 4c04ae09d0ab027c30179828c6bb47764df1bd13
+  FirebaseCore: 8b2765c445d40db7137989b7146a3aa3f91b5529
+  FirebaseCoreDiagnostics: be4f7a09d02ab305f18de59a470412caddb64c2a
   FirebaseCoreDiagnosticsInterop: 6829da2b8d1fc795ff1bd99df751d3788035d2cb
   FirebaseInstanceID: 550df9be1f99f751d8fcde3ac342a1e21a0e6c42
-  FirebaseMessaging: 9483ac438b7b223c09dad8712310e9ee7d562c99
+  FirebaseMessaging: b22b949cc45c14da01e60404dd7bffc78956380c
   Folly: de497beb10f102453a1afa9edbf8cf8a251890de
   glog: aefd1eb5dda2ab95ba0938556f34b98e2da3a60d
   Google-Maps-iOS-Utils: c32891ff472eaaa1fca032beedafa1a013af7875
-  GoogleAppMeasurement: 86a82f0e1f20b8eedf8e20326530138fd71409de
-  GoogleDataTransport: 8f9897b8e073687f24ca8d3c3a8013dec7d2d1cc
-  GoogleDataTransportCCTSupport: 51134d81fca795c60cc247d1cb6af63c3d67b8d8
+  GoogleAppMeasurement: 0ae90be1cc4dad40f4a27fc767ef59fa032ec87b
+  GoogleDataTransport: c8617c00e4f3eb9418e42ac0e8ac5241a9d555dd
+  GoogleDataTransportCCTSupport: 9f352523e8785a71f6754f51eeff09f49ec19268
   GoogleMaps: 5c13302e6fe6bb6e686b267196586b91cd594225
-  GoogleUtilities: e7dc37039b19df7fe543479d3e4a02ac8d11bb69
+  GoogleUtilities: 9c2c544202301110b29f7974a82e77fdcf12bf51
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
-  Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
+  Protobuf: 67fb42ba613def994e61854de2b3164f13790cc4
   React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
   react-native-document-picker: c36bf5f067a581657ecaf7124dcd921a8be19061
   react-native-fast-image: fdfc612dba58fd73136cf5efdaeb8cfcad7f63b2
   react-native-google-maps: 88d750ad441b19c24885f20d43a55ecac25939b5
   react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
   react-native-maps: 190c02ca533fddac5bb49cf17bdece3644612107
-  react-native-video: 2a13be56b84904ce1be3487e2fe61b73e30b6a00
-  ReactNativePermissions: f3beb8871251594a8ea2c6b19a3f8252d5c7379d
-  RNCAsyncStorage: 2e2e3feb9bdadc752a026703d8c4065ca912e75a
-  RNDeviceInfo: 17e34f6dd902f08d88cbe2c0b7a01be948d43641
+  react-native-video: 31f90922291b3a3378ee4fa0d74e606646c05231
+  ReactNativePermissions: f0aec11433d43d45953c678b6982921d83ad94c8
+  RNCAsyncStorage: 621bad7a889b5bf1583a52547f2dcd3a4d1ff15e
+  RNDeviceInfo: dd92c8af9bea41d9fd0cbbfa56d18bb0a1a39741
   RNFS: a8fbe7060fa49157d819466404794ad9c58e58cf
   RNGestureHandler: 5329a942fce3d41c68b84c2c2276ce06a696d8b0
-  RNSVG: a53a5de0d90ec96a6502cc3a4534dfcc0c130622
-  SDWebImage: 96d7f03415ccb28d299d765f93557ff8a617abd8
+  RNSVG: 90c76b7cf235654d45e54655b6c189ea4041057c
+  SDWebImage: 609192dcf3898c910a2848032372ead951e66364
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
 PODFILE CHECKSUM: 5b98eeea7a0e6a65193c6709c7a25d9a521b0cd6
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.0
