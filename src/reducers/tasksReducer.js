@@ -5,6 +5,7 @@ import {
   SET_OUT_TASK,
   SET_ACTIVE_TASK,
   SET_CURRENT_TASK,
+  SET_TASK_LIST,
 } from '../actions/tasksActions'
 
 const initialState = {
@@ -13,6 +14,9 @@ const initialState = {
   activeTask: {},
   incTasks: [],
   outTasks: [],
+  tasks_tmp: [],
+  tasksOut: [],
+  tasksInc: [],
 }
 const tasksReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -49,6 +53,12 @@ const tasksReducer = (state = initialState, action) => {
       return {
         ...state,
         currentTask: { ...action.payload },
+      }
+    case SET_TASK_LIST:
+      return {
+        ...state,
+        tasksOut: action.payload.tasksOut,
+        tasksInc: action.payload.tasksInc,
       }
     default:
       return state

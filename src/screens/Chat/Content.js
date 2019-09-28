@@ -13,7 +13,6 @@ import { connect } from 'react-redux'
 import { BottomSheet } from 'react-native-btr'
 import moment from 'moment'
 import 'moment/locale/ru'
-import ActionSheet from 'react-native-action-sheet'
 import { chatBg } from '../../assets/images'
 import helper from '../../utils/helpers'
 import Message from '../../common/Message'
@@ -412,23 +411,23 @@ class Content extends Component {
 
   _onLongPressMessage = item => {
     this.setState({ optionsSelector: true, selectedMessage: item }, () => {
-      ActionSheet.showActionSheetWithOptions(
-        {
-          options: [
-            'Отменить',
-            'Ответить',
-            'Копировать',
-            'Изменить',
-            'Удалить',
-          ],
-          cancelButtonIndex: 0,
-        },
-        buttonIndex => {
-          if (buttonIndex === 1) {
-            /* destructive action */
-          }
-        },
-      )
+      // ActionSheetIOS.showActionSheetWithOptions(
+      //   {
+      //     options: [
+      //       'Отменить',
+      //       'Ответить',
+      //       'Копировать',
+      //       'Изменить',
+      //       'Удалить',
+      //     ],
+      //     cancelButtonIndex: 0,
+      //   },
+      //   buttonIndex => {
+      //     if (buttonIndex === 1) {
+      //       /* destructive action */
+      //     }
+      //   },
+      // )
     })
   }
 

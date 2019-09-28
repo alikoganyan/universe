@@ -59,22 +59,19 @@ const CheckLabel = styled(Text)`
   margin-left: 10px;
   margin-top: 3px;
 `
-const statuses = { accepted: 0, set: 1, cancelled: 1, completed: 2, done: 2 }
+const statuses = {
+  in_work: 0,
+  set: 1,
+  canceled: 1,
+  accepted: 1,
+  completed: 2,
+  done: 2,
+}
 class Content extends Component {
   render() {
     const { options, animationCompleted } = this.state
     const { active } = options
-    const { user, activeTask, tasks } = this.props
-    const flatten = list =>
-      list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
-    const tasksList = [...tasks].map(e => [...e.tasks, ...e.tasks_list])
-    const outTasks = [
-      ...new Set(
-        flatten([...tasksList, ...user.tasks])
-          .filter(e => e.creator._id === user._id)
-          .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)),
-      ),
-    ]
+    const { activeTask, tasksOut } = this.props
 
     return (
       <SafeAreaView>
@@ -93,9 +90,9 @@ class Content extends Component {
                 </CheckBoxWrapper>
               ))}
             </OptionsWrapper>
-            {outTasks && animationCompleted ? (
+            {tasksOut && animationCompleted ? (
               <TaskList
-                data={outTasks.filter(item =>
+                data={tasksOut.filter(item =>
                   active.includes(statuses[item.status]),
                 )}
                 ListFooterComponent={<View />}
@@ -179,6 +176,7 @@ const mapStateToProps = state => ({
   activeTask: state.tasksReducer.activeTask,
   tasks: state.tasksReducer.tasks,
   user: state.userReducer.user,
+  tasksOut: state.tasksReducer.tasksOut,
 })
 const mapDispatchToProps = dispatch => ({
   setActiveTask: _ => dispatch(setActiveTask(_)),

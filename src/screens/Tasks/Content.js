@@ -63,7 +63,14 @@ const StyledScrollView = styled(ScrollView)`
 const TaskListFooter = styled(View)`
   margin: 0;
 `
-const statuses = { accepted: 0, set: 1, cancelled: 1, completed: 2, done: 2 }
+const statuses = {
+  in_work: 0,
+  set: 1,
+  canceled: 1,
+  accepted: 1,
+  completed: 2,
+  done: 2,
+}
 
 class Content extends Component {
   render() {

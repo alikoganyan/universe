@@ -8,8 +8,8 @@ import TaskPack from './TaskPack'
 import Loader from '../../common/Loader'
 import helper from '../../utils/helpers'
 import sendRequest from '../../utils/request'
-import { g_users } from '../../constants/api'
-import { setTasks } from '../../actions/tasksActions'
+import { g_users, g_tasks } from '../../constants/api'
+import { setTasks, setTaskList } from '../../actions/tasksActions'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
 
@@ -129,31 +129,18 @@ class Content extends Component {
       outTasks: flatten(outTasks),
       incTasks: flatten(incTasks),
     })
-    // sendRequest({
-    //   r_path: g_users,
-    //   method: 'get',
-    //   success: ({ users }) => {
-    //     const tasksList = [];
-    //     // const userId = user._id;
-    //     users.map((user) => {
-    //       const { tasks } = user;
-    //       tasks && tasks.map((e, i) => {
-    //         // const amIReceiver = e.performers.filter(e => e._id === userId)[0];
-    //         // const amICreator = e.creator._id === userId;
-    //         // console.log(amIReceiver, amICreator);
-    //         if (i === 0) {
-    //           tasksList.push(user);
-    //         }
-    //       });
-    //     });
-    //     setTimeout(() => {
-    //       setTasks([...tasksList]);
-    //     }, 0);
-    //   },
-    //   failFunc: (err) => {
-    //     console.log({ err });
-    //   }
-    // });
+    sendRequest({
+      r_path: g_tasks,
+      method: 'get',
+      success: res => {
+        const tasksInc = res.tasks.filter(item => item.creator._id !== user._id)
+        const tasksOut = res.tasks.filter(item => item.creator._id === user._id)
+        this.props.setTaskList({ tasksInc, tasksOut })
+      },
+      failFunc: err => {
+        // console.log({ err });
+      },
+    })
   }
 
   componentWillUnmount() {
@@ -214,9 +201,12 @@ class Content extends Component {
 const mapStateToProps = state => ({
   user: state.userReducer.user,
   tasks: state.tasksReducer.tasks,
+  tasksOut: state.tasksReducer.tasksOut,
+  tasksInc: state.tasksReducer.tasksInc,
 })
 const mapDispatchToProps = dispatch => ({
   setTasks: _ => dispatch(setTasks(_)),
+  setTaskList: _ => dispatch(setTaskList(_)),
 })
 export default connect(
   mapStateToProps,
