@@ -97,7 +97,7 @@ class Content extends Component {
             </OptionsWrapper>
             {currentTask.tasks && animationCompleted ? (
               <TaskList
-                data={currentTask.tasks_list
+                data={currentTask.tasks
                   .sort(
                     (a, b) => new Date(b.created_at) - new Date(a.created_at),
                   )
@@ -122,6 +122,7 @@ class Content extends Component {
                             // marginRight: myTask ? 10 : 70,
                             // marginLeft: myTask ? 70 : 10,
                           }}
+                          userTask
                         >
                           {item}
                         </TaskComponent>

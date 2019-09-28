@@ -70,7 +70,7 @@ class HeaderComponent extends Component {
   }
 
   componentWillUnmount() {
-    this.stopSearch()
+    // this.stopSearch()
   }
 
   handleInputChange = e => {

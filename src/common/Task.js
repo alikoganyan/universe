@@ -11,7 +11,12 @@ import {
   EditIcon,
 } from '../assets'
 import { connect } from 'react-redux'
-import { setTasks, setActiveTask, setTaskList } from '../actions/tasksActions'
+import {
+  setTasks,
+  setActiveTask,
+  setTaskList,
+  setTask,
+} from '../actions/tasksActions'
 import sendRequest from '../utils/request'
 import { p_tasks } from '../constants/api'
 import ImageComponent from './Image'
@@ -439,7 +444,15 @@ class TaskComponent extends Component {
   }
 
   changeState = e => {
-    const { activeTask, tasksInc, tasksOut, inc } = this.props
+    const {
+      activeTask,
+      tasksInc,
+      tasksOut,
+      inc,
+      tasksWithUsers,
+      userTask,
+      currentTask,
+    } = this.props
     const { _id, name, description, deadline, performers } = activeTask
 
     if (inc) {
@@ -447,13 +460,19 @@ class TaskComponent extends Component {
       const taskId = list.findIndex(item => item._id === _id)
       list[taskId].status = e
 
-      this.props.setTaskList({ tasksInc: list, tasksOut })
+      this.props.setTaskList({ tasksInc: list, tasksOut, tasksWithUsers })
+    } else if (userTask) {
+      const list = { ...currentTask }
+      const taskId = list.tasks.findIndex(item => item._id === _id)
+      list.tasks[taskId].status = e
+
+      this.props.setTask(list)
     } else {
       const list = [...tasksOut]
       const taskId = list.findIndex(item => item._id === _id)
       list[taskId].status = e
 
-      this.props.setTaskList({ tasksInc, tasksOut: list })
+      this.props.setTaskList({ tasksInc, tasksOut: list, tasksWithUsers })
     }
     sendRequest({
       r_path: p_tasks,
@@ -505,11 +524,13 @@ const mapStateToProps = state => ({
   user: state.userReducer.user,
   tasksInc: state.tasksReducer.tasksInc,
   tasksOut: state.tasksReducer.tasksOut,
+  tasksWithUsers: state.tasksReducer.tasksWithUsers,
 })
 const mapDispatchToProps = dispatch => ({
   setTasks: _ => dispatch(setTasks(_)),
   setActiveTask: _ => dispatch(setActiveTask(_)),
   setTaskList: _ => dispatch(setTaskList(_)),
+  setTask: _ => dispatch(setTask(_)),
 })
 export default connect(
   mapStateToProps,

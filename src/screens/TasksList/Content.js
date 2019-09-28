@@ -34,8 +34,7 @@ const Title = styled(Animated.Text)`
 
 class Content extends Component {
   render() {
-    const { tasks, navigate } = this.props
-    const { incTasks, outTasks } = this.state
+    const { tasksWithUsers, navigate, tasksInc, tasksOut } = this.props
     const opacity = this.scrollY.interpolate({
       inputRange: [0, 90, 91],
       outputRange: [0, 0, 1],
@@ -45,7 +44,7 @@ class Content extends Component {
       outputRange: [0, 50, 50],
     })
 
-    return tasks ? (
+    return tasksWithUsers ? (
       <Wrapper>
         <TabPreHeader
           onWritePress={() => navigate('NewTask')}
@@ -71,18 +70,18 @@ class Content extends Component {
           <Header />
           <TaskPack
             title="inc"
-            tasksPack={incTasks}
+            tasksPack={tasksInc}
             onPress={() => navigate('TasksInc')}
             first
           />
           <TaskPack
             title="out"
-            tasksPack={outTasks}
+            tasksPack={tasksOut}
             onPress={() => navigate('TasksOut')}
             last
           />
-          {tasks.length ? (
-            tasks.map((e, i) => (
+          {tasksWithUsers.length ? (
+            tasksWithUsers.map((e, i) => (
               <Task onPress={this.toTasks} key={i}>
                 {e}
               </Task>
@@ -106,39 +105,23 @@ class Content extends Component {
 
   state = {
     users: [],
-    incTasks: [],
-    outTasks: [],
   }
   scrollY = new Animated.Value(0)
 
   componentDidMount = async () => {
-    const { setTasks: setTasksProp, user } = this.props
-    await this._getUsers()
-    const tasks = this._getTasks()
-
-    const flatten = list =>
-      list.reduce((a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), [])
-    setTasksProp(tasks)
-    const outTasks = [...tasks].map(e =>
-      [...e.tasks, ...e.tasks_list, ...user.tasks].filter(
-        task => task.creator._id === user._id,
-      ),
-    )
-    const incTasks = [...user.tasks]
-    this.setState({
-      outTasks: flatten(outTasks),
-      incTasks: flatten(incTasks),
-    })
+    const { user } = this.props
+    const tasksWithUsers = await this._getUsers()
     sendRequest({
       r_path: g_tasks,
       method: 'get',
       success: res => {
         const tasksInc = res.tasks.filter(item => item.creator._id !== user._id)
         const tasksOut = res.tasks.filter(item => item.creator._id === user._id)
-        this.props.setTaskList({ tasksInc, tasksOut })
+
+        this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
       },
       failFunc: err => {
-        // console.log({ err });
+        // console.log(err);
       },
     })
   }
@@ -167,35 +150,6 @@ class Content extends Component {
       })
     })
   }
-
-  _getTasks = () => {
-    const { user } = this.props
-    const { users } = this.state
-    const contacts = [...users]
-    const my_tasks = []
-    contacts.map(u => {
-      let tasks_list = []
-      u.tasks.map(t => {
-        if (t.creator._id === user._id) {
-          tasks_list.push(t)
-        }
-      })
-      u.created_tasks.map(t => {
-        if (t.performers[0]._id === user._id) {
-          tasks_list.push(t)
-        }
-      })
-      if (tasks_list.length > 0) {
-        tasks_list = tasks_list.sort((a, b) => {
-          const dateDifference = new Date(a.created_at) - new Date(b.created_at)
-          return dateDifference
-        })
-        u.tasks_list = tasks_list
-        my_tasks.push(u)
-      }
-    })
-    return my_tasks
-  }
 }
 
 const mapStateToProps = state => ({
@@ -203,6 +157,7 @@ const mapStateToProps = state => ({
   tasks: state.tasksReducer.tasks,
   tasksOut: state.tasksReducer.tasksOut,
   tasksInc: state.tasksReducer.tasksInc,
+  tasksWithUsers: state.tasksReducer.tasksWithUsers,
 })
 const mapDispatchToProps = dispatch => ({
   setTasks: _ => dispatch(setTasks(_)),

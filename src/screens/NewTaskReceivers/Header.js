@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React, { Component } from 'react'
 import {
   View,
@@ -18,6 +19,7 @@ import helper from '../../utils/helpers'
 import { p_tasks_search, g_users } from '../../constants/api'
 import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
+import { setTasks } from '../../actions/tasksActions'
 
 const { sidePadding, HeaderHeight, fontSize } = helper
 const Header = styled(View)`
@@ -144,7 +146,7 @@ class HeaderComponent extends Component {
             }, 0)
           },
           failFunc: err => {
-            console.log(err)
+            // console.log(err)
           },
         })
       : sendRequest({
@@ -170,7 +172,7 @@ class HeaderComponent extends Component {
             }, 0)
           },
           failFunc: err => {
-            console.log({ err })
+            // console.log({ err })
           },
         })
   }

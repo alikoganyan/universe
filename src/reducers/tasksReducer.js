@@ -17,6 +17,7 @@ const initialState = {
   tasks_tmp: [],
   tasksOut: [],
   tasksInc: [],
+  tasksWithUsers: [],
 }
 const tasksReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -59,6 +60,7 @@ const tasksReducer = (state = initialState, action) => {
         ...state,
         tasksOut: action.payload.tasksOut,
         tasksInc: action.payload.tasksInc,
+        tasksWithUsers: action.payload.tasksWithUsers,
       }
     default:
       return state
