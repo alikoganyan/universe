@@ -134,8 +134,7 @@ const MyMessageCachedImage = styled(FastImage)`
 const InterlocutorsName = styled(InterlocutorsMessageText)`
   margin-bottom: 0;
 `
-const BottomLine = styled(View)`
-  background: rgba(0, 0, 0, 0.3);
+const BottomLine = styled(LinearGradient)`
   position: absolute;
   bottom: 0;
   width: 100%;
@@ -449,18 +448,18 @@ class Message extends Component {
             marginRight: 10,
           }}
         >
-          <MyMessage style={{ height: 150, width: '100%' }}>
+          <MyMessage style={{ height: 200, width: '100%' }}>
             <MapView
               scrollEnabled={false}
               rotateEnabled={false}
               pitchEnabled={false}
               zoomEnabled={false}
               provider="google"
-              style={StyleSheet.absoluteFillObject}
+              style={[StyleSheet.absoluteFillObject, { margin: 3 }]}
               region={{
                 ...data,
-                latitudeDelta: 0.02,
-                longitudeDelta: 0.02,
+                latitudeDelta: 0.002,
+                longitudeDelta: 0.002,
               }}
               tracksViewChanges={false}
               onPress={onPressMessage}
@@ -474,7 +473,11 @@ class Message extends Component {
                 tracksViewChanges={false}
               />
             </MapView>
-            <BottomLine>
+            <BottomLine
+              start={{ x: 0, y: 0.5 }}
+              end={{ x: 1.0, y: 1.0 }}
+              colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
+            >
               <BottomLineInfo>
                 <BottomLineTime>{finalTime}</BottomLineTime>
                 <Indicator color="black" read={messageRead} />
@@ -510,7 +513,7 @@ class Message extends Component {
           >
             <TriangleRightIcon color={interlocatorMessage} />
             <InterlocutorsMessage
-              style={{ height: 150, width: '100%' }}
+              style={{ height: 200, width: '100%' }}
               background={background || interlocatorMessage}
             >
               <MapView
@@ -519,12 +522,12 @@ class Message extends Component {
                 pitchEnabled={false}
                 zoomEnabled={false}
                 provider="google"
-                style={StyleSheet.absoluteFillObject}
+                style={[StyleSheet.absoluteFillObject, { margin: 3 }]}
                 region={{
                   latitude,
                   longitude,
-                  latitudeDelta: 0.02,
-                  longitudeDelta: 0.02,
+                  latitudeDelta: 0.002,
+                  longitudeDelta: 0.002,
                 }}
                 onPress={onPressMessage}
                 onLongPress={onLongPressMessage}
@@ -544,7 +547,12 @@ class Message extends Component {
                   </WhiteTopText>
                 </ShadowTopContainer>
               )}
-              <BottomLine style={{ justifyContent: 'flex-start' }}>
+              <BottomLine
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1.0, y: 1.0 }}
+                colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
+                style={{ justifyContent: 'flex-start' }}
+              >
                 <BottomLineTime>{finalTime}</BottomLineTime>
               </BottomLine>
             </InterlocutorsMessage>
