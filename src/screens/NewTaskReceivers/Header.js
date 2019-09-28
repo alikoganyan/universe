@@ -68,7 +68,7 @@ class HeaderComponent extends Component {
           {!search ? (
             <>
               <BackIcon onPress={back} right />
-              <HeaderText>Добавить получателей</HeaderText>
+              <HeaderText>Добавить исполнителя</HeaderText>
             </>
           ) : (
             <>

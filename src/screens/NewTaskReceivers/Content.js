@@ -321,8 +321,9 @@ class Content extends Component {
   }
 
   addReceiver = e => {
-    const { setReceivers } = this.props
+    const { setReceivers, back } = this.props
     setReceivers([e])
+    back()
   }
 
   addAllReceivers = e => {

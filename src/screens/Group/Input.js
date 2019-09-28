@@ -120,7 +120,7 @@ const MessageBoxLeft = styled(View)`
 class InputComponent extends Component {
   render() {
     const { text, edit, forward, reply } = this.state
-    const { editedMessage, forwardedMessage, repliedMessage } = this.props
+    const { editedMessage, repliedMessage } = this.props
 
     return (
       <>
@@ -148,12 +148,7 @@ class InputComponent extends Component {
         ) : null}
         {forward ? (
           <MessageBox>
-            <MessageBoxLeft>
-              <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
-              <MessageText numberOfLines={1}>
-                {forwardedMessage.text}
-              </MessageText>
-            </MessageBoxLeft>
+            <MessageBoxLeft>{this.renderForward()}</MessageBoxLeft>
             <Right>
               <CloseIcon onPress={this.stopForwarding} marginLeft={false} />
               <PapperPlaneIcon onPress={this.confirmForwarding} />
@@ -229,7 +224,7 @@ class InputComponent extends Component {
     const editChanged =
       JSON.stringify(nextProps.editedMessage) !==
       JSON.stringify(prevState.editedMessage)
-    const forwarChanged =
+    const forwardChanged =
       JSON.stringify(nextProps.forwardedMessage) !==
       JSON.stringify(prevState.forwardedMessage)
     const replyChanged =
@@ -247,14 +242,10 @@ class InputComponent extends Component {
         text: nextProps.editedMessage.text,
       }
     }
-    if (
-      nextProps.forwardedMessage &&
-      nextProps.forwardedMessage.text &&
-      forwarChanged
-    ) {
+    if (nextProps.forwardedMessage && forwardChanged) {
       return {
         ...nextProps,
-        forward: nextProps.forwardedMessage.text,
+        forward: true,
       }
     }
     if (
@@ -269,6 +260,43 @@ class InputComponent extends Component {
     }
 
     return nextProps
+  }
+
+  renderForward = () => {
+    const { forwardedMessage } = this.props
+
+    switch (forwardedMessage.type) {
+      case 'text':
+        return (
+          <>
+            <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
+            <MessageText numberOfLines={1}>{forwardedMessage.text}</MessageText>
+          </>
+        )
+      case 'geo':
+        return (
+          <>
+            <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
+            <MessageText numberOfLines={1}>Forwarded location</MessageText>
+          </>
+        )
+      case 'file':
+        return (
+          <>
+            <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
+            <MessageText numberOfLines={1}>Forwarded file</MessageText>
+          </>
+        )
+      case 'image':
+        return (
+          <>
+            <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
+            <MessageText numberOfLines={1}>Forwarded image</MessageText>
+          </>
+        )
+      default:
+        return null
+    }
   }
 
   confirmEditing = () => {

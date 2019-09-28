@@ -18,7 +18,7 @@ import DefaultAvatar from '../../common/DefaultAvatar'
 import Button from '../../common/Button'
 import { p_create_task } from '../../constants/api'
 import sendRequest from '../../utils/request'
-import { setTasks } from '../../actions/tasksActions'
+import { setTasks, setTaskList } from '../../actions/tasksActions'
 import { GroupIcon, CloseIcon } from '../../assets'
 
 const { Colors, HeaderHeight, sidePadding } = helper
@@ -287,37 +287,28 @@ class Content extends Component {
   }
 
   proceed = e => {
-    const { receivers, forward, setTasks, user, tasks } = this.props
+    const {
+      receivers,
+      forward,
+      tasksOut,
+      tasksInc,
+      tasksWithUsers,
+    } = this.props
     const { deadlineDate, deadlineTime, taskName, taskText } = this.state
     const deadline = this.jsCoreDateCreator(`${deadlineDate}:${deadlineTime}`)
-    const newTaskUser = tasks.filter(e => e._id === user._id)[0]
-    const newTask = {
-      _id: Math.floor(Math.random() * 10000),
+
+    const taskList = [...tasksOut]
+    taskList.push({
       name: taskName,
       description: taskText,
       deadline,
       performers: [receivers[0]._id],
-      creator: { ...user },
-      created_at: new Date(),
-      updated_at: new Date(),
-      status: 'set',
-    }
-    if (newTaskUser) {
-      const newTasks = [...tasks]
-      newTaskUser.tasks = [...newTaskUser.tasks, newTask]
-      const index = newTasks.findIndex(e => e._id === user._id)
-      newTasks[index] = newTaskUser
-      setTasks(newTasks)
-    } else {
-      const newTasks = [
-        ...tasks,
-        {
-          ...user,
-          tasks: [...user.tasks, newTask],
-        },
-      ]
-      setTasks(newTasks)
-    }
+    })
+    this.props.setTaskList({
+      tasksInc,
+      tasksWithUsers,
+      tasksOut: taskList,
+    })
     sendRequest({
       r_path: p_create_task,
       method: 'post',
@@ -363,11 +354,15 @@ const mapStateToProps = state => ({
   user: state.userReducer.user,
   receivers: state.participantsReducer.tasks.receivers,
   tasks: state.tasksReducer.tasks,
+  tasksOut: state.tasksReducer.tasksOut,
+  tasksInc: state.tasksReducer.tasksInc,
+  tasksWithUsers: state.tasksReducer.tasksWithUsers,
 })
 const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setTasks: _ => dispatch(setTasks(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
+  setTaskList: _ => dispatch(setTaskList(_)),
 })
 export default connect(
   mapStateToProps,

@@ -159,7 +159,6 @@ class Content extends Component {
 			onSwipeLeft={this.optionLeft}
 			onSwipeRight={this.optionRight}
 		> */}
-
         <Wrapper>
           <KeyboardAwareScrollView enableOnAndroid>
             <Options>
