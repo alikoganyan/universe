@@ -3,8 +3,6 @@ import {
   View,
   Text,
   SafeAreaView,
-  FlatList,
-  Image,
   TouchableOpacity,
   ScrollView,
   Dimensions,
@@ -34,16 +32,16 @@ const { Colors, HeaderHeight } = helper
 const { green, black, yellow } = Colors
 const AnimatedScrollView = posed.View({
   left: {
-    x: Dimensions.get('window').width,
+    x: 0,
     transition: { duration: 300, ease: 'easeOut' },
   },
   center: {
-    x: 0,
+    x: -Dimensions.get('window').width,
     transition: { duration: 300, ease: 'easeOut' },
   },
 
   right: {
-    x: -Dimensions.get('window').width,
+    x: -Dimensions.get('window').width * 2,
     transition: { duration: 300, ease: 'easeOut' },
   },
 })
@@ -106,11 +104,6 @@ const BoxInnerItem = styled(View)`
   flex-direction: row;
   align-items: center;
 `
-const ContactImage = styled(Image)`
-  width: 36px;
-  height: 36px;
-  border-radius: 18;
-`
 const ContactInfo = styled(View)`
   display: flex;
   align-items: flex-start;
@@ -142,17 +135,25 @@ const Option = styled(Text)`
   overflow: hidden;
   text-align: center;
 `
-const Group = styled(BoxInnerItem)``
-const GroupInfo = styled(ContactInfo)``
-const GroupTitle = styled(ContactName)``
-const GroupParticipants = styled(ContactRole)``
-const GroupImage = styled(ContactImage)``
+
 class Content extends Component {
   render() {
-    const { receivers } = this.props
-    const { users, collapsed, options, animationCompleted } = this.state
+    const { receivers, dialogs } = this.props
+    const {
+      users,
+      collapsed,
+      options,
+      animationCompleted,
+      selectedGroup,
+    } = this.state
     const { department } = users
     const { active } = options
+
+    const allUsers = []
+    department.forEach(item => {
+      allUsers.push(...item.workers)
+    })
+
     return (
       <SafeAreaView>
         {/* <GestureRecognizer
@@ -164,13 +165,53 @@ class Content extends Component {
             <Options>
               {options.options.map((e, i) => (
                 <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                  <Option active={active % 3 === i}>{e}</Option>
+                  <Option active={active === i}>{e}</Option>
                 </TouchableOpacity>
               ))}
             </Options>
             <Animated
               pose={active === 0 ? 'left' : active === 1 ? 'center' : 'right'}
             >
+              <ContactList>
+                {allUsers.map(e => (
+                  <TouchableOpacity
+                    key={e._id}
+                    onPress={() => this.addReceiver(e)}
+                  >
+                    <BoxInnerItem>
+                      {this.includes(e) ? (
+                        <RoundCheckbox
+                          size={36}
+                          backgroundColor={yellow}
+                          checked
+                          onValueChange={() => this.addReceiver(e)}
+                        />
+                      ) : !e.image ||
+                        e.image === '/images/default_group.png' ||
+                        e.image === '/images/default_avatar.jpg' ? (
+                        <DefaultAvatar size={36} id={e._id} />
+                      ) : (
+                        <ImageComponent
+                          source={{
+                            uri: `https://ser.univ.team${e.image}`,
+                          }}
+                          size={36}
+                        />
+                      )}
+                      <ContactInfo>
+                        <ContactName>
+                          {e.first_name
+                            ? `${e.first_name} ${e.last_name}`
+                            : e.phone_number}
+                        </ContactName>
+                        {e.role ? (
+                          <ContactRole>{e.role.name || 'no role'}</ContactRole>
+                        ) : null}
+                      </ContactInfo>
+                    </BoxInnerItem>
+                  </TouchableOpacity>
+                ))}
+              </ContactList>
               <ContactList>
                 {department.map((e, i) => (
                   <Box key={i} last={i === department.length - 1}>
@@ -244,26 +285,32 @@ class Content extends Component {
                 ))}
               </ContactList>
               <ContactList>
-                {animationCompleted ? (
-                  <FlatList
-                    style={{ paddingRight: 5, paddingLeft: 5 }}
-                    ListHeaderComponent={<View style={{ margin: 35 }} />}
-                    inverted
-                    data={department}
-                    renderItem={({ item, index }) => (
-                      <Group key={index}>
-                        <GroupImage />
-                        <GroupInfo>
-                          <GroupTitle>{item.title}</GroupTitle>
-                          <GroupParticipants>
-                            {item.workers ? item.workers.length : 0} участников
-                          </GroupParticipants>
-                        </GroupInfo>
-                      </Group>
-                    )}
-                    keyExtractor={(item, index) => index.toString()}
-                  />
-                ) : null}
+                {dialogs
+                  .filter(item => item.isGroup)
+                  .map((e, i) => (
+                    <Box key={i} last={i === dialogs.length - 1}>
+                      <BoxTitle
+                        onPress={() =>
+                          collapsed[i]
+                            ? this.collapseDepartment(i)
+                            : this.showDepartment(i)
+                        }
+                      >
+                        <>
+                          <RoundCheckbox
+                            size={24}
+                            backgroundColor={yellow}
+                            checked={selectedGroup === e._id}
+                            onValueChange={() => this.addGroupReceivers(e)}
+                          />
+                          <BoxItem title>{e.name}</BoxItem>
+                        </>
+                        <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
+                          <ArrowDownIcon />
+                        </ArrowWrapper>
+                      </BoxTitle>
+                    </Box>
+                  ))}
               </ContactList>
             </Animated>
           </KeyboardAwareScrollView>
@@ -284,7 +331,7 @@ class Content extends Component {
       ],
     },
     options: {
-      active: 1,
+      active: 0,
       options: ['Все', 'Пользователи', 'Группы'],
     },
     groups: [
@@ -298,6 +345,7 @@ class Content extends Component {
       { title: 'длинное корпоративное название группы', participants: 15 },
     ],
     animationCompleted: false,
+    selectedGroup: '',
   }
 
   componentDidMount() {
@@ -357,6 +405,19 @@ class Content extends Component {
     setReceivers(newReceivers)
   }
 
+  addGroupReceivers = e => {
+    const { selectedGroup } = this.state
+    if (selectedGroup === e._id) {
+      this.setState({ selectedGroup: '' })
+
+      this.props.setReceivers([])
+    } else {
+      this.setState({ selectedGroup: e._id })
+
+      this.props.setReceivers(e.participants)
+    }
+  }
+
   includes = e => {
     const { receivers } = this.props
     return !!receivers.filter(user => e._id === user._id)[0]
@@ -392,6 +453,7 @@ const mapStateToProps = state => ({
   user: state.userReducer.user,
   users: state.userReducer,
   receivers: state.participantsReducer.news.receivers,
+  dialogs: state.dialogsReducer.dialogs,
 })
 const mapDispatchToProps = dispatch => ({
   getMessages: _ => dispatch(getMessages(_)),
