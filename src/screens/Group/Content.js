@@ -26,8 +26,13 @@ import {
 import { setDialogs } from '../../actions/dialogsActions'
 import { d_message } from '../../constants/api'
 import sendRequest from '../../utils/request'
+import Loader from '../../common/Loader'
 
-const { HeaderHeight, borderRadius } = helper
+const {
+  HeaderHeight,
+  borderRadius,
+  Colors: { gray2 },
+} = helper
 const Wrapper = styled(View)`
   background: white;
   margin-bottom: ${({ search }) => (search ? HeaderHeight * 2 : HeaderHeight)};
@@ -113,6 +118,7 @@ class Content extends Component {
                 />
               )}
               keyExtractor={(item, index) => index.toString()}
+              ListEmptyComponent={this.renderEmptyComponent}
             />
           </StyledImageBackground>
         </Wrapper>
@@ -197,6 +203,19 @@ class Content extends Component {
       setDialogs(newDialogs)
     }
   }
+
+  renderEmptyComponent = () => (
+    <Loader
+      hint="Пока нет сообщений в диалоге."
+      style={{ flex: 1, height: '100%' }}
+    >
+      <TouchableOpacity onPress={this.toContacts}>
+        <Text style={{ color: gray2, textAlign: 'center' }}>
+          Начните общение, отправив сообщение
+        </Text>
+      </TouchableOpacity>
+    </Loader>
+  )
 
   getMessageDate = () => {
     const { currentDate } = this.state

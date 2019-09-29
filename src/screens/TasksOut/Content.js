@@ -15,6 +15,7 @@ import CheckBox from 'react-native-check-box'
 import TaskComponent from '../../common/Task'
 import { setActiveTask } from '../../actions/tasksActions'
 import helper from '../../utils/helpers'
+import Loader from '../../common/Loader'
 
 const { Colors, HeaderHeight } = helper
 const { pink } = Colors
@@ -96,6 +97,11 @@ class Content extends Component {
                   active.includes(statuses[item.status]),
                 )}
                 ListFooterComponent={<View />}
+                ListEmptyComponent={
+                  <View style={{ flex: 1 }}>
+                    <Loader hint="Пока нет задач" />
+                  </View>
+                }
                 renderItem={({ item }) => {
                   return (
                     <TaskWrapper>

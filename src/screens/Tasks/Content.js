@@ -16,6 +16,7 @@ import TaskComponent from '../../common/Task'
 import { setActiveTask } from '../../actions/tasksActions'
 import { setTaskReceivers } from '../../actions/participantsActions'
 import helper from '../../utils/helpers'
+import Loader from '../../common/Loader'
 
 const { Colors, HeaderHeight } = helper
 const { purple, pink } = Colors
@@ -103,6 +104,11 @@ class Content extends Component {
                   )
                   .filter(item => active.includes(statuses[item.status]))}
                 ListFooterComponent={<TaskListFooter />}
+                ListEmptyComponent={
+                  <View style={{ flex: 1 }}>
+                    <Loader hint="Пока нет задач" />
+                  </View>
+                }
                 renderItem={({ item }) => {
                   const myTask = item.creator._id === user._id
 

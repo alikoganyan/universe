@@ -31,7 +31,7 @@ import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
 
 const { Colors, HeaderHeight, sidePadding } = helper
-const { green, black, grey2, blue } = Colors
+const { green, black, grey2 } = Colors
 const AnimatedScrollView = posed.View({
   left: {
     x: 0,
@@ -312,11 +312,10 @@ class Content extends Component {
   scrollY = new Animated.Value(0)
 
   _renderEmptyComponent = () => (
-    <Loader hint="Пока нет диалогов" style={{ flex: 1, height: '100%' }}>
+    <Loader hint="Пока нет контактов." style={{ flex: 1, height: '100%' }}>
       <TouchableOpacity onPress={this.toContacts}>
         <Text style={{ color: grey2, textAlign: 'center' }}>
-          Откройте первый диалог, выбрав пользователя
-          <Text style={{ color: blue }}> на странице контактов</Text>
+          Похоже произошла ошибка, обратитесь к администратору системы
         </Text>
       </TouchableOpacity>
     </Loader>
