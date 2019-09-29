@@ -585,7 +585,11 @@ class Message extends Component {
               <VideoPinBorder>
                 <VideoPinTriangle />
               </VideoPinBorder>
-              <BottomLine>
+              <BottomLine
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1.0, y: 1.0 }}
+                colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
+              >
                 <BottomLineInfo>
                   <BottomLineTime>{finalTime}</BottomLineTime>
                   <Indicator color="black" read={messageRead} />
@@ -644,7 +648,12 @@ class Message extends Component {
                     </WhiteTopText>
                   </ShadowTopContainer>
                 )}
-                <BottomLine style={{ justifyContent: 'flex-start' }}>
+                <BottomLine
+                  start={{ x: 0, y: 0.5 }}
+                  end={{ x: 1.0, y: 1.0 }}
+                  colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
+                  style={{ justifyContent: 'flex-start' }}
+                >
                   <BottomLineTime>{finalTime}</BottomLineTime>
                 </BottomLine>
               </InterlocutorsMessage>
