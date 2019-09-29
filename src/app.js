@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { BackHandler, StatusBar, AppState } from 'react-native'
+import { BackHandler, StatusBar, AppState, NetInfo } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import GlobalFont from 'react-native-global-font'
 import firebase from 'react-native-firebase'
@@ -12,6 +12,8 @@ import { connectToSocket } from './utils/socket'
 import { setUser, setAuth } from './actions/userActions'
 import { setDialogsUserId } from './actions/dialogsActions'
 import { createNotificationListeners } from './utils/fcm'
+import OfflineScreen from './common/OfflineScreen'
+import Offline from './common/Offline'
 
 // const Roboto = require('./assets/fonts/Roboto-Regular.ttf')
 
@@ -20,13 +22,22 @@ console.disableYellowBox = true
 
 export default class AppComponent extends Component {
   render() {
-    const { loaded, logged } = this.state
+    const { loaded, logged, connected } = this.state
     const Navigator = createRootNavigator(loaded && logged)
 
+    if(!loaded) {
+      return null;
+    }
+    if(!connected && !logged) {
+      return <OfflineScreen />
+    }
     return (
       <Provider store={store}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
-        {loaded ? <Navigator /> : null}
+        {logged && !connected && (
+          <Offline />
+        )}
+        <Navigator />
       </Provider>
     )
   }
@@ -34,11 +45,13 @@ export default class AppComponent extends Component {
   state = {
     loaded: false,
     logged: false,
+    connected: true
   }
 
   appState = AppState.currentState
 
   async componentDidMount() {
+    NetInfo.addEventListener('connectionChange', this.handleFirstConnectivityChange);
     createNotificationListeners()
     firebase.notifications().setBadge(0)
     getPushesPermissionStatusAndToken(store.dispatch)()
@@ -74,6 +87,22 @@ export default class AppComponent extends Component {
 
   componetnWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this._handleBackButton)
+    NetInfo.removeEventListener(
+      'connectionChange',
+      this.handleFirstConnectivityChange,
+    );
+  }
+
+  handleFirstConnectivityChange = (connectionInfo) => {
+    if(connectionInfo.type === 'none') {
+      this.setState({
+        connected: false
+      })
+    } else {
+      this.setState({
+        connected: true
+      })
+    }
   }
 
   _handleBackButton = () => {
