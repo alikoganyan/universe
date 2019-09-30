@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, Image, Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import styled from 'styled-components'
 import helper from '../utils/helpers'
-import ICONS from './icons'
+import * as ICONS from './icons'
 
 const {
   IconDarkColor,
@@ -193,7 +193,7 @@ export function FileIcon(props) {
       <Image
         style={{ width: IconSize, height: IconSize }}
         resizeMode="contain"
-        source={ICONS.File}
+        source={ICONS.Files}
       />
     </StyledTouchableOpacity>
   )

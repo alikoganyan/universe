@@ -4,19 +4,17 @@ import {
   Text,
   FlatList,
   ImageBackground,
-  TouchableOpacity,
   InteractionManager,
   Alert,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { BottomSheet } from 'react-native-btr'
+import ActionSheet from 'react-native-actionsheet'
 import moment from 'moment'
 import 'moment/locale/ru'
 import { chatBg } from '../../assets/images'
-import helper from '../../utils/helpers'
+import helper, { getHamsterDate } from '../../utils/helpers'
 import Message from '../../common/Message'
-import ImagesViewer from '../../common/ImagesViewer'
 import sendRequest from '../../utils/request'
 import { setDialogs } from '../../actions/dialogsActions'
 import { setTaskReceivers } from '../../actions/participantsActions'
@@ -27,29 +25,12 @@ import {
 } from '../../actions/messageActions'
 import { d_message } from '../../constants/api'
 
-const { HeaderHeight, borderRadius } = helper
+const { HeaderHeight } = helper
 const Wrapper = styled(View)`
   background: white;
   margin-bottom: ${({ search }) => (search ? HeaderHeight * 2 : HeaderHeight)};
   z-index: 1;
   position: relative;
-`
-const MessageOptions = styled(View)`
-  background: white;
-  width: 94%;
-  position: absolute;
-  margin: 0 3%;
-  padding: 30px 7% 0;
-  bottom: 10px;
-  border-radius: ${borderRadius};
-  display: flex;
-  justify-content: space-around;
-  align-items: flex-start;
-  z-index: 9999;
-`
-const MessageOption = styled(TouchableOpacity)`
-  padding-bottom: 30px;
-  width: 100%;
 `
 const StyledFlatList = styled(FlatList)`
   padding-right: 5;
@@ -78,14 +59,8 @@ const DateView = styled(View)`
 `
 class Content extends Component {
   render() {
-    const {
-      selectedMessage,
-      optionsSelector,
-      previewImages,
-      previewImagesIndex,
-      previewImagesIsVisible,
-    } = this.state
-    const { search, user, dialogs, currentChat, editedMessage } = this.props
+    const { messageLongPressActions } = this.state
+    const { search, dialogs, currentChat, editedMessage } = this.props
     const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const isEditing = !!editedMessage.text
     const messages = dialog ? [...dialog.messages] : []
@@ -120,68 +95,28 @@ class Content extends Component {
             />
           </StyledImageBackground>
         </Wrapper>
-        <ImagesViewer
-          isVisible={previewImagesIsVisible}
-          images={previewImages}
-          index={previewImagesIndex}
-          onClose={this._onCLosePreviewImages}
-        />
-        <BottomSheet
-          visible={optionsSelector}
-          onBackButtonPress={this.unselect}
-          onBackdropPress={this.unselect}
-        >
-          <MessageOptions>
-            {selectedMessage._id && selectedMessage.sender._id === user._id ? (
-              <MessageOption onPress={this.turnToTask}>
-                <Text>Сделать задачей</Text>
-              </MessageOption>
-            ) : (
-              <MessageOption onPress={() => this.replyMessage(selectedMessage)}>
-                <Text>Ответить</Text>
-              </MessageOption>
-            )}
-            <MessageOption onPress={() => this.forwardMessage(selectedMessage)}>
-              <Text>Переслать</Text>
-            </MessageOption>
-            {selectedMessage._id && selectedMessage.sender._id === user._id && (
-              <>
-                <MessageOption
-                  onPress={() => this.editMessage(selectedMessage)}
-                >
-                  <Text>Редактировать</Text>
-                </MessageOption>
-                {selectedMessage.type === 'image' && (
-                  <MessageOption>
-                    <Text>Сохранить</Text>
-                  </MessageOption>
-                )}
-                <MessageOption onPress={this.messageDeleteConfirmation}>
-                  <Text>Удалить</Text>
-                </MessageOption>
-              </>
-            )}
-            <MessageOption onPress={this.unselect}>
-              <Text>Отменить</Text>
-            </MessageOption>
-          </MessageOptions>
-        </BottomSheet>
         <DateContainer>
           <DateView>
             <Text>{this.getMessageDate()}</Text>
           </DateView>
         </DateContainer>
+        <ActionSheet
+          ref={node => (this.ActionSheetMessage = node)}
+          options={messageLongPressActions.map(({ title }) => title)}
+          cancelButtonIndex={messageLongPressActions.length - 1}
+          onPress={index =>
+            messageLongPressActions[index] &&
+            messageLongPressActions[index].action &&
+            messageLongPressActions[index].action()
+          }
+        />
       </>
     )
   }
 
   state = {
-    selectedMessage: {},
+    messageLongPressActions: [],
     animationCompleted: false,
-    optionsSelector: false,
-    previewImages: [],
-    previewImagesIndex: 0,
-    previewImagesIsVisible: false,
     currentDate: '',
   }
 
@@ -291,42 +226,31 @@ class Content extends Component {
     }
   }
 
-  turnToTask = () => {
+  turnToTask = message => {
     const { navigate, setTaskReceivers, currentDialog } = this.props
-    const { selectedMessage } = this.state
     setTaskReceivers([currentDialog])
-    const { text } = selectedMessage
+    const { text } = message
     const task = {
       text,
     }
     navigate({ routeName: 'NewTask', params: task })
-    this.unselect()
   }
 
-  messageDeleteConfirmation = () => {
+  messageDeleteConfirmation = message => {
     Alert.alert('Внимание', 'Вы уверены что хотите удалить сообщение', [
       { text: 'Нет' },
-      { text: 'Да', onPress: this.deleteMessage },
+      { text: 'Да', onPress: () => this.deleteMessage(message) },
     ])
   }
 
-  deleteMessage = () => {
+  deleteMessage = currentMessage => {
     const { dialogs, setDialogs, currentChat, currentRoomId } = this.props
-    const { selectedMessage } = this.state
-    // console.log({
-    //   r_path: d_message,
-    //   method: 'delete',
-    //   attr: {
-    //     dialog_id: currentRoomId,
-    //     messages: [selectedMessage._id],
-    //   },
-    // })
     sendRequest({
       r_path: d_message,
       method: 'delete',
       attr: {
         dialog_id: currentRoomId,
-        messages: [selectedMessage._id],
+        messages: [currentMessage._id],
       },
       success: res => {
         // console.log(res)
@@ -338,20 +262,16 @@ class Content extends Component {
     const dialog = dialogs.filter(dialog => dialog.room === currentChat)[0]
     const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
     dialog.messages = dialog.messages.filter(
-      message => message._id !== selectedMessage._id,
+      message => message._id !== currentMessage._id,
     )
     const newDialogs = [...dialogs]
     newDialogs[dialogIndex] = dialog
     setDialogs(newDialogs)
-    this.unselect()
-  }
-
-  unselect = () => {
-    this.setState({ selectedMessage: {}, optionsSelector: false })
   }
 
   _onPressMessage = item => {
-    const { navigate, dialogs, currentChat } = this.props
+    const { navigate, dialogs, currentChat, currentDialog } = this.props
+    const { first_name, last_name, phone_number } = currentDialog
     const {
       _id = 0,
       type = '',
@@ -390,17 +310,18 @@ class Content extends Component {
           let imageIndex = 0
           dialogMessages.forEach(message => {
             if (message.type === 'image') {
-              dialogImages.push(`https://ser.univ.team${message.src}`)
+              dialogImages.push({
+                image: `https://ser.univ.team${message.src}`,
+                title: first_name ? `${first_name} ${last_name}` : phone_number,
+                description: getHamsterDate(message.created_at),
+                actions: this._getMessageActions(message).slice(0, -1),
+              })
               if (message._id === _id) {
                 imageIndex = dialogImages.length - 1
               }
             }
           })
-          this.setState({
-            previewImages: dialogImages,
-            previewImagesIndex: imageIndex,
-            previewImagesIsVisible: true,
-          })
+          this.props.onShowPreviewImages(dialogImages, imageIndex)
         }
         break
 
@@ -409,52 +330,73 @@ class Content extends Component {
     }
   }
 
-  _onLongPressMessage = item => {
-    this.setState({ optionsSelector: true, selectedMessage: item }, () => {
-      // ActionSheetIOS.showActionSheetWithOptions(
-      //   {
-      //     options: [
-      //       'Отменить',
-      //       'Ответить',
-      //       'Копировать',
-      //       'Изменить',
-      //       'Удалить',
-      //     ],
-      //     cancelButtonIndex: 0,
-      //   },
-      //   buttonIndex => {
-      //     if (buttonIndex === 1) {
-      //       /* destructive action */
-      //     }
-      //   },
-      // )
+  _getMessageActions = message => {
+    const { user } = this.props
+    let actions = []
+    if (message._id && message.sender._id === user._id) {
+      actions.push({
+        title: 'Сделать задачей',
+        action: () => this.turnToTask(message),
+      })
+    } else {
+      actions.push({
+        title: 'Ответить',
+        action: () => this.replyMessage(message),
+      })
+    }
+    actions.push({
+      title: 'Переслать',
+      action: () => this.forwardMessage(message),
     })
+    if (message._id && message.sender._id === user._id) {
+      actions.push({
+        title: 'Редактировать',
+        action: () => this.editMessage(message),
+      })
+    }
+    // if (message._id && message.type === 'image') {
+    //   actions.push({
+    //     title: 'Сохранить',
+    //     action: () => {},
+    //   })
+    // }
+    if (message._id && message.sender._id === user._id) {
+      actions.push({
+        title: 'Удалить',
+        action: () => this.messageDeleteConfirmation(message),
+      })
+    }
+    actions.push({
+      title: 'Отменить',
+      action: () => {},
+    })
+    return actions
   }
 
-  _onCLosePreviewImages = () => {
-    this.setState({
-      previewImages: [],
-      previewImagesIndex: 0,
-      previewImagesIsVisible: false,
-    })
+  _onLongPressMessage = message => {
+    this.setState(
+      {
+        messageLongPressActions: this._getMessageActions(message),
+      },
+      () => {
+        this.ActionSheetMessage && this.ActionSheetMessage.show()
+      },
+    )
   }
 
   editMessage = message => {
     const { editMessage } = this.props
-    this.unselect()
     editMessage({ ...message })
   }
 
   forwardMessage = message => {
     const { forwardMessage, goBack } = this.props
-    this.unselect()
     forwardMessage(message)
     goBack()
   }
 
   replyMessage = message => {
     const { replyMessage } = this.props
-    this.unselect()
     replyMessage(message)
   }
 }

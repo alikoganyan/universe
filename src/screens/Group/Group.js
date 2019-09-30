@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component, Fragment } from 'react'
 import { View, Platform } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -8,6 +8,7 @@ import {
   setRoom,
 } from '../../actions/messageActions'
 import SafeAreaView from '../../common/SafeAreaView'
+import ImagesViewer from '../../common/ImagesViewer'
 import Header from './Header'
 import Input from './Input'
 import Content from './Content'
@@ -25,24 +26,60 @@ const Bottom = styled(View)`
   z-index: 200;
 `
 class Chat extends Component {
+  static state = {
+    previewImages: [],
+    previewImagesIndex: 0,
+    previewImagesIsVisible: false,
+  }
+
+  _onCLosePreviewImages = () => {
+    this.setState({
+      previewImages: [],
+      previewImagesIndex: 0,
+      previewImagesIsVisible: false,
+    })
+  }
+
+  _onShowPreviewImages = (images, index) => {
+    this.setState({
+      previewImages: images,
+      previewImagesIndex: index,
+      previewImagesIsVisible: true,
+    })
+  }
+
   render() {
+    const {
+      previewImagesIsVisible,
+      previewImages,
+      previewImagesIndex,
+    } = this.state
     return (
-      <SafeAreaView behavior="padding" enabled={Platform.OS === 'ios'}>
-        <Wrapper>
-          <Header
-            toProfile={this.toProfile}
-            back={this.navigateBack}
-            currentChat={this.props.currentChat}
-          />
-          <Content
-            navigate={this.props.navigation.navigate}
-            goBack={this.props.navigation.goBack}
-          />
-          <Bottom>
-            <Input />
-          </Bottom>
-        </Wrapper>
-      </SafeAreaView>
+      <Fragment>
+        <SafeAreaView behavior="padding" enabled={Platform.OS === 'ios'}>
+          <Wrapper>
+            <Header
+              toProfile={this.toProfile}
+              back={this.navigateBack}
+              currentChat={this.props.currentChat}
+            />
+            <Content
+              navigate={this.props.navigation.navigate}
+              goBack={this.props.navigation.goBack}
+              onShowPreviewImages={this._onShowPreviewImages}
+            />
+            <Bottom>
+              <Input />
+            </Bottom>
+          </Wrapper>
+        </SafeAreaView>
+        <ImagesViewer
+          isVisible={previewImagesIsVisible}
+          images={previewImages}
+          index={previewImagesIndex}
+          onClose={this._onCLosePreviewImages}
+        />
+      </Fragment>
     )
   }
 
