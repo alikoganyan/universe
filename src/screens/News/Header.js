@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { CloseIcon, SearchIconGray } from '../../assets/index'
 import helper from '../../utils/helpers'
-import { p_news_search, p_news } from '../../constants/api'
+import { p_news_search } from '../../constants/api'
 import { setNews } from '../../actions/newsActions'
 import sendRequest from '../../utils/request'
 
@@ -74,7 +74,7 @@ class HeaderComponent extends PureComponent {
   handleInputChange = e => {
     const { setNews } = this.props
     this.setState({ input: e })
-    e && e.length >= 2
+    e
       ? sendRequest({
           r_path: p_news_search,
           method: 'post',
@@ -90,8 +90,12 @@ class HeaderComponent extends PureComponent {
           },
         })
       : sendRequest({
-          r_path: p_news,
-          method: 'get',
+          r_path: p_news_search,
+          method: 'post',
+          attr: {
+            text: '',
+            withUser: true,
+          },
           success: res => {
             setNews(res.news)
           },

@@ -3,6 +3,7 @@ import { View, Text, Dimensions, Platform } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ActionSheet from 'react-native-actionsheet'
+import _ from 'lodash'
 import getImageFromPicker from '../../utils/ImagePicker'
 import RNDocumentPicker from 'react-native-document-picker'
 import getGeoCoords from '../../utils/geolocation'
@@ -245,7 +246,7 @@ class InputComponent extends Component {
         text: nextProps.editedMessage.text,
       }
     }
-    if (nextProps.forwardedMessage && forwardChanged) {
+    if (!_.isEmpty(nextProps.forwardedMessage) && forwardChanged) {
       return {
         ...nextProps,
         forward: true,

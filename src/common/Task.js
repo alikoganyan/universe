@@ -11,6 +11,7 @@ import {
   EditIcon,
 } from '../assets'
 import { connect } from 'react-redux'
+import moment from 'moment'
 import {
   setTasks,
   setActiveTask,
@@ -345,25 +346,7 @@ class TaskComponent extends Component {
                 <TaskDeadlineLabel numberOfLines={1}>
                   Срок:{' '}
                   <TaskDeadlineValue>
-                    {deadlineDate.getDate() >= 10
-                      ? deadlineDate.getDate()
-                      : `0${deadlineDate.getDate()}`}
-                    .
-                    {deadlineDate.getMonth() >= 10
-                      ? deadlineDate.getMonth()
-                      : `0${deadlineDate.getMonth()}`}
-                    .
-                    {deadlineDate
-                      .getFullYear()
-                      .toString()
-                      .substr(-2)}{' '}
-                    {deadlineDate.getHours() >= 10
-                      ? deadlineDate.getHours()
-                      : `0${deadlineDate.getHours()}`}
-                    :
-                    {deadlineDate.getMinutes() >= 10
-                      ? deadlineDate.getMinutes()
-                      : `0${deadlineDate.getMinutes()}`}
+                    {moment(deadlineDate).format()}
                   </TaskDeadlineValue>
                 </TaskDeadlineLabel>
               </TaskDeadline>

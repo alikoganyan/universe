@@ -165,6 +165,7 @@ class Content extends Component {
     const { receivers, forward, addFeed, user } = this.props
     const { text } = this.state
     let idList = []
+    // eslint-disable-next-line array-callback-return
     receivers.map(e => {
       idList = [...idList, e._id]
     })
@@ -191,11 +192,10 @@ class Content extends Component {
           },
         },
         success: res => {
-          console.log({ res })
           forward()
         },
         failFunc: err => {
-          console.log({ err })
+          // console.log({ err })
         },
       })
     }

@@ -193,6 +193,7 @@ class Content extends Component {
       inputRange: [0, 50, 51],
       outputRange: [0, 50, 50],
     })
+
     return (
       <Wrapper>
         <TabPreHeader
@@ -279,7 +280,12 @@ class Content extends Component {
                 </Collapsible>
               </Box>
             )}
-            keyExtractor={item => item.title._id.toString()}
+            keyExtractor={(item, i) => {
+              if (item.title._id) {
+                return item.title._id.toString()
+              }
+              return i.toString()
+            }}
             scrollEventThrottle={16}
             onScroll={Animated.event(
               [
@@ -459,17 +465,22 @@ class Content extends Component {
         const newUsers = { ...users }
         const newDepartment = [...users.department]
         res.users.forEach(user => {
-          const department = newUsers.department.filter(
-            e =>
-              e.title.name === user.department.name ||
-              e.title.name === 'без департамента',
-          )[0]
-          if (department) {
-            const index = newUsers.department.findIndex(
-              e =>
+          const department = newUsers.department.filter(e => {
+            if (e.title && user.department) {
+              return (
                 e.title.name === user.department.name ||
-                e.title.name === 'без департамента',
-            )
+                e.title.name === 'без департамента'
+              )
+            }
+            return false
+          })[0]
+          if (department) {
+            const index = newUsers.department.findIndex(e => {
+              return (
+                e.title.name === user.department.name ||
+                e.title.name === 'без департамента'
+              )
+            })
             newDepartment[index].users.push(user)
           } else {
             newDepartment.push({
