@@ -42,8 +42,7 @@ const StyledInput = styled(TextInput)`
   padding-bottom: 10px;
   text-align: center;
   margin-bottom: 50px;
-  height: 40px;
-  max-height: 40px;
+  min-height: 40px;
   ${({ style }) => style}
 `
 const ButtonBox = styled(View)`
@@ -150,7 +149,7 @@ class Content extends Component {
             value={taskName}
             placeholder="Название задачи"
             multiline
-            style={{ flex: 1, marginBottom: 30, textAlign: 'left' }}
+            style={{ marginBottom: 30, textAlign: 'left' }}
           />
           <StyledInput
             password
@@ -159,7 +158,6 @@ class Content extends Component {
             placeholder="Текст задачи"
             multiline
             style={{
-              flex: 1,
               marginBottom: 30,
               textAlign: 'left',
               padding: 0,

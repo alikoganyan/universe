@@ -7,6 +7,7 @@ import {
   ScrollView,
   Dimensions,
   InteractionManager,
+  Animated as AnimatedNative,
 } from 'react-native'
 import styled from 'styled-components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -115,23 +116,31 @@ const ContactRole = styled(Text)`
   color: #a7b0ba;
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)``
-const Options = styled(View)`
+const OptionsWrap = styled(AnimatedNative.View)`
+  padding-top: 13px;
+  background-color: #ffffff;
+`
+const Options = styled(AnimatedNative.View)`
   display: flex;
   align-self: center;
   background: ${green};
   flex-direction: row;
   justify-content: space-between;
+  border-radius: 16;
   padding: 1px;
-  border-radius: 13;
   overflow: hidden;
+  width: ${Dimensions.get('window').width - helper.sidePadding * 2}px;
 `
 const Option = styled(Text)`
   color: ${({ active }) => (active ? black : 'white')};
   background: ${({ active }) => (active ? 'white' : 'transparent')};
-  min-width: 20%;
-  margin: 1px;
-  border-radius: 10;
-  padding: 2px 10px;
+  border: ${({ active }) => (active ? '1px rgba(0, 0, 0, 0.1) solid' : '0')};
+  border-color: ${({ active }) =>
+    active ? 'rgba(0, 0, 0, 0.1)' : 'transparent'};
+  border-style: solid;
+  min-width: 27%;
+  border-radius: 15;
+  padding: 8px 10px 7px;
   overflow: hidden;
   text-align: center;
 `
@@ -162,13 +171,18 @@ class Content extends Component {
 		> */}
         <Wrapper>
           <KeyboardAwareScrollView enableOnAndroid>
-            <Options>
-              {options.options.map((e, i) => (
-                <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                  <Option active={active === i}>{e}</Option>
-                </TouchableOpacity>
-              ))}
-            </Options>
+            <OptionsWrap>
+              <Options>
+                {options.options.map((e, i) => (
+                  <TouchableOpacity
+                    key={i}
+                    onPress={() => this.selectOption(i)}
+                  >
+                    <Option active={active === i}>{e}</Option>
+                  </TouchableOpacity>
+                ))}
+              </Options>
+            </OptionsWrap>
             <Animated
               pose={active === 0 ? 'left' : active === 1 ? 'center' : 'right'}
             >
