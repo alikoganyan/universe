@@ -333,7 +333,11 @@ class Content extends Component {
   _getMessageActions = message => {
     const { user } = this.props
     let actions = []
-    if (message._id && message.sender._id === user._id) {
+    if (
+      message._id &&
+      message.type === 'text' &&
+      message.sender._id === user._id
+    ) {
       actions.push({
         title: 'Сделать задачей',
         action: () => this.turnToTask(message),
@@ -348,7 +352,11 @@ class Content extends Component {
       title: 'Переслать',
       action: () => this.forwardMessage(message),
     })
-    if (message._id && message.sender._id === user._id) {
+    if (
+      message._id &&
+      message.type === 'text' &&
+      message.sender._id === user._id
+    ) {
       actions.push({
         title: 'Редактировать',
         action: () => this.editMessage(message),
