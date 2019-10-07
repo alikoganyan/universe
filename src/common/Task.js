@@ -402,8 +402,8 @@ class TaskComponent extends Component {
   }
 
   editFeed = () => {
-    const { editFeed } = this.props
-    editFeed()
+    const { navigate } = this.props
+    navigate('TaskEdit')
   }
 
   toWork = () => {

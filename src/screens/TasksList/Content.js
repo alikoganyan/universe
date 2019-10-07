@@ -82,7 +82,11 @@ class Content extends Component {
           />
           {tasksWithUsers.length ? (
             tasksWithUsers.map((e, i) => (
-              <Task onPress={this.toTasks} key={i}>
+              <Task
+                onPress={this.toTasks}
+                key={i}
+                navigate={this.props.navigate}
+              >
                 {e}
               </Task>
             ))

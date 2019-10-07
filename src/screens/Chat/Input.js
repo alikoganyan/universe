@@ -120,6 +120,7 @@ const MessageBoxLeft = styled(View)`
   flex-direction: column;
   justify-content: space-between;
   align-items: flex-start;
+  max-width: 80%;
 `
 class InputComponent extends Component {
   render() {

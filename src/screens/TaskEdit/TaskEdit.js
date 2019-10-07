@@ -21,6 +21,8 @@ export default class Signup extends Component {
             addParticipants={this.addParticipants}
             forward={this.moveForward}
             back={this.back}
+            getParam={this.props.navigation.getParam}
+            navigate={this.props.navigation.navigate}
           />
         </Wrapper>
       </SafeAreaView>

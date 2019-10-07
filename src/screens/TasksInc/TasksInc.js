@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
+import { View } from 'react-native'
 import styled from 'styled-components'
-import { BackIcon } from '../../assets/index'
 import SafeAreaView from '../../common/SafeAreaView'
 
 import Header from './Header'
@@ -17,7 +16,7 @@ export default class News extends Component {
       <SafeAreaView>
         <Wrapper>
           <Header back={this.navigateBack} />
-          <Content />
+          <Content navigate={this.props.navigation.navigate} />
         </Wrapper>
       </SafeAreaView>
     )

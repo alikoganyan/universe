@@ -69,7 +69,7 @@ const Wrapper = styled(View)`
 `
 const ContactList = styled(Animated.FlatList)`
   padding: 20px 16px 0;
-  padding-top: 128px;
+  padding-top: 140px;
   max-width: 100%;
   overflow: hidden;
   flex: 1;
@@ -169,7 +169,7 @@ const Title = styled(Animated.Text)`
 
 const Head = styled(Animated.View)`
   position: absolute;
-  top: 37px;
+  top: 49px;
   z-index: 1;
   width: ${Dimensions.get('window').width};
 `
@@ -186,8 +186,8 @@ class Content extends Component {
       outputRange: [0, 0, 1],
     })
     const contentTranslateY = this.scrollY.interpolate({
-      inputRange: [0, 100, 101],
-      outputRange: [0, -100, -100],
+      inputRange: [0, 112, 113],
+      outputRange: [0, -112, -112],
     })
     const titleTranslateY = this.scrollY.interpolate({
       inputRange: [0, 50, 51],

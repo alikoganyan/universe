@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, Dimensions, TextInput } from 'react-native'
+import { View, Text } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { CloseIcon } from '../../assets/index'
@@ -38,7 +38,6 @@ const HeaderText = styled(Text)`
 `
 class HeaderComponent extends Component {
   render() {
-    const { user } = this.props
     return (
       <Header>
         <Left>
@@ -85,7 +84,7 @@ const mapStateToProps = state => ({
   tasks: state.tasksReducer.tasks,
 })
 const mapDispatchToProps = dispatch => ({
-  setTasks: _ => dispatch(setTasks(_)),
+  // setTasks: _ => dispatch(setTasks(_)),
 })
 export default connect(
   mapStateToProps,

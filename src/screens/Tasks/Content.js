@@ -164,7 +164,7 @@ class Content extends Component {
   editFeed = () => {
     const { navigate, setTaskReceivers, activeTask } = this.props
     setTaskReceivers(activeTask.performers)
-    navigate('TaskEdit')
+    navigate('TaskEdit', { userTask: true })
   }
 
   unselect = () => {

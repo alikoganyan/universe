@@ -18,7 +18,11 @@ import DefaultAvatar from '../../common/DefaultAvatar'
 import Button from '../../common/Button'
 import { p_tasks } from '../../constants/api'
 import sendRequest from '../../utils/request'
-import { setTasks, setCurrentTask } from '../../actions/tasksActions'
+import {
+  setTasks,
+  setCurrentTask,
+  setTaskList,
+} from '../../actions/tasksActions'
 import { GroupIcon, CloseIcon } from '../../assets'
 
 const { Colors, HeaderHeight, sidePadding } = helper
@@ -228,7 +232,7 @@ class Content extends Component {
           </Receivers>
           <ButtonBox>
             <Button onPress={this.proceed} background={purple} color="white">
-              Редактировать задачу
+              Сохранить
             </Button>
             {/* <TouchableOpacity onPress={this.deleteTask}> */}
             <DeleteTask>Удалить задачу</DeleteTask>
@@ -299,12 +303,13 @@ class Content extends Component {
 
   proceed = () => {
     const {
-      back,
       activeTask,
-      setTasks,
-      setCurrentTask,
-      tasks,
+      tasksInc,
+      tasksOut,
+      tasksWithUsers,
       currentTask,
+      back,
+      getParam,
     } = this.props
     const { _id, status, performers, creator } = activeTask
     const { deadlineDate, deadlineTime, taskName, taskText } = this.state
@@ -320,6 +325,9 @@ class Content extends Component {
     const deadline = this.jsCoreDateCreator(
       `${dateY}-${dateM}-${dateD} ${timeH}:${timeM}`,
     )
+    const inc = getParam('inc')
+    const userTask = getParam('userTask')
+
     // console.log({ deadline }, deadlineTime)
     const newTask = {
       _id,
@@ -330,21 +338,24 @@ class Content extends Component {
       status,
       creator,
     }
-    const index = [...tasks].findIndex(e => e._id === currentTask._id)
-    const newTasks = [...tasks]
-    const taskIndex = newTasks[index].tasks.findIndex(
-      e => e._id === newTask._id,
-    )
-    const currentTaskIndex = currentTask.tasks.findIndex(
-      e => e._id === newTask._id,
-    )
-    newTasks[index].tasks[taskIndex] = newTask
-    const newCurrentTask = { ...currentTask }
-    const newTaskCreator = newCurrentTask.tasks[currentTaskIndex].creator
-    newCurrentTask.tasks[currentTaskIndex] = {
-      ...activeTask,
-      ...newTask,
-      creator: { ...newTaskCreator },
+    if (inc) {
+      const list = [...tasksInc]
+      const taskId = list.findIndex(item => item._id === _id)
+      list[taskId] = newTask
+
+      this.props.setTaskList({ tasksInc: list, tasksOut, tasksWithUsers })
+    } else if (userTask) {
+      const list = { ...currentTask }
+      const taskId = list.tasks.findIndex(item => item._id === _id)
+      list.tasks[taskId] = newTask
+
+      this.props.setTask(list)
+    } else {
+      const list = [...tasksOut]
+      const taskId = list.findIndex(item => item._id === _id)
+      list[taskId] = newTask
+
+      this.props.setTaskList({ tasksInc, tasksOut: list, tasksWithUsers })
     }
     sendRequest({
       r_path: p_tasks,
@@ -353,8 +364,6 @@ class Content extends Component {
         task: { ...newTask },
       },
       success: () => {
-        setCurrentTask(newCurrentTask)
-        setTasks(newTasks)
         back()
         // getMessages(res.messages);
       },
@@ -390,12 +399,16 @@ const mapStateToProps = state => ({
   tasks: state.tasksReducer.tasks,
   activeTask: state.tasksReducer.activeTask,
   currentTask: state.tasksReducer.currentTask,
+  tasksInc: state.tasksReducer.tasksInc,
+  tasksOut: state.tasksReducer.tasksOut,
+  tasksWithUsers: state.tasksReducer.tasksWithUsers,
 })
 const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setCurrentTask: _ => dispatch(setCurrentTask(_)),
   setTasks: _ => dispatch(setTasks(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
+  setTaskList: _ => dispatch(setTaskList(_)),
 })
 export default connect(
   mapStateToProps,
