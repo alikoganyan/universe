@@ -22,6 +22,7 @@ import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { setFeed } from '../../actions/newsActions'
 import { socket } from '../../utils/socket'
+import { SafeAreaView } from 'react-navigation'
 
 const { sidePadding, borderRadius, Colors, fontSize } = helper
 const { yellow, black, darkBlue2, grey2 } = Colors
@@ -224,15 +225,16 @@ class Content extends Component {
           <FlatList
             style={{ paddingRight: 5, paddingLeft: 5 }}
             ListHeaderComponent={<View style={{ margin: 110 }} />}
-            ListFooterComponent={<View style={{ margin: 5 }} />}
+            ListFooterComponent={<View style={{ margin: 100 }} />}
             contentContainerStyle={{ alignItems: 'stretch' }}
             keyboardDismissMode="on-drag"
-            inverted
             data={reversedCommnets}
             renderItem={({ item }) => <this.Message>{item}</this.Message>}
             keyExtractor={(item, index) => index.toString()}
+            inverted
           />
         ) : null}
+        <SafeAreaView />
       </Wrapper>
     )
   }

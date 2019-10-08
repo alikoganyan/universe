@@ -346,7 +346,7 @@ class TaskComponent extends Component {
                 <TaskDeadlineLabel numberOfLines={1}>
                   Срок:{' '}
                   <TaskDeadlineValue>
-                    {moment(deadlineDate).format()}
+                    {moment(deadlineDate).format('MMMM DD YYYY, hh:mm')}
                   </TaskDeadlineValue>
                 </TaskDeadlineLabel>
               </TaskDeadline>

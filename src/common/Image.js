@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import helper from '../utils/helpers'
 import FastImage from 'react-native-fast-image'
+import { Placeholder } from '../assets/icons'
 
 const { imageSize } = helper
 const StyledImage = styled(FastImage)`
@@ -12,6 +13,16 @@ const StyledImage = styled(FastImage)`
   overflow: hidden;
 `
 export default function ImageComponent(props) {
+  const [defaultAvatar, setDefaultAvatar] = useState(true)
+
   const { source, style, size = 'medium' } = props
-  return <StyledImage size={size} source={{ ...source }} style={{ ...style }} />
+
+  return (
+    <StyledImage
+      size={size}
+      source={defaultAvatar ? Placeholder : { ...source }}
+      style={{ ...style }}
+      onLoadEnd={() => setDefaultAvatar(false)}
+    />
+  )
 }

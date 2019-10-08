@@ -8,10 +8,10 @@ import {
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import FastImage from 'react-native-fast-image'
 import helper, { getHamsterDate } from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { socket } from '../../utils/socket'
+import ImageComponent from '../../common/Image'
 
 // import { FilesRedIcon, TaskIcon, LocationIcon } from '../../assets'
 
@@ -37,7 +37,7 @@ const Wrapper = styled(View)`
   width: 100%;
   height: 74px;
 `
-const DialogImage = styled(FastImage)`
+const DialogImage = styled(ImageComponent)`
   width: ${({ size }) => (size ? size : 50)}px;
   height: ${({ size }) => (size ? size : 50)}px;
   border-radius: ${({ size }) => (size ? size / 2 : 25)}px;

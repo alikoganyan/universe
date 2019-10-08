@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
+import { View } from 'react-native'
 import styled from 'styled-components'
-import { BackIcon, EllipsisVIcon } from '../../assets/index'
 import SafeAreaView from '../../common/SafeAreaView'
 import Header from './Header'
 import Content from './Content'

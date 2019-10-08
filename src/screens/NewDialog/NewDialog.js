@@ -1,11 +1,7 @@
 import React, { Component } from 'react'
-import { View, Text, Image } from 'react-native'
+import { View } from 'react-native'
 import styled from 'styled-components'
-import {
-  ActionSheetProvider,
-  connectActionSheet,
-} from '@expo/react-native-action-sheet'
-import { BackIcon, EllipsisVIcon } from '../../assets/index'
+import { ActionSheetProvider } from '@expo/react-native-action-sheet'
 import SafeAreaView from '../../common/SafeAreaView'
 
 import Header from './Header'
