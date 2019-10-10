@@ -61,6 +61,8 @@
 	<string>Some description</string>
 	<key>NSSpeechRecognitionUsageDescription</key>
 	<string>Some description</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>Some description</string>
 	<key>UIAppFonts</key>
 	<array>
 		<string>Roboto-Black.ttf</string>

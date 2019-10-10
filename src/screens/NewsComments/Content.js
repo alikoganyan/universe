@@ -27,15 +27,15 @@ import { SafeAreaView } from 'react-navigation'
 const { sidePadding, borderRadius, Colors, fontSize } = helper
 const { yellow, black, darkBlue2, grey2 } = Colors
 const Wrapper = styled(View)`
-    margin-bottom: 50px;   
     background: white;
     /* padding: 0 ${sidePadding}px; */
     display: flex;
+    flex: 1;
 `
 const NewsItem = styled(View)`
   background: white;
   padding: 20px;
-  padding-bottom: 10px;
+  padding-bottom: 50px;
   border: 0.5px solid ${yellow};
   border-radius: ${borderRadius};
   margin: 0 ${sidePadding}px;
@@ -224,13 +224,13 @@ class Content extends Component {
         {animationCompleted ? (
           <FlatList
             style={{ paddingRight: 5, paddingLeft: 5 }}
-            ListHeaderComponent={<View style={{ margin: 110 }} />}
-            ListFooterComponent={<View style={{ margin: 100 }} />}
-            contentContainerStyle={{ alignItems: 'stretch' }}
+            ListHeaderComponent={<View style={{ margin: 5 }} />}
+            ListFooterComponent={<View style={{ margin: 5 }} />}
             keyboardDismissMode="on-drag"
             data={reversedCommnets}
             renderItem={({ item }) => <this.Message>{item}</this.Message>}
             keyExtractor={(item, index) => index.toString()}
+            contentContainerStyle={{ flexGrow: 1, paddingTop: 80 }}
             inverted
           />
         ) : null}

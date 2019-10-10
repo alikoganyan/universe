@@ -72,7 +72,7 @@ class InputComponent extends Component {
   render() {
     const { text, pickerOpened } = this.state
     return (
-      <>
+      <View>
         {pickerOpened && <Shadow activeOpacity={1} onPress={this.unselect} />}
         <Wrapper>
           <Left>
@@ -106,7 +106,7 @@ class InputComponent extends Component {
             </TouchableOpacity>
           </FilePicker>
         </BottomSheet>
-      </>
+      </View>
     )
   }
 

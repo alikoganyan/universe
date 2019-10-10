@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, Image, Platform } from 'react-native'
+import { View, Dimensions, Platform } from 'react-native'
 import styled from 'styled-components'
-import { BackIcon } from '../../assets/index'
 import SafeAreaView from '../../common/SafeAreaView'
 
 import Header from './Header'
@@ -9,14 +8,14 @@ import Input from './Input'
 import Content from './Content'
 
 const Wrapper = styled(View)`
-  height: 100%;
+  flex: 1;
 `
-
 const Bottom = styled(View)`
   position: absolute;
   bottom: 0;
-  width: 100%;
-  background-color: transparent;
+  width: ${Dimensions.get('window').width};
+  background-color: #ffffff;
+  height: 70px;
 `
 export default class NewsComments extends Component {
   render() {
