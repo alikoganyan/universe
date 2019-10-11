@@ -55,9 +55,13 @@ const Right = styled(Left)`
 
 class HeaderComponent extends Component {
   render() {
-    const { back, user } = this.props
+    const { back, user, feed } = this.props
     const { search, find } = this.state
     const { image } = user
+
+    if (!feed.creator) {
+      return null
+    }
     return (
       <Header>
         <Left>
@@ -80,7 +84,9 @@ class HeaderComponent extends Component {
         <Right>
           {!search ? (
             <>
-              <EditIcon right onPress={this.editFeed} />
+              {user._id === feed.creator._id && (
+                <EditIcon right onPress={this.editFeed} />
+              )}
               <SearchIcon right onPress={this.startSearch} />
               <TouchableOpacity onPress={this.toProfile}>
                 {!image ||
@@ -124,20 +130,24 @@ class HeaderComponent extends Component {
             withUser: true,
           },
           success: res => {
-            console.log({ res })
+            // console.log({ res })
           },
           failFunc: err => {
-            console.log(err)
+            // console.log(err)
           },
         })
       : sendRequest({
-          r_path: news,
-          method: 'get',
+          r_path: p_news_search,
+          method: 'post',
+          attr: {
+            text: e,
+            withUser: true,
+          },
           success: res => {
             setNews(res.news)
           },
           failFunc: err => {
-            console.log(err)
+            // console.log(err)
           },
         })
   }
@@ -164,6 +174,7 @@ class HeaderComponent extends Component {
 const mapStateToProps = state => ({
   user: state.userReducer.user,
   tasks: state.tasksReducer.tasks,
+  feed: state.newsReducer.feed,
 })
 const mapDispatchToProps = dispatch => ({
   setNews: _ => dispatch(setNews(_)),

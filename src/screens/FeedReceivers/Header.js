@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { View, Text, Dimensions, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import helper from '../../utils/helpers'
 import ImageComponent from '../../common/Image'
-import { BackIcon, CheckGreyIcon } from '../../assets'
+import { BackIcon } from '../../assets'
 
 const { sidePadding, HeaderHeight, fontSize, Colors } = helper
 const { grey3 } = Colors
@@ -60,12 +60,13 @@ class HeaderComponent extends Component {
               />
             </TouchableOpacity>
           ) : (
-            <CheckGreyIcon
-              size={22}
-              noPaddingAll
-              left
-              onPress={this.addParticipants}
-            />
+            // <CheckGreyIcon
+            //   size={22}
+            //   noPaddingAll
+            //   left
+            //   onPress={this.addParticipants}
+            // />
+            <View />
           )}
         </Right>
       </Header>
@@ -79,7 +80,7 @@ const mapStateToProps = state => ({
   receivers: state.participantsReducer.news.receivers,
 })
 const mapDispatchToProps = dispatch => ({
-  setTasks: _ => dispatch(setTasks(_)),
+  // setTasks: _ => dispatch(setTasks(_)),
 })
 export default connect(
   mapStateToProps,
