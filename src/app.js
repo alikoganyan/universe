@@ -25,18 +25,16 @@ export default class AppComponent extends Component {
     const { loaded, logged, connected } = this.state
     const Navigator = createRootNavigator(loaded && logged)
 
-    if(!loaded) {
-      return null;
+    if (!loaded) {
+      return null
     }
-    if(!connected && !logged) {
+    if (!connected && !logged) {
       return <OfflineScreen />
     }
     return (
       <Provider store={store}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
-        {logged && !connected && (
-          <Offline />
-        )}
+        {logged && !connected && <Offline />}
         <Navigator />
       </Provider>
     )
@@ -45,13 +43,16 @@ export default class AppComponent extends Component {
   state = {
     loaded: false,
     logged: false,
-    connected: true
+    connected: true,
   }
 
   appState = AppState.currentState
 
   async componentDidMount() {
-    NetInfo.addEventListener('connectionChange', this.handleFirstConnectivityChange);
+    NetInfo.addEventListener(
+      'connectionChange',
+      this.handleFirstConnectivityChange,
+    )
     createNotificationListeners()
     firebase.notifications().setBadge(0)
     getPushesPermissionStatusAndToken(store.dispatch)()
@@ -85,22 +86,22 @@ export default class AppComponent extends Component {
     // this._notificationSubscription = Notifications.addListener(this._handleNotification);
   }
 
-  componetnWillUnmount() {
+  componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this._handleBackButton)
     NetInfo.removeEventListener(
       'connectionChange',
       this.handleFirstConnectivityChange,
-    );
+    )
   }
 
-  handleFirstConnectivityChange = (connectionInfo) => {
-    if(connectionInfo.type === 'none') {
+  handleFirstConnectivityChange = connectionInfo => {
+    if (connectionInfo.type === 'none') {
       this.setState({
-        connected: false
+        connected: false,
       })
     } else {
       this.setState({
-        connected: true
+        connected: true,
       })
     }
   }

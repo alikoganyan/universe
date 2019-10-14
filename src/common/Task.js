@@ -294,6 +294,7 @@ class TaskComponent extends Component {
               borderBottomRightRadius: triangleRight ? 0 : borderRadius,
             }}
             borderColor={borderColor}
+            navigate={this.props.navigate}
           >
             <Status>
               <StatusText>{statuses[this.stat]}</StatusText>

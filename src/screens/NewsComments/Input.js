@@ -9,7 +9,7 @@ import {
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import helper from '../../utils/helpers'
-import { setFeed } from '../../actions/newsActions'
+import { setFeed, setNews } from '../../actions/newsActions'
 import { p_send_file, p_news_add_comment } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
@@ -37,7 +37,8 @@ const Wrapper = styled(View)`
 `
 const Input = styled(TextInput)`
   font-size: 15px;
-  height: 30px;
+  min-height: 30px;
+  max-height: 60px;
   width: 85%;
   overflow: hidden;
   padding: 0;
@@ -81,8 +82,11 @@ class InputComponent extends Component {
               onChangeText={e => this.handleChange(e)}
               onSubmitEditing={this.sendMessage}
               value={text}
-              blurOnSubmit={false}
               placeholderTextColor={grey2}
+              multiline
+              blurOnSubmit
+              enablesReturnKeyAutomatically
+              returnKeyType="done"
             />
           </Left>
         </Wrapper>
@@ -138,7 +142,7 @@ class InputComponent extends Component {
   discardSelect = () => {}
 
   sendMessage = () => {
-    const { user, addComment, feed } = this.props
+    const { user, addComment, feed, addNews, news } = this.props
     const { text } = this.state
     if (text) {
       const newFeed = feed
@@ -160,6 +164,11 @@ class InputComponent extends Component {
         },
       ]
       addComment(newFeed)
+      const newItemIndex = news.findIndex(item => item._id === newFeed._id)
+      if (newItemIndex > -1) {
+        news[newItemIndex] = newFeed
+        addNews(news)
+      }
       sendRequest({
         r_path: p_news_add_comment,
         method: 'post',
@@ -223,11 +232,13 @@ const mapStateToProps = state => ({
   id: state.userReducer.user._id,
   user: state.userReducer.user,
   feed: state.newsReducer.feed,
+  news: state.newsReducer.news,
 })
 const mapDispatchToProps = dispatch => ({
   addComment: _ => dispatch(setFeed(_)),
   startSearch: _ => dispatch(startSearch(_)),
   stopSearch: _ => dispatch(stopSearch(_)),
+  addNews: _ => dispatch(setNews(_)),
 })
 export default connect(
   mapStateToProps,

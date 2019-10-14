@@ -6,6 +6,7 @@ import {
   Image,
   TouchableOpacity,
   InteractionManager,
+  ScrollView,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -156,7 +157,9 @@ const MessageDate = styled(Text)`
   margin-left: 15px;
   font-size: ${fontSize.sm};
 `
-const FeedText = styled(View)``
+const FeedText = styled(ScrollView)`
+  max-height: 100px;
+`
 
 const NewsText = styled(Text)`
   color: ${darkBlue2};

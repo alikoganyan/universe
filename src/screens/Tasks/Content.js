@@ -129,6 +129,7 @@ class Content extends Component {
                             // marginLeft: myTask ? 70 : 10,
                           }}
                           userTask
+                          navigate={this.props.navigate}
                         >
                           {item}
                         </TaskComponent>

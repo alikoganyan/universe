@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
 import { View, Dimensions, Platform } from 'react-native'
 import styled from 'styled-components'
-import SafeAreaView from '../../common/SafeAreaView'
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
+import SafeAreaView from '../../common/SafeAreaView'
 import Header from './Header'
 import Input from './Input'
 import Content from './Content'
@@ -15,15 +16,20 @@ const Bottom = styled(View)`
   bottom: 0;
   width: ${Dimensions.get('window').width};
   background-color: #ffffff;
-  height: 70px;
 `
 export default class NewsComments extends Component {
   render() {
     return (
-      <SafeAreaView behavior={Platform.OS === 'ios' ? 'padding' : 'padding'}>
+      <SafeAreaView behavior="padding" enabled={Platform.OS === 'ios'}>
         <Wrapper>
           <Header back={this.navigateBack} navigate={e => this.navigate(e)} />
-          <Content navigate={this.navigate} />
+          <KeyboardAwareScrollView
+            contentContainerStyle={{ flexGrow: 1 }}
+            keyboardShouldPersistTaps="handled"
+            keyboardDismissMode="on-drag"
+          >
+            <Content navigate={this.navigate} />
+          </KeyboardAwareScrollView>
           <Bottom>
             <Input />
           </Bottom>
