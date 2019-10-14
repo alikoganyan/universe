@@ -337,27 +337,13 @@ class Content extends Component {
   state = {
     collapsed: [],
     users: {
-      department: [
-        {
-          title: 'Отдел длинных корпоративных названий',
-          workers: [],
-        },
-      ],
+      department: [],
     },
     options: {
       active: 0,
       options: ['Все', 'Пользователи', 'Группы'],
     },
-    groups: [
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-    ],
+    groups: [],
     animationCompleted: false,
     selectedGroup: '',
   }

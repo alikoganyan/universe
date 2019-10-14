@@ -3,8 +3,8 @@ import {
   View,
   Text,
   SafeAreaView,
-  FlatList,
-  TouchableOpacity,
+  // FlatList,
+  // TouchableOpacity,
   ScrollView,
   Dimensions,
   InteractionManager,
@@ -14,7 +14,7 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import posed from 'react-native-pose'
 import Collapsible from 'react-native-collapsible'
 import { connect } from 'react-redux'
-import { ArrowDownIcon } from '../../assets/index'
+// import { ArrowDownIcon } from '../../assets/index'
 import helper from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import ImageComponent from '../../common/Image'
@@ -26,8 +26,8 @@ import {
 } from '../../actions/participantsActions'
 import { setDialogs } from '../../actions/dialogsActions'
 
-const { Colors, HeaderHeight } = helper
-const { black, yellow } = Colors
+const { HeaderHeight } = helper
+// const { black, green } = Colors
 const AnimatedScrollView = posed.View({
   left: {
     x: Dimensions.get('window').width,
@@ -52,10 +52,10 @@ const AnimatedBox = posed.View({
   visible: { flex: 1 },
   hidden: { flex: 0 },
 })
-const AnimatedArrowWrapper = posed.View({
-  down: { rotate: '0deg' },
-  right: { rotate: '-90deg' },
-})
+// const AnimatedArrowWrapper = posed.View({
+//   down: { rotate: '0deg' },
+//   right: { rotate: '-90deg' },
+// })
 const Wrapper = styled(View)`
   padding-top: 0px;
   background: white;
@@ -63,7 +63,7 @@ const Wrapper = styled(View)`
   height: ${Dimensions.get('window').height - HeaderHeight - 20};
 `
 const ContactList = styled(ScrollView)`
-  padding: 30px;
+  padding: 15px;
   padding-bottom: 10px;
   max-width: ${Dimensions.get('window').width};
   overflow: hidden;
@@ -76,25 +76,20 @@ const Box = styled(View)`
   border-top-width: 1px;
   border-bottom-width: ${({ last }) => (last ? 1 : 0)}px;
 `
-const BoxTitle = styled(TouchableOpacity)`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
+// const BoxTitle = styled(TouchableOpacity)`
+//   display: flex;
+//   flex-direction: row;
+//   justify-content: space-between;
+//   align-items: center;
+//   padding-bottom: 20px;
+// `
+const BoxInner = styled(AnimatedBox)`
   padding-bottom: 20px;
 `
-const BoxInner = styled(AnimatedBox)`
-  padding: 20px 0;
-  padding-top: 20px;
-  border: 1px solid #e8ebee;
-  border-width: 0;
-  border-top-width: 1px;
-  border-bottom-width: ${({ last }) => (last ? 1 : 0)}px;
-`
-const BoxItem = styled(Text)`
-  color: #a7b0ba;
-  width: 80%;
-`
+// const BoxItem = styled(Text)`
+//   color: #a7b0ba;
+//   width: 80%;
+// `
 const BoxInnerItem = styled(View)`
   padding: 10px;
   padding-bottom: ${({ title }) => (title ? 20 : 0)}px;
@@ -102,11 +97,11 @@ const BoxInnerItem = styled(View)`
   flex-direction: row;
   align-items: center;
 `
-const ContactImage = styled(ImageComponent)`
-  width: 36px;
-  height: 36px;
-  border-radius: 18;
-`
+// const ContactImage = styled(ImageComponent)`
+//   width: 36px;
+//   height: 36px;
+//   border-radius: 18;
+// `
 const ContactInfo = styled(View)`
   display: flex;
   align-items: flex-start;
@@ -117,61 +112,70 @@ const ContactName = styled(Text)``
 const ContactRole = styled(Text)`
   color: #a7b0ba;
 `
-const ArrowWrapper = styled(AnimatedArrowWrapper)``
-const Options = styled(View)`
-  display: flex;
-  align-self: center;
-  background: ${yellow};
-  flex-direction: row;
-  justify-content: space-between;
-  padding: 1px;
-  border-radius: 13;
-  overflow: hidden;
-`
-const Option = styled(Text)`
-  color: ${({ active }) => (active ? black : 'white')};
-  background: ${({ active }) => (active ? 'white' : 'transparent')};
-  min-width: 20%;
-  margin: 1px;
-  border-radius: 10;
-  padding: 2px 10px;
-  overflow: hidden;
-  text-align: center;
-`
-const Group = styled(BoxInnerItem)``
-const GroupInfo = styled(ContactInfo)``
-const GroupTitle = styled(ContactName)``
-const GroupParticipants = styled(ContactRole)``
-const GroupImage = styled(ContactImage)``
-const StyledFlatList = styled(FlatList)`
-  padding: 0 5px;
-`
-const FlatListHeader = styled(View)`
-  margin: 35px;
-`
+// const ArrowWrapper = styled(AnimatedArrowWrapper)``
+// const OptionsWrap = styled(View)`
+//   padding-top: 13px;
+//   background-color: #ffffff;
+// `
+// const Options = styled(View)`
+//   display: flex;
+//   align-self: center;
+//   background: ${green};
+//   flex-direction: row;
+//   justify-content: space-between;
+//   border-radius: 16;
+//   padding: 1px;
+//   overflow: hidden;
+//   width: ${Dimensions.get('window').width - helper.sidePadding * 2}px;
+// `
+// const Option = styled(Text)`
+//   color: ${({ active }) => (active ? black : 'white')};
+//   background: ${({ active }) => (active ? 'white' : 'transparent')};
+//   border: ${({ active }) => (active ? '1px rgba(0, 0, 0, 0.1) solid' : '0')};
+//   border-color: ${({ active }) =>
+//     active ? 'rgba(0, 0, 0, 0.1)' : 'transparent'};
+//   border-style: solid;
+//   min-width: 27%;
+//   border-radius: 15;
+//   padding: 8px 10px 7px;
+//   overflow: hidden;
+//   text-align: center;
+// `
+// const Group = styled(BoxInnerItem)``
+// const GroupInfo = styled(ContactInfo)``
+// const GroupTitle = styled(ContactName)``
+// const GroupParticipants = styled(ContactRole)``
+// const GroupImage = styled(ContactImage)``
+// const StyledFlatList = styled(FlatList)`
+//   padding: 0 5px;
+// `
+// const FlatListHeader = styled(View)`
+//   margin: 35px;
+// `
 class Content extends Component {
   render() {
-    const { users, collapsed, options, groups, animationCompleted } = this.state
-    const { department } = users
+    const { options, workers, animationCompleted } = this.state
     const { active } = options
+
     return (
       <SafeAreaView>
         <Wrapper>
           <KeyboardAwareScrollView enableOnAndroid>
-            <Options>
-              {options.options.map((e, i) => (
-                <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
-                  <Option active={active % 3 === i}>{e}</Option>
-                </TouchableOpacity>
-              ))}
-            </Options>
+            {/* <OptionsWrap>
+              <Options>
+                {options.options.map((e, i) => (
+                  <TouchableOpacity key={i} onPress={() => this.selectOption(i)}>
+                    <Option active={active % 3 === i}>{e}</Option>
+                  </TouchableOpacity>
+                ))}
+              </Options>
+            </OptionsWrap> */}
             <Animated
               pose={active === 0 ? 'left' : active === 1 ? 'center' : 'right'}
             >
               <ContactList>
-                {department.map((e, i) => (
-                  <Box key={i} last={i === department.length - 1}>
-                    <BoxTitle
+                <Box last>
+                  {/* <BoxTitle
                       onPress={() =>
                         collapsed[i]
                           ? this.collapseDepartment(i)
@@ -182,45 +186,44 @@ class Content extends Component {
                       <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
                         <ArrowDownIcon />
                       </ArrowWrapper>
-                    </BoxTitle>
-                    <Collapsible collapsed={collapsed[i] || false}>
-                      {animationCompleted ? (
-                        <BoxInner>
-                          {e.workers.map((e, i) => (
-                            <BoxInnerItem key={i}>
-                              {!e.image ||
-                              e.image === '/images/default_group.png' ||
-                              e.image === '/images/default_avatar.jpg' ? (
-                                <DefaultAvatar size={36} id={e._id} />
-                              ) : (
-                                <ImageComponent
-                                  size={36}
-                                  source={{
-                                    uri: `https://ser.univ.team${e.image}`,
-                                  }}
-                                />
-                              )}
-                              <ContactInfo>
-                                <ContactName>
-                                  {e.first_name
-                                    ? `${e.first_name} ${e.last_name}`
-                                    : e.phone_number}
-                                </ContactName>
-                                {e.role ? (
-                                  <ContactRole>
-                                    {e.role.name || 'no role'}
-                                  </ContactRole>
-                                ) : null}
-                              </ContactInfo>
-                            </BoxInnerItem>
-                          ))}
-                        </BoxInner>
-                      ) : null}
-                    </Collapsible>
-                  </Box>
-                ))}
+                    </BoxTitle> */}
+                  <Collapsible collapsed={false}>
+                    {animationCompleted ? (
+                      <BoxInner>
+                        {workers.map((e, i) => (
+                          <BoxInnerItem key={i}>
+                            {!e.image ||
+                            e.image === '/images/default_group.png' ||
+                            e.image === '/images/default_avatar.jpg' ? (
+                              <DefaultAvatar size={36} id={e._id} />
+                            ) : (
+                              <ImageComponent
+                                size={36}
+                                source={{
+                                  uri: `https://ser.univ.team${e.image}`,
+                                }}
+                              />
+                            )}
+                            <ContactInfo>
+                              <ContactName>
+                                {e.first_name
+                                  ? `${e.first_name} ${e.last_name}`
+                                  : e.phone_number}
+                              </ContactName>
+                              {e.role ? (
+                                <ContactRole>
+                                  {e.role.name || 'no role'}
+                                </ContactRole>
+                              ) : null}
+                            </ContactInfo>
+                          </BoxInnerItem>
+                        ))}
+                      </BoxInner>
+                    ) : null}
+                  </Collapsible>
+                </Box>
               </ContactList>
-              <ContactList>
+              {/* <ContactList>
                 {animationCompleted ? (
                   <StyledFlatList
                     ListHeaderComponent={<FlatListHeader />}
@@ -240,7 +243,7 @@ class Content extends Component {
                     keyExtractor={(item, index) => index.toString()}
                   />
                 ) : null}
-              </ContactList>
+              </ContactList> */}
             </Animated>
           </KeyboardAwareScrollView>
         </Wrapper>
@@ -253,25 +256,16 @@ class Content extends Component {
     users: {
       department: [
         {
-          title: 'Отдел длинных корпоративных названий',
           workers: [],
         },
       ],
     },
+    workers: [],
     options: {
       active: 1,
       options: ['Все', 'Пользователи', 'Группы'],
     },
-    groups: [
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-    ],
+    groups: [],
     animationCompleted: false,
   }
 
@@ -291,7 +285,11 @@ class Content extends Component {
     setContacts(receivers)
     const newUsers = { ...users }
     newUsers.department[0].workers = receivers
-    this.setState({ users: newUsers, collapsed: newDCollapsed })
+    this.setState({
+      users: newUsers,
+      collapsed: newDCollapsed,
+      workers: receivers,
+    })
   }
 
   optionLeft = () => {

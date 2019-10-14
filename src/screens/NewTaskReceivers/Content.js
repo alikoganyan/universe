@@ -264,16 +264,7 @@ class Content extends Component {
       active: 1,
       options: ['Все', 'Пользователи', 'Группы'],
     },
-    groups: [
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-    ],
+    groups: [],
     animationCompleted: false,
   }
 
