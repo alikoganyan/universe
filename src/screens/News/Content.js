@@ -17,6 +17,7 @@ import DefaultAvatar from '../../common/DefaultAvatar'
 import Loader from '../../common/Loader'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
+import Company from '../../common/Company'
 
 const { borderRadius, Colors, fontSize, sidePadding, HeaderHeight } = helper
 const { yellow, darkBlue2, grey2 } = Colors
@@ -93,13 +94,22 @@ const Reactionsext = styled(Text)`
   margin-left: 5px;
 `
 
-const Title = styled(Animated.Text)`
+const Title = styled(Text)`
   font-family: 'OpenSans-Bold';
   font-size: 30px;
   color: ${Colors.black};
   padding: 0 16px 8px;
   background-color: ${Colors.white};
   z-index: 2;
+`
+
+const HeaderContainer = styled(Animated.View)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+  background-color: #ffffff;
 `
 
 class Content extends Component {
@@ -207,7 +217,10 @@ class Content extends Component {
 
     return (
       <>
-        <Title style={{ transform: [{ translateY }] }}>Новости</Title>
+        <HeaderContainer style={{ transform: [{ translateY }] }}>
+          <Title>Новости</Title>
+          <Company />
+        </HeaderContainer>
         <Header />
       </>
     )
@@ -220,6 +233,7 @@ class Content extends Component {
 
 const mapStateToProps = state => ({
   news: state.newsReducer.news,
+  user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({
   setFeed: _ => dispatch(setFeed(_)),

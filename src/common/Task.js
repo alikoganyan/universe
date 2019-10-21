@@ -181,8 +181,9 @@ class TaskComponent extends Component {
       triangleRight,
       borderColor,
       activeTask,
-      withImage,
+      withImage = {},
       withReceiver,
+      inc,
     } = this.props
     const {
       name,
@@ -255,7 +256,7 @@ class TaskComponent extends Component {
         <Wrapper
           style={{ alignSelf: triangleRight ? 'flex-end' : 'flex-start' }}
         >
-          {withImage && (
+          {inc && withImage && (
             <View
               style={{
                 alignSelf: 'flex-end',

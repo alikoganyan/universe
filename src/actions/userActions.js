@@ -9,6 +9,8 @@ export const SET_CONTACTS = 'SET_CONTACTS'
 export const SET_ERROR = 'SET_ERROR'
 export const ALTER_USER = 'ALTER_USER'
 export const SET_SETTINGS = 'SET_SETTINGS'
+export const SET_COMPANIES = 'SET_COMPANIES'
+
 export const setUser = payload => ({
   type: SET_USER,
   payload,
@@ -47,5 +49,10 @@ export const alterUser = payload => ({
 })
 export const setSettings = payload => ({
   type: SET_SETTINGS,
+  payload,
+})
+
+export const setCompanies = payload => ({
+  type: SET_COMPANIES,
   payload,
 })

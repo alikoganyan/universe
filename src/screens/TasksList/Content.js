@@ -12,6 +12,7 @@ import { g_users, g_tasks } from '../../constants/api'
 import { setTasks, setTaskList } from '../../actions/tasksActions'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
+import Company from '../../common/Company'
 
 const { HeaderHeight, Colors } = helper
 const { grey2 } = Colors
@@ -23,13 +24,22 @@ const Wrapper = styled(View)`
 const StyledScrollView = styled(Animated.ScrollView)`
   height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
 `
-const Title = styled(Animated.Text)`
+const Title = styled(Text)`
   font-family: 'OpenSans-Bold';
   font-size: 30px;
   color: ${Colors.black};
   padding: 0 16px 8px;
   background-color: ${Colors.white};
   z-index: 2;
+`
+
+const HeaderContainer = styled(Animated.View)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+  background-color: #ffffff;
 `
 
 class Content extends Component {
@@ -66,7 +76,10 @@ class Content extends Component {
             },
           )}
         >
-          <Title style={{ transform: [{ translateY }] }}>Задачи</Title>
+          <HeaderContainer style={{ transform: [{ translateY }] }}>
+            <Title>Задачи</Title>
+            <Company />
+          </HeaderContainer>
           <Header />
           <TaskPack
             title="inc"

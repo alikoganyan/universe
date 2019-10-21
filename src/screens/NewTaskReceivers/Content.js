@@ -253,12 +253,7 @@ class Content extends Component {
   state = {
     collapsed: [],
     users: {
-      department: [
-        {
-          title: 'Отдел длинных корпоративных названий',
-          workers: [],
-        },
-      ],
+      department: [],
     },
     options: {
       active: 1,

@@ -29,6 +29,7 @@ import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import { socket } from '../../utils/socket'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
+import Company from '../../common/Company'
 
 const { Colors, HeaderHeight, sidePadding } = helper
 const { green, black, grey2 } = Colors
@@ -158,13 +159,22 @@ const Option = styled(Text)`
   text-align: center;
 `
 
-const Title = styled(Animated.Text)`
+const Title = styled(Text)`
   font-family: 'OpenSans-Bold';
   font-size: 30px;
   color: ${Colors.black};
   padding: 0 16px 8px;
   background-color: ${Colors.white};
   z-index: 2;
+`
+
+const HeaderContainer = styled(Animated.View)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+  background-color: #ffffff;
 `
 
 const Head = styled(Animated.View)`
@@ -202,9 +212,12 @@ class Content extends Component {
           opacity={opacity}
         />
         <Head style={{ transform: [{ translateY: contentTranslateY }] }}>
-          <Title style={{ transform: [{ translateY: titleTranslateY }] }}>
-            Контакты
-          </Title>
+          <HeaderContainer
+            style={{ transform: [{ translateY: titleTranslateY }] }}
+          >
+            <Title>Контакты</Title>
+            <Company />
+          </HeaderContainer>
           <Header />
           <OptionsWrap>
             <Options>

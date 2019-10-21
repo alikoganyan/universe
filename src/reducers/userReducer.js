@@ -9,6 +9,7 @@ import {
   SET_REGISTER_USER_SMS,
   ALTER_USER,
   SET_SETTINGS,
+  SET_COMPANIES,
 } from '../actions/userActions'
 import {
   ENABLE_USER_PUSHES,
@@ -25,6 +26,8 @@ const initialState = {
     phone: '',
     sms: '',
   },
+  companies: [],
+  company: {},
 }
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -83,6 +86,13 @@ const userReducer = (state = initialState, action) => {
         },
       }
       return { ...state, user: { ...state.user, settings } }
+    }
+    case SET_COMPANIES: {
+      return {
+        ...state,
+        companies: action.payload.companies,
+        company: action.payload.company,
+      }
     }
     default:
       return state

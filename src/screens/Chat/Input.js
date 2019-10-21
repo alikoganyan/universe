@@ -597,7 +597,7 @@ class InputComponent extends Component {
       method: 'post',
       attr: bodyReq,
       success: res => {
-        this.stopForwarding()
+        this.stopReply()
         socket.emit('get_dialog', { id: currentRoomId })
       },
       failFunc: err => {

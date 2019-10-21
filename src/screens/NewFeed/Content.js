@@ -170,7 +170,7 @@ class Content extends Component {
       idList = [...idList, e._id]
     })
     const newFeed = {
-      receivers: [...idList],
+      receivers,
       tags: [],
       likes_сount: 0,
       likes: [],

@@ -15,10 +15,12 @@ import {
 } from '../../actions/messageActions'
 // import { Notifications } from 'expo';
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
-import { setAllUsers } from '../../actions/userActions'
+import { setAllUsers, setCompanies } from '../../actions/userActions'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 import TabPreHeader from '../../common/TabPreHeader'
+import sendRequest from '../../utils/request'
+import Company from '../../common/Company'
 
 const { Colors } = helper
 const { blue, grey2, lightColor } = Colors
@@ -29,13 +31,22 @@ const StyledFlatList = styled(Animated.FlatList)`
   height: 100%;
 `
 
-const Title = styled(Animated.Text)`
+const Title = styled(Text)`
   font-family: 'OpenSans-Bold';
   font-size: 30px;
   color: ${Colors.black};
   padding: 0 16px 8px;
   background-color: ${Colors.white};
   z-index: 2;
+`
+
+const HeaderContainer = styled(Animated.View)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  z-index: 2;
+  background-color: #ffffff;
 `
 
 class Dialogs extends Component {
@@ -152,6 +163,18 @@ class Dialogs extends Component {
 
   componentDidMount() {
     const { user } = this.props
+
+    sendRequest({
+      r_path: '/profile',
+      method: 'get',
+      success: res => {
+        this.props.setCompanies({
+          companies: res.user.companies,
+          company: res.user.company,
+        })
+      },
+      failFunc: () => {},
+    })
     // navigation.navigate('NewTask') // restore
     // clearInterval(this.interval)
     // this.interval = setInterval(() => {
@@ -196,7 +219,10 @@ class Dialogs extends Component {
 
     return (
       <>
-        <Title style={{ transform: [{ translateY }] }}>Диалоги</Title>
+        <HeaderContainer style={{ transform: [{ translateY }] }}>
+          <Title>Диалоги</Title>
+          <Company />
+        </HeaderContainer>
         <Header />
       </>
     )
@@ -523,6 +549,8 @@ const mapStateToProps = state => ({
   currentChat: state.messageReducer.currentChat,
   user: state.userReducer.user,
   currentDialog: state.dialogsReducer.currentDialog,
+  companies: state.userReducer.companies,
+  company: state.userReducer.company,
 })
 const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),
@@ -532,6 +560,7 @@ const mapDispatchToProps = dispatch => ({
   setAllUsers: _ => dispatch(setAllUsers(_)),
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
+  setCompanies: _ => dispatch(setCompanies(_)),
 })
 export default connect(
   mapStateToProps,

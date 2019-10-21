@@ -24,6 +24,7 @@ import FastImage from 'react-native-fast-image'
 import helper, { getHamsterDate } from '../utils/helpers'
 import { SingleImage } from 'react-native-zoom-lightbox'
 import LinearGradient from 'react-native-linear-gradient'
+import Forwarded from './Forwarded'
 
 const { Colors, fontSize, borderRadius } = helper
 const { myMessage, interlocatorMessage, pink } = Colors
@@ -239,6 +240,7 @@ class Message extends Component {
       viewers,
       text,
       sender,
+      resend,
       src,
       type,
       width,
@@ -386,6 +388,13 @@ class Message extends Component {
         >
           <View style={{ display: 'flex', flexDirection: 'row' }}>
             <MyMessage background={background}>
+              {resend && (
+                <Forwarded
+                  userName={`${resend.sender.first_name} ${resend.sender.last_name}`}
+                  text={resend.text}
+                  myMessage
+                />
+              )}
               <MyMessageText>{text}</MyMessageText>
               <MessageInfo>
                 <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
@@ -423,6 +432,12 @@ class Message extends Component {
               <InterlocutorsMessage
                 background={background || interlocatorMessage}
               >
+                {resend && (
+                  <Forwarded
+                    userName={`${resend.sender.first_name} ${resend.sender.last_name}`}
+                    text={resend.text}
+                  />
+                )}
                 {withImage && (
                   <InterlocutorsName isGroupName={isGroup}>
                     {`${sender.first_name} ${sender.last_name}`}
