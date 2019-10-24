@@ -261,7 +261,7 @@ class Message extends Component {
     const messageRead = !!viewers.filter(e => e !== myId).length
     if (type === 'image' && !isUploaded) {
       this.readFile(
-        src.split('file://')[1] ? src : `https://ser.univ.team${src}`,
+        src.split('file://')[1] ? src : `https://testser.univ.team${src}`,
         filename,
       )
       return myId === sender._id ? (
@@ -275,7 +275,7 @@ class Message extends Component {
               <MyMessageCachedImage
                 style={{ width }}
                 source={{
-                  uri: `https://ser.univ.team${src}`,
+                  uri: `https://testser.univ.team${src}`,
                 }}
                 resizeMode={FastImage.resizeMode.cover}
               />
@@ -311,7 +311,7 @@ class Message extends Component {
                 style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
                 size={30}
                 source={{
-                  uri: `https://ser.univ.team${sender.image}`,
+                  uri: `https://testser.univ.team${sender.image}`,
                 }}
               />
             ) : null}
@@ -328,7 +328,7 @@ class Message extends Component {
                 <MyMessageCachedImage
                   style={{ width }}
                   source={{
-                    uri: `https://ser.univ.team${src}`,
+                    uri: `https://testser.univ.team${src}`,
                   }}
                   resizeMode={FastImage.resizeMode.cover}
                 />
@@ -416,7 +416,7 @@ class Message extends Component {
                 style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
                 size={30}
                 source={{
-                  uri: `https://ser.univ.team${sender.image}`,
+                  uri: `https://testser.univ.team${sender.image}`,
                 }}
               />
             )}
@@ -514,7 +514,7 @@ class Message extends Component {
               style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
               size={30}
               source={{
-                uri: `https://ser.univ.team${sender.image}`,
+                uri: `https://testser.univ.team${sender.image}`,
               }}
             />
           ) : null}
@@ -632,7 +632,7 @@ class Message extends Component {
                 style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
                 size={30}
                 source={{
-                  uri: `https://ser.univ.team${sender.image}`,
+                  uri: `https://testser.univ.team${sender.image}`,
                 }}
               />
             ) : null}
@@ -715,7 +715,7 @@ class Message extends Component {
                 style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
                 size={30}
                 source={{
-                  uri: `https://ser.univ.team${sender.image}`,
+                  uri: `https://testser.univ.team${sender.image}`,
                 }}
               />
             )}

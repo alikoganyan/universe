@@ -273,7 +273,7 @@ class Content extends Component {
                         ) : (
                           <ContactImage
                             source={{
-                              uri: `https://ser.univ.team${e.image}`,
+                              uri: `https://testser.univ.team${e.image}`,
                             }}
                           />
                         )}
@@ -367,7 +367,7 @@ class Content extends Component {
                 <DefaultAvatar id={item._id} size={36} />
               ) : (
                 <ContactImage
-                  source={{ uri: `https://ser.univ.team${image}` }}
+                  source={{ uri: `https://testser.univ.team${image}` }}
                 />
               )}
               <ContactInfo>
@@ -417,7 +417,7 @@ class Content extends Component {
                 <DefaultAvatar isGroup={isGroup} id={_id} size={36} />
               ) : (
                 <ContactImage
-                  source={{ uri: `https://ser.univ.team${image}` }}
+                  source={{ uri: `https://testser.univ.team${image}` }}
                 />
               )}
               <ContactInfo>

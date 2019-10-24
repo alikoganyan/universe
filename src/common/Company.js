@@ -66,7 +66,7 @@ class Company extends Component {
         <TouchableOpacity onPress={() => this.setState({ modalVisible: true })}>
           <ImageComponent
             source={{
-              uri: `https://ser.univ.team${company.logo}`,
+              uri: `https://testser.univ.team${company.logo}`,
             }}
             size={36}
             style={{ marginRight: 16 }}
@@ -88,7 +88,7 @@ class Company extends Component {
                 <Wrapper>
                   <UserImage
                     source={{
-                      uri: `https://ser.univ.team${user.image}`,
+                      uri: `https://testser.univ.team${user.image}`,
                     }}
                     size={56}
                   />
@@ -104,7 +104,7 @@ class Company extends Component {
                   <Wrapper style={{ marginLeft: 8 }}>
                     <UserImage
                       source={{
-                        uri: `https://ser.univ.team${item.logo}`,
+                        uri: `https://testser.univ.team${item.logo}`,
                       }}
                       size={40}
                     />

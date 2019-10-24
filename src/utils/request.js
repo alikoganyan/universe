@@ -4,7 +4,7 @@ import { setAuth, setError } from '../actions/userActions'
 // import { disconnectFromSocket, socket } from './socket'
 import NavigationProvider from './NavigationProvider'
 
-const SERVER_URL = 'https://ser.univ.team/api'
+const SERVER_URL = 'https://testser.univ.team/api'
 
 axios.interceptors.request.use(request => {
   return request
@@ -67,6 +67,7 @@ export default async function sendRequest({
     }
   } catch (err) {
     const { response } = err
+    console.log('response', response, err);
     // console.log(response.data)
     // console.log(store.getState().userReducer.auth);
     // console.log('error in path -->', r_path, err)

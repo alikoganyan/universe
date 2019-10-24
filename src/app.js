@@ -28,13 +28,13 @@ export default class AppComponent extends Component {
     if (!loaded) {
       return null
     }
-    if (!connected && !logged) {
-      return <OfflineScreen />
-    }
+    // if (!connected && !logged) {
+    //   return <OfflineScreen />
+    // }
     return (
       <Provider store={store}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
-        {logged && !connected && <Offline />}
+        {/* {logged && !connected && <Offline />} */}
         <Navigator />
       </Provider>
     )

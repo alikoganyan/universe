@@ -102,11 +102,11 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.team.universe.media"
+        applicationId "elize.univ.team"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionName "2.0.50"
-        versionCode 41
+        versionName "2.0.53"
+        versionCode 44
         setProperty("archivesBaseName", "universe-$versionName($versionCode)")
     }
 

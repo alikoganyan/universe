@@ -169,7 +169,7 @@ class Content extends Component {
                                     size={33}
                                     source={{
                                       uri: e.image
-                                        ? `https://ser.univ.team${e.image}`
+                                        ? `https://testser.univ.team${e.image}`
                                         : 'https://simpleicon.com/wp-content/uploads/user1.png',
                                     }}
                                   />
@@ -283,8 +283,8 @@ class Content extends Component {
           this.setState({ users: newUsers })
         })
       },
-      failFunc: err => {
-        console.log({ err })
+      failFunc: () => {
+        // console.log({ err })
       },
     })
   }
