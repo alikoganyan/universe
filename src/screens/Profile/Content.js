@@ -242,7 +242,9 @@ class Content extends Component {
                   ) : (
                     <ImageComponent
                       size={36}
-                      source={{ uri: `https://testser.univ.team${creator.image}` }}
+                      source={{
+                        uri: `https://testser.univ.team${creator.image}`,
+                      }}
                       style={{ marginRight: 8 }}
                     />
                   )}
@@ -286,7 +288,9 @@ class Content extends Component {
                         ) : (
                           <ImageComponent
                             size={36}
-                            source={{ uri: `https://testser.univ.team${image}` }}
+                            source={{
+                              uri: `https://testser.univ.team${image}`,
+                            }}
                             style={{ marginRight: 8 }}
                           />
                         )}

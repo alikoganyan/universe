@@ -288,7 +288,7 @@ class Content extends Component {
         }, 0)
       },
       failFunc: err => {
-        console.log('err', err);
+        console.log('err', err)
         const phone = err.length
           ? err.filter(e => e.param === 'phone_number')[0]
           : err.phone_number
