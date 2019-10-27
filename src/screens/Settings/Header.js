@@ -29,7 +29,7 @@ class HeaderComponent extends Component {
     return (
       <HeaderContainer>
         <Title>Настройки</Title>
-        <Company />
+        <Company navigate={this.props.navigate} />
       </HeaderContainer>
     )
   }

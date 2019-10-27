@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 import { store } from '../reducers/store'
 
-const socketServer = 'https://testser.univ.team'
+const socketServer = 'https://ser.univ.team'
 const socketPath = '/socket.io'
 export let socket = null
 export const connectToSocket = (token = store.getState().userReducer.auth) => {

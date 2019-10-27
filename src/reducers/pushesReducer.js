@@ -10,6 +10,7 @@ import {
   USER_PUSHES_FULFILLED,
   USER_PUSHES_REJECTED,
 } from '../actions/pushesActions'
+import { LOG_OUT } from '../actions/userActions'
 
 const initialState = {
   permissionsIsFetching: false,
@@ -60,7 +61,8 @@ const pushesReducer = (state = initialState, action) => {
       return { ...state, userPushesIsFetching: false, userPushesIsError: false }
     case USER_PUSHES_REJECTED:
       return { ...state, userPushesIsFetching: false, userPushesIsError: true }
-
+    case LOG_OUT:
+        return initialState;
     default:
       return state
   }

@@ -149,7 +149,7 @@ class Content extends Component {
                     ) : (
                       <ImageComponent
                         source={{
-                          uri: `https://testser.univ.team${creator.image}`,
+                          uri: `https://ser.univ.team${creator.image}`,
                         }}
                         size="xs"
                         style={{ marginRight: 10 }}
@@ -219,7 +219,7 @@ class Content extends Component {
       <>
         <HeaderContainer style={{ transform: [{ translateY }] }}>
           <Title>Новости</Title>
-          <Company />
+          <Company navigate={this.props.navigate} />
         </HeaderContainer>
         <Header />
       </>

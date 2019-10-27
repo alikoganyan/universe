@@ -101,7 +101,7 @@ class HeaderComponent extends Component {
               {!participants.length ? (
                 <TouchableOpacity onPress={toProfile}>
                   <ImageComponent
-                    source={{ uri: `https://testser.univ.team${image}` }}
+                    source={{ uri: `https://ser.univ.team${image}` }}
                     size="header"
                   />
                 </TouchableOpacity>

@@ -5,6 +5,7 @@ import {
   REMOVE_UPLOAD_MESSAGE,
   UPDATE_UPLOAD_MESSAGE_PROGRESS,
 } from '../actions/dialogsActions'
+import { LOG_OUT } from '../actions/userActions'
 const initialState = {
   dialogs: [],
   currentDialog: {},
@@ -21,7 +22,8 @@ const dialogsReducer = (state = initialState, action) => {
 
     case SET_CURRENT_DIALOGS:
       return { ...state, currentDialog: { ...payload } }
-
+    case LOG_OUT:
+      return initialState;
     default:
       return state
   }

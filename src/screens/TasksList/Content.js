@@ -78,7 +78,7 @@ class Content extends Component {
         >
           <HeaderContainer style={{ transform: [{ translateY }] }}>
             <Title>Задачи</Title>
-            <Company />
+            <Company navigate={this.props.navigate} />
           </HeaderContainer>
           <Header />
           <TaskPack

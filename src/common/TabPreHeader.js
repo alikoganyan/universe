@@ -24,12 +24,12 @@ const SubTitle = styled(Animated.Text)`
 
 class PreHeaderComponent extends PureComponent {
   render() {
-    const { opacity, title, onWritePress } = this.props
+    const { opacity, title, onWritePress, hideButton } = this.props
     return (
       <PreHeader>
         <View style={{ width: 28 }} />
         <SubTitle style={{ opacity }}>{title}</SubTitle>
-        <WriteMessageBlue onPress={onWritePress} />
+        {!hideButton && <WriteMessageBlue onPress={onWritePress} />}
       </PreHeader>
     )
   }

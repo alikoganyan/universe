@@ -296,7 +296,7 @@ class Content extends Component {
             routeName: 'VideoView',
             params: {
               title: 'Видео',
-              uri: `https://testser.univ.team${src}`,
+              uri: `https://ser.univ.team${src}`,
             },
           })
         break
@@ -311,7 +311,7 @@ class Content extends Component {
           dialogMessages.forEach(message => {
             if (message.type === 'image') {
               dialogImages.push({
-                image: `https://testser.univ.team${message.src}`,
+                image: `https://ser.univ.team${message.src}`,
                 title: first_name ? `${first_name} ${last_name}` : phone_number,
                 description: getHamsterDate(message.created_at),
                 actions: this._getMessageActions(message).slice(0, -1),

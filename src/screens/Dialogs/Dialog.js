@@ -206,7 +206,7 @@ class Content extends Component {
           ) : (
             <DialogImage
               source={{
-                uri: `https://testser.univ.team${chatImage}`,
+                uri: `https://ser.univ.team${chatImage}`,
               }}
               size={56}
             />

@@ -4,7 +4,7 @@ import { setAuth, setError } from '../actions/userActions'
 // import { disconnectFromSocket, socket } from './socket'
 import NavigationProvider from './NavigationProvider'
 
-const SERVER_URL = 'https://testser.univ.team/api'
+const SERVER_URL = 'https://ser.univ.team/api'
 
 axios.interceptors.request.use(request => {
   return request

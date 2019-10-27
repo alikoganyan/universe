@@ -20,6 +20,7 @@ import Header from './Header'
 import Content from './Content'
 import { setDialogs } from '../../actions/dialogsActions'
 import { p_logout } from '../../constants/api'
+import { logOut } from '../../actions/userActions'
 
 const { Colors, fontSize } = helper
 const { pink } = Colors
@@ -125,6 +126,7 @@ class Profile extends Component {
             },
             failFunc: e => console.log('request error: ', e),
           })
+          this.props.logOut()
           AsyncStorage.clear()
         } catch (e) {
           console.log('error: ', e)
@@ -150,6 +152,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   setDialogs: _ => dispatch(setDialogs(_)),
+  logOut: _ => dispatch(logOut()),
 })
 export default connect(
   mapStateToProps,

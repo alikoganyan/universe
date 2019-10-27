@@ -11,11 +11,15 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import ImageComponent from './Image'
 import helper from '../utils/helpers'
+import sendRequest from '../utils/request'
+import { setTasks } from '../actions/tasksActions'
+import { setCompanies, setContacts } from '../actions/userActions'
+import { setDialogs } from '../actions/dialogsActions'
 
 const { fontSize, sidePadding, Colors } = helper
 const { lightGrey2 } = Colors
 
-const Wrapper = styled(View)`
+const Wrapper = styled(TouchableOpacity)`
   flex-direction: row;
   align-items: center;
   padding: 4px ${sidePadding}px 2px;
@@ -66,7 +70,7 @@ class Company extends Component {
         <TouchableOpacity onPress={() => this.setState({ modalVisible: true })}>
           <ImageComponent
             source={{
-              uri: `https://testser.univ.team${company.logo}`,
+              uri: `https://ser.univ.team${company.logo}`,
             }}
             size={36}
             style={{ marginRight: 16 }}
@@ -80,15 +84,18 @@ class Company extends Component {
           animationType="fade"
           transparent
         >
-          <TouchableWithoutFeedback
+          {/* <TouchableWithoutFeedback
             onPress={() => this.setState({ modalVisible: false })}
-          >
+          > */}
             <View style={styles.modal}>
               <View style={styles.modalContent}>
-                <Wrapper>
+                <Wrapper onPress={() => {
+                  this.setState({ modalVisible: false })
+                  this.props.navigate('Profile')
+                }}>
                   <UserImage
                     source={{
-                      uri: `https://testser.univ.team${user.image}`,
+                      uri: `https://ser.univ.team${user.image}`,
                     }}
                     size={56}
                   />
@@ -101,10 +108,10 @@ class Company extends Component {
                   </UserText>
                 </Wrapper>
                 {companies.map(item => (
-                  <Wrapper style={{ marginLeft: 8 }}>
+                  <Wrapper style={{ marginLeft: 8 }} onPress={() => this.changeCompany(item._id)}>
                     <UserImage
                       source={{
-                        uri: `https://testser.univ.team${item.logo}`,
+                        uri: `https://ser.univ.team${item.logo}`,
                       }}
                       size={40}
                     />
@@ -117,10 +124,27 @@ class Company extends Component {
                 ))}
               </View>
             </View>
-          </TouchableWithoutFeedback>
+          {/* </TouchableWithoutFeedback> */}
         </Modal>
       </>
     )
+  }
+
+  changeCompany = (id) => {
+    this.setState({ modalVisible: false })
+    console.log('id', id);
+
+    sendRequest({
+      r_path: '/profile/change_company',
+      method: 'patch',
+      attr: {
+        company_id: id,
+      },
+      success: res => {
+        console.log('res', res);
+      },
+      full_res: true,
+    })
   }
 }
 
@@ -136,6 +160,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 20,
+    zIndex: 2
   },
 })
 
@@ -143,6 +168,12 @@ const mapStateToProps = state => ({
   companies: state.userReducer.companies,
   company: state.userReducer.company,
   user: state.userReducer.user,
+})
+
+const mapDispatchToProps = dispatch => ({
+  setTasks: _ => dispatch(setTasks(_)),
+  setContacts: _ => dispatch(setContacts(_)),
+  setDialogs: _ => dispatch(setDialogs(_)),
 })
 
 export default connect(

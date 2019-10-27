@@ -10,6 +10,7 @@ import {
   ALTER_USER,
   SET_SETTINGS,
   SET_COMPANIES,
+  LOG_OUT,
 } from '../actions/userActions'
 import {
   ENABLE_USER_PUSHES,
@@ -94,6 +95,8 @@ const userReducer = (state = initialState, action) => {
         company: action.payload.company,
       }
     }
+    case LOG_OUT:
+        return initialState;
     default:
       return state
   }

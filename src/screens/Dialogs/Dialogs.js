@@ -221,7 +221,7 @@ class Dialogs extends Component {
       <>
         <HeaderContainer style={{ transform: [{ translateY }] }}>
           <Title>Диалоги</Title>
-          <Company />
+          <Company navigate={this.props.navigation.navigate} />
         </HeaderContainer>
         <Header />
       </>

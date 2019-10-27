@@ -178,7 +178,7 @@ class HeaderComponent extends Component {
                   ) : (
                     <ImageComponent
                       size={42}
-                      source={{ uri: `https://testser.univ.team${image}` }}
+                      source={{ uri: `https://ser.univ.team${image}` }}
                     />
                   )}
                   <Info>

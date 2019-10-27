@@ -210,13 +210,14 @@ class Content extends Component {
           onWritePress={() => navigate('NewContact')}
           title="Контакты"
           opacity={opacity}
+          hideButton
         />
         <Head style={{ transform: [{ translateY: contentTranslateY }] }}>
           <HeaderContainer
             style={{ transform: [{ translateY: titleTranslateY }] }}
           >
             <Title>Контакты</Title>
-            <Company />
+            <Company navigate={navigate} />
           </HeaderContainer>
           <Header />
           <OptionsWrap>
@@ -273,7 +274,7 @@ class Content extends Component {
                         ) : (
                           <ContactImage
                             source={{
-                              uri: `https://testser.univ.team${e.image}`,
+                              uri: `https://ser.univ.team${e.image}`,
                             }}
                           />
                         )}
@@ -331,7 +332,7 @@ class Content extends Component {
   scrollY = new Animated.Value(0)
 
   _renderEmptyComponent = () => (
-    <Loader hint="Пока нет контактов." style={{ flex: 1, height: '100%' }}>
+    <Loader hint="Пока нет контактов." style={{ flex: 1 }}>
       <TouchableOpacity onPress={this.toContacts}>
         <Text style={{ color: grey2, textAlign: 'center' }}>
           Похоже произошла ошибка, обратитесь к администратору системы
@@ -367,7 +368,7 @@ class Content extends Component {
                 <DefaultAvatar id={item._id} size={36} />
               ) : (
                 <ContactImage
-                  source={{ uri: `https://testser.univ.team${image}` }}
+                  source={{ uri: `https://ser.univ.team${image}` }}
                 />
               )}
               <ContactInfo>
@@ -417,7 +418,7 @@ class Content extends Component {
                 <DefaultAvatar isGroup={isGroup} id={_id} size={36} />
               ) : (
                 <ContactImage
-                  source={{ uri: `https://testser.univ.team${image}` }}
+                  source={{ uri: `https://ser.univ.team${image}` }}
                 />
               )}
               <ContactInfo>

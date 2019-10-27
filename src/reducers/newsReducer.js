@@ -1,4 +1,5 @@
 import { SET_NEWS, SET_FEED, ADD_FEED } from '../actions/newsActions'
+import { LOG_OUT } from '../actions/userActions'
 const initialState = {
   news: [],
   feed: {},
@@ -20,6 +21,8 @@ const newsReducer = (state = initialState, action) => {
         ...state,
         feed: { ...action.payload },
       }
+    case LOG_OUT:
+        return initialState;
     default:
       return state
   }

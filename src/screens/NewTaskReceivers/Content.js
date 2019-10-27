@@ -195,7 +195,7 @@ class Content extends Component {
                                 ) : (
                                   <ContactImage
                                     source={{
-                                      uri: `https://testser.univ.team${e.image}`,
+                                      uri: `https://ser.univ.team${e.image}`,
                                     }}
                                   />
                                 )}

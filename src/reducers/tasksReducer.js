@@ -7,6 +7,7 @@ import {
   SET_CURRENT_TASK,
   SET_TASK_LIST,
 } from '../actions/tasksActions'
+import { LOG_OUT } from '../actions/userActions'
 
 const initialState = {
   tasks: [],
@@ -62,6 +63,8 @@ const tasksReducer = (state = initialState, action) => {
         tasksInc: action.payload.tasksInc,
         tasksWithUsers: action.payload.tasksWithUsers,
       }
+    case LOG_OUT:
+        return initialState;
     default:
       return state
   }

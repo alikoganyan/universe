@@ -6,6 +6,7 @@ import {
   ADD_DIALOG_PARTICIPANT,
   SET_DIALOG_PARTICIPANTS,
 } from '../actions/participantsActions'
+import { LOG_OUT } from '../actions/userActions'
 const initialState = {
   tasks: {
     receivers: [],
@@ -58,6 +59,8 @@ const participantsReducer = (state = initialState, action) => {
         ...state,
         dialog: { ...state.dialog, participants: [...action.payload] },
       }
+    case LOG_OUT:
+        return initialState;
     default:
       return state
   }

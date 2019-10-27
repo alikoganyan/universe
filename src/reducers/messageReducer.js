@@ -10,6 +10,7 @@ import {
   FORWARD_MESSAGE,
   REPLY_MESSAGE,
 } from '../actions/messageActions'
+import { LOG_OUT } from '../actions/userActions'
 
 const initialState = {
   search: false,
@@ -54,7 +55,8 @@ export default (state = initialState, action) => {
 
     case REPLY_MESSAGE:
       return { ...state, replyMessage: payload }
-
+    case LOG_OUT:
+        return initialState;
     default:
       return state
   }
