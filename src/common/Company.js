@@ -150,6 +150,17 @@ class Company extends Component {
         company_id: id,
       },
       success: res => {
+        sendRequest({
+          r_path: '/profile',
+          method: 'get',
+          success: res => {
+            this.props.setCompanies({
+              companies: res.user.companies,
+              company: res.user.company,
+            })
+          },
+          failFunc: () => {},
+        })
         this.props.setTasks(res.data.tasks);
         this.props.setContacts(res.data.contacts);
         this.props.setDialogs(res.data.dialogs);
@@ -187,6 +198,7 @@ const mapDispatchToProps = dispatch => ({
   setContacts: _ => dispatch(setContacts(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   setNews: _ => dispatch(setNews(_)),
+  setCompanies: _ => dispatch(setCompanies(_)),
 })
 
 export default connect(
