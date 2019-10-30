@@ -207,7 +207,7 @@ class Content extends Component {
                       ) : (
                         <ImageComponent
                           source={{
-                            uri: `https://ser.univ.team${e.image}`,
+                            uri: `https://testser.univ.team${e.image}`,
                           }}
                           size={36}
                         />
@@ -272,7 +272,7 @@ class Content extends Component {
                                 ) : (
                                   <ImageComponent
                                     source={{
-                                      uri: `https://ser.univ.team${e.image}`,
+                                      uri: `https://testser.univ.team${e.image}`,
                                     }}
                                     size={36}
                                   />

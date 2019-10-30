@@ -59,7 +59,7 @@ const DateView = styled(View)`
 `
 class Content extends Component {
   render() {
-    const { messageLongPressActions } = this.state
+    const { messageLongPressActions, currentDate } = this.state
     const { search, dialogs, currentChat, editedMessage } = this.props
     const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const isEditing = !!editedMessage.text
@@ -67,6 +67,7 @@ class Content extends Component {
     const reversedMessages = [...messages]
       .reverse()
       .sort((x, y) => new Date(y.created_at) - new Date(x.created_at))
+
 
     return (
       <>
@@ -95,11 +96,13 @@ class Content extends Component {
             />
           </StyledImageBackground>
         </Wrapper>
-        <DateContainer>
-          <DateView>
-            <Text>{this.getMessageDate()}</Text>
-          </DateView>
-        </DateContainer>
+        {!!currentDate && (
+          <DateContainer>
+            <DateView>
+              <Text>{this.getMessageDate()}</Text>
+            </DateView>
+          </DateContainer>
+        )}
         <ActionSheet
           ref={node => (this.ActionSheetMessage = node)}
           options={messageLongPressActions.map(({ title }) => title)}
@@ -213,7 +216,7 @@ class Content extends Component {
     const { currentDate } = this.state
     const item = viewableItems[viewableItems.length - 1]
     if (item) {
-      const [date] = item.item.created_at.split('T')
+      const [date] = typeof item.item.created_at === 'string' ? item.item.created_at.split('T') : item.item.created_at.toISOString().split('T')
       if (!currentDate) {
         this.setState({
           currentDate: date,
@@ -296,7 +299,7 @@ class Content extends Component {
             routeName: 'VideoView',
             params: {
               title: 'Видео',
-              uri: `https://ser.univ.team${src}`,
+              uri: `https://testser.univ.team${src}`,
             },
           })
         break
@@ -311,7 +314,7 @@ class Content extends Component {
           dialogMessages.forEach(message => {
             if (message.type === 'image') {
               dialogImages.push({
-                image: `https://ser.univ.team${message.src}`,
+                image: `https://testser.univ.team${message.src}`,
                 title: first_name ? `${first_name} ${last_name}` : phone_number,
                 description: getHamsterDate(message.created_at),
                 actions: this._getMessageActions(message).slice(0, -1),

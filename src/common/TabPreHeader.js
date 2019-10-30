@@ -29,7 +29,7 @@ class PreHeaderComponent extends PureComponent {
       <PreHeader>
         <View style={{ width: 28 }} />
         <SubTitle style={{ opacity }}>{title}</SubTitle>
-        {!hideButton && <WriteMessageBlue onPress={onWritePress} />}
+        {hideButton ? <View style={{ width: 41 }} /> : <WriteMessageBlue onPress={onWritePress} />}
       </PreHeader>
     )
   }

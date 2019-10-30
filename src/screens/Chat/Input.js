@@ -509,7 +509,7 @@ class InputComponent extends Component {
   discardSelect = () => {}
 
   sendMessage = () => {
-    const { currentRoom } = this.props
+    const { currentRoom, user, currentDialog } = this.props
     const { text } = this.state
     if (text) {
       // const { dialogs, currentChat } = this.props;
@@ -540,7 +540,9 @@ class InputComponent extends Component {
       //   setRoom(currentDialog._id);
       //   setCurrentChat(`${user._id}_${currentDialog._id}`);
       // }
+      this.props.setCurrentChat(`${user._id}_${currentDialog._id}`);
     }
+
     this.setState({ text: '' })
   }
 

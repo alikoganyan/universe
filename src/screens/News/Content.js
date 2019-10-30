@@ -149,7 +149,7 @@ class Content extends Component {
                     ) : (
                       <ImageComponent
                         source={{
-                          uri: `https://ser.univ.team${creator.image}`,
+                          uri: `https://testser.univ.team${creator.image}`,
                         }}
                         size="xs"
                         style={{ marginRight: 10 }}

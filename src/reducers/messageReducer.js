@@ -39,6 +39,7 @@ export default (state = initialState, action) => {
       return { ...state, search: false }
 
     case SET_CURRENT_CHAT:
+      console.log('ste2', payload);
       return { ...state, currentChat: payload }
 
     case SET_CURRENT_ROOM_ID:

@@ -15,6 +15,8 @@ import sendRequest from '../utils/request'
 import { setTasks } from '../actions/tasksActions'
 import { setCompanies, setContacts } from '../actions/userActions'
 import { setDialogs } from '../actions/dialogsActions'
+import DefaultAvatar from './DefaultAvatar'
+import { setNews } from '../actions/newsActions'
 
 const { fontSize, sidePadding, Colors } = helper
 const { lightGrey2 } = Colors
@@ -70,7 +72,7 @@ class Company extends Component {
         <TouchableOpacity onPress={() => this.setState({ modalVisible: true })}>
           <ImageComponent
             source={{
-              uri: `https://ser.univ.team${company.logo}`,
+              uri: `https://testser.univ.team${company.logo}`,
             }}
             size={36}
             style={{ marginRight: 16 }}
@@ -93,12 +95,16 @@ class Company extends Component {
                   this.setState({ modalVisible: false })
                   this.props.navigate('Profile')
                 }}>
-                  <UserImage
-                    source={{
-                      uri: `https://ser.univ.team${user.image}`,
-                    }}
-                    size={56}
-                  />
+                  {user.image ? (
+                    <UserImage
+                      source={{
+                        uri: `https://testser.univ.team${user.image}`,
+                      }}
+                      size={56}
+                    />
+                    ) : (
+                      <DefaultAvatar size={56} />
+                    )}
                   <UserText style={{ marginLeft: 4 }}>
                     <UserTextInner>
                       <UserTitle>
@@ -109,12 +115,16 @@ class Company extends Component {
                 </Wrapper>
                 {companies.map(item => (
                   <Wrapper style={{ marginLeft: 8 }} onPress={() => this.changeCompany(item._id)}>
-                    <UserImage
-                      source={{
-                        uri: `https://ser.univ.team${item.logo}`,
-                      }}
-                      size={40}
-                    />
+                    {item.logo ? (
+                      <UserImage
+                        source={{
+                          uri: `https://testser.univ.team${item.logo}`,
+                        }}
+                        size={40}
+                      />
+                    ) : (
+                      <DefaultAvatar size={40} />
+                    )}
                     <UserText style={{ marginLeft: 12 }}>
                       <UserTextInner>
                         <UserTitle>{item.name}</UserTitle>
@@ -132,7 +142,6 @@ class Company extends Component {
 
   changeCompany = (id) => {
     this.setState({ modalVisible: false })
-    console.log('id', id);
 
     sendRequest({
       r_path: '/profile/change_company',
@@ -141,7 +150,10 @@ class Company extends Component {
         company_id: id,
       },
       success: res => {
-        console.log('res', res);
+        this.props.setTasks(res.data.tasks);
+        this.props.setContacts(res.data.contacts);
+        this.props.setDialogs(res.data.dialogs);
+        this.props.setNews(res.data.news);
       },
       full_res: true,
     })
@@ -174,9 +186,10 @@ const mapDispatchToProps = dispatch => ({
   setTasks: _ => dispatch(setTasks(_)),
   setContacts: _ => dispatch(setContacts(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
+  setNews: _ => dispatch(setNews(_)),
 })
 
 export default connect(
   mapStateToProps,
-  null,
+  mapDispatchToProps,
 )(Company)

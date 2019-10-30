@@ -271,7 +271,7 @@ class TaskComponent extends Component {
               ) : (
                 <ImageComponent
                   size="header"
-                  source={{ uri: `https://ser.univ.team${creator.image}` }}
+                  source={{ uri: `https://testser.univ.team${creator.image}` }}
                 />
               )}
             </View>
@@ -324,7 +324,7 @@ class TaskComponent extends Component {
                 ) : (
                   <ImageComponent
                     size="header"
-                    source={{ uri: `https://ser.univ.team${image}` }}
+                    source={{ uri: `https://testser.univ.team${image}` }}
                   />
                 )}
                 <ReceiverInfo>

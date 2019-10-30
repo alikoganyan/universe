@@ -71,7 +71,7 @@ const RecieverComponent = props => {
           <DefaultAvatar />
         ) : (
           <ImageComponent
-            source={{ uri: `https://ser.univ.team${image}` }}
+            source={{ uri: `https://testser.univ.team${image}` }}
           />
         )}
         <View style={{ flex: 1, marginLeft: 10 }}>

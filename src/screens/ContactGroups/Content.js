@@ -70,7 +70,7 @@ const Wrapper = styled(View)`
 `
 const ContactList = styled(Animated.FlatList)`
   padding: 20px 16px 0;
-  padding-top: 140px;
+  padding-top: 150px;
   max-width: 100%;
   overflow: hidden;
   flex: 1;
@@ -182,6 +182,7 @@ const Head = styled(Animated.View)`
   top: 49px;
   z-index: 1;
   width: ${Dimensions.get('window').width};
+  background-color: #ffffff;
 `
 
 class Content extends Component {
@@ -196,8 +197,8 @@ class Content extends Component {
       outputRange: [0, 0, 1],
     })
     const contentTranslateY = this.scrollY.interpolate({
-      inputRange: [0, 112, 113],
-      outputRange: [0, -112, -112],
+      inputRange: [0, 122, 123],
+      outputRange: [0, -122, -122],
     })
     const titleTranslateY = this.scrollY.interpolate({
       inputRange: [0, 50, 51],
@@ -254,7 +255,7 @@ class Content extends Component {
                   }
                 >
                   <BoxItem numberOfLines={1} title>
-                    {item.title.name}
+                    {item.title}
                   </BoxItem>
                   <ArrowWrapper pose={collapsed[index] ? 'right' : 'down'}>
                     <ArrowDownIcon />
@@ -274,7 +275,7 @@ class Content extends Component {
                         ) : (
                           <ContactImage
                             source={{
-                              uri: `https://ser.univ.team${e.image}`,
+                              uri: `https://testser.univ.team${e.image}`,
                             }}
                           />
                         )}
@@ -368,7 +369,7 @@ class Content extends Component {
                 <DefaultAvatar id={item._id} size={36} />
               ) : (
                 <ContactImage
-                  source={{ uri: `https://ser.univ.team${image}` }}
+                  source={{ uri: `https://testser.univ.team${image}` }}
                 />
               )}
               <ContactInfo>
@@ -418,7 +419,7 @@ class Content extends Component {
                 <DefaultAvatar isGroup={isGroup} id={_id} size={36} />
               ) : (
                 <ContactImage
-                  source={{ uri: `https://ser.univ.team${image}` }}
+                  source={{ uri: `https://testser.univ.team${image}` }}
                 />
               )}
               <ContactInfo>
@@ -482,8 +483,8 @@ class Content extends Component {
           const department = newUsers.department.filter(e => {
             if (e.title && user.department) {
               return (
-                e.title.name === user.department.name ||
-                e.title.name === 'без департамента'
+                e.title === user.department ||
+                e.title === 'без департамента'
               )
             }
             return false
@@ -491,8 +492,8 @@ class Content extends Component {
           if (department) {
             const index = newUsers.department.findIndex(e => {
               return (
-                e.title.name === user.department.name ||
-                e.title.name === 'без департамента'
+                e.title === user.department ||
+                e.title === 'без департамента'
               )
             })
             newDepartment[index].users.push(user)

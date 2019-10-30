@@ -137,7 +137,7 @@ class Tasks extends Component {
           {image ? (
             <ImageComponent
               size={50}
-              source={{ uri: `https://ser.univ.team${image}` }}
+              source={{ uri: `https://testser.univ.team${image}` }}
               style={{ marginRight: sidePadding }}
             />
           ) : (

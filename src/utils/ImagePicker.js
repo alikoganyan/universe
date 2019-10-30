@@ -9,8 +9,9 @@ const pickerOptions = {
   cancelButtonTitle: 'Отмена',
   mediaType: 'photo',
   noData: true, // disable base64
-  // maxWidth: 1300,
-  // maxHeight: 1300,
+  maxWidth: 300,
+  maxHeight: 300,
+  quality: 0.8,
   storageOptions: {
     skipBackup: true,
     path: 'images',

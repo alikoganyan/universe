@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView } from 'react-native'
+import { View, ScrollView, Platform } from 'react-native'
 import AsyncStorage from '@react-native-community/async-storage'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -19,7 +19,7 @@ class ProfileEdit extends Component {
   render() {
     return (
       <ActionSheetProvider>
-        <SafeAreaView behavior="padding">
+        <SafeAreaView behavior="padding" enabled={Platform.OS === 'ios'}>
           <Wrapper>
             <Header back={this.navigateBack} />
             <ScrollView keyboardDismissMode="on-drag">
