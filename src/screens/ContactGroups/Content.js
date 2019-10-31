@@ -188,9 +188,9 @@ const Head = styled(Animated.View)`
 class Content extends Component {
   render() {
     const { users, collapsed, options } = this.state
-    const { department } = users
+    const { navigate, user } = this.props
+    const { departments } = user
     const { active } = options
-    const { navigate } = this.props
 
     const opacity = this.scrollY.interpolate({
       inputRange: [0, 90, 91],
@@ -238,14 +238,14 @@ class Content extends Component {
           <ContactList
             bounces={false}
             contentContainerStyle={{ paddingBottom: 140 }}
-            data={department}
+            data={departments}
             ListEmptyComponent={this._renderEmptyComponent}
             ref={ref => (this.usersRef = ref)}
             renderItem={({ item, index }) => (
               <Box
                 key={item._id}
                 first={!index}
-                last={index === department.length - 1}
+                last={index === departments.length - 1}
               >
                 <BoxTitle
                   onPress={() =>
@@ -255,7 +255,7 @@ class Content extends Component {
                   }
                 >
                   <BoxItem numberOfLines={1} title>
-                    {item.title}
+                    {item.name}
                   </BoxItem>
                   <ArrowWrapper pose={collapsed[index] ? 'right' : 'down'}>
                     <ArrowDownIcon />
@@ -296,9 +296,6 @@ class Content extends Component {
               </Box>
             )}
             keyExtractor={(item, i) => {
-              if (item.title._id) {
-                return item.title._id.toString()
-              }
               return i.toString()
             }}
             scrollEventThrottle={16}
@@ -344,42 +341,35 @@ class Content extends Component {
 
   AllContacts = () => {
     const { user } = this.props
-    const { allContacts } = this.state
+    const { departments } = user
+
     return (
       <ContactList
         bounces={false}
-        contentContainerStyle={{ paddingBottom: 140, paddingTop: 10 }}
-        data={allContacts}
+        contentContainerStyle={{ paddingBottom: 150, paddingTop: 10 }}
+        data={departments.reduce((accumulator, item) => [...accumulator, ...item.users], [])}
         ListEmptyComponent={this._renderEmptyComponent}
         ref={ref => (this.allRef = ref)}
         renderItem={({ item }) => {
-          const { participants, creator, _id, name, isGroup } = item
-          const chatItem = creator._id === user._id ? participants[0] : creator
-          const { first_name, last_name, phone_number, role, image } = chatItem
-          const chatName = isGroup
-            ? name
-            : first_name
-            ? `${first_name} ${last_name}`
-            : phone_number
           return item ? (
-            <BoxInnerItem key={_id} onPress={() => this.toChat(item)}>
-              {!image ||
-              image === '/images/default_avatar.jpg' ||
-              image === '/images/default_group.png' ? (
+            <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
+              {!item.image ||
+              item.image === '/images/default_avatar.jpg' ||
+              item.ArrowWrapperimage === '/images/default_group.png' ? (
                 <DefaultAvatar id={item._id} size={36} />
               ) : (
                 <ContactImage
-                  source={{ uri: `https://testser.univ.team${image}` }}
+                  source={{ uri: `https://testser.univ.team${item.image}` }}
                 />
               )}
               <ContactInfo>
-                <ContactName>{chatName}</ContactName>
-                {isGroup && (
+                <ContactName>{item.first_name} {item.last_name}</ContactName>
+                {/* {isGroup && (
                   <ContactRole>
                     {`${participants.length + 1} участника`}
                   </ContactRole>
-                )}
-                {!isGroup && role && <ContactRole>{role.name}</ContactRole>}
+                )} */}
+                {/* {!isGroup && role && <ContactRole>{role.name}</ContactRole>} */}
               </ContactInfo>
             </BoxInnerItem>
           ) : null

@@ -161,6 +161,7 @@ class Company extends Component {
           },
           failFunc: () => {},
         })
+        console.log('res.data.contacts', res.data);
         this.props.setTasks(res.data.tasks);
         this.props.setContacts(res.data.contacts);
         this.props.setDialogs(res.data.dialogs);
