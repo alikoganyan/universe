@@ -59,7 +59,7 @@ const DateView = styled(View)`
 `
 class Content extends Component {
   render() {
-    const { messageLongPressActions } = this.state
+    const { messageLongPressActions, currentDate } = this.state
     const { dialogs, currentChat, search, editedMessage } = this.props
     const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const messages = dialog ? [...dialog.messages] : []
@@ -74,7 +74,7 @@ class Content extends Component {
             <FlatList
               style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
               ListHeaderComponent={<FlatListHeader editing={isEditing} />}
-              inverted
+              inverted={!!reversedMessages.length}
               data={reversedMessages}
               keyboardDismissMode="on-drag"
               initialNumToRender={10}
@@ -99,11 +99,13 @@ class Content extends Component {
             />
           </StyledImageBackground>
         </Wrapper>
-        <DateContainer>
-          <DateView>
-            <Text>{this.getMessageDate()}</Text>
-          </DateView>
-        </DateContainer>
+        {!!currentDate && (
+          <DateContainer>
+            <DateView>
+              <Text>{this.getMessageDate()}</Text>
+            </DateView>
+          </DateContainer>
+        )}
         <ActionSheet
           ref={node => (this.ActionSheetMessage = node)}
           options={messageLongPressActions.map(({ title }) => title)}

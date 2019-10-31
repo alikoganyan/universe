@@ -1,19 +1,18 @@
 import React, { Component } from 'react'
-import { View, Text, Dimensions } from 'react-native'
+import { View, Platform } from 'react-native'
 import styled from 'styled-components'
 import SafeAreaView from '../../common/SafeAreaView'
 import Header from './Header'
 import Content from './Content'
 import helper from '../../utils/helpers'
 
-const { HeaderHeight } = helper
 const Wrapper = styled(View)`
   height: 100%;
 `
 export default class Signup extends Component {
   render() {
     return (
-      <SafeAreaView behavior="padding">
+      <SafeAreaView behavior="padding"  enabled={Platform.OS === 'ios'}>
         <Wrapper>
           <Header back={this.back} />
           <Content

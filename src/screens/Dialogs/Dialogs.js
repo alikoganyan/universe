@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, Text, Animated, TouchableOpacity, AppState } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import _ from 'lodash';
 import Header from './Header'
 import Dialog from './Dialog'
 import Loader from '../../common/Loader'
@@ -265,6 +266,7 @@ class Dialogs extends Component {
   socketNewDialog = () => {}
 
   socketDialogOpened = e => {
+    console.log('steeeeeeee1');
     const { dialogs, setDialogs } = this.props
     const { dialog_id, viewer } = e
     const newMessages = []
@@ -295,6 +297,7 @@ class Dialogs extends Component {
   }
 
   setDialogsSocket = e => {
+    console.log('e', e);
     const { setDialogs } = this.props
     const newDialogs = e.dialogs.length ? [...e.dialogs] : []
     const newDialogsSorted = newDialogs.length
@@ -361,6 +364,7 @@ class Dialogs extends Component {
       dialogs,
       setDialogs /*addMessage, currentRoomId, user*/,
     } = this.props
+    console.log('steeeeeeeee', 2, dialogs, e);
     try {
       const message =
         e.message && e.message._id
@@ -422,7 +426,7 @@ class Dialogs extends Component {
               const bCreation = new Date(b.created_at)
               return bCreation - aCreation
             }
-          })
+          }).map(e => ({...e, messages: _.uniqBy(e.messages, '_id')}))
         setDialogs(newDialogSorted)
       }
     } catch (err) {

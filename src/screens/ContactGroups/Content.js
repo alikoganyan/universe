@@ -70,7 +70,7 @@ const Wrapper = styled(View)`
 `
 const ContactList = styled(Animated.FlatList)`
   padding: 20px 16px 0;
-  padding-top: 150px;
+  padding-top: 160px;
   max-width: 100%;
   overflow: hidden;
   flex: 1;
@@ -187,9 +187,8 @@ const Head = styled(Animated.View)`
 
 class Content extends Component {
   render() {
-    const { users, collapsed, options } = this.state
-    const { navigate, user } = this.props
-    const { departments } = user
+    const { userContacts, collapsed, options } = this.state
+    const { navigate } = this.props
     const { active } = options
 
     const opacity = this.scrollY.interpolate({
@@ -237,15 +236,15 @@ class Content extends Component {
           <this.AllContacts />
           <ContactList
             bounces={false}
-            contentContainerStyle={{ paddingBottom: 140 }}
-            data={departments}
+            contentContainerStyle={{ paddingBottom: 160 }}
+            data={userContacts}
             ListEmptyComponent={this._renderEmptyComponent}
             ref={ref => (this.usersRef = ref)}
             renderItem={({ item, index }) => (
               <Box
                 key={item._id}
                 first={!index}
-                last={index === departments.length - 1}
+                last={index === userContacts.length - 1}
               >
                 <BoxTitle
                   onPress={() =>
@@ -263,7 +262,7 @@ class Content extends Component {
                 </BoxTitle>
                 <Collapsible collapsed={collapsed[index] || false}>
                   <BoxInner>
-                    {item.users.map(e => (
+                    {item.data.map(e => (
                       <BoxInnerItem key={e._id} onPress={() => this.toChat(e)}>
                         {!e.image ||
                         e.image === '/images/default_avatar.jpg' ? (
@@ -326,6 +325,7 @@ class Content extends Component {
       active: 1,
       options: ['Все', 'Пользователи', 'Группы'],
     },
+    userContacts: []
   }
   scrollY = new Animated.Value(0)
 
@@ -340,14 +340,13 @@ class Content extends Component {
   )
 
   AllContacts = () => {
-    const { user } = this.props
-    const { departments } = user
+    const { allContacts } = this.state
 
     return (
       <ContactList
         bounces={false}
-        contentContainerStyle={{ paddingBottom: 150, paddingTop: 10 }}
-        data={departments.reduce((accumulator, item) => [...accumulator, ...item.users], [])}
+        contentContainerStyle={{ paddingBottom: 160, paddingTop: 10 }}
+        data={allContacts}
         ListEmptyComponent={this._renderEmptyComponent}
         ref={ref => (this.allRef = ref)}
         renderItem={({ item }) => {
@@ -395,7 +394,7 @@ class Content extends Component {
     return (
       <ContactList
         bounces={false}
-        contentContainerStyle={{ paddingBottom: 140, paddingTop: 10 }}
+        contentContainerStyle={{ paddingBottom: 160, paddingTop: 10 }}
         data={dialogs}
         ListEmptyComponent={this._renderEmptyComponent}
         ref={ref => (this.groupRef = ref)}
@@ -465,37 +464,23 @@ class Content extends Component {
       r_path: g_users,
       method: 'get',
       success: res => {
-        // console.log('get users')
-        const { users } = this.state
-        const newUsers = { ...users }
-        const newDepartment = [...users.department]
+        const data = [];
         res.users.forEach(user => {
-          const department = newUsers.department.filter(e => {
-            if (e.title && user.department) {
-              return (
-                e.title === user.department ||
-                e.title === 'без департамента'
-              )
+          user.departments.forEach(department => {
+            const index = data.findIndex(item => item.id === department._id);
+            if(index > -1) {
+              data[index].data.push(user);
+            } else {
+              data.push({
+                id: department._id,
+                name: department.name,
+                data: [user]
+              })
             }
-            return false
-          })[0]
-          if (department) {
-            const index = newUsers.department.findIndex(e => {
-              return (
-                e.title === user.department ||
-                e.title === 'без департамента'
-              )
-            })
-            newDepartment[index].users.push(user)
-          } else {
-            newDepartment.push({
-              title: user.department || 'без департамента',
-              users: [user],
-            })
-          }
-          newUsers.department = [...newDepartment]
+          })
         })
-        this.setState({ users: newUsers })
+
+        this.setState({ userContacts: data, allContacts: res.users })
       },
       failFunc: err => {
         // console.log({ err })

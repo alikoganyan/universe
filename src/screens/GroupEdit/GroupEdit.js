@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View } from 'react-native'
+import { View, Platform } from 'react-native'
 import styled from 'styled-components'
 import SafeAreaView from '../../common/SafeAreaView'
 import Header from './Header'
@@ -13,7 +13,7 @@ export default class Signup extends Component {
     const { navigation } = this.props
     const defaultValues = navigation.getParam('currentDialog')
     return (
-      <SafeAreaView behavior="padding">
+      <SafeAreaView behavior="padding" enabled={Platform.OS === 'ios'}>
         <Wrapper>
           <Header back={this.back} />
           <Content

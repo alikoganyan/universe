@@ -345,7 +345,7 @@ class Message extends Component {
                 {withImage && (
                   <ShadowTopContainer>
                     <WhiteTopText>
-                      {`${sender.first_name} ${sender.last_name}`}
+                      {!!sender && `${sender.first_name} ${sender.last_name}`}
                     </WhiteTopText>
                   </ShadowTopContainer>
                 )}
@@ -388,7 +388,7 @@ class Message extends Component {
         >
           <View style={{ display: 'flex', flexDirection: 'row' }}>
             <MyMessage background={background}>
-              {resend && (
+              {!!(resend && resend.sender) && (
                 <Forwarded
                   userName={`${resend.sender.first_name} ${resend.sender.last_name}`}
                   text={resend.text}
@@ -432,7 +432,7 @@ class Message extends Component {
               <InterlocutorsMessage
                 background={background || interlocatorMessage}
               >
-                {resend && (
+                {!!(resend && resend.sender) && (
                   <Forwarded
                     userName={`${resend.sender.first_name} ${resend.sender.last_name}`}
                     text={resend.text}
@@ -440,7 +440,7 @@ class Message extends Component {
                 )}
                 {withImage && (
                   <InterlocutorsName isGroupName={isGroup}>
-                    {`${sender.first_name} ${sender.last_name}`}
+                    {!!sender && `${sender.first_name} ${sender.last_name}`}
                   </InterlocutorsName>
                 )}
                 <InterlocutorsMessageText>{text}</InterlocutorsMessageText>
@@ -558,7 +558,7 @@ class Message extends Component {
               {withImage && (
                 <ShadowTopContainer>
                   <WhiteTopText>
-                    {`${sender.first_name} ${sender.last_name}`}
+                    {!!sender && `${sender.first_name} ${sender.last_name}`}
                   </WhiteTopText>
                 </ShadowTopContainer>
               )}
@@ -659,7 +659,7 @@ class Message extends Component {
                 {withImage && (
                   <ShadowTopContainer>
                     <WhiteTopText>
-                      {`${sender.first_name} ${sender.last_name}`}
+                      {!!sender && `${sender.first_name} ${sender.last_name}`}
                     </WhiteTopText>
                   </ShadowTopContainer>
                 )}
@@ -733,7 +733,7 @@ class Message extends Component {
               >
                 {withImage && (
                   <InterlocutorsName isGroupName={isGroup}>
-                    {`${sender.first_name} ${sender.last_name}`}
+                    {!!sender && `${sender.first_name} ${sender.last_name}`}
                   </InterlocutorsName>
                 )}
                 <FileInfoWrapper>

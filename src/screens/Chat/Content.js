@@ -75,7 +75,7 @@ class Content extends Component {
           <StyledImageBackground source={chatBg}>
             <StyledFlatList
               ListHeaderComponent={<FlatListHeader editing={isEditing} />}
-              inverted
+              inverted={!!reversedMessages.length}
               data={reversedMessages}
               initialNumToRender={15}
               keyboardDismissMode="on-drag"
