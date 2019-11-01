@@ -1,4 +1,4 @@
-package elize.univ.team;
+package com.team.universe.media;
 
 import android.app.Application;
 
