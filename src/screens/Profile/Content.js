@@ -86,13 +86,13 @@ const Value = styled(Text)`
   font-size: 13px;
   min-width: 150px;
   text-align: left;
-  flex: 1;
+  flex: 2;
   display: flex;
   justify-content: flex-start;
 `
 const Type = styled(Value)`
   min-width: 110px;
-  flex: 0;
+  flex: 1;
   font-size: 13px;
 `
 const PersonalData = styled(View)`
@@ -206,7 +206,7 @@ class Content extends Component {
                     (!myProfile || !item.icon) && (
                       <Info key={item._id}>
                         <Data>
-                          <Type>{item.type}</Type>
+                          <Type numberOfLines={1}>{item.type}</Type>
                           <Value>{item.value}</Value>
                           {item.icon && item.icon}
                         </Data>
@@ -320,7 +320,7 @@ class Content extends Component {
                   (!myProfile || !item.icon) && (
                     <Info key={index}>
                       <Data>
-                        <Type>{item.type}</Type>
+                        <Type numberOfLines={1}>{item.type}</Type>
                         <Value>
                           {item.value &&
                             (item.value.name ? item.value.name : item.value)}

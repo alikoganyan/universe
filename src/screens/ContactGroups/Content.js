@@ -16,7 +16,7 @@ import Loader from '../../common/Loader'
 import { ArrowDownIcon } from '../../assets/index'
 import sendRequest from '../../utils/request'
 import { g_users } from '../../constants/api'
-import { setContacts, setAllUsers } from '../../actions/userActions'
+import { setContacts, setAllUsers, setReset } from '../../actions/userActions'
 import {
   getMessages,
   setRoom,
@@ -500,6 +500,17 @@ class Content extends Component {
   }
 
   componentDidMount() {
+    this.mount()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.reset) {
+      this.props.setReset(false)
+      this.mount()
+    }
+  }
+
+  mount = () => {
     const { collapsed, users } = this.state
     const { user, dialogs } = this.props
     const { department } = users
@@ -656,6 +667,7 @@ class Content extends Component {
 const mapStateToProps = state => ({
   dialogs: state.dialogsReducer.dialogs,
   user: state.userReducer.user,
+  reset: state.userReducer.reset,
 })
 const mapDispatchToProps = dispatch => ({
   getMessages: _ => dispatch(getMessages(_)),
@@ -667,6 +679,7 @@ const mapDispatchToProps = dispatch => ({
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
+  setReset: _ => dispatch(setReset(_)),
 })
 export default connect(
   mapStateToProps,

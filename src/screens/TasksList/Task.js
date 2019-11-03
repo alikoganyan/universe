@@ -124,7 +124,6 @@ class Tasks extends Component {
     return tasks.length ? (
       <TouchableOpacity
         onPress={() => this.handleClick(children)}
-        onLongPress={this.handleHold}
         style={{
           width: '100%',
           paddingLeft: sidePadding,

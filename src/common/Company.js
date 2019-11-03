@@ -6,7 +6,12 @@ import ImageComponent from './Image'
 import helper from '../utils/helpers'
 import sendRequest from '../utils/request'
 import { setTasks } from '../actions/tasksActions'
-import { setCompanies, setContacts } from '../actions/userActions'
+import {
+  setCompanies,
+  setContacts,
+  setUser,
+  setReset,
+} from '../actions/userActions'
 import { setDialogs } from '../actions/dialogsActions'
 import DefaultAvatar from './DefaultAvatar'
 import { setNews } from '../actions/newsActions'
@@ -157,6 +162,7 @@ class Company extends Component {
               companies: res.user.companies,
               company: res.user.company,
             })
+            this.props.setUser(res.user)
           },
           failFunc: () => {},
         })
@@ -164,6 +170,7 @@ class Company extends Component {
         this.props.setContacts(res.data.contacts)
         this.props.setDialogs(res.data.dialogs)
         this.props.setNews(res.data.news)
+        this.props.setReset(true)
       },
       full_res: true,
     })
@@ -198,6 +205,8 @@ const mapDispatchToProps = dispatch => ({
   setDialogs: _ => dispatch(setDialogs(_)),
   setNews: _ => dispatch(setNews(_)),
   setCompanies: _ => dispatch(setCompanies(_)),
+  setUser: _ => dispatch(setUser(_)),
+  setReset: _ => dispatch(setReset(_)),
 })
 
 export default connect(

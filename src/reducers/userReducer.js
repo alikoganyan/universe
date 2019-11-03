@@ -11,6 +11,7 @@ import {
   SET_SETTINGS,
   SET_COMPANIES,
   LOG_OUT,
+  SET_RESET,
 } from '../actions/userActions'
 import {
   ENABLE_USER_PUSHES,
@@ -29,6 +30,7 @@ const initialState = {
   },
   companies: [],
   company: {},
+  reset: false,
 }
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -95,8 +97,10 @@ const userReducer = (state = initialState, action) => {
         company: action.payload.company,
       }
     }
+    case SET_RESET:
+      return { ...state, reset: action.payload }
     case LOG_OUT:
-        return initialState;
+      return initialState
     default:
       return state
   }

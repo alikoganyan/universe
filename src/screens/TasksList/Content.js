@@ -13,6 +13,7 @@ import { setTasks, setTaskList } from '../../actions/tasksActions'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
 import Company from '../../common/Company'
+import { setReset } from '../../actions/userActions'
 
 const { HeaderHeight, Colors } = helper
 const { grey2 } = Colors
@@ -127,7 +128,18 @@ class Content extends Component {
   }
   scrollY = new Animated.Value(0)
 
-  componentDidMount = async () => {
+  componentDidMount() {
+    this.mount()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.reset) {
+      this.props.setReset(false)
+      this.mount()
+    }
+  }
+
+  mount = async () => {
     const { user } = this.props
     const tasksWithUsers = await this._getUsers()
     sendRequest({
@@ -175,10 +187,12 @@ const mapStateToProps = state => ({
   tasksOut: state.tasksReducer.tasksOut,
   tasksInc: state.tasksReducer.tasksInc,
   tasksWithUsers: state.tasksReducer.tasksWithUsers,
+  reset: state.userReducer.reset,
 })
 const mapDispatchToProps = dispatch => ({
   setTasks: _ => dispatch(setTasks(_)),
   setTaskList: _ => dispatch(setTaskList(_)),
+  setReset: _ => dispatch(setReset(_)),
 })
 export default connect(
   mapStateToProps,

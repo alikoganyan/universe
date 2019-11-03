@@ -10,7 +10,8 @@ export const SET_ERROR = 'SET_ERROR'
 export const ALTER_USER = 'ALTER_USER'
 export const SET_SETTINGS = 'SET_SETTINGS'
 export const SET_COMPANIES = 'SET_COMPANIES'
-export const LOG_OUT = 'LOG_OUT';
+export const LOG_OUT = 'LOG_OUT'
+export const SET_RESET = 'SET_RESET'
 
 export const setUser = payload => ({
   type: SET_USER,
@@ -60,5 +61,10 @@ export const setCompanies = payload => ({
 
 export const logOut = payload => ({
   type: LOG_OUT,
+  payload,
+})
+
+export const setReset = payload => ({
+  type: SET_RESET,
   payload,
 })

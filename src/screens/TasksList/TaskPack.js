@@ -143,7 +143,7 @@ class TaskPack extends Component {
       date = getHamsterDate(taskPack[taskPack.length - 1].created_at, true)
     }
     return (
-      <TouchableOpacity onPress={onPress} onLongPress={this.handleHold}>
+      <TouchableOpacity onPress={onPress}>
         <Wrapper first={first} last={last}>
           <TaskText>
             <TaskTextInner>

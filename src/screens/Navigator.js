@@ -126,7 +126,7 @@ const TabBarNavigation = createBottomTabNavigator(
   {
     initialRouteName: 'Dialogs',
     backBehavior: 'Dialogs',
-    // resetOnBlur: true,
+    resetOnBlur: true,
     tabBarOptions: {
       style: {
         paddingVertical: 8,
