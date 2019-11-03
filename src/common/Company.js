@@ -1,12 +1,5 @@
 import React, { Component } from 'react'
-import {
-  TouchableOpacity,
-  Modal,
-  View,
-  StyleSheet,
-  Text,
-  TouchableWithoutFeedback,
-} from 'react-native'
+import { TouchableOpacity, Modal, View, StyleSheet, Text } from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import ImageComponent from './Image'
@@ -89,58 +82,64 @@ class Company extends Component {
           {/* <TouchableWithoutFeedback
             onPress={() => this.setState({ modalVisible: false })}
           > */}
-            <View style={styles.modal}>
-              <View style={styles.modalContent}>
-                <Wrapper onPress={() => {
+          <View style={styles.modal}>
+            <View style={styles.modalContent}>
+              <Wrapper
+                onPress={() => {
                   this.setState({ modalVisible: false })
                   this.props.navigate('Profile')
-                }}>
-                  {user.image ? (
+                }}
+              >
+                {user.image ? (
+                  <UserImage
+                    source={{
+                      uri: `https://testser.univ.team${user.image}`,
+                    }}
+                    size={56}
+                  />
+                ) : (
+                  <DefaultAvatar size={56} />
+                )}
+                <UserText style={{ marginLeft: 4 }}>
+                  <UserTextInner>
+                    <UserTitle>
+                      {user.first_name} {user.last_name}
+                    </UserTitle>
+                  </UserTextInner>
+                </UserText>
+              </Wrapper>
+              {companies.map(item => (
+                <Wrapper
+                  key={item._id.toString()}
+                  style={{ marginLeft: 8 }}
+                  onPress={() => this.changeCompany(item._id)}
+                >
+                  {item.logo ? (
                     <UserImage
                       source={{
-                        uri: `https://testser.univ.team${user.image}`,
+                        uri: `https://testser.univ.team${item.logo}`,
                       }}
-                      size={56}
+                      size={40}
                     />
-                    ) : (
-                      <DefaultAvatar size={56} />
-                    )}
-                  <UserText style={{ marginLeft: 4 }}>
+                  ) : (
+                    <DefaultAvatar size={40} />
+                  )}
+                  <UserText style={{ marginLeft: 12 }}>
                     <UserTextInner>
-                      <UserTitle>
-                        {user.first_name} {user.last_name}
-                      </UserTitle>
+                      <UserTitle>{item.name}</UserTitle>
                     </UserTextInner>
                   </UserText>
                 </Wrapper>
-                {companies.map(item => (
-                  <Wrapper style={{ marginLeft: 8 }} onPress={() => this.changeCompany(item._id)}>
-                    {item.logo ? (
-                      <UserImage
-                        source={{
-                          uri: `https://testser.univ.team${item.logo}`,
-                        }}
-                        size={40}
-                      />
-                    ) : (
-                      <DefaultAvatar size={40} />
-                    )}
-                    <UserText style={{ marginLeft: 12 }}>
-                      <UserTextInner>
-                        <UserTitle>{item.name}</UserTitle>
-                      </UserTextInner>
-                    </UserText>
-                  </Wrapper>
-                ))}
-              </View>
+              ))}
             </View>
+          </View>
           {/* </TouchableWithoutFeedback> */}
         </Modal>
       </>
     )
   }
 
-  changeCompany = (id) => {
+  changeCompany = id => {
     this.setState({ modalVisible: false })
 
     sendRequest({
@@ -161,10 +160,10 @@ class Company extends Component {
           },
           failFunc: () => {},
         })
-        this.props.setTasks(res.data.tasks);
-        this.props.setContacts(res.data.contacts);
-        this.props.setDialogs(res.data.dialogs);
-        this.props.setNews(res.data.news);
+        this.props.setTasks(res.data.tasks)
+        this.props.setContacts(res.data.contacts)
+        this.props.setDialogs(res.data.dialogs)
+        this.props.setNews(res.data.news)
       },
       full_res: true,
     })
@@ -183,7 +182,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#ffffff',
     borderRadius: 16,
     padding: 20,
-    zIndex: 2
+    zIndex: 2,
   },
 })
 

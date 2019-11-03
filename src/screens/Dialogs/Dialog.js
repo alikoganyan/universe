@@ -37,11 +37,6 @@ const Wrapper = styled(View)`
   width: 100%;
   height: 74px;
 `
-const DialogImage = styled(ImageComponent)`
-  width: ${({ size }) => (size ? size : 50)}px;
-  height: ${({ size }) => (size ? size : 50)}px;
-  border-radius: ${({ size }) => (size ? size / 2 : 25)}px;
-`
 const DialogText = styled(View)`
   flex: 1;
   flex-direction: row;
@@ -204,7 +199,7 @@ class Content extends Component {
           chatImage === '/images/default_avatar.jpg' ? (
             <DefaultAvatar isGroup={isGroup} id={item._id} size={56} />
           ) : (
-            <DialogImage
+            <ImageComponent
               source={{
                 uri: `https://testser.univ.team${chatImage}`,
               }}

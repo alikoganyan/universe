@@ -104,6 +104,7 @@ class Dialogs extends Component {
       inputRange: [0, 90, 91],
       outputRange: [0, 0, 1],
     })
+
     return (
       <SafeAreaView behavior="padding">
         <TabPreHeader

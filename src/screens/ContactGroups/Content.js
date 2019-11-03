@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import {
   View,
   Text,
-  Image,
   TouchableOpacity,
   Dimensions,
   Animated,
@@ -30,6 +29,7 @@ import { socket } from '../../utils/socket'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
 import Company from '../../common/Company'
+import ImageComponent from '../../common/Image'
 
 const { Colors, HeaderHeight, sidePadding } = helper
 const { green, black, grey2 } = Colors
@@ -110,11 +110,6 @@ const BoxInnerItem = styled(TouchableOpacity)`
   display: flex;
   flex-direction: row;
   align-items: center;
-`
-const ContactImage = styled(Image)`
-  width: 36px;
-  height: 36px;
-  border-radius: 18;
 `
 const ContactInfo = styled(View)`
   display: flex;
@@ -279,10 +274,11 @@ class Content extends Component {
                                 size={36}
                               />
                             ) : (
-                              <ContactImage
+                              <ImageComponent
                                 source={{
                                   uri: `https://testser.univ.team${e.image}`,
                                 }}
+                                size={36}
                               />
                             )}
                             <ContactInfo>
@@ -310,8 +306,9 @@ class Content extends Component {
                   item.ArrowWrapperimage === '/images/default_group.png' ? (
                     <DefaultAvatar id={item._id} size={36} />
                   ) : (
-                    <ContactImage
+                    <ImageComponent
                       source={{ uri: `https://testser.univ.team${item.image}` }}
+                      size={36}
                     />
                   )}
                   <ContactInfo>
@@ -400,8 +397,9 @@ class Content extends Component {
                     size={36}
                   />
                 ) : (
-                  <ContactImage
+                  <ImageComponent
                     source={{ uri: `https://testser.univ.team${image}` }}
+                    size={36}
                   />
                 )}
                 <ContactInfo>
@@ -420,8 +418,9 @@ class Content extends Component {
               item.ArrowWrapperimage === '/images/default_group.png' ? (
                 <DefaultAvatar id={item._id} size={36} />
               ) : (
-                <ContactImage
+                <ImageComponent
                   source={{ uri: `https://testser.univ.team${item.image}` }}
+                  size={36}
                 />
               )}
               <ContactInfo>
@@ -472,8 +471,9 @@ class Content extends Component {
               {image === '/images/default_avatar.jpg' ? (
                 <DefaultAvatar isGroup={isGroup} id={_id} size={36} />
               ) : (
-                <ContactImage
+                <ImageComponent
                   source={{ uri: `https://testser.univ.team${image}` }}
+                  size={36}
                 />
               )}
               <ContactInfo>
