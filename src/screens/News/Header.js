@@ -85,9 +85,7 @@ class HeaderComponent extends PureComponent {
           success: res => {
             setNews(res.news)
           },
-          failFunc: err => {
-            // console.log(err)
-          },
+          failFunc: err => {},
         })
       : sendRequest({
           r_path: p_news_search,
@@ -99,9 +97,7 @@ class HeaderComponent extends PureComponent {
           success: res => {
             setNews(res.news)
           },
-          failFunc: err => {
-            // console.log(err)
-          },
+          failFunc: err => {},
         })
   }
 

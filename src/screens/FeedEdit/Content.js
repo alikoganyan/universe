@@ -170,7 +170,6 @@ class Content extends Component {
     Alert.alert('Удалить новость?', null, [
       {
         text: 'Отменить',
-        // onPress: () => console.log('dismiss'),
         style: 'cancel',
       },
       {
@@ -190,12 +189,8 @@ class Content extends Component {
       attr: {
         _id: feed._id,
       },
-      success: res => {
-        // console.log({ res })
-      },
-      failFunc: err => {
-        // console.log(err)
-      },
+      success: res => {},
+      failFunc: err => {},
     })
     forward()
   }
@@ -244,12 +239,9 @@ class Content extends Component {
       method: 'patch',
       attr: reqBody,
       success: res => {
-        // console.log({ res })
         back()
       },
-      failFunc: err => {
-        // console.log(err)
-      },
+      failFunc: err => {},
     })
   }
 

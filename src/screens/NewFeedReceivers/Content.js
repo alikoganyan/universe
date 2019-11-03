@@ -370,9 +370,7 @@ class Content extends Component {
         const formatedUsers = getUsersByDepartments(res.users || [])
         this.setState({ users: { department: formatedUsers } })
       },
-      failFunc: err => {
-        // console.log({ err })
-      },
+      failFunc: err => {},
     })
   }
 

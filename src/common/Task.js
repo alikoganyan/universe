@@ -12,6 +12,7 @@ import {
 } from '../assets'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import _ from 'lodash'
 import {
   setTasks,
   setActiveTask,
@@ -197,9 +198,7 @@ class TaskComponent extends Component {
     } = children
     const performer = performers[0]
 
-    const { first_name, last_name, phone_number, post, image } = withImage
-      ? creator
-      : performer
+    const { post } = withImage ? creator : performer
     const statuses = [
       'ЗАДАЧА ПОСТАВЛЕНА',
       'ПРИНЯЛ В РАБОТУ',
@@ -219,7 +218,7 @@ class TaskComponent extends Component {
       <OuterWrapper
         style={{
           justifyContent: triangleRight ? 'flex-end' : 'flex-start',
-          left: withImage ? -10 : 0,
+          left: !_.isEmpty(withImage) ? -10 : 0,
         }}
       >
         {triangleRight && (
@@ -256,7 +255,7 @@ class TaskComponent extends Component {
         <Wrapper
           style={{ alignSelf: triangleRight ? 'flex-end' : 'flex-start' }}
         >
-          {inc && withImage && (
+          {inc && !_.isEmpty(withImage) && (
             <View
               style={{
                 alignSelf: 'flex-end',
@@ -317,31 +316,27 @@ class TaskComponent extends Component {
             </TaskBody>
             {withReceiver ? (
               <TaskBody>
-                {!image ||
-                image === '/images/default_group.png' ||
-                image === '/images/default_avatar.jpg' ? (
-                  <DefaultAvatar id={performer._id} size="header" />
+                {!withReceiver.image ||
+                withReceiver.image === '/images/default_group.png' ||
+                withReceiver.image === '/images/default_avatar.jpg' ? (
+                  <DefaultAvatar id={withReceiver._id} size="header" />
                 ) : (
                   <ImageComponent
                     size="header"
-                    source={{ uri: `https://testser.univ.team${image}` }}
+                    source={{
+                      uri: `https://testser.univ.team${withReceiver.image}`,
+                    }}
                   />
                 )}
                 <ReceiverInfo>
                   <Text>
-                    {first_name ? `${first_name} ${last_name}` : phone_number}
+                    {withReceiver.first_name
+                      ? `${withReceiver.first_name} ${withReceiver.last_name}`
+                      : withReceiver.phone_number}
                   </Text>
                   {post ? <Text>{post}</Text> : null}
                 </ReceiverInfo>
               </TaskBody>
-            ) : null}
-            {withImage ? (
-              <TaskDeadlineLabel numberOfLines={1}>
-                Поставил:{' '}
-                <TaskDeadlineValue>
-                  {first_name ? `${first_name} ${last_name}` : phone_number}
-                </TaskDeadlineValue>
-              </TaskDeadlineLabel>
             ) : null}
             <TaskFooter>
               <TaskDeadline>
@@ -472,20 +467,14 @@ class TaskComponent extends Component {
           status: e,
         },
       },
-      success: res => {
-        // console.log(res)
-      },
-      failFunc: err => {
-        // console.log(err)
-      },
+      success: res => {},
+      failFunc: err => {},
     })
   }
 
   unselect = () => {
-    const { setActiveTask } = this.props
-    setActiveTask({})
+    this.props.setActiveTask({})
     // this.changeState('set')
-    // console.log('unselect')
   }
 
   componentDidMount() {}

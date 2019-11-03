@@ -187,8 +187,8 @@ const Head = styled(Animated.View)`
 
 class Content extends Component {
   render() {
-    const { userContacts, collapsed, options } = this.state
-    const { navigate } = this.props
+    const { userContacts, collapsed, options, userContactsAll } = this.state
+    const { navigate, user } = this.props
     const { active } = options
 
     const opacity = this.scrollY.interpolate({
@@ -237,63 +237,97 @@ class Content extends Component {
           <ContactList
             bounces={false}
             contentContainerStyle={{ paddingBottom: 160 }}
-            data={userContacts}
+            data={
+              user.settings.partition_contacts ? userContacts : userContactsAll
+            }
             ListEmptyComponent={this._renderEmptyComponent}
             ref={ref => (this.usersRef = ref)}
-            renderItem={({ item, index }) => (
-              <Box
-                key={item._id}
-                first={!index}
-                last={index === userContacts.length - 1}
-              >
-                <BoxTitle
-                  onPress={() =>
-                    collapsed[index]
-                      ? this.collapseDepartment(index)
-                      : this.showDepartment(index)
-                  }
-                >
-                  <BoxItem numberOfLines={1} title>
-                    {item.name}
-                  </BoxItem>
-                  <ArrowWrapper pose={collapsed[index] ? 'right' : 'down'}>
-                    <ArrowDownIcon />
-                  </ArrowWrapper>
-                </BoxTitle>
-                <Collapsible collapsed={collapsed[index] || false}>
-                  <BoxInner>
-                    {item.data.map(e => (
-                      <BoxInnerItem key={e._id} onPress={() => this.toChat(e)}>
-                        {!e.image ||
-                        e.image === '/images/default_avatar.jpg' ? (
-                          <DefaultAvatar
-                            isGroup={e.isGroup}
-                            id={e._id}
-                            size={36}
-                          />
-                        ) : (
-                          <ContactImage
-                            source={{
-                              uri: `https://testser.univ.team${e.image}`,
-                            }}
-                          />
-                        )}
-                        <ContactInfo>
-                          <ContactName>
-                            {e.first_name
-                              ? `${e.first_name} ${e.last_name}`
-                              : e.phone_number}
-                          </ContactName>
-                          {e.role ? (
-                            <ContactRole>{e.role.name}</ContactRole>
-                          ) : null}
-                        </ContactInfo>
-                      </BoxInnerItem>
-                    ))}
-                  </BoxInner>
-                </Collapsible>
-              </Box>
-            )}
+            renderItem={({ item, index }) => {
+              if (user.settings.partition_contacts) {
+                return (
+                  <Box
+                    key={item._id}
+                    first={!index}
+                    last={index === userContacts.length - 1}
+                  >
+                    <BoxTitle
+                      onPress={() =>
+                        collapsed[index]
+                          ? this.collapseDepartment(index)
+                          : this.showDepartment(index)
+                      }
+                    >
+                      <BoxItem numberOfLines={1} title>
+                        {item.name}
+                      </BoxItem>
+                      <ArrowWrapper pose={collapsed[index] ? 'right' : 'down'}>
+                        <ArrowDownIcon />
+                      </ArrowWrapper>
+                    </BoxTitle>
+                    <Collapsible collapsed={collapsed[index] || false}>
+                      <BoxInner>
+                        {item.data.map(e => (
+                          <BoxInnerItem
+                            key={e._id}
+                            onPress={() => this.toChat(e)}
+                          >
+                            {!e.image ||
+                            e.image === '/images/default_avatar.jpg' ? (
+                              <DefaultAvatar
+                                isGroup={e.isGroup}
+                                id={e._id}
+                                size={36}
+                              />
+                            ) : (
+                              <ContactImage
+                                source={{
+                                  uri: `https://testser.univ.team${e.image}`,
+                                }}
+                              />
+                            )}
+                            <ContactInfo>
+                              <ContactName>
+                                {e.first_name
+                                  ? `${e.first_name} ${e.last_name}`
+                                  : e.phone_number}
+                              </ContactName>
+                              {e.role ? (
+                                <ContactRole>{e.role.name}</ContactRole>
+                              ) : null}
+                            </ContactInfo>
+                          </BoxInnerItem>
+                        ))}
+                      </BoxInner>
+                    </Collapsible>
+                  </Box>
+                )
+              }
+
+              return item ? (
+                <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
+                  {!item.image ||
+                  item.image === '/images/default_avatar.jpg' ||
+                  item.ArrowWrapperimage === '/images/default_group.png' ? (
+                    <DefaultAvatar id={item._id} size={36} />
+                  ) : (
+                    <ContactImage
+                      source={{ uri: `https://testser.univ.team${item.image}` }}
+                    />
+                  )}
+                  <ContactInfo>
+                    <ContactName>
+                      {item.first_name} {item.last_name}
+                    </ContactName>
+                    {/* {isGroup && (
+                        <ContactRole>
+                          {`${participants.length + 1} участника`}
+                        </ContactRole>
+                      )} */}
+                    {/* {!isGroup && role && <ContactRole>{role.name}</ContactRole>} */}
+                  </ContactInfo>
+                </BoxInnerItem>
+              ) : null
+            }}
             keyExtractor={(item, i) => {
               return i.toString()
             }}
@@ -325,7 +359,7 @@ class Content extends Component {
       active: 1,
       options: ['Все', 'Пользователи', 'Группы'],
     },
-    userContacts: []
+    userContacts: [],
   }
   scrollY = new Animated.Value(0)
 
@@ -341,6 +375,7 @@ class Content extends Component {
 
   AllContacts = () => {
     const { allContacts } = this.state
+    const { user } = this.props
 
     return (
       <ContactList
@@ -350,6 +385,34 @@ class Content extends Component {
         ListEmptyComponent={this._renderEmptyComponent}
         ref={ref => (this.allRef = ref)}
         renderItem={({ item }) => {
+          if (item.isGroup) {
+            const chatItem =
+              item.creator._id === user._id
+                ? item.participants[0]
+                : item.creator
+            const { image } = chatItem
+            return (
+              <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
+                {image === '/images/default_avatar.jpg' ? (
+                  <DefaultAvatar
+                    isGroup={item.isGroup}
+                    id={item._id}
+                    size={36}
+                  />
+                ) : (
+                  <ContactImage
+                    source={{ uri: `https://testser.univ.team${image}` }}
+                  />
+                )}
+                <ContactInfo>
+                  <ContactName>{item.name}</ContactName>
+                  <ContactRole>
+                    {item.participants.length + 1} участника
+                  </ContactRole>
+                </ContactInfo>
+              </BoxInnerItem>
+            )
+          }
           return item ? (
             <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
               {!item.image ||
@@ -362,7 +425,9 @@ class Content extends Component {
                 />
               )}
               <ContactInfo>
-                <ContactName>{item.first_name} {item.last_name}</ContactName>
+                <ContactName>
+                  {item.first_name} {item.last_name}
+                </ContactName>
                 {/* {isGroup && (
                   <ContactRole>
                     {`${participants.length + 1} участника`}
@@ -464,27 +529,31 @@ class Content extends Component {
       r_path: g_users,
       method: 'get',
       success: res => {
-        const data = [];
+        const data = []
         res.users.forEach(user => {
           user.departments.forEach(department => {
-            const index = data.findIndex(item => item.id === department._id);
-            if(index > -1) {
-              data[index].data.push(user);
+            const index = data.findIndex(item => item.id === department._id)
+            if (index > -1) {
+              data[index].data.push(user)
             } else {
               data.push({
                 id: department._id,
                 name: department.name,
-                data: [user]
+                data: [user],
               })
             }
           })
         })
 
-        this.setState({ userContacts: data, allContacts: res.users })
+        const groups = dialogs.filter(item => item.isGroup)
+
+        this.setState({
+          userContacts: data,
+          allContacts: [...res.users, ...groups],
+          userContactsAll: res.users,
+        })
       },
-      failFunc: err => {
-        // console.log({ err })
-      },
+      failFunc: () => {},
     })
     this.setState({ collapsed: newCollapsed })
   }

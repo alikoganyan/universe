@@ -252,9 +252,7 @@ class HeaderComponent extends Component {
           success: res => {
             getMessages(res.messages)
           },
-          failFunc: err => {
-            // console.log(err)
-          },
+          failFunc: () => {},
         })
       : getMessages(
           dialogs.filter(e => e.room.includes(currentRoom))[0].messages,

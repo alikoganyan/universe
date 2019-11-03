@@ -16,7 +16,7 @@ import { setTaskReceivers } from '../../actions/participantsActions'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import Button from '../../common/Button'
-import { p_tasks } from '../../constants/api'
+import { p_tasks, g_users } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import {
   setTasks,
@@ -24,9 +24,10 @@ import {
   setTaskList,
 } from '../../actions/tasksActions'
 import { GroupIcon, CloseIcon } from '../../assets'
+import moment from 'moment'
 
 const { Colors, HeaderHeight, sidePadding } = helper
-const { lightGrey1, purple, red } = Colors
+const { lightGrey1, purple, red, pink, black } = Colors
 const Wrapper = styled(View)`
   padding: 0 ${sidePadding}px;
   display: flex;
@@ -40,9 +41,6 @@ const StyledScrollView = styled(ScrollView)`
   width: 100%;
 `
 const StyledInput = styled(TextInput)`
-  border: 1px solid ${lightGrey1};
-  border-width: 0;
-  border-bottom-width: 1px;
   padding-bottom: 10px;
   text-align: center;
   margin-bottom: 50px;
@@ -134,7 +132,14 @@ const ReceiverComponent = props => {
 class Content extends Component {
   render() {
     const { receivers } = this.props
-    const { taskName, taskText, deadlineDate, deadlineTime } = this.state
+    const {
+      taskName,
+      taskText,
+      deadlineDate,
+      deadlineTime,
+      touched,
+    } = this.state
+
     return (
       <Wrapper>
         <StyledScrollView
@@ -150,7 +155,12 @@ class Content extends Component {
             value={taskName}
             placeholder="Название задачи"
             multiline
-            style={{ flex: 1, marginBottom: 30, textAlign: 'left' }}
+            style={{
+              marginBottom: 30,
+              textAlign: 'left',
+              borderBottomWidth: 1,
+              borderBottomColor: !taskName && touched ? pink : lightGrey1,
+            }}
           />
           <StyledInput
             password
@@ -159,10 +169,10 @@ class Content extends Component {
             placeholder="Текст задачи"
             multiline
             style={{
-              flex: 1,
               marginBottom: 30,
               textAlign: 'left',
-              padding: 0,
+              borderBottomWidth: 1,
+              borderBottomColor: !taskText && touched ? pink : lightGrey1,
             }}
           />
           <DeadLine>
@@ -185,13 +195,21 @@ class Content extends Component {
                   dateInput: {
                     borderWidth: 0,
                     borderBottomWidth: 1,
+                    borderBottomColor:
+                      !deadlineDate && touched ? pink : lightGrey1,
                   },
                 }}
                 onDateChange={e => this.setState({ deadlineDate: e })}
               />
               <DatePicker
-                date={deadlineTime}
-                mode="date"
+                date={
+                  typeof deadlineTime === 'string'
+                    ? deadlineTime.length <= 5
+                      ? deadlineTime
+                      : moment(deadlineTime).format('HH:MM')
+                    : moment(deadlineTime).format('HH:MM')
+                }
+                mode="time"
                 format="HH:MM"
                 confirmBtnText="Подтвердить"
                 cancelBtnText="Отменить"
@@ -203,6 +221,8 @@ class Content extends Component {
                   dateInput: {
                     borderWidth: 0,
                     borderBottomWidth: 1,
+                    borderBottomColor:
+                      !deadlineTime && touched ? pink : lightGrey1,
                   },
                 }}
                 onDateChange={e => this.setState({ deadlineTime: e })}
@@ -212,7 +232,13 @@ class Content extends Component {
           <Receivers>
             <DialogsLabel>
               <GroupIcon />
-              <DialogsLabelText>Исполнитель</DialogsLabelText>
+              <DialogsLabelText
+                style={{
+                  color: touched && !receivers.length ? pink : black,
+                }}
+              >
+                Исполнитель
+              </DialogsLabelText>
             </DialogsLabel>
             {receivers.length > 0 ? (
               receivers.map((e, i) => (
@@ -236,9 +262,9 @@ class Content extends Component {
             <Button onPress={this.proceed} background={purple} color="white">
               Сохранить
             </Button>
-            {/* <TouchableOpacity onPress={this.deleteTask}> */}
-            <DeleteTask>Удалить задачу</DeleteTask>
-            {/* </TouchableOpacity> */}
+            <TouchableOpacity onPress={this.deleteTask}>
+              <DeleteTask>Удалить задачу</DeleteTask>
+            </TouchableOpacity>
           </ButtonBox>
         </StyledScrollView>
       </Wrapper>
@@ -250,17 +276,20 @@ class Content extends Component {
     taskText: '',
     deadlineDate: new Date(),
     deadlineTime: new Date(),
+    touched: false,
   }
 
   componentDidMount() {
     const { activeTask } = this.props
     const { name, deadline, description } = activeTask
+
     this.setState({
       taskName: name,
       taskText: description,
       deadlineDate: deadline,
       deadlineTime: deadline,
     })
+    this.props.setTaskReceivers(activeTask.performers)
   }
 
   jsCoreDateCreator = dateString => {
@@ -282,97 +311,142 @@ class Content extends Component {
     addParticipants()
   }
 
+  _getUsers = () => {
+    return new Promise((resolve, reject) => {
+      sendRequest({
+        r_path: g_users,
+        method: 'get',
+        success: res => {
+          resolve(res.users)
+        },
+        failFunc: err => {
+          reject()
+        },
+      })
+    })
+  }
+
   deleteTask = () => {
-    const { back } = this.props
-    // const { _id } = activeTask;
-    // console.log('try to delete')
+    const {
+      back,
+      activeTask,
+      inc,
+      tasksInc,
+      tasksOut,
+      userTask,
+      currentTask,
+    } = this.props
+    const { _id } = activeTask
     sendRequest({
       r_path: '/tasks',
       method: 'delete',
       attr: {
-        _id: 1,
+        _id,
       },
-      success: () => {
+      success: async () => {
+        const tasksWithUsers = await this._getUsers()
+        if (inc) {
+          const list = [...tasksInc]
+          const taskId = list.findIndex(item => item._id === _id)
+          list.splice(taskId, 1)
+
+          this.props.setTaskList({ tasksInc: list, tasksOut, tasksWithUsers })
+        } else if (userTask) {
+          const list = { ...currentTask }
+          const taskId = list.tasks.findIndex(item => item._id === _id)
+          list.splice(taskId, 1)
+
+          this.props.setTask(list)
+        } else {
+          const list = [...tasksOut]
+          const taskId = list.findIndex(item => item._id === _id)
+          list.splice(taskId, 1)
+
+          this.props.setTaskList({ tasksInc, tasksOut: list, tasksWithUsers })
+        }
         back()
-        // console.log('deleted');
       },
-      failFunc: err => {
-        // console.log('not deleted');
-        // console.log(err);
-      },
+      failFunc: err => {},
     })
   }
 
-  proceed = () => {
+  proceed = async () => {
     const {
       activeTask,
       tasksInc,
       tasksOut,
-      tasksWithUsers,
       currentTask,
       back,
       getParam,
+      receivers,
     } = this.props
     const { _id, status, performers, creator } = activeTask
     const { deadlineDate, deadlineTime, taskName, taskText } = this.state
-    const date = new Date(deadlineDate)
-    const dateY = date.getFullYear()
-    const dateM = date.getMonth()
-    const dateD = date.getDate()
 
-    const time = new Date(deadlineTime)
-    const timeH = time.getHours()
-    const timeM = time.getMinutes()
-
-    const deadline = this.jsCoreDateCreator(
-      `${dateY}-${dateM}-${dateD} ${timeH}:${timeM}`,
-    )
-    const inc = getParam('inc')
-    const userTask = getParam('userTask')
-
-    // console.log({ deadline }, deadlineTime)
-    const newTask = {
-      _id,
-      name: taskName,
-      description: taskText,
-      deadline,
-      performers,
-      status,
-      creator,
-    }
-    if (inc) {
-      const list = [...tasksInc]
-      const taskId = list.findIndex(item => item._id === _id)
-      list[taskId] = newTask
-
-      this.props.setTaskList({ tasksInc: list, tasksOut, tasksWithUsers })
-    } else if (userTask) {
-      const list = { ...currentTask }
-      const taskId = list.tasks.findIndex(item => item._id === _id)
-      list.tasks[taskId] = newTask
-
-      this.props.setTask(list)
+    const formatedDeadlineDate = moment(deadlineDate).format('DD-MM-YYYY')
+    const formatedDeadlineTime =
+      typeof deadlineTime === 'string'
+        ? deadlineTime.length <= 5
+          ? deadlineTime
+          : moment(deadlineTime).format('HH:MM')
+        : moment(deadlineTime).format('HH:MM')
+    if (
+      !taskName ||
+      !taskText ||
+      !deadlineDate ||
+      !deadlineTime ||
+      !receivers.length
+    ) {
+      this.setState({ touched: true })
     } else {
-      const list = [...tasksOut]
-      const taskId = list.findIndex(item => item._id === _id)
-      list[taskId] = newTask
+      const deadline = moment(
+        `${formatedDeadlineDate} ${formatedDeadlineTime}`,
+      ).format()
+      const inc = getParam('inc')
+      const userTask = getParam('userTask')
 
-      this.props.setTaskList({ tasksInc, tasksOut: list, tasksWithUsers })
+      const newTask = {
+        _id,
+        name: taskName,
+        description: taskText,
+        deadline,
+        performers,
+        status,
+        creator,
+      }
+      const tasksWithUsers = await this._getUsers()
+      if (inc) {
+        const list = [...tasksInc]
+        const taskId = list.findIndex(item => item._id === _id)
+        list[taskId] = newTask
+
+        this.props.setTaskList({ tasksInc: list, tasksOut, tasksWithUsers })
+      } else if (userTask) {
+        const list = { ...currentTask }
+        const taskId = list.tasks.findIndex(item => item._id === _id)
+        list.tasks[taskId] = newTask
+
+        this.props.setTask(list)
+      } else {
+        const list = [...tasksOut]
+        const taskId = list.findIndex(item => item._id === _id)
+        list[taskId] = newTask
+
+        this.props.setTaskList({ tasksInc, tasksOut: list, tasksWithUsers })
+      }
+      sendRequest({
+        r_path: p_tasks,
+        method: 'patch',
+        attr: {
+          task: { ...newTask },
+        },
+        success: () => {
+          back()
+          // getMessages(res.messages);
+        },
+        failFunc: err => {},
+      })
     }
-    sendRequest({
-      r_path: p_tasks,
-      method: 'patch',
-      attr: {
-        task: { ...newTask },
-      },
-      success: () => {
-        back()
-        // getMessages(res.messages);
-      },
-      failFunc: err => {
-        // console.log(err)
-      },
-    })
   }
 
   handleCountry = e => {

@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React, { Component } from 'react'
 import { View, Text, Dimensions, TextInput } from 'react-native'
 import styled from 'styled-components'
@@ -6,6 +7,7 @@ import { BackIcon, SearchIcon, CloseIcon } from '../../assets/index'
 import helper from '../../utils/helpers'
 import { p_tasks_search, g_users } from '../../constants/api'
 import sendRequest from '../../utils/request'
+import { setTasks } from '../../actions/tasksActions'
 
 const { sidePadding, HeaderHeight, fontSize } = helper
 
@@ -112,9 +114,7 @@ class HeaderComponent extends Component {
               setTasks(tasksList)
             }, 0)
           },
-          failFunc: err => {
-            console.log(err)
-          },
+          failFunc: err => {},
         })
       : sendRequest({
           r_path: g_users,
@@ -133,9 +133,6 @@ class HeaderComponent extends Component {
                   }
                 })
             })
-          },
-          failFunc: err => {
-            console.log({ err })
           },
         })
   }

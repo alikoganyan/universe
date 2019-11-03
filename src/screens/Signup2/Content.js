@@ -117,13 +117,16 @@ class Content extends Component {
   componentDidMount() {
     const countdown = setInterval(() => {
       const { deadline } = this.state
-      this.setState({ deadline: deadline - 1 })
-      if (deadline === 0) clearInterval(countdown)
+      if (deadline < 1) {
+        clearInterval(countdown)
+      } else {
+        this.setState({ deadline: deadline - 1 })
+      }
     }, 1000)
   }
 
   handleSMS = e => {
-    const { error, tries, sms } = this.state
+    const { error, tries } = this.state
     const { forward, register } = this.props
     if (error <= tries) {
       this.setState({ sms: e }, () => {
@@ -136,12 +139,9 @@ class Content extends Component {
               password: e,
             },
             success: res => {
-              console.log({ res })
               forward()
             },
-            failFunc: err => {
-              console.log(err)
-              const { phone_number } = err
+            failFunc: () => {
               this.setState({
                 err: true,
               })
@@ -164,20 +164,21 @@ class Content extends Component {
         },
         success: () => {
           // forward();
+          const countdown = setInterval(() => {
+            const { deadline } = this.state
+            if (deadline < 1) {
+              clearInterval(countdown)
+            } else {
+              this.setState({ deadline: deadline - 1 })
+            }
+          }, 1000)
         },
         failFunc: err => {
-          console.log(err)
-          const { phone_number } = err
           this.setState({
             error: true,
           })
         },
       })
-      const countdown = setInterval(() => {
-        const { deadline } = this.state
-        this.setState({ deadline: deadline - 1 })
-        if (deadline === 0) clearInterval(countdown)
-      }, 1000)
     })
   }
 }

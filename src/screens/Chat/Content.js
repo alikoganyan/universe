@@ -68,7 +68,6 @@ class Content extends Component {
       .reverse()
       .sort((x, y) => new Date(y.created_at) - new Date(x.created_at))
 
-
     return (
       <>
         <Wrapper search={search}>
@@ -216,7 +215,10 @@ class Content extends Component {
     const { currentDate } = this.state
     const item = viewableItems[viewableItems.length - 1]
     if (item) {
-      const [date] = typeof item.item.created_at === 'string' ? item.item.created_at.split('T') : item.item.created_at.toISOString().split('T')
+      const [date] =
+        typeof item.item.created_at === 'string'
+          ? item.item.created_at.split('T')
+          : item.item.created_at.toISOString().split('T')
       if (!currentDate) {
         this.setState({
           currentDate: date,
@@ -255,12 +257,8 @@ class Content extends Component {
         dialog_id: currentRoomId,
         messages: [currentMessage._id],
       },
-      success: res => {
-        // console.log(res)
-      },
-      failFunc: err => {
-        // console.log(err)
-      },
+      success: res => {},
+      failFunc: err => {},
     })
     const dialog = dialogs.filter(dialog => dialog.room === currentChat)[0]
     const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)

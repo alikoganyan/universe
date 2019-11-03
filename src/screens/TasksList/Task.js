@@ -194,9 +194,7 @@ class Tasks extends Component {
         destructiveButtonIndex: 0,
         tintColor: 'blue',
       },
-      buttonIndex => {
-        // console.log('button clicked :', buttonIndex)
-      },
+      buttonIndex => {},
     )
   }
 

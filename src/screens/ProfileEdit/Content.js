@@ -275,15 +275,12 @@ class Content extends Component {
             },
           },
           success: res => {
-            // console.log('res: ', res)
             const newUser = { ...user }
             newUser.image = res.newImage
             setUser(newUser)
             this.setState({ user: newUser })
           },
-          failFunc: err => {
-            // console.log({ err })
-          },
+          failFunc: err => {},
         })
       }
     })
@@ -346,9 +343,7 @@ class Content extends Component {
           })
           back()
         },
-        failFunc: err => {
-          // console.log('pa_profile', { err })
-        },
+        failFunc: err => {},
       })
       back()
     }

@@ -106,9 +106,11 @@ class Content extends Component {
             </OptionsWrapper>
             {!_.isEmpty(tasksInc) && animationCompleted ? (
               <TaskList
-                data={tasksInc.filter(item =>
-                  active.includes(statuses[item.status]),
-                )}
+                data={tasksInc
+                  .filter(item => active.includes(statuses[item.status]))
+                  .sort(
+                    (a, b) => new Date(b.updated_at) - new Date(a.updated_at),
+                  )}
                 ListFooterComponent={<View />}
                 ListEmptyComponent={
                   <View style={{ flex: 1 }}>
@@ -125,7 +127,7 @@ class Content extends Component {
                         <TaskComponent
                           triangleLeft
                           borderColor={purple}
-                          withImage
+                          withReceiver={item.creator || false}
                           style={{
                             zIndex: activeTask._id === item._id ? 5 : 1,
                             // marginRight: myTask ? 10 : 70,
@@ -166,8 +168,7 @@ class Content extends Component {
   }
 
   unselect = () => {
-    const { setActiveTask } = this.props
-    setActiveTask({})
+    this.props.setActiveTask({})
   }
 
   handleHold = e => {

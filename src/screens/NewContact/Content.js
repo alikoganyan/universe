@@ -202,11 +202,8 @@ export default class Content extends Component {
       r_path: p_create_contact,
       method: 'post',
       attr: { contact },
-      success: res => {
-        console.log({ res })
-      },
+      success: res => {},
       failFunc: err => {
-        console.log(err)
         const { phone_number } = err
         this.setState({
           invalidPhone: phone_number || null,

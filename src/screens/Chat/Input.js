@@ -326,9 +326,7 @@ class InputComponent extends Component {
         setDialogs(newDialogs)
         this.stopEditing()
       },
-      failFunc: err => {
-        // console.log({ err })
-      },
+      failFunc: () => {},
     })
   }
 
@@ -344,6 +342,7 @@ class InputComponent extends Component {
       result => {
         const { imageFormData = {}, uri = '' } = result
         let imageSrc = /\.(gif|jpg|jpeg|tiff|png)$/i.test(uri) ? uri : ''
+
         this._startSendingFile(imageFormData, imageSrc)
       },
       () => {},
@@ -362,6 +361,7 @@ class InputComponent extends Component {
       user,
     } = this.props
     const form = new FormData()
+
     form.append('file', formDataObject)
     form.append('room', currentChat)
     const tempMessageId = Date.now()
@@ -402,7 +402,6 @@ class InputComponent extends Component {
         },
       },
       success: res => {
-        // console.log('load success: ', { res })
         socket.emit('file', { room: currentChat })
         const newDialogs = [...dialogs]
         const index = newDialogs.findIndex(e => e.room === currentChat)
@@ -410,7 +409,6 @@ class InputComponent extends Component {
         setDialogsProp(newDialogs)
       },
       failFunc: err => {
-        // console.log('load err: ', { err })
         removeUploadMessageProp({
           room: currentChat,
           tempId: tempMessageId,
@@ -447,7 +445,6 @@ class InputComponent extends Component {
         //       setDialogsProp(newDialogs)
         //     },
         //     failFunc: err => {
-        //       // console.log('load err: ', { err })
         //       removeUploadMessageProp({
         //         room: currentChat,
         //         tempId: tempMessageId,
@@ -465,7 +462,7 @@ class InputComponent extends Component {
         type: [RNDocumentPicker.types.allFiles],
       })
       if (data) {
-        this._startSendingFile(data)
+        this._startSendingFile(data, data.uri)
       }
     } catch (err) {}
   }
@@ -482,7 +479,6 @@ class InputComponent extends Component {
           })
         },
         error => {
-          // console.log('Geolocation error ', error)
           reject(error)
         },
         {
@@ -540,9 +536,7 @@ class InputComponent extends Component {
         this.stopForwarding()
         socket.emit('message', { receiver: currentRoom, message: text })
       },
-      failFunc: err => {
-        // console.log(err)
-      },
+      failFunc: err => {},
     })
   }
 
@@ -573,9 +567,7 @@ class InputComponent extends Component {
         this.stopReply()
         socket.emit('get_dialog', { id: currentRoomId })
       },
-      failFunc: err => {
-        // console.log(err.response, err)
-      },
+      failFunc: err => {},
     })
   }
 

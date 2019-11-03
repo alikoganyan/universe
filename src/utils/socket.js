@@ -33,9 +33,7 @@ export const connectToSocket = (token = store.getState().userReducer.auth) => {
         1000,
       )
     })
-    socket.on('error', error => {
-      console.log({ error })
-    })
+    socket.on('error', error => {})
     socket.on('reconnect_attempt', () => {
       socket.io.opts.transports = ['polling']
       // socket.io.opts.transports = ['polling', 'websocket']
@@ -45,7 +43,6 @@ export const connectToSocket = (token = store.getState().userReducer.auth) => {
 
 export const disconnectFromSocket = () => {
   socket.disconnect()
-  console.log('disconnected')
 }
 
 // export const addListener = (listener) => {

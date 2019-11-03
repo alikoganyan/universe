@@ -48,7 +48,6 @@ export const trySignToPushes = dispatch => async (firstTimeMode = false) => {
         dispatch({ type: ASK_PERMISSION_STATUS })
         await firebase.messaging().requestPermission()
         fcmToken = await firebase.messaging().getToken()
-        // console.log('fcmToken: ', fcmToken)
       } catch (error) {
         if (firstTimeMode) {
           dispatch({ type: PUSH_TOKEN_REJECTED, payload: error })
@@ -86,14 +85,7 @@ export const trySignToPushes = dispatch => async (firstTimeMode = false) => {
 
     if (fcmToken) {
       dispatch({ type: PUSH_TOKEN_FULFILLED, payload: fcmToken })
-      // console.log('fcmToken: ', fcmToken)
       dispatch({ type: USER_PUSHES_REQUEST })
-      // console.log({
-      //   enable: true,
-      //   push_token: fcmToken,
-      //   deviceId: RNDeviceInfo.getDeviceId(),
-      //   platform: Platform.OS,
-      // })
       sendRequest({
         r_path: p_notifications,
         method: 'patch',

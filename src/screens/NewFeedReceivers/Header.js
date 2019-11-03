@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React, { Component } from 'react'
 import {
   View,
@@ -18,6 +19,7 @@ import helper from '../../utils/helpers'
 import { p_tasks_search, g_users } from '../../constants/api'
 import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
+import { setTasks } from '../../actions/tasksActions'
 
 const { sidePadding, HeaderHeight, fontSize, Colors } = helper
 const { grey3 } = Colors
@@ -139,12 +141,9 @@ class HeaderComponent extends Component {
             })
             setTimeout(() => {
               this.setState({ FlatListData: [...tasksList] })
-              setTasks(tasksList)
             }, 0)
           },
-          failFunc: err => {
-            console.log(err)
-          },
+          failFunc: err => {},
         })
       : sendRequest({
           r_path: g_users,
@@ -168,9 +167,7 @@ class HeaderComponent extends Component {
               // setTasks([])
             }, 0)
           },
-          failFunc: err => {
-            console.log({ err })
-          },
+          failFunc: err => {},
         })
   }
 

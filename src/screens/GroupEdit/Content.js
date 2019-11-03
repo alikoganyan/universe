@@ -1,3 +1,4 @@
+/* eslint-disable array-callback-return */
 import React, { Component } from 'react'
 import {
   View,
@@ -196,13 +197,11 @@ class Content extends Component {
         group_id: _id,
       },
       success: res => {
-        console.log({ res })
         setTimeout(() => socket.emit('get_dialogs'), 500)
         setParticipants([])
         forward()
       },
       failFunc: err => {
-        console.log({ err })
         alert(err.msg)
       },
     })
@@ -255,14 +254,11 @@ class Content extends Component {
         group_id: _id,
       },
       success: res => {
-        console.log({ res })
         setTimeout(() => socket.emit('get_dialogs'), 0)
         setParticipants([])
         forward()
       },
-      failFunc: err => {
-        console.log(err)
-      },
+      failFunc: err => {},
     })
   }
 

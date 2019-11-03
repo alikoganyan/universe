@@ -73,13 +73,10 @@ const parseImageResponse = (response = {}, mediaType) => {
 const getImageFromPicker = (success, reject, mergeOptions = {}) => {
   const options = { ...pickerOptions, ...mergeOptions }
   RNImagePicker.showImagePicker(options, response => {
-    // console.log('Response = ', response)
     if (response.didCancel) {
-      // console.log('User cancelled image picker')
       reject && reject()
       return null
     } else if (response.error) {
-      // console.log('ImagePicker Error: ', response.error)
       if (Platform.OS === 'ios') {
         if (RNPermissions.canOpenSettings()) {
           Alert.alert(
@@ -90,7 +87,6 @@ const getImageFromPicker = (success, reject, mergeOptions = {}) => {
               {
                 text: 'Настройки',
                 onPress: () => {
-                  // console.log('Cancel Pressed')
                   RNPermissions.openSettings()
                 },
               },
@@ -112,10 +108,8 @@ const getImageFromPicker = (success, reject, mergeOptions = {}) => {
       return null
     } else if (response.customButton) {
       reject && reject()
-      // console.log('User tapped custom button: ', response.customButton)
       return null
     } else {
-      // console.log('response: ', response)
       success && success(parseImageResponse(response, options.mediaType))
     }
   })

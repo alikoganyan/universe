@@ -20,7 +20,7 @@ import { GroupIcon, CloseIcon } from '../../assets'
 import { setFeedReceivers } from '../../actions/participantsActions'
 
 const { Colors, sidePadding } = helper
-const { lightGrey1, black, yellow } = Colors
+const { lightGrey1, black, yellow, pink } = Colors
 const Wrapper = styled(View)`
   padding: 0 ${sidePadding * 2}px;
   justify-content: center;
@@ -29,9 +29,6 @@ const Wrapper = styled(View)`
 `
 
 const StyledInput = styled(TextInput)`
-  border: 1px solid ${lightGrey1};
-  border-width: 0;
-  border-bottom-width: 1px;
   padding-bottom: 10px;
   text-align: center;
   margin-bottom: 50px;
@@ -89,7 +86,7 @@ const RecieverComponent = props => {
 }
 class Content extends Component {
   render() {
-    const { text } = this.state
+    const { text, touched } = this.state
     const { receivers } = this.props
     return (
       <ScrollView
@@ -108,23 +105,24 @@ class Content extends Component {
               textAlign: 'left',
               paddingLeft: 10,
               maxHeight: 130,
+              borderBottomWidth: 1,
+              borderBottomColor: touched && !text ? pink : lightGrey1,
             }}
           />
           <Recievers>
             <DialogsLabel>
               <GroupIcon right />
-              <Text>Получатели</Text>
+              <Text
+                style={{ color: touched && !receivers.length ? pink : black }}
+              >
+                Получатели
+              </Text>
             </DialogsLabel>
             <DialogsLabel style={{ justifyContent: 'space-between' }}>
               <TouchableOpacity onPress={this.addParticipant}>
                 <AddReciever>Добавить</AddReciever>
               </TouchableOpacity>
-              <Button
-                disabled={!text || !receivers.length}
-                onPress={this.proceed}
-                background={yellow}
-                color={black}
-              >
+              <Button onPress={this.proceed} background={yellow} color={black}>
                 Продолжить
               </Button>
             </DialogsLabel>
@@ -147,6 +145,7 @@ class Content extends Component {
 
   state = {
     text: '',
+    touched: false,
   }
 
   componentDidMount() {}
@@ -166,40 +165,44 @@ class Content extends Component {
   proceed = () => {
     const { receivers, forward, addFeed, user } = this.props
     const { text } = this.state
-    let idList = []
-    // eslint-disable-next-line array-callback-return
-    receivers.map(e => {
-      idList = [...idList, e._id]
-    })
-    const newFeed = {
-      receivers,
-      tags: [],
-      likes_сount: 0,
-      likes: [],
-      text,
-      comments: [],
-      creator: { ...user },
-      created_at: new Date(),
-      updated_at: new Date(),
-    }
-    addFeed(newFeed)
-    if (text && receivers.length) {
-      sendRequest({
-        r_path: p_news,
-        method: 'post',
-        attr: {
-          news: {
-            text,
-            receivers: idList,
-          },
-        },
-        success: res => {
-          forward()
-        },
-        failFunc: err => {
-          // console.log({ err })
-        },
+    if (!text || !receivers.length) {
+      this.setState({
+        touched: true,
       })
+    } else {
+      let idList = []
+      // eslint-disable-next-line array-callback-return
+      receivers.map(e => {
+        idList = [...idList, e._id]
+      })
+      const newFeed = {
+        receivers,
+        tags: [],
+        likes_сount: 0,
+        likes: [],
+        text,
+        comments: [],
+        creator: { ...user },
+        created_at: new Date(),
+        updated_at: new Date(),
+      }
+      addFeed(newFeed)
+      if (text && receivers.length) {
+        sendRequest({
+          r_path: p_news,
+          method: 'post',
+          attr: {
+            news: {
+              text,
+              receivers: idList,
+            },
+          },
+          success: res => {
+            forward()
+          },
+          failFunc: err => {},
+        })
+      }
     }
   }
 

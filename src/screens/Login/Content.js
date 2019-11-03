@@ -225,9 +225,7 @@ class Content extends Component {
   }
   inputRef = null
 
-  componentDidMount = () => {
-    // console.log({ rn: DeviceInfo.getDeviceId(), ex: Constants.deviceId });
-  }
+  componentDidMount = () => {}
 
   onSelectCountry = country => {
     this.setState({
@@ -288,7 +286,6 @@ class Content extends Component {
         }, 0)
       },
       failFunc: err => {
-        console.log('err', err)
         const phone = err.length
           ? err.filter(e => e.param === 'phone_number')[0]
           : err.phone_number

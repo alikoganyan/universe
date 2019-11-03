@@ -16,13 +16,14 @@ import { setTaskReceivers } from '../../actions/participantsActions'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import Button from '../../common/Button'
-import { p_create_task } from '../../constants/api'
+import { p_create_task, g_users } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import { setTasks, setTaskList } from '../../actions/tasksActions'
 import { GroupIcon, CloseIcon } from '../../assets'
+import moment from 'moment'
 
 const { Colors, HeaderHeight, sidePadding } = helper
-const { lightGrey1, purple } = Colors
+const { lightGrey1, purple, pink, black } = Colors
 const Wrapper = styled(View)`
   padding: 0 ${sidePadding}px;
   display: flex;
@@ -36,9 +37,6 @@ const StyledScrollView = styled(ScrollView)`
   width: 100%;
 `
 const StyledInput = styled(TextInput)`
-  border: 1px solid ${lightGrey1};
-  border-width: 0;
-  border-bottom-width: 1px;
   padding-bottom: 10px;
   text-align: center;
   margin-bottom: 50px;
@@ -120,7 +118,13 @@ const ReceiverComponent = props => {
 class Content extends Component {
   render() {
     const { receivers } = this.props
-    const { taskName, taskText, deadlineDate, deadlineTime } = this.state
+    const {
+      taskName,
+      taskText,
+      deadlineDate,
+      deadlineTime,
+      touched,
+    } = this.state
     // const months = [
     //   'Jan',
     //   'Feb',
@@ -146,15 +150,18 @@ class Content extends Component {
           }}
         >
           <StyledInput
-            password
             onChangeText={this.handleTaskName}
             value={taskName}
             placeholder="Название задачи"
             multiline
-            style={{ marginBottom: 30, textAlign: 'left' }}
+            style={{
+              marginBottom: 30,
+              textAlign: 'left',
+              borderBottomWidth: 1,
+              borderBottomColor: !taskName && touched ? pink : lightGrey1,
+            }}
           />
           <StyledInput
-            password
             onChangeText={this.handleTaskText}
             value={taskText}
             placeholder="Текст задачи"
@@ -163,6 +170,8 @@ class Content extends Component {
               marginBottom: 30,
               textAlign: 'left',
               padding: 0,
+              borderBottomWidth: 1,
+              borderBottomColor: !taskText && touched ? pink : lightGrey1,
             }}
           />
           <DeadLine>
@@ -186,12 +195,20 @@ class Content extends Component {
                   dateInput: {
                     borderWidth: 0,
                     borderBottomWidth: 1,
+                    borderBottomColor:
+                      !deadlineDate && touched ? pink : lightGrey1,
                   },
                 }}
                 onDateChange={e => this.setState({ deadlineDate: e })}
               />
               <DatePicker
-                date={deadlineTime}
+                date={
+                  typeof deadlineTime === 'string'
+                    ? deadlineTime.length <= 5
+                      ? deadlineTime
+                      : moment(deadlineTime).format('HH:MM')
+                    : moment(deadlineTime).format('HH:MM')
+                }
                 mode="time"
                 confirmBtnText="Подтвердить"
                 cancelBtnText="Отменить"
@@ -203,6 +220,8 @@ class Content extends Component {
                   dateInput: {
                     borderWidth: 0,
                     borderBottomWidth: 1,
+                    borderBottomColor:
+                      !deadlineTime && touched ? pink : lightGrey1,
                   },
                 }}
                 onDateChange={e => this.setState({ deadlineTime: e })}
@@ -212,7 +231,13 @@ class Content extends Component {
           <Receivers>
             <DialogsLabel>
               <GroupIcon />
-              <DialogsLabelText>Исполнитель</DialogsLabelText>
+              <DialogsLabelText
+                style={{
+                  color: touched && !receivers.length ? pink : black,
+                }}
+              >
+                Исполнитель
+              </DialogsLabelText>
             </DialogsLabel>
             {receivers.length > 0 ? (
               receivers.map((e, i) => (
@@ -233,18 +258,7 @@ class Content extends Component {
             )}
           </Receivers>
           <ButtonBox>
-            <Button
-              disabled={
-                !taskName ||
-                !taskText ||
-                !deadlineDate ||
-                !deadlineTime ||
-                !receivers.length
-              }
-              onPress={this.proceed}
-              background={purple}
-              color="white"
-            >
+            <Button onPress={this.proceed} background={purple} color="white">
               Создать задачу
             </Button>
           </ButtonBox>
@@ -258,6 +272,7 @@ class Content extends Component {
     taskText: '',
     deadlineDate: new Date(),
     deadlineTime: new Date(),
+    touched: false,
   }
 
   componentDidMount() {
@@ -265,6 +280,10 @@ class Content extends Component {
     const { text } = deafultValues
     this.setState({ taskText: text })
     // setTaskReceivers(participants)
+  }
+
+  componentWillUnmount() {
+    this.props.setTaskReceivers([])
   }
 
   jsCoreDateCreator = dateString => {
@@ -286,48 +305,78 @@ class Content extends Component {
     addParticipants()
   }
 
-  proceed = e => {
-    const {
-      receivers,
-      forward,
-      tasksOut,
-      tasksInc,
-      tasksWithUsers,
-    } = this.props
-    const { deadlineDate, deadlineTime, taskName, taskText } = this.state
-    const deadline = this.jsCoreDateCreator(`${deadlineDate}:${deadlineTime}`)
-
-    const taskList = [...tasksOut]
-    taskList.push({
-      name: taskName,
-      description: taskText,
-      deadline,
-      performers: [receivers[0]._id],
-    })
-    this.props.setTaskList({
-      tasksInc,
-      tasksWithUsers,
-      tasksOut: taskList,
-    })
-    sendRequest({
-      r_path: p_create_task,
-      method: 'post',
-      attr: {
-        task: {
-          name: taskName,
-          description: taskText,
-          deadline,
-          performers: [receivers[0]._id],
+  _getUsers = () => {
+    return new Promise((resolve, reject) => {
+      sendRequest({
+        r_path: g_users,
+        method: 'get',
+        success: res => {
+          resolve(res.users)
         },
-      },
-      success: res => {
-        // console.log(res)
-        forward()
-      },
-      failFunc: err => {
-        // console.log(err)
-      },
+        failFunc: err => {
+          reject()
+        },
+      })
     })
+  }
+
+  proceed = async e => {
+    const { receivers } = this.props
+    const { taskName, taskText, deadlineDate, deadlineTime } = this.state
+
+    const formatedDeadlineDate = moment(deadlineDate).format('DD-MM-YYYY')
+    const formatedDeadlineTime =
+      typeof deadlineTime === 'string'
+        ? deadlineTime.length <= 5
+          ? deadlineTime
+          : moment(deadlineTime).format('HH:MM')
+        : moment(deadlineTime).format('HH:MM')
+    if (
+      !taskName ||
+      !taskText ||
+      !deadlineDate ||
+      !deadlineTime ||
+      !receivers.length
+    ) {
+      this.setState({ touched: true })
+    } else {
+      const { receivers, forward, tasksOut, tasksInc } = this.props
+      const deadline = moment(
+        `${formatedDeadlineDate} ${formatedDeadlineTime}`,
+      ).format()
+
+      const taskList = [...tasksOut]
+
+      taskList.push({
+        name: taskName,
+        description: taskText,
+        deadline,
+        performers: [receivers[0]._id],
+      })
+
+      sendRequest({
+        r_path: p_create_task,
+        method: 'post',
+        attr: {
+          task: {
+            name: taskName,
+            description: taskText,
+            deadline,
+            performers: [receivers[0]._id],
+          },
+        },
+        success: async res => {
+          const tasksWithUsers = await this._getUsers()
+          this.props.setTaskList({
+            tasksInc,
+            tasksWithUsers,
+            tasksOut: [...taskList],
+          })
+          forward()
+        },
+        failFunc: err => {},
+      })
+    }
   }
 
   handleCountry = e => {

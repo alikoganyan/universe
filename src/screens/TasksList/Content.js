@@ -62,7 +62,7 @@ class Content extends Component {
           opacity={opacity}
         />
         <StyledScrollView
-          contentContainerStyle={{ flexGrow: 1, paddingBottom: 49 }}
+          contentContainerStyle={{ flexGrow: 1 }}
           keyboardShouldPersistTaps="handled"
           scrollEventThrottle={16}
           onScroll={Animated.event(
@@ -94,15 +94,17 @@ class Content extends Component {
             last
           />
           {tasksWithUsers.length ? (
-            tasksWithUsers.map((e, i) => (
-              <Task
-                onPress={this.toTasks}
-                key={i}
-                navigate={this.props.navigate}
-              >
-                {e}
-              </Task>
-            ))
+            tasksWithUsers
+              .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+              .map((e, i) => (
+                <Task
+                  onPress={this.toTasks}
+                  key={i}
+                  navigate={this.props.navigate}
+                >
+                  {e}
+                </Task>
+              ))
           ) : (
             <View style={{ flex: 1 }}>
               <Loader hint="Пока нет задач">
@@ -137,9 +139,7 @@ class Content extends Component {
 
         this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
       },
-      failFunc: err => {
-        // console.log(err);
-      },
+      failFunc: err => {},
     })
   }
 

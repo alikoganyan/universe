@@ -1,9 +1,9 @@
+/* eslint-disable array-callback-return */
 import React, { Component } from 'react'
 import {
   View,
   Text,
   SafeAreaView,
-  Image,
   TouchableOpacity,
   ScrollView,
   Dimensions,
@@ -283,9 +283,7 @@ class Content extends Component {
           this.setState({ users: newUsers })
         })
       },
-      failFunc: () => {
-        // console.log({ err })
-      },
+      failFunc: () => {},
     })
   }
 

@@ -124,13 +124,10 @@ class Profile extends Component {
               push_token: pushesToken,
               deviceId: RNDeviceInfo.getDeviceId(),
             },
-            failFunc: e => console.log('request error: ', e),
           })
           this.props.logOut()
           AsyncStorage.clear()
-        } catch (e) {
-          console.log('error: ', e)
-        }
+        } catch (e) {}
         this.setState({ loading: false }, () => navigation.navigate('Login'))
       },
     )

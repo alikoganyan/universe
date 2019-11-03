@@ -99,10 +99,10 @@ class Content extends Component {
             {currentTask.tasks && animationCompleted ? (
               <TaskList
                 data={currentTask.tasks
+                  .filter(item => active.includes(statuses[item.status]))
                   .sort(
-                    (a, b) => new Date(b.created_at) - new Date(a.created_at),
-                  )
-                  .filter(item => active.includes(statuses[item.status]))}
+                    (a, b) => new Date(b.updated_at) - new Date(a.updated_at),
+                  )}
                 ListFooterComponent={<TaskListFooter />}
                 ListEmptyComponent={
                   <View style={{ flex: 1 }}>
@@ -169,8 +169,7 @@ class Content extends Component {
   }
 
   unselect = () => {
-    const { setActiveTask } = this.props
-    setActiveTask({})
+    this.props.setActiveTask({})
   }
 
   handleHold = e => {

@@ -15,7 +15,7 @@ import { connect } from 'react-redux'
 import helper from '../../utils/helpers'
 import sendRequest from '../../utils/request'
 import { p_settings } from '../../constants/api'
-import { setSettings } from '../../actions/userActions'
+import { setSettings, setUser } from '../../actions/userActions'
 import { BottomSheet } from 'react-native-btr'
 import {
   trySignToPushes,
@@ -133,7 +133,7 @@ const Toggle = props => {
 }
 class Content extends Component {
   render() {
-    const { settings, pickerOpened, langs, agreements } = this.state
+    const { settings, pickerOpened, langs, agreements, isLoading } = this.state
     const {
       user: {
         settings: {
@@ -146,6 +146,8 @@ class Content extends Component {
       tokenIsFetching,
       navigate,
     } = this.props
+
+    if (isLoading) return null
     return (
       <SafeAreaView>
         <Wrapper>
@@ -232,6 +234,7 @@ class Content extends Component {
   }
 
   state = {
+    isLoading: false,
     langs: {
       ru: 'Русский',
       en: 'English',
@@ -280,24 +283,35 @@ class Content extends Component {
   }
 
   componentDidMount() {
-    const { settings, langs } = this.state
-    const { user } = this.props
-    const newSettings = [...settings]
-    // console.log(settings)
-    newSettings.forEach(e => {
-      // console.log(e);
-      if (e.item === 'language') {
-        e.option.value = 'Изменить'
-        e.status = langs[e.item]
-      }
-      if (e.item === 'notifications') {
-        // e.status = pushesPermissions ? 'Включены' : 'Выключены';
-        // console.log(pushesPermissions, isNotificationsEnabled);
-      } else e.option.value = user.settings[e.item]
+    this.setState({ isLoading: true })
+    sendRequest({
+      r_path: '/profile',
+      method: 'get',
+      success: res => {
+        const { settings, langs } = this.state
+        const { user } = res
+        this.props.setUser({ ...user })
+        const newSettings = [...settings]
+        newSettings.forEach(e => {
+          if (e.item === 'language') {
+            e.option.value = 'Изменить'
+            e.status = langs[e.item]
+          }
+          if (e.item === 'notifications') {
+            // e.status = pushesPermissions ? 'Включены' : 'Выключены';
+          } else {
+            e.option.value = user.settings[e.item]
+          }
+        })
+        setTimeout(() => {
+          this.setState({ settings: newSettings })
+        }, 0)
+        this.setState({ isLoading: false })
+      },
+      failFunc: () => {
+        this.setState({ isLoading: false })
+      },
     })
-    setTimeout(() => {
-      this.setState({ settings: newSettings })
-    }, 0)
   }
 
   pickerClose = () => {
@@ -310,7 +324,30 @@ class Content extends Component {
     const item = newSettings.filter(({ label }) => e === label)[0]
     item.option.value = !newSettings.filter(({ label }) => e === label)[0]
       .option.value
+
     this.setState({ settings: newSettings })
+
+    const data = {}
+
+    newSettings.forEach(item => {
+      data[item.item] = item.option.value
+    })
+
+    sendRequest({
+      r_path: p_settings,
+      method: 'patch',
+      attr: data,
+      success: res => {
+        sendRequest({
+          r_path: '/profile',
+          method: 'get',
+          success: res => {
+            const { user } = res
+            this.props.setUser({ ...user })
+          },
+        })
+      },
+    })
   }
 
   handleTogglePushes = () => {
@@ -335,37 +372,6 @@ class Content extends Component {
   selectOption = () => {
     this.setState({ pickerOpened: true })
   }
-
-  componentWillUnmount() {
-    const { settings } = this.state
-    const { user } = this.props
-    const userSettings = user.settings
-    const reqBody = {
-      language: '',
-      sound: '',
-      partition_contacts: '',
-    }
-    settings.forEach(e => {
-      if (e.item === 'notifications') {
-        reqBody[e.item] = e.item === 'language' ? 'ru' : !!e.option.value
-      }
-    })
-    JSON.stringify(reqBody) !== JSON.stringify(userSettings) &&
-      sendRequest({
-        r_path: p_settings,
-        method: 'patch',
-        attr: {
-          settings: reqBody,
-        },
-        success: res => {
-          // console.log({ res })
-          setSettings(reqBody)
-        },
-        failFunc: err => {
-          // console.log({ err })
-        },
-      })
-  }
 }
 
 const mapStateToProps = ({
@@ -389,6 +395,7 @@ const mapDispatchToProps = dispatch => ({
   setSettings: _ => dispatch(setSettings(_)),
   trySignToPushes: trySignToPushes(dispatch),
   requestDisablePushes: requestDisablePushes(dispatch),
+  setUser: _ => dispatch(setUser(_)),
 })
 export default connect(
   mapStateToProps,

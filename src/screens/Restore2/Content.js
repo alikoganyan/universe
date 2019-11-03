@@ -167,7 +167,6 @@ class Content extends Component {
         navigate('Restore3')
       },
       failFunc: err => {
-        console.log(err)
         this.setState({ error: true })
       },
     })

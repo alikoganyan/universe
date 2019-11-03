@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import axios from 'axios'
 import { store } from '../reducers/store'
 import { setAuth, setError } from '../actions/userActions'
@@ -28,9 +29,7 @@ export default async function sendRequest({
       Authorization: `Bearer ${store.getState().userReducer.auth}`,
     },
   },
-  success = res => {
-    // console.log(res)
-  },
+  success = res => {},
   failFunc = null,
   full_res = false,
 }) {
@@ -68,9 +67,6 @@ export default async function sendRequest({
   } catch (err) {
     const { response } = err
     console.log('response', response, err)
-    // console.log(response.data)
-    // console.log(store.getState().userReducer.auth);
-    // console.log('error in path -->', r_path, err)
     if (!response || response.status === 500) {
       store.dispatch(setError(true))
       if (failFunc) {

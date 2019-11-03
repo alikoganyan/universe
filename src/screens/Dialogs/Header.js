@@ -93,9 +93,7 @@ class HeaderComponent extends PureComponent {
           const newDialogs = [...dialogs, ...groups]
           setDialogs(newDialogs)
         },
-        failFunc: err => {
-          // console.log(err)
-        },
+        failFunc: err => {},
       })
     } else {
       socket.emit('get_dialogs', { id: user._id })

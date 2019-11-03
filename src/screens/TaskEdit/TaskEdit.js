@@ -38,7 +38,7 @@ export default class Signup extends Component {
 
   moveForward = () => {
     const { navigation } = this.props
-    navigation.navigate('TasksList')
+    navigation.goBack()
   }
 
   addParticipants = () => {

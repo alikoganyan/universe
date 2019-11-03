@@ -145,9 +145,7 @@ class HeaderComponent extends Component {
               setTasks(tasksList)
             }, 0)
           },
-          failFunc: err => {
-            // console.log(err)
-          },
+          failFunc: err => {},
         })
       : sendRequest({
           r_path: g_users,
@@ -171,9 +169,7 @@ class HeaderComponent extends Component {
               // setTasks([])
             }, 0)
           },
-          failFunc: err => {
-            // console.log({ err })
-          },
+          failFunc: err => {},
         })
   }
 

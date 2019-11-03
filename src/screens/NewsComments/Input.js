@@ -176,12 +176,8 @@ class InputComponent extends Component {
           news_id: feed._id,
           text,
         },
-        success: res => {
-          // console.log({ res })
-        },
-        failFunc: err => {
-          // console.log({ err })
-        },
+        success: res => {},
+        failFunc: err => {},
       })
       this.setState({ text: '' })
     }
@@ -215,12 +211,9 @@ class InputComponent extends Component {
         },
       },
       success: res => {
-        // console.log({ res })
         socket.emit('file', { room: currentRoom })
       },
-      failFunc: err => {
-        // console.log({ err })
-      },
+      failFunc: err => {},
     })
     // }
   }

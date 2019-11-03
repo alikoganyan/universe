@@ -1,8 +1,9 @@
+/* eslint-disable array-callback-return */
 import React, { Component } from 'react'
 import { View, Text, Animated, TouchableOpacity, AppState } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import _ from 'lodash';
+import _ from 'lodash'
 import Header from './Header'
 import Dialog from './Dialog'
 import Loader from '../../common/Loader'
@@ -266,7 +267,6 @@ class Dialogs extends Component {
   socketNewDialog = () => {}
 
   socketDialogOpened = e => {
-    console.log('steeeeeeee1');
     const { dialogs, setDialogs } = this.props
     const { dialog_id, viewer } = e
     const newMessages = []
@@ -297,7 +297,6 @@ class Dialogs extends Component {
   }
 
   setDialogsSocket = e => {
-    console.log('e', e);
     const { setDialogs } = this.props
     const newDialogs = e.dialogs.length ? [...e.dialogs] : []
     const newDialogsSorted = newDialogs.length
@@ -364,7 +363,6 @@ class Dialogs extends Component {
       dialogs,
       setDialogs /*addMessage, currentRoomId, user*/,
     } = this.props
-    console.log('steeeeeeeee', 2, dialogs, e);
     try {
       const message =
         e.message && e.message._id
@@ -389,44 +387,50 @@ class Dialogs extends Component {
         const newDialogSorted =
           newDialogs.length &&
           // eslint-disable-next-line array-callback-return
-          newDialogs.sort((a, b) => {
-            if (b.messages.length && a.messages.length) {
-              const aCreation = new Date(a.created_at)
-              const aLastMessage = new Date(
-                a.messages[a.messages.length - 1].created_at,
-              )
-              const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
-              const bCreation = new Date(b.created_at)
-              const bLastMessage = new Date(
-                b.messages[b.messages.length - 1].created_at,
-              )
-              const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
-              return bDate - aDate
-            }
-            if (b.messages.length && !a.messages.length) {
-              const aCreation = new Date(a.created_at)
-              const bCreation = new Date(b.created_at)
-              const bLastMessage = new Date(
-                b.messages[b.messages.length - 1].created_at,
-              )
-              const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
-              return bDate - aCreation
-            }
-            if (!b.messages.length && a.messages.length) {
-              const aCreation = new Date(a.created_at)
-              const aLastMessage = new Date(
-                a.messages[a.messages.length - 1].created_at,
-              )
-              const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
-              const bCreation = new Date(b.created_at)
-              return bCreation - aDate
-            }
-            if (!b.messages.length && !a.messages.length) {
-              const aCreation = new Date(a.created_at)
-              const bCreation = new Date(b.created_at)
-              return bCreation - aCreation
-            }
-          }).map(e => ({...e, messages: _.uniqBy(e.messages, '_id')}))
+          newDialogs
+            .sort((a, b) => {
+              if (b.messages.length && a.messages.length) {
+                const aCreation = new Date(a.created_at)
+                const aLastMessage = new Date(
+                  a.messages[a.messages.length - 1].created_at,
+                )
+                const aDate =
+                  aCreation > aLastMessage ? aCreation : aLastMessage
+                const bCreation = new Date(b.created_at)
+                const bLastMessage = new Date(
+                  b.messages[b.messages.length - 1].created_at,
+                )
+                const bDate =
+                  bCreation > bLastMessage ? bCreation : bLastMessage
+                return bDate - aDate
+              }
+              if (b.messages.length && !a.messages.length) {
+                const aCreation = new Date(a.created_at)
+                const bCreation = new Date(b.created_at)
+                const bLastMessage = new Date(
+                  b.messages[b.messages.length - 1].created_at,
+                )
+                const bDate =
+                  bCreation > bLastMessage ? bCreation : bLastMessage
+                return bDate - aCreation
+              }
+              if (!b.messages.length && a.messages.length) {
+                const aCreation = new Date(a.created_at)
+                const aLastMessage = new Date(
+                  a.messages[a.messages.length - 1].created_at,
+                )
+                const aDate =
+                  aCreation > aLastMessage ? aCreation : aLastMessage
+                const bCreation = new Date(b.created_at)
+                return bCreation - aDate
+              }
+              if (!b.messages.length && !a.messages.length) {
+                const aCreation = new Date(a.created_at)
+                const bCreation = new Date(b.created_at)
+                return bCreation - aCreation
+              }
+            })
+            .map(e => ({ ...e, messages: _.uniqBy(e.messages, '_id') }))
         setDialogs(newDialogSorted)
       }
     } catch (err) {

@@ -323,9 +323,7 @@ class InputComponent extends Component {
         setDialogs(newDialogs)
         this.stopEditing()
       },
-      failFunc: err => {
-        // console.log({ err })
-      },
+      failFunc: err => {},
     })
   }
 
@@ -399,7 +397,6 @@ class InputComponent extends Component {
         },
       },
       success: res => {
-        // console.log('load success: ', { res })
         socket.emit('file', { room: currentChat })
         const newDialogs = [...dialogs]
         const index = newDialogs.findIndex(e => e.room === currentChat)
@@ -407,7 +404,6 @@ class InputComponent extends Component {
         setDialogsProp(newDialogs)
       },
       failFunc: err => {
-        // console.log('load err: ', { err })
         removeUploadMessageProp({
           room: currentChat,
           tempId: tempMessageId,
@@ -443,7 +439,6 @@ class InputComponent extends Component {
         //       setDialogsProp(newDialogs)
         //     },
         //     failFunc: err => {
-        //       // console.log({ err })
         //       removeUploadMessageProp({
         //         room: currentChat,
         //         tempId: tempMessageId,
@@ -539,9 +534,7 @@ class InputComponent extends Component {
         this.stopForwarding()
         socket.emit('group_message', { room: currentChat, message: text })
       },
-      failFunc: err => {
-        // console.log(err)
-      },
+      failFunc: err => {},
     })
   }
 
@@ -572,9 +565,7 @@ class InputComponent extends Component {
         this.stopForwarding()
         socket.emit('get_dialog', { id: currentRoomId })
       },
-      failFunc: err => {
-        // console.log(err.response, err)
-      },
+      failFunc: err => {},
     })
   }
 

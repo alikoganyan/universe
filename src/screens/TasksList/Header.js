@@ -96,12 +96,9 @@ class HeaderComponent extends Component {
             // setTimeout(() => {
             //     // this.setState({ FlatListData: [...tasksList] })
             //     // setTasks(tasksList)
-            //     console.log({tasksList})
             // }, 0)
           },
-          failFunc: err => {
-            // console.log(err)
-          },
+          failFunc: err => {},
         })
       : sendRequest({
           r_path: g_users,
@@ -124,9 +121,7 @@ class HeaderComponent extends Component {
               this.setState({ FlatListData: [...tasksList] })
             }, 0)
           },
-          failFunc: err => {
-            // console.log({ err })
-          },
+          failFunc: err => {},
         })
   }
 

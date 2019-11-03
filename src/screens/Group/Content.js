@@ -226,7 +226,10 @@ class Content extends Component {
     const { currentDate } = this.state
     const item = viewableItems[viewableItems.length - 1]
     if (item) {
-      const [date] = typeof item.item.created_at === 'string' ? item.item.created_at.split('T') : item.item.created_at.toISOString().split('T')
+      const [date] =
+        typeof item.item.created_at === 'string'
+          ? item.item.created_at.split('T')
+          : item.item.created_at.toISOString().split('T')
       if (!currentDate) {
         this.setState({
           currentDate: date,
@@ -277,12 +280,8 @@ class Content extends Component {
         dialog_id: currentRoomId,
         messages: [currentMessage._id],
       },
-      success: res => {
-        // console.log(res)
-      },
-      failFunc: err => {
-        // console.log(err)
-      },
+      success: res => {},
+      failFunc: err => {},
     })
   }
 

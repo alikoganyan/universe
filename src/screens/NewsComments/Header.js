@@ -129,12 +129,8 @@ class HeaderComponent extends Component {
             text: e,
             withUser: true,
           },
-          success: res => {
-            // console.log({ res })
-          },
-          failFunc: err => {
-            // console.log(err)
-          },
+          success: res => {},
+          failFunc: err => {},
         })
       : sendRequest({
           r_path: p_news_search,
@@ -146,9 +142,7 @@ class HeaderComponent extends Component {
           success: res => {
             setNews(res.news)
           },
-          failFunc: err => {
-            // console.log(err)
-          },
+          failFunc: err => {},
         })
   }
 

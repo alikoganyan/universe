@@ -34,9 +34,7 @@ class News extends Component {
       success: res => {
         setNews(res.news)
       },
-      failFunc: err => {
-        // console.log(err)
-      },
+      failFunc: err => {},
     })
   }
 

@@ -174,17 +174,13 @@ class Content extends Component {
       success: () => {
         this.login()
       },
-      failFunc: err => {
-        console.log({ err })
-        // const { phone_number, password } = err;
-      },
+      failFunc: err => {},
     })
   }
 
   login = () => {
-    const { register, setAuth, setUser, navigate } = this.props
+    const { setAuth, setUser, navigate } = this.props
     const { pass } = this.state
-    const { phone } = register
     sendRequest({
       r_path: p_login,
       method: 'post',
@@ -208,7 +204,6 @@ class Content extends Component {
         }, 0)
       },
       failFunc: err => {
-        console.log({ err })
         navigate('Login')
         // const phone = err.length ? err.filter(e => e.param === 'phone_number')[0] : err.phone_number;
         // const pass = err.length ? err.filter(e => e.param === 'password')[0] : err.password;

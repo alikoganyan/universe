@@ -15,7 +15,6 @@ export const createNotificationListeners = async () => {
       }
       // const { title, body } = notification
       // this.showAlert(title, body);
-      // console.log('NOTIFICATION: ', title, body)
       firebase.notifications().displayNotification(notification)
     })
 
@@ -27,7 +26,6 @@ export const createNotificationListeners = async () => {
     .onNotificationOpened(notificationOpen => {
       // const { title, body } = notificationOpen.notification
       // this.showAlert(title, body);
-      // console.log('NOTIFICATION: ', title, body)
     })
 
   /*

@@ -12,8 +12,6 @@ import { connectToSocket } from './utils/socket'
 import { setUser, setAuth } from './actions/userActions'
 import { setDialogsUserId } from './actions/dialogsActions'
 import { createNotificationListeners } from './utils/fcm'
-import OfflineScreen from './common/OfflineScreen'
-import Offline from './common/Offline'
 
 // const Roboto = require('./assets/fonts/Roboto-Regular.ttf')
 
@@ -22,7 +20,7 @@ console.disableYellowBox = true
 
 export default class AppComponent extends Component {
   render() {
-    const { loaded, logged, connected } = this.state
+    const { loaded, logged } = this.state
     const Navigator = createRootNavigator(loaded && logged)
 
     if (!loaded) {
@@ -56,8 +54,6 @@ export default class AppComponent extends Component {
     createNotificationListeners()
     firebase.notifications().setBadge(0)
     getPushesPermissionStatusAndToken(store.dispatch)()
-    // console.log('badge: ', await firebase.notifications().getBadge())
-    // console.log('setbadge: ', await firebase.notifications().setBadge(55))
 
     AsyncStorage.getItem('user')
       .then(res => {
@@ -116,15 +112,12 @@ export default class AppComponent extends Component {
 
   _handleNotification = notification => {
     // Notifications.setBadgeNumberAsync(notification.badge);
-    // console.log({Notifications});
     // if (this.appState === 'active' && notification.origin === 'received') {
     //     Notifications.dismissNotificationAsync(notification.notificationId);
     // }
   }
 
-  __handleNotificationClick = data => {
-    // console.log('CLICKED', data)
-  }
+  __handleNotificationClick = data => {}
 
   _loadResourcesAsync = async () =>
     Promise.all([

@@ -197,7 +197,6 @@ class Content extends Component {
           setTimeout(() => navigate('Restore2'), 0)
         },
         failFunc: err => {
-          // console.log(err)
           this.setState({
             error: err.msg ? (
               <ErrorText>{err.msg}</ErrorText>

@@ -433,7 +433,6 @@ class Content extends Component {
     const newDialogs = [...dialog].filter(e => e._id !== currentDialog._id)
     setDialogs(newDialogs)
     toDialogs()
-    // console.log(`leave group ${currentRoom}`)
   }
 }
 

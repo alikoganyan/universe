@@ -1,9 +1,8 @@
+/* eslint-disable array-callback-return */
 import React, { Component } from 'react'
 import {
   View,
   Text,
-  SafeAreaView,
-  Image,
   Dimensions,
   TouchableOpacity,
   TextInput,
@@ -12,19 +11,15 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import {
   BackIcon,
-  AddIcon,
   SearchIcon,
-  BurgerIcon,
-  EditIcon,
-  FunnelIcon,
   CloseIcon,
   CheckGreyIcon,
 } from '../../assets/index'
 import helper from '../../utils/helpers'
 import { p_tasks_search, g_users } from '../../constants/api'
 import ImageComponent from '../../common/Image'
-import DefaultAvatar from '../../common/DefaultAvatar'
 import sendRequest from '../../utils/request'
+import { setTasks } from '../../actions/tasksActions'
 
 const { sidePadding, HeaderHeight, fontSize, Colors } = helper
 const { grey3 } = Colors
@@ -44,7 +39,6 @@ const Left = styled(View)`
   flex-direction: row;
   align-items: center;
 `
-const Center = styled(View)``
 const Input = styled(TextInput)`
   margin-left: ${Dimensions.get('window').width * 0.085};
 `
@@ -58,12 +52,7 @@ const Right = styled(Left)`
 //     border-radius: 15px;
 //     margin-left:${sidePadding}px;
 // `
-const MarginRight = styled(View)`
-  margin-right: ${Dimensions.get('window').width * 0.085};
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`
+
 const HeaderText = styled(Text)`
   font-size: ${fontSize.header};
   position: relative;
@@ -101,7 +90,7 @@ class HeaderComponent extends Component {
               {!participants.length ? (
                 <TouchableOpacity onPress={toProfile}>
                   <ImageComponent
-                    source={{ uri: `https://testser.univ.team${image}` }}
+                    source={{ uri: `https://ser.univ.team${image}` }}
                     size="header"
                   />
                 </TouchableOpacity>
@@ -153,12 +142,9 @@ class HeaderComponent extends Component {
             })
             setTimeout(() => {
               this.setState({ FlatListData: [...tasksList] })
-              setTasks(tasksList)
             }, 0)
           },
-          failFunc: err => {
-            console.log(err)
-          },
+          failFunc: err => {},
         })
       : sendRequest({
           r_path: g_users,
@@ -178,14 +164,10 @@ class HeaderComponent extends Component {
                 })
             })
             setTimeout(() => {
-              const { setTasks } = this.props
               this.setState({ FlatListData: [...tasksList] })
-              // setTasks([])
             }, 0)
           },
-          failFunc: err => {
-            console.log({ err })
-          },
+          failFunc: err => {},
         })
   }
 

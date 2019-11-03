@@ -36,17 +36,7 @@ export default class AutoHeightInput extends PureComponent {
       height + (paddingVertical ? paddingVertical : paddingTop + paddingBottom),
       propsHeight,
     )
-    // console.log('propsStyle: ', propsStyle)
-    // console.log('contentHeight: ', height)
-    // console.log('calcHeight: ', calcHeight)
-    // console.log(
-    //   'resultHeight: ',
-    //   maxHeight === -1
-    //     ? Math.max(height, propsHeight)
-    //     : maxHeight > calcHeight
-    //     ? calcHeight
-    //     : maxHeight,
-    // )
+
     if (autoHeight) {
       inputStyle = {
         ...inputStyle,
