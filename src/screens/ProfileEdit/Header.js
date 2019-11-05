@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native'
 import styled from 'styled-components'
-import { connect } from 'react-redux'
 import { BackIcon } from '../../assets/index'
 import helper from '../../utils/helpers'
 
@@ -34,7 +33,7 @@ export default class HeaderComponent extends Component {
           <MarginRight>
             <BackIcon onPress={this.props.back} />
           </MarginRight>
-          <Text>Редактирование профиль</Text>
+          <Text>Редактирование профиля</Text>
         </Left>
       </Header>
     )
