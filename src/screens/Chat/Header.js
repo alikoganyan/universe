@@ -121,6 +121,7 @@ class HeaderComponent extends Component {
       'Июля',
       'Августа',
       'Сентября',
+      'Октябрь',
       'Ноября',
       'Декабря',
     ]
