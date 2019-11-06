@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ActionSheet from 'react-native-actionsheet'
 import _ from 'lodash'
+import Geolocation from 'react-native-geolocation-service'
 import getImageFromPicker from '../../utils/ImagePicker'
 import RNDocumentPicker from 'react-native-document-picker'
 import getGeoCoords from '../../utils/geolocation'
@@ -181,8 +182,9 @@ class InputComponent extends Component {
                   onPress={() =>
                     this._selectMedia({
                       mediaType: 'mixed',
-                      maxWidth: 1500,
-                      maxHeight: 1500,
+                      maxWidth: 800,
+                      maxHeight: 800,
+                      quality: 0.8,
                     })
                   }
                 />
@@ -470,9 +472,8 @@ class InputComponent extends Component {
   async getGeolocationPromise() {
     // await Location.requestPermissionsAsync();
     return new Promise((resolve, reject) => {
-      navigator.geolocation.getCurrentPosition(
+      Geolocation.getCurrentPosition(
         position => {
-          //geo
           resolve({
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
@@ -481,11 +482,7 @@ class InputComponent extends Component {
         error => {
           reject(error)
         },
-        {
-          enableHighAccuracy: false,
-          timeout: 20000,
-          maximumAge: 1000 * 10 * 60,
-        },
+        { enableHighAccuracy: true, timeout: 20000, maximumAge: 1000 },
       )
     })
   }

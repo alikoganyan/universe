@@ -66,6 +66,7 @@
 		A57CFD7CCF8B4CBF99BD45E2 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FDFE178893284568B8FA7EF3 /* FontAwesome5_Solid.ttf */; };
 		A7D944C3568B438D83BADACB /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 41DDD7626B314CDAA2433339 /* libRNVectorIcons.a */; };
 		A81A602B123A42CE9D265553 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E8AAFEF476E435CB57C6B82 /* EvilIcons.ttf */; };
+		AA75B66F237353C500BB1BBE /* GoogleService-Info-elize.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA75B645237353C500BB1BBE /* GoogleService-Info-elize.plist */; };
 		AC2D87DCCA314CB782A15A81 /* Roboto-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60B3ED286F2041E699FBA60E /* Roboto-ThinItalic.ttf */; };
 		AE68DB912BC2444F955B54B3 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B40021CD7934A62B6979E49 /* OpenSans-Semibold.ttf */; };
 		B1D911D69BEC65333102AD6E /* libPods-universeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFF2DEEB0B10725AD767295 /* libPods-universeTests.a */; };
@@ -407,7 +408,7 @@
 		1355C9C0F7AA4F52A2C42E4F /* RobotoCondensed-BoldItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "RobotoCondensed-BoldItalic.ttf"; path = "../src/assets/fonts/RobotoCondensed-BoldItalic.ttf"; sourceTree = "<group>"; };
 		139105B61AF99BAD00B5F7CC /* RCTSettings.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTSettings.xcodeproj; path = "../node_modules/react-native/Libraries/Settings/RCTSettings.xcodeproj"; sourceTree = "<group>"; };
 		139FDEE61B06529A00C62182 /* RCTWebSocket.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTWebSocket.xcodeproj; path = "../node_modules/react-native/Libraries/WebSocket/RCTWebSocket.xcodeproj"; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* Universe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Universe.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* Test Universe.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Test Universe.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = universe/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = universe/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB21A68108700A75B9A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
@@ -455,6 +456,7 @@
 		9350D2CD1CC34B8BA5016E50 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		A2281037BCDD377AF87B85CC /* Pods-universeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-universeTests.debug.xcconfig"; path = "Target Support Files/Pods-universeTests/Pods-universeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A4F30D4D11A845C4BD7B7B3E /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Bold.ttf"; path = "../src/assets/fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
+		AA75B645237353C500BB1BBE /* GoogleService-Info-elize.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info-elize.plist"; path = "../../../GoogleService-Info-elize.plist"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B11000F444584A9FB8D99A7A /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../src/assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		B879EFDA596A4F66A08F7D6F /* Roboto-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Thin.ttf"; path = "../src/assets/fonts/Roboto-Thin.ttf"; sourceTree = "<group>"; };
@@ -620,6 +622,7 @@
 			isa = PBXGroup;
 			children = (
 				6C5E605022EE620C00B9DAAA /* GoogleService-Info.plist */,
+				AA75B645237353C500BB1BBE /* GoogleService-Info-elize.plist */,
 				6CE0678122EE36870069E47A /* universe.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -817,7 +820,7 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Universe.app */,
+				13B07F961A680F5B00A75B9A /* Test Universe.app */,
 				00E356EE1AD99517003FC87E /* universeTests.xctest */,
 				2D02E47B1E0B4A5D006451C7 /* universe-tvOS.app */,
 				2D02E4901E0B4A5D006451C7 /* universe-tvOSTests.xctest */,
@@ -884,7 +887,7 @@
 			);
 			name = universe;
 			productName = "Hello World";
-			productReference = 13B07F961A680F5B00A75B9A /* Universe.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* Test Universe.app */;
 			productType = "com.apple.product-type.application";
 		};
 		2D02E47A1E0B4A5D006451C7 /* universe-tvOS */ = {
@@ -1371,6 +1374,7 @@
 				7768CADE1B2C448C996099A7 /* RobotoCondensed-Regular.ttf in Resources */,
 				39C9CE4BCC5344CB8D6AB777 /* AntDesign.ttf in Resources */,
 				853BA92C74E5423CBDD5D151 /* Entypo.ttf in Resources */,
+				AA75B66F237353C500BB1BBE /* GoogleService-Info-elize.plist in Resources */,
 				A81A602B123A42CE9D265553 /* EvilIcons.ttf in Resources */,
 				FD0D4DF63B884159A542870C /* Feather.ttf in Resources */,
 				2AE726E99EAB4B9AA32285CC /* FontAwesome.ttf in Resources */,
@@ -1596,7 +1600,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Universe.app/Universe";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Test Universe.app/Test Universe";
 			};
 			name = Debug;
 		};
@@ -1628,7 +1632,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Universe.app/Universe";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Test Universe.app/Test Universe";
 			};
 			name = Release;
 		};
@@ -1641,7 +1645,7 @@
 				CODE_SIGN_ENTITLEMENTS = universe/universe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 51;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = U28URW9S3B;
 				HEADER_SEARCH_PATHS = (
@@ -1653,14 +1657,14 @@
 				INFOPLIST_FILE = universe/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.58;
+				MARKETING_VERSION = 2.0.59;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = team.amigo.media;
-				PRODUCT_NAME = Universe;
+				PRODUCT_BUNDLE_IDENTIFIER = elize.univ.team;
+				PRODUCT_NAME = "Test Universe";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";
@@ -1676,7 +1680,7 @@
 				CODE_SIGN_ENTITLEMENTS = universe/universe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 50;
+				CURRENT_PROJECT_VERSION = 51;
 				DEVELOPMENT_TEAM = U28URW9S3B;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1687,14 +1691,14 @@
 				INFOPLIST_FILE = universe/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.58;
+				MARKETING_VERSION = 2.0.59;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = team.amigo.media;
-				PRODUCT_NAME = Universe;
+				PRODUCT_BUNDLE_IDENTIFIER = elize.univ.team;
+				PRODUCT_NAME = "Test Universe";
 				PROVISIONING_PROFILE_SPECIFIER = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				VERSIONING_SYSTEM = "apple-generic";

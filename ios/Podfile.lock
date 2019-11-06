@@ -112,6 +112,8 @@ PODS:
   - react-native-fast-image (6.1.1):
     - React
     - SDWebImage (~> 5.0)
+  - react-native-geolocation (1.4.2):
+    - React
   - react-native-google-maps (0.25.0):
     - Google-Maps-iOS-Utils (= 2.1.0)
     - GoogleMaps (= 3.1.0)
@@ -206,6 +208,7 @@ DEPENDENCIES:
   - GoogleMaps
   - react-native-document-picker (from `../node_modules/react-native-document-picker`)
   - react-native-fast-image (from `../node_modules/react-native-fast-image`)
+  - "react-native-geolocation (from `../node_modules/@react-native-community/geolocation`)"
   - react-native-google-maps (from `../node_modules/react-native-maps`)
   - react-native-image-picker (from `../node_modules/react-native-image-picker`)
   - react-native-maps (from `../node_modules/react-native-maps`)
@@ -232,7 +235,7 @@ DEPENDENCIES:
   - yoga (from `../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
 
 SPEC REPOS:
-  https://github.com/cocoapods/specs.git:
+  https://github.com/CocoaPods/Specs.git:
     - boost-for-react-native
     - Firebase
     - FirebaseAnalytics
@@ -267,6 +270,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-document-picker"
   react-native-fast-image:
     :path: "../node_modules/react-native-fast-image"
+  react-native-geolocation:
+    :path: "../node_modules/@react-native-community/geolocation"
   react-native-google-maps:
     :path: "../node_modules/react-native-maps"
   react-native-image-picker:
@@ -315,6 +320,7 @@ SPEC CHECKSUMS:
   React: 76e6aa2b87d05eb6cccb6926d72685c9a07df152
   react-native-document-picker: c36bf5f067a581657ecaf7124dcd921a8be19061
   react-native-fast-image: fdfc612dba58fd73136cf5efdaeb8cfcad7f63b2
+  react-native-geolocation: 79c743ad7a2e86617811ef23f49308824e92520c
   react-native-google-maps: 88d750ad441b19c24885f20d43a55ecac25939b5
   react-native-image-picker: e6e06d4315e3c85bad17e4b2002cd29f11d202c8
   react-native-maps: 190c02ca533fddac5bb49cf17bdece3644612107
@@ -328,6 +334,6 @@ SPEC CHECKSUMS:
   SDWebImage: 609192dcf3898c910a2848032372ead951e66364
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-PODFILE CHECKSUM: 5b98eeea7a0e6a65193c6709c7a25d9a521b0cd6
+PODFILE CHECKSUM: a53f5bcaf9e468396e1303724e00dcd345980d54
 
-COCOAPODS: 1.7.5
+COCOAPODS: 1.8.4

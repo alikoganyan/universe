@@ -69,6 +69,8 @@ rn_path = '../node_modules/react-native'
 
   pod 'react-native-video', :path => '../node_modules/react-native-video'
 
+  pod 'react-native-geolocation', path: '../node_modules/@react-native-community/geolocation'
+
   target 'universeTests' do
     inherit! :search_paths
     # Pods for testing

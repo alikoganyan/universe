@@ -20,8 +20,17 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   [GMSServices provideAPIKey:@"AIzaSyBI7-iCFRNdAxATxBbcNG1VTmQGNi5IxeQ"];
+  NSString *bundleIdentifier = [[NSBundle mainBundle] bundleIdentifier];
   
-  [FIRApp configure];
+  NSString *filePath;
+  if([bundleIdentifier isEqualToString:@"team.amigo.media"]){
+    filePath = [[NSBundle mainBundle] pathForResource:@"GoogleService-Info" ofType:@"plist"];
+  }else{
+    filePath = [[NSBundle mainBundle] pathForResource:@"GoogleService-Info-elize" ofType:@"plist"];
+  }
+  
+  FIROptions *options = [[FIROptions alloc] initWithContentsOfFile:filePath];
+  [FIRApp configureWithOptions:options];
   [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
   [RNFirebaseNotifications configure];
   
