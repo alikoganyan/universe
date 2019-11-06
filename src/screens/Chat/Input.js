@@ -68,7 +68,6 @@ const Wrapper = styled(View)`
 `
 const Input = styled(AutoHeightInput)`
   display: flex;
-  flex-direction: column;
   width: 100%;
   overflow: hidden;
   padding-horizontal: 12px;
