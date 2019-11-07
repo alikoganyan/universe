@@ -361,7 +361,7 @@ class Content extends Component {
           : 'без должности',
         isGroup: false,
       },
-      { type: 'Личный', value: phone_number || 'без номера', isGroup: false },
+      { type: 'Телефон', value: phone_number || 'без номера', isGroup: false },
       !myProfile
         ? {
             type: 'Задачи',

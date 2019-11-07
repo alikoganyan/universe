@@ -231,7 +231,7 @@ class Content extends Component {
           <this.AllContacts />
           <ContactList
             bounces={false}
-            contentContainerStyle={{ paddingBottom: 160 }}
+            contentContainerStyle={{ paddingBottom: 170 }}
             data={
               user.settings.partition_contacts ? userContacts : userContactsAll
             }
