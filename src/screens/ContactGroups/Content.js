@@ -636,8 +636,8 @@ class Content extends Component {
     } = this.props
     const currentRoom = dialogs.filter(
       dialog =>
-        dialog.room === `${e._id}_${user._id}` ||
-        dialog.room === `${user._id}_${e._id}`,
+        !dialog.isGroup &&
+        (dialog.creator.id === e._id || dialog.participants[0]._id === e._id),
     )[0]
     if (currentRoom) {
       const { isGroup, participants, creator, room, _id } = currentRoom

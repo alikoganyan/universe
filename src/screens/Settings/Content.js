@@ -265,19 +265,19 @@ class Content extends Component {
         value: false,
         linkText: 'Условия использования',
         linkComp: 'linkComp',
-        link: 'agreement.univ.center/1',
+        link: 'https://agreement.univ.center/confidentiality/',
       },
       {
         value: false,
         linkText: 'Пользовательское соглашение',
         linkComp: 'linkComp',
-        link: 'agreement.univ.center/2',
+        link: 'https://agreement.univ.center/agreement/',
       },
       {
         value: false,
         linkText: 'Соглашение об Использовании персональных данных',
         linkComp: 'linkComp',
-        link: 'agreement.univ.center/3',
+        link: 'https://agreement.univ.center/terms-of-use/',
       },
     ],
   }
