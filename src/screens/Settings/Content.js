@@ -133,7 +133,7 @@ const Toggle = props => {
 }
 class Content extends Component {
   render() {
-    const { settings, pickerOpened, langs, agreements, isLoading } = this.state
+    const { pickerOpened, langs, agreements, isLoading } = this.state
     const {
       user: {
         settings: {
@@ -145,8 +145,12 @@ class Content extends Component {
       permissionsIsFetching,
       tokenIsFetching,
       navigate,
+      user,
     } = this.props
-
+    const settings =
+      user.department.name === 'Персональный'
+        ? this.state.settings.slice(0, this.state.settings.length - 2)
+        : this.state.settings
     if (isLoading) return null
     return (
       <SafeAreaView>
