@@ -43,7 +43,6 @@ const UserInfo = styled(View)`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 60px;
   width: 100%;
   margin-top: 10px;
 `
