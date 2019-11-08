@@ -165,7 +165,6 @@ class Content extends Component {
       : first_name
       ? `${first_name} ${last_name}`
       : phone_number
-    const departmentName = department.name
     const myGroup = creator && creator._id === user._id
     const sortedParticipants =
       creator && [...participants].sort((a, b) => b._id === creator._id)
@@ -193,7 +192,9 @@ class Content extends Component {
               <UserName>
                 <Name>{chatName}</Name>
               </UserName>
-              {departmentName === 'Персональный' ? (
+              {department &&
+              department.name &&
+              department.name === 'Персональный' ? (
                 <Account>Персональный режим</Account>
               ) : null}
               {!myProfile && !isGroup && <UserStatus>{status}</UserStatus>}
@@ -355,14 +356,14 @@ class Content extends Component {
     const { myProfile, user, currentDialog } = this.props
     const { role, phone_number, department } = myProfile ? user : currentDialog
     const newUserData = [
-      department.name !== 'Персональный'
+      department && department.name !== 'Персональный'
         ? {
             type: 'Подразделение',
             value: department || 'без подразделения',
             isGroup: false,
           }
         : null,
-      department.name !== 'Персональный'
+      department && department.name !== 'Персональный'
         ? {
             type: 'Должность',
             value: role
