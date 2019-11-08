@@ -72,8 +72,8 @@ const Input = styled(AutoHeightInput)`
   width: 100%;
   overflow: hidden;
   padding-horizontal: 12px;
-  padding-top: ${Platform.OS === 'ios' ? '8px' : '10px'};
-  padding-bottom: ${Platform.OS === 'ios' ? '6px' : '0px'};
+  padding-top: ${Platform.OS === 'ios' ? '8px' : '8px'};
+  padding-bottom: ${Platform.OS === 'ios' ? '6px' : '2px'};
   align-items: flex-start;
   font-size: ${fontSize.input};
   text-align-vertical: top;
@@ -170,6 +170,7 @@ class InputComponent extends Component {
                 value={text}
                 blurOnSubmit={false}
                 autoHeight
+                multiline
               />
             </Body>
             <Right>
