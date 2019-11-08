@@ -155,9 +155,9 @@ class Content extends Component {
     //   : ''
     // const lastFiles =
     //   latestMessage && latestMessage.type !== 'text' ? [latestMessage] : []
-    const lastMessageDate = latestMessage
+    const lastMessageDate = Object.keys(latestMessage).length
       ? new Date(latestMessage.created_at)
-      : null
+      : new Date(item.created_at)
     const dialogDate = getHamsterDate(lastMessageDate, true)
     let lastType = ''
     if (lastMessage.length) {
