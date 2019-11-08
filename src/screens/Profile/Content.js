@@ -62,6 +62,9 @@ const Name = styled(Text)`
   width: 100%;
   text-align: center;
 `
+
+const Account = styled(Name)``
+
 const UserStatus = styled(Name)`
   font-size: 11;
   color: #b9b9b9;
@@ -140,6 +143,7 @@ const ContactRole = styled(Text)`
   align-items: flex-start;
   justify-content: center;
 `
+
 class Content extends Component {
   render() {
     const { UserData, status } = this.state
@@ -155,12 +159,14 @@ class Content extends Component {
       participants,
       name,
       creator,
+      department,
     } = myProfile ? user : currentDialog
     const chatName = isGroup
       ? name
       : first_name
       ? `${first_name} ${last_name}`
       : phone_number
+    const departmentName = department.name
     const myGroup = creator && creator._id === user._id
     const sortedParticipants =
       creator && [...participants].sort((a, b) => b._id === creator._id)
@@ -188,6 +194,9 @@ class Content extends Component {
               <UserName>
                 <Name>{chatName}</Name>
               </UserName>
+              {departmentName === 'Персональный' ? (
+                <Account>Персональный режим</Account>
+              ) : null}
               {!myProfile && !isGroup && <UserStatus>{status}</UserStatus>}
               {!myProfile && !isGroup && (
                 <SendMessage onPress={this.toChat}>
@@ -347,20 +356,24 @@ class Content extends Component {
     const { myProfile, user, currentDialog } = this.props
     const { role, phone_number, department } = myProfile ? user : currentDialog
     const newUserData = [
-      {
-        type: 'Подразделение',
-        value: department || 'без подразделения',
-        isGroup: false,
-      },
-      {
-        type: 'Должность',
-        value: role
-          ? role.length
-            ? role.name
-            : 'без должности'
-          : 'без должности',
-        isGroup: false,
-      },
+      department.name !== 'Персональный'
+        ? {
+            type: 'Подразделение',
+            value: department || 'без подразделения',
+            isGroup: false,
+          }
+        : null,
+      department.name !== 'Персональный'
+        ? {
+            type: 'Должность',
+            value: role
+              ? role.length
+                ? role.name
+                : 'без должности'
+              : 'без должности',
+            isGroup: false,
+          }
+        : null,
       { type: 'Телефон', value: phone_number || 'без номера', isGroup: false },
       !myProfile
         ? {
