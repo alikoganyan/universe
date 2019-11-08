@@ -634,20 +634,21 @@ class Content extends Component {
       setCurrentRoomId,
       dialogs,
     } = this.props
+    const recipientId = !e.isGroup ? e._id : null
     const currentRoom = dialogs.filter(
       dialog =>
         !dialog.isGroup &&
-        (dialog.creator.id === e._id || dialog.participants[0]._id === e._id),
+        (dialog.creator._id === e._id || dialog.participants[0]._id === e._id),
     )[0]
     if (currentRoom) {
       const { isGroup, participants, creator, room, _id } = currentRoom
-      const roomId = room.split('_').filter(e => e !== user._id)[0]
+      // const roomId = room.split('_').filter(e => e !== user._id)[0]
       const currentDialog = isGroup
         ? { ...e }
         : user._id === creator._id
         ? { ...participants[0] }
         : { ...creator }
-      setRoom(roomId)
+      setRoom(recipientId)
       setCurrentRoomId(_id)
       setCurrentChat(room)
       setCurrentDialogs(currentDialog)

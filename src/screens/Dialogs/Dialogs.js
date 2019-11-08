@@ -526,13 +526,17 @@ class Dialogs extends Component {
       setCurrentRoomId,
     } = this.props
     const { isGroup, room, participants, creator, _id } = e
-    const roomId = room.split('_').filter(e => Number(e) !== user._id)[0]
+    // const roomId = room.split('_').filter(e => Number(e) !== user._id)[0]
+    const recipientId =
+      !isGroup && user._id !== e.creator._id
+        ? e.creator._id
+        : e.participants[0]._id
     const currentDialog = isGroup
       ? { ...e }
       : user._id === creator._id
       ? { ...participants[0] }
       : { ...creator }
-    setRoom(roomId)
+    setRoom(recipientId)
     setCurrentRoomId(_id)
     setCurrentChat(room)
     setCurrentDialogs(currentDialog)
