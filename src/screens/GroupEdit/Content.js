@@ -146,7 +146,7 @@ class Content extends Component {
               <DeleteGroup>Удалить группу</DeleteGroup>
             </TouchableOpacity>
             <Button onPress={this.proceed} background={green} color={black}>
-              Продолжить
+              Сохранить
             </Button>
           </ButtonBox>
           <Receivers>
