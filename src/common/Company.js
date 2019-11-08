@@ -1,5 +1,12 @@
 import React, { Component } from 'react'
-import { TouchableOpacity, Modal, View, StyleSheet, Text } from 'react-native'
+import {
+  TouchableOpacity,
+  Modal,
+  View,
+  StyleSheet,
+  Text,
+  TouchableWithoutFeedback,
+} from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import ImageComponent from './Image'
@@ -61,6 +68,7 @@ class Company extends Component {
   state = {
     modalVisible: false,
   }
+
   render() {
     const { user, company, companies } = this.props
 
@@ -84,61 +92,61 @@ class Company extends Component {
           animationType="fade"
           transparent
         >
-          {/* <TouchableWithoutFeedback
+          <TouchableWithoutFeedback
             onPress={() => this.setState({ modalVisible: false })}
-          > */}
-          <View style={styles.modal}>
-            <View style={styles.modalContent}>
-              <Wrapper
-                onPress={() => {
-                  this.setState({ modalVisible: false })
-                  this.props.navigate('Profile')
-                }}
-              >
-                {user.image ? (
-                  <UserImage
-                    source={{
-                      uri: `https://testser.univ.team${user.image}`,
-                    }}
-                    size={56}
-                  />
-                ) : (
-                  <DefaultAvatar size={56} />
-                )}
-                <UserText style={{ marginLeft: 4 }}>
-                  <UserTextInner>
-                    <UserTitle>
-                      {user.first_name} {user.last_name}
-                    </UserTitle>
-                  </UserTextInner>
-                </UserText>
-              </Wrapper>
-              {companies.map(item => (
+          >
+            <View style={styles.modal}>
+              <View style={styles.modalContent}>
                 <Wrapper
-                  key={item._id.toString()}
-                  style={{ marginLeft: 8 }}
-                  onPress={() => this.changeCompany(item._id)}
+                  onPress={() => {
+                    this.setState({ modalVisible: false })
+                    this.props.navigate('Profile')
+                  }}
                 >
-                  {item.logo ? (
+                  {user.image ? (
                     <UserImage
                       source={{
-                        uri: `https://testser.univ.team${item.logo}`,
+                        uri: `https://testser.univ.team${user.image}`,
                       }}
-                      size={40}
+                      size={56}
                     />
                   ) : (
-                    <DefaultAvatar size={40} />
+                    <DefaultAvatar size={56} />
                   )}
-                  <UserText style={{ marginLeft: 12 }}>
+                  <UserText style={{ marginLeft: 4 }}>
                     <UserTextInner>
-                      <UserTitle>{item.name}</UserTitle>
+                      <UserTitle>
+                        {user.first_name} {user.last_name}
+                      </UserTitle>
                     </UserTextInner>
                   </UserText>
                 </Wrapper>
-              ))}
+                {companies.map(item => (
+                  <Wrapper
+                    key={item._id.toString()}
+                    style={{ paddingLeft: 8 }}
+                    onPress={() => this.changeCompany(item._id)}
+                  >
+                    {item.logo ? (
+                      <UserImage
+                        source={{
+                          uri: `https://testser.univ.team${item.logo}`,
+                        }}
+                        size={40}
+                      />
+                    ) : (
+                      <DefaultAvatar size={40} />
+                    )}
+                    <UserText style={{ marginLeft: 12 }}>
+                      <UserTextInner>
+                        <UserTitle>{item.name}</UserTitle>
+                      </UserTextInner>
+                    </UserText>
+                  </Wrapper>
+                ))}
+              </View>
             </View>
-          </View>
-          {/* </TouchableWithoutFeedback> */}
+          </TouchableWithoutFeedback>
         </Modal>
       </>
     )
@@ -188,8 +196,8 @@ const styles = StyleSheet.create({
   modalContent: {
     backgroundColor: '#ffffff',
     borderRadius: 16,
-    padding: 20,
     zIndex: 2,
+    padding: 20,
   },
 })
 
