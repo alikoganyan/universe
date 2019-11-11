@@ -53,7 +53,6 @@
 		4AC64630AD9840C59081C666 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 9350D2CD1CC34B8BA5016E50 /* MaterialIcons.ttf */; };
 		5348069FD5C7483D89B982AE /* RobotoCondensed-BoldItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 1355C9C0F7AA4F52A2C42E4F /* RobotoCondensed-BoldItalic.ttf */; };
 		58D7978F39954962AB0D68CF /* libRNVectorIcons-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 1E6C77676B0F4E72A0C69271 /* libRNVectorIcons-tvOS.a */; };
-		6C5E605122EE620C00B9DAAA /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 6C5E605022EE620C00B9DAAA /* GoogleService-Info.plist */; };
 		7768CADE1B2C448C996099A7 /* RobotoCondensed-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CC97EB87FD53474AB8D686F4 /* RobotoCondensed-Regular.ttf */; };
 		7984A817E4D94B6EBC725240 /* Roboto-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = B11000F444584A9FB8D99A7A /* Roboto-Bold.ttf */; };
 		7DB750749423469F92EE7B62 /* EncodeSansSemiExpanded-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5BBC3C35DBE4435098C6D325 /* EncodeSansSemiExpanded-Medium.ttf */; };
@@ -66,7 +65,8 @@
 		A57CFD7CCF8B4CBF99BD45E2 /* FontAwesome5_Solid.ttf in Resources */ = {isa = PBXBuildFile; fileRef = FDFE178893284568B8FA7EF3 /* FontAwesome5_Solid.ttf */; };
 		A7D944C3568B438D83BADACB /* libRNVectorIcons.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 41DDD7626B314CDAA2433339 /* libRNVectorIcons.a */; };
 		A81A602B123A42CE9D265553 /* EvilIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 8E8AAFEF476E435CB57C6B82 /* EvilIcons.ttf */; };
-		AA75B66F237353C500BB1BBE /* GoogleService-Info-elize.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA75B645237353C500BB1BBE /* GoogleService-Info-elize.plist */; };
+		AA6CFCC12379F5D60076ACD0 /* GoogleService-Info-elize.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA6CFCBF2379F5D50076ACD0 /* GoogleService-Info-elize.plist */; };
+		AA6CFCC22379F5D60076ACD0 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = AA6CFCC02379F5D60076ACD0 /* GoogleService-Info.plist */; };
 		AC2D87DCCA314CB782A15A81 /* Roboto-ThinItalic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 60B3ED286F2041E699FBA60E /* Roboto-ThinItalic.ttf */; };
 		AE68DB912BC2444F955B54B3 /* OpenSans-Semibold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 7B40021CD7934A62B6979E49 /* OpenSans-Semibold.ttf */; };
 		B1D911D69BEC65333102AD6E /* libPods-universeTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CBFF2DEEB0B10725AD767295 /* libPods-universeTests.a */; };
@@ -437,7 +437,6 @@
 		60B3ED286F2041E699FBA60E /* Roboto-ThinItalic.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-ThinItalic.ttf"; path = "../src/assets/fonts/Roboto-ThinItalic.ttf"; sourceTree = "<group>"; };
 		614B2A89D2A84805927EEDF5 /* Octicons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Octicons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; };
 		666CAF658FE348BB8A3238C6 /* Roboto-Medium.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Medium.ttf"; path = "../src/assets/fonts/Roboto-Medium.ttf"; sourceTree = "<group>"; };
-		6C5E605022EE620C00B9DAAA /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		6CE0678122EE36870069E47A /* universe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; name = universe.entitlements; path = universe/universe.entitlements; sourceTree = "<group>"; };
 		6DB07160D865AD3DEDC1BF68 /* Pods-universe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-universe.release.xcconfig"; path = "Target Support Files/Pods-universe/Pods-universe.release.xcconfig"; sourceTree = "<group>"; };
 		6DDAE2E30B9042B6983DC5CE /* Roboto-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Regular.ttf"; path = "../src/assets/fonts/Roboto-Regular.ttf"; sourceTree = "<group>"; };
@@ -456,7 +455,8 @@
 		9350D2CD1CC34B8BA5016E50 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		A2281037BCDD377AF87B85CC /* Pods-universeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-universeTests.debug.xcconfig"; path = "Target Support Files/Pods-universeTests/Pods-universeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		A4F30D4D11A845C4BD7B7B3E /* OpenSans-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "OpenSans-Bold.ttf"; path = "../src/assets/fonts/OpenSans-Bold.ttf"; sourceTree = "<group>"; };
-		AA75B645237353C500BB1BBE /* GoogleService-Info-elize.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info-elize.plist"; path = "../../../GoogleService-Info-elize.plist"; sourceTree = "<group>"; };
+		AA6CFCBF2379F5D50076ACD0 /* GoogleService-Info-elize.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info-elize.plist"; path = "universe/GoogleService-Info-elize.plist"; sourceTree = "<group>"; };
+		AA6CFCC02379F5D60076ACD0 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "universe/GoogleService-Info.plist"; sourceTree = "<group>"; };
 		ADBDB91F1DFEBF0600ED6528 /* RCTBlob.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTBlob.xcodeproj; path = "../node_modules/react-native/Libraries/Blob/RCTBlob.xcodeproj"; sourceTree = "<group>"; };
 		B11000F444584A9FB8D99A7A /* Roboto-Bold.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Bold.ttf"; path = "../src/assets/fonts/Roboto-Bold.ttf"; sourceTree = "<group>"; };
 		B879EFDA596A4F66A08F7D6F /* Roboto-Thin.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Roboto-Thin.ttf"; path = "../src/assets/fonts/Roboto-Thin.ttf"; sourceTree = "<group>"; };
@@ -621,8 +621,8 @@
 		13B07FAE1A68108700A75B9A /* universe */ = {
 			isa = PBXGroup;
 			children = (
-				6C5E605022EE620C00B9DAAA /* GoogleService-Info.plist */,
-				AA75B645237353C500BB1BBE /* GoogleService-Info-elize.plist */,
+				AA6CFCBF2379F5D50076ACD0 /* GoogleService-Info-elize.plist */,
+				AA6CFCC02379F5D60076ACD0 /* GoogleService-Info.plist */,
 				6CE0678122EE36870069E47A /* universe.entitlements */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
@@ -1357,7 +1357,6 @@
 				231D98DEC71F47E3B631BEE6 /* Roboto-BlackItalic.ttf in Resources */,
 				7984A817E4D94B6EBC725240 /* Roboto-Bold.ttf in Resources */,
 				DF48DB007E4144A2A871BE39 /* Roboto-BoldItalic.ttf in Resources */,
-				6C5E605122EE620C00B9DAAA /* GoogleService-Info.plist in Resources */,
 				9476AE8EA27B48428D10360A /* Roboto-Italic.ttf in Resources */,
 				BDEEFA89761C49FC8A2272A6 /* Roboto-Light.ttf in Resources */,
 				2F06FFC7B03E47738F2E65CB /* Roboto-LightItalic.ttf in Resources */,
@@ -1371,10 +1370,10 @@
 				EA8DA80FCA7D411DA36C3D8E /* RobotoCondensed-Italic.ttf in Resources */,
 				173C3F7ACD7D4B9989AE9191 /* RobotoCondensed-Light.ttf in Resources */,
 				D6CBFA0CA0A54D139DD460CD /* RobotoCondensed-LightItalic.ttf in Resources */,
+				AA6CFCC12379F5D60076ACD0 /* GoogleService-Info-elize.plist in Resources */,
 				7768CADE1B2C448C996099A7 /* RobotoCondensed-Regular.ttf in Resources */,
 				39C9CE4BCC5344CB8D6AB777 /* AntDesign.ttf in Resources */,
 				853BA92C74E5423CBDD5D151 /* Entypo.ttf in Resources */,
-				AA75B66F237353C500BB1BBE /* GoogleService-Info-elize.plist in Resources */,
 				A81A602B123A42CE9D265553 /* EvilIcons.ttf in Resources */,
 				FD0D4DF63B884159A542870C /* Feather.ttf in Resources */,
 				2AE726E99EAB4B9AA32285CC /* FontAwesome.ttf in Resources */,
@@ -1393,6 +1392,7 @@
 				C1C5147674294A95A6894F85 /* OpenSans.ttf in Resources */,
 				AE68DB912BC2444F955B54B3 /* OpenSans-Semibold.ttf in Resources */,
 				7DB750749423469F92EE7B62 /* EncodeSansSemiExpanded-Medium.ttf in Resources */,
+				AA6CFCC22379F5D60076ACD0 /* GoogleService-Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1645,7 +1645,7 @@
 				CODE_SIGN_ENTITLEMENTS = universe/universe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 51;
+				CURRENT_PROJECT_VERSION = 54;
 				DEAD_CODE_STRIPPING = NO;
 				DEVELOPMENT_TEAM = U28URW9S3B;
 				HEADER_SEARCH_PATHS = (
@@ -1657,7 +1657,7 @@
 				INFOPLIST_FILE = universe/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.59;
+				MARKETING_VERSION = 2.0.62;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
@@ -1680,7 +1680,7 @@
 				CODE_SIGN_ENTITLEMENTS = universe/universe.entitlements;
 				CODE_SIGN_IDENTITY = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 51;
+				CURRENT_PROJECT_VERSION = 54;
 				DEVELOPMENT_TEAM = U28URW9S3B;
 				HEADER_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1691,7 +1691,7 @@
 				INFOPLIST_FILE = universe/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 9.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				MARKETING_VERSION = 2.0.59;
+				MARKETING_VERSION = 2.0.62;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
