@@ -10,7 +10,7 @@ import { connect } from 'react-redux'
 import styled from 'styled-components'
 import {
   BackIcon,
-  LocationIcon,
+  // LocationIcon,
   SearchIcon,
   CloseIcon,
 } from '../../assets/index'
@@ -159,7 +159,7 @@ class HeaderComponent extends Component {
             {!search ? (
               <>
                 <SearchIcon onPress={startSearch} />
-                <LocationIcon />
+                {/*<LocationIcon />*/}
               </>
             ) : (
               <CloseIcon onPress={stopSearch} right={false} marginRight />

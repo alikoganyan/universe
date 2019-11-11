@@ -160,7 +160,7 @@ class Content extends Component {
               background={green}
               color={black}
             >
-              Продолжить
+              Сохранить
             </Button>
           </ButtonBox>
           <Receivers>

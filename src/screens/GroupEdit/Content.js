@@ -95,7 +95,7 @@ class Content extends Component {
               alignItems: 'center',
             }}
           >
-            {image === '/images/default_avatar.jpg' ? (
+            {image === '/images/default_avatar.jpg' || !image ? (
               <DefaultAvatar />
             ) : (
               <ImageComponent

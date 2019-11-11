@@ -246,7 +246,8 @@ class Content extends Component {
                 }}
               >
                 <BoxInnerItem>
-                  {creator.image === '/images/default_avatar.jpg' ? (
+                  {creator.image === '/images/default_avatar.jpg' ||
+                  !creator.image ? (
                     <DefaultAvatar size={36} />
                   ) : (
                     <ImageComponent
@@ -292,7 +293,7 @@ class Content extends Component {
                       }}
                     >
                       <BoxInnerItem>
-                        {image === '/images/default_avatar.jpg' ? (
+                        {image === '/images/default_avatar.jpg' || !image ? (
                           <DefaultAvatar size={36} />
                         ) : (
                           <ImageComponent
