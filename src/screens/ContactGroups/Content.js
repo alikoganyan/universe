@@ -454,7 +454,7 @@ class Content extends Component {
   }
 
   GroupContacts = () => {
-    const { dialogs, user } = this.props
+    const { dialogs } = this.props
     return (
       <ContactList
         bounces={false}
@@ -463,12 +463,11 @@ class Content extends Component {
         ListEmptyComponent={this._renderEmptyComponent}
         ref={ref => (this.groupRef = ref)}
         renderItem={({ item }) => {
-          const { participants, creator, _id, name, isGroup } = item
-          const chatItem = creator._id === user._id ? participants[0] : creator
-          const { image } = chatItem
+          const { participants, _id, name, isGroup } = item
+          const { image } = item.image
           return isGroup ? (
             <BoxInnerItem key={_id} onPress={() => this.toChat(item)}>
-              {image === '/images/default_avatar.jpg' ? (
+              {!image ? (
                 <DefaultAvatar isGroup={isGroup} id={_id} size={36} />
               ) : (
                 <ImageComponent
