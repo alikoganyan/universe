@@ -97,7 +97,7 @@ class HeaderComponent extends Component {
                 <CheckGreyIcon
                   size={22}
                   noPaddingAll
-                  left
+                  right
                   onPress={this.addParticipants}
                 />
               )}
