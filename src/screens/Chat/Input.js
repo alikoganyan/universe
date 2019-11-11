@@ -355,6 +355,8 @@ class InputComponent extends Component {
   _startSendingFile = (formDataObject = {}, imageUri = '') => {
     const {
       currentChat,
+      currentRoom,
+      currentRoomId,
       setDialogs: setDialogsProp,
       addUploadMessage: addUploadMessageProp,
       removeUploadMessage: removeUploadMessageProp,
@@ -363,7 +365,6 @@ class InputComponent extends Component {
       user,
     } = this.props
     const form = new FormData()
-
     form.append('file', formDataObject)
     form.append('room', currentChat)
     const tempMessageId = Date.now()
@@ -404,7 +405,11 @@ class InputComponent extends Component {
         },
       },
       success: res => {
-        socket.emit('file', { room: currentChat })
+        socket.emit('file', {
+          room: currentChat,
+          dialog_id: currentRoomId,
+          participant: currentRoom,
+        })
         const newDialogs = [...dialogs]
         const index = newDialogs.findIndex(e => e.room === currentChat)
         newDialogs[index] = res.dialog
@@ -520,7 +525,7 @@ class InputComponent extends Component {
 
   confirmForwarding = () => {
     const {
-      forwardedMessage: { _id, text },
+      forwardedMessage: { _id, text, type, filename },
       currentRoomId,
       currentRoom,
     } = this.props
@@ -531,7 +536,23 @@ class InputComponent extends Component {
       attr: bodyReq,
       success: res => {
         this.stopForwarding()
-        socket.emit('message', { receiver: currentRoom, message: text })
+        switch (type) {
+          case 'text':
+            socket.emit('message', { receiver: currentRoom, message: text })
+            break
+          case 'geo':
+            const { latitude, longitude } = this.props.forwardedMessage.data
+            socket.emit('geo', {
+              receiver: currentRoom,
+              geo_data: { latitude, longitude },
+            })
+            break
+          case 'image':
+            socket.emit('message', { receiver: currentRoom, message: filename })
+            break
+          default:
+            break
+        }
       },
       failFunc: err => {},
     })

@@ -349,6 +349,8 @@ class InputComponent extends Component {
   _startSendingFile = (formDataObject = {}, imageUri = '') => {
     const {
       currentChat,
+      currentRoomId,
+      currentRoom,
       setDialogs: setDialogsProp,
       addUploadMessage: addUploadMessageProp,
       removeUploadMessage: removeUploadMessageProp,
@@ -397,7 +399,11 @@ class InputComponent extends Component {
         },
       },
       success: res => {
-        socket.emit('file', { room: currentChat })
+        socket.emit('file', {
+          room: currentChat,
+          dialog_id: currentRoomId,
+          participant: currentRoom,
+        })
         const newDialogs = [...dialogs]
         const index = newDialogs.findIndex(e => e.room === currentChat)
         newDialogs[index] = res.dialog
@@ -521,7 +527,7 @@ class InputComponent extends Component {
 
   confirmForwarding = () => {
     const {
-      forwardedMessage: { _id, text },
+      forwardedMessage: { _id, text, type },
       currentRoomId,
       currentChat,
     } = this.props
@@ -532,7 +538,23 @@ class InputComponent extends Component {
       attr: bodyReq,
       success: res => {
         this.stopForwarding()
-        socket.emit('group_message', { room: currentChat, message: text })
+        switch (type) {
+          case 'text':
+            socket.emit('group_message', { room: currentChat, message: text })
+            break
+          case 'geo':
+            const { latitude, longitude } = this.props.forwardedMessage.data
+            socket.emit('geo_group', {
+              room: currentChat,
+              geo_data: { latitude, longitude },
+            })
+            break
+          case 'image':
+            // socket.emit('file', { room: currentChat, message: filename })
+            break
+          default:
+            break
+        }
       },
       failFunc: err => {},
     })
