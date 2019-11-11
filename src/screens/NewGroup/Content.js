@@ -3,11 +3,11 @@ import {
   View,
   Text,
   TextInput,
-  Dimensions,
+  // Dimensions,
   ScrollView,
   TouchableOpacity,
 } from 'react-native'
-import FloatingLabel from 'react-native-floating-labels'
+// import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 // import { ImagePicker, Permissions } from 'expo';
@@ -18,12 +18,12 @@ import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { GroupIcon, CloseIcon } from '../../assets'
 import {
-  addDialogParticipant,
+  // addDialogParticipant,
   setDialogParticipants,
 } from '../../actions/participantsActions'
 import { socket } from '../../utils/socket'
 
-const { Colors, HeaderHeight, sidePadding } = helper
+const { Colors, /* HeaderHeight,*/ sidePadding } = helper
 const { lightGrey1, black, green } = Colors
 const Wrapper = styled(View)`
   padding: 0 ${sidePadding}px;
@@ -87,12 +87,12 @@ class Content extends Component {
     const ReceiverComponent = props => {
       const { children, last = false, onDelete } = props
       const {
-        info,
-        title,
+        // info,
+        // title,
         image,
         role,
         first_name,
-        last_name,
+        // last_name,
         phone_number,
       } = children
       return (
@@ -104,7 +104,7 @@ class Content extends Component {
               alignItems: 'center',
             }}
           >
-            {image === '/images/default_avatar.jpg' ? (
+            {image === '/images/default_avatar.jpg' || !image ? (
               <DefaultAvatar />
             ) : (
               <ImageComponent
@@ -228,9 +228,7 @@ class Content extends Component {
     const { participants, forward, setParticipants } = this.props
     const { text } = this.state
     let idList = []
-    participants.map(e => {
-      idList = [...idList, e._id]
-    })
+    participants.map(e => (idList = [...idList, e._id]))
     setParticipants([])
     socket.emit('new_group', { name: text, participants: idList })
     setTimeout(() => socket.emit('get_dialogs'), 500)

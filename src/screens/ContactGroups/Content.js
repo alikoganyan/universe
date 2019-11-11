@@ -390,7 +390,7 @@ class Content extends Component {
             const { image } = chatItem
             return (
               <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
-                {image === '/images/default_avatar.jpg' ? (
+                {image === '/images/default_avatar.jpg' || !image ? (
                   <DefaultAvatar
                     isGroup={item.isGroup}
                     id={item._id}
