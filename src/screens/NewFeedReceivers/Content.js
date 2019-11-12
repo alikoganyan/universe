@@ -20,7 +20,7 @@ import helper, { getUsersByDepartments } from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
-import { g_users } from '../../constants/api'
+import { p_users_from_role_or_position } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
 import {
@@ -146,29 +146,185 @@ const Option = styled(Text)`
 `
 
 class Content extends Component {
-  render() {
-    const { receivers, dialogs } = this.props
-    const {
-      users,
-      collapsed,
-      options,
-      animationCompleted,
-      selectedGroup,
-    } = this.state
-    const { department } = users
-    const { active } = options
+  MiddleContacts = () => {
+    if (this.props.user.company._id === 0) {
+      return (
+        <ContactList>
+          {this.state.allContacts.map(e => (
+            <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
+              <BoxInnerItem>
+                {this.includes(e) ? (
+                  <RoundCheckbox
+                    size={36}
+                    backgroundColor={yellow}
+                    checked
+                    onValueChange={() => this.addReceiver(e)}
+                  />
+                ) : !e.image ||
+                  e.image === '/images/default_group.png' ||
+                  e.image === '/images/default_avatar.jpg' ? (
+                  <DefaultAvatar size={36} id={e._id} />
+                ) : (
+                  <ImageComponent
+                    source={{
+                      uri: `https://testser.univ.team${e.image}`,
+                    }}
+                    size={36}
+                  />
+                )}
+                <ContactInfo>
+                  <ContactName>
+                    {e.first_name
+                      ? `${e.first_name} ${e.last_name}`
+                      : e.phone_number}
+                  </ContactName>
+                  {e.role ? (
+                    <ContactRole>{e.role.name || 'no role'}</ContactRole>
+                  ) : null}
+                </ContactInfo>
+              </BoxInnerItem>
+            </TouchableOpacity>
+          ))}
+        </ContactList>
+      )
+    } else {
+      return (
+        <ContactList>
+          {this.state.users.department.map((e, i) => (
+            <Box key={i} last={i === this.state.users.department.length - 1}>
+              <BoxTitle
+                onPress={() =>
+                  this.state.collapsed[i]
+                    ? this.collapseDepartment(i)
+                    : this.showDepartment(i)
+                }
+              >
+                <>
+                  <RoundCheckbox
+                    size={24}
+                    backgroundColor={yellow}
+                    checked={this.props.receivers.length === e.workers.length}
+                    onValueChange={() => this.addAllReceivers(e.workers)}
+                  />
+                  <BoxItem title>{e.title}</BoxItem>
+                </>
+                <ArrowWrapper pose={this.state.collapsed[i] ? 'right' : 'down'}>
+                  <ArrowDownIcon />
+                </ArrowWrapper>
+              </BoxTitle>
+              <Collapsible collapsed={this.state.collapsed[i] || false}>
+                {this.state.animationCompleted ? (
+                  <BoxInner>
+                    {e.workers.map(e => (
+                      <TouchableOpacity
+                        key={e._id}
+                        onPress={() => this.addReceiver(e)}
+                      >
+                        <BoxInnerItem>
+                          {this.includes(e) ? (
+                            <RoundCheckbox
+                              size={36}
+                              backgroundColor={yellow}
+                              checked
+                              onValueChange={() => this.addReceiver(e)}
+                            />
+                          ) : !e.image ||
+                            e.image === '/images/default_group.png' ||
+                            e.image === '/images/default_avatar.jpg' ? (
+                            <DefaultAvatar size={36} id={e._id} />
+                          ) : (
+                            <ImageComponent
+                              source={{
+                                uri: `https://testser.univ.team${e.image}`,
+                              }}
+                              size={36}
+                            />
+                          )}
+                          <ContactInfo>
+                            <ContactName>
+                              {e.first_name
+                                ? `${e.first_name} ${e.last_name}`
+                                : e.phone_number}
+                            </ContactName>
+                            {e.role ? (
+                              <ContactRole>
+                                {e.role.name || 'no role'}
+                              </ContactRole>
+                            ) : null}
+                          </ContactInfo>
+                        </BoxInnerItem>
+                      </TouchableOpacity>
+                    ))}
+                  </BoxInner>
+                ) : null}
+              </Collapsible>
+            </Box>
+          ))}
+        </ContactList>
+      )
+    }
+  }
 
+  AllContacts = () => {
     const allUsers = []
-    department.forEach(item => {
-      allUsers.push(...item.workers)
-    })
+    if (this.props.user.company._id === 0) {
+      this.state.allContacts.forEach(item => {
+        allUsers.push(item)
+      })
+    } else {
+      this.state.users.department.forEach(item => {
+        allUsers.push(...item.workers)
+      })
+    }
+
+    return (
+      <ContactList>
+        {allUsers.map(e => (
+          <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
+            <BoxInnerItem>
+              {this.includes(e) ? (
+                <RoundCheckbox
+                  size={36}
+                  backgroundColor={yellow}
+                  checked
+                  onValueChange={() => this.addReceiver(e)}
+                />
+              ) : !e.image ||
+                e.image === '/images/default_group.png' ||
+                e.image === '/images/default_avatar.jpg' ? (
+                <DefaultAvatar size={36} id={e._id} />
+              ) : (
+                <ImageComponent
+                  source={{
+                    uri: `https://testser.univ.team${e.image}`,
+                  }}
+                  size={36}
+                />
+              )}
+              <ContactInfo>
+                <ContactName>
+                  {e.first_name
+                    ? `${e.first_name} ${e.last_name}`
+                    : e.phone_number}
+                </ContactName>
+                {e.role ? (
+                  <ContactRole>{e.role.name || 'no role'}</ContactRole>
+                ) : null}
+              </ContactInfo>
+            </BoxInnerItem>
+          </TouchableOpacity>
+        ))}
+      </ContactList>
+    )
+  }
+
+  render() {
+    const { dialogs } = this.props
+    const { collapsed, options, selectedGroup } = this.state
+    const { active } = options
 
     return (
       <SafeAreaView>
-        {/* <GestureRecognizer
-			onSwipeLeft={this.optionLeft}
-			onSwipeRight={this.optionRight}
-		> */}
         <Wrapper>
           <KeyboardAwareScrollView enableOnAndroid>
             <OptionsWrap>
@@ -186,118 +342,8 @@ class Content extends Component {
             <Animated
               pose={active === 0 ? 'left' : active === 1 ? 'center' : 'right'}
             >
-              <ContactList>
-                {allUsers.map(e => (
-                  <TouchableOpacity
-                    key={e._id}
-                    onPress={() => this.addReceiver(e)}
-                  >
-                    <BoxInnerItem>
-                      {this.includes(e) ? (
-                        <RoundCheckbox
-                          size={36}
-                          backgroundColor={yellow}
-                          checked
-                          onValueChange={() => this.addReceiver(e)}
-                        />
-                      ) : !e.image ||
-                        e.image === '/images/default_group.png' ||
-                        e.image === '/images/default_avatar.jpg' ? (
-                        <DefaultAvatar size={36} id={e._id} />
-                      ) : (
-                        <ImageComponent
-                          source={{
-                            uri: `https://testser.univ.team${e.image}`,
-                          }}
-                          size={36}
-                        />
-                      )}
-                      <ContactInfo>
-                        <ContactName>
-                          {e.first_name
-                            ? `${e.first_name} ${e.last_name}`
-                            : e.phone_number}
-                        </ContactName>
-                        {e.role ? (
-                          <ContactRole>{e.role.name || 'no role'}</ContactRole>
-                        ) : null}
-                      </ContactInfo>
-                    </BoxInnerItem>
-                  </TouchableOpacity>
-                ))}
-              </ContactList>
-              <ContactList>
-                {department.map((e, i) => (
-                  <Box key={i} last={i === department.length - 1}>
-                    <BoxTitle
-                      onPress={() =>
-                        collapsed[i]
-                          ? this.collapseDepartment(i)
-                          : this.showDepartment(i)
-                      }
-                    >
-                      <>
-                        <RoundCheckbox
-                          size={24}
-                          backgroundColor={yellow}
-                          checked={receivers.length === e.workers.length}
-                          onValueChange={() => this.addAllReceivers(e.workers)}
-                        />
-                        <BoxItem title>{e.title}</BoxItem>
-                      </>
-                      <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                        <ArrowDownIcon />
-                      </ArrowWrapper>
-                    </BoxTitle>
-                    <Collapsible collapsed={collapsed[i] || false}>
-                      {animationCompleted ? (
-                        <BoxInner>
-                          {e.workers.map(e => (
-                            <TouchableOpacity
-                              key={e._id}
-                              onPress={() => this.addReceiver(e)}
-                            >
-                              <BoxInnerItem>
-                                {this.includes(e) ? (
-                                  <RoundCheckbox
-                                    size={36}
-                                    backgroundColor={yellow}
-                                    checked
-                                    onValueChange={() => this.addReceiver(e)}
-                                  />
-                                ) : !e.image ||
-                                  e.image === '/images/default_group.png' ||
-                                  e.image === '/images/default_avatar.jpg' ? (
-                                  <DefaultAvatar size={36} id={e._id} />
-                                ) : (
-                                  <ImageComponent
-                                    source={{
-                                      uri: `https://testser.univ.team${e.image}`,
-                                    }}
-                                    size={36}
-                                  />
-                                )}
-                                <ContactInfo>
-                                  <ContactName>
-                                    {e.first_name
-                                      ? `${e.first_name} ${e.last_name}`
-                                      : e.phone_number}
-                                  </ContactName>
-                                  {e.role ? (
-                                    <ContactRole>
-                                      {e.role.name || 'no role'}
-                                    </ContactRole>
-                                  ) : null}
-                                </ContactInfo>
-                              </BoxInnerItem>
-                            </TouchableOpacity>
-                          ))}
-                        </BoxInner>
-                      ) : null}
-                    </Collapsible>
-                  </Box>
-                ))}
-              </ContactList>
+              <this.AllContacts />
+              <this.MiddleContacts />
               <ContactList>
                 {dialogs
                   .filter(item => item.isGroup)
@@ -329,13 +375,13 @@ class Content extends Component {
             </Animated>
           </KeyboardAwareScrollView>
         </Wrapper>
-        {/* </GestureRecognizer> */}
       </SafeAreaView>
     )
   }
 
   state = {
     collapsed: [],
+    allContacts: [],
     users: {
       department: [],
     },
@@ -362,12 +408,19 @@ class Content extends Component {
     }
     this.setState({ collapsed: newDCollapsed })
     sendRequest({
-      r_path: g_users,
-      method: 'get',
+      r_path: p_users_from_role_or_position,
+      method: 'post',
+      attr: {
+        access_field: 'create_news',
+      },
       success: res => {
+        this.setState({ allContacts: res.users })
         setContacts(res.users)
         // TODO: надо бы брать все из стора
-        const formatedUsers = getUsersByDepartments(res.users || [])
+        const formatedUsers = getUsersByDepartments(
+          res.users || [],
+          this.props.user.company._id,
+        )
         this.setState({ users: { department: formatedUsers } })
       },
       failFunc: err => {},
