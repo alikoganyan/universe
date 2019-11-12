@@ -123,6 +123,7 @@ export default {
   }),
   // encrypt,
 }
+
 export function widthPercentageToDP(widthPercent) {
   const elemWidth = parseFloat(widthPercent)
   return PixelRatio.roundToNearestPixel((width * elemWidth) / 100)
@@ -161,17 +162,29 @@ export function validateEmail(email) {
   return re.test(String(email).toLowerCase())
 }
 
-export const getUsersByDepartments = (users = []) => {
+export const getUsersByDepartments = (users = [], company_id) => {
   const usersByDepartments = []
   users &&
     users.length &&
-    users.forEach(item => {
-      const { department: { _id: dId = 0, name: dTitle = '' } = {} } = item
-      const dIndex = usersByDepartments.findIndex(({ id = 0 }) => id === dId)
-      if (dIndex !== -1) {
-        usersByDepartments[dIndex].workers.push(item)
-      } else {
-        usersByDepartments.push({ id: dId, title: dTitle, workers: [item] })
+    users.forEach(user => {
+      if (user.departments) {
+        const department = user.departments.filter(
+          elem => elem.company === company_id,
+        )[0]
+        if (department) {
+          const dIndex = usersByDepartments.findIndex(
+            ({ id = 0 }) => id === department._id,
+          )
+          if (dIndex !== -1) {
+            usersByDepartments[dIndex].workers.push(user)
+          } else {
+            usersByDepartments.push({
+              id: department._id,
+              title: department.name,
+              workers: [user],
+            })
+          }
+        }
       }
     })
   return usersByDepartments
