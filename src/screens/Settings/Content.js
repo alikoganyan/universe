@@ -148,8 +148,8 @@ class Content extends Component {
       user,
     } = this.props
     const settings =
-      user.department.name === 'Персональный'
-        ? this.state.settings.slice(0, this.state.settings.length - 2)
+      user.company._id === 0
+        ? this.state.settings.slice(0, this.state.settings.length - 1)
         : this.state.settings
     if (isLoading) return null
     return (
