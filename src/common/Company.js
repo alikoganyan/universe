@@ -12,7 +12,7 @@ import styled from 'styled-components'
 import ImageComponent from './Image'
 import helper from '../utils/helpers'
 import sendRequest from '../utils/request'
-import { setTasks } from '../actions/tasksActions'
+import { setTaskList, setTasks } from '../actions/tasksActions'
 import {
   setCompanies,
   setContacts,
@@ -22,6 +22,7 @@ import {
 import { setDialogs } from '../actions/dialogsActions'
 import DefaultAvatar from './DefaultAvatar'
 import { setNews } from '../actions/newsActions'
+import { socket } from '../utils/socket'
 
 const { fontSize, sidePadding, Colors } = helper
 const { lightGrey2 } = Colors
@@ -154,7 +155,6 @@ class Company extends Component {
 
   changeCompany = id => {
     this.setState({ modalVisible: false })
-
     sendRequest({
       r_path: '/profile/change_company',
       method: 'patch',
@@ -165,15 +165,19 @@ class Company extends Component {
         sendRequest({
           r_path: '/profile',
           method: 'get',
-          success: res => {
+          success: data => {
+            const userData = { ...data }
             this.props.setCompanies({
-              companies: res.user.companies,
-              company: res.user.company,
+              companies: userData.user.companies,
+              company: userData.user.company,
             })
-            this.props.setUser(res.user)
+            this.props.setUser(userData.user)
+            socket.emit('get_dialogs', { id: userData.user._id })
           },
           failFunc: () => {},
         })
+        // to do
+        // this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
         this.props.setTasks(res.data.tasks)
         this.props.setContacts(res.data.contacts)
         this.props.setDialogs(res.data.dialogs)
@@ -208,6 +212,7 @@ const mapStateToProps = state => ({
 })
 
 const mapDispatchToProps = dispatch => ({
+  setTaskList: _ => dispatch(setTaskList(_)),
   setTasks: _ => dispatch(setTasks(_)),
   setContacts: _ => dispatch(setContacts(_)),
   setDialogs: _ => dispatch(setDialogs(_)),

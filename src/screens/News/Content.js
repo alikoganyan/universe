@@ -10,7 +10,7 @@ import {
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { CommentIcon, HeartIcon } from '../../assets/index'
-import { setFeed } from '../../actions/newsActions'
+import { setFeed, setNews } from '../../actions/newsActions'
 import helper, { getHamsterDate } from '../../utils/helpers'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
@@ -237,6 +237,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   setFeed: _ => dispatch(setFeed(_)),
+  setNews: _ => dispatch(setNews(_)),
 })
 export default connect(
   mapStateToProps,
