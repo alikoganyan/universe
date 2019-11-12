@@ -74,6 +74,7 @@ const ContactList = styled(Animated.FlatList)`
   max-width: 100%;
   overflow: hidden;
   flex: 1;
+  height: auto;
 `
 const Box = styled(View)`
   padding-top: 20px;
@@ -361,7 +362,7 @@ class Content extends Component {
   scrollY = new Animated.Value(0)
 
   _renderEmptyComponent = () => (
-    <Loader hint="Пока нет контактов." style={{ flex: 1 }}>
+    <Loader marginTop={70} hint="Пока нет контактов." style={{ flex: 1 }}>
       <TouchableOpacity onPress={this.toContacts}>
         <Text style={{ color: grey2, textAlign: 'center' }}>
           Похоже произошла ошибка, обратитесь к администратору системы
@@ -377,7 +378,7 @@ class Content extends Component {
     return (
       <ContactList
         bounces={false}
-        contentContainerStyle={{ paddingBottom: 160, paddingTop: 10 }}
+        contentContainerStyle={{ paddingBottom: 170 }}
         data={allContacts}
         ListEmptyComponent={this._renderEmptyComponent}
         ref={ref => (this.allRef = ref)}
@@ -458,7 +459,7 @@ class Content extends Component {
     return (
       <ContactList
         bounces={false}
-        contentContainerStyle={{ paddingBottom: 160, paddingTop: 10 }}
+        contentContainerStyle={{ paddingBottom: 170 }}
         data={dialogs}
         ListEmptyComponent={this._renderEmptyComponent}
         ref={ref => (this.groupRef = ref)}

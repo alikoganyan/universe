@@ -1,10 +1,10 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import helper from '../utils/helpers'
 import { LogoPlaceholder } from '../assets/'
 const { Colors, fontSize } = helper
-const { border, lightColor, grey2 } = Colors
+const { grey2 } = Colors
 const Wrapper = styled(TouchableOpacity)`
   display: flex;
   justify-content: center;
@@ -23,10 +23,19 @@ const LogoText = styled(Text)`
   text-align: center;
   margin-bottom: 20px;
 `
-export default Loader = props => {
-  const { style, width, height, children, labelStyle, textStyle, hint } = props
+const Loader = props => {
+  const {
+    style,
+    width,
+    height,
+    children,
+    labelStyle,
+    textStyle,
+    hint,
+    marginTop,
+  } = props
   return (
-    <Wrapper style={{ ...style }}>
+    <Wrapper style={{ ...style, marginTop: marginTop }}>
       <LogoPlaceholder width={width || 200} height={height || 200} />
       <LogoLable style={labelStyle}>
         <LogoText style={textStyle}>{hint}</LogoText>
@@ -35,3 +44,5 @@ export default Loader = props => {
     </Wrapper>
   )
 }
+
+export default Loader
