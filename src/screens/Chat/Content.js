@@ -60,8 +60,24 @@ const DateView = styled(View)`
 class Content extends Component {
   render() {
     const { messageLongPressActions, currentDate } = this.state
-    const { search, dialogs, currentChat, editedMessage } = this.props
-    const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
+    const {
+      search,
+      dialogs,
+      currentChat,
+      editedMessage,
+      currentDialog,
+    } = this.props
+    const dialog = [...dialogs].filter(e => {
+      if (!currentChat) {
+        return (
+          !e.isGroup &&
+          (e.creator._id === currentDialog._id ||
+            e.participants.some(p => p._id === currentDialog._id))
+        )
+      } else {
+        return e.room === currentChat
+      }
+    })[0]
     const isEditing = !!editedMessage.text
     const messages = dialog ? [...dialog.messages] : []
     const reversedMessages = [...messages]
