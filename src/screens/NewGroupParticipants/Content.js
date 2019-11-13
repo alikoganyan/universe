@@ -22,7 +22,7 @@ import helper, { getUsersByDepartments } from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
-import { g_users } from '../../constants/api'
+import { p_users_from_role_or_position } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
 import {
@@ -33,26 +33,6 @@ import { setDialogs } from '../../actions/dialogsActions'
 
 const { Colors } = helper
 const { green } = Colors
-// const AnimatedScrollView = posed.View({
-//   left: {
-//     x: Dimensions.get('window').width,
-//     transition: { duration: 300, ease: 'easeOut' },
-//   },
-//   center: {
-//     x: 0,
-//     transition: { duration: 300, ease: 'easeOut' },
-//   },
-
-//   right: {
-//     x: -Dimensions.get('window').width,
-//     transition: { duration: 300, ease: 'easeOut' },
-//   },
-// })
-// const Animated = styled(AnimatedScrollView)`
-//   display: flex;
-//   flex-direction: row;
-//   width: ${Dimensions.get('window').width * 3};
-// `
 const AnimatedBox = posed.View({
   visible: { flex: 1 },
   hidden: { flex: 0 },
@@ -122,127 +102,140 @@ const ContactRole = styled(Text)`
   justify-content: center;
 `
 const ArrowWrapper = styled(AnimatedArrowWrapper)``
-// const Options = styled(View)`
-//   display: flex;
-//   align-self: center;
-//   background: ${green};
-//   flex-direction: row;
-//   justify-content: space-between;
-//   padding: 1px;
-//   border-radius: 13;
-//   overflow: hidden;
-// `
-// const Option = styled(Text)`
-//   color: ${({ active }) => (active ? black : 'white')};
-//   background: ${({ active }) => (active ? 'white' : 'transparent')};
-//   min-width: 20%;
-//   margin: 1px;
-//   border-radius: 10;
-//   padding: 2px 10px;
-//   overflow: hidden;
-//   text-align: center;
-// `
-// const Group = styled(BoxInnerItem)``
-// const GroupInfo = styled(ContactInfo)``
-// const GroupTitle = styled(ContactName)``
-// const GroupParticipants = styled(ContactRole)``
-// const GroupImage = styled(ContactImage)``
+
 class Content extends Component {
+  Contacts = () => {
+    if (this.props.user.company._id === 0) {
+      if (this.state.allUsers && this.state.allUsers.length) {
+        return (
+          <ContactList>
+            {[...this.state.allUsers].map((e, i) => (
+              <TouchableWithoutFeedback
+                key={e._id}
+                onPress={() => this.addReceiver(e)}
+              >
+                <BoxInnerItem>
+                  {this.includes(e) ? (
+                    <RoundCheckbox
+                      size={36}
+                      backgroundColor={green}
+                      checked
+                      onValueChange={() => this.addReceiver(e)}
+                    />
+                  ) : !e.image ||
+                    e.image === '/images/default_group.png' ||
+                    e.image === '/images/default_avatar.jpg' ? (
+                    <DefaultAvatar size={36} id={e._id} />
+                  ) : (
+                    <ImageComponent
+                      source={{
+                        uri: `https://testser.univ.team${e.image}`,
+                      }}
+                      size={36}
+                    />
+                  )}
+                  <ContactInfo>
+                    <ContactName>
+                      {e.first_name
+                        ? `${e.first_name} ${e.last_name}`
+                        : e.phone_number}
+                    </ContactName>
+                    {e.role ? (
+                      <ContactRole>{e.role.name || 'no role'}</ContactRole>
+                    ) : null}
+                  </ContactInfo>
+                </BoxInnerItem>
+              </TouchableWithoutFeedback>
+            ))}
+          </ContactList>
+        )
+      } else {
+        return null
+      }
+    } else {
+      return (
+        <ContactList>
+          {this.state.users.department.map((e, i) => (
+            <Box key={i} last={i === this.state.users.department.length - 1}>
+              <BoxTitle
+                onPress={() =>
+                  this.state.collapsed[i]
+                    ? this.collapseDepartment(i)
+                    : this.showDepartment(i)
+                }
+              >
+                <RoundCheckbox
+                  size={24}
+                  backgroundColor={green}
+                  checked={this.props.participants.length === e.workers.length}
+                  onValueChange={() => this.addAllReceivers(e.workers)}
+                />
+                <BoxItem title>{e.title}</BoxItem>
+                <ArrowWrapper pose={this.state.collapsed[i] ? 'right' : 'down'}>
+                  <ArrowDownIcon />
+                </ArrowWrapper>
+              </BoxTitle>
+              <Collapsible collapsed={this.state.collapsed[i] || false}>
+                {this.state.animationCompleted ? (
+                  <BoxInner>
+                    {e.workers.map((e, i) => (
+                      <TouchableWithoutFeedback
+                        key={e._id}
+                        onPress={() => this.addReceiver(e)}
+                      >
+                        <BoxInnerItem>
+                          {this.includes(e) ? (
+                            <RoundCheckbox
+                              size={36}
+                              backgroundColor={green}
+                              checked
+                              onValueChange={() => this.addReceiver(e)}
+                            />
+                          ) : !e.image ||
+                            e.image === '/images/default_group.png' ||
+                            e.image === '/images/default_avatar.jpg' ? (
+                            <DefaultAvatar size={36} id={e._id} />
+                          ) : (
+                            <ImageComponent
+                              source={{
+                                uri: `https://testser.univ.team${e.image}`,
+                              }}
+                              size={36}
+                            />
+                          )}
+                          <ContactInfo>
+                            <ContactName>
+                              {e.first_name
+                                ? `${e.first_name} ${e.last_name}`
+                                : e.phone_number}
+                            </ContactName>
+                            {e.role ? (
+                              <ContactRole>
+                                {e.role.name || 'no role'}
+                              </ContactRole>
+                            ) : null}
+                          </ContactInfo>
+                        </BoxInnerItem>
+                      </TouchableWithoutFeedback>
+                    ))}
+                  </BoxInner>
+                ) : null}
+              </Collapsible>
+            </Box>
+          ))}
+        </ContactList>
+      )
+    }
+  }
+
   render() {
-    const { participants } = this.props
-    const {
-      users,
-      collapsed,
-      // options,
-      // groups,
-      // isSelected,
-      // usersToAdd,
-      animationCompleted,
-    } = this.state
-    const { department } = users
-    // const { active } = options
     return (
       <SafeAreaView>
-        {/* <GestureRecognizer
-                    onSwipeLeft={this.optionLeft}
-                    onSwipeRight={this.optionRight}
-                > */}
-
         <Wrapper>
           <KeyboardAwareScrollView enableOnAndroid>
-            <ContactList>
-              {department.map((e, i) => (
-                <Box key={i} last={i === department.length - 1}>
-                  <BoxTitle
-                    onPress={() =>
-                      collapsed[i]
-                        ? this.collapseDepartment(i)
-                        : this.showDepartment(i)
-                    }
-                  >
-                    <RoundCheckbox
-                      size={24}
-                      backgroundColor={green}
-                      checked={participants.length === e.workers.length}
-                      onValueChange={() => this.addAllReceivers(e.workers)}
-                    />
-                    <BoxItem title>{e.title}</BoxItem>
-                    <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                      <ArrowDownIcon />
-                    </ArrowWrapper>
-                  </BoxTitle>
-                  <Collapsible collapsed={collapsed[i] || false}>
-                    {animationCompleted ? (
-                      <BoxInner>
-                        {e.workers.map((e, i) => (
-                          <TouchableWithoutFeedback
-                            key={e._id}
-                            onPress={() => this.addReceiver(e)}
-                          >
-                            <BoxInnerItem>
-                              {this.includes(e) ? (
-                                <RoundCheckbox
-                                  size={36}
-                                  backgroundColor={green}
-                                  checked
-                                  onValueChange={() => this.addReceiver(e)}
-                                />
-                              ) : !e.image ||
-                                e.image === '/images/default_group.png' ||
-                                e.image === '/images/default_avatar.jpg' ? (
-                                <DefaultAvatar size={36} id={e._id} />
-                              ) : (
-                                <ImageComponent
-                                  source={{
-                                    uri: `https://testser.univ.team${e.image}`,
-                                  }}
-                                  size={36}
-                                />
-                              )}
-                              <ContactInfo>
-                                <ContactName>
-                                  {e.first_name
-                                    ? `${e.first_name} ${e.last_name}`
-                                    : e.phone_number}
-                                </ContactName>
-                                {e.role ? (
-                                  <ContactRole>
-                                    {e.role.name || 'no role'}
-                                  </ContactRole>
-                                ) : null}
-                              </ContactInfo>
-                            </BoxInnerItem>
-                          </TouchableWithoutFeedback>
-                        ))}
-                      </BoxInner>
-                    ) : null}
-                  </Collapsible>
-                </Box>
-              ))}
-            </ContactList>
+            <this.Contacts />
           </KeyboardAwareScrollView>
         </Wrapper>
-        {/* </GestureRecognizer> */}
       </SafeAreaView>
     )
   }
@@ -250,6 +243,7 @@ class Content extends Component {
   state = {
     usersToAdd: [],
     collapsed: [],
+    allUsers: [],
     users: {
       department: [
         {
@@ -281,7 +275,6 @@ class Content extends Component {
         animationCompleted: true,
       })
     })
-    // const { participants } = this.props
     const { collapsed, users } = this.state
     const newDCollapsed = [...collapsed]
     for (let i = 0; i <= users.department.length; i++) {
@@ -289,12 +282,17 @@ class Content extends Component {
     }
     this.setState({ collapsed: newDCollapsed })
     sendRequest({
-      r_path: g_users,
-      method: 'get',
+      r_path: p_users_from_role_or_position,
+      method: 'post',
+      attr: {
+        access_field: 'create_groups',
+      },
       success: res => {
-        this.props.setContacts(res.users)
-        // TODO: надо бы брать все из стора
-        const formatedUsers = getUsersByDepartments(res.users || [])
+        this.setState({ allUsers: res.users })
+        const formatedUsers = getUsersByDepartments(
+          res.users || [],
+          this.props.user.company._id,
+        )
         this.setState({ users: { department: formatedUsers } })
       },
       failFunc: err => {},
