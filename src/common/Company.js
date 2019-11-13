@@ -180,7 +180,6 @@ class Company extends Component {
         // this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
         this.props.setTasks(res.data.tasks)
         this.props.setContacts(res.data.contacts)
-        this.props.setDialogs(res.data.dialogs)
         this.props.setNews(res.data.news)
         this.props.setReset(true)
       },
