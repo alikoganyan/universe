@@ -224,7 +224,9 @@ class Content extends Component {
                     </DialogLastMessage>
                   ) : (
                     <DialogLastMessage numberOfLines={1}>
-                      {latestMessage.type === 'image'
+                      {!Object.keys(latestMessage).length
+                        ? 'Пока нет собшений в группе.'
+                        : latestMessage.type === 'image'
                         ? 'Изображение'
                         : latestMessage.type === 'task'
                         ? 'Задача'
