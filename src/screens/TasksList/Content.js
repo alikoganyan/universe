@@ -7,13 +7,10 @@ import Task from './Task'
 import TaskPack from './TaskPack'
 import Loader from '../../common/Loader'
 import helper from '../../utils/helpers'
-import sendRequest from '../../utils/request'
-import { g_users, g_tasks } from '../../constants/api'
-import { setTasks, setTaskList } from '../../actions/tasksActions'
+import { setTaskList } from '../../actions/tasksActions'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
 import Company from '../../common/Company'
-import { setReset } from '../../actions/userActions'
 
 const { HeaderHeight, Colors } = helper
 const { grey2 } = Colors
@@ -55,7 +52,26 @@ class Content extends Component {
       outputRange: [0, 50, 50],
     })
 
-    return tasksWithUsers ? (
+    const allUserTasks = []
+    tasksWithUsers.forEach(task => {
+      const index = allUserTasks.findIndex(
+        item => item._id === task.performers[0]._id,
+      )
+      if (index !== -1) {
+        allUserTasks[index].tasks.push(task)
+      } else {
+        allUserTasks.push({
+          _id: task.performers[0]._id,
+          first_name: task.performers[0].first_name,
+          last_name: task.performers[0].last_name,
+          phone_number: task.performers[0].phone_number,
+          image: task.performers[0].image,
+          tasks: [task],
+        })
+      }
+    })
+
+    return allUserTasks ? (
       <Wrapper>
         <TabPreHeader
           onWritePress={() => navigate('NewTask')}
@@ -94,18 +110,20 @@ class Content extends Component {
             onPress={() => navigate('TasksOut')}
             last
           />
-          {tasksWithUsers.length ? (
-            tasksWithUsers
-              .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
-              .map((e, i) => (
-                <Task
-                  onPress={this.toTasks}
-                  key={i}
-                  navigate={this.props.navigate}
-                >
-                  {e}
-                </Task>
-              ))
+          {allUserTasks && allUserTasks.length ? (
+            allUserTasks
+              // .sort((a, b) => new Date(b.updated_at) - new Date(a.updated_at))
+              .map((e, i) => {
+                return (
+                  <Task
+                    onPress={() => navigate('Tasks')}
+                    key={i}
+                    navigate={this.props.navigate}
+                  >
+                    {e}
+                  </Task>
+                )
+              })
           ) : (
             <View style={{ flex: 1 }}>
               <Loader hint="Пока нет задач">
@@ -123,76 +141,16 @@ class Content extends Component {
     )
   }
 
-  state = {
-    users: [],
-  }
   scrollY = new Animated.Value(0)
-
-  componentDidMount() {
-    this.mount()
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.reset) {
-      this.props.setReset(false)
-      this.mount()
-    }
-  }
-
-  mount = async () => {
-    const { user } = this.props
-    const tasksWithUsers = await this._getUsers()
-    sendRequest({
-      r_path: g_tasks,
-      method: 'get',
-      success: res => {
-        const tasksInc = res.tasks.filter(item => item.creator._id !== user._id)
-        const tasksOut = res.tasks.filter(item => item.creator._id === user._id)
-
-        this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
-      },
-      failFunc: err => {},
-    })
-  }
-
-  componentWillUnmount() {
-    const { setTasks: setTasksProp } = this.props
-    setTasksProp([])
-  }
-
-  toTasks = () => {
-    const { navigate } = this.props
-    navigate('Tasks')
-  }
-
-  _getUsers = () => {
-    return new Promise((resolve, reject) => {
-      sendRequest({
-        r_path: g_users,
-        method: 'get',
-        success: res => {
-          this.setState({ users: [...res.users] }, () => resolve(res.users))
-        },
-        failFunc: err => {
-          reject()
-        },
-      })
-    })
-  }
 }
 
 const mapStateToProps = state => ({
-  user: state.userReducer.user,
-  tasks: state.tasksReducer.tasks,
   tasksOut: state.tasksReducer.tasksOut,
   tasksInc: state.tasksReducer.tasksInc,
   tasksWithUsers: state.tasksReducer.tasksWithUsers,
-  reset: state.userReducer.reset,
 })
 const mapDispatchToProps = dispatch => ({
-  setTasks: _ => dispatch(setTasks(_)),
   setTaskList: _ => dispatch(setTaskList(_)),
-  setReset: _ => dispatch(setReset(_)),
 })
 export default connect(
   mapStateToProps,

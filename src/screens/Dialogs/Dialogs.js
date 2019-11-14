@@ -17,12 +17,13 @@ import {
 } from '../../actions/messageActions'
 // import { Notifications } from 'expo';
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
-import { setAllUsers, setCompanies } from '../../actions/userActions'
+import { setAllUsers, setCompanies, setReset } from '../../actions/userActions'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 import TabPreHeader from '../../common/TabPreHeader'
 import sendRequest from '../../utils/request'
 import Company from '../../common/Company'
+import { setTaskList } from '../../actions/tasksActions'
 
 const { Colors } = helper
 const { blue, grey2, lightColor } = Colors
@@ -164,17 +165,37 @@ class Dialogs extends Component {
   }
   scrollY = new Animated.Value(0)
 
+  // _getUsers = () => {
+  //   return new Promise((resolve, reject) => {
+  //     sendRequest({
+  //       r_path: g_users,
+  //       method: 'get',
+  //       success: res => {
+  //         this.setState({ users: [...res.users] }, () => resolve(res.users))
+  //       },
+  //       failFunc: err => {
+  //         reject()
+  //       },
+  //     })
+  //   })
+  // }
+
   componentDidMount() {
     const { user } = this.props
-
     sendRequest({
       r_path: '/profile',
       method: 'get',
       success: res => {
+        const userData = { ...res }
         this.props.setCompanies({
           companies: res.user.companies,
           company: res.user.company,
         })
+        const tasksInc = [...userData.user.tasks]
+        const tasksOut = [...userData.user.created_tasks]
+        const tasksWithUsers = [...tasksInc, ...tasksOut]
+        this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
+        this.props.setReset(true)
       },
       failFunc: () => {},
     })
@@ -574,6 +595,8 @@ const mapDispatchToProps = dispatch => ({
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setCompanies: _ => dispatch(setCompanies(_)),
+  setTaskList: _ => dispatch(setTaskList(_)),
+  setReset: _ => dispatch(setReset(_)),
 })
 export default connect(
   mapStateToProps,

@@ -122,6 +122,9 @@ class Content extends Component {
                           triangleLeft={!myTask}
                           triangleRight={myTask}
                           borderColor={myTask ? pink : purple}
+                          withReceiver={
+                            item.performers ? item.performers[0] : false
+                          }
                           editFeed={this.editFeed}
                           style={{
                             zIndex: activeTask._id === item._id ? 5 : 1,

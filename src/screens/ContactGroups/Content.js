@@ -584,10 +584,10 @@ class Content extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    // if (nextProps.reset) {
-    //   this.props.setReset(false)
-    this.mount()
-    // }
+    if (nextProps.reset) {
+      this.props.setReset(false)
+      this.mount()
+    }
   }
 
   mount = () => {

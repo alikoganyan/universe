@@ -12,7 +12,7 @@ import styled from 'styled-components'
 import ImageComponent from './Image'
 import helper from '../utils/helpers'
 import sendRequest from '../utils/request'
-import { setTaskList, setTasks } from '../actions/tasksActions'
+import { setTaskList } from '../actions/tasksActions'
 import {
   setCompanies,
   setContacts,
@@ -176,9 +176,10 @@ class Company extends Component {
           },
           failFunc: () => {},
         })
-        // to do
-        // this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
-        this.props.setTasks(res.data.tasks)
+        const tasksInc = [...res.data.tasks]
+        const tasksOut = [...res.data.created_tasks]
+        const tasksWithUsers = [...tasksInc, ...tasksOut]
+        this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
         this.props.setContacts(res.data.contacts)
         this.props.setNews(res.data.news)
         this.props.setReset(true)
@@ -212,7 +213,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   setTaskList: _ => dispatch(setTaskList(_)),
-  setTasks: _ => dispatch(setTasks(_)),
   setContacts: _ => dispatch(setContacts(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   setNews: _ => dispatch(setNews(_)),

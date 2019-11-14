@@ -26,7 +26,7 @@ import DefaultAvatar from './DefaultAvatar'
 import helper, { getHamsterDate } from '../utils/helpers'
 
 const { Colors, fontSize, borderRadius } = helper
-const { red, yellow, green, purple, grey1 } = Colors
+const { yellow, green, purple, grey1 } = Colors
 const Wrapper = styled(View)`
   display: flex;
   flex-direction: row;
@@ -207,7 +207,14 @@ class TaskComponent extends Component {
       'ВЫПОЛНЕНА',
       'СДАНА',
     ]
-    const colors = [red, red, red, yellow, green, purple]
+    const colors = [
+      '#bf0023',
+      '#9bb4ff',
+      '#ff9900',
+      '#0000ff',
+      '#ca00ad',
+      '#669900',
+    ]
     this.stat = statuses_index[status]
 
     const deadlineDate = new Date(deadline)
