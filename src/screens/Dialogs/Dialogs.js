@@ -165,21 +165,6 @@ class Dialogs extends Component {
   }
   scrollY = new Animated.Value(0)
 
-  // _getUsers = () => {
-  //   return new Promise((resolve, reject) => {
-  //     sendRequest({
-  //       r_path: g_users,
-  //       method: 'get',
-  //       success: res => {
-  //         this.setState({ users: [...res.users] }, () => resolve(res.users))
-  //       },
-  //       failFunc: err => {
-  //         reject()
-  //       },
-  //     })
-  //   })
-  // }
-
   componentDidMount() {
     const { user } = this.props
     sendRequest({
@@ -466,11 +451,6 @@ class Dialogs extends Component {
   }
 
   news = () => {}
-
-  getUsers = e => {
-    const { setAllUsers } = this.props
-    setAllUsers(e)
-  }
 
   find = e => {
     setDialogs(e.result)
