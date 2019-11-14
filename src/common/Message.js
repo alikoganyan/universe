@@ -114,11 +114,6 @@ const MessageInfo = styled(View)`
   justify-content: flex-end;
   padding: 0 10px 5px;
   width: 100%;
-  position: absolute;
-  z-index: 2;
-  bottom: 0;
-  right: 0;
-  left: 0;
 `
 const MessageDate = styled(Text)`
   color: ${({ color }) => color || Colors.jumbo};
@@ -376,7 +371,9 @@ class Message extends Component {
                 <UploadProgressText>{uploadProgress}%</UploadProgressText>
               )}
             </UploadProgressContainer>
-            <MessageInfo>
+            <MessageInfo
+              style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
+            >
               <MessageDate color={Colors.norway}>Загрузка...</MessageDate>
             </MessageInfo>
           </MyMessage>

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, Dimensions, Platform } from 'react-native'
+import { View, Text, Dimensions, Platform } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import RNDocumentPicker from 'react-native-document-picker'
@@ -37,6 +37,7 @@ import {
 
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
+import AutoHeightInput from '../../common/AutoHeightInput'
 
 const { sidePadding, /*HeaderHeight,*/ fontSize, Colors } = helper
 const { blue } = Colors
@@ -61,7 +62,7 @@ const Wrapper = styled(View)`
   background-color: #f4f4f4;
   ${'' /* max-height: 65px; */}
 `
-const Input = styled(TextInput)`
+const Input = styled(AutoHeightInput)`
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -166,6 +167,7 @@ class InputComponent extends Component {
                 onChangeText={e => this.handleChange(e)}
                 value={text}
                 blurOnSubmit={false}
+                autoHeight
               />
             </Body>
             <Right>
