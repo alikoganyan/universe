@@ -18,12 +18,12 @@ const dialogsReducer = (state = initialState, action) => {
     case ADD_UPLOAD_MESSAGE:
     case REMOVE_UPLOAD_MESSAGE:
     case UPDATE_UPLOAD_MESSAGE_PROGRESS:
-      return { ...state, dialogs: [...payload] }
+      return { ...state, dialogs: payload ? [...payload] : [] }
 
     case SET_CURRENT_DIALOGS:
       return { ...state, currentDialog: { ...payload } }
     case LOG_OUT:
-      return initialState;
+      return initialState
     default:
       return state
   }
