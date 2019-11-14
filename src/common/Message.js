@@ -371,7 +371,9 @@ class Message extends Component {
                 <UploadProgressText>{uploadProgress}%</UploadProgressText>
               )}
             </UploadProgressContainer>
-            <MessageInfo>
+            <MessageInfo
+              style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
+            >
               <MessageDate color={Colors.norway}>Загрузка...</MessageDate>
             </MessageInfo>
           </MyMessage>

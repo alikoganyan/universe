@@ -57,7 +57,7 @@ class Profile extends Component {
   render() {
     const { loading } = this.state
     const { currentChat, user, currentDialog } = this.props
-    const myProfile = !currentChat || currentDialog._id === user._id
+    const myProfile = currentChat === null || currentDialog._id === user._id
     const myGroup = currentDialog.isGroup
       ? currentDialog.creator._id === user._id
       : false
