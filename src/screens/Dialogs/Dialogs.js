@@ -180,7 +180,6 @@ class Dialogs extends Component {
         const tasksOut = [...userData.user.created_tasks]
         const tasksWithUsers = [...tasksInc, ...tasksOut]
         this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
-        this.props.setReset(true)
       },
       failFunc: () => {},
     })
