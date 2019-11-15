@@ -16,7 +16,7 @@ import { setTaskReceivers } from '../../actions/participantsActions'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import Button from '../../common/Button'
-import { p_create_task, g_users } from '../../constants/api'
+import { p_create_task } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import { setTasks, setTaskList } from '../../actions/tasksActions'
 import { GroupIcon, CloseIcon } from '../../assets'
@@ -202,13 +202,7 @@ class Content extends Component {
                 onDateChange={e => this.setState({ deadlineDate: e })}
               />
               <DatePicker
-                date={
-                  typeof deadlineTime === 'string'
-                    ? deadlineTime.length <= 5
-                      ? deadlineTime
-                      : moment(deadlineTime).format('HH:MM')
-                    : moment(deadlineTime).format('HH:MM')
-                }
+                date={deadlineTime}
                 mode="time"
                 confirmBtnText="Подтвердить"
                 cancelBtnText="Отменить"
@@ -270,8 +264,8 @@ class Content extends Component {
   state = {
     taskName: '',
     taskText: '',
-    deadlineDate: new Date(),
-    deadlineTime: new Date(),
+    deadlineDate: moment(new Date()).format('DD-MM-YYYY'),
+    deadlineTime: moment(new Date()).format('HH:mm'),
     touched: false,
   }
 
@@ -305,32 +299,16 @@ class Content extends Component {
     addParticipants()
   }
 
-  _getUsers = () => {
-    return new Promise((resolve, reject) => {
-      sendRequest({
-        r_path: g_users,
-        method: 'get',
-        success: res => {
-          resolve(res.users)
-        },
-        failFunc: err => {
-          reject()
-        },
-      })
-    })
-  }
-
   proceed = async e => {
     const { receivers } = this.props
     const { taskName, taskText, deadlineDate, deadlineTime } = this.state
+    const deadline = moment(
+      `${deadlineDate} ${deadlineTime}`,
+      'DD-MM-YYYY HH:mm',
+    )
+      .utc()
+      .format()
 
-    const formatedDeadlineDate = moment(deadlineDate).format('DD-MM-YYYY')
-    const formatedDeadlineTime =
-      typeof deadlineTime === 'string'
-        ? deadlineTime.length <= 5
-          ? deadlineTime
-          : moment(deadlineTime).format('HH:MM')
-        : moment(deadlineTime).format('HH:MM')
     if (
       !taskName ||
       !taskText ||
@@ -340,19 +318,7 @@ class Content extends Component {
     ) {
       this.setState({ touched: true })
     } else {
-      const { receivers, forward, tasksOut, tasksInc } = this.props
-      const deadline = moment(
-        `${formatedDeadlineDate} ${formatedDeadlineTime}`,
-      ).format()
-
-      const taskList = [...tasksOut]
-
-      taskList.push({
-        name: taskName,
-        description: taskText,
-        deadline,
-        performers: [receivers[0]._id],
-      })
+      const { receivers, forward } = this.props
 
       sendRequest({
         r_path: p_create_task,
@@ -366,17 +332,27 @@ class Content extends Component {
           },
         },
         success: async res => {
-          const tasksWithUsers = await this._getUsers()
-          this.props.setTaskList({
-            tasksInc,
-            tasksWithUsers,
-            tasksOut: [...taskList],
-          })
+          this.getProfile()
           forward()
         },
         failFunc: err => {},
       })
     }
+  }
+
+  getProfile = () => {
+    sendRequest({
+      r_path: '/profile',
+      method: 'get',
+      success: res => {
+        const userData = { ...res }
+        const tasksInc = [...userData.user.tasks]
+        const tasksOut = [...userData.user.created_tasks]
+        const tasksWithUsers = [...tasksInc, ...tasksOut]
+        this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
+      },
+      failFunc: () => {},
+    })
   }
 
   handleCountry = e => {
