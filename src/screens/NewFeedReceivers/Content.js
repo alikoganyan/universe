@@ -16,7 +16,7 @@ import posed from 'react-native-pose'
 import Collapsible from 'react-native-collapsible'
 import { connect } from 'react-redux'
 import { ArrowDownIcon } from '../../assets/index'
-import helper, { getUsersByDepartments } from '../../utils/helpers'
+import helper from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
@@ -188,94 +188,105 @@ class Content extends Component {
         </ContactList>
       )
     } else {
-      return (
-        <ContactList>
-          {this.state.users.department.map((e, i) => (
-            <Box key={i} last={i === this.state.users.department.length - 1}>
-              <BoxTitle
-                onPress={() =>
-                  this.state.collapsed[i]
-                    ? this.collapseDepartment(i)
-                    : this.showDepartment(i)
-                }
-              >
-                <>
-                  <RoundCheckbox
-                    size={24}
-                    backgroundColor={yellow}
-                    checked={this.props.receivers.length === e.workers.length}
-                    onValueChange={() => this.addAllReceivers(e.workers)}
-                  />
-                  <BoxItem title>{e.title}</BoxItem>
-                </>
-                <ArrowWrapper pose={this.state.collapsed[i] ? 'right' : 'down'}>
-                  <ArrowDownIcon />
-                </ArrowWrapper>
-              </BoxTitle>
-              <Collapsible collapsed={this.state.collapsed[i] || false}>
-                {this.state.animationCompleted ? (
-                  <BoxInner>
-                    {e.workers.map(e => (
-                      <TouchableOpacity
-                        key={e._id}
-                        onPress={() => this.addReceiver(e)}
-                      >
-                        <BoxInnerItem>
-                          {this.includes(e) ? (
-                            <RoundCheckbox
-                              size={36}
-                              backgroundColor={yellow}
-                              checked
-                              onValueChange={() => this.addReceiver(e)}
-                            />
-                          ) : !e.image ||
-                            e.image === '/images/default_group.png' ||
-                            e.image === '/images/default_avatar.jpg' ? (
-                            <DefaultAvatar size={36} id={e._id} />
-                          ) : (
-                            <ImageComponent
-                              source={{
-                                uri: `https://testser.univ.team${e.image}`,
-                              }}
-                              size={36}
-                            />
-                          )}
-                          <ContactInfo>
-                            <ContactName>
-                              {e.first_name
-                                ? `${e.first_name} ${e.last_name}`
-                                : e.phone_number}
-                            </ContactName>
-                            {e.role ? (
-                              <ContactRole>
-                                {e.role.name || 'no role'}
-                              </ContactRole>
-                            ) : null}
-                          </ContactInfo>
-                        </BoxInnerItem>
-                      </TouchableOpacity>
-                    ))}
-                  </BoxInner>
-                ) : null}
-              </Collapsible>
-            </Box>
-          ))}
-        </ContactList>
-      )
+      if (this.state.users.department.length && this.state.checkedList.length) {
+        return (
+          <ContactList>
+            {this.state.users.department.map((e, i) => (
+              <Box key={i} last={i === this.state.users.department.length - 1}>
+                <BoxTitle
+                  onPress={() =>
+                    this.state.collapsed[i]
+                      ? this.collapseDepartment(i)
+                      : this.showDepartment(i)
+                  }
+                >
+                  <>
+                    <RoundCheckbox
+                      size={24}
+                      backgroundColor={yellow}
+                      checked={this.state.checkedList
+                        .filter(item => item.department_id === e._id)
+                        .every(({ checked }) => checked)}
+                      onValueChange={() => this.addAllReceivers(e._id)}
+                    />
+                    <BoxItem title>{e.name}</BoxItem>
+                  </>
+                  <ArrowWrapper
+                    pose={this.state.collapsed[i] ? 'right' : 'down'}
+                  >
+                    <ArrowDownIcon />
+                  </ArrowWrapper>
+                </BoxTitle>
+                <Collapsible collapsed={this.state.collapsed[i] || false}>
+                  {this.state.animationCompleted ? (
+                    <BoxInner>
+                      {e.users_this.map(user => (
+                        <TouchableOpacity
+                          key={user._id}
+                          onPress={() => {
+                            /*  if (this.state.checkedList) {
+                                const list = [...this.state.checkedList]
+                                list[i][j] = !receivers || !receivers.length ? false : receivers.some(elem => elem._id === user._id )
+                                this.setState({checkedList: list})
+                              }*/
+                            this.addReceiver(user)
+                          }}
+                        >
+                          <BoxInnerItem>
+                            {this.state.checkedList.some(
+                              e => e.id === user._id && e.checked,
+                            ) ? (
+                              <RoundCheckbox
+                                size={36}
+                                backgroundColor={yellow}
+                                checked
+                                onValueChange={() => this.addReceiver(user)}
+                              />
+                            ) : !user.image ||
+                              user.image === '/images/default_group.png' ||
+                              user.image === '/images/default_avatar.jpg' ? (
+                              <DefaultAvatar size={36} id={user._id} />
+                            ) : (
+                              <ImageComponent
+                                source={{
+                                  uri: `https://testser.univ.team${user.image}`,
+                                }}
+                                size={36}
+                              />
+                            )}
+                            <ContactInfo>
+                              <ContactName>
+                                {user.first_name
+                                  ? `${user.first_name} ${user.last_name}`
+                                  : user.phone_number}
+                              </ContactName>
+                              {user.role ? (
+                                <ContactRole>
+                                  {user.role.name || 'no role'}
+                                </ContactRole>
+                              ) : null}
+                            </ContactInfo>
+                          </BoxInnerItem>
+                        </TouchableOpacity>
+                      ))}
+                    </BoxInner>
+                  ) : null}
+                </Collapsible>
+              </Box>
+            ))}
+          </ContactList>
+        )
+      } else {
+        return null
+      }
     }
   }
 
   AllContacts = () => {
     const allUsers = []
-    if (this.props.user.company._id === 0) {
-      this.state.allContacts.forEach(item => {
-        allUsers.push(item)
-      })
-    } else {
-      this.state.users.department.forEach(item => {
-        allUsers.push(...item.workers)
-      })
-    }
+    this.state.allContacts.forEach(item => {
+      allUsers.push(item)
+    })
 
     return (
       <ContactList>
@@ -319,8 +330,7 @@ class Content extends Component {
   }
 
   render() {
-    const { dialogs } = this.props
-    const { collapsed, options, selectedGroup } = this.state
+    const { groups, collapsedGroups, options } = this.state
     const { active } = options
 
     return (
@@ -345,32 +355,85 @@ class Content extends Component {
               <this.AllContacts />
               <this.MiddleContacts />
               <ContactList>
-                {dialogs
-                  .filter(item => item.isGroup)
-                  .map((e, i) => (
-                    <Box key={i} last={i === dialogs.length - 1}>
-                      <BoxTitle
-                        onPress={() =>
-                          collapsed[i]
-                            ? this.collapseDepartment(i)
-                            : this.showDepartment(i)
-                        }
+                {groups.map((e, i) => (
+                  <Box key={i} last={i === groups.length - 1}>
+                    <BoxTitle
+                      onPress={() =>
+                        collapsedGroups[i]
+                          ? this.collapseGroups(i)
+                          : this.showGroup(i)
+                      }
+                    >
+                      <>
+                        <RoundCheckbox
+                          size={24}
+                          backgroundColor={yellow}
+                          checked={this.state.checkedList
+                            .filter(u => u.groups.some(id => id === e._id))
+                            .every(u => u.checked)}
+                          onValueChange={() => this.addGroupReceivers(e)}
+                        />
+                        <BoxItem title>{e.name}</BoxItem>
+                      </>
+                      <ArrowWrapper
+                        pose={collapsedGroups[i] ? 'right' : 'down'}
                       >
-                        <>
-                          <RoundCheckbox
-                            size={24}
-                            backgroundColor={yellow}
-                            checked={selectedGroup === e._id}
-                            onValueChange={() => this.addGroupReceivers(e)}
-                          />
-                          <BoxItem title>{e.name}</BoxItem>
-                        </>
-                        <ArrowWrapper pose={collapsed[i] ? 'right' : 'down'}>
-                          <ArrowDownIcon />
-                        </ArrowWrapper>
-                      </BoxTitle>
-                    </Box>
-                  ))}
+                        <ArrowDownIcon />
+                      </ArrowWrapper>
+                    </BoxTitle>
+                    <Collapsible collapsed={collapsedGroups[i] || false}>
+                      {this.state.animationCompleted ? (
+                        <BoxInner>
+                          {e.participants.map(user => (
+                            <TouchableOpacity
+                              key={user._id}
+                              onPress={() => {
+                                this.addReceiver(user)
+                              }}
+                            >
+                              <BoxInnerItem>
+                                {this.state.checkedList.some(
+                                  e => e.id === user._id && e.checked,
+                                ) ? (
+                                  <RoundCheckbox
+                                    size={36}
+                                    backgroundColor={yellow}
+                                    checked
+                                    onValueChange={() => this.addReceiver(user)}
+                                  />
+                                ) : !user.image ||
+                                  user.image === '/images/default_group.png' ||
+                                  user.image ===
+                                    '/images/default_avatar.jpg' ? (
+                                  <DefaultAvatar size={36} id={user._id} />
+                                ) : (
+                                  <ImageComponent
+                                    source={{
+                                      uri: `https://testser.univ.team${user.image}`,
+                                    }}
+                                    size={36}
+                                  />
+                                )}
+                                <ContactInfo>
+                                  <ContactName>
+                                    {user.first_name
+                                      ? `${user.first_name} ${user.last_name}`
+                                      : user.phone_number}
+                                  </ContactName>
+                                  {user.role ? (
+                                    <ContactRole>
+                                      {user.role.name || 'no role'}
+                                    </ContactRole>
+                                  ) : null}
+                                </ContactInfo>
+                              </BoxInnerItem>
+                            </TouchableOpacity>
+                          ))}
+                        </BoxInner>
+                      ) : null}
+                    </Collapsible>
+                  </Box>
+                ))}
               </ContactList>
             </Animated>
           </KeyboardAwareScrollView>
@@ -381,7 +444,9 @@ class Content extends Component {
 
   state = {
     collapsed: [],
+    collapsedGroups: [],
     allContacts: [],
+    checkedList: [],
     users: {
       department: [],
     },
@@ -400,13 +465,32 @@ class Content extends Component {
         animationCompleted: true,
       })
     })
-    const { collapsed, users } = this.state
-    const { setContacts } = this.props
-    const newDCollapsed = [...collapsed]
+    const { users } = this.state
+    const { setContacts, receivers } = this.props
+
+    const newDCollapsed = []
+    const newGCollapsed = []
     for (let i = 0; i <= users.department.length; i += 1) {
-      newDCollapsed.push(false)
+      newDCollapsed.push(true)
     }
-    this.setState({ collapsed: newDCollapsed })
+    const groups = this.props.dialogs
+      .filter(d => d.isGroup)
+      .map(g => {
+        g.participants = [g.creator, ...g.participants].filter(
+          u => u._id !== this.props.user._id,
+        )
+        g.participants = g.participants.filter(
+          (u, i) => g.participants.findIndex(user => user._id === u._id) === i,
+        )
+        return g
+      })
+    newGCollapsed.push(...groups.map(() => true))
+    this.setState({
+      ...this.state,
+      collapsed: newDCollapsed,
+      groups,
+      collapsedGroups: newGCollapsed,
+    })
     sendRequest({
       r_path: p_users_from_role_or_position,
       method: 'post',
@@ -416,62 +500,93 @@ class Content extends Component {
       success: res => {
         this.setState({ allContacts: res.users })
         setContacts(res.users)
-        // TODO: надо бы брать все из стора
-        const formatedUsers = getUsersByDepartments(
-          res.users || [],
-          this.props.user.company._id,
+        const formatedUsers = res.company.subdivisions
+        formatedUsers.forEach(
+          d =>
+            (d.users_this = d.users_this.filter(
+              u => u._id !== this.props.user._id,
+            )),
         )
         this.setState({ users: { department: formatedUsers } })
+
+        const checkedList = res.users.map(user => ({
+          id: user._id,
+          checked: receivers.some(e => e._id === user._id),
+          department_id: null,
+          groups: [],
+        }))
+        formatedUsers.forEach(({ users_this, _id }) =>
+          users_this.forEach(user => {
+            const index = checkedList.findIndex(u => u.id === user._id)
+            if (index !== -1) {
+              checkedList[index].department_id = _id
+            }
+          }),
+        )
+
+        groups.forEach(g =>
+          g.participants.forEach(user => {
+            const index = checkedList.findIndex(u => u.id === user._id)
+            if (index !== -1) {
+              checkedList[index].groups.push(g._id)
+            }
+          }),
+        )
+
+        this.setState({ checkedList })
       },
       failFunc: err => {},
     })
   }
 
-  optionLeft = () => {
-    const { options } = this.state
-    const newState = { ...options }
-    const { length } = options.options
-    newState.active = options.active < length - 1 ? options.active + 1 : 0
-    this.setState({ options: newState })
-  }
-
-  optionRight = () => {
-    const { options } = this.state
-    const newState = { ...options }
-    const { length } = options.options
-    newState.active = options.active > 0 ? options.active - 1 : length - 1
-    this.setState({ options: newState })
-  }
-
-  addReceiver = e => {
+  addReceiver = user => {
     const { addReceiver, setReceivers, receivers } = this.props
-    const newReceivers = [...receivers].filter(user => user._id !== e._id)
-    this.includes(e) ? setReceivers(newReceivers) : addReceiver(e)
+
+    const { checkedList } = this.state
+    const c = checkedList.find(e => e.id === user._id)
+    if (c) {
+      c.checked = !c.checked
+    }
+    this.setState({ ...this.state, checkedList })
+
+    if (c.checked && !receivers.some(r => r._id === user._id)) {
+      addReceiver(user)
+    }
+
+    if (!c.checked && receivers.some(r => r._id === user._id)) {
+      const newReceivers = receivers.filter(e => !!e && user._id !== e._id)
+      setReceivers(newReceivers)
+    }
   }
 
-  addAllReceivers = e => {
-    const { receivers, setReceivers } = this.props
-    const newReceivers =
-      JSON.stringify(e) === JSON.stringify(receivers) ? [] : e
+  addAllReceivers = id => {
+    const { setReceivers } = this.props
+    const { checkedList } = this.state
+    const dep = checkedList.filter(e => id === e.department_id)
+    const is = dep.every(e => e.checked)
+    dep.forEach(e => (e.checked = !is))
+    this.setState({ ...this.state, checkedList })
+    const newReceivers = this.state.allContacts.filter(
+      e => checkedList.find(o => o.id === e._id)?.checked,
+    )
     setReceivers(newReceivers)
   }
 
   addGroupReceivers = e => {
-    const { selectedGroup } = this.state
-    if (selectedGroup === e._id) {
-      this.setState({ selectedGroup: '' })
-
-      this.props.setReceivers([])
-    } else {
-      this.setState({ selectedGroup: e._id })
-
-      this.props.setReceivers(e.participants)
-    }
+    const { setReceivers } = this.props
+    const { checkedList } = this.state
+    const users = checkedList.filter(u => u.groups.some(id => id === e._id))
+    const is = users.every(u => u.checked)
+    users.forEach(u => (u.checked = !is))
+    this.setState({ ...this.state, checkedList })
+    const newReceivers = this.state.allContacts.filter(
+      e => checkedList.find(o => o.id === e._id)?.checked,
+    )
+    setReceivers(newReceivers)
   }
 
   includes = e => {
-    const { receivers } = this.props
-    return !!receivers.filter(user => e._id === user._id)[0]
+    return this.state.checkedList.find(o => o.id === e._id)?.checked
   }
 
   collapseDepartment = i => {
@@ -481,11 +596,23 @@ class Content extends Component {
     this.setState({ collapsed: newDCollapsed })
   }
 
+  collapseGroups = i => {
+    const { collapsedGroups } = this.state
+    collapsedGroups[i] = false
+    this.setState({ ...this.state, collapsedGroups })
+  }
+
   showDepartment = i => {
     const { collapsed } = this.state
     const newDCollapsed = [...collapsed]
     newDCollapsed[i] = true
     this.setState({ collapsed: newDCollapsed })
+  }
+
+  showGroup = i => {
+    const { collapsedGroups } = this.state
+    collapsedGroups[i] = true
+    this.setState({ ...this.state, collapsedGroups })
   }
 
   selectOption = e => {
