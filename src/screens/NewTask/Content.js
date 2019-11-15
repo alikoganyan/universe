@@ -308,7 +308,6 @@ class Content extends Component {
     )
       .utc()
       .format()
-
     if (
       !taskName ||
       !taskText ||

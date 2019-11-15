@@ -22,6 +22,7 @@ import {
   setTasks,
   setCurrentTask,
   setTaskList,
+  setActiveTask,
 } from '../../actions/tasksActions'
 import { GroupIcon, CloseIcon } from '../../assets'
 import moment from 'moment'
@@ -377,6 +378,7 @@ class Content extends Component {
         const tasksOut = [...userData.user.created_tasks]
         const tasksWithUsers = [...tasksInc, ...tasksOut]
         this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
+        this.props.setActiveTask({})
       },
       failFunc: () => {},
     })
@@ -415,6 +417,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setCurrentTask: _ => dispatch(setCurrentTask(_)),
+  setActiveTask: _ => dispatch(setActiveTask(_)),
   setTasks: _ => dispatch(setTasks(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
   setTaskList: _ => dispatch(setTaskList(_)),
