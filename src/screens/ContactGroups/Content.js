@@ -14,8 +14,6 @@ import helper from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import Loader from '../../common/Loader'
 import { ArrowDownIcon } from '../../assets/index'
-import sendRequest from '../../utils/request'
-import { g_users } from '../../constants/api'
 import { setContacts, setAllUsers, setReset } from '../../actions/userActions'
 import {
   getMessages,
@@ -344,193 +342,166 @@ class Content extends Component {
   }
 
   MiddleContacts = () => {
-    const { allContacts } = this.state
-    const { user } = this.props
+    const { userContactsAll } = this.state
+    if (this.props.user && this.props.user.company) {
+      if (this.props.user.company._id === 0) {
+        return (
+          <ContactList
+            bounces={false}
+            contentContainerStyle={{ paddingBottom: 170 }}
+            data={userContactsAll}
+            ListEmptyComponent={this._renderEmptyComponent}
+            ref={ref => (this.usersRef = ref)}
+            renderItem={({ item }) => (
+              <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
+                {!item.image ||
+                item.image === '/images/default_avatar.jpg' ||
+                item.ArrowWrapperimage === '/images/default_group.png' ? (
+                  <DefaultAvatar id={item._id} size={36} />
+                ) : (
+                  <ImageComponent
+                    source={{ uri: `https://testser.univ.team${item.image}` }}
+                    size={36}
+                  />
+                )}
+                <ContactInfo>
+                  <ContactName>
+                    {item.first_name} {item.last_name}
+                  </ContactName>
+                </ContactInfo>
+              </BoxInnerItem>
+            )}
+            keyExtractor={item => item._id.toString()}
+            scrollEventThrottle={16}
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: { contentOffset: { y: this.scrollY } },
+                },
+              ],
+              {
+                useNativeDriver: true,
+              },
+            )}
+          />
+        )
+      } else {
+        return (
+          <ContactList
+            bounces={false}
+            contentContainerStyle={{ paddingBottom: 170 }}
+            data={
+              this.props.user.settings.partition_contacts
+                ? this.state.userContacts
+                : this.state.userContactsAll
+            }
+            ListEmptyComponent={this._renderEmptyComponent}
+            ref={ref => (this.usersRef = ref)}
+            renderItem={({ item, index }) => {
+              if (this.props.user.settings.partition_contacts) {
+                return (
+                  <Box
+                    key={item._id}
+                    first={!index}
+                    last={index === this.state.userContacts.length - 1}
+                  >
+                    <BoxTitle
+                      onPress={() =>
+                        this.state.collapsed[index]
+                          ? this.collapseDepartment(index)
+                          : this.showDepartment(index)
+                      }
+                    >
+                      <BoxItem numberOfLines={1} title>
+                        {item.name}
+                      </BoxItem>
+                      <ArrowWrapper
+                        pose={this.state.collapsed[index] ? 'right' : 'down'}
+                      >
+                        <ArrowDownIcon />
+                      </ArrowWrapper>
+                    </BoxTitle>
+                    <Collapsible
+                      collapsed={this.state.collapsed[index] || false}
+                    >
+                      <BoxInner>
+                        {item.data.map(e => (
+                          <BoxInnerItem
+                            key={e._id}
+                            onPress={() => this.toChat(e)}
+                          >
+                            {!e.image ||
+                            e.image === '/images/default_avatar.jpg' ? (
+                              <DefaultAvatar
+                                isGroup={e.isGroup}
+                                id={e._id}
+                                size={36}
+                              />
+                            ) : (
+                              <ImageComponent
+                                source={{
+                                  uri: `https://testser.univ.team${e.image}`,
+                                }}
+                                size={36}
+                              />
+                            )}
+                            <ContactInfo>
+                              <ContactName>
+                                {e.first_name
+                                  ? `${e.first_name} ${e.last_name}`
+                                  : e.phone_number}
+                              </ContactName>
+                              {e.role ? (
+                                <ContactRole>{e.role.name}</ContactRole>
+                              ) : null}
+                            </ContactInfo>
+                          </BoxInnerItem>
+                        ))}
+                      </BoxInner>
+                    </Collapsible>
+                  </Box>
+                )
+              }
 
-    if (this.props.user.company._id === 0) {
-      return (
-        <ContactList
-          bounces={false}
-          contentContainerStyle={{ paddingBottom: 170 }}
-          data={allContacts.filter(elem => !elem.isGroup)}
-          ListEmptyComponent={this._renderEmptyComponent}
-          ref={ref => (this.usersRef = ref)}
-          renderItem={({ item }) => {
-            if (item.isGroup) {
-              const chatItem =
-                item.creator._id === user._id
-                  ? item.participants[0]
-                  : item.creator
-              const { image } = chatItem
-              return (
+              return item ? (
                 <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
-                  {image === '/images/default_avatar.jpg' || !image ? (
-                    <DefaultAvatar
-                      isGroup={item.isGroup}
-                      id={item._id}
-                      size={36}
-                    />
+                  {!item.image ||
+                  item.image === '/images/default_avatar.jpg' ||
+                  item.ArrowWrapperimage === '/images/default_group.png' ? (
+                    <DefaultAvatar id={item._id} size={36} />
                   ) : (
                     <ImageComponent
-                      source={{ uri: `https://testser.univ.team${image}` }}
+                      source={{ uri: `https://testser.univ.team${item.image}` }}
                       size={36}
                     />
                   )}
                   <ContactInfo>
-                    <ContactName>{item.name}</ContactName>
-                    <ContactRole>
-                      {item.participants.length + 1} участника
-                    </ContactRole>
+                    <ContactName>
+                      {item.first_name} {item.last_name}
+                    </ContactName>
                   </ContactInfo>
                 </BoxInnerItem>
-              )
-            }
-            return item ? (
-              <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
-                {!item.image ||
-                item.image === '/images/default_avatar.jpg' ||
-                item.ArrowWrapperimage === '/images/default_group.png' ? (
-                  <DefaultAvatar id={item._id} size={36} />
-                ) : (
-                  <ImageComponent
-                    source={{ uri: `https://testser.univ.team${item.image}` }}
-                    size={36}
-                  />
-                )}
-                <ContactInfo>
-                  <ContactName>
-                    {item.first_name} {item.last_name}
-                  </ContactName>
-                </ContactInfo>
-              </BoxInnerItem>
-            ) : null
-          }}
-          keyExtractor={item => item._id.toString()}
-          scrollEventThrottle={16}
-          onScroll={Animated.event(
-            [
+              ) : null
+            }}
+            keyExtractor={(item, i) => {
+              return i.toString()
+            }}
+            scrollEventThrottle={16}
+            onScroll={Animated.event(
+              [
+                {
+                  nativeEvent: { contentOffset: { y: this.scrollY } },
+                },
+              ],
               {
-                nativeEvent: { contentOffset: { y: this.scrollY } },
+                useNativeDriver: true,
               },
-            ],
-            {
-              useNativeDriver: true,
-            },
-          )}
-        />
-      )
+            )}
+          />
+        )
+      }
     } else {
-      return (
-        <ContactList
-          bounces={false}
-          contentContainerStyle={{ paddingBottom: 170 }}
-          data={
-            this.props.user.settings.partition_contacts
-              ? this.state.userContacts
-              : this.state.userContactsAll
-          }
-          ListEmptyComponent={this._renderEmptyComponent}
-          ref={ref => (this.usersRef = ref)}
-          renderItem={({ item, index }) => {
-            if (this.props.user.settings.partition_contacts) {
-              return (
-                <Box
-                  key={item._id}
-                  first={!index}
-                  last={index === this.state.userContacts.length - 1}
-                >
-                  <BoxTitle
-                    onPress={() =>
-                      this.state.collapsed[index]
-                        ? this.collapseDepartment(index)
-                        : this.showDepartment(index)
-                    }
-                  >
-                    <BoxItem numberOfLines={1} title>
-                      {item.name}
-                    </BoxItem>
-                    <ArrowWrapper
-                      pose={this.state.collapsed[index] ? 'right' : 'down'}
-                    >
-                      <ArrowDownIcon />
-                    </ArrowWrapper>
-                  </BoxTitle>
-                  <Collapsible collapsed={this.state.collapsed[index] || false}>
-                    <BoxInner>
-                      {item.data.map(e => (
-                        <BoxInnerItem
-                          key={e._id}
-                          onPress={() => this.toChat(e)}
-                        >
-                          {!e.image ||
-                          e.image === '/images/default_avatar.jpg' ? (
-                            <DefaultAvatar
-                              isGroup={e.isGroup}
-                              id={e._id}
-                              size={36}
-                            />
-                          ) : (
-                            <ImageComponent
-                              source={{
-                                uri: `https://testser.univ.team${e.image}`,
-                              }}
-                              size={36}
-                            />
-                          )}
-                          <ContactInfo>
-                            <ContactName>
-                              {e.first_name
-                                ? `${e.first_name} ${e.last_name}`
-                                : e.phone_number}
-                            </ContactName>
-                            {e.role ? (
-                              <ContactRole>{e.role.name}</ContactRole>
-                            ) : null}
-                          </ContactInfo>
-                        </BoxInnerItem>
-                      ))}
-                    </BoxInner>
-                  </Collapsible>
-                </Box>
-              )
-            }
-
-            return item ? (
-              <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
-                {!item.image ||
-                item.image === '/images/default_avatar.jpg' ||
-                item.ArrowWrapperimage === '/images/default_group.png' ? (
-                  <DefaultAvatar id={item._id} size={36} />
-                ) : (
-                  <ImageComponent
-                    source={{ uri: `https://testser.univ.team${item.image}` }}
-                    size={36}
-                  />
-                )}
-                <ContactInfo>
-                  <ContactName>
-                    {item.first_name} {item.last_name}
-                  </ContactName>
-                </ContactInfo>
-              </BoxInnerItem>
-            ) : null
-          }}
-          keyExtractor={(item, i) => {
-            return i.toString()
-          }}
-          scrollEventThrottle={16}
-          onScroll={Animated.event(
-            [
-              {
-                nativeEvent: { contentOffset: { y: this.scrollY } },
-              },
-            ],
-            {
-              useNativeDriver: true,
-            },
-          )}
-        />
-      )
+      return null
     }
   }
 
@@ -590,13 +561,79 @@ class Content extends Component {
     }
   }
 
+  /* mount = () => {
+     const { collapsed, users } = this.state
+     const { user, dialogs } = this.props
+     const { department } = users
+     console.log(this.state)
+     const allContacts = [...dialogs].filter(e => e._id !== user._id)
+     department.forEach(dep => {
+       dep.users.forEach(e => {
+         const exists = dialogs.findIndex(chat => chat._id === e._id) !== -1
+         const chat = dialogs.filter(
+           chat => chat._id === e._id && chat._id === user._id,
+         )[0]
+         const nonExisting = {
+           ...e,
+           creator: e,
+           participants: e,
+           room: `${e._id}_${user._id}`,
+         }
+         const conditon = exists || e._id !== user._id
+         conditon && allContacts.push(chat || nonExisting)
+       })
+     })
+     setTimeout(() => this.setState({ allContacts }), 0)
+     const newCollapsed = [...collapsed]
+     users.department.forEach(() => {
+       newCollapsed.push(false)
+     })
+     sendRequest({
+       r_path: g_users,
+       method: 'get',
+       success: res => {
+         const data = []
+         res.users.forEach(user => {
+           user.departments.forEach(department => {
+             const index = data.findIndex(item => item.id === department._id)
+             if (index > -1) {
+               data[index].data.push(user)
+             } else {
+               data.push({
+                 id: department._id,
+                 name: department.name,
+                 data: [user],
+               })
+             }
+           })
+         })
+
+         const groups = dialogs.filter(item => item.isGroup)
+
+         this.setState({
+           userContacts: data,
+           allContacts: [...res.users, ...groups],
+           userContactsAll: res.users,
+         })
+       },
+       failFunc: () => {},
+     })
+     this.setState({ collapsed: newCollapsed })
+   }*/
   mount = () => {
-    const { collapsed, users } = this.state
-    const { user, dialogs } = this.props
-    const { department } = users
-    const allContacts = [...dialogs].filter(e => e._id !== user._id)
+    const { collapsed } = this.state
+    const { user, dialogs, company } = this.props
+    const department = company.subdivisions
+    const allContacts = company.users
+    const data = department.map(e => {
+      return {
+        id: e._id,
+        name: e.name,
+        data: e.users_this,
+      }
+    })
     department.forEach(dep => {
-      dep.users.forEach(e => {
+      dep.users_this.forEach(e => {
         const exists = dialogs.findIndex(chat => chat._id === e._id) !== -1
         const chat = dialogs.filter(
           chat => chat._id === e._id && chat._id === user._id,
@@ -611,58 +648,16 @@ class Content extends Component {
         conditon && allContacts.push(chat || nonExisting)
       })
     })
-    setTimeout(() => this.setState({ allContacts }), 0)
     const newCollapsed = [...collapsed]
-    users.department.forEach(() => {
+    department.forEach(() => {
       newCollapsed.push(false)
     })
-    sendRequest({
-      r_path: g_users,
-      method: 'get',
-      success: res => {
-        const data = []
-        res.users.forEach(user => {
-          user.departments.forEach(department => {
-            const index = data.findIndex(item => item.id === department._id)
-            if (index > -1) {
-              data[index].data.push(user)
-            } else {
-              data.push({
-                id: department._id,
-                name: department.name,
-                data: [user],
-              })
-            }
-          })
-        })
-
-        const groups = dialogs.filter(item => item.isGroup)
-
-        this.setState({
-          userContacts: data,
-          allContacts: [...res.users, ...groups],
-          userContactsAll: res.users,
-        })
-      },
-      failFunc: () => {},
+    this.setState({
+      userContacts: data,
+      allContacts: [...allContacts, ...dialogs.filter(e => e.isGroup)],
+      userContactsAll: allContacts,
+      collapsed: newCollapsed,
     })
-    this.setState({ collapsed: newCollapsed })
-  }
-
-  optionLeft = () => {
-    const { options } = this.state
-    const newState = { ...options }
-    const { length } = options.options
-    newState.active = options.active < length - 1 ? options.active + 1 : 0
-    this.setState({ options: newState })
-  }
-
-  optionRight = () => {
-    const { options } = this.state
-    const newState = { ...options }
-    const { length } = options.options
-    newState.active = options.active > 0 ? options.active - 1 : length - 1
-    this.setState({ options: newState })
   }
 
   collapseDepartment = i => {
@@ -749,6 +744,7 @@ const mapStateToProps = state => ({
   dialogs: state.dialogsReducer.dialogs,
   user: state.userReducer.user,
   reset: state.userReducer.reset,
+  company: state.userReducer.company,
 })
 const mapDispatchToProps = dispatch => ({
   getMessages: _ => dispatch(getMessages(_)),

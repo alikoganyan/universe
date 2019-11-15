@@ -17,7 +17,12 @@ import {
 } from '../../actions/messageActions'
 // import { Notifications } from 'expo';
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
-import { setAllUsers, setCompanies, setReset } from '../../actions/userActions'
+import {
+  setAllUsers,
+  setCompanies,
+  setReset,
+  setUser,
+} from '../../actions/userActions'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
 import TabPreHeader from '../../common/TabPreHeader'
@@ -175,6 +180,9 @@ class Dialogs extends Component {
         this.props.setCompanies({
           companies: res.user.companies,
           company: res.user.company,
+        })
+        this.props.setUser({
+          ...res.user,
         })
         const tasksInc = [...userData.user.tasks]
         const tasksOut = [...userData.user.created_tasks]
@@ -571,6 +579,7 @@ const mapDispatchToProps = dispatch => ({
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   addMessage: _ => dispatch(addMessage(_)),
+  setUser: _ => dispatch(setUser(_)),
   setAllUsers: _ => dispatch(setAllUsers(_)),
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
