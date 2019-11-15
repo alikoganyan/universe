@@ -64,7 +64,7 @@ const RecieverComponent = props => {
       <View
         style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
       >
-        {image === '/images/default_avatar.jpg' ? (
+        {!image || image === '/images/default_avatar.jpg' ? (
           <DefaultAvatar />
         ) : (
           <ImageComponent
@@ -128,15 +128,17 @@ class Content extends Component {
             </DialogsLabel>
           </Recievers>
           <ScrollView>
-            {receivers.map((e, i) => (
-              <RecieverComponent
-                key={i}
-                onDelete={() => this.deleteReceiver(e)}
-                last={i === receivers.length}
-              >
-                {e}
-              </RecieverComponent>
-            ))}
+            {receivers
+              .filter(e => !!e)
+              .map((e, i) => (
+                <RecieverComponent
+                  key={i}
+                  onDelete={() => this.deleteReceiver(e)}
+                  last={i === receivers.length}
+                >
+                  {e}
+                </RecieverComponent>
+              ))}
           </ScrollView>
         </Wrapper>
       </ScrollView>
