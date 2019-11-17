@@ -1,5 +1,6 @@
 import { Platform, Alert } from 'react-native'
 import RNPermissions from 'react-native-permissions'
+import Geolocation from 'react-native-geolocation-service'
 
 const getGeoCoords = async () => {
   let status
@@ -41,17 +42,20 @@ const getGeoCoords = async () => {
       }
     } else {
       try {
-      } catch (error) {
-        Alert.alert(error.message ? String(error.message) : String(error))
-      }
-      const geolocation = await new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject, {
-          enableHighAccuracy: true,
-          timeout: 20000,
-          maximumAge: 100,
+        const geolocation = await new Promise((resolve, reject) => {
+          Geolocation.getCurrentPosition(resolve, reject, {
+            enableHighAccuracy: true,
+            timeout: 20000,
+            maximumAge: 1000,
+          })
         })
-      })
-      coords = geolocation.coords
+        coords = geolocation.coords
+      } catch (error) {
+        Alert.alert(
+          'Ошибка',
+          error.message ? String(error.message) : String(error),
+        )
+      }
     }
   })
   return coords

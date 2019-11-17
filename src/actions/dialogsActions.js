@@ -114,14 +114,21 @@ export const updateUploadMessageProgress = ({
   )
   if (dialogIndex !== -1) {
     if (dialogs[dialogIndex].messages && dialogs[dialogIndex].messages.length) {
-      const messageIndex = dialogs[dialogIndex].messages.findIndex(
-        ({ tempId: messageTempId }) => tempId === messageTempId,
+      let messageIndex = dialogs[dialogIndex].messages.findIndex(
+        item => item.id === -1,
       )
-      if (messageIndex !== -1) {
-        dialogs[dialogIndex].messages[messageIndex] = {
-          ...dialogs[dialogIndex].messages[messageIndex],
-          uploadProgress,
-        }
+
+      if (messageIndex === -1) {
+        messageIndex = dialogs[dialogIndex].messages.length
+      }
+      dialogs[dialogIndex].messages[messageIndex] = {
+        uploadProgress,
+        isUploading: true,
+        viewers: [],
+        sender: {},
+        id: -1,
+        type: 'file',
+        enableUploadProgress: true,
       }
     }
   }

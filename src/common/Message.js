@@ -251,6 +251,7 @@ class Message extends Component {
       size,
       data,
       isUploaded,
+      isUploading,
       enableUploadProgress,
       uploadProgress,
     } = item
@@ -260,6 +261,31 @@ class Message extends Component {
         ? `${(size / (1024 * 2)).toFixed(1)}МБ`
         : `${(size / 1024).toFixed(1)}КБ`
     const messageRead = !!viewers.filter(e => e !== myId).length
+
+    if (type === 'file' && isUploading) {
+      return (
+        <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <MyMessage background={background} style={{ padding: 0 }}>
+            <UploadProgressContainer
+              style={{
+                height: 100,
+                backgroundColor: Colors.black,
+                position: 'relative',
+              }}
+            >
+              <ActivityIndicator animating color={Colors.white} size="large" />
+              {!!enableUploadProgress && (
+                <UploadProgressText>{uploadProgress}%</UploadProgressText>
+              )}
+            </UploadProgressContainer>
+            <MessageInfo>
+              <MessageDate color={Colors.norway}>Загрузка...</MessageDate>
+            </MessageInfo>
+          </MyMessage>
+          <TriangleLeftIcon color={myMessage} />
+        </View>
+      )
+    }
     if (type === 'image' && !isUploaded) {
       this.readFile(
         src.split('file://')[1] ? src : `https://testser.univ.team${src}`,
@@ -405,7 +431,9 @@ class Message extends Component {
                   myMessage
                 />
               )}
-              <MyMessageText>{text}</MyMessageText>
+              {!(resend && resend.sender) && (
+                <MyMessageText>{text}</MyMessageText>
+              )}
               <MessageInfo>
                 <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
                 <Indicator color="black" read={messageRead} />
@@ -459,7 +487,9 @@ class Message extends Component {
                     {!!sender && `${sender.first_name} ${sender.last_name}`}
                   </InterlocutorsName>
                 )}
-                <InterlocutorsMessageText>{text}</InterlocutorsMessageText>
+                {!(resend && resend.sender) && (
+                  <InterlocutorsMessageText>{text}</InterlocutorsMessageText>
+                )}
                 <MessageInfo>
                   <MessageDate>{finalTime}</MessageDate>
                 </MessageInfo>
@@ -773,30 +803,6 @@ class Message extends Component {
       )
     }
 
-    if (type === 'file' && isUploaded) {
-      return (
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <MyMessage background={background} style={{ padding: 0 }}>
-            <UploadProgressContainer
-              style={{
-                height: 100,
-                backgroundColor: Colors.black,
-                position: 'relative',
-              }}
-            >
-              <ActivityIndicator animating color={Colors.white} size="large" />
-              {!!enableUploadProgress && (
-                <UploadProgressText>{uploadProgress}%</UploadProgressText>
-              )}
-            </UploadProgressContainer>
-            <MessageInfo>
-              <MessageDate color={Colors.norway}>Загрузка...</MessageDate>
-            </MessageInfo>
-          </MyMessage>
-          <TriangleLeftIcon color={myMessage} />
-        </View>
-      )
-    }
     return null
   }
 

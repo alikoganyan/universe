@@ -5,7 +5,6 @@ import {
   Text,
   SafeAreaView,
   TouchableOpacity,
-  ScrollView,
   Dimensions,
   Animated,
 } from 'react-native'
@@ -125,17 +124,17 @@ class Content extends Component {
   render() {
     return (
       <SafeAreaView>
-        <ScrollView keyboardShouldPersistTaps="handled">
-          <Wrapper>
-            <KeyboardAwareScrollView enableOnAndroid>
-              <CreateDialog onPress={this.newGroup}>
-                <GroupIconWhite />
-                <CreateDialogText>Создать группу</CreateDialogText>
-              </CreateDialog>
-              <this.Contacts />
-            </KeyboardAwareScrollView>
-          </Wrapper>
-        </ScrollView>
+        {/* <ScrollView keyboardShouldPersistTaps="handled"> */}
+        <Wrapper>
+          <KeyboardAwareScrollView enableOnAndroid>
+            <CreateDialog onPress={this.newGroup}>
+              <GroupIconWhite />
+              <CreateDialogText>Создать группу</CreateDialogText>
+            </CreateDialog>
+            <this.Contacts />
+          </KeyboardAwareScrollView>
+        </Wrapper>
+        {/* </ScrollView> */}
       </SafeAreaView>
     )
   }

@@ -8,7 +8,7 @@ import logger from 'redux-logger'
 // import thunk from 'redux-thunk'
 
 const persistConfig = {
-  key: 'root2',
+  key: 'root3',
   timeout: 0,
   storage,
   blacklist: ['error', 'userReducer'],
