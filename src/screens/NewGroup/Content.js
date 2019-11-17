@@ -3,27 +3,21 @@ import {
   View,
   Text,
   TextInput,
-  // Dimensions,
   ScrollView,
   TouchableOpacity,
 } from 'react-native'
-// import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-// import { ImagePicker, Permissions } from 'expo';
 import helper from '../../utils/helpers'
 import { setUser } from '../../actions/userActions'
 import Button from '../../common/Button'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { GroupIcon, CloseIcon } from '../../assets'
-import {
-  // addDialogParticipant,
-  setDialogParticipants,
-} from '../../actions/participantsActions'
+import { setDialogParticipants } from '../../actions/participantsActions'
 import { socket } from '../../utils/socket'
 
-const { Colors, /* HeaderHeight,*/ sidePadding } = helper
+const { Colors, sidePadding } = helper
 const { lightGrey1, black, green } = Colors
 const Wrapper = styled(View)`
   padding: 0 ${sidePadding}px;
@@ -86,15 +80,7 @@ class Content extends Component {
     const { participants } = this.props
     const ReceiverComponent = props => {
       const { children, last = false, onDelete } = props
-      const {
-        // info,
-        // title,
-        image,
-        role,
-        first_name,
-        // last_name,
-        phone_number,
-      } = children
+      const { image, role, first_name, _id, phone_number } = children
       return (
         <Receiver last={last}>
           <View
@@ -105,7 +91,7 @@ class Content extends Component {
             }}
           >
             {image === '/images/default_avatar.jpg' || !image ? (
-              <DefaultAvatar />
+              <DefaultAvatar id={_id} />
             ) : (
               <ImageComponent
                 source={{ uri: `https://testser.univ.team${image}` }}
@@ -168,17 +154,15 @@ class Content extends Component {
               <GroupIcon />
               <DialogsLabelText>Участники</DialogsLabelText>
             </DialogsLabel>
-            <ScrollView style={{ maxHeight: 300 }}>
-              {participants.map((e, i) => (
-                <ReceiverComponent
-                  key={i}
-                  onDelete={() => this.deleteParticipant(e)}
-                  last={i === participants.length}
-                >
-                  {e}
-                </ReceiverComponent>
-              ))}
-            </ScrollView>
+            {participants.map((e, i) => (
+              <ReceiverComponent
+                key={i}
+                onDelete={() => this.deleteParticipant(e)}
+                last={i === participants.length - 1}
+              >
+                {e}
+              </ReceiverComponent>
+            ))}
           </Receivers>
         </Wrapper>
       </ScrollView>
@@ -194,22 +178,6 @@ class Content extends Component {
 
   selectPhoto = async e => {
     alert('temporary unavailable')
-    // const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    // if (status !== 'granted') {
-    //     alert('no camera roll permission')
-    // }
-    // let result = await ImagePicker.launchImageLibraryAsync({
-    //     allowsEditing: false,
-    // });
-    // const { uri, type } = result
-    // const fileName = Math.random().toString(36).substring(7);
-    // const form = new FormData();
-    // form.append("file", {
-    //     uri,
-    //     name: `photo.${fileName}.${ext}`,
-    //     type: `image/${type}`,
-    // })
-    // this.setState({ image: form })
   }
 
   deleteParticipant = e => {
@@ -233,10 +201,6 @@ class Content extends Component {
     socket.emit('new_group', { name: text, participants: idList })
     setTimeout(() => socket.emit('get_dialogs'), 500)
     forward()
-  }
-
-  handleCountry = e => {
-    this.setState({ country: e })
   }
 
   handleChange = e => {

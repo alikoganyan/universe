@@ -43,8 +43,6 @@ const AnimatedArrowWrapper = posed.View({
 const Wrapper = styled(View)`
   padding-top: 0px;
   background: white;
-  margin-bottom: 110px;
-  height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
   margin-top: ${HeaderHeight};
 `
 const ContactList = styled(Animated.FlatList)`
@@ -193,11 +191,10 @@ class Content extends Component {
       return (
         <ContactList
           bounces={false}
-          contentContainerStyle={{ paddingBottom: 170 }}
           data={this.state.users.department}
           ref={ref => (this.usersRef = ref)}
           renderItem={({ item, index }) => (
-            <Box last>
+            <Box last={index === this.state.users.department.length - 1}>
               <BoxTitle
                 onPress={() =>
                   this.state.collapsed[index]
@@ -230,9 +227,7 @@ class Content extends Component {
                             <ImageComponent
                               size={33}
                               source={{
-                                uri: e.image
-                                  ? `https://testser.univ.team${e.image}`
-                                  : 'https://simpleicon.com/wp-content/uploads/user1.png',
+                                uri: `https://testser.univ.team${e.image}`,
                               }}
                             />
                           )}

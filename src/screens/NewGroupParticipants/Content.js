@@ -3,7 +3,6 @@ import {
   View,
   Text,
   SafeAreaView,
-  // Image,
   TouchableOpacity,
   ScrollView,
   Dimensions,
@@ -15,7 +14,6 @@ import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view
 import RoundCheckbox from 'rn-round-checkbox'
 import posed from 'react-native-pose'
 import Collapsible from 'react-native-collapsible'
-// import GestureRecognizer, { swipeDirections } from 'react-native-swipe-gestures'
 import { connect } from 'react-redux'
 import { ArrowDownIcon } from '../../assets/index'
 import helper, { getUsersByDepartments } from '../../utils/helpers'
@@ -23,13 +21,10 @@ import DefaultAvatar from '../../common/DefaultAvatar'
 import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
 import { p_users_from_role_or_position } from '../../constants/api'
-import { setContacts, setAllUsers } from '../../actions/userActions'
-import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
 import {
   addDialogParticipant,
   setDialogParticipants,
 } from '../../actions/participantsActions'
-import { setDialogs } from '../../actions/dialogsActions'
 
 const { Colors } = helper
 const { green } = Colors
@@ -86,11 +81,6 @@ const BoxInnerItem = styled(View)`
   flex-direction: row;
   align-items: center;
 `
-// const ContactImage = styled(Image)`
-//   width: 36px;
-//   height: 36px;
-//   border-radius: 18;
-// `
 const ContactInfo = styled(View)`
   margin-left: 10px;
 `
@@ -109,7 +99,7 @@ class Content extends Component {
       if (this.state.allUsers && this.state.allUsers.length) {
         return (
           <ContactList>
-            {[...this.state.allUsers].map((e, i) => (
+            {this.state.allUsers.map(e => (
               <TouchableWithoutFeedback
                 key={e._id}
                 onPress={() => this.addReceiver(e)}
@@ -178,7 +168,7 @@ class Content extends Component {
               <Collapsible collapsed={this.state.collapsed[i] || false}>
                 {this.state.animationCompleted ? (
                   <BoxInner>
-                    {e.workers.map((e, i) => (
+                    {e.workers.map(e => (
                       <TouchableWithoutFeedback
                         key={e._id}
                         onPress={() => this.addReceiver(e)}
@@ -245,27 +235,13 @@ class Content extends Component {
     collapsed: [],
     allUsers: [],
     users: {
-      department: [
-        {
-          title: 'Отдел длинных корпоративных названий1',
-          workers: [],
-        },
-      ],
+      department: [],
     },
     options: {
       active: 1,
       options: ['Все', 'Пользователи', 'Группы'],
     },
-    groups: [
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-      { title: 'длинное корпоративное название группы', participants: 15 },
-    ],
+    groups: [],
     animationCompleted: false,
   }
 
@@ -299,25 +275,8 @@ class Content extends Component {
     })
   }
 
-  optionLeft = () => {
-    const { options } = this.state
-    const newState = { ...options }
-    const { length } = options.options
-    newState.active = options.active < length - 1 ? options.active + 1 : 0
-    this.setState({ options: newState })
-  }
-
-  optionRight = () => {
-    const { options } = this.state
-    const newState = { ...options }
-    const { length } = options.options
-    newState.active = options.active > 0 ? options.active - 1 : length - 1
-    this.setState({ options: newState })
-  }
-
   addReceiver = e => {
-    const { addReceiver, /*back,*/ setReceivers, participants } = this.props
-    // const { usersToAdd } = this.state
+    const { addReceiver, setReceivers, participants } = this.props
     const newReceivers = [...participants].filter(user => user._id !== e._id)
     this.includes(e) ? setReceivers(newReceivers) : addReceiver(e)
   }
@@ -328,7 +287,7 @@ class Content extends Component {
   }
 
   addAllReceivers = e => {
-    const { /*addReceiver, back,*/ participants, setReceivers } = this.props
+    const { participants, setReceivers } = this.props
     const newReceivers =
       JSON.stringify(e) === JSON.stringify(participants) ? [] : e
     setReceivers(newReceivers)
@@ -347,13 +306,6 @@ class Content extends Component {
     newDCollapsed[i] = true
     this.setState({ collapsed: newDCollapsed })
   }
-
-  selectOption = e => {
-    const { options } = this.state
-    const newState = { ...options }
-    newState.active = e
-    this.setState({ options: newState })
-  }
 }
 
 const mapStateToProps = state => ({
@@ -366,12 +318,6 @@ const mapStateToProps = state => ({
   participants: state.participantsReducer.dialog.participants,
 })
 const mapDispatchToProps = dispatch => ({
-  getMessages: _ => dispatch(getMessages(_)),
-  setRoom: _ => dispatch(setRoom(_)),
-  setDialogs: _ => dispatch(setDialogs(_)),
-  addMessage: _ => dispatch(addMessage(_)),
-  setAllUsers: _ => dispatch(setAllUsers(_)),
-  setContacts: _ => dispatch(setContacts(_)),
   addReceiver: _ => dispatch(addDialogParticipant(_)),
   setReceivers: _ => dispatch(setDialogParticipants(_)),
 })
