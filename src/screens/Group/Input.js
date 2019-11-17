@@ -168,6 +168,7 @@ class InputComponent extends Component {
                 value={text}
                 blurOnSubmit={false}
                 autoHeight
+                multiline
               />
             </Body>
             <Right>
@@ -529,9 +530,9 @@ class InputComponent extends Component {
 
   confirmForwarding = () => {
     const {
-      forwardedMessage: { _id, text, type },
+      forwardedMessage: { _id },
       currentRoomId,
-      currentChat,
+      user,
     } = this.props
     const bodyReq = { message_id: _id, dialog_id: currentRoomId }
     sendRequest({
@@ -539,24 +540,8 @@ class InputComponent extends Component {
       method: 'post',
       attr: bodyReq,
       success: res => {
+        socket.emit('get_dialogs', { id: user._id })
         this.stopForwarding()
-        switch (type) {
-          case 'text':
-            socket.emit('group_message', { room: currentChat, message: text })
-            break
-          case 'geo':
-            const { latitude, longitude } = this.props.forwardedMessage.data
-            socket.emit('geo_group', {
-              room: currentChat,
-              geo_data: { latitude, longitude },
-            })
-            break
-          case 'image':
-            // socket.emit('file', { room: currentChat, message: filename })
-            break
-          default:
-            break
-        }
       },
       failFunc: err => {},
     })
@@ -570,7 +555,7 @@ class InputComponent extends Component {
 
   stopReply = () => {
     const { replyMessage } = this.props
-    this.setState({ reply: false })
+    this.setState({ reply: false, text: '' })
     replyMessage({})
   }
 
@@ -578,6 +563,7 @@ class InputComponent extends Component {
     const {
       repliedMessage: { _id },
       currentRoomId,
+      user,
     } = this.props
     // const { text } = this.state
     const bodyReq = { message_id: _id, dialog_id: currentRoomId }
@@ -586,8 +572,8 @@ class InputComponent extends Component {
       method: 'post',
       attr: bodyReq,
       success: res => {
-        this.stopForwarding()
-        socket.emit('get_dialog', { id: currentRoomId })
+        this.stopReply()
+        socket.emit('get_dialogs', { id: user._id })
       },
       failFunc: err => {},
     })

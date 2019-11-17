@@ -6,6 +6,7 @@ export const SET_DIALOGS_USER_ID = 'SET_DIALOGS_USER_ID'
 export const ADD_UPLOAD_MESSAGE = 'ADD_UPLOAD_MESSAGE'
 export const REMOVE_UPLOAD_MESSAGE = 'REMOVE_UPLOAD_MESSAGE'
 export const UPDATE_UPLOAD_MESSAGE_PROGRESS = 'UPDATE_UPLOAD_MESSAGE_PROGRESS'
+export const SET_FILE_LOADING = 'SET_FILE_LOADING'
 
 export const setDialogs = payload => ({
   type: SET_DIALOGS,
@@ -129,3 +130,6 @@ export const updateUploadMessageProgress = ({
     payload: dialogs,
   }
 }
+
+export const setFileLoading = payload => dispatch =>
+  dispatch({ type: SET_FILE_LOADING, payload })

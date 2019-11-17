@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { SafeAreaView, Text, View } from 'react-native'
-import RNVideoPlayer from 'react-native-video-player'
+import Video from 'react-native-video'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
 import { BackIcon } from '../../assets'
@@ -56,18 +56,18 @@ export default class VideoViewScreen extends Component {
           <Right />
         </Header>
         <View style={{ flex: 1 }}>
-          <RNVideoPlayer
+          <Video
             endWithThumbnail
-            video={{ uri }}
+            source={{ uri }}
             ref={r => (this.player = r)}
-            customStyles={{
-              wrapper: {
-                flex: 1,
-                backgroundColor: Colors.black,
-                justifyContent: 'center',
-              },
+            style={{
+              backgroundColor: Colors.black,
+              flex: 1,
             }}
-            disableControlsAutoHide
+            paused={false}
+            fullscreen
+            fullscreenAutorotate
+            controls
           />
         </View>
       </SafeAreaView>

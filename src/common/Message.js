@@ -241,6 +241,7 @@ class Message extends Component {
       text,
       sender,
       resend,
+      reply,
       src,
       type,
       width,
@@ -397,6 +398,13 @@ class Message extends Component {
                   myMessage
                 />
               )}
+              {!!(reply && reply.sender) && (
+                <Forwarded
+                  userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
+                  text={reply.text}
+                  myMessage
+                />
+              )}
               <MyMessageText>{text}</MyMessageText>
               <MessageInfo>
                 <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
@@ -438,6 +446,12 @@ class Message extends Component {
                   <Forwarded
                     userName={`${resend.sender.first_name} ${resend.sender.last_name}`}
                     text={resend.text}
+                  />
+                )}
+                {!!(reply && reply.sender) && (
+                  <Forwarded
+                    userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
+                    text={reply.text}
                   />
                 )}
                 {withImage && (

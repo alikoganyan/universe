@@ -53,6 +53,7 @@ export default class AppComponent extends Component {
     )
     createNotificationListeners()
     firebase.notifications().setBadge(0)
+    firebase.notifications().removeAllDeliveredNotifications()
     getPushesPermissionStatusAndToken(store.dispatch)()
 
     AsyncStorage.getItem('user')

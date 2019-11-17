@@ -525,9 +525,9 @@ class InputComponent extends Component {
 
   confirmForwarding = () => {
     const {
-      forwardedMessage: { _id, text, type, filename },
+      forwardedMessage: { _id },
       currentRoomId,
-      currentRoom,
+      user,
     } = this.props
     const bodyReq = { message_id: _id, dialog_id: currentRoomId }
     sendRequest({
@@ -535,24 +535,8 @@ class InputComponent extends Component {
       method: 'post',
       attr: bodyReq,
       success: res => {
+        socket.emit('get_dialogs', { id: user._id })
         this.stopForwarding()
-        switch (type) {
-          case 'text':
-            socket.emit('message', { receiver: currentRoom, message: text })
-            break
-          case 'geo':
-            const { latitude, longitude } = this.props.forwardedMessage.data
-            socket.emit('geo', {
-              receiver: currentRoom,
-              geo_data: { latitude, longitude },
-            })
-            break
-          case 'image':
-            socket.emit('message', { receiver: currentRoom, message: filename })
-            break
-          default:
-            break
-        }
       },
       failFunc: err => {},
     })
@@ -566,7 +550,7 @@ class InputComponent extends Component {
 
   stopReply = () => {
     const { replyMessage } = this.props
-    this.setState({ reply: false })
+    this.setState({ reply: false, text: '' })
     replyMessage({})
   }
 
@@ -574,6 +558,7 @@ class InputComponent extends Component {
     const {
       repliedMessage: { _id },
       currentRoomId,
+      user,
     } = this.props
     const { text } = this.state
     const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
@@ -583,7 +568,7 @@ class InputComponent extends Component {
       attr: bodyReq,
       success: res => {
         this.stopReply()
-        socket.emit('get_dialog', { id: currentRoomId })
+        socket.emit('get_dialogs', { id: user._id })
       },
       failFunc: err => {},
     })
