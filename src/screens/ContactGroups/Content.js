@@ -14,15 +14,13 @@ import helper from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import Loader from '../../common/Loader'
 import { ArrowDownIcon } from '../../assets/index'
-import { setContacts, setAllUsers, setReset } from '../../actions/userActions'
+import { setContacts, setReset } from '../../actions/userActions'
 import {
-  getMessages,
   setRoom,
-  addMessage,
   setCurrentChat,
   setCurrentRoomId,
 } from '../../actions/messageActions'
-import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
+import { setCurrentDialogs } from '../../actions/dialogsActions'
 import { socket } from '../../utils/socket'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
@@ -260,7 +258,6 @@ class Content extends Component {
 
   AllContacts = () => {
     const { allContacts } = this.state
-    const { user } = this.props
 
     return (
       <ContactList
@@ -271,14 +268,9 @@ class Content extends Component {
         ref={ref => (this.allRef = ref)}
         renderItem={({ item }) => {
           if (item.isGroup) {
-            const chatItem =
-              item.creator._id === user._id
-                ? item.participants[0]
-                : item.creator
-            const { image } = chatItem
             return (
               <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
-                {image === '/images/default_avatar.jpg' || !image ? (
+                {!item.image || item.image === '/images/default_avatar.jpg' ? (
                   <DefaultAvatar
                     isGroup={item.isGroup}
                     id={item._id}
@@ -286,7 +278,7 @@ class Content extends Component {
                   />
                 ) : (
                   <ImageComponent
-                    source={{ uri: `https://testser.univ.team${image}` }}
+                    source={{ uri: `https://testser.univ.team${item.image}` }}
                     size={36}
                   />
                 )}
@@ -301,9 +293,7 @@ class Content extends Component {
           }
           return item ? (
             <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
-              {!item.image ||
-              item.image === '/images/default_avatar.jpg' ||
-              item.ArrowWrapperimage === '/images/default_group.png' ? (
+              {!item.image || item.image === '/images/default_avatar.jpg' ? (
                 <DefaultAvatar id={item._id} size={36} />
               ) : (
                 <ImageComponent
@@ -313,14 +303,10 @@ class Content extends Component {
               )}
               <ContactInfo>
                 <ContactName>
-                  {item.first_name} {item.last_name}
+                  {item.first_name
+                    ? `${item.first_name} ${item.last_name}`
+                    : item.phone_number}
                 </ContactName>
-                {/* {isGroup && (
-                  <ContactRole>
-                    {`${participants.length + 1} участника`}
-                  </ContactRole>
-                )} */}
-                {/* {!isGroup && role && <ContactRole>{role.name}</ContactRole>} */}
               </ContactInfo>
             </BoxInnerItem>
           ) : null
@@ -354,9 +340,7 @@ class Content extends Component {
             ref={ref => (this.usersRef = ref)}
             renderItem={({ item }) => (
               <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
-                {!item.image ||
-                item.image === '/images/default_avatar.jpg' ||
-                item.ArrowWrapperimage === '/images/default_group.png' ? (
+                {!item.image || item.image === '/images/default_avatar.jpg' ? (
                   <DefaultAvatar id={item._id} size={36} />
                 ) : (
                   <ImageComponent
@@ -366,7 +350,9 @@ class Content extends Component {
                 )}
                 <ContactInfo>
                   <ContactName>
-                    {item.first_name} {item.last_name}
+                    {item.first_name
+                      ? `${item.first_name} ${item.last_name}`
+                      : item.phone_number}
                   </ContactName>
                 </ContactInfo>
               </BoxInnerItem>
@@ -466,8 +452,7 @@ class Content extends Component {
               return item ? (
                 <BoxInnerItem key={item._id} onPress={() => this.toChat(item)}>
                   {!item.image ||
-                  item.image === '/images/default_avatar.jpg' ||
-                  item.ArrowWrapperimage === '/images/default_group.png' ? (
+                  item.image === '/images/default_avatar.jpg' ? (
                     <DefaultAvatar id={item._id} size={36} />
                   ) : (
                     <ImageComponent
@@ -477,7 +462,9 @@ class Content extends Component {
                   )}
                   <ContactInfo>
                     <ContactName>
-                      {item.first_name} {item.last_name}
+                      {item.first_name
+                        ? `${item.first_name} ${item.last_name}`
+                        : item.phone_number}
                     </ContactName>
                   </ContactInfo>
                 </BoxInnerItem>
@@ -561,77 +548,19 @@ class Content extends Component {
     }
   }
 
-  /* mount = () => {
-     const { collapsed, users } = this.state
-     const { user, dialogs } = this.props
-     const { department } = users
-     console.log(this.state)
-     const allContacts = [...dialogs].filter(e => e._id !== user._id)
-     department.forEach(dep => {
-       dep.users.forEach(e => {
-         const exists = dialogs.findIndex(chat => chat._id === e._id) !== -1
-         const chat = dialogs.filter(
-           chat => chat._id === e._id && chat._id === user._id,
-         )[0]
-         const nonExisting = {
-           ...e,
-           creator: e,
-           participants: e,
-           room: `${e._id}_${user._id}`,
-         }
-         const conditon = exists || e._id !== user._id
-         conditon && allContacts.push(chat || nonExisting)
-       })
-     })
-     setTimeout(() => this.setState({ allContacts }), 0)
-     const newCollapsed = [...collapsed]
-     users.department.forEach(() => {
-       newCollapsed.push(false)
-     })
-     sendRequest({
-       r_path: g_users,
-       method: 'get',
-       success: res => {
-         const data = []
-         res.users.forEach(user => {
-           user.departments.forEach(department => {
-             const index = data.findIndex(item => item.id === department._id)
-             if (index > -1) {
-               data[index].data.push(user)
-             } else {
-               data.push({
-                 id: department._id,
-                 name: department.name,
-                 data: [user],
-               })
-             }
-           })
-         })
-
-         const groups = dialogs.filter(item => item.isGroup)
-
-         this.setState({
-           userContacts: data,
-           allContacts: [...res.users, ...groups],
-           userContactsAll: res.users,
-         })
-       },
-       failFunc: () => {},
-     })
-     this.setState({ collapsed: newCollapsed })
-   }*/
   mount = () => {
     const { collapsed } = this.state
     const { user, dialogs, company } = this.props
-    const department = company.subdivisions
-    const allContacts = company.users
-    const data = department.map(e => {
-      return {
-        id: e._id,
-        name: e.name,
-        data: e.users_this,
-      }
+    const department = company.subdivisions.map(e => {
+      e.users_this = e.users_this.filter(({ _id }) => _id !== user._id)
+      return e
     })
+    const allContacts = company.users.filter(({ _id }) => _id !== user._id)
+    const data = department.map(e => ({
+      id: e._id,
+      name: e.name,
+      data: e.users_this,
+    }))
     department.forEach(dep => {
       dep.users_this.forEach(e => {
         const exists = dialogs.findIndex(chat => chat._id === e._id) !== -1
@@ -710,14 +639,13 @@ class Content extends Component {
       dialogs,
     } = this.props
     const recipientId = !e.isGroup ? e._id : null
-    const currentRoom = dialogs.filter(
+    const currentRoom = dialogs.find(
       dialog =>
         !dialog.isGroup &&
         (dialog.creator._id === e._id || dialog.participants[0]._id === e._id),
-    )[0]
+    )
     if (currentRoom) {
       const { isGroup, participants, creator, room, _id } = currentRoom
-      // const roomId = room.split('_').filter(e => e !== user._id)[0]
       const currentDialog = isGroup
         ? { ...e }
         : user._id === creator._id
@@ -730,8 +658,7 @@ class Content extends Component {
       socket.emit('view', { room, viewer: user._id })
     } else {
       const { room, _id } = e
-      const roomId = _id
-      setRoom(roomId)
+      setRoom(_id)
       setCurrentRoomId(_id)
       setCurrentChat(room)
       setCurrentDialogs(e)
@@ -747,11 +674,7 @@ const mapStateToProps = state => ({
   company: state.userReducer.company,
 })
 const mapDispatchToProps = dispatch => ({
-  getMessages: _ => dispatch(getMessages(_)),
   setRoom: _ => dispatch(setRoom(_)),
-  setDialogs: _ => dispatch(setDialogs(_)),
-  addMessage: _ => dispatch(addMessage(_)),
-  setAllUsers: _ => dispatch(setAllUsers(_)),
   setContacts: _ => dispatch(setContacts(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
