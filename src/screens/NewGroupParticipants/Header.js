@@ -20,6 +20,7 @@ import { p_tasks_search, g_users } from '../../constants/api'
 import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
 import { setTasks } from '../../actions/tasksActions'
+import DefaultAvatar from '../../common/DefaultAvatar'
 
 const { sidePadding, HeaderHeight, fontSize, Colors } = helper
 const { grey3 } = Colors
@@ -45,13 +46,6 @@ const Input = styled(TextInput)`
 const Right = styled(Left)`
   justify-content: flex-end;
 `
-// const UserImage = styled(Image)`
-//     background: red;
-//     width: 30px;
-//     height: 30px;
-//     border-radius: 15px;
-//     margin-left:${sidePadding}px;
-// `
 
 const HeaderText = styled(Text)`
   font-size: ${fontSize.header};
@@ -59,6 +53,7 @@ const HeaderText = styled(Text)`
   left: -10px;
   color: ${grey3};
 `
+
 class HeaderComponent extends Component {
   render() {
     const { back, user, toProfile, participants } = this.props
@@ -89,16 +84,20 @@ class HeaderComponent extends Component {
               <SearchIcon right onPress={this.startSearch} />
               {!participants.length ? (
                 <TouchableOpacity onPress={toProfile}>
-                  <ImageComponent
-                    source={{ uri: `https://testser.univ.team${image}` }}
-                    size="header"
-                  />
+                  {!image || image === '/images/default_avatar.jpg' ? (
+                    <DefaultAvatar size="header" />
+                  ) : (
+                    <ImageComponent
+                      size="header"
+                      source={{ uri: `https://testser.univ.team${image}` }}
+                    />
+                  )}
                 </TouchableOpacity>
               ) : (
                 <CheckGreyIcon
                   size={22}
                   noPaddingAll
-                  left
+                  right
                   onPress={this.addParticipants}
                 />
               )}

@@ -20,6 +20,7 @@ import { p_tasks_search, g_users } from '../../constants/api'
 import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
 import { setTasks } from '../../actions/tasksActions'
+import DefaultAvatar from '../../common/DefaultAvatar'
 
 const { sidePadding, HeaderHeight, fontSize, Colors } = helper
 const { grey3 } = Colors
@@ -88,10 +89,14 @@ class HeaderComponent extends Component {
               <SearchIcon right onPress={this.startSearch} />
               {!receivers.length ? (
                 <TouchableOpacity onPress={toProfile}>
-                  <ImageComponent
-                    source={{ uri: `https://testser.univ.team${image}` }}
-                    size="header"
-                  />
+                  {!image || image === '/images/default_avatar.jpg' ? (
+                    <DefaultAvatar size="header" />
+                  ) : (
+                    <ImageComponent
+                      size="header"
+                      source={{ uri: `https://testser.univ.team${image}` }}
+                    />
+                  )}
                 </TouchableOpacity>
               ) : (
                 <CheckGreyIcon

@@ -40,7 +40,6 @@ const StyledFlatList = styled(FlatList)`
 const FlatListHeader = styled(View)`
   margin: ${({ editing }) => (editing ? 65 : 35)}px;
 `
-// const StyledImageBackground = styled(ImageBackground)`
 const StyledImageBackground = styled(ImageBackground)`
   width: 100%;
   height: 100%;
@@ -148,21 +147,17 @@ class Content extends Component {
     })
     const dialog = dialogs.filter(
       dialog =>
-        dialog.participants[0]._id === currentDialog._id ||
-        dialog.creator._id === currentDialog._id,
+        dialog.participants[0] &&
+        (dialog.participants[0]._id === currentDialog._id ||
+          dialog.creator._id === currentDialog._id),
     )[0]
     if (dialog) {
-      const dialogIndex = dialogs.findIndex(
-        dialog =>
-          dialog.participants[0]._id === currentDialog._id ||
-          dialog.creator._id === currentDialog._id,
-      )
-      const messages = [...dialog.messages].map(message => ({
+      const messages = dialog.messages.map(message => ({
         ...message,
         viewers: [...message.viewers, user._id],
       }))
       const newDialogs = [...dialogs]
-      newDialogs[dialogIndex].messages = messages
+      dialog.messages = messages
       setDialogs(newDialogs)
     }
   }

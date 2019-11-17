@@ -134,10 +134,15 @@ class Profile extends Component {
   }
 
   edit = () => {
-    const { navigation, currentDialog } = this.props
-    navigation.navigate(currentDialog.isGroup ? 'GroupEdit' : 'ProfileEdit', {
-      currentDialog,
-    })
+    const { navigation, currentDialog, currentChat } = this.props
+    navigation.navigate(
+      currentChat !== null && currentDialog.isGroup
+        ? 'GroupEdit'
+        : 'ProfileEdit',
+      {
+        currentDialog,
+      },
+    )
   }
 }
 

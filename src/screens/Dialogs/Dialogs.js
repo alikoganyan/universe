@@ -478,26 +478,26 @@ class Dialogs extends Component {
     // this.setState({FlatListData: newFlatListData })?
   }
 
-  newMessage = e => {
-    const { senderId, chatId } = e
-    const { user, dialogs } = this.props
-    const chat = chatId
-      .split('room')[1]
-      // eslint-disable-next-line no-useless-escape
-      .replace(/\_/, '')
-      .replace(senderId, '')
-    const newFlatListData = [...dialogs]
-    const index = newFlatListData.findIndex(event => event.id === e.senderId)
-    const myIndex = newFlatListData.findIndex(event => event.id === user.id)
-    if (newFlatListData[index] || newFlatListData[myIndex]) {
-      if (chat === user.id) newFlatListData[index].text = e.text
-      if (senderId === user.id) newFlatListData[myIndex].text = e.text
-    }
-    newFlatListData.sort(
-      (a, b) => new Date(b.lastMessage) - new Date(a.lastMessage),
-    )
-    if (chat === user.id || senderId === user.id) setDialogs(newFlatListData)
-  }
+  // newMessage = e => {
+  //   const { senderId, chatId } = e
+  //   const { user, dialogs } = this.props
+  //   const chat = chatId
+  //     .split('room')[1]
+  //     // eslint-disable-next-line no-useless-escape
+  //     .replace(/\_/, '')
+  //     .replace(senderId, '')
+  //   const newFlatListData = [...dialogs]
+  //   const index = newFlatListData.findIndex(event => event.id === e.senderId)
+  //   const myIndex = newFlatListData.findIndex(event => event.id === user.id)
+  //   if (newFlatListData[index] || newFlatListData[myIndex]) {
+  //     if (chat === user.id) newFlatListData[index].text = e.text
+  //     if (senderId === user.id) newFlatListData[myIndex].text = e.text
+  //   }
+  //   newFlatListData.sort(
+  //     (a, b) => new Date(b.lastMessage) - new Date(a.lastMessage),
+  //   )
+  //   if (chat === user.id || senderId === user.id) setDialogs(newFlatListData)
+  // }
 
   dialogs = e => {
     const { user } = this.props
@@ -534,17 +534,18 @@ class Dialogs extends Component {
       setCurrentRoomId,
     } = this.props
     const { isGroup, room, participants, creator, _id } = e
-    // const roomId = room.split('_').filter(e => Number(e) !== user._id)[0]
     const recipientId =
       !isGroup && user._id !== e.creator._id
         ? e.creator._id
-        : e.participants[0]._id
+        : (e.participants[0] || { _id: null })._id
     const currentDialog = isGroup
       ? { ...e }
       : user._id === creator._id
       ? { ...participants[0] }
       : { ...creator }
-    setRoom(recipientId)
+    if (recipientId) {
+      setRoom(recipientId)
+    }
     setCurrentRoomId(_id)
     setCurrentChat(room)
     setCurrentDialogs(currentDialog)
