@@ -232,7 +232,6 @@ class Message extends Component {
       myId,
       background,
       isGroup = false,
-      withImage,
       onLongPressMessage,
       onPressMessage,
     } = this.props
@@ -334,7 +333,7 @@ class Message extends Component {
           onLongPress={onLongPressMessage}
         >
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {withImage ? (
+            {sender.image ? (
               <ImageComponent
                 style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
                 size={30}
@@ -348,7 +347,7 @@ class Message extends Component {
                 display: 'flex',
                 flexDirection: 'row',
                 position: 'relative',
-                left: withImage ? -5 : 0,
+                left: sender.image ? -5 : 0,
               }}
             >
               <TriangleRightIcon color={interlocatorMessage} />
@@ -370,7 +369,7 @@ class Message extends Component {
                     <MessageDate color={Colors.white}>{finalTime}</MessageDate>
                   </MessageInfo>
                 </LinearGradient>
-                {withImage && (
+                {sender.first_name && sender.last_name && (
                   <ShadowTopContainer>
                     <WhiteTopText>
                       {!!sender && `${sender.first_name} ${sender.last_name}`}
@@ -454,7 +453,7 @@ class Message extends Component {
           onLongPress={onLongPressMessage}
         >
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {withImage && (
+            {sender.image && (
               <ImageComponent
                 style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
                 size={30}
@@ -468,7 +467,7 @@ class Message extends Component {
                 display: 'flex',
                 flexDirection: 'row',
                 position: 'relative',
-                left: withImage ? -5 : 0,
+                left: sender.image ? -5 : 0,
               }}
             >
               <TriangleRightIcon color={background || interlocatorMessage} />
@@ -483,15 +482,20 @@ class Message extends Component {
                 )}
                 {!!(reply && reply.sender) && (
                   <Forwarded
+                    type={reply.type}
+                    fileName={reply.filename}
+                    geoData={reply.data}
+                    src={reply.src}
                     userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
                     text={reply.text}
+                    myMessage
                   />
                 )}
-                {withImage && (
-                  <InterlocutorsName isGroupName={isGroup}>
-                    {!!sender && `${sender.first_name} ${sender.last_name}`}
-                  </InterlocutorsName>
-                )}
+                {/*{sender.first_name && sender.last_name && (*/}
+                {/*  <InterlocutorsName isGroupName={isGroup}>*/}
+                {/*    {!!sender && `${sender.first_name} ${sender.last_name}`}*/}
+                {/*  </InterlocutorsName>*/}
+                {/*)}*/}
                 {!(resend && resend.sender) && (
                   <InterlocutorsMessageText>{text}</InterlocutorsMessageText>
                 )}
@@ -560,7 +564,7 @@ class Message extends Component {
             flexDirection: 'row',
           }}
         >
-          {withImage ? (
+          {sender.image ? (
             <ImageComponent
               style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
               size={30}
@@ -574,7 +578,7 @@ class Message extends Component {
               display: 'flex',
               flexDirection: 'row',
               position: 'relative',
-              left: withImage ? -5 : 0,
+              left: sender.image ? -5 : 0,
             }}
           >
             <TriangleRightIcon color={interlocatorMessage} />
@@ -606,7 +610,7 @@ class Message extends Component {
                   tracksViewChanges={false}
                 />
               </MapView>
-              {withImage && (
+              {sender.first_name && sender.last_name && (
                 <ShadowTopContainer>
                   <WhiteTopText>
                     {!!sender && `${sender.first_name} ${sender.last_name}`}
@@ -678,7 +682,7 @@ class Message extends Component {
               flexDirection: 'row',
             }}
           >
-            {withImage ? (
+            {sender.image ? (
               <ImageComponent
                 style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
                 size={30}
@@ -692,7 +696,7 @@ class Message extends Component {
                 display: 'flex',
                 flexDirection: 'row',
                 position: 'relative',
-                left: withImage ? -5 : 0,
+                left: sender.image ? -5 : 0,
               }}
             >
               <TriangleRightIcon color={interlocatorMessage} />
@@ -707,7 +711,7 @@ class Message extends Component {
                 <VideoPinBorder>
                   <VideoPinTriangle />
                 </VideoPinBorder>
-                {withImage && (
+                {sender.first_name && sender.last_name && (
                   <ShadowTopContainer>
                     <WhiteTopText>
                       {!!sender && `${sender.first_name} ${sender.last_name}`}
@@ -761,7 +765,7 @@ class Message extends Component {
           onLongPress={onLongPressMessage}
         >
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {withImage && (
+            {sender.image && (
               <ImageComponent
                 style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
                 size={30}
@@ -775,14 +779,14 @@ class Message extends Component {
                 display: 'flex',
                 flexDirection: 'row',
                 position: 'relative',
-                left: withImage ? -10 : 0,
+                left: sender.image ? -10 : 0,
               }}
             >
               <TriangleRightIcon color={background || interlocatorMessage} />
               <InterlocutorsMessage
                 background={background || interlocatorMessage}
               >
-                {withImage && (
+                {sender.first_name && sender.last_name && (
                   <InterlocutorsName isGroupName={isGroup}>
                     {!!sender && `${sender.first_name} ${sender.last_name}`}
                   </InterlocutorsName>

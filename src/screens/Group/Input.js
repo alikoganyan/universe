@@ -471,12 +471,12 @@ class InputComponent extends Component {
   }
 
   _selectGeo = async () => {
-    const { currentRoom } = this.props
+    const { currentChat } = this.props
     const coords = await getGeoCoords()
     if (coords) {
       const { latitude, longitude } = coords
       socket.emit('geo_group', {
-        room: currentRoom,
+        room: currentChat,
         geo_data: { latitude, longitude },
       })
     }
