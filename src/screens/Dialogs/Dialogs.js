@@ -208,12 +208,14 @@ class Dialogs extends Component {
 
     socket.emit('get_dialogs', { id: user._id })
     socket.removeEventListener('update_dialogs', this.setDialogsSocket)
+    socket.removeEventListener('update_dialog', this.setDialogSocket)
     socket.removeEventListener('new_message', this.newMessageSocket)
     socket.removeEventListener('new_dialogs', this.socketNewDialog)
     socket.removeEventListener('need_update', this.socketNeedsUpdate)
     socket.removeEventListener('dialog_opened', this.socketDialogOpened)
     socket.removeEventListener('new_group', this.socketGetGroup)
     socket.on('update_dialogs', e => this.setDialogsSocket(e))
+    socket.on('update_dialog', e => this.setDialogSocket(e))
     socket.on('new_message', e => this.newMessageSocket(e))
     socket.on('new_dialogs', this.socketNewDialog)
     socket.on('need_update', this.socketNeedsUpdate)
@@ -308,6 +310,13 @@ class Dialogs extends Component {
   socketNeedsUpdate = () => {
     const { user } = this.props
     socket.emit('get_dialogs', { id: user._id })
+  }
+
+  setDialogSocket = e => {
+    const { dialogs, setDialogs } = this.props
+
+    const newDialog = dialogs.map(d => (d._id === e._id ? e : d))
+    setDialogs(newDialog)
   }
 
   setDialogsSocket = e => {

@@ -1,5 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, Dimensions, Platform, Alert } from 'react-native'
+import {
+  View,
+  Text,
+  Dimensions,
+  Platform,
+  Alert,
+  StyleSheet,
+} from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ActionSheet from 'react-native-actionsheet'
@@ -42,6 +49,8 @@ import {
 } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
+import FastImage from 'react-native-fast-image'
+import MapView from 'react-native-maps'
 
 const { sidePadding, /*HeaderHeight,*/ fontSize, Colors } = helper
 const { blue } = Colors
@@ -121,10 +130,20 @@ const MessageBoxLeft = styled(View)`
   align-items: flex-start;
   max-width: 80%;
 `
+
+const MyMessageCachedImage = styled(FastImage)`
+  width: 40;
+  height: 40;
+`
+const ReplyGeo = styled(View)`
+  width: 40;
+  height: 40;
+`
+
 class InputComponent extends Component {
   render() {
     const { text, edit, forward, reply } = this.state
-    const { editedMessage, repliedMessage } = this.props
+    const { editedMessage } = this.props
     return (
       <>
         {edit ? (
@@ -140,10 +159,8 @@ class InputComponent extends Component {
         ) : null}
         {reply ? (
           <MessageBox>
-            <MessageBoxLeft>
-              <Message>Ответить</Message>
-              <MessageText numberOfLines={1}>{repliedMessage.text}</MessageText>
-            </MessageBoxLeft>
+            <MessageBoxLeft>{this.renderReplyed()}</MessageBoxLeft>
+
             <Right>
               <CloseIcon onPress={this.stopReply} marginLeft={false} />
             </Right>
@@ -256,12 +273,14 @@ class InputComponent extends Component {
     }
     if (
       nextProps.repliedMessage &&
-      nextProps.repliedMessage.text &&
+      nextProps.repliedMessage.type &&
       replyChanged
     ) {
       return {
         ...nextProps,
-        reply: nextProps.repliedMessage.text,
+        reply: nextProps.repliedMessage.text
+          ? nextProps.repliedMessage.text
+          : true,
       }
     }
     return nextProps
@@ -298,6 +317,82 @@ class InputComponent extends Component {
             <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
             <MessageText numberOfLines={1}>Forwarded image</MessageText>
           </>
+        )
+      default:
+        return null
+    }
+  }
+
+  renderReplyed = () => {
+    const { repliedMessage } = this.props
+    switch (repliedMessage.type) {
+      case 'text':
+        return (
+          <>
+            <Message>Ответить</Message>
+            <MessageText numberOfLines={1}>{repliedMessage.text}</MessageText>
+          </>
+        )
+      case 'geo':
+        return (
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'column', width: '98%' }}>
+              <Message>Ответить</Message>
+              <MessageText numberOfLines={1}>Replyed location</MessageText>
+            </View>
+            <ReplyGeo>
+              <MapView
+                scrollEnabled={false}
+                rotateEnabled={false}
+                pitchEnabled={false}
+                zoomEnabled={false}
+                provider="google"
+                style={[StyleSheet.absoluteFillObject, { margin: 3 }]}
+                region={{
+                  ...repliedMessage.data,
+                  latitudeDelta: 0.002,
+                  longitudeDelta: 0.002,
+                }}
+                tracksViewChanges={false}
+              >
+                <MapView.Marker
+                  coordinate={{
+                    latitude: repliedMessage.data.latitude,
+                    longitude: repliedMessage.data.longitude,
+                  }}
+                  tracksViewChanges={false}
+                />
+              </MapView>
+            </ReplyGeo>
+          </View>
+        )
+      case 'file':
+        return (
+          <>
+            <Message>Ответить</Message>
+            <MessageText numberOfLines={1}>
+              Replyed file {repliedMessage.filename}
+            </MessageText>
+          </>
+        )
+      case 'video':
+      case 'image':
+        return (
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'column', width: '98%' }}>
+              <Message>Ответить</Message>
+              <MessageText numberOfLines={1}>
+                Replyed {repliedMessage.type}
+              </MessageText>
+            </View>
+
+            <MyMessageCachedImage
+              source={{
+                uri: `https://testser.univ.team${repliedMessage.src}`,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+          </View>
         )
       default:
         return null
@@ -509,7 +604,6 @@ class InputComponent extends Component {
     const {
       forwardedMessage: { _id },
       currentRoomId,
-      user,
     } = this.props
     const bodyReq = { message_id: _id, dialog_id: currentRoomId }
     sendRequest({
@@ -517,7 +611,7 @@ class InputComponent extends Component {
       method: 'post',
       attr: bodyReq,
       success: res => {
-        socket.emit('get_dialogs', { id: user._id })
+        socket.emit('get_dialog', { _id: currentRoomId })
         this.stopForwarding()
       },
       failFunc: err => {},
@@ -540,7 +634,6 @@ class InputComponent extends Component {
     const {
       repliedMessage: { _id },
       currentRoomId,
-      user,
     } = this.props
     const { text } = this.state
     const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
@@ -550,7 +643,7 @@ class InputComponent extends Component {
       attr: bodyReq,
       success: res => {
         this.stopReply()
-        socket.emit('get_dialogs', { id: user._id })
+        socket.emit('get_dialog', { _id: currentRoomId })
       },
       failFunc: err => {},
     })

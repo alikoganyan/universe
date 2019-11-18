@@ -236,6 +236,7 @@ class Message extends Component {
       onLongPressMessage,
       onPressMessage,
     } = this.props
+
     const {
       viewers,
       text,
@@ -426,6 +427,10 @@ class Message extends Component {
               )}
               {!!(reply && reply.sender) && (
                 <Forwarded
+                  type={reply.type}
+                  fileName={reply.filename}
+                  geoData={reply.data}
+                  src={reply.src}
                   userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
                   text={reply.text}
                   myMessage
