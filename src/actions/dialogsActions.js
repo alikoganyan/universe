@@ -107,12 +107,13 @@ export const updateUploadMessageProgress = ({
   room,
   tempId,
   uploadProgress,
+  isFile,
 }) => {
   let { dialogsReducer: { dialogs = [] } = {} } = store.getState()
   const dialogIndex = dialogs.findIndex(
     ({ room: dialogRoom }) => room === dialogRoom,
   )
-  if (dialogIndex !== -1) {
+  if (dialogIndex !== -1 && isFile) {
     if (dialogs[dialogIndex].messages && dialogs[dialogIndex].messages.length) {
       let messageIndex = dialogs[dialogIndex].messages.findIndex(
         item => item.id === -1,

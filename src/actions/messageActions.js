@@ -1,3 +1,6 @@
+import { store } from '../reducers/store'
+import { UPDATE_UPLOAD_MESSAGE_PROGRESS } from './dialogsActions'
+
 export const ADD_MESSAGE = 'ADD_MESSAGE'
 export const ADD_GROUP_MESSAGE = 'ADD_GROUP_MESSAGE'
 export const START_SEARCH = 'START_SEARCH'
@@ -57,3 +60,33 @@ export const replyMessage = payload => ({
   type: REPLY_MESSAGE,
   payload,
 })
+
+export const setGeoLoading = room => {
+  let { dialogsReducer: { dialogs = [] } = {} } = store.getState()
+  const dialogIndex = dialogs.findIndex(
+    ({ room: dialogRoom }) => room === dialogRoom,
+  )
+  if (dialogIndex !== -1) {
+    if (dialogs[dialogIndex].messages && dialogs[dialogIndex].messages.length) {
+      let messageIndex = dialogs[dialogIndex].messages.findIndex(
+        item => item.id === -1,
+      )
+
+      if (messageIndex === -1) {
+        messageIndex = dialogs[dialogIndex].messages.length
+      }
+
+      dialogs[dialogIndex].messages[messageIndex] = {
+        isLoading: true,
+        type: 'geo',
+        viewers: [],
+        sender: {},
+        id: -1,
+      }
+    }
+  }
+  return {
+    type: UPDATE_UPLOAD_MESSAGE_PROGRESS,
+    payload: dialogs,
+  }
+}

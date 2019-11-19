@@ -33,6 +33,7 @@ import {
   editMessage,
   forwardMessage,
   replyMessage,
+  setGeoLoading,
 } from '../../actions/messageActions'
 import {
   p_send_file,
@@ -494,6 +495,7 @@ class InputComponent extends Component {
               room: currentChat,
               tempId: tempMessageId,
               uploadProgress,
+              isFile: !imageUri,
             })
           }
         },
@@ -574,6 +576,8 @@ class InputComponent extends Component {
     const coords = await getGeoCoords()
     if (coords) {
       const { latitude, longitude } = coords
+
+      // this.props.setGeoLoading(currentChat)
       socket.emit('geo', {
         receiver: currentDialog._id,
         geo_data: { latitude, longitude },
@@ -685,6 +689,7 @@ const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
+  setGeoLoading: _ => dispatch(setGeoLoading(_)),
 })
 export default connect(
   mapStateToProps,

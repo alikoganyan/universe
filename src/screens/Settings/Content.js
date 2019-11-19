@@ -181,25 +181,28 @@ class Content extends Component {
               style={{ paddingRight: 5, paddingLeft: 5, maxHeight: 300 }}
               data={settings}
               scrollEnabled={false}
-              renderItem={({ item, index }) => (
-                <Box key={index} last={index === settings.length - 1}>
-                  <Label numberOfLines={1}>{item.label}</Label>
-                  <Status>{item.status || item.language}</Status>
-                  <Option>
-                    {item.option.type === 'toggle' && (
-                      <Toggle
-                        onPress={() => this.handleToggle(item.label)}
-                        switchOn={!!item.option.value}
-                      />
-                    )}
-                    {item.option.type === 'link' && (
-                      <TouchableOpacity onPress={this.selectOption}>
-                        <Link>{item.option.value}</Link>
-                      </TouchableOpacity>
-                    )}
-                  </Option>
-                </Box>
-              )}
+              renderItem={({ item, index }) => {
+                if (item.item === 'language') return null
+                return (
+                  <Box key={index} last={index === settings.length - 1}>
+                    <Label numberOfLines={1}>{item.label}</Label>
+                    <Status>{item.status || item.language}</Status>
+                    <Option>
+                      {item.option.type === 'toggle' && (
+                        <Toggle
+                          onPress={() => this.handleToggle(item.label)}
+                          switchOn={!!item.option.value}
+                        />
+                      )}
+                      {item.option.type === 'link' && (
+                        <TouchableOpacity onPress={this.selectOption}>
+                          <Link>{item.option.value}</Link>
+                        </TouchableOpacity>
+                      )}
+                    </Option>
+                  </Box>
+                )
+              }}
               keyExtractor={(item, index) => index.toString()}
             />
             <CheckboxHolder>

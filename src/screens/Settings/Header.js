@@ -16,7 +16,7 @@ const Title = styled(Text)`
 `
 
 const HeaderContainer = styled(View)`
-  margin-top: 37px;
+  margin-top: 49px;
   display: flex;
   flex-direction: row;
   align-items: center;
