@@ -134,18 +134,31 @@ class Content extends Component {
         animationCompleted: true,
       })
     })
-    const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
-    if (dialog) {
-      const dialogIndex = [...dialogs].filter(e => e.room === currentChat)
-      const newDialogs = [...dialogs]
-      dialog.messages = dialog
-        ? [...dialog.messages].map(e => ({
-            ...e,
-            viewers: [...e.viewers, user._id],
-          }))
-        : []
-      newDialogs[dialogIndex] = dialog
-      setDialogs(newDialogs)
+
+    const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
+    if (dialogIndex > -1) {
+      dialogs[dialogIndex].messages = dialogs[dialogIndex].messages.map(
+        message => ({
+          ...message,
+          viewers: [...message.viewers, user._id],
+        }),
+      )
+      setDialogs(dialogs)
+    }
+  }
+
+  componentWillUnmount() {
+    const { dialogs, setDialogs, user, currentChat } = this.props
+    const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
+
+    if (dialogIndex > -1) {
+      dialogs[dialogIndex].messages = dialogs[dialogIndex].messages.map(
+        message => ({
+          ...message,
+          viewers: [...message.viewers, user._id],
+        }),
+      )
+      setDialogs(dialogs)
     }
   }
 

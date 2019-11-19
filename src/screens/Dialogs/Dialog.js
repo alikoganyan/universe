@@ -146,6 +146,7 @@ const NewMessagesText = styled(Text)`
 class Content extends Component {
   render() {
     const { title, user, image, lastMessage, item, unreadMessages } = this.props
+
     const { phone, _id, creator, /*created_at,*/ isGroup, participants } = item
 
     const latestMessage = lastMessage[lastMessage.length - 1] || {}

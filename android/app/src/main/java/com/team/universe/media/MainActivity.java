@@ -1,4 +1,4 @@
-package com.team.universe.media;
+package elize.univ.team;
 
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactActivityDelegate;

@@ -71,9 +71,11 @@ class Dialogs extends Component {
       room,
       image,
     } = item
+
     const unreadMessages = messages.filter(
       e => !e.viewers.includes(user._id) && e.sender._id !== user._id,
     ).length
+
     const chatName = !isGroup
       ? user._id !== creator._id
         ? creator.first_name
@@ -88,6 +90,10 @@ class Dialogs extends Component {
         ? user.image
         : participants[0].image
       : image
+
+    if (chatName === 'Test Test') {
+      // console.log('unreadMessages', unreadMessages, messages);
+    }
     return (
       <Dialog
         key={item._id}

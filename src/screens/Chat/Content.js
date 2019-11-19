@@ -139,26 +139,38 @@ class Content extends Component {
 
   componentDidMount() {
     moment.locale('ru')
-    const { dialogs, currentDialog, setDialogs, user } = this.props
+    const { dialogs, setDialogs, user, currentChat } = this.props
     InteractionManager.runAfterInteractions(() => {
       this.setState({
         animationCompleted: true,
       })
     })
-    const dialog = dialogs.filter(
-      dialog =>
-        dialog.participants[0] &&
-        (dialog.participants[0]._id === currentDialog._id ||
-          dialog.creator._id === currentDialog._id),
-    )[0]
-    if (dialog) {
-      const messages = dialog.messages.map(message => ({
-        ...message,
-        viewers: [...message.viewers, user._id],
-      }))
-      const newDialogs = [...dialogs]
-      dialog.messages = messages
-      setDialogs(newDialogs)
+
+    const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
+
+    if (dialogIndex > -1) {
+      dialogs[dialogIndex].messages = dialogs[dialogIndex].messages.map(
+        message => ({
+          ...message,
+          viewers: [...message.viewers, user._id],
+        }),
+      )
+      setDialogs(dialogs)
+    }
+  }
+
+  componentWillUnmount() {
+    const { dialogs, setDialogs, user, currentChat } = this.props
+    const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
+
+    if (dialogIndex > -1) {
+      dialogs[dialogIndex].messages = dialogs[dialogIndex].messages.map(
+        message => ({
+          ...message,
+          viewers: [...message.viewers, user._id],
+        }),
+      )
+      setDialogs(dialogs)
     }
   }
 
@@ -426,6 +438,7 @@ const mapStateToProps = state => ({
   currentChat: state.messageReducer.currentChat,
   editedMessage: state.messageReducer.editMessage,
   currentRoomId: state.messageReducer.currentRoomId,
+  currentRoom: state.messageReducer.currentRoom,
   user: state.userReducer.user,
   dialogs: state.dialogsReducer.dialogs,
   currentDialog: state.dialogsReducer.currentDialog,

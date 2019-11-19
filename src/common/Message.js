@@ -369,7 +369,7 @@ class Message extends Component {
                     <MessageDate color={Colors.white}>{finalTime}</MessageDate>
                   </MessageInfo>
                 </LinearGradient>
-                {sender.first_name && sender.last_name && (
+                {!!sender.first_name && !!sender.last_name && (
                   <ShadowTopContainer>
                     <WhiteTopText>
                       {!!sender && `${sender.first_name} ${sender.last_name}`}
@@ -453,7 +453,7 @@ class Message extends Component {
           onLongPress={onLongPressMessage}
         >
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {sender.image && (
+            {!!sender.image && (
               <ImageComponent
                 style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
                 size={30}
@@ -610,7 +610,7 @@ class Message extends Component {
                   tracksViewChanges={false}
                 />
               </MapView>
-              {sender.first_name && sender.last_name && (
+              {!!sender.first_name && !!sender.last_name && (
                 <ShadowTopContainer>
                   <WhiteTopText>
                     {!!sender && `${sender.first_name} ${sender.last_name}`}
@@ -711,7 +711,7 @@ class Message extends Component {
                 <VideoPinBorder>
                   <VideoPinTriangle />
                 </VideoPinBorder>
-                {sender.first_name && sender.last_name && (
+                {!!sender.first_name && !!sender.last_name && (
                   <ShadowTopContainer>
                     <WhiteTopText>
                       {!!sender && `${sender.first_name} ${sender.last_name}`}
@@ -765,7 +765,7 @@ class Message extends Component {
           onLongPress={onLongPressMessage}
         >
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {sender.image && (
+            {!!sender.image && (
               <ImageComponent
                 style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
                 size={30}
@@ -786,7 +786,7 @@ class Message extends Component {
               <InterlocutorsMessage
                 background={background || interlocatorMessage}
               >
-                {sender.first_name && sender.last_name && (
+                {!!sender.first_name && !!sender.last_name && (
                   <InterlocutorsName isGroupName={isGroup}>
                     {!!sender && `${sender.first_name} ${sender.last_name}`}
                   </InterlocutorsName>

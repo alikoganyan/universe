@@ -233,12 +233,8 @@ class Content extends Component {
     })
   }
 
-  storeUserData = async user => {
-    try {
-      await AsyncStorage.setItem('user', JSON.stringify(user))
-    } catch (error) {
-      // Error saving data
-    }
+  storeUserData = user => {
+    AsyncStorage.setItem('user', JSON.stringify(user))
   }
 
   login = () => {
@@ -275,7 +271,10 @@ class Content extends Component {
         } = res
         setAuth(access_token)
         setUser(data)
-        this.storeUserData({ ...data, password, access_token })
+        AsyncStorage.setItem(
+          'user',
+          JSON.stringify({ ...data, password, access_token }),
+        )
         if (!isPushesAsked || isPushesEnabled) {
           trySignToPushes(true)
         }
