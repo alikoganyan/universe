@@ -11,7 +11,6 @@ import { getPushesPermissionStatusAndToken } from './actions/pushesActions'
 import { connectToSocket } from './utils/socket'
 import { setUser, setAuth } from './actions/userActions'
 import { setDialogsUserId } from './actions/dialogsActions'
-import { createNotificationListeners } from './utils/fcm'
 
 // const Roboto = require('./assets/fonts/Roboto-Regular.ttf')
 
@@ -51,10 +50,10 @@ export default class AppComponent extends Component {
       'connectionChange',
       this.handleFirstConnectivityChange,
     )
-    createNotificationListeners()
-    firebase.notifications().setBadge(0)
-    firebase.notifications().removeAllDeliveredNotifications()
     getPushesPermissionStatusAndToken(store.dispatch)()
+    const notifications = firebase.notifications()
+    notifications.setBadge(0)
+    notifications.removeAllDeliveredNotifications()
 
     AsyncStorage.getItem('user')
       .then(res => {
