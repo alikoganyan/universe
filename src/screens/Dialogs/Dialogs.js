@@ -215,7 +215,7 @@ class Dialogs extends Component {
     // AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
-  getProfile() {
+  getProfile = () => {
     sendRequest({
       r_path: '/profile',
       method: 'get',
@@ -318,10 +318,6 @@ class Dialogs extends Component {
   socketNeedsUpdate = () => {
     const { user } = this.props
     socket.emit('get_dialogs', { id: user._id })
-  }
-
-  setProfileSocket = e => {
-    this.getProfile()
   }
 
   setDialogSocket = e => {
