@@ -110,14 +110,6 @@ class Content extends Component {
             }}
           />
           <Recievers>
-            <DialogsLabel>
-              <GroupIcon right />
-              <Text
-                style={{ color: touched && !receivers.length ? pink : black }}
-              >
-                Получатели
-              </Text>
-            </DialogsLabel>
             <DialogsLabel style={{ justifyContent: 'space-between' }}>
               <TouchableOpacity onPress={this.addParticipant}>
                 <AddReciever>Добавить</AddReciever>
@@ -125,6 +117,14 @@ class Content extends Component {
               <Button onPress={this.proceed} background={yellow} color={black}>
                 Продолжить
               </Button>
+            </DialogsLabel>
+            <DialogsLabel>
+              <GroupIcon right />
+              <Text
+                style={{ color: touched && !receivers.length ? pink : black }}
+              >
+                Получатели
+              </Text>
             </DialogsLabel>
           </Recievers>
           <ScrollView>
