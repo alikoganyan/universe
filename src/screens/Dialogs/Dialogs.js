@@ -172,6 +172,50 @@ class Dialogs extends Component {
 
   componentDidMount() {
     const { user } = this.props
+
+    this.getProfile()
+
+    // navigation.navigate('NewTask') // restore
+    // clearInterval(this.interval)
+    // this.interval = setInterval(() => {
+    //  if (!socket.connected) connectToSocket()
+    // }, 2000)
+
+    // Notifications.addListener((notification) => {
+    // 	const { dialogs } = this.props;
+    //         const { room } = notification.data;
+    //         const dialog = [...dialogs].filter(chat => chat.room === room)[0];
+    //         this.toChat(dialog);
+    //     });
+
+    AppState.addEventListener('change', this._handleAppStateChange)
+
+    socket.emit('get_dialogs', { id: user._id })
+    socket.removeEventListener('update_dialogs', this.setDialogsSocket)
+    socket.removeEventListener('update_dialog', this.setDialogSocket)
+    socket.removeEventListener('update_profile', this.getProfile)
+    socket.removeEventListener('new_message', this.newMessageSocket)
+    socket.removeEventListener('new_dialogs', this.socketNewDialog)
+    socket.removeEventListener('need_update', this.socketNeedsUpdate)
+    socket.removeEventListener('dialog_opened', this.socketDialogOpened)
+    socket.removeEventListener('new_group', this.socketGetGroup)
+    socket.on('update_dialogs', e => this.setDialogsSocket(e))
+    socket.on('update_dialog', e => this.setDialogSocket(e))
+    socket.on('update_profile', this.getProfile)
+    socket.on('new_message', e => this.newMessageSocket(e))
+    socket.on('new_dialogs', this.socketNewDialog)
+    socket.on('need_update', this.socketNeedsUpdate)
+    socket.on('dialog_opened', this.socketDialogOpened)
+    socket.on('new_group', this.socketGetGroup)
+    this.setState({ congratulations: !user.first_name })
+  }
+
+  componentWillUnmount() {
+    // disconnectFromSocket()
+    // AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  getProfile() {
     sendRequest({
       r_path: '/profile',
       method: 'get',
@@ -191,42 +235,6 @@ class Dialogs extends Component {
       },
       failFunc: () => {},
     })
-    // navigation.navigate('NewTask') // restore
-    // clearInterval(this.interval)
-    // this.interval = setInterval(() => {
-    //  if (!socket.connected) connectToSocket()
-    // }, 2000)
-
-    // Notifications.addListener((notification) => {
-    // 	const { dialogs } = this.props;
-    //         const { room } = notification.data;
-    //         const dialog = [...dialogs].filter(chat => chat.room === room)[0];
-    //         this.toChat(dialog);
-    //     });
-
-    AppState.addEventListener('change', this._handleAppStateChange)
-
-    socket.emit('get_dialogs', { id: user._id })
-    socket.removeEventListener('update_dialogs', this.setDialogsSocket)
-    socket.removeEventListener('update_dialog', this.setDialogSocket)
-    socket.removeEventListener('new_message', this.newMessageSocket)
-    socket.removeEventListener('new_dialogs', this.socketNewDialog)
-    socket.removeEventListener('need_update', this.socketNeedsUpdate)
-    socket.removeEventListener('dialog_opened', this.socketDialogOpened)
-    socket.removeEventListener('new_group', this.socketGetGroup)
-    socket.on('update_dialogs', e => this.setDialogsSocket(e))
-    socket.on('update_dialog', e => this.setDialogSocket(e))
-    socket.on('new_message', e => this.newMessageSocket(e))
-    socket.on('new_dialogs', this.socketNewDialog)
-    socket.on('need_update', this.socketNeedsUpdate)
-    socket.on('dialog_opened', this.socketDialogOpened)
-    socket.on('new_group', this.socketGetGroup)
-    this.setState({ congratulations: !user.first_name })
-  }
-
-  componentWillUnmount() {
-    // disconnectFromSocket()
-    // AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   _renderListHeader = () => {
@@ -310,6 +318,10 @@ class Dialogs extends Component {
   socketNeedsUpdate = () => {
     const { user } = this.props
     socket.emit('get_dialogs', { id: user._id })
+  }
+
+  setProfileSocket = e => {
+    this.getProfile()
   }
 
   setDialogSocket = e => {

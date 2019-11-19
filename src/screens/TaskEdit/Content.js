@@ -26,6 +26,7 @@ import {
 } from '../../actions/tasksActions'
 import { GroupIcon, CloseIcon } from '../../assets'
 import moment from 'moment'
+import { socket } from '../../utils/socket'
 
 const { Colors, HeaderHeight, sidePadding } = helper
 const { lightGrey1, purple, red, pink, black } = Colors
@@ -359,6 +360,7 @@ class Content extends Component {
           task: { ...newTask },
         },
         success: res => {
+          socket.emit('update_user', { user_id: receivers[0]._id })
           this.getProfile()
           back()
           // getMessages(res.messages);

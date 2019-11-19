@@ -24,6 +24,7 @@ import { p_tasks } from '../constants/api'
 import ImageComponent from './Image'
 import DefaultAvatar from './DefaultAvatar'
 import helper, { getHamsterDate } from '../utils/helpers'
+import { socket } from '../utils/socket'
 
 const { Colors, fontSize, borderRadius } = helper
 const { yellow, green, purple, grey1 } = Colors
@@ -439,6 +440,7 @@ class TaskComponent extends Component {
       tasksWithUsers,
       userTask,
       currentTask,
+      withReceiver,
     } = this.props
     const { _id, name, description, deadline, performers } = activeTask
 
@@ -474,7 +476,9 @@ class TaskComponent extends Component {
           status: e,
         },
       },
-      success: res => {},
+      success: res => {
+        socket.emit('update_user', { user_id: withReceiver._id })
+      },
       failFunc: err => {},
     })
   }

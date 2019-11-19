@@ -21,6 +21,7 @@ import sendRequest from '../../utils/request'
 import { setTasks, setTaskList } from '../../actions/tasksActions'
 import { GroupIcon, CloseIcon } from '../../assets'
 import moment from 'moment'
+import { socket } from '../../utils/socket'
 
 const { Colors, HeaderHeight, sidePadding } = helper
 const { lightGrey1, purple, pink, black } = Colors
@@ -331,6 +332,7 @@ class Content extends Component {
           },
         },
         success: async res => {
+          socket.emit('update_user', { user_id: receivers[0]._id })
           this.getProfile()
           forward()
         },
