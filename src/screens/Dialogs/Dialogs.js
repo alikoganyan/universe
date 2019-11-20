@@ -112,6 +112,7 @@ class Dialogs extends Component {
   render() {
     const { dialogs, navigation } = this.props
     const { congratulations } = this.state
+
     const opacity = this.scrollY.interpolate({
       inputRange: [0, 90, 91],
       outputRange: [0, 0, 1],
@@ -177,9 +178,9 @@ class Dialogs extends Component {
   scrollY = new Animated.Value(0)
 
   componentDidMount() {
-    const { user } = this.props
-
     this.getProfile()
+
+    const { user } = this.props
 
     // navigation.navigate('NewTask') // restore
     // clearInterval(this.interval)
@@ -213,7 +214,6 @@ class Dialogs extends Component {
     socket.on('need_update', this.socketNeedsUpdate)
     socket.on('dialog_opened', this.socketDialogOpened)
     socket.on('new_group', this.socketGetGroup)
-    this.setState({ congratulations: !user.first_name })
   }
 
   componentWillUnmount() {
@@ -234,6 +234,8 @@ class Dialogs extends Component {
         this.props.setUser({
           ...res.user,
         })
+        this.setState({ congratulations: !userData.user.first_name })
+
         const tasksInc = [...userData.user.tasks]
         const tasksOut = [...userData.user.created_tasks]
         const tasksWithUsers = [...tasksInc, ...tasksOut]
@@ -273,21 +275,7 @@ class Dialogs extends Component {
 
   _handleAppStateChange = () => {
     const { user } = this.props
-    // if (!socket.connected)
-    // connectToSocket();
     socket.emit('get_dialogs', { id: user._id })
-    // socket.removeEventListener('update_dialogs', this.setDialogsSocket);
-    // socket.removeEventListener('new_message', this.newMessageSocket);
-    // socket.removeEventListener('new_dialogs', this.socketNewDialog);
-    // socket.removeEventListener('need_update', this.socketNeedsUpdate);
-    // socket.removeEventListener('dialog_opened', this.socketDialogOpened);
-    // socket.removeEventListener('new_group', this.socketGetGroup);
-    // socket.on('update_dialogs', e => this.setDialogsSocket(e));
-    // socket.on('new_message', e => this.newMessageSocket(e));
-    // socket.on('new_dialogs', this.socketNewDialog);
-    // socket.on('need_update', this.socketNeedsUpdate);
-    // socket.on('dialog_opened', this.socketDialogOpened);
-    // socket.on('new_group', this.socketGetGroup);
   }
 
   socketGetGroup = () => {
