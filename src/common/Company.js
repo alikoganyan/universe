@@ -23,7 +23,6 @@ import { setDialogs } from '../actions/dialogsActions'
 import DefaultAvatar from './DefaultAvatar'
 import { setNews } from '../actions/newsActions'
 import { socket } from '../utils/socket'
-import { setFeedReceivers } from '../actions/participantsActions'
 
 const { fontSize, sidePadding, Colors } = helper
 const { lightGrey2 } = Colors
@@ -185,7 +184,6 @@ class Company extends Component {
         this.props.setContacts(res.data.contacts)
         this.props.setNews(res.data.news)
         this.props.setReset(true)
-        this.props.setReceivers([])
       },
       full_res: true,
     })
@@ -222,7 +220,6 @@ const mapDispatchToProps = dispatch => ({
   setCompanies: _ => dispatch(setCompanies(_)),
   setUser: _ => dispatch(setUser(_)),
   setReset: _ => dispatch(setReset(_)),
-  setReceivers: _ => dispatch(setFeedReceivers(_)),
 })
 
 export default connect(

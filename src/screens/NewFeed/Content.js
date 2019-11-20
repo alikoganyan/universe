@@ -152,6 +152,10 @@ class Content extends Component {
 
   componentDidMount() {}
 
+  componentWillUnmount(): void {
+    this.props.setReceivers([])
+  }
+
   deleteReceiver = e => {
     const { _id } = e
     const { receivers, setFeedReceivers } = this.props
@@ -222,6 +226,7 @@ const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   addFeed: _ => dispatch(addFeed(_)),
   setFeedReceivers: _ => dispatch(setFeedReceivers(_)),
+  setReceivers: _ => dispatch(setFeedReceivers(_)),
 })
 export default connect(
   mapStateToProps,
