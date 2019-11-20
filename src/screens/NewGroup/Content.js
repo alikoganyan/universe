@@ -176,6 +176,10 @@ class Content extends Component {
 
   componentDidMount() {}
 
+  componentWillUnmount() {
+    this.props.setParticipants([])
+  }
+
   selectPhoto = async e => {
     alert('temporary unavailable')
   }
