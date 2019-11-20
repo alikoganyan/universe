@@ -642,7 +642,8 @@ class Content extends Component {
     const currentRoom = dialogs.find(
       dialog =>
         !dialog.isGroup &&
-        (dialog.creator._id === e._id || dialog.participants[0]._id === e._id),
+        ((dialog.creator._id && dialog.creator._id === e._id) ||
+          (dialog.participants[0] && dialog.participants[0]._id === e._id)),
     )
     if (currentRoom) {
       const { isGroup, participants, creator, room, _id } = currentRoom

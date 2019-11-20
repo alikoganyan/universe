@@ -300,24 +300,64 @@ class InputComponent extends Component {
         )
       case 'geo':
         return (
-          <>
-            <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
-            <MessageText numberOfLines={1}>Forwarded location</MessageText>
-          </>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'column', width: '98%' }}>
+              <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
+              <MessageText numberOfLines={1}>Forwarded location</MessageText>
+            </View>
+            <ReplyGeo>
+              <MapView
+                scrollEnabled={false}
+                rotateEnabled={false}
+                pitchEnabled={false}
+                zoomEnabled={false}
+                provider="google"
+                style={[StyleSheet.absoluteFillObject, { margin: 3 }]}
+                region={{
+                  ...forwardedMessage.data,
+                  latitudeDelta: 0.002,
+                  longitudeDelta: 0.002,
+                }}
+                tracksViewChanges={false}
+              >
+                <MapView.Marker
+                  coordinate={{
+                    latitude: forwardedMessage.data.latitude,
+                    longitude: forwardedMessage.data.longitude,
+                  }}
+                  tracksViewChanges={false}
+                />
+              </MapView>
+            </ReplyGeo>
+          </View>
         )
       case 'file':
         return (
           <>
             <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
-            <MessageText numberOfLines={1}>Forwarded file</MessageText>
+            <MessageText numberOfLines={1}>
+              Forwarded file {forwardedMessage.filename}
+            </MessageText>
           </>
         )
+      case 'video':
       case 'image':
         return (
-          <>
-            <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
-            <MessageText numberOfLines={1}>Forwarded image</MessageText>
-          </>
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'column', width: '98%' }}>
+              <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
+              <MessageText numberOfLines={1}>
+                Forwarded {forwardedMessage.type}
+              </MessageText>
+            </View>
+
+            <MyMessageCachedImage
+              source={{
+                uri: `https://testser.univ.team${forwardedMessage.src}`,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+          </View>
         )
       default:
         return null
