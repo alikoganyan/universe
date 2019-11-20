@@ -105,9 +105,9 @@ android {
         applicationId "elize.univ.team"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionName "2.0.60"
-        versionCode 53
-        setProperty("archivesBaseName", "universe-$versionName($versionCode)")
+        versionName "2.0.64"
+        versionCode 57
+        setProperty("archivesBaseName", "universe-test-$versionName($versionCode)")
     }
 
     signingConfigs {
