@@ -152,7 +152,7 @@ class Content extends Component {
 
   componentDidMount() {}
 
-  componentWillUnmount(): void {
+  componentWillUnmount() {
     this.props.setReceivers([])
   }
 

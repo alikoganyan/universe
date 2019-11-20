@@ -15,6 +15,7 @@ import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { setNews } from '../../actions/newsActions'
 import sendRequest from '../../utils/request'
+import { setIsMyProfile } from '../../actions/profileAction'
 
 const { sidePadding, HeaderHeight, fontSize } = helper
 
@@ -116,6 +117,7 @@ class HeaderComponent extends Component {
 
   toProfile = () => {
     const { navigate } = this.props
+    this.props.setIsMyProfile(true)
     navigate('Profile')
   }
 
@@ -172,6 +174,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   setNews: _ => dispatch(setNews(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
 })
 export default connect(
   mapStateToProps,

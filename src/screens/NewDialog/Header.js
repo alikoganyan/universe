@@ -14,6 +14,7 @@ import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import helper from '../../utils/helpers'
 import { socket } from '../../utils/socket'
+import { setIsMyProfile } from '../../actions/profileAction'
 
 const { Colors, sidePadding, fontSize, HeaderHeight } = helper
 const { grey3 } = Colors
@@ -57,7 +58,12 @@ class HeaderComponent extends Component {
         </Left>
         <Right>
           <SearchIcon right />
-          <TouchableOpacity onPress={toProfile}>
+          <TouchableOpacity
+            onPress={() => {
+              this.props.setIsMyProfile(true)
+              toProfile()
+            }}
+          >
             {!user.image ||
             user.image === '/images/default_group.png' ||
             user.image === '/images/default_avatar.jpg' ? (
@@ -107,6 +113,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   setDialogs: _ => dispatch(setDialogs(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
 })
 export default connect(
   mapStateToProps,

@@ -13,16 +13,12 @@ import ImageComponent from './Image'
 import helper from '../utils/helpers'
 import sendRequest from '../utils/request'
 import { setTaskList } from '../actions/tasksActions'
-import {
-  setCompanies,
-  setContacts,
-  setUser,
-  setReset,
-} from '../actions/userActions'
+import { setCompanies, setContacts, setUser } from '../actions/userActions'
 import { setDialogs } from '../actions/dialogsActions'
 import DefaultAvatar from './DefaultAvatar'
 import { setNews } from '../actions/newsActions'
 import { socket } from '../utils/socket'
+import { setIsMyProfile } from '../actions/profileAction'
 
 const { fontSize, sidePadding, Colors } = helper
 const { lightGrey2 } = Colors
@@ -101,6 +97,7 @@ class Company extends Component {
                 <Wrapper
                   onPress={() => {
                     this.setState({ modalVisible: false })
+                    this.props.setIsMyProfile(true)
                     this.props.navigate('Profile')
                   }}
                 >
@@ -172,18 +169,16 @@ class Company extends Component {
               company: userData.user.company,
             })
             this.props.setUser(userData.user)
+            const tasksInc = [...res.data.tasks]
+            const tasksOut = [...res.data.created_tasks]
+            const tasksWithUsers = [...tasksInc, ...tasksOut]
+            this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
+            this.props.setContacts(res.data.contacts)
+            this.props.setNews(res.data.news)
             socket.emit('get_dialogs', { id: userData.user._id })
           },
           failFunc: () => {},
         })
-
-        const tasksInc = [...res.data.tasks]
-        const tasksOut = [...res.data.created_tasks]
-        const tasksWithUsers = [...tasksInc, ...tasksOut]
-        this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
-        this.props.setContacts(res.data.contacts)
-        this.props.setNews(res.data.news)
-        this.props.setReset(true)
       },
       full_res: true,
     })
@@ -219,7 +214,7 @@ const mapDispatchToProps = dispatch => ({
   setNews: _ => dispatch(setNews(_)),
   setCompanies: _ => dispatch(setCompanies(_)),
   setUser: _ => dispatch(setUser(_)),
-  setReset: _ => dispatch(setReset(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
 })
 
 export default connect(

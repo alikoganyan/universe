@@ -13,6 +13,7 @@ import Header from './Header'
 import Input from './Input'
 import Content from './Content'
 import { socket } from '../../utils/socket'
+import { setIsMyProfile } from '../../actions/profileAction'
 
 const Wrapper = styled(View)`
   height: 100%;
@@ -111,6 +112,7 @@ class Chat extends Component {
   toProfile = () => {
     const { navigation } = this.props
     const { navigate } = navigation
+    this.props.setIsMyProfile(false)
     navigate('Profile')
   }
 }
@@ -125,6 +127,7 @@ const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
 })
 export default connect(
   mapStateToProps,

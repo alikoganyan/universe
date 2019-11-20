@@ -7,6 +7,7 @@ import participantsReducer from './participantsReducer'
 import tasksReducer from './tasksReducer'
 import newsReducer from './newsReducer'
 import pushesReducer from './pushesReducer'
+import profileReducer from './profileReducer'
 
 export default combineReducers({
   dialogsReducer,
@@ -17,4 +18,5 @@ export default combineReducers({
   tasksReducer,
   newsReducer,
   pushesReducer,
+  profileReducer,
 })

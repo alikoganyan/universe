@@ -56,8 +56,7 @@ const Loading = styled(ActivityIndicator)`
 class Profile extends Component {
   render() {
     const { loading } = this.state
-    const { currentChat, user, currentDialog } = this.props
-    const myProfile = currentChat === null || currentDialog._id === user._id
+    const { user, currentDialog, myProfile } = this.props
     const myGroup = currentDialog.isGroup
       ? currentDialog.creator._id === user._id
       : false
@@ -151,6 +150,7 @@ const mapStateToProps = state => ({
   currentChat: state.messageReducer.currentChat,
   currentDialog: state.dialogsReducer.currentDialog,
   pushesToken: state.pushesReducer.token,
+  myProfile: state.profileReducer.myProfile,
 })
 const mapDispatchToProps = dispatch => ({
   setDialogs: _ => dispatch(setDialogs(_)),

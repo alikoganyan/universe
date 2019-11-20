@@ -147,7 +147,6 @@ class Content extends Component {
   render() {
     const { UserData, status } = this.state
     const { user, myProfile, currentDialog } = this.props
-
     const {
       _id,
       image,

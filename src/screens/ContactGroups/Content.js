@@ -556,6 +556,7 @@ class Content extends Component {
       return e
     })
     const allContacts = company.users.filter(({ _id }) => _id !== user._id)
+    const userContactsAll = [...allContacts]
     const data = department.map(e => ({
       id: e._id,
       name: e.name,
@@ -574,7 +575,7 @@ class Content extends Component {
           room: `${e._id}_${user._id}`,
         }
         const conditon = exists || e._id !== user._id
-        conditon && allContacts.push(chat || nonExisting)
+        conditon && userContactsAll.push(chat || nonExisting)
       })
     })
     const newCollapsed = [...collapsed]
@@ -584,7 +585,7 @@ class Content extends Component {
     this.setState({
       userContacts: data,
       allContacts: [...allContacts, ...dialogs.filter(e => e.isGroup)],
-      userContactsAll: allContacts,
+      userContactsAll: userContactsAll,
       collapsed: newCollapsed,
     })
   }

@@ -366,6 +366,7 @@ class Dialogs extends Component {
         })
       : []
     setDialogs(newDialogsSorted)
+    this.props.setReset(true)
   }
 
   closeCongratulations = () => {
