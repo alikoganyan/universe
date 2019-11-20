@@ -313,7 +313,9 @@ class Content extends Component {
       dialog,
     } = this.props
     const dialogIncludes = dialog.filter(
-      e => e.creator._id === event._id || e.participants[0]._id === event._id,
+      e =>
+        (e.creator._id && e.creator._id === event._id) ||
+        (e.participants[0] && e.participants[0]._id === event._id),
     )[0]
     setCurrentDialogs(event)
     setRoom(event._id)
