@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Dimensions, Platform } from 'react-native'
+import { View, Text, Dimensions, Platform, StyleSheet } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import RNDocumentPicker from 'react-native-document-picker'
@@ -38,6 +38,8 @@ import {
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
 import AutoHeightInput from '../../common/AutoHeightInput'
+import FastImage from 'react-native-fast-image'
+import MapView from 'react-native-maps'
 
 const { sidePadding, /*HeaderHeight,*/ fontSize, Colors } = helper
 const { blue } = Colors
@@ -119,10 +121,19 @@ const MessageBoxLeft = styled(View)`
   align-items: flex-start;
   width: 80%;
 `
+
+const MyMessageCachedImage = styled(FastImage)`
+  width: 40;
+  height: 40;
+`
+const ReplyGeo = styled(View)`
+  width: 40;
+  height: 40;
+`
 class InputComponent extends Component {
   render() {
     const { text, edit, forward, reply } = this.state
-    const { editedMessage, repliedMessage } = this.props
+    const { editedMessage } = this.props
 
     return (
       <>
@@ -139,10 +150,7 @@ class InputComponent extends Component {
         ) : null}
         {reply ? (
           <MessageBox>
-            <MessageBoxLeft>
-              <Message>Ответить</Message>
-              <MessageText numberOfLines={1}>{repliedMessage.text}</MessageText>
-            </MessageBoxLeft>
+            <MessageBoxLeft>{this.renderReplyed()}</MessageBoxLeft>
             <Right>
               <CloseIcon onPress={this.stopReply} marginLeft={false} />
             </Right>
@@ -254,16 +262,94 @@ class InputComponent extends Component {
     }
     if (
       nextProps.repliedMessage &&
-      nextProps.repliedMessage.text &&
+      nextProps.repliedMessage.type &&
       replyChanged
     ) {
       return {
         ...nextProps,
-        reply: nextProps.repliedMessage.text,
+        reply: nextProps.repliedMessage.text
+          ? nextProps.repliedMessage.text
+          : true,
       }
     }
 
     return nextProps
+  }
+
+  renderReplyed = () => {
+    const { repliedMessage } = this.props
+    switch (repliedMessage.type) {
+      case 'text':
+        return (
+          <>
+            <Message>Ответить</Message>
+            <MessageText numberOfLines={1}>{repliedMessage.text}</MessageText>
+          </>
+        )
+      case 'geo':
+        return (
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'column', width: '98%' }}>
+              <Message>Ответить</Message>
+              <MessageText numberOfLines={1}>Replyed location</MessageText>
+            </View>
+            <ReplyGeo>
+              <MapView
+                scrollEnabled={false}
+                rotateEnabled={false}
+                pitchEnabled={false}
+                zoomEnabled={false}
+                provider="google"
+                style={[StyleSheet.absoluteFillObject, { margin: 3 }]}
+                region={{
+                  ...repliedMessage.data,
+                  latitudeDelta: 0.002,
+                  longitudeDelta: 0.002,
+                }}
+                tracksViewChanges={false}
+              >
+                <MapView.Marker
+                  coordinate={{
+                    latitude: repliedMessage.data.latitude,
+                    longitude: repliedMessage.data.longitude,
+                  }}
+                  tracksViewChanges={false}
+                />
+              </MapView>
+            </ReplyGeo>
+          </View>
+        )
+      case 'file':
+        return (
+          <>
+            <Message>Ответить</Message>
+            <MessageText numberOfLines={1}>
+              Replyed file {repliedMessage.filename}
+            </MessageText>
+          </>
+        )
+      case 'video':
+      case 'image':
+        return (
+          <View style={{ flexDirection: 'row' }}>
+            <View style={{ flexDirection: 'column', width: '98%' }}>
+              <Message>Ответить</Message>
+              <MessageText numberOfLines={1}>
+                Replyed {repliedMessage.type}
+              </MessageText>
+            </View>
+
+            <MyMessageCachedImage
+              source={{
+                uri: `https://testser.univ.team${repliedMessage.src}`,
+              }}
+              resizeMode={FastImage.resizeMode.cover}
+            />
+          </View>
+        )
+      default:
+        return null
+    }
   }
 
   renderForward = () => {
