@@ -695,7 +695,6 @@ class InputComponent extends Component {
 
   handleSendPress = () => {
     const { edit, reply } = this.state
-
     if (edit) {
       this.confirmEditing()
     } else if (reply) {

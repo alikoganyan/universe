@@ -134,7 +134,6 @@ class InputComponent extends Component {
   render() {
     const { text, edit, forward, reply } = this.state
     const { editedMessage } = this.props
-
     return (
       <>
         {edit ? (
@@ -651,8 +650,8 @@ class InputComponent extends Component {
       currentRoomId,
       user,
     } = this.props
-    // const { text } = this.state
-    const bodyReq = { message_id: _id, dialog_id: currentRoomId }
+    const { text } = this.state
+    const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
     sendRequest({
       r_path: p_reply_message,
       method: 'post',
@@ -667,7 +666,6 @@ class InputComponent extends Component {
 
   handleSendPress = () => {
     const { edit, reply } = this.state
-
     if (edit) {
       this.confirmEditing()
     } else if (reply) {

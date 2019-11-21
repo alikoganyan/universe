@@ -435,9 +435,9 @@ class Message extends Component {
                   myMessage
                 />
               )}
-              {!(resend && resend.sender) && (
-                <MyMessageText>{text || reply.text}</MyMessageText>
-              )}
+              {/*{!(resend && resend.sender) && (*/}
+              <MyMessageText>{text}</MyMessageText>
+              {/*)}*/}
               <MessageInfo>
                 <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
                 <Indicator color="black" read={messageRead} />
@@ -496,11 +496,9 @@ class Message extends Component {
                 {/*    {!!sender && `${sender.first_name} ${sender.last_name}`}*/}
                 {/*  </InterlocutorsName>*/}
                 {/*)}*/}
-                {!(resend && resend.sender) && (
-                  <InterlocutorsMessageText>
-                    {text || reply.text}
-                  </InterlocutorsMessageText>
-                )}
+                {/*{!(resend && resend.sender) && (*/}
+                <InterlocutorsMessageText>{text}</InterlocutorsMessageText>
+                {/*)}*/}
                 <MessageInfo>
                   <MessageDate>{finalTime}</MessageDate>
                 </MessageInfo>
