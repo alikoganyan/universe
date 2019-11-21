@@ -25,6 +25,7 @@ import helper, { getHamsterDate } from '../utils/helpers'
 import { SingleImage } from 'react-native-zoom-lightbox'
 import LinearGradient from 'react-native-linear-gradient'
 import Forwarded from './Forwarded'
+import DefaultAvatar from './DefaultAvatar'
 
 const { Colors, fontSize, borderRadius } = helper
 const { myMessage, interlocatorMessage, pink } = Colors
@@ -341,7 +342,13 @@ class Message extends Component {
                   uri: `https://testser.univ.team${sender.image}`,
                 }}
               />
-            ) : null}
+            ) : (
+              <DefaultAvatar
+                size={30}
+                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                id={sender._id}
+              />
+            )}
             <View
               style={{
                 display: 'flex',
@@ -453,13 +460,24 @@ class Message extends Component {
           onLongPress={onLongPressMessage}
         >
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {!!sender.image && (
+            {sender.image ? (
               <ImageComponent
-                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                style={{
+                  alignSelf: 'flex-end',
+                  position: 'relative',
+                  top: -5,
+                  marginRight: 4,
+                }}
                 size={30}
                 source={{
                   uri: `https://testser.univ.team${sender.image}`,
                 }}
+              />
+            ) : (
+              <DefaultAvatar
+                size={30}
+                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                id={sender._id}
               />
             )}
             <View
@@ -572,7 +590,13 @@ class Message extends Component {
                 uri: `https://testser.univ.team${sender.image}`,
               }}
             />
-          ) : null}
+          ) : (
+            <DefaultAvatar
+              size={30}
+              style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+              id={sender._id}
+            />
+          )}
           <View
             style={{
               display: 'flex',
@@ -690,7 +714,13 @@ class Message extends Component {
                   uri: `https://testser.univ.team${sender.image}`,
                 }}
               />
-            ) : null}
+            ) : (
+              <DefaultAvatar
+                size={30}
+                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                id={sender._id}
+              />
+            )}
             <View
               style={{
                 display: 'flex',
@@ -765,13 +795,19 @@ class Message extends Component {
           onLongPress={onLongPressMessage}
         >
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {!!sender.image && (
+            {sender.image ? (
               <ImageComponent
                 style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
                 size={30}
                 source={{
                   uri: `https://testser.univ.team${sender.image}`,
                 }}
+              />
+            ) : (
+              <DefaultAvatar
+                size={30}
+                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
+                id={sender._id}
               />
             )}
             <View
