@@ -178,14 +178,14 @@ class Content extends Component {
     if (!phone) {
       this.setState({ error: <Error>Введите телефон</Error> })
     }
-    if (phone && phone.length < 9) {
+    if (phone_number && phone_number.length < 9) {
       this.setState({
         error: <Error>Проверьте правильность введенного номера</Error>,
       })
     }
     phone_number &&
       phone &&
-      phone.length >= 9 &&
+      phone_number.length >= 9 &&
       sendRequest({
         r_path: p_get_restore_password,
         method: 'post',

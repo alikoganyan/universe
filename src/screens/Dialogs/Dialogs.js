@@ -235,7 +235,6 @@ class Dialogs extends Component {
           ...res.user,
         })
         this.setState({ congratulations: !userData.user.first_name })
-
         const tasksInc = [...userData.user.tasks]
         const tasksOut = [...userData.user.created_tasks]
         const tasksWithUsers = [...tasksInc, ...tasksOut]
