@@ -135,6 +135,8 @@ class HeaderComponent extends Component {
       last_visit,
     } = currentDialog
     const lastVisit = new Date(last_visit)
+    const lastVisitDay = Math.floor(lastVisit.getTime() / 1000 / 60 / 60 / 24)
+    const day = Math.floor(new Date().getTime() / 1000 / 60 / 60 / 24)
     const lastVisitDifference = Math.abs(new Date() - lastVisit) / 60000
     const minutes =
       lastVisit.getMinutes() >= 10
@@ -149,15 +151,18 @@ class HeaderComponent extends Component {
         ? lastVisit.getDate()
         : `0${lastVisit.getDate()}`
     const month = months[lastVisit.getMonth()]
-    const lastSeenDate = last_visit
-      ? lastVisitDifference < 5
-        ? 'был недавно'
-        : lastVisitDifference < 60
-        ? 'был в течении часа'
-        : lastVisitDifference < 1440
-        ? `был онлайн в ${hours}:${minutes}`
-        : `был онлайн ${date} ${month}`
-      : 'неизвестно'
+    const lastSeenDate =
+      day - lastVisitDay === 1
+        ? `был вчера ${hours}:${minutes}`
+        : last_visit
+        ? lastVisitDifference < 5
+          ? 'был недавно'
+          : lastVisitDifference < 60
+          ? 'был в течении часа'
+          : lastVisitDifference < 1440
+          ? `был онлайн в ${hours}:${minutes}`
+          : `был онлайн ${date} ${month}`
+        : 'неизвестно'
     return (
       <Header>
         <Top>
