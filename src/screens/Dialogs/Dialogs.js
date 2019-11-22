@@ -554,7 +554,7 @@ class Dialogs extends Component {
       : user._id === creator._id
       ? { ...participants[0] }
       : { ...creator }
-    if (recipientId) {
+    if (recipientId || recipientId === 0) {
       setRoom(recipientId)
     }
     setCurrentRoomId(_id)
