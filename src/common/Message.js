@@ -236,7 +236,6 @@ class Message extends Component {
       onLongPressMessage,
       onPressMessage,
     } = this.props
-
     const {
       viewers,
       text,
@@ -392,8 +391,7 @@ class Message extends Component {
                     </WhiteTopText>
                   </ShadowTopContainer>
                 ) : (
-                  !!sender.first_name &&
-                  !!sender.last_name && (
+                  isGroup && (
                     <ShadowTopContainer>
                       <WhiteTopText>
                         {!!sender && `${sender.first_name} ${sender.last_name}`}
@@ -525,14 +523,12 @@ class Message extends Component {
                     myMessage
                   />
                 )}
-                {/*{sender.first_name && sender.last_name && (*/}
-                {/*  <InterlocutorsName isGroupName={isGroup}>*/}
-                {/*    {!!sender && `${sender.first_name} ${sender.last_name}`}*/}
-                {/*  </InterlocutorsName>*/}
-                {/*)}*/}
-                {/*{!(resend && resend.sender) && (*/}
+                {sender.first_name && sender.last_name && isGroup && (
+                  <InterlocutorsName isGroupName={isGroup}>
+                    {!!sender && `${sender.first_name} ${sender.last_name}`}
+                  </InterlocutorsName>
+                )}
                 <InterlocutorsMessageText>{text}</InterlocutorsMessageText>
-                {/*)}*/}
                 <MessageInfo>
                   <MessageDate>{finalTime}</MessageDate>
                 </MessageInfo>
@@ -666,6 +662,13 @@ class Message extends Component {
                   </WhiteTopText>
                 </ShadowTopContainer>
               )}
+              {!!(sender.first_name && sender.last_name && isGroup) && (
+                <ShadowTopContainer>
+                  <WhiteTopText>
+                    {!!sender && `${sender.first_name} ${sender.last_name}`}
+                  </WhiteTopText>
+                </ShadowTopContainer>
+              )}
               <BottomLine
                 start={{ x: 0, y: 0.5 }}
                 end={{ x: 1.0, y: 1.0 }}
@@ -782,8 +785,7 @@ class Message extends Component {
                     </WhiteTopText>
                   </ShadowTopContainer>
                 ) : (
-                  !!sender.first_name &&
-                  !!sender.last_name && (
+                  isGroup && (
                     <ShadowTopContainer>
                       <WhiteTopText>
                         {!!sender && `${sender.first_name} ${sender.last_name}`}
@@ -876,11 +878,11 @@ class Message extends Component {
                     {!!sender && `${sender.first_name} ${sender.last_name}`}
                   </InterlocutorsName>
                 )}
-                {/*{!!sender.first_name && !!sender.last_name && (*/}
-                {/*  <InterlocutorsName isGroupName={isGroup}>*/}
-                {/*    {!!sender && `${sender.first_name} ${sender.last_name}`}*/}
-                {/*  </InterlocutorsName>*/}
-                {/*)}*/}
+                {!!sender.first_name && !!sender.last_name && isGroup && (
+                  <InterlocutorsName isGroupName={isGroup}>
+                    {!!sender && `${sender.first_name} ${sender.last_name}`}
+                  </InterlocutorsName>
+                )}
                 <FileInfoWrapper>
                   <FileIcon background={pink}>
                     <ImageIcon />
