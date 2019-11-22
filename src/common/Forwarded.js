@@ -15,6 +15,7 @@ class Forwarded extends PureComponent {
       fileName,
       type,
     } = this.props
+
     return (
       <View
         style={[
