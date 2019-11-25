@@ -59,7 +59,7 @@ const DateView = styled(View)`
 `
 class Content extends Component {
   render() {
-    const { messageLongPressActions, currentDate } = this.state
+    const { messageLongPressActions, currentDate, participants } = this.state
     const { dialogs, currentChat, search, editedMessage } = this.props
     const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const messages = dialog ? [...dialog.messages] : []
@@ -67,6 +67,7 @@ class Content extends Component {
     const reversedMessages = [...messages].sort(
       (x, y) => new Date(y.created_at) - new Date(x.created_at),
     )
+
     return (
       <>
         <Wrapper search={search}>
@@ -83,17 +84,23 @@ class Content extends Component {
               viewabilityConfig={{
                 itemVisiblePercentThreshold: 50,
               }}
-              renderItem={({ item, index }) => (
-                <Message
-                  key={index}
-                  withImage
-                  read={!!item.viewers.length}
-                  isGroup
-                  item={item}
-                  onLongPressMessage={() => this._onLongPressMessage(item)}
-                  onPressMessage={() => this._onPressMessage(item)}
-                />
-              )}
+              renderItem={({ item, index }) => {
+                const participant = participants.find(
+                  participant => participant._id === item.sender._id,
+                )
+                return (
+                  <Message
+                    key={index}
+                    withImage
+                    read={!!item.viewers.length}
+                    isGroup
+                    item={item}
+                    color={participant && participant.color}
+                    onLongPressMessage={() => this._onLongPressMessage(item)}
+                    onPressMessage={() => this._onPressMessage(item)}
+                  />
+                )
+              }}
               keyExtractor={(item, index) => index.toString()}
               ListEmptyComponent={this.renderEmptyComponent}
             />
@@ -124,6 +131,7 @@ class Content extends Component {
     messageLongPressActions: [],
     animationCompleted: false,
     currentDate: '',
+    participants: [],
   }
 
   componentDidMount() {
@@ -145,6 +153,8 @@ class Content extends Component {
       )
       setDialogs(dialogs)
     }
+
+    this.generateColor()
   }
 
   componentWillUnmount() {
@@ -160,6 +170,26 @@ class Content extends Component {
       )
       setDialogs(dialogs)
     }
+  }
+
+  generateColor = () => {
+    const { randomColors } = helper
+    const { currentDialog } = this.props
+    const { participants, creator } = currentDialog
+
+    const allUsers = [...participants]
+    allUsers.push(creator)
+
+    for (let user of allUsers) {
+      const randomIndex = Math.floor(Math.random() * 7)
+      user.color = randomColors[randomIndex]
+    }
+
+    this.setState({
+      participants: allUsers,
+    })
+
+    this.setState({ participants: allUsers })
   }
 
   renderEmptyComponent = () => (

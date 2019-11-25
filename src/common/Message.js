@@ -235,6 +235,7 @@ class Message extends Component {
       isGroup = false,
       onLongPressMessage,
       onPressMessage,
+      color,
     } = this.props
     const {
       viewers,
@@ -393,7 +394,7 @@ class Message extends Component {
                 ) : (
                   isGroup && (
                     <ShadowTopContainer>
-                      <WhiteTopText>
+                      <WhiteTopText style={{ color: color }}>
                         {!!sender && `${sender.first_name} ${sender.last_name}`}
                       </WhiteTopText>
                     </ShadowTopContainer>
@@ -524,7 +525,10 @@ class Message extends Component {
                   />
                 )}
                 {sender.first_name && sender.last_name && isGroup && (
-                  <InterlocutorsName isGroupName={isGroup}>
+                  <InterlocutorsName
+                    isGroupName={isGroup}
+                    style={{ color: color }}
+                  >
                     {!!sender && `${sender.first_name} ${sender.last_name}`}
                   </InterlocutorsName>
                 )}
@@ -664,7 +668,7 @@ class Message extends Component {
               )}
               {!!(sender.first_name && sender.last_name && isGroup) && (
                 <ShadowTopContainer>
-                  <WhiteTopText>
+                  <WhiteTopText style={{ color: color }}>
                     {!!sender && `${sender.first_name} ${sender.last_name}`}
                   </WhiteTopText>
                 </ShadowTopContainer>
@@ -787,7 +791,7 @@ class Message extends Component {
                 ) : (
                   isGroup && (
                     <ShadowTopContainer>
-                      <WhiteTopText>
+                      <WhiteTopText style={{ color: color }}>
                         {!!sender && `${sender.first_name} ${sender.last_name}`}
                       </WhiteTopText>
                     </ShadowTopContainer>
@@ -879,7 +883,10 @@ class Message extends Component {
                   </InterlocutorsName>
                 )}
                 {!!sender.first_name && !!sender.last_name && isGroup && (
-                  <InterlocutorsName isGroupName={isGroup}>
+                  <InterlocutorsName
+                    isGroupName={isGroup}
+                    style={{ color: color }}
+                  >
                     {!!sender && `${sender.first_name} ${sender.last_name}`}
                   </InterlocutorsName>
                 )}
