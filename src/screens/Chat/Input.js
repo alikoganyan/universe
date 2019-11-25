@@ -301,7 +301,7 @@ class InputComponent extends Component {
       case 'geo':
         return (
           <View style={{ flexDirection: 'row' }}>
-            <View style={{ flexDirection: 'column', width: '98%' }}>
+            <View style={{ flexDirection: 'column', width: '88%' }}>
               <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
               <MessageText numberOfLines={1}>Forwarded location</MessageText>
             </View>
@@ -344,7 +344,7 @@ class InputComponent extends Component {
       case 'image':
         return (
           <View style={{ flexDirection: 'row' }}>
-            <View style={{ flexDirection: 'column', width: '98%' }}>
+            <View style={{ flexDirection: 'column', width: '88%' }}>
               <Message>{`${forwardedMessage.sender.first_name} ${forwardedMessage.sender.last_name}`}</Message>
               <MessageText numberOfLines={1}>
                 Forwarded {forwardedMessage.type}
