@@ -28,16 +28,14 @@ import sendRequest from '../../utils/request'
 import Loader from '../../common/Loader'
 
 const {
-  HeaderHeight,
   Colors: { gray2 },
 } = helper
 const Wrapper = styled(View)`
   background: white;
-  margin-bottom: ${({ search }) => (search ? HeaderHeight * 2 : HeaderHeight)};
   z-index: 1;
 `
 const FlatListHeader = styled(View)`
-  margin: ${({ editing }) => (editing ? 65 : 35)}px;
+  margin-bottom: 15px;
 `
 
 // const StyledImageBackground = styled(ImageBackground)`

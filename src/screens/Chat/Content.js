@@ -13,7 +13,7 @@ import ActionSheet from 'react-native-actionsheet'
 import moment from 'moment'
 import 'moment/locale/ru'
 import { chatBg } from '../../assets/images'
-import helper, { getHamsterDate } from '../../utils/helpers'
+import { getHamsterDate } from '../../utils/helpers'
 import Message from '../../common/Message'
 import sendRequest from '../../utils/request'
 import { setDialogs } from '../../actions/dialogsActions'
@@ -25,10 +25,8 @@ import {
 } from '../../actions/messageActions'
 import { d_message } from '../../constants/api'
 
-const { HeaderHeight } = helper
 const Wrapper = styled(View)`
   background: white;
-  margin-bottom: ${({ search }) => (search ? HeaderHeight * 2 : HeaderHeight)};
   z-index: 1;
   position: relative;
 `
@@ -38,7 +36,7 @@ const StyledFlatList = styled(FlatList)`
   z-index: 2;
 `
 const FlatListHeader = styled(View)`
-  margin: ${({ editing }) => (editing ? 65 : 35)}px;
+  margin-bottom: 15px;
 `
 const StyledImageBackground = styled(ImageBackground)`
   width: 100%;

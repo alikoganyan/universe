@@ -21,11 +21,8 @@ const Wrapper = styled(View)`
   overflow: hidden;
 `
 const Bottom = styled(View)`
-  position: absolute;
-  bottom: 0;
   width: 100%;
   background: transparent;
-  z-index: 3;
 `
 class Chat extends Component {
   static state = {
@@ -66,11 +63,14 @@ class Chat extends Component {
               back={this.navigateBack}
               currentChat={currentChat}
             />
-            <Content
-              navigate={this.navigate}
-              goBack={this.navigateBack}
-              onShowPreviewImages={this._onShowPreviewImages}
-            />
+            <View style={{ flex: 1 }}>
+              <Content
+                navigate={this.navigate}
+                goBack={this.navigateBack}
+                onShowPreviewImages={this._onShowPreviewImages}
+              />
+            </View>
+
             <Bottom>
               <Input />
             </Bottom>
