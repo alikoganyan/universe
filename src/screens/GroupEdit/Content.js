@@ -14,7 +14,11 @@ import { setUser } from '../../actions/userActions'
 import Button from '../../common/Button'
 // import { ImagePicker } from 'expo';
 import getImageFromPicker from '../../utils/ImagePicker'
-import { p_update_group, p_delete_group } from '../../constants/api'
+import {
+  p_update_group,
+  p_delete_group,
+  p_group_image,
+} from '../../constants/api'
 import sendRequest from '../../utils/request'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
@@ -81,7 +85,7 @@ const DeleteGroup = styled(Text)`
 `
 class Content extends Component {
   render() {
-    const { text } = this.state
+    const { text, image, imageFormData } = this.state
     const { participants } = this.props
     const ReceiverComponent = props => {
       const { children, last = false, onDelete } = props
@@ -122,11 +126,23 @@ class Content extends Component {
       >
         <Wrapper>
           <TouchableOpacity onPress={this.selectPhoto}>
-            <DefaultAvatar
-              isGroup
-              style={{ alignSelf: 'center', marginBottom: 20 }}
-              size={70}
-            />
+            {!image ? (
+              <DefaultAvatar
+                isGroup
+                style={{ alignSelf: 'center', marginBottom: 20 }}
+                size={70}
+              />
+            ) : (
+              <ImageComponent
+                size={70}
+                source={{
+                  uri: imageFormData
+                    ? image
+                    : `https://testser.univ.team${image}`,
+                }}
+                style={{ alignSelf: 'center', marginBottom: 20 }}
+              />
+            )}
           </TouchableOpacity>
           <StyledInput
             password
@@ -178,11 +194,14 @@ class Content extends Component {
 
   state = {
     text: '',
+    image: '',
+    imageFormData: null,
   }
 
   componentDidMount() {
     const { defaultValues, setParticipants } = this.props
-    const { name, participants } = defaultValues
+    const { name, participants, image } = defaultValues
+    this.setState({ image: image })
     this.setState({ text: name })
     setParticipants(participants)
   }
@@ -208,20 +227,11 @@ class Content extends Component {
   }
 
   selectPhoto = async () => {
-    // alert('temporary unavailable')
-
     getImageFromPicker(result => {
-      const { uri, type } = result
-      const ext = uri.split('.')[uri.split('.').length - 1]
-      const fileName = Math.random()
-        .toString(36)
-        .substring(7)
-      const form = new FormData()
-      form.append('file', {
-        uri,
-        name: `photo.${fileName}.${ext}`,
-        type: `image/${type}`,
-      })
+      const { imageFormData = {} } = result
+      if (!result.cancelled) {
+        this.setState({ imageFormData, image: imageFormData.uri })
+      }
     })
   }
 
@@ -240,7 +250,7 @@ class Content extends Component {
   proceed = () => {
     const { participants, forward, setParticipants, defaultValues } = this.props
     const { name, _id } = defaultValues
-    const { text } = this.state
+    const { text, imageFormData } = this.state
     let idList = []
     participants.map(e => {
       idList = [...idList, e._id]
@@ -254,10 +264,31 @@ class Content extends Component {
         group_id: _id,
       },
       success: res => {
+        imageFormData && this.saveImage()
         setTimeout(() => socket.emit('get_dialogs'), 0)
         setParticipants([])
         forward()
       },
+      failFunc: err => {},
+    })
+  }
+
+  saveImage = () => {
+    const { imageFormData } = this.state
+    const { defaultValues } = this.props
+    const form = new FormData()
+    form.append('file', imageFormData)
+    form.append('room', defaultValues.room)
+    sendRequest({
+      r_path: p_group_image,
+      method: 'post',
+      attr: form,
+      config: {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+      success: res => {},
       failFunc: err => {},
     })
   }
