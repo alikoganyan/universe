@@ -428,11 +428,11 @@ class Content extends Component {
   }
 
   toChat = () => {
-    const { toChat, setRoom, user } = this.props
-    const { id } = user
-    socket.emit('select chat', { chatId: id, userId: id })
-    setRoom(id)
-    toChat()
+    const { setRoom, user, navigate } = this.props
+    const { _id } = user
+    socket.emit('select chat', { chatId: _id, userId: _id })
+    setRoom(_id)
+    navigate('Chat')
   }
 
   leaveGroup = () => {

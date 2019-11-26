@@ -56,7 +56,8 @@ const Loading = styled(ActivityIndicator)`
 class Profile extends Component {
   render() {
     const { loading } = this.state
-    const { user, currentDialog, myProfile } = this.props
+    const { user, currentDialog, myProfile, navigation } = this.props
+
     const myGroup = currentDialog.isGroup
       ? currentDialog.creator._id === user._id
       : false
@@ -72,6 +73,7 @@ class Profile extends Component {
             <Content
               toChat={this.toChat}
               myProfile={myProfile}
+              navigate={navigation.navigate}
               toDialogs={this.toDialogs}
             />
             <Bottom>
