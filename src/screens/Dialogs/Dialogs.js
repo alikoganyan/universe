@@ -405,13 +405,12 @@ class Dialogs extends Component {
       const newDialogs = [...dialogs]
       const newDialog = newDialogs.filter(event => event._id === e.dialog)[0]
       if (newDialog) {
-        newDialog.messages = [...newDialog.messages, message]
+        newDialog.messages.push(message)
         newDialogs[
           newDialogs.findIndex(event => event._id === e.dialog)
         ] = newDialog
         const newDialogSorted =
           newDialogs.length &&
-          // eslint-disable-next-line array-callback-return
           newDialogs
             .sort((a, b) => {
               if (b.messages.length && a.messages.length) {

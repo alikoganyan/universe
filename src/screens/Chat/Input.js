@@ -487,6 +487,7 @@ class InputComponent extends Component {
     )
   }
 
+  // to do
   _startSendingFile = (formDataObject = {}, imageUri = '') => {
     const {
       currentChat,
@@ -630,8 +631,10 @@ class InputComponent extends Component {
   sendMessage = () => {
     const { currentRoom } = this.props
     const { text } = this.state
-    if (text) {
+    if (text.trim()) {
       socket.emit('message', { receiver: currentRoom, message: text.trim() })
+      this.setState({ text: '' })
+    } else {
       this.setState({ text: '' })
     }
   }

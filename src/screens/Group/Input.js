@@ -615,7 +615,7 @@ class InputComponent extends Component {
     //   _id, first_name, last_name, middle_name, image
     // } = user;
     const { text } = this.state
-    if (text) {
+    if (text.trim()) {
       // const message = {
       //   _id: Math.random().toString(36).substring(7),
       //   sender: {
@@ -639,9 +639,10 @@ class InputComponent extends Component {
       //     if (b.messages.length && a.messages.length) return new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at);
       //   });
       //   setDialogs(newDialogSorted);
-      socket.emit('group_message', { room: currentChat, message: text })
+      socket.emit('group_message', { room: currentChat, message: text.trim() })
       // }
     }
+
     this.setState({ text: '' })
   }
 
