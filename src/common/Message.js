@@ -28,7 +28,13 @@ import Forwarded from './Forwarded'
 import DefaultAvatar from './DefaultAvatar'
 
 const { Colors, fontSize, borderRadius } = helper
-const { myMessage, interlocatorMessage, pink } = Colors
+const {
+  myMessage,
+  interlocatorMessage,
+  pink,
+  forwardedMessage,
+  replyedMessage,
+} = Colors
 
 const UploadProgressContainer = styled(View)`
   width: 100%;
@@ -262,7 +268,6 @@ class Message extends Component {
         ? `${(size / (1024 * 2)).toFixed(1)}МБ`
         : `${(size / 1024).toFixed(1)}КБ`
     const messageRead = !!viewers.filter(e => e !== myId).length
-
     if (type === 'file' && isUploading) {
       return (
         <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -325,9 +330,8 @@ class Message extends Component {
               </LinearGradient>
               {!!(resend && resend.sender) && (
                 <ShadowTopContainer>
-                  <WhiteTopText>
-                    {!!resend.sender &&
-                      `Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                  <WhiteTopText style={{ color: forwardedMessage }}>
+                    {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
                   </WhiteTopText>
                 </ShadowTopContainer>
               )}
@@ -386,9 +390,8 @@ class Message extends Component {
                 </LinearGradient>
                 {!!(resend && resend.sender) ? (
                   <ShadowTopContainer>
-                    <WhiteTopText>
-                      {!!resend.sender &&
-                        `Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                    <WhiteTopText style={{ color: forwardedMessage }}>
+                      {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
                     </WhiteTopText>
                   </ShadowTopContainer>
                 ) : (
@@ -443,12 +446,14 @@ class Message extends Component {
             <MyMessage background={background}>
               {!!(resend && resend.sender) && (
                 <Forwarded
+                  color={forwardedMessage}
                   userName={`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
                   myMessage
                 />
               )}
               {!!(reply && reply.sender) && (
                 <Forwarded
+                  color={replyedMessage}
                   type={reply.type}
                   fileName={reply.filename}
                   geoData={reply.data}
@@ -510,11 +515,13 @@ class Message extends Component {
               >
                 {!!(resend && resend.sender) && (
                   <Forwarded
+                    color={forwardedMessage}
                     userName={`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
                   />
                 )}
                 {!!(reply && reply.sender) && (
                   <Forwarded
+                    color={replyedMessage}
                     type={reply.type}
                     fileName={reply.filename}
                     geoData={reply.data}
@@ -579,9 +586,8 @@ class Message extends Component {
             </MapView>
             {!!(resend && resend.sender) && (
               <ShadowTopContainer>
-                <WhiteTopText>
-                  {!!resend.sender &&
-                    `Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                <WhiteTopText style={{ color: forwardedMessage }}>
+                  {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
                 </WhiteTopText>
               </ShadowTopContainer>
             )}
@@ -660,9 +666,8 @@ class Message extends Component {
               </MapView>
               {!!(resend && resend.sender) && (
                 <ShadowTopContainer>
-                  <WhiteTopText>
-                    {!!resend.sender &&
-                      `Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                  <WhiteTopText style={{ color: forwardedMessage }}>
+                    {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
                   </WhiteTopText>
                 </ShadowTopContainer>
               )}
@@ -710,9 +715,8 @@ class Message extends Component {
             >
               {!!(resend && resend.sender) && (
                 <ShadowTopContainer>
-                  <WhiteTopText>
-                    {!!resend.sender &&
-                      `Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                  <WhiteTopText style={{ color: forwardedMessage }}>
+                    {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
                   </WhiteTopText>
                 </ShadowTopContainer>
               )}
@@ -783,9 +787,8 @@ class Message extends Component {
                 </VideoPinBorder>
                 {!!(resend && resend.sender) ? (
                   <ShadowTopContainer>
-                    <WhiteTopText>
-                      {!!resend.sender &&
-                        `Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                    <WhiteTopText style={{ color: forwardedMessage }}>
+                      {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
                     </WhiteTopText>
                   </ShadowTopContainer>
                 ) : (
@@ -822,6 +825,7 @@ class Message extends Component {
             <MyMessage background={background}>
               {!!(resend && resend.sender) && (
                 <Forwarded
+                  color={forwardedMessage}
                   userName={`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
                   myMessage
                 />
@@ -878,7 +882,10 @@ class Message extends Component {
                 background={background || interlocatorMessage}
               >
                 {!!(resend && resend.sender) && (
-                  <InterlocutorsName isGroupName={isGroup}>
+                  <InterlocutorsName
+                    style={{ color: forwardedMessage }}
+                    isGroupName={isGroup}
+                  >
                     {!!sender && `${sender.first_name} ${sender.last_name}`}
                   </InterlocutorsName>
                 )}

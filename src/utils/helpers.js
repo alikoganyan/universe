@@ -83,8 +83,8 @@ export default {
     silver: '#cacaca',
     jumbo: '#818086',
     norway: '#A8BE9D',
-    forwardedMessage: '#e66529',
-    replyedMessage: '#edc821',
+    forwardedMessage: '#7367F0',
+    replyedMessage: '#FE2F57',
   },
   randomColors: [
     '#e63c29',

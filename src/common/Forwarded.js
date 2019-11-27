@@ -14,8 +14,8 @@ class Forwarded extends PureComponent {
       geoData,
       fileName,
       type,
+      color,
     } = this.props
-
     return (
       <View
         style={[
@@ -23,7 +23,9 @@ class Forwarded extends PureComponent {
           { backgroundColor: myMessage ? '#cfe9ba' : '#ececec' },
         ]}
       >
-        <Text style={styles.userName}>{userName}</Text>
+        <Text style={[styles.userName, { color: color ? color : '#034402' }]}>
+          {userName}
+        </Text>
 
         {src && (type === 'video' || type === 'image') ? (
           <MyMessageCachedImage
