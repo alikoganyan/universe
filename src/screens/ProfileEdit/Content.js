@@ -114,8 +114,10 @@ class Content extends Component {
       emailError,
       passwordError,
       repasswordError,
+      image,
+      imageFormData,
     } = this.state
-    const { first_name, last_name, middle_name, email, image } = user || {}
+    const { first_name, last_name, middle_name, email } = user || {}
     return (
       <Wrapper>
         <User>
@@ -127,7 +129,11 @@ class Content extends Component {
             ) : (
               <ImageComponent
                 size={80}
-                source={{ uri: `https://testser.univ.team${image}` }}
+                source={{
+                  uri: imageFormData
+                    ? image
+                    : `https://testser.univ.team${image}`,
+                }}
                 style={{
                   marginTop: 0,
                   marginBottom: 16,
@@ -225,6 +231,8 @@ class Content extends Component {
     emailError: false,
     passwordError: false,
     repasswordError: false,
+    imageFormData: null,
+    image: '',
     user: {
       email: '',
       first_name: '',
@@ -247,7 +255,10 @@ class Content extends Component {
   componentDidMount() {
     const { user } = this.props
     const statUser = this.state.user
-    this.setState({ user: { ...statUser, ...user, password: '' } })
+    this.setState({
+      user: { ...statUser, ...user, password: '' },
+      image: user.image,
+    })
     // setInterval(() => this.setState({
     //     lastNameError: !this.state.lastNameError,
     //     firstNameError: !this.state.firstNameError,
@@ -259,30 +270,35 @@ class Content extends Component {
   }
 
   selectImage = () => {
-    const { user, setUser } = this.props
     getImageFromPicker(result => {
       const { imageFormData = {} } = result
-      const form = new FormData()
-      form.append('file', imageFormData)
       if (!result.cancelled) {
-        sendRequest({
-          r_path: p_profile_avatar,
-          method: 'post',
-          attr: form,
-          config: {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-          success: res => {
-            const newUser = { ...user }
-            newUser.image = res.newImage
-            setUser(newUser)
-            this.setState({ user: newUser })
-          },
-          failFunc: err => {},
-        })
+        this.setState({ imageFormData, image: imageFormData.uri })
       }
+    })
+  }
+
+  saveImage = () => {
+    const { imageFormData } = this.state
+    const { setUser, user } = this.props
+    const form = new FormData()
+    form.append('file', imageFormData)
+    sendRequest({
+      r_path: p_profile_avatar,
+      method: 'post',
+      attr: form,
+      config: {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+      success: res => {
+        const newUser = { ...user }
+        newUser.image = res.newImage
+        setUser(newUser)
+        this.setState({ user: newUser })
+      },
+      failFunc: err => {},
     })
   }
 
@@ -302,7 +318,7 @@ class Content extends Component {
   }
 
   apply = () => {
-    const { user } = this.state
+    const { user, imageFormData } = this.state
     const { back, alterUser } = this.props
     const userRedux = this.props.user
     const {
@@ -335,6 +351,7 @@ class Content extends Component {
           deviceId: RNDeviceInfo.getDeviceId(),
         },
         success: () => {
+          imageFormData && this.saveImage()
           alterUser({
             email: email || userRedux.email,
             first_name: first_name || userRedux.firstName,
