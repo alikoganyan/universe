@@ -22,6 +22,8 @@ import ImageComponent from '../../common/Image'
 import { socket } from '../../utils/socket'
 import { setDialogs } from '../../actions/dialogsActions'
 import DefaultAvatar from '../../common/DefaultAvatar'
+import sendRequest from '../../utils/request'
+import { p_leave_group } from '../../constants/api'
 
 const { sidePadding, Colors, HeaderHeight, fontSize } = helper
 const { border, grey3, pink } = Colors
@@ -443,9 +445,20 @@ class Content extends Component {
       dialog,
       toDialogs,
     } = this.props
-    const newDialogs = [...dialog].filter(e => e._id !== currentDialog._id)
-    setDialogs(newDialogs)
-    toDialogs()
+    sendRequest({
+      r_path: p_leave_group,
+      method: 'post',
+      attr: {
+        group_id: currentDialog._id,
+      },
+      success: res => {
+        // to do
+        const newDialogs = [...dialog].filter(e => e._id !== currentDialog._id)
+        setDialogs(newDialogs)
+        toDialogs()
+      },
+      failFunc: err => {},
+    })
   }
 }
 
