@@ -63,13 +63,14 @@ class Chat extends Component {
             />
             <View style={{ flex: 1 }}>
               <Content
+                navigation={this.props.navigation}
                 navigate={this.props.navigation.navigate}
                 goBack={this.props.navigation.goBack}
                 onShowPreviewImages={this._onShowPreviewImages}
               />
             </View>
             <Bottom>
-              <Input />
+              <Input navigation={this.props.navigation} />
             </Bottom>
           </Wrapper>
         </SafeAreaView>

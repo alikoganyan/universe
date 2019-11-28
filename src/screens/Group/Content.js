@@ -71,6 +71,7 @@ class Content extends Component {
         <Wrapper search={search}>
           <StyledImageBackground source={chatBg}>
             <FlatList
+              ref="flatList"
               style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
               ListHeaderComponent={<FlatListHeader editing={isEditing} />}
               inverted={!!reversedMessages.length}
@@ -134,7 +135,12 @@ class Content extends Component {
 
   componentDidMount() {
     moment.locale('ru')
-    const { dialogs, currentChat, setDialogs, user } = this.props
+    const { navigation, dialogs, currentChat, setDialogs, user } = this.props
+
+    navigation.setParams({
+      scrollToBottom: this._scrollToBottom,
+    })
+
     InteractionManager.runAfterInteractions(() => {
       this.setState({
         animationCompleted: true,
@@ -168,6 +174,10 @@ class Content extends Component {
       )
       setDialogs(dialogs)
     }
+  }
+
+  _scrollToBottom = () => {
+    this.refs.flatList.scrollToOffset({ x: 0, y: 0, animated: true })
   }
 
   generateColor = () => {

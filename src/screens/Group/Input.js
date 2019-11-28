@@ -485,6 +485,7 @@ class InputComponent extends Component {
       updateUploadMessageProgress: updateUploadMessageProgressProp,
       dialogs,
       user,
+      navigation,
     } = this.props
     const form = new FormData()
     form.append('file', formDataObject)
@@ -532,6 +533,8 @@ class InputComponent extends Component {
           dialog_id: currentRoomId,
           participant: currentRoom,
         })
+        navigation.getParam('scrollToBottom')()
+
         const newDialogs = [...dialogs]
         const index = newDialogs.findIndex(e => e.room === currentChat)
         newDialogs[index] = res.dialog
@@ -596,7 +599,7 @@ class InputComponent extends Component {
   }
 
   _selectGeo = async () => {
-    const { currentChat } = this.props
+    const { currentChat, navigation } = this.props
     const coords = await getGeoCoords()
     if (coords) {
       const { latitude, longitude } = coords
@@ -604,6 +607,7 @@ class InputComponent extends Component {
         room: currentChat,
         geo_data: { latitude, longitude },
       })
+      navigation.getParam('scrollToBottom')()
     }
   }
 
@@ -611,6 +615,7 @@ class InputComponent extends Component {
 
   sendMessage = () => {
     const { currentChat } = this.props
+
     // const {
     //   _id, first_name, last_name, middle_name, image
     // } = user;
@@ -659,6 +664,7 @@ class InputComponent extends Component {
       forwardedMessage: { _id },
       currentRoomId,
       user,
+      navigation,
     } = this.props
     const bodyReq = { message_id: _id, dialog_id: currentRoomId }
     sendRequest({
@@ -667,6 +673,8 @@ class InputComponent extends Component {
       attr: bodyReq,
       success: res => {
         socket.emit('get_dialogs', { id: user._id })
+        navigation.getParam('scrollToBottom')()
+
         this.stopForwarding()
       },
       failFunc: err => {},
@@ -706,6 +714,7 @@ class InputComponent extends Component {
   }
 
   handleSendPress = () => {
+    const { navigation } = this.props
     const { edit, reply } = this.state
     if (edit) {
       this.confirmEditing()
@@ -714,6 +723,7 @@ class InputComponent extends Component {
     } else {
       this.sendMessage()
     }
+    navigation.getParam('scrollToBottom')()
   }
 }
 

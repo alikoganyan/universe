@@ -487,7 +487,6 @@ class InputComponent extends Component {
     )
   }
 
-  // to do
   _startSendingFile = (formDataObject = {}, imageUri = '') => {
     const {
       currentChat,
@@ -500,6 +499,7 @@ class InputComponent extends Component {
       dialogs,
       user,
       setCurrentChat,
+      navigation,
     } = this.props
 
     const form = new FormData()
@@ -552,7 +552,7 @@ class InputComponent extends Component {
           dialog_id: res.dialog._id,
           participant: currentRoom,
         })
-
+        navigation.getParam('scrollToBottom')()
         const newDialogs = [...dialogs]
         const index = newDialogs.findIndex(e => e.room === currentChat)
         newDialogs[index] = res.dialog
@@ -622,7 +622,7 @@ class InputComponent extends Component {
   }
 
   _selectGeo = async () => {
-    const { currentDialog } = this.props
+    const { navigation, currentDialog } = this.props
     const coords = await getGeoCoords()
     if (coords) {
       const { latitude, longitude } = coords
@@ -632,6 +632,7 @@ class InputComponent extends Component {
         receiver: currentDialog._id,
         geo_data: { latitude, longitude },
       })
+      navigation.getParam('scrollToBottom')()
     }
   }
 
@@ -660,6 +661,7 @@ class InputComponent extends Component {
     const {
       forwardedMessage: { _id },
       currentRoomId,
+      navigation,
     } = this.props
     const bodyReq = { message_id: _id, dialog_id: currentRoomId }
     sendRequest({
@@ -668,6 +670,7 @@ class InputComponent extends Component {
       attr: bodyReq,
       success: res => {
         socket.emit('get_dialog', { _id: currentRoomId })
+        navigation.getParam('scrollToBottom')()
         this.stopForwarding()
       },
       failFunc: err => {},
@@ -706,6 +709,8 @@ class InputComponent extends Component {
   }
 
   handleSendPress = () => {
+    const { navigation } = this.props
+    navigation.getParam('scrollToBottom')()
     const { edit, reply } = this.state
     if (edit) {
       this.confirmEditing()
