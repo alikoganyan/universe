@@ -373,7 +373,6 @@ class Content extends Component {
         title: 'Сделать задачей',
         action: () => this.turnToTask(message),
       })
-    } else {
       actions.push({
         title: 'Ответить',
         action: () => this.replyMessage(message),
