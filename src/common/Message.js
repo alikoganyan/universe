@@ -56,7 +56,6 @@ const UploadProgressText = styled(Text)`
 
 const MyMessage = styled(View)`
   display: flex;
-  justify-content: center;
   text-align: right;
   margin: 5px 10px;
   background: ${({ background }) => background || myMessage};
@@ -85,10 +84,8 @@ const MyMessageText = styled(Text)`
 `
 
 const InterlocutorsMessage = styled(MyMessage)`
-  justify-content: center;
   flex-direction: column;
   text-align: left;
-  align-items: flex-start;
   background: ${({ background }) => background || interlocatorMessage};
   margin-left: 5px;
   position: relative;
@@ -109,10 +106,10 @@ const InterlocutorsMessageText = styled(MyMessageText)`
   color: ${({ isGroupName }) =>
     isGroupName ? helper.Colors.blue : Colors.black};
   border-radius: 3;
-  overflow: hidden;
   padding-bottom: 0;
   flex-wrap: wrap;
   font-family: 'OpenSans';
+  overflow: hidden;
 `
 const MessageInfo = styled(View)`
   display: flex;
@@ -154,9 +151,6 @@ const BottomLine = styled(LinearGradient)`
   font-size: ${fontSize.sm};
 `
 const ShadowTopContainer = styled(View)`
-  background: rgba(0, 0, 0, 0.3);
-  position: absolute;
-  top: 0;
   width: 100%;
 `
 const WhiteTopText = styled(Text)`
@@ -304,9 +298,19 @@ class Message extends Component {
           onLongPress={onLongPressMessage}
         >
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <MyMessage background={background} style={{ padding: 0 }}>
+            <MyMessage
+              background={background}
+              style={{ padding: 0, height: 230 }}
+            >
+              {!!(resend && resend.sender) && (
+                <ShadowTopContainer>
+                  <WhiteTopText style={{ color: forwardedMessage }}>
+                    {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                  </WhiteTopText>
+                </ShadowTopContainer>
+              )}
               <MyMessageCachedImage
-                style={{ width }}
+                style={{ width, flex: 1 }}
                 source={{
                   uri: `https://testser.univ.team${src}`,
                 }}
@@ -328,13 +332,6 @@ class Message extends Component {
                   <Indicator color="black" read={messageRead} />
                 </MessageInfo>
               </LinearGradient>
-              {!!(resend && resend.sender) && (
-                <ShadowTopContainer>
-                  <WhiteTopText style={{ color: forwardedMessage }}>
-                    {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
-                  </WhiteTopText>
-                </ShadowTopContainer>
-              )}
             </MyMessage>
             <TriangleLeftIcon color={myMessage} />
           </View>
@@ -370,24 +367,10 @@ class Message extends Component {
               }}
             >
               <TriangleRightIcon color={interlocatorMessage} />
-              <InterlocutorsMessage background={background}>
-                <MyMessageCachedImage
-                  style={{ width }}
-                  source={{
-                    uri: `https://testser.univ.team${src}`,
-                  }}
-                  resizeMode={FastImage.resizeMode.cover}
-                />
-                <LinearGradient
-                  start={{ x: 0, y: 0.5 }}
-                  end={{ x: 1.0, y: 1.0 }}
-                  colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
-                  style={{ position: 'absolute', right: 0, bottom: 0 }}
-                >
-                  <MessageInfo>
-                    <MessageDate color={Colors.white}>{finalTime}</MessageDate>
-                  </MessageInfo>
-                </LinearGradient>
+              <InterlocutorsMessage
+                background={background}
+                style={{ height: 230 }}
+              >
                 {!!(resend && resend.sender) ? (
                   <ShadowTopContainer>
                     <WhiteTopText style={{ color: forwardedMessage }}>
@@ -403,6 +386,25 @@ class Message extends Component {
                     </ShadowTopContainer>
                   )
                 )}
+                <View style={{ flex: 1 }}>
+                  <MyMessageCachedImage
+                    style={{ width }}
+                    source={{
+                      uri: `https://testser.univ.team${src}`,
+                    }}
+                    resizeMode={FastImage.resizeMode.cover}
+                  />
+                </View>
+                <LinearGradient
+                  start={{ x: 0, y: 0.5 }}
+                  end={{ x: 1.0, y: 1.0 }}
+                  colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
+                  style={{ position: 'absolute', right: 0, bottom: 0 }}
+                >
+                  <MessageInfo>
+                    <MessageDate color={Colors.white}>{finalTime}</MessageDate>
+                  </MessageInfo>
+                </LinearGradient>
               </InterlocutorsMessage>
             </View>
           </View>
@@ -559,31 +561,7 @@ class Message extends Component {
             marginRight: 10,
           }}
         >
-          <MyMessage style={{ height: 200, width: '100%' }}>
-            <MapView
-              scrollEnabled={false}
-              rotateEnabled={false}
-              pitchEnabled={false}
-              zoomEnabled={false}
-              provider="google"
-              style={[StyleSheet.absoluteFillObject, { margin: 3 }]}
-              region={{
-                ...data,
-                latitudeDelta: 0.002,
-                longitudeDelta: 0.002,
-              }}
-              tracksViewChanges={false}
-              onPress={onPressMessage}
-              onLongPress={onLongPressMessage}
-            >
-              <MapView.Marker
-                coordinate={{
-                  latitude,
-                  longitude,
-                }}
-                tracksViewChanges={false}
-              />
-            </MapView>
+          <MyMessage style={{ height: 230, width: '100%' }}>
             {!!(resend && resend.sender) && (
               <ShadowTopContainer>
                 <WhiteTopText style={{ color: forwardedMessage }}>
@@ -591,6 +569,33 @@ class Message extends Component {
                 </WhiteTopText>
               </ShadowTopContainer>
             )}
+            <View style={{ flex: 1 }}>
+              <MapView
+                scrollEnabled={false}
+                rotateEnabled={false}
+                pitchEnabled={false}
+                zoomEnabled={false}
+                provider="google"
+                style={[StyleSheet.absoluteFillObject, { margin: 3 }]}
+                region={{
+                  ...data,
+                  latitudeDelta: 0.002,
+                  longitudeDelta: 0.002,
+                }}
+                tracksViewChanges={false}
+                onPress={onPressMessage}
+                onLongPress={onLongPressMessage}
+              >
+                <MapView.Marker
+                  coordinate={{
+                    latitude,
+                    longitude,
+                  }}
+                  tracksViewChanges={false}
+                />
+              </MapView>
+            </View>
+
             <BottomLine
               start={{ x: 0, y: 0.5 }}
               end={{ x: 1.0, y: 1.0 }}
@@ -637,33 +642,9 @@ class Message extends Component {
           >
             <TriangleRightIcon color={interlocatorMessage} />
             <InterlocutorsMessage
-              style={{ height: 200, width: '100%' }}
+              style={{ height: 230, width: '100%' }}
               background={background || interlocatorMessage}
             >
-              <MapView
-                scrollEnabled={false}
-                rotateEnabled={false}
-                pitchEnabled={false}
-                zoomEnabled={false}
-                provider="google"
-                style={[StyleSheet.absoluteFillObject, { margin: 3 }]}
-                region={{
-                  latitude,
-                  longitude,
-                  latitudeDelta: 0.002,
-                  longitudeDelta: 0.002,
-                }}
-                onPress={onPressMessage}
-                onLongPress={onLongPressMessage}
-              >
-                <MapView.Marker
-                  coordinate={{
-                    latitude,
-                    longitude,
-                  }}
-                  tracksViewChanges={false}
-                />
-              </MapView>
               {!!(resend && resend.sender) && (
                 <ShadowTopContainer>
                   <WhiteTopText style={{ color: forwardedMessage }}>
@@ -678,6 +659,33 @@ class Message extends Component {
                   </WhiteTopText>
                 </ShadowTopContainer>
               )}
+              <View style={{ flex: 1 }}>
+                <MapView
+                  scrollEnabled={false}
+                  rotateEnabled={false}
+                  pitchEnabled={false}
+                  zoomEnabled={false}
+                  provider="google"
+                  style={[StyleSheet.absoluteFillObject, { margin: 3 }]}
+                  region={{
+                    latitude,
+                    longitude,
+                    latitudeDelta: 0.002,
+                    longitudeDelta: 0.002,
+                  }}
+                  onPress={onPressMessage}
+                  onLongPress={onLongPressMessage}
+                >
+                  <MapView.Marker
+                    coordinate={{
+                      latitude,
+                      longitude,
+                    }}
+                    tracksViewChanges={false}
+                  />
+                </MapView>
+              </View>
+
               <BottomLine
                 start={{ x: 0, y: 0.5 }}
                 end={{ x: 1.0, y: 1.0 }}
@@ -708,9 +716,8 @@ class Message extends Component {
           >
             <MyMessage
               style={{
-                height: 150,
+                height: 180,
                 width: '100%',
-                backgroundColor: Colors.black,
               }}
             >
               {!!(resend && resend.sender) && (
@@ -720,9 +727,17 @@ class Message extends Component {
                   </WhiteTopText>
                 </ShadowTopContainer>
               )}
-              <VideoPinBorder>
-                <VideoPinTriangle />
-              </VideoPinBorder>
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: 'black',
+                  justifyContent: 'center',
+                }}
+              >
+                <VideoPinBorder>
+                  <VideoPinTriangle />
+                </VideoPinBorder>
+              </View>
               <BottomLine
                 start={{ x: 0, y: 0.5 }}
                 end={{ x: 1.0, y: 1.0 }}
@@ -776,15 +791,11 @@ class Message extends Component {
               <TriangleRightIcon color={interlocatorMessage} />
               <InterlocutorsMessage
                 style={{
-                  height: 150,
+                  height: 180,
                   width: '100%',
-                  backgroundColor: Colors.black,
                 }}
                 background={background || interlocatorMessage}
               >
-                <VideoPinBorder>
-                  <VideoPinTriangle />
-                </VideoPinBorder>
                 {!!(resend && resend.sender) ? (
                   <ShadowTopContainer>
                     <WhiteTopText style={{ color: forwardedMessage }}>
@@ -800,6 +811,17 @@ class Message extends Component {
                     </ShadowTopContainer>
                   )
                 )}
+                <View
+                  style={{
+                    flex: 1,
+                    backgroundColor: 'black',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <VideoPinBorder>
+                    <VideoPinTriangle />
+                  </VideoPinBorder>
+                </View>
                 <BottomLine
                   start={{ x: 0, y: 0.5 }}
                   end={{ x: 1.0, y: 1.0 }}

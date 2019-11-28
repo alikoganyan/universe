@@ -373,11 +373,11 @@ class Content extends Component {
         title: 'Сделать задачей',
         action: () => this.turnToTask(message),
       })
-      actions.push({
-        title: 'Ответить',
-        action: () => this.replyMessage(message),
-      })
     }
+    actions.push({
+      title: 'Ответить',
+      action: () => this.replyMessage(message),
+    })
     actions.push({
       title: 'Переслать',
       action: () => this.forwardMessage(message),
