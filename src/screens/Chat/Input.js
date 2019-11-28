@@ -492,17 +492,22 @@ class InputComponent extends Component {
     const {
       currentChat,
       currentRoom,
-      currentRoomId,
+      currentDialog,
       setDialogs: setDialogsProp,
       addUploadMessage: addUploadMessageProp,
       removeUploadMessage: removeUploadMessageProp,
       updateUploadMessageProgress: updateUploadMessageProgressProp,
       dialogs,
       user,
+      setCurrentChat,
     } = this.props
+
     const form = new FormData()
     form.append('file', formDataObject)
-    form.append('room', currentChat)
+    currentChat
+      ? form.append('room', currentChat)
+      : form.append('receiver', currentDialog._id)
+
     const tempMessageId = Date.now()
     let prevProgress = 0
     const progressMultiplier = 10
@@ -543,14 +548,18 @@ class InputComponent extends Component {
       },
       success: res => {
         socket.emit('file', {
-          room: currentChat,
-          dialog_id: currentRoomId,
+          room: currentChat ? currentChat : null,
+          dialog_id: res.dialog._id,
           participant: currentRoom,
         })
+
         const newDialogs = [...dialogs]
         const index = newDialogs.findIndex(e => e.room === currentChat)
         newDialogs[index] = res.dialog
         setDialogsProp(newDialogs)
+        if (!currentChat) {
+          setCurrentChat(res.dialog.room)
+        }
       },
       failFunc: err => {
         Alert.alert('Ошибка', 'Что то пошло не так')
