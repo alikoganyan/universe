@@ -89,11 +89,10 @@ const styles = StyleSheet.create({
   },
   userName: {
     color: '#034402',
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 14,
   },
   text: {
-    fontSize: 14,
+    fontSize: 12,
   },
 })
 

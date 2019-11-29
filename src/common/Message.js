@@ -62,6 +62,7 @@ const MyMessage = styled(View)`
   border-radius: ${borderRadius};
   border-bottom-right-radius: 0;
   max-width: 80%;
+  min-width: 25%;
   margin-left: 20%;
   position: relative;
   flex-grow: 1;
@@ -84,16 +85,18 @@ const MyMessageText = styled(Text)`
 `
 
 const InterlocutorsMessage = styled(MyMessage)`
-  flex-direction: column;
+  display: flex;
   text-align: left;
   background: ${({ background }) => background || interlocatorMessage};
-  margin-left: 5px;
+  margin: 5px 10px;
+  margin-left: 15px;
   position: relative;
-  left: -10px;
+  left: -20px;
   border-bottom-right-radius: ${borderRadius};
   border-bottom-left-radius: 0;
   max-width: 80%;
   overflow: hidden;
+  flex-grow: 1;
 `
 
 const InterlocutorsMessageText = styled(MyMessageText)`
@@ -117,7 +120,6 @@ const MessageInfo = styled(View)`
   align-items: center;
   justify-content: flex-end;
   padding: 0 10px 5px;
-  width: 100%;
 `
 const MessageDate = styled(Text)`
   color: ${({ color }) => color || Colors.jumbo};
@@ -444,36 +446,43 @@ class Message extends Component {
           onPress={onPressMessage}
           onLongPress={onLongPressMessage}
         >
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <MyMessage background={background}>
-              {!!(resend && resend.sender) && (
-                <Forwarded
-                  color={forwardedMessage}
-                  userName={`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
-                  myMessage
-                />
-              )}
-              {!!(reply && reply.sender) && (
-                <Forwarded
-                  color={replyedMessage}
-                  type={reply.type}
-                  fileName={reply.filename}
-                  geoData={reply.data}
-                  src={reply.src}
-                  userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
-                  text={reply.text}
-                  myMessage
-                />
-              )}
-              {/*{!(resend && resend.sender) && (*/}
-              <MyMessageText>{text}</MyMessageText>
-              {/*)}*/}
-              <MessageInfo>
-                <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
-                <Indicator color="black" read={messageRead} />
-              </MessageInfo>
-            </MyMessage>
-            <TriangleLeftIcon color={background || myMessage} />
+          <View style={{ display: 'flex', flexDirection: 'row-reverse' }}>
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                position: 'relative',
+                right: 10,
+              }}
+            >
+              <MyMessage background={background}>
+                {!!(resend && resend.sender) && (
+                  <Forwarded
+                    color={forwardedMessage}
+                    userName={`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                    myMessage
+                  />
+                )}
+                {!!(reply && reply.sender) && (
+                  <Forwarded
+                    color={replyedMessage}
+                    type={reply.type}
+                    fileName={reply.filename}
+                    geoData={reply.data}
+                    src={reply.src}
+                    userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
+                    text={reply.text}
+                    myMessage
+                  />
+                )}
+                <MyMessageText>{text}</MyMessageText>
+                <MessageInfo>
+                  <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
+                  <Indicator color="black" read={messageRead} />
+                </MessageInfo>
+              </MyMessage>
+              <TriangleLeftIcon color={background || myMessage} />
+            </View>
           </View>
         </TouchableOpacity>
       ) : (

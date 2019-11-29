@@ -14,7 +14,7 @@ export default {
   IconDarkColor: '#979897',
   IconLightColor: '#ABABAB',
   IconBlueColor: '#2B5275',
-  IconSize: 17,
+  IconSize: 13,
   IconSizeSmall: 11,
   IconSizeLarge: 20,
   borderRadius: 8,
