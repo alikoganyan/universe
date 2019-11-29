@@ -91,7 +91,7 @@ const InterlocutorsMessage = styled(MyMessage)`
   margin: 5px 10px;
   margin-left: 40px;
   position: relative;
-  left: -55px;
+  left: -45px;
   border-bottom-right-radius: ${borderRadius};
   border-bottom-left-radius: 0;
   max-width: 80%;
