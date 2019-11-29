@@ -62,7 +62,7 @@ const MyMessage = styled(View)`
   border-radius: ${borderRadius};
   border-bottom-right-radius: 0;
   max-width: 80%;
-  min-width: 25%;
+  min-width: 20%;
   margin-left: 20%;
   position: relative;
   flex-grow: 1;
@@ -89,9 +89,9 @@ const InterlocutorsMessage = styled(MyMessage)`
   text-align: left;
   background: ${({ background }) => background || interlocatorMessage};
   margin: 5px 10px;
-  margin-left: 15px;
+  margin-left: 40px;
   position: relative;
-  left: -20px;
+  left: -55px;
   border-bottom-right-radius: ${borderRadius};
   border-bottom-left-radius: 0;
   max-width: 80%;
