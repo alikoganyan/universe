@@ -319,9 +319,11 @@ class Dialogs extends Component {
   }
 
   setDialogSocket = e => {
-    const { dialogs, setDialogs } = this.props
+    const { dialogs, setDialogs, currentRoomId } = this.props
     const dialog = { ...e }
-    this.props.setDialog(dialog)
+    if (e._id === currentRoomId) {
+      this.props.setDialog(dialog)
+    }
     const newDialog = dialogs.map(d => (d._id === e._id ? e : d))
     setDialogs(newDialog)
   }

@@ -106,6 +106,7 @@ class Chat extends Component {
     setCurrentRoomId(null)
     setRoom(null)
     this.props.setDialog(null)
+    socket.emit('get_dialogs', { id: user._id })
   }
 
   navigateBack = () => {

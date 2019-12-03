@@ -665,9 +665,7 @@ class InputComponent extends Component {
     const {
       forwardedMessage: { _id },
       currentRoomId,
-      user,
       navigation,
-      currentChat,
     } = this.props
     const bodyReq = { message_id: _id, dialog_id: currentRoomId }
     sendRequest({
@@ -675,16 +673,8 @@ class InputComponent extends Component {
       method: 'post',
       attr: bodyReq,
       success: res => {
-        socket.emit(
-          'subscribe_to_group',
-          { room: currentChat },
-          ({ dialog }) => {
-            this.props.setDialog(dialog)
-          },
-        )
-        socket.emit('get_dialogs', { id: user._id })
+        socket.emit('get_dialog', { _id: currentRoomId })
         navigation.getParam('scrollToBottom')()
-
         this.stopForwarding()
       },
       failFunc: err => {},
@@ -707,8 +697,6 @@ class InputComponent extends Component {
     const {
       repliedMessage: { _id },
       currentRoomId,
-      user,
-      currentChat,
     } = this.props
     const { text } = this.state
     const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
@@ -718,14 +706,7 @@ class InputComponent extends Component {
       attr: bodyReq,
       success: res => {
         this.stopReply()
-        socket.emit(
-          'subscribe_to_group',
-          { room: currentChat },
-          ({ dialog }) => {
-            this.props.setDialog(dialog)
-          },
-        )
-        socket.emit('get_dialogs', { id: user._id })
+        socket.emit('get_dialog', { _id: currentRoomId })
       },
       failFunc: err => {},
     })
