@@ -16,11 +16,7 @@ import {
   setCurrentRoomId,
 } from '../../actions/messageActions'
 // import { Notifications } from 'expo';
-import {
-  setDialogs,
-  setCurrentDialogs,
-  setDialog,
-} from '../../actions/dialogsActions'
+import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
 import {
   setAllUsers,
   setCompanies,
@@ -221,7 +217,6 @@ class Dialogs extends Component {
   }
 
   componentWillUnmount() {
-    this.props.setDialog(null)
     // disconnectFromSocket()
     // AppState.removeEventListener('change', this._handleAppStateChange);
   }
@@ -321,10 +316,6 @@ class Dialogs extends Component {
   setDialogSocket = e => {
     const { dialogs, setDialogs } = this.props
 
-    const dialog = { ...e }
-
-    this.props.setDialog(dialog)
-
     const newDialog = dialogs.map(d => (d._id === e._id ? e : d))
     setDialogs(newDialog)
   }
@@ -393,12 +384,15 @@ class Dialogs extends Component {
   }
 
   newMessageSocket = e => {
-    const { dialog, user } = this.props
+    const {
+      dialogs,
+      setDialogs /*addMessage, currentRoomId, user*/,
+    } = this.props
     try {
       const message =
-        e && e._id
+        e.message && e.message._id
           ? {
-              ...e,
+              ...e.message,
             }
           : {
               ...e,
@@ -408,70 +402,63 @@ class Dialogs extends Component {
               sender: { ...e.sender },
               viewers: [],
             }
-      if (Object.keys(dialog).length) {
-        const updatedCurrentDialog = { ...dialog }
-        updatedCurrentDialog.messages.push(message)
-        this.props.setDialog(updatedCurrentDialog)
-        this.sortedDialog(updatedCurrentDialog)
-      } else {
-        socket.emit('get_dialogs', { id: user._id })
+      const newDialogs = [...dialogs]
+      const newDialog = newDialogs.filter(event => event._id === e.dialog)[0]
+      if (newDialog) {
+        newDialog.messages.push(message)
+        newDialogs[
+          newDialogs.findIndex(event => event._id === e.dialog)
+        ] = newDialog
+        const newDialogSorted =
+          newDialogs.length &&
+          newDialogs
+            .sort((a, b) => {
+              if (b.messages.length && a.messages.length) {
+                const aCreation = new Date(a.created_at)
+                const aLastMessage = new Date(
+                  a.messages[a.messages.length - 1].created_at,
+                )
+                const aDate =
+                  aCreation > aLastMessage ? aCreation : aLastMessage
+                const bCreation = new Date(b.created_at)
+                const bLastMessage = new Date(
+                  b.messages[b.messages.length - 1].created_at,
+                )
+                const bDate =
+                  bCreation > bLastMessage ? bCreation : bLastMessage
+                return bDate - aDate
+              }
+              if (b.messages.length && !a.messages.length) {
+                const aCreation = new Date(a.created_at)
+                const bCreation = new Date(b.created_at)
+                const bLastMessage = new Date(
+                  b.messages[b.messages.length - 1].created_at,
+                )
+                const bDate =
+                  bCreation > bLastMessage ? bCreation : bLastMessage
+                return bDate - aCreation
+              }
+              if (!b.messages.length && a.messages.length) {
+                const aCreation = new Date(a.created_at)
+                const aLastMessage = new Date(
+                  a.messages[a.messages.length - 1].created_at,
+                )
+                const aDate =
+                  aCreation > aLastMessage ? aCreation : aLastMessage
+                const bCreation = new Date(b.created_at)
+                return bCreation - aDate
+              }
+              if (!b.messages.length && !a.messages.length) {
+                const aCreation = new Date(a.created_at)
+                const bCreation = new Date(b.created_at)
+                return bCreation - aCreation
+              }
+            })
+            .map(e => ({ ...e, messages: _.uniqBy(e.messages, '_id') }))
+        setDialogs(newDialogSorted)
       }
     } catch (err) {
       alert(`${JSON.stringify(e)} cannot be processed [${err}]`)
-    }
-  }
-
-  sortedDialog = dialog => {
-    const { dialogs, setDialogs } = this.props
-    const newDialogs = [...dialogs]
-    const newDialog = { ...dialog }
-    if (newDialog) {
-      newDialogs[
-        newDialogs.findIndex(event => event._id === dialog._id)
-      ] = newDialog
-      const newDialogSorted =
-        newDialogs.length &&
-        newDialogs
-          .sort((a, b) => {
-            if (b.messages.length && a.messages.length) {
-              const aCreation = new Date(a.created_at)
-              const aLastMessage = new Date(
-                a.messages[a.messages.length - 1].created_at,
-              )
-              const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
-              const bCreation = new Date(b.created_at)
-              const bLastMessage = new Date(
-                b.messages[b.messages.length - 1].created_at,
-              )
-              const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
-              return bDate - aDate
-            }
-            if (b.messages.length && !a.messages.length) {
-              const aCreation = new Date(a.created_at)
-              const bCreation = new Date(b.created_at)
-              const bLastMessage = new Date(
-                b.messages[b.messages.length - 1].created_at,
-              )
-              const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
-              return bDate - aCreation
-            }
-            if (!b.messages.length && a.messages.length) {
-              const aCreation = new Date(a.created_at)
-              const aLastMessage = new Date(
-                a.messages[a.messages.length - 1].created_at,
-              )
-              const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
-              const bCreation = new Date(b.created_at)
-              return bCreation - aDate
-            }
-            if (!b.messages.length && !a.messages.length) {
-              const aCreation = new Date(a.created_at)
-              const bCreation = new Date(b.created_at)
-              return bCreation - aCreation
-            }
-          })
-          .map(e => ({ ...e, messages: _.uniqBy(e.messages, '_id') }))
-      setDialogs(newDialogSorted)
     }
   }
 
@@ -561,7 +548,6 @@ class Dialogs extends Component {
       !isGroup && user._id !== e.creator._id
         ? e.creator._id
         : (e.participants[0] || { _id: null })._id
-    const dialog = { ...e }
     const currentDialog = isGroup
       ? { ...e }
       : user._id === creator._id
@@ -572,7 +558,6 @@ class Dialogs extends Component {
     }
     setCurrentRoomId(_id)
     setCurrentChat(room)
-    this.props.setDialog(dialog)
     setCurrentDialogs(currentDialog)
     socket.emit('view', { room, viewer: user._id })
     navigation.navigate(e.isGroup ? 'Group' : 'Chat')
@@ -591,7 +576,6 @@ class Dialogs extends Component {
 
 const mapStateToProps = state => ({
   dialogs: state.dialogsReducer.dialogs,
-  dialog: state.dialogsReducer.dialog,
   currentRoomId: state.messageReducer.currentRoomId,
   currentRoom: state.messageReducer.currentRoom,
   currentChat: state.messageReducer.currentChat,
@@ -604,7 +588,6 @@ const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
-  setDialog: _ => dispatch(setDialog(_)),
   addMessage: _ => dispatch(addMessage(_)),
   setUser: _ => dispatch(setUser(_)),
   setAllUsers: _ => dispatch(setAllUsers(_)),

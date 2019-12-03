@@ -1,6 +1,4 @@
 import React, { Component } from 'react'
-import RNFetchBlob from 'rn-fetch-blob'
-
 import {
   View,
   Text,
@@ -18,13 +16,12 @@ import { chatBg } from '../../assets/images'
 import { getHamsterDate } from '../../utils/helpers'
 import Message from '../../common/Message'
 import sendRequest from '../../utils/request'
-import { setDialog, setDialogs } from '../../actions/dialogsActions'
+import { setDialogs } from '../../actions/dialogsActions'
 import { setTaskReceivers } from '../../actions/participantsActions'
 import {
   editMessage,
   forwardMessage,
   replyMessage,
-  setCurrentRoomId,
 } from '../../actions/messageActions'
 import { d_message } from '../../constants/api'
 
@@ -66,24 +63,20 @@ class Content extends Component {
       currentChat,
       editedMessage,
       currentDialog,
-      dialog,
     } = this.props
-    const _dialog = Object.keys(dialog).length
-      ? dialog
-      : [...dialogs].filter(e => {
-          if (!currentChat) {
-            return (
-              !e.isGroup &&
-              (e.creator._id === currentDialog._id ||
-                e.participants.some(p => p._id === currentDialog._id))
-            )
-          } else {
-            return e.room === currentChat
-          }
-        })[0]
+    const dialog = [...dialogs].filter(e => {
+      if (!currentChat) {
+        return (
+          !e.isGroup &&
+          (e.creator._id === currentDialog._id ||
+            e.participants.some(p => p._id === currentDialog._id))
+        )
+      } else {
+        return e.room === currentChat
+      }
+    })[0]
     const isEditing = !!editedMessage.text
-
-    const messages = _dialog ? [..._dialog.messages] : []
+    const messages = dialog ? [...dialog.messages] : []
     const reversedMessages = [...messages]
       .reverse()
       .sort((x, y) => new Date(y.created_at) - new Date(x.created_at))
@@ -145,14 +138,7 @@ class Content extends Component {
 
   componentDidMount() {
     moment.locale('ru')
-    const {
-      navigation,
-      dialogs,
-      setDialogs,
-      user,
-      currentChat,
-      dialog,
-    } = this.props
+    const { navigation, dialogs, setDialogs, user, currentChat } = this.props
 
     navigation.setParams({
       scrollToBottom: this._scrollToBottom,
@@ -172,9 +158,6 @@ class Content extends Component {
           viewers: [...message.viewers, user._id],
         }),
       )
-      if (!Object.keys(dialog).length) {
-        this.props.setDialog(dialogs[dialogIndex])
-      }
       setDialogs(dialogs)
     }
   }
@@ -192,7 +175,6 @@ class Content extends Component {
       )
       setDialogs(dialogs)
     }
-    this.props.setDialog({})
   }
 
   getMessageDate = () => {
@@ -293,13 +275,7 @@ class Content extends Component {
   }
 
   deleteMessage = currentMessage => {
-    const {
-      dialogs,
-      setDialogs,
-      currentChat,
-      currentRoomId,
-      dialog,
-    } = this.props
+    const { dialogs, setDialogs, currentChat, currentRoomId } = this.props
     sendRequest({
       r_path: d_message,
       method: 'delete',
@@ -310,14 +286,13 @@ class Content extends Component {
       success: res => {},
       failFunc: err => {},
     })
-    // const dialog = dialogs.filter(dialog => dialog.room === currentChat)[0]
+    const dialog = dialogs.filter(dialog => dialog.room === currentChat)[0]
     const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
     dialog.messages = dialog.messages.filter(
       message => message._id !== currentMessage._id,
     )
     const newDialogs = [...dialogs]
     newDialogs[dialogIndex] = dialog
-    this.props.setDialog(dialog)
     setDialogs(newDialogs)
   }
 
@@ -325,38 +300,7 @@ class Content extends Component {
     this.refs.flatList.scrollToOffset({ x: 0, y: 0, animated: true })
   }
 
-  download = item => {
-    let url = `https://testser.univ.team${item.src}`
-    let fileName = item.filename
-    let date = new Date()
-    let ext = this.extention(url)
-    ext = `.${ext[0]}`
-    const { config, fs } = RNFetchBlob
-    let PictureDir = fs.dirs.PictureDir
-    let options = {
-      fileCache: true,
-      addAndroidDownloads: {
-        useDownloadManager: true,
-        notification: true,
-        path: `${PictureDir}/${Math.floor(
-          date.getTime() + date.getSeconds() / 2,
-        )}${ext}`,
-        description: fileName,
-      },
-    }
-    config(options)
-      .fetch('GET', url)
-      .then(res => {
-        Alert.alert('Success Downloaded')
-      })
-  }
-
-  extention = filename => {
-    return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined
-  }
-
   _onPressMessage = item => {
-    this.download(item)
     const { navigate, dialogs, currentChat, currentDialog } = this.props
     const { first_name, last_name, phone_number } = currentDialog
     const {
@@ -418,9 +362,7 @@ class Content extends Component {
   }
 
   _getMessageActions = message => {
-    const { user, dialog } = this.props
-    this.props.setCurrentRoomId(dialog._id)
-
+    const { user } = this.props
     let actions = []
     if (
       message._id &&
@@ -505,17 +447,14 @@ const mapStateToProps = state => ({
   currentRoom: state.messageReducer.currentRoom,
   user: state.userReducer.user,
   dialogs: state.dialogsReducer.dialogs,
-  dialog: state.dialogsReducer.dialog,
   currentDialog: state.dialogsReducer.currentDialog,
 })
 const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
-  setDialog: _ => dispatch(setDialog(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
-  setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
 })
 export default connect(
   mapStateToProps,

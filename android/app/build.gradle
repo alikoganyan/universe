@@ -151,7 +151,6 @@ android {
 }
 
 dependencies {
-    implementation project(':rn-fetch-blob')
     implementation project(':react-native-geolocation-service')
     implementation project(':react-native-video')
     implementation project(':react-native-action-sheet')
