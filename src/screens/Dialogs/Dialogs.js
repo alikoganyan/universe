@@ -406,10 +406,12 @@ class Dialogs extends Component {
               viewers: [],
             }
       if (Object.keys(dialog).length) {
-        const updatedCurrentDialog = { ...dialog }
-        updatedCurrentDialog.messages.push(message)
-        this.props.setDialog(updatedCurrentDialog)
-        this.sortedDialog(updatedCurrentDialog)
+        if (e.dialog === dialog._id) {
+          const updatedCurrentDialog = { ...dialog }
+          updatedCurrentDialog.messages.push(message)
+          this.props.setDialog(updatedCurrentDialog)
+          this.sortedDialog(updatedCurrentDialog)
+        }
       } else {
         socket.emit('get_dialogs', { id: user._id })
       }
