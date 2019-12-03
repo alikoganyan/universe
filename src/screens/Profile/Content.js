@@ -452,7 +452,6 @@ class Content extends Component {
         group_id: currentDialog._id,
       },
       success: res => {
-        // to do
         const newDialogs = [...dialog].filter(e => e._id !== currentDialog._id)
         setDialogs(newDialogs)
         toDialogs()

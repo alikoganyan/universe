@@ -20,7 +20,7 @@ import {
   setCurrentChat,
   setCurrentRoomId,
 } from '../../actions/messageActions'
-import { setCurrentDialogs } from '../../actions/dialogsActions'
+import { setCurrentDialogs, setDialog } from '../../actions/dialogsActions'
 import { socket } from '../../utils/socket'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
@@ -646,6 +646,9 @@ class Content extends Component {
         ((dialog.creator._id && dialog.creator._id === e._id) ||
           (dialog.participants[0] && dialog.participants[0]._id === e._id)),
     )
+    if (e.isGroup) {
+      this.props.setDialog(e)
+    }
     if (currentRoom) {
       const { isGroup, participants, creator, room, _id } = currentRoom
       const currentDialog = isGroup
@@ -681,6 +684,7 @@ const mapDispatchToProps = dispatch => ({
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
+  setDialog: _ => dispatch(setDialog(_)),
   setReset: _ => dispatch(setReset(_)),
 })
 export default connect(

@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import RNFetchBlob from 'rn-fetch-blob'
+
 import {
   View,
   Text,
@@ -22,7 +24,7 @@ import {
   forwardMessage,
   replyMessage,
 } from '../../actions/messageActions'
-import { setDialogs } from '../../actions/dialogsActions'
+import { setDialog, setDialogs } from '../../actions/dialogsActions'
 import { d_message } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import Loader from '../../common/Loader'
@@ -58,8 +60,14 @@ const DateView = styled(View)`
 class Content extends Component {
   render() {
     const { messageLongPressActions, currentDate, participants } = this.state
-    const { dialogs, currentChat, search, editedMessage } = this.props
-    const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
+    const {
+      // dialogs,
+      // currentChat,
+      search,
+      editedMessage,
+      dialog,
+    } = this.props
+    // const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const messages = dialog ? [...dialog.messages] : []
     const isEditing = !!editedMessage.text
     const reversedMessages = [...messages].sort(
@@ -347,7 +355,38 @@ class Content extends Component {
     )
   }
 
+  download = item => {
+    let url = `https://testser.univ.team${item.src}`
+    let fileName = item.filename
+    let date = new Date()
+    let ext = this.extention(url)
+    ext = `.${ext[0]}`
+    const { config, fs } = RNFetchBlob
+    let PictureDir = fs.dirs.PictureDir
+    let options = {
+      fileCache: true,
+      addAndroidDownloads: {
+        useDownloadManager: true,
+        notification: true,
+        path: `${PictureDir}/${Math.floor(
+          date.getTime() + date.getSeconds() / 2,
+        )}${ext}`,
+        description: fileName,
+      },
+    }
+    config(options)
+      .fetch('GET', url)
+      .then(res => {
+        Alert.alert('Success Downloaded')
+      })
+  }
+
+  extention = filename => {
+    return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined
+  }
+
   _onPressMessage = item => {
+    this.download(item)
     const { navigate, dialogs, currentChat, currentDialog } = this.props
     const { name: dialogName } = currentDialog
     const {
@@ -476,6 +515,7 @@ const mapStateToProps = state => ({
   currentRoom: state.messageReducer.currentRoom,
   editedMessage: state.messageReducer.editMessage,
   currentDialog: state.dialogsReducer.currentDialog,
+  dialog: state.dialogsReducer.dialog,
   currentChat: state.messageReducer.currentChat,
   currentRoomId: state.messageReducer.currentRoomId,
   user: state.userReducer.user,
@@ -484,6 +524,7 @@ const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
+  setDialog: _ => dispatch(setDialog(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
 })
