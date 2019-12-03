@@ -47,6 +47,7 @@ import {
   addUploadMessage,
   removeUploadMessage,
   updateUploadMessageProgress,
+  setDialog,
 } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
@@ -492,12 +493,12 @@ class InputComponent extends Component {
       currentChat,
       currentRoom,
       currentDialog,
-      setDialogs: setDialogsProp,
-      addUploadMessage: addUploadMessageProp,
-      removeUploadMessage: removeUploadMessageProp,
-      updateUploadMessageProgress: updateUploadMessageProgressProp,
-      dialogs,
-      user,
+      // setDialogs: setDialogsProp,
+      // addUploadMessage: addUploadMessageProp,
+      // removeUploadMessage: removeUploadMessageProp,
+      // updateUploadMessageProgress: updateUploadMessageProgressProp,
+      // dialogs,
+      // user,
       setCurrentChat,
       navigation,
     } = this.props
@@ -508,21 +509,21 @@ class InputComponent extends Component {
       ? form.append('room', currentChat)
       : form.append('receiver', currentDialog._id)
 
-    const tempMessageId = Date.now()
-    let prevProgress = 0
-    const progressMultiplier = 10
-    addUploadMessageProp({
-      room: currentChat,
-      src: imageUri,
-      type: imageUri ? 'image' : 'file',
-      isUploaded: true,
-      created_at: new Date(),
-      sender: { ...user },
-      tempId: tempMessageId,
-      viewers: [],
-      enableUploadProgress: true,
-      uploadProgress: 0,
-    })
+    // const tempMessageId = Date.now()
+    // let prevProgress = 0
+    // const progressMultiplier = 10
+    // addUploadMessageProp({
+    //   room: currentChat,
+    //   src: imageUri,
+    //   type: imageUri ? 'image' : 'file',
+    //   isUploaded: true,
+    //   created_at: new Date(),
+    //   sender: { ...user },
+    //   tempId: tempMessageId,
+    //   viewers: [],
+    //   enableUploadProgress: true,
+    //   uploadProgress: 0,
+    // })
     sendRequest({
       r_path: p_send_file,
       method: 'post',
@@ -531,20 +532,20 @@ class InputComponent extends Component {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        onUploadProgress: progressEvent => {
-          const uploadProgress = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total,
-          )
-          if (uploadProgress >= prevProgress + progressMultiplier) {
-            prevProgress = uploadProgress
-            updateUploadMessageProgressProp({
-              room: currentChat,
-              tempId: tempMessageId,
-              uploadProgress,
-              isFile: !imageUri,
-            })
-          }
-        },
+        // onUploadProgress: progressEvent => {
+        //   const uploadProgress = Math.round(
+        //     (progressEvent.loaded * 100) / progressEvent.total,
+        //   )
+        //   if (uploadProgress >= prevProgress + progressMultiplier) {
+        //     prevProgress = uploadProgress
+        //     updateUploadMessageProgressProp({
+        //       room: currentChat,
+        //       tempId: tempMessageId,
+        //       uploadProgress,
+        //       isFile: !imageUri,
+        //     })
+        //   }
+        // },
       },
       success: res => {
         socket.emit('file', {
@@ -553,20 +554,21 @@ class InputComponent extends Component {
           participant: currentRoom,
         })
         navigation.getParam('scrollToBottom')()
-        const newDialogs = [...dialogs]
-        const index = newDialogs.findIndex(e => e.room === currentChat)
-        newDialogs[index] = res.dialog
-        setDialogsProp(newDialogs)
+        this.props.setDialog(res.dialog)
+        // const newDialogs = [...dialogs]
+        // const index = newDialogs.findIndex(e => e.room === currentChat)
+        // newDialogs[index] = res.dialog
+        // setDialogsProp(newDialogs)
         if (!currentChat) {
           setCurrentChat(res.dialog.room)
         }
       },
       failFunc: err => {
         Alert.alert('Ошибка', 'Что то пошло не так')
-        removeUploadMessageProp({
-          room: currentChat,
-          tempId: tempMessageId,
-        })
+        // removeUploadMessageProp({
+        //   room: currentChat,
+        //   tempId: tempMessageId,
+        // })
         // if (!result.cancelled) {
         //   sendRequest({
         //     r_path: p_send_file,
@@ -740,6 +742,7 @@ const mapDispatchToProps = dispatch => ({
   removeUploadMessage: _ => dispatch(removeUploadMessage(_)),
   updateUploadMessageProgress: _ => dispatch(updateUploadMessageProgress(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
+  setDialog: _ => dispatch(setDialog(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setRoom: _ => dispatch(setRoom(_)),

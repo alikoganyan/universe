@@ -1,6 +1,8 @@
 import { store } from '../reducers/store'
 
 export const SET_DIALOGS = 'SET_DIALOGS'
+export const SET_DIALOG = 'SET_DIALOG'
+
 export const SET_CURRENT_DIALOGS = 'SET_CURRENT_DIALOGS'
 export const SET_DIALOGS_USER_ID = 'SET_DIALOGS_USER_ID'
 export const ADD_UPLOAD_MESSAGE = 'ADD_UPLOAD_MESSAGE'
@@ -20,6 +22,11 @@ export const setCurrentDialogs = payload => ({
 
 export const setDialogsUserId = payload => ({
   type: SET_DIALOGS_USER_ID,
+  payload,
+})
+
+export const setDialog = payload => ({
+  type: SET_DIALOG,
   payload,
 })
 

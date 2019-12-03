@@ -33,6 +33,7 @@ import {
   addUploadMessage,
   removeUploadMessage,
   updateUploadMessageProgress,
+  setDialog,
 } from '../../actions/dialogsActions'
 
 import sendRequest from '../../utils/request'
@@ -480,31 +481,31 @@ class InputComponent extends Component {
       currentRoomId,
       currentRoom,
       setDialogs: setDialogsProp,
-      addUploadMessage: addUploadMessageProp,
-      removeUploadMessage: removeUploadMessageProp,
-      updateUploadMessageProgress: updateUploadMessageProgressProp,
+      // addUploadMessage: addUploadMessageProp,
+      // removeUploadMessage: removeUploadMessageProp,
+      // updateUploadMessageProgress: updateUploadMessageProgressProp,
       dialogs,
-      user,
+      // user,
       navigation,
     } = this.props
     const form = new FormData()
     form.append('file', formDataObject)
     form.append('room', currentChat)
-    const tempMessageId = Date.now()
-    let prevProgress = 0
-    const progressMultiplier = 10
-    addUploadMessageProp({
-      room: currentChat,
-      src: imageUri,
-      type: imageUri ? 'image' : 'file',
-      isUploaded: true,
-      created_at: new Date(),
-      sender: { ...user },
-      tempId: tempMessageId,
-      viewers: [],
-      enableUploadProgress: true,
-      uploadProgress: 0,
-    })
+    // const tempMessageId = Date.now()
+    // let prevProgress = 0
+    // const progressMultiplier = 10
+    // addUploadMessageProp({
+    //   room: currentChat,
+    //   src: imageUri,
+    //   type: imageUri ? 'image' : 'file',
+    //   isUploaded: true,
+    //   created_at: new Date(),
+    //   sender: { ...user },
+    //   tempId: tempMessageId,
+    //   viewers: [],
+    //   enableUploadProgress: true,
+    //   uploadProgress: 0,
+    // })
     sendRequest({
       r_path: p_send_file,
       method: 'post',
@@ -513,19 +514,19 @@ class InputComponent extends Component {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        onUploadProgress: progressEvent => {
-          const uploadProgress = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total,
-          )
-          if (uploadProgress >= prevProgress + progressMultiplier) {
-            prevProgress = uploadProgress
-            updateUploadMessageProgressProp({
-              room: currentChat,
-              tempId: tempMessageId,
-              uploadProgress,
-            })
-          }
-        },
+        // onUploadProgress: progressEvent => {
+        //   const uploadProgress = Math.round(
+        //     (progressEvent.loaded * 100) / progressEvent.total,
+        //   )
+        //   if (uploadProgress >= prevProgress + progressMultiplier) {
+        //     prevProgress = uploadProgress
+        //     updateUploadMessageProgressProp({
+        //       room: currentChat,
+        //       tempId: tempMessageId,
+        //       uploadProgress,
+        //     })
+        //   }
+        // },
       },
       success: res => {
         socket.emit('file', {
@@ -534,6 +535,7 @@ class InputComponent extends Component {
           participant: currentRoom,
         })
         navigation.getParam('scrollToBottom')()
+        this.props.setDialog(res.dialog)
 
         const newDialogs = [...dialogs]
         const index = newDialogs.findIndex(e => e.room === currentChat)
@@ -541,10 +543,10 @@ class InputComponent extends Component {
         setDialogsProp(newDialogs)
       },
       failFunc: err => {
-        removeUploadMessageProp({
-          room: currentChat,
-          tempId: tempMessageId,
-        })
+        // removeUploadMessageProp({
+        //   room: currentChat,
+        //   tempId: tempMessageId,
+        // })
         // if (!result.cancelled) {
         //   sendRequest({
         //     r_path: p_send_file,
@@ -665,6 +667,7 @@ class InputComponent extends Component {
       currentRoomId,
       user,
       navigation,
+      currentChat,
     } = this.props
     const bodyReq = { message_id: _id, dialog_id: currentRoomId }
     sendRequest({
@@ -672,6 +675,13 @@ class InputComponent extends Component {
       method: 'post',
       attr: bodyReq,
       success: res => {
+        socket.emit(
+          'subscribe_to_group',
+          { room: currentChat },
+          ({ dialog }) => {
+            this.props.setDialog(dialog)
+          },
+        )
         socket.emit('get_dialogs', { id: user._id })
         navigation.getParam('scrollToBottom')()
 
@@ -698,6 +708,7 @@ class InputComponent extends Component {
       repliedMessage: { _id },
       currentRoomId,
       user,
+      currentChat,
     } = this.props
     const { text } = this.state
     const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
@@ -707,6 +718,13 @@ class InputComponent extends Component {
       attr: bodyReq,
       success: res => {
         this.stopReply()
+        socket.emit(
+          'subscribe_to_group',
+          { room: currentChat },
+          ({ dialog }) => {
+            this.props.setDialog(dialog)
+          },
+        )
         socket.emit('get_dialogs', { id: user._id })
       },
       failFunc: err => {},
@@ -750,6 +768,7 @@ const mapDispatchToProps = dispatch => ({
   setDialogs: _ => dispatch(setDialogs(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
+  setDialog: _ => dispatch(setDialog(_)),
 })
 export default connect(
   mapStateToProps,

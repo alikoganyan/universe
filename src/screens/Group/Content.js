@@ -22,7 +22,7 @@ import {
   forwardMessage,
   replyMessage,
 } from '../../actions/messageActions'
-import { setDialogs } from '../../actions/dialogsActions'
+import { setDialogs, setDialog } from '../../actions/dialogsActions'
 import { d_message } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import Loader from '../../common/Loader'
@@ -58,8 +58,8 @@ const DateView = styled(View)`
 class Content extends Component {
   render() {
     const { messageLongPressActions, currentDate, participants } = this.state
-    const { dialogs, currentChat, search, editedMessage } = this.props
-    const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
+    const { search, editedMessage, dialog } = this.props
+    // const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const messages = dialog ? [...dialog.messages] : []
     const isEditing = !!editedMessage.text
     const reversedMessages = [...messages].sort(
@@ -476,6 +476,7 @@ const mapStateToProps = state => ({
   currentRoom: state.messageReducer.currentRoom,
   editedMessage: state.messageReducer.editMessage,
   currentDialog: state.dialogsReducer.currentDialog,
+  dialog: state.dialogsReducer.dialog,
   currentChat: state.messageReducer.currentChat,
   currentRoomId: state.messageReducer.currentRoomId,
   user: state.userReducer.user,
@@ -484,6 +485,7 @@ const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
+  setDialog: _ => dispatch(setDialog(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
 })

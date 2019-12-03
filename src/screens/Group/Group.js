@@ -14,6 +14,7 @@ import Input from './Input'
 import Content from './Content'
 import { socket } from '../../utils/socket'
 import { setIsMyProfile } from '../../actions/profileAction'
+import { setDialog } from '../../actions/dialogsActions'
 
 const Wrapper = styled(View)`
   height: 100%;
@@ -102,6 +103,7 @@ class Chat extends Component {
     setCurrentChat(null)
     setCurrentRoomId(null)
     setRoom(null)
+    this.props.setDialog(null)
   }
 
   navigateBack = () => {
@@ -125,6 +127,7 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),
+  setDialog: _ => dispatch(setDialog(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
