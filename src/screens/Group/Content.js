@@ -22,7 +22,7 @@ import {
   forwardMessage,
   replyMessage,
 } from '../../actions/messageActions'
-import { setDialogs, setDialog } from '../../actions/dialogsActions'
+import { setDialog } from '../../actions/dialogsActions'
 import { d_message } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import Loader from '../../common/Loader'
@@ -59,7 +59,6 @@ class Content extends Component {
   render() {
     const { messageLongPressActions, currentDate, participants } = this.state
     const { search, editedMessage, dialog } = this.props
-    // const dialog = [...dialogs].filter(e => e.room === currentChat)[0]
     const messages = dialog ? [...dialog.messages] : []
     const isEditing = !!editedMessage.text
     const reversedMessages = [...messages].sort(
@@ -135,7 +134,7 @@ class Content extends Component {
 
   componentDidMount() {
     moment.locale('ru')
-    const { navigation, dialogs, currentChat, setDialogs, user } = this.props
+    const { navigation } = this.props
 
     navigation.setParams({
       scrollToBottom: this._scrollToBottom,
@@ -146,35 +145,10 @@ class Content extends Component {
         animationCompleted: true,
       })
     })
-
-    const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
-    if (dialogIndex > -1) {
-      dialogs[dialogIndex].messages = dialogs[dialogIndex].messages.map(
-        message => ({
-          ...message,
-          viewers: [...message.viewers, user._id],
-        }),
-      )
-      setDialogs(dialogs)
-    }
-
     this.generateColor()
   }
 
-  componentWillUnmount() {
-    const { dialogs, setDialogs, user, currentChat } = this.props
-    const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
-
-    if (dialogIndex > -1) {
-      dialogs[dialogIndex].messages = dialogs[dialogIndex].messages.map(
-        message => ({
-          ...message,
-          viewers: [...message.viewers, user._id],
-        }),
-      )
-      setDialogs(dialogs)
-    }
-  }
+  componentWillUnmount() {}
 
   _scrollToBottom = () => {
     this.refs.flatList.scrollToOffset({ x: 0, y: 0, animated: true })
@@ -315,15 +289,11 @@ class Content extends Component {
   }
 
   deleteMessage = currentMessage => {
-    const { dialogs, setDialogs, currentChat, currentRoomId } = this.props
-    const dialog = dialogs.filter(dialog => dialog.room === currentChat)[0]
-    const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
+    const { dialog, currentRoomId } = this.props
     dialog.messages = dialog.messages.filter(
       message => message._id !== currentMessage._id,
     )
-    const newDialogs = [...dialogs]
-    newDialogs[dialogIndex] = dialog
-    setDialogs(newDialogs)
+    this.props.setDialog(dialog)
     sendRequest({
       r_path: d_message,
       method: 'delete',
@@ -348,7 +318,7 @@ class Content extends Component {
   }
 
   _onPressMessage = item => {
-    const { navigate, dialogs, currentChat, currentDialog } = this.props
+    const { navigate, dialog, currentDialog } = this.props
     const { name: dialogName } = currentDialog
     const {
       _id = 0,
@@ -380,9 +350,6 @@ class Content extends Component {
         break
       case 'image':
         {
-          const dialog = dialogs.filter(
-            dialog => dialog.room === currentChat,
-          )[0]
           const dialogMessages = dialog.messages || []
           let dialogImages = []
           let imageIndex = 0
@@ -402,7 +369,6 @@ class Content extends Component {
           this.props.onShowPreviewImages(dialogImages, imageIndex)
         }
         break
-
       default:
         break
     }
@@ -471,7 +437,6 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-  dialogs: state.dialogsReducer.dialogs,
   search: state.messageReducer.search,
   currentRoom: state.messageReducer.currentRoom,
   editedMessage: state.messageReducer.editMessage,
@@ -484,7 +449,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
-  setDialogs: _ => dispatch(setDialogs(_)),
   setDialog: _ => dispatch(setDialog(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
