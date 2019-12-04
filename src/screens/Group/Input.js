@@ -430,12 +430,9 @@ class InputComponent extends Component {
   }
 
   confirmEditing = () => {
-    const { text } = this.state
+    const { text, dialog } = this.state
     const {
       editedMessage: { _id },
-      dialogs,
-      currentChat,
-      setDialogs,
     } = this.props
     const bodyReq = { text, message_id: _id }
     sendRequest({
@@ -443,13 +440,10 @@ class InputComponent extends Component {
       method: 'patch',
       attr: bodyReq,
       success: res => {
-        const newDialogs = [...dialogs]
-        const newDialog = newDialogs.filter(e => e.room === currentChat)[0]
-        const dialogIndex = newDialogs.findIndex(e => e.room === currentChat)
+        const newDialog = { ...dialog }
         const msgIndex = newDialog.messages.findIndex(e => e._id === _id)
         newDialog.messages[msgIndex].text = text
-        newDialogs[dialogIndex] = newDialog
-        setDialogs(newDialogs)
+        this.props.setDialog(newDialog)
         this.stopEditing()
       },
       failFunc: err => {},
@@ -731,6 +725,7 @@ const mapStateToProps = state => ({
   currentRoom: state.messageReducer.currentRoom,
   currentChat: state.messageReducer.currentChat,
   dialogs: state.dialogsReducer.dialogs,
+  dialog: state.dialogsReducer.dialog,
   editedMessage: state.messageReducer.editMessage,
   id: state.userReducer.user._id,
   user: state.userReducer.user,

@@ -112,7 +112,6 @@ const InterlocutorsMessageText = styled(MyMessageText)`
   padding-bottom: 0;
   flex-wrap: wrap;
   font-family: 'OpenSans';
-  overflow: hidden;
 `
 const MessageInfo = styled(View)`
   display: flex;
@@ -853,29 +852,40 @@ class Message extends Component {
           onLongPress={onLongPressMessage}
         >
           <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <MyMessage background={background}>
-              {!!(resend && resend.sender) && (
-                <Forwarded
-                  color={forwardedMessage}
-                  userName={`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
-                  myMessage
-                />
-              )}
-              <FileInfoWrapper>
-                <FileIcon>
-                  <ImageIconBlue />
-                </FileIcon>
-                <FileInfo>
-                  <MyMessageText noPadding>{filename}</MyMessageText>
-                  <FileSize>{fileSize}</FileSize>
-                </FileInfo>
-              </FileInfoWrapper>
-              <MessageInfo>
-                <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
-                <Indicator color="black" read={messageRead} />
-              </MessageInfo>
-            </MyMessage>
-            <TriangleLeftIcon color={background || myMessage} />
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'row',
+                position: 'relative',
+                right: 10,
+              }}
+            >
+              <MyMessage background={background}>
+                {!!(resend && resend.sender) && (
+                  <Forwarded
+                    color={forwardedMessage}
+                    userName={`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                    myMessage
+                  />
+                )}
+                <FileInfoWrapper>
+                  <FileIcon>
+                    <ImageIconBlue />
+                  </FileIcon>
+                  <FileInfo>
+                    <MyMessageText noPadding style={{ maxWidth: '90%' }}>
+                      {filename}
+                    </MyMessageText>
+                    <FileSize>{fileSize}</FileSize>
+                  </FileInfo>
+                </FileInfoWrapper>
+                <MessageInfo>
+                  <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
+                  <Indicator color="black" read={messageRead} />
+                </MessageInfo>
+              </MyMessage>
+              <TriangleLeftIcon color={background || myMessage} />
+            </View>
           </View>
         </TouchableOpacity>
       ) : (
@@ -905,7 +915,7 @@ class Message extends Component {
                 display: 'flex',
                 flexDirection: 'row',
                 position: 'relative',
-                left: sender.image ? -10 : 0,
+                left: sender.image ? -5 : 0,
               }}
             >
               <TriangleRightIcon color={background || interlocatorMessage} />
@@ -933,7 +943,10 @@ class Message extends Component {
                     <ImageIcon />
                   </FileIcon>
                   <FileInfo>
-                    <InterlocutorsMessageText noPadding>
+                    <InterlocutorsMessageText
+                      noPadding
+                      style={{ maxWidth: '90%' }}
+                    >
                       {filename}
                     </InterlocutorsMessageText>
                     <FileSize color={pink}>{fileSize}</FileSize>

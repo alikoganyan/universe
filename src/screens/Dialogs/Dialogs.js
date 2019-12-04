@@ -206,7 +206,7 @@ class Dialogs extends Component {
     socket.removeEventListener('update_dialog', this.setDialogSocket)
     socket.removeEventListener('update_profile', this.getProfile)
     socket.removeEventListener('new_message', this.newMessageSocket)
-    socket.removeEventListener('new_dialogs', this.socketNewDialog)
+    socket.removeEventListener('new_dialog', this.socketNewDialog)
     socket.removeEventListener('need_update', this.socketNeedsUpdate)
     socket.removeEventListener('dialog_opened', this.socketDialogOpened)
     socket.removeEventListener('new_group', this.socketGetGroup)
@@ -214,7 +214,7 @@ class Dialogs extends Component {
     socket.on('update_dialog', e => this.setDialogSocket(e))
     socket.on('update_profile', this.getProfile)
     socket.on('new_message', e => this.newMessageSocket(e))
-    socket.on('new_dialogs', this.socketNewDialog)
+    socket.on('new_dialog', e => this.socketNewDialog(e))
     socket.on('need_update', this.socketNeedsUpdate)
     socket.on('dialog_opened', this.socketDialogOpened)
     socket.on('new_group', this.socketGetGroup)
@@ -286,7 +286,10 @@ class Dialogs extends Component {
     socket.emit('get_dialogs')
   }
 
-  socketNewDialog = () => {}
+  // to do
+  socketNewDialog = e => {
+    // console.log(e)
+  }
 
   socketDialogOpened = e => {
     const { dialogs, setDialogs } = this.props
@@ -416,6 +419,8 @@ class Dialogs extends Component {
         }
       } else {
         socket.emit('get_dialogs', { id: user._id })
+        // to do
+        this.props.setCurrentRoomId(e.dialog)
       }
     } catch (err) {
       alert(`${JSON.stringify(e)} cannot be processed [${err}]`)

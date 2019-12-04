@@ -65,11 +65,15 @@ class Content extends Component {
       editedMessage,
       currentDialog,
       dialog,
+      // currentRoomId,
     } = this.props
+
+    // to do
+    // console.log(dialogs, currentChat, currentRoomId)
 
     const _dialog = Object.keys(dialog).length
       ? dialog
-      : [...dialogs].filter(e => {
+      : [...dialogs].find(e => {
           if (!currentChat) {
             return (
               !e.isGroup &&
@@ -79,8 +83,11 @@ class Content extends Component {
           } else {
             return e.room === currentChat
           }
-        })[0]
-
+          // if(e._id === currentRoomId) {
+          //   this.props.setDialog(e)
+          // }
+        })
+    // console.log(_dialog)
     const isEditing = !!editedMessage.text
     const messages = _dialog ? [..._dialog.messages] : []
     const reversedMessages = [...messages]
