@@ -70,56 +70,46 @@ const MyMessage = styled(View)`
   overflow: hidden;
 `
 
-const MyMessageText = styled(Text)`
-  display: flex;
-  justify-content: flex-end;
-  text-align: left;
+// Vahe to do
+
+const MyMessages = styled(View)`
+  background: ${({ background }) => background || myMessage};
+  border-radius: ${borderRadius};
+  border-bottom-right-radius: 0;
   padding: ${({ noPadding }) => (noPadding ? 0 : 10)}px;
-  padding-bottom: 0;
+  padding-top: ${({ noPadding }) => (noPadding ? 0 : 5)}px;
+  padding-bottom: ${({ noPadding }) => (noPadding ? 0 : 5)}px;
+`
+
+const RecivedMessage = styled(View)`
+  background: ${({ background }) => background || interlocatorMessage};
+  border-radius: ${borderRadius};
+  border-bottom-right-radius: ${borderRadius};
+  border-bottom-left-radius: 0;
+  padding: ${({ noPadding }) => (noPadding ? 0 : 10)}px;
+  padding-top: ${({ noPadding }) => (noPadding ? 0 : 5)}px;
+  padding-bottom: ${({ noPadding }) => (noPadding ? 0 : 5)}px;
+`
+const MessageText = styled(Text)`
   font-size: ${fontSize.textSize};
   font-family: 'OpenSans';
   color: ${Colors.black};
-  textShadowColor: ${Colors.black};
-  textShadowOffset: {width: 0, height: 0};
-  textShadowRadius: 0.01;
+  textshadowcolor: ${Colors.black};
 `
-
-const InterlocutorsMessage = styled(MyMessage)`
-  display: flex;
-  text-align: left;
-  background: ${({ background }) => background || interlocatorMessage};
-  margin: 5px 10px;
-  margin-left: 40px;
-  position: relative;
-  left: -45px;
-  border-bottom-right-radius: ${borderRadius};
-  border-bottom-left-radius: 0;
-  max-width: 80%;
-  overflow: hidden;
-  flex-grow: 1;
-`
-
-const InterlocutorsMessageText = styled(MyMessageText)`
-  justify-content: flex-start;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  text-align: left;
-  color: ${({ isGroupName }) =>
-    isGroupName ? helper.Colors.blue : Colors.black};
-  border-radius: 3;
-  padding-bottom: 0;
-  flex-wrap: wrap;
+const ReviverName = styled(Text)`
   font-family: 'OpenSans';
 `
+
 const MessageInfo = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
-  padding: 0 10px 5px;
+  margin-right: ${({ paddings }) => (paddings ? 8 : 0)}px;
+  padding-bottom: ${({ paddings }) => (paddings ? 5 : 0)}px;
 `
+// Vahe
+
 const MessageDate = styled(Text)`
   color: ${({ color }) => color || Colors.jumbo};
   font-family: 'OpenSans';
@@ -137,9 +127,7 @@ const MyMessageCachedImage = styled(FastImage)`
   min-width: 100%;
   height: 250px;
 `
-const InterlocutorsName = styled(InterlocutorsMessageText)`
-  margin-bottom: 0;
-`
+
 const BottomLine = styled(LinearGradient)`
   position: absolute;
   bottom: 0;
@@ -195,7 +183,7 @@ const VideoPinTriangle = styled(View)`
 const FileInfoWrapper = styled(View)`
   display: flex;
   flex-direction: row;
-  padding: 10px;
+  padding: 4px;
   padding-bottom: 0;
   align-items: center;
 `
@@ -208,14 +196,13 @@ const FileIcon = styled(View)`
   width: 50px;
   height: 50px;
   border-radius: 25px;
-  margin-right: 10px;
-  overflow: hidden;
 `
 const FileInfo = styled(View)`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  padding-left: 10px;
 `
 const FileSize = styled(Text)`
   color: ${({ color }) => color || 'black'};
@@ -298,43 +285,61 @@ class Message extends Component {
           onPress={onPressMessage}
           onLongPress={onLongPressMessage}
         >
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
-            <MyMessage
-              background={background}
-              style={{ padding: 0, height: 230 }}
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 2,
+              marginBottom: 2,
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+            }}
+          >
+            <View
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignSelf: 'flex-start',
+                minWidth: '20%',
+                maxWidth: '80%',
+                zIndex: 5,
+              }}
             >
-              {!!(resend && resend.sender) && (
-                <ShadowTopContainer>
-                  <WhiteTopText style={{ color: forwardedMessage }}>
-                    {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
-                  </WhiteTopText>
-                </ShadowTopContainer>
-              )}
-              <MyMessageCachedImage
-                style={{ width, flex: 1 }}
-                source={{
-                  uri: `https://testser.univ.team${src}`,
-                }}
-                resizeMode={FastImage.resizeMode.cover}
-              />
-              <LinearGradient
-                start={{ x: 0, y: 0.5 }}
-                end={{ x: 1.0, y: 1.0 }}
-                colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
-                style={{
-                  position: 'absolute',
-                  right: 0,
-                  bottom: 0,
-                  borderBottomRightRadius: 10,
-                }}
-              >
-                <MessageInfo>
-                  <MessageDate color={Colors.white}>{finalTime}</MessageDate>
-                  <Indicator color="black" read={messageRead} />
-                </MessageInfo>
-              </LinearGradient>
-            </MyMessage>
-            <TriangleLeftIcon color={myMessage} />
+              <MyMessages noPadding background={background}>
+                {!!(resend && resend.sender) && (
+                  <ShadowTopContainer>
+                    <WhiteTopText style={{ color: forwardedMessage }}>
+                      {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                    </WhiteTopText>
+                  </ShadowTopContainer>
+                )}
+                <MyMessageCachedImage
+                  style={{ width, flex: 1 }}
+                  source={{
+                    uri: `https://testser.univ.team${src}`,
+                  }}
+                  resizeMode={FastImage.resizeMode.cover}
+                />
+                <LinearGradient
+                  start={{ x: 0, y: 0.5 }}
+                  end={{ x: 1.0, y: 1.0 }}
+                  colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
+                  style={{
+                    position: 'absolute',
+                    right: 0,
+                    bottom: 0,
+                    borderBottomRightRadius: 10,
+                  }}
+                >
+                  <MessageInfo paddings>
+                    <MessageDate color={Colors.white}>{finalTime}</MessageDate>
+                    <Indicator color="black" read={messageRead} />
+                  </MessageInfo>
+                </LinearGradient>
+              </MyMessages>
+            </View>
+            <View style={{ position: 'relative', right: -13 }}>
+              <TriangleLeftIcon color={background || myMessage} />
+            </View>
           </View>
         </TouchableOpacity>
       ) : (
@@ -343,34 +348,39 @@ class Message extends Component {
           onPress={onPressMessage}
           onLongPress={onLongPressMessage}
         >
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {sender.image ? (
-              <ImageComponent
-                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-                size={30}
-                source={{
-                  uri: `https://testser.univ.team${sender.image}`,
-                }}
-              />
-            ) : (
-              <DefaultAvatar
-                size={30}
-                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-                id={sender._id}
-              />
-            )}
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 2,
+              marginBottom: 2,
+              alignItems: 'flex-end',
+            }}
+          >
+            <View style={{ flexDirection: 'row' }}>
+              {sender.image ? (
+                <ImageComponent
+                  size={30}
+                  source={{
+                    uri: `https://testser.univ.team${sender.image}`,
+                  }}
+                />
+              ) : (
+                <DefaultAvatar size={30} id={sender._id} />
+              )}
+              <TriangleRightIcon color={background || interlocatorMessage} />
+            </View>
             <View
               style={{
                 display: 'flex',
-                flexDirection: 'row',
-                position: 'relative',
-                left: sender.image ? -5 : 0,
+                flexDirection: 'column',
+                alignSelf: 'flex-start',
+                minWidth: '20%',
+                maxWidth: '80%',
               }}
             >
-              <TriangleRightIcon color={interlocatorMessage} />
-              <InterlocutorsMessage
-                background={background}
-                style={{ height: 230 }}
+              <RecivedMessage
+                noPadding
+                background={background || interlocatorMessage}
               >
                 {!!(resend && resend.sender) ? (
                   <ShadowTopContainer>
@@ -402,11 +412,11 @@ class Message extends Component {
                   colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
                   style={{ position: 'absolute', right: 0, bottom: 0 }}
                 >
-                  <MessageInfo>
+                  <MessageInfo paddings>
                     <MessageDate color={Colors.white}>{finalTime}</MessageDate>
                   </MessageInfo>
                 </LinearGradient>
-              </InterlocutorsMessage>
+              </RecivedMessage>
             </View>
           </View>
         </TouchableOpacity>
@@ -445,16 +455,26 @@ class Message extends Component {
           onPress={onPressMessage}
           onLongPress={onLongPressMessage}
         >
-          <View style={{ display: 'flex', flexDirection: 'row-reverse' }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 2,
+              marginBottom: 2,
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+            }}
+          >
             <View
               style={{
                 display: 'flex',
-                flexDirection: 'row',
-                position: 'relative',
-                right: 10,
+                flexDirection: 'column',
+                alignSelf: 'flex-start',
+                minWidth: '20%',
+                maxWidth: '80%',
+                zIndex: 5,
               }}
             >
-              <MyMessage background={background}>
+              <MyMessages background={background}>
                 {!!(resend && resend.sender) && (
                   <Forwarded
                     color={forwardedMessage}
@@ -474,12 +494,14 @@ class Message extends Component {
                     myMessage
                   />
                 )}
-                <MyMessageText>{text}</MyMessageText>
+                <MessageText>{text}</MessageText>
                 <MessageInfo>
                   <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
                   <Indicator color="black" read={messageRead} />
                 </MessageInfo>
-              </MyMessage>
+              </MyMessages>
+            </View>
+            <View style={{ position: 'relative', right: -13 }}>
               <TriangleLeftIcon color={background || myMessage} />
             </View>
           </View>
@@ -490,39 +512,37 @@ class Message extends Component {
           onPress={onPressMessage}
           onLongPress={onLongPressMessage}
         >
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {sender.image ? (
-              <ImageComponent
-                style={{
-                  alignSelf: 'flex-end',
-                  position: 'relative',
-                  top: -5,
-                  marginRight: 4,
-                }}
-                size={30}
-                source={{
-                  uri: `https://testser.univ.team${sender.image}`,
-                }}
-              />
-            ) : (
-              <DefaultAvatar
-                size={30}
-                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-                id={sender._id}
-              />
-            )}
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 2,
+              marginBottom: 2,
+              alignItems: 'flex-end',
+            }}
+          >
+            <View style={{ flexDirection: 'row' }}>
+              {sender.image ? (
+                <ImageComponent
+                  size={30}
+                  source={{
+                    uri: `https://testser.univ.team${sender.image}`,
+                  }}
+                />
+              ) : (
+                <DefaultAvatar size={30} id={sender._id} />
+              )}
+              <TriangleRightIcon color={background || interlocatorMessage} />
+            </View>
             <View
               style={{
                 display: 'flex',
-                flexDirection: 'row',
-                position: 'relative',
-                left: sender.image ? -5 : 0,
+                flexDirection: 'column',
+                alignSelf: 'flex-start',
+                minWidth: '20%',
+                maxWidth: '80%',
               }}
             >
-              <TriangleRightIcon color={background || interlocatorMessage} />
-              <InterlocutorsMessage
-                background={background || interlocatorMessage}
-              >
+              <RecivedMessage background={background || interlocatorMessage}>
                 {!!(resend && resend.sender) && (
                   <Forwarded
                     color={forwardedMessage}
@@ -542,18 +562,15 @@ class Message extends Component {
                   />
                 )}
                 {sender.first_name && sender.last_name && isGroup && (
-                  <InterlocutorsName
-                    isGroupName={isGroup}
-                    style={{ color: color }}
-                  >
+                  <ReviverName numberOfLines={1} style={{ color: color }}>
                     {!!sender && `${sender.first_name} ${sender.last_name}`}
-                  </InterlocutorsName>
+                  </ReviverName>
                 )}
-                <InterlocutorsMessageText>{text}</InterlocutorsMessageText>
+                <MessageText>{text}</MessageText>
                 <MessageInfo>
                   <MessageDate>{finalTime}</MessageDate>
                 </MessageInfo>
-              </InterlocutorsMessage>
+              </RecivedMessage>
             </View>
           </View>
         </TouchableOpacity>
@@ -565,93 +582,17 @@ class Message extends Component {
         <View
           style={{
             flexDirection: 'row',
+            marginTop: 2,
+            marginBottom: 2,
             alignItems: 'flex-end',
-            marginRight: 10,
+            justifyContent: 'flex-end',
           }}
         >
-          <MyMessage style={{ height: 230, width: '100%' }}>
-            {!!(resend && resend.sender) && (
-              <ShadowTopContainer>
-                <WhiteTopText style={{ color: forwardedMessage }}>
-                  {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
-                </WhiteTopText>
-              </ShadowTopContainer>
-            )}
-            <View style={{ flex: 1 }}>
-              <MapView
-                scrollEnabled={false}
-                rotateEnabled={false}
-                pitchEnabled={false}
-                zoomEnabled={false}
-                provider="google"
-                style={[StyleSheet.absoluteFillObject, { margin: 3 }]}
-                region={{
-                  ...data,
-                  latitudeDelta: 0.002,
-                  longitudeDelta: 0.002,
-                }}
-                tracksViewChanges={false}
-                onPress={onPressMessage}
-                onLongPress={onLongPressMessage}
-              >
-                <MapView.Marker
-                  coordinate={{
-                    latitude,
-                    longitude,
-                  }}
-                  tracksViewChanges={false}
-                />
-              </MapView>
-            </View>
-
-            <BottomLine
-              start={{ x: 0, y: 0.5 }}
-              end={{ x: 1.0, y: 1.0 }}
-              colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
-            >
-              <BottomLineInfo>
-                <BottomLineTime>{finalTime}</BottomLineTime>
-                <Indicator color="black" read={messageRead} />
-              </BottomLineInfo>
-            </BottomLine>
-          </MyMessage>
-          <TriangleLeftIcon color={myMessage} />
-        </View>
-      ) : (
-        <View
-          style={{
-            display: 'flex',
-            alignItems: 'flex-start',
-            flexDirection: 'row',
-          }}
-        >
-          {sender.image ? (
-            <ImageComponent
-              style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-              size={30}
-              source={{
-                uri: `https://testser.univ.team${sender.image}`,
-              }}
-            />
-          ) : (
-            <DefaultAvatar
-              size={30}
-              style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-              id={sender._id}
-            />
-          )}
-          <View
-            style={{
-              display: 'flex',
-              flexDirection: 'row',
-              position: 'relative',
-              left: sender.image ? -5 : 0,
-            }}
-          >
-            <TriangleRightIcon color={interlocatorMessage} />
-            <InterlocutorsMessage
-              style={{ height: 230, width: '100%' }}
-              background={background || interlocatorMessage}
+          <View style={{ maxWidth: '80%', width: '80%' }}>
+            <MyMessages
+              style={{ width: '100%', height: 230 }}
+              noPadding
+              background={background}
             >
               {!!(resend && resend.sender) && (
                 <ShadowTopContainer>
@@ -660,12 +601,93 @@ class Message extends Component {
                   </WhiteTopText>
                 </ShadowTopContainer>
               )}
-              {!!(sender.first_name && sender.last_name && isGroup) && (
+              <View style={{ flex: 1 }}>
+                <MapView
+                  scrollEnabled={false}
+                  rotateEnabled={false}
+                  pitchEnabled={false}
+                  zoomEnabled={false}
+                  provider="google"
+                  style={[StyleSheet.absoluteFillObject, { margin: 3 }]}
+                  region={{
+                    ...data,
+                    latitudeDelta: 0.002,
+                    longitudeDelta: 0.002,
+                  }}
+                  tracksViewChanges={false}
+                  onPress={onPressMessage}
+                  onLongPress={onLongPressMessage}
+                >
+                  <MapView.Marker
+                    coordinate={{
+                      latitude,
+                      longitude,
+                    }}
+                    tracksViewChanges={false}
+                  />
+                </MapView>
+              </View>
+
+              <BottomLine
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1.0, y: 1.0 }}
+                colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
+              >
+                <BottomLineInfo>
+                  <BottomLineTime style={{ color: Colors.black }}>
+                    {finalTime}
+                  </BottomLineTime>
+                  <Indicator color="black" read={messageRead} />
+                </BottomLineInfo>
+              </BottomLine>
+            </MyMessages>
+          </View>
+          <View style={{ position: 'relative', right: -13 }}>
+            <TriangleLeftIcon color={background || myMessage} />
+          </View>
+        </View>
+      ) : (
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 2,
+            marginBottom: 2,
+            alignItems: 'flex-end',
+          }}
+        >
+          <View style={{ flexDirection: 'row' }}>
+            {sender.image ? (
+              <ImageComponent
+                size={30}
+                source={{
+                  uri: `https://testser.univ.team${sender.image}`,
+                }}
+              />
+            ) : (
+              <DefaultAvatar size={30} id={sender._id} />
+            )}
+            <TriangleRightIcon color={background || interlocatorMessage} />
+          </View>
+          <View style={{ maxWidth: '80%', width: '80%' }}>
+            <RecivedMessage
+              style={{ width: '100%', height: 230 }}
+              noPadding
+              background={background || interlocatorMessage}
+            >
+              {!!(resend && resend.sender) ? (
                 <ShadowTopContainer>
-                  <WhiteTopText style={{ color: color }}>
-                    {!!sender && `${sender.first_name} ${sender.last_name}`}
+                  <WhiteTopText style={{ color: forwardedMessage }}>
+                    {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
                   </WhiteTopText>
                 </ShadowTopContainer>
+              ) : (
+                isGroup && (
+                  <ShadowTopContainer>
+                    <WhiteTopText style={{ color: color }}>
+                      {!!sender && `${sender.first_name} ${sender.last_name}`}
+                    </WhiteTopText>
+                  </ShadowTopContainer>
+                )
               )}
               <View style={{ flex: 1 }}>
                 <MapView
@@ -693,16 +715,16 @@ class Message extends Component {
                   />
                 </MapView>
               </View>
-
               <BottomLine
                 start={{ x: 0, y: 0.5 }}
                 end={{ x: 1.0, y: 1.0 }}
                 colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
-                style={{ justifyContent: 'flex-start' }}
               >
-                <BottomLineTime>{finalTime}</BottomLineTime>
+                <BottomLineTime style={{ color: Colors.black }}>
+                  {finalTime}
+                </BottomLineTime>
               </BottomLine>
-            </InterlocutorsMessage>
+            </RecivedMessage>
           </View>
         </View>
       )
@@ -718,46 +740,51 @@ class Message extends Component {
           <View
             style={{
               flexDirection: 'row',
+              marginTop: 2,
+              marginBottom: 2,
               alignItems: 'flex-end',
-              marginRight: 10,
+              justifyContent: 'flex-end',
             }}
           >
-            <MyMessage
-              style={{
-                height: 180,
-                width: '100%',
-              }}
-            >
-              {!!(resend && resend.sender) && (
-                <ShadowTopContainer>
-                  <WhiteTopText style={{ color: forwardedMessage }}>
-                    {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
-                  </WhiteTopText>
-                </ShadowTopContainer>
-              )}
-              <View
-                style={{
-                  flex: 1,
-                  backgroundColor: 'black',
-                  justifyContent: 'center',
-                }}
+            <View style={{ maxWidth: '80%', width: '80%' }}>
+              <MyMessages
+                style={{ width: '100%', height: 230, zIndex: 5 }}
+                noPadding
+                background={background}
               >
-                <VideoPinBorder>
-                  <VideoPinTriangle />
-                </VideoPinBorder>
-              </View>
-              <BottomLine
-                start={{ x: 0, y: 0.5 }}
-                end={{ x: 1.0, y: 1.0 }}
-                colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
-              >
-                <BottomLineInfo>
-                  <BottomLineTime>{finalTime}</BottomLineTime>
-                  <Indicator color="black" read={messageRead} />
-                </BottomLineInfo>
-              </BottomLine>
-            </MyMessage>
-            <TriangleLeftIcon color={myMessage} />
+                {!!(resend && resend.sender) && (
+                  <ShadowTopContainer>
+                    <WhiteTopText style={{ color: forwardedMessage }}>
+                      {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                    </WhiteTopText>
+                  </ShadowTopContainer>
+                )}
+                <View
+                  style={{
+                    flex: 1,
+                    backgroundColor: 'black',
+                    justifyContent: 'center',
+                  }}
+                >
+                  <VideoPinBorder>
+                    <VideoPinTriangle />
+                  </VideoPinBorder>
+                </View>
+                <BottomLine
+                  start={{ x: 0, y: 0.5 }}
+                  end={{ x: 1.0, y: 1.0 }}
+                  colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
+                >
+                  <BottomLineInfo>
+                    <BottomLineTime>{finalTime}</BottomLineTime>
+                    <Indicator color="black" read={messageRead} />
+                  </BottomLineInfo>
+                </BottomLine>
+              </MyMessages>
+            </View>
+            <View style={{ position: 'relative', right: -13 }}>
+              <TriangleLeftIcon color={background || myMessage} />
+            </View>
           </View>
         </TouchableOpacity>
       ) : (
@@ -768,40 +795,29 @@ class Message extends Component {
         >
           <View
             style={{
-              display: 'flex',
-              alignItems: 'flex-start',
               flexDirection: 'row',
+              marginTop: 2,
+              marginBottom: 2,
+              alignItems: 'flex-end',
             }}
           >
-            {sender.image ? (
-              <ImageComponent
-                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-                size={30}
-                source={{
-                  uri: `https://testser.univ.team${sender.image}`,
-                }}
-              />
-            ) : (
-              <DefaultAvatar
-                size={30}
-                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-                id={sender._id}
-              />
-            )}
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'row',
-                position: 'relative',
-                left: sender.image ? -5 : 0,
-              }}
-            >
-              <TriangleRightIcon color={interlocatorMessage} />
-              <InterlocutorsMessage
-                style={{
-                  height: 180,
-                  width: '100%',
-                }}
+            <View style={{ flexDirection: 'row' }}>
+              {sender.image ? (
+                <ImageComponent
+                  size={30}
+                  source={{
+                    uri: `https://testser.univ.team${sender.image}`,
+                  }}
+                />
+              ) : (
+                <DefaultAvatar size={30} id={sender._id} />
+              )}
+              <TriangleRightIcon color={background || interlocatorMessage} />
+            </View>
+            <View style={{ maxWidth: '80%', width: '80%' }}>
+              <RecivedMessage
+                style={{ height: 180 }}
+                noPadding
                 background={background || interlocatorMessage}
               >
                 {!!(resend && resend.sender) ? (
@@ -834,11 +850,10 @@ class Message extends Component {
                   start={{ x: 0, y: 0.5 }}
                   end={{ x: 1.0, y: 1.0 }}
                   colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
-                  style={{ justifyContent: 'flex-start' }}
                 >
                   <BottomLineTime>{finalTime}</BottomLineTime>
                 </BottomLine>
-              </InterlocutorsMessage>
+              </RecivedMessage>
             </View>
           </View>
         </TouchableOpacity>
@@ -851,16 +866,26 @@ class Message extends Component {
           onPress={onPressMessage}
           onLongPress={onLongPressMessage}
         >
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 2,
+              marginBottom: 2,
+              alignItems: 'flex-end',
+              justifyContent: 'flex-end',
+            }}
+          >
             <View
               style={{
                 display: 'flex',
-                flexDirection: 'row',
-                position: 'relative',
-                right: 10,
+                flexDirection: 'column',
+                alignSelf: 'flex-start',
+                minWidth: '20%',
+                maxWidth: '80%',
+                zIndex: 5,
               }}
             >
-              <MyMessage background={background}>
+              <MyMessages background={background}>
                 {!!(resend && resend.sender) && (
                   <Forwarded
                     color={forwardedMessage}
@@ -868,22 +893,27 @@ class Message extends Component {
                     myMessage
                   />
                 )}
+
                 <FileInfoWrapper>
                   <FileIcon>
                     <ImageIconBlue />
                   </FileIcon>
                   <FileInfo>
-                    <MyMessageText noPadding style={{ maxWidth: '90%' }}>
+                    <MessageText noPadding style={{ maxWidth: '95%' }}>
                       {filename}
-                    </MyMessageText>
+                    </MessageText>
                     <FileSize>{fileSize}</FileSize>
                   </FileInfo>
                 </FileInfoWrapper>
+
+                <MessageText>{text}</MessageText>
                 <MessageInfo>
                   <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
                   <Indicator color="black" read={messageRead} />
                 </MessageInfo>
-              </MyMessage>
+              </MyMessages>
+            </View>
+            <View style={{ position: 'relative', right: -13 }}>
               <TriangleLeftIcon color={background || myMessage} />
             </View>
           </View>
@@ -894,68 +924,75 @@ class Message extends Component {
           onPress={onPressMessage}
           onLongPress={onLongPressMessage}
         >
-          <View style={{ display: 'flex', flexDirection: 'row' }}>
-            {sender.image ? (
-              <ImageComponent
-                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-                size={30}
-                source={{
-                  uri: `https://testser.univ.team${sender.image}`,
-                }}
-              />
-            ) : (
-              <DefaultAvatar
-                size={30}
-                style={{ alignSelf: 'flex-end', position: 'relative', top: -5 }}
-                id={sender._id}
-              />
-            )}
+          <View
+            style={{
+              flexDirection: 'row',
+              marginTop: 2,
+              marginBottom: 2,
+              alignItems: 'flex-end',
+            }}
+          >
+            <View style={{ flexDirection: 'row' }}>
+              {sender.image ? (
+                <ImageComponent
+                  size={30}
+                  source={{
+                    uri: `https://testser.univ.team${sender.image}`,
+                  }}
+                />
+              ) : (
+                <DefaultAvatar size={30} id={sender._id} />
+              )}
+              <TriangleRightIcon color={background || interlocatorMessage} />
+            </View>
             <View
               style={{
                 display: 'flex',
-                flexDirection: 'row',
-                position: 'relative',
-                left: sender.image ? -5 : 0,
+                flexDirection: 'column',
+                alignSelf: 'flex-start',
+                minWidth: '20%',
+                maxWidth: '80%',
               }}
             >
-              <TriangleRightIcon color={background || interlocatorMessage} />
-              <InterlocutorsMessage
-                background={background || interlocatorMessage}
-              >
+              <RecivedMessage background={background || interlocatorMessage}>
                 {!!(resend && resend.sender) && (
-                  <InterlocutorsName
-                    style={{ color: forwardedMessage }}
-                    isGroupName={isGroup}
-                  >
-                    {!!sender && `${sender.first_name} ${sender.last_name}`}
-                  </InterlocutorsName>
+                  <Forwarded
+                    color={forwardedMessage}
+                    userName={`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                  />
                 )}
-                {!!sender.first_name && !!sender.last_name && isGroup && (
-                  <InterlocutorsName
-                    isGroupName={isGroup}
-                    style={{ color: color }}
-                  >
+                {!!(reply && reply.sender) && (
+                  <Forwarded
+                    color={replyedMessage}
+                    type={reply.type}
+                    fileName={reply.filename}
+                    geoData={reply.data}
+                    src={reply.src}
+                    userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
+                    text={reply.text}
+                    myMessage
+                  />
+                )}
+                {sender.first_name && sender.last_name && isGroup && (
+                  <ReviverName numberOfLines={1} style={{ color: color }}>
                     {!!sender && `${sender.first_name} ${sender.last_name}`}
-                  </InterlocutorsName>
+                  </ReviverName>
                 )}
                 <FileInfoWrapper>
                   <FileIcon background={pink}>
                     <ImageIcon />
                   </FileIcon>
                   <FileInfo>
-                    <InterlocutorsMessageText
-                      noPadding
-                      style={{ maxWidth: '90%' }}
-                    >
+                    <MessageText style={{ maxWidth: '95%' }}>
                       {filename}
-                    </InterlocutorsMessageText>
+                    </MessageText>
                     <FileSize color={pink}>{fileSize}</FileSize>
                   </FileInfo>
                 </FileInfoWrapper>
                 <MessageInfo>
                   <MessageDate>{finalTime}</MessageDate>
                 </MessageInfo>
-              </InterlocutorsMessage>
+              </RecivedMessage>
             </View>
           </View>
         </TouchableOpacity>

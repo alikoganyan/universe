@@ -58,7 +58,6 @@ const TriangleLeft = styled(View)`
   position: relative;
   align-self: flex-end;
   left: -15px;
-  top: -5px;
   line-height: 0px;
   ${({ style }) => style};
 `
@@ -76,7 +75,6 @@ const TriangleRight = styled(View)`
   position: relative;
   align-self: flex-end;
   left: 0px;
-  top: -5px;
   line-height: 0px;
   ${({ style }) => style};
 `

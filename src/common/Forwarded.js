@@ -81,8 +81,8 @@ class Forwarded extends PureComponent {
 
 const styles = StyleSheet.create({
   root: {
-    padding: 8,
-    margin: 8,
+    padding: 5,
+    marginBottom: 4,
     borderRadius: 5,
     borderLeftWidth: 4,
     borderLeftColor: '#034402',
