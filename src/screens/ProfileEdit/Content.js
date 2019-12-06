@@ -132,7 +132,7 @@ class Content extends Component {
                 source={{
                   uri: imageFormData
                     ? image
-                    : `https://testser.univ.team${image}`,
+                    : `https://seruniverse.asmo.media${image}`,
                 }}
                 style={{
                   marginTop: 0,

@@ -85,6 +85,7 @@ export default {
     norway: '#A8BE9D',
     forwardedMessage: '#052555',
     replyedMessage: '#FE2F57',
+    myReplyedMessage: '#1c2b91',
   },
   randomColors: [
     '#e63c29',

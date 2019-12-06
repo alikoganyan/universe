@@ -32,7 +32,13 @@ class News extends Component {
       r_path: p_news,
       method: 'get',
       success: res => {
-        setNews(res.news)
+        let news = [...res.news]
+        news = news.sort((a, b) => {
+          // Turn your strings into dates, and then subtract them
+          // to get a value that is either negative, positive, or zero.
+          return new Date(b.created_at) - new Date(a.created_at)
+        })
+        setNews(news)
       },
       failFunc: err => {},
     })

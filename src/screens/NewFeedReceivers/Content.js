@@ -167,7 +167,7 @@ class Content extends Component {
                 ) : (
                   <ImageComponent
                     source={{
-                      uri: `https://testser.univ.team${e.image}`,
+                      uri: `https://seruniverse.asmo.media${e.image}`,
                     }}
                     size={36}
                   />
@@ -254,7 +254,7 @@ class Content extends Component {
                               ) : (
                                 <ImageComponent
                                   source={{
-                                    uri: `https://testser.univ.team${user.image}`,
+                                    uri: `https://seruniverse.asmo.media${user.image}`,
                                   }}
                                   size={36}
                                 />
@@ -312,7 +312,7 @@ class Content extends Component {
               ) : (
                 <ImageComponent
                   source={{
-                    uri: `https://testser.univ.team${e.image}`,
+                    uri: `https://seruniverse.asmo.media${e.image}`,
                   }}
                   size={36}
                 />
@@ -414,7 +414,7 @@ class Content extends Component {
                                 ) : (
                                   <ImageComponent
                                     source={{
-                                      uri: `https://testser.univ.team${user.image}`,
+                                      uri: `https://seruniverse.asmo.media${user.image}`,
                                     }}
                                     size={36}
                                   />

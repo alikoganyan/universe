@@ -202,7 +202,7 @@ class Content extends Component {
           ) : (
             <ImageComponent
               source={{
-                uri: `https://testser.univ.team${chatImage}`,
+                uri: `https://seruniverse.asmo.media${chatImage}`,
               }}
               size={56}
             />

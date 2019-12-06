@@ -98,7 +98,7 @@ const ReceiverComponent = props => {
           <DefaultAvatar />
         ) : (
           <ImageComponent
-            source={{ uri: `https://testser.univ.team${image}` }}
+            source={{ uri: `https://seruniverse.asmo.media${image}` }}
           />
         )}
         <View style={{ flex: 1, marginLeft: 5 }}>

@@ -89,7 +89,7 @@ class HeaderComponent extends Component {
                 {!receivers.length ? (
                   <TouchableOpacity onPress={toProfile}>
                     <ImageComponent
-                      source={{ uri: `https://testser.univ.team${image}` }}
+                      source={{ uri: `https://seruniverse.asmo.media${image}` }}
                       size="header"
                     />
                   </TouchableOpacity>

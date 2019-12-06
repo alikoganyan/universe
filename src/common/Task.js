@@ -278,7 +278,9 @@ class TaskComponent extends Component {
               ) : (
                 <ImageComponent
                   size="header"
-                  source={{ uri: `https://testser.univ.team${creator.image}` }}
+                  source={{
+                    uri: `https://seruniverse.asmo.media${creator.image}`,
+                  }}
                 />
               )}
             </View>
@@ -332,7 +334,7 @@ class TaskComponent extends Component {
                   <ImageComponent
                     size="header"
                     source={{
-                      uri: `https://testser.univ.team${withReceiver.image}`,
+                      uri: `https://seruniverse.asmo.media${withReceiver.image}`,
                     }}
                   />
                 )}

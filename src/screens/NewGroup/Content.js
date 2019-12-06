@@ -94,7 +94,7 @@ class Content extends Component {
               <DefaultAvatar id={_id} />
             ) : (
               <ImageComponent
-                source={{ uri: `https://testser.univ.team${image}` }}
+                source={{ uri: `https://seruniverse.asmo.media${image}` }}
               />
             )}
             <View style={{ flex: 1 }}>

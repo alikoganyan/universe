@@ -180,7 +180,7 @@ class InputComponent extends Component {
               />
             </Body>
             <Right>
-              {text ? (
+              {text.trim() ? (
                 <PapperPlaneIcon onPress={this.handleSendPress} />
               ) : (
                 <CameraIconBlue
@@ -341,7 +341,7 @@ class InputComponent extends Component {
 
             <MyMessageCachedImage
               source={{
-                uri: `https://testser.univ.team${repliedMessage.src}`,
+                uri: `https://seruniverse.asmo.media${repliedMessage.src}`,
               }}
               resizeMode={FastImage.resizeMode.cover}
             />
@@ -418,7 +418,7 @@ class InputComponent extends Component {
 
             <MyMessageCachedImage
               source={{
-                uri: `https://testser.univ.team${forwardedMessage.src}`,
+                uri: `https://seruniverse.asmo.media${forwardedMessage.src}`,
               }}
               resizeMode={FastImage.resizeMode.cover}
             />

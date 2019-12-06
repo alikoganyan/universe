@@ -34,6 +34,7 @@ const {
   pink,
   forwardedMessage,
   replyedMessage,
+  myReplyedMessage,
 } = Colors
 
 const UploadProgressContainer = styled(View)`
@@ -277,7 +278,7 @@ class Message extends Component {
     }
     if (type === 'image' && !isUploaded) {
       this.readFile(
-        src.split('file://')[1] ? src : `https://testser.univ.team${src}`,
+        src.split('file://')[1] ? src : `https://seruniverse.asmo.media${src}`,
         filename,
       )
       return myId === sender._id ? (
@@ -316,7 +317,7 @@ class Message extends Component {
                 <MyMessageCachedImage
                   style={{ width, flex: 1 }}
                   source={{
-                    uri: `https://testser.univ.team${src}`,
+                    uri: `https://seruniverse.asmo.media${src}`,
                   }}
                   resizeMode={FastImage.resizeMode.cover}
                 />
@@ -362,7 +363,7 @@ class Message extends Component {
                 <ImageComponent
                   size={30}
                   source={{
-                    uri: `https://testser.univ.team${sender.image}`,
+                    uri: `https://seruniverse.asmo.media${sender.image}`,
                   }}
                 />
               ) : (
@@ -402,7 +403,7 @@ class Message extends Component {
                   <MyMessageCachedImage
                     style={{ width }}
                     source={{
-                      uri: `https://testser.univ.team${src}`,
+                      uri: `https://seruniverse.asmo.media${src}`,
                     }}
                     resizeMode={FastImage.resizeMode.cover}
                   />
@@ -485,7 +486,7 @@ class Message extends Component {
                 )}
                 {!!(reply && reply.sender) && (
                   <Forwarded
-                    color={replyedMessage}
+                    color={myReplyedMessage}
                     type={reply.type}
                     fileName={reply.filename}
                     geoData={reply.data}
@@ -526,7 +527,7 @@ class Message extends Component {
                 <ImageComponent
                   size={30}
                   source={{
-                    uri: `https://testser.univ.team${sender.image}`,
+                    uri: `https://seruniverse.asmo.media${sender.image}`,
                   }}
                 />
               ) : (
@@ -661,7 +662,7 @@ class Message extends Component {
               <ImageComponent
                 size={30}
                 source={{
-                  uri: `https://testser.univ.team${sender.image}`,
+                  uri: `https://seruniverse.asmo.media${sender.image}`,
                 }}
               />
             ) : (
@@ -807,7 +808,7 @@ class Message extends Component {
                 <ImageComponent
                   size={30}
                   source={{
-                    uri: `https://testser.univ.team${sender.image}`,
+                    uri: `https://seruniverse.asmo.media${sender.image}`,
                   }}
                 />
               ) : (
@@ -938,7 +939,7 @@ class Message extends Component {
                 <ImageComponent
                   size={30}
                   source={{
-                    uri: `https://testser.univ.team${sender.image}`,
+                    uri: `https://seruniverse.asmo.media${sender.image}`,
                   }}
                 />
               ) : (

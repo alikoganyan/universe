@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {
+  Clipboard,
   View,
   Text,
   FlatList,
@@ -267,6 +268,10 @@ class Content extends Component {
     }
   }
 
+  copyMessage = message => {
+    Clipboard.setString(message.text)
+  }
+
   editMessage = message => {
     const { editMessage } = this.props
     editMessage({ ...message })
@@ -344,7 +349,7 @@ class Content extends Component {
             routeName: 'VideoView',
             params: {
               title: 'Видео',
-              uri: `https://testser.univ.team${src}`,
+              uri: `https://seruniverse.asmo.media${src}`,
             },
           })
         break
@@ -356,7 +361,7 @@ class Content extends Component {
           dialogMessages.forEach(message => {
             if (message.type === 'image') {
               dialogImages.push({
-                image: `https://testser.univ.team${message.src}`,
+                image: `https://seruniverse.asmo.media${message.src}`,
                 title: dialogName,
                 description: getHamsterDate(message.created_at),
                 actions: this._getMessageActions(message).slice(0, -1),
@@ -386,7 +391,19 @@ class Content extends Component {
         title: 'Сделать задачей',
         action: () => this.turnToTask(message),
       })
+      actions.push({
+        title: 'Редактировать',
+        action: () => this.editMessage(message),
+      })
     }
+
+    if (message._id && message.type === 'text') {
+      actions.push({
+        title: 'Копировать',
+        action: () => this.copyMessage(message),
+      })
+    }
+
     actions.push({
       title: 'Ответить',
       action: () => this.replyMessage(message),
@@ -395,16 +412,7 @@ class Content extends Component {
       title: 'Переслать',
       action: () => this.forwardMessage(message),
     })
-    if (
-      message._id &&
-      message.type === 'text' &&
-      message.sender._id === user._id
-    ) {
-      actions.push({
-        title: 'Редактировать',
-        action: () => this.editMessage(message),
-      })
-    }
+
     // if (message._id && message.type === 'image') {
     //   actions.push({
     //     title: 'Сохранить',

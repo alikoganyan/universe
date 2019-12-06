@@ -166,7 +166,7 @@ class Content extends Component {
                     size={33}
                     source={{
                       uri: item.image
-                        ? `https://testser.univ.team${item.image}`
+                        ? `https://seruniverse.asmo.media${item.image}`
                         : 'https://simpleicon.com/wp-content/uploads/user1.png',
                     }}
                   />
@@ -226,7 +226,7 @@ class Content extends Component {
                             <ImageComponent
                               size={33}
                               source={{
-                                uri: `https://testser.univ.team${e.image}`,
+                                uri: `https://seruniverse.asmo.media${e.image}`,
                               }}
                             />
                           )}

@@ -278,7 +278,9 @@ class Content extends Component {
                   />
                 ) : (
                   <ImageComponent
-                    source={{ uri: `https://testser.univ.team${item.image}` }}
+                    source={{
+                      uri: `https://seruniverse.asmo.media${item.image}`,
+                    }}
                     size={36}
                   />
                 )}
@@ -297,7 +299,9 @@ class Content extends Component {
                 <DefaultAvatar id={item._id} size={36} />
               ) : (
                 <ImageComponent
-                  source={{ uri: `https://testser.univ.team${item.image}` }}
+                  source={{
+                    uri: `https://seruniverse.asmo.media${item.image}`,
+                  }}
                   size={36}
                 />
               )}
@@ -344,7 +348,9 @@ class Content extends Component {
                   <DefaultAvatar id={item._id} size={36} />
                 ) : (
                   <ImageComponent
-                    source={{ uri: `https://testser.univ.team${item.image}` }}
+                    source={{
+                      uri: `https://seruniverse.asmo.media${item.image}`,
+                    }}
                     size={36}
                   />
                 )}
@@ -426,7 +432,7 @@ class Content extends Component {
                             ) : (
                               <ImageComponent
                                 source={{
-                                  uri: `https://testser.univ.team${e.image}`,
+                                  uri: `https://seruniverse.asmo.media${e.image}`,
                                 }}
                                 size={36}
                               />
@@ -456,7 +462,9 @@ class Content extends Component {
                     <DefaultAvatar id={item._id} size={36} />
                   ) : (
                     <ImageComponent
-                      source={{ uri: `https://testser.univ.team${item.image}` }}
+                      source={{
+                        uri: `https://seruniverse.asmo.media${item.image}`,
+                      }}
                       size={36}
                     />
                   )}
@@ -510,7 +518,7 @@ class Content extends Component {
                 <DefaultAvatar isGroup={isGroup} id={_id} size={36} />
               ) : (
                 <ImageComponent
-                  source={{ uri: `https://testser.univ.team${image}` }}
+                  source={{ uri: `https://seruniverse.asmo.media${image}` }}
                   size={36}
                 />
               )}

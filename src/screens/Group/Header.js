@@ -132,7 +132,7 @@ class HeaderComponent extends Component {
                     <DefaultAvatar id={_id} size={42} isGroup />
                   ) : (
                     <ImageComponent
-                      source={{ uri: `https://testser.univ.team${image}` }}
+                      source={{ uri: `https://seruniverse.asmo.media${image}` }}
                       size={42}
                     />
                   )}

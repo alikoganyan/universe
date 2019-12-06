@@ -96,7 +96,7 @@ class Content extends Component {
                     ) : (
                       <ContactImage
                         source={{
-                          uri: `https://testser.univ.team${item.image}`,
+                          uri: `https://seruniverse.asmo.media${item.image}`,
                         }}
                       />
                     )}

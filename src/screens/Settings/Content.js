@@ -272,7 +272,7 @@ class Content extends Component {
         value: false,
         linkText: 'Условия использования',
         linkComp: 'linkComp',
-        link: 'https://agreement.univ.center/confidentiality/',
+        link: 'https://agreement.univ.center/terms-of-use/',
       },
       {
         value: false,
@@ -284,7 +284,7 @@ class Content extends Component {
         value: false,
         linkText: 'Соглашение об Использовании персональных данных',
         linkComp: 'linkComp',
-        link: 'https://agreement.univ.center/terms-of-use/',
+        link: 'https://agreement.univ.center/confidentiality/',
       },
     ],
   }

@@ -94,7 +94,7 @@ class HeaderComponent extends Component {
                   ) : (
                     <ImageComponent
                       size="header"
-                      source={{ uri: `https://testser.univ.team${image}` }}
+                      source={{ uri: `https://seruniverse.asmo.media${image}` }}
                     />
                   )}
                 </TouchableOpacity>

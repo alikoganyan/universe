@@ -30,7 +30,7 @@ class Forwarded extends PureComponent {
         {src && (type === 'video' || type === 'image') ? (
           <MyMessageCachedImage
             source={{
-              uri: `https://testser.univ.team${src}`,
+              uri: `https://seruniverse.asmo.media${src}`,
             }}
             resizeMode={FastImage.resizeMode.cover}
           />
@@ -89,10 +89,10 @@ const styles = StyleSheet.create({
   },
   userName: {
     color: '#034402',
-    fontSize: 14,
+    fontSize: 13,
   },
   text: {
-    fontSize: 12,
+    fontSize: 11,
   },
 })
 

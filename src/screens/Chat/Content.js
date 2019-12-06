@@ -6,6 +6,7 @@ import {
   ImageBackground,
   InteractionManager,
   Alert,
+  Clipboard,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -358,7 +359,7 @@ class Content extends Component {
             routeName: 'VideoView',
             params: {
               title: 'Видео',
-              uri: `https://testser.univ.team${src}`,
+              uri: `https://seruniverse.asmo.media${src}`,
             },
           })
         break
@@ -373,7 +374,7 @@ class Content extends Component {
           dialogMessages.forEach(message => {
             if (message.type === 'image') {
               dialogImages.push({
-                image: `https://testser.univ.team${message.src}`,
+                image: `https://seruniverse.asmo.media${message.src}`,
                 title: first_name ? `${first_name} ${last_name}` : phone_number,
                 description: getHamsterDate(message.created_at),
                 actions: this._getMessageActions(message).slice(0, -1),
@@ -405,6 +406,16 @@ class Content extends Component {
         title: 'Сделать задачей',
         action: () => this.turnToTask(message),
       })
+      actions.push({
+        title: 'Редактировать',
+        action: () => this.editMessage(message),
+      })
+    }
+    if (message._id && message.type === 'text') {
+      actions.push({
+        title: 'Копировать',
+        action: () => this.copyMessage(message),
+      })
     }
     actions.push({
       title: 'Ответить',
@@ -414,16 +425,7 @@ class Content extends Component {
       title: 'Переслать',
       action: () => this.forwardMessage(message),
     })
-    if (
-      message._id &&
-      message.type === 'text' &&
-      message.sender._id === user._id
-    ) {
-      actions.push({
-        title: 'Редактировать',
-        action: () => this.editMessage(message),
-      })
-    }
+
     // if (message._id && message.type === 'image') {
     //   actions.push({
     //     title: 'Сохранить',
@@ -452,6 +454,10 @@ class Content extends Component {
         this.ActionSheetMessage && this.ActionSheetMessage.show()
       },
     )
+  }
+
+  copyMessage = message => {
+    Clipboard.setString(message.text)
   }
 
   editMessage = message => {

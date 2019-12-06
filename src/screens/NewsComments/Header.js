@@ -96,7 +96,7 @@ class HeaderComponent extends Component {
                   <DefaultAvatar size="header" style={{ marginLeft: 10 }} />
                 ) : (
                   <ImageComponent
-                    source={{ uri: `https://testser.univ.team${image}` }}
+                    source={{ uri: `https://seruniverse.asmo.media${image}` }}
                     size="header"
                   />
                 )}

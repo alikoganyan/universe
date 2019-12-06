@@ -103,7 +103,7 @@ class Content extends Component {
               <DefaultAvatar />
             ) : (
               <ImageComponent
-                source={{ uri: `https://testser.univ.team${image}` }}
+                source={{ uri: `https://seruniverse.asmo.media${image}` }}
               />
             )}
             <View style={{ flex: 1 }}>
@@ -138,7 +138,7 @@ class Content extends Component {
                 source={{
                   uri: imageFormData
                     ? image
-                    : `https://testser.univ.team${image}`,
+                    : `https://seruniverse.asmo.media${image}`,
                 }}
                 style={{ alignSelf: 'center', marginBottom: 20 }}
               />

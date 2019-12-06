@@ -70,7 +70,7 @@ class HeaderComponent extends Component {
               <DefaultAvatar size="header" />
             ) : (
               <ImageComponent
-                source={{ uri: `https://testser.univ.team${user.image}` }}
+                source={{ uri: `https://seruniverse.asmo.media${user.image}` }}
                 size="header"
               />
             )}

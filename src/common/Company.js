@@ -75,7 +75,7 @@ class Company extends Component {
         <TouchableOpacity onPress={() => this.setState({ modalVisible: true })}>
           <ImageComponent
             source={{
-              uri: `https://testser.univ.team${company.logo}`,
+              uri: `https://seruniverse.asmo.media${company.logo}`,
             }}
             size={36}
             style={{ marginRight: 16 }}
@@ -104,7 +104,7 @@ class Company extends Component {
                   {user.image ? (
                     <UserImage
                       source={{
-                        uri: `https://testser.univ.team${user.image}`,
+                        uri: `https://seruniverse.asmo.media${user.image}`,
                       }}
                       size={56}
                     />
@@ -128,7 +128,7 @@ class Company extends Component {
                     {item.logo ? (
                       <UserImage
                         source={{
-                          uri: `https://testser.univ.team${item.logo}`,
+                          uri: `https://seruniverse.asmo.media${item.logo}`,
                         }}
                         size={40}
                       />
