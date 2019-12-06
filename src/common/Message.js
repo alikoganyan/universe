@@ -79,6 +79,7 @@ const MyMessages = styled(View)`
   padding: ${({ noPadding }) => (noPadding ? 0 : 10)}px;
   padding-top: ${({ noPadding }) => (noPadding ? 0 : 5)}px;
   padding-bottom: ${({ noPadding }) => (noPadding ? 0 : 5)}px;
+  z-index: 1;
 `
 
 const RecivedMessage = styled(View)`
@@ -748,7 +749,7 @@ class Message extends Component {
           >
             <View style={{ maxWidth: '80%', width: '80%' }}>
               <MyMessages
-                style={{ width: '100%', height: 230, zIndex: 5 }}
+                style={{ width: '100%', height: 180, zIndex: 5 }}
                 noPadding
                 background={background}
               >
@@ -899,7 +900,7 @@ class Message extends Component {
                     <ImageIconBlue />
                   </FileIcon>
                   <FileInfo>
-                    <MessageText noPadding style={{ maxWidth: '95%' }}>
+                    <MessageText noPadding style={{ maxWidth: '92%' }}>
                       {filename}
                     </MessageText>
                     <FileSize>{fileSize}</FileSize>
@@ -983,7 +984,7 @@ class Message extends Component {
                     <ImageIcon />
                   </FileIcon>
                   <FileInfo>
-                    <MessageText style={{ maxWidth: '95%' }}>
+                    <MessageText style={{ maxWidth: '92%' }}>
                       {filename}
                     </MessageText>
                     <FileSize color={pink}>{fileSize}</FileSize>

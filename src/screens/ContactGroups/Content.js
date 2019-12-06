@@ -385,7 +385,7 @@ class Content extends Component {
             ref={ref => (this.usersRef = ref)}
             renderItem={({ item, index }) => {
               if (this.props.user.settings.partition_contacts) {
-                return (
+                return item.data.length ? (
                   <Box
                     key={item._id}
                     first={!index}
@@ -446,7 +446,7 @@ class Content extends Component {
                       </BoxInner>
                     </Collapsible>
                   </Box>
-                )
+                ) : null
               }
 
               return item ? (
