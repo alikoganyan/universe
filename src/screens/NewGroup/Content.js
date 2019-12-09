@@ -16,6 +16,9 @@ import DefaultAvatar from '../../common/DefaultAvatar'
 import { GroupIcon, CloseIcon } from '../../assets'
 import { setDialogParticipants } from '../../actions/participantsActions'
 import { socket } from '../../utils/socket'
+import sendRequest from '../../utils/request'
+import { p_create_group } from '../../constants/api'
+import getImageFromPicker from '../../utils/ImagePicker'
 
 const { Colors, sidePadding } = helper
 const { lightGrey1, black, green } = Colors
@@ -76,7 +79,7 @@ const DialogsLabelText = styled(Text)`
 `
 class Content extends Component {
   render() {
-    const { text } = this.state
+    const { text, image, imageFormData } = this.state
     const { participants } = this.props
     const ReceiverComponent = props => {
       const { children, last = false, onDelete } = props
@@ -117,11 +120,23 @@ class Content extends Component {
       >
         <Wrapper>
           <TouchableOpacity onPress={this.selectPhoto}>
-            <DefaultAvatar
-              isGroup
-              style={{ alignSelf: 'center', marginBottom: 20 }}
-              size={70}
-            />
+            {!image ? (
+              <DefaultAvatar
+                isGroup
+                style={{ alignSelf: 'center', marginBottom: 20 }}
+                size={70}
+              />
+            ) : (
+              <ImageComponent
+                size={70}
+                source={{
+                  uri: imageFormData
+                    ? image
+                    : `https://seruniverse.asmo.media${image}`,
+                }}
+                style={{ alignSelf: 'center', marginBottom: 20 }}
+              />
+            )}
           </TouchableOpacity>
           <StyledInput
             password
@@ -171,7 +186,8 @@ class Content extends Component {
 
   state = {
     text: '',
-    image: null,
+    image: '',
+    imageFormData: null,
   }
 
   componentDidMount() {}
@@ -181,7 +197,12 @@ class Content extends Component {
   }
 
   selectPhoto = async e => {
-    alert('temporary unavailable')
+    getImageFromPicker(result => {
+      const { imageFormData = {} } = result
+      if (!result.cancelled) {
+        this.setState({ imageFormData, image: imageFormData.uri })
+      }
+    })
   }
 
   deleteParticipant = e => {
@@ -198,12 +219,28 @@ class Content extends Component {
 
   proceed = e => {
     const { participants, forward, setParticipants } = this.props
-    const { text } = this.state
+    const { text, imageFormData } = this.state
     let idList = []
     participants.map(e => (idList = [...idList, e._id]))
-    setParticipants([])
-    socket.emit('new_group', { name: text, participants: idList })
-    setTimeout(() => socket.emit('get_dialogs'), 500)
+    const form = new FormData()
+    form.append('name', text)
+    form.append('participants', JSON.stringify(idList))
+    form.append('file', imageFormData)
+    sendRequest({
+      r_path: p_create_group,
+      method: 'post',
+      attr: form,
+      config: {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      },
+      success: res => {
+        setParticipants([])
+        socket.emit('get_dialogs')
+      },
+      failFunc: err => {},
+    })
     forward()
   }
 
