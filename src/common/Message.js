@@ -225,6 +225,7 @@ class Message extends Component {
       isGroup = false,
       onLongPressMessage,
       onPressMessage,
+      toSenderProfile,
       color,
     } = this.props
     const {
@@ -345,19 +346,15 @@ class Message extends Component {
           </View>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={onPressMessage}
-          onLongPress={onLongPressMessage}
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 2,
+            marginBottom: 2,
+            alignItems: 'flex-end',
+          }}
         >
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 2,
-              marginBottom: 2,
-              alignItems: 'flex-end',
-            }}
-          >
+          <TouchableOpacity activeOpacity={0.8} onPress={toSenderProfile}>
             <View style={{ flexDirection: 'row' }}>
               {sender.image ? (
                 <ImageComponent
@@ -371,14 +368,21 @@ class Message extends Component {
               )}
               <TriangleRightIcon color={background || interlocatorMessage} />
             </View>
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignSelf: 'flex-start',
-                minWidth: '20%',
-                maxWidth: '80%',
-              }}
+          </TouchableOpacity>
+
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignSelf: 'flex-start',
+              minWidth: '20%',
+              maxWidth: '80%',
+            }}
+          >
+            <TouchableOpacity
+              activeOpacity={0.8}
+              onPress={onPressMessage}
+              onLongPress={onLongPressMessage}
             >
               <RecivedMessage
                 noPadding
@@ -419,9 +423,9 @@ class Message extends Component {
                   </MessageInfo>
                 </LinearGradient>
               </RecivedMessage>
-            </View>
+            </TouchableOpacity>
           </View>
-        </TouchableOpacity>
+        </View>
       )
     }
     if (type === 'image' && isUploaded) {
@@ -509,19 +513,15 @@ class Message extends Component {
           </View>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={onPressMessage}
-          onLongPress={onLongPressMessage}
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 2,
+            marginBottom: 2,
+            alignItems: 'flex-end',
+          }}
         >
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 2,
-              marginBottom: 2,
-              alignItems: 'flex-end',
-            }}
-          >
+          <TouchableOpacity activeOpacity={0.8} onPress={toSenderProfile}>
             <View style={{ flexDirection: 'row' }}>
               {sender.image ? (
                 <ImageComponent
@@ -535,6 +535,12 @@ class Message extends Component {
               )}
               <TriangleRightIcon color={background || interlocatorMessage} />
             </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={onPressMessage}
+            onLongPress={onLongPressMessage}
+          >
             <View
               style={{
                 display: 'flex',
@@ -573,8 +579,8 @@ class Message extends Component {
                 </MessageInfo>
               </RecivedMessage>
             </View>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
       )
     }
     if (type === 'geo') {
@@ -656,19 +662,21 @@ class Message extends Component {
             alignItems: 'flex-end',
           }}
         >
-          <View style={{ flexDirection: 'row' }}>
-            {sender.image ? (
-              <ImageComponent
-                size={30}
-                source={{
-                  uri: `https://seruniverse.asmo.media${sender.image}`,
-                }}
-              />
-            ) : (
-              <DefaultAvatar size={30} id={sender._id} />
-            )}
-            <TriangleRightIcon color={background || interlocatorMessage} />
-          </View>
+          <TouchableOpacity activeOpacity={0.8} onPress={toSenderProfile}>
+            <View style={{ flexDirection: 'row' }}>
+              {sender.image ? (
+                <ImageComponent
+                  size={30}
+                  source={{
+                    uri: `https://seruniverse.asmo.media${sender.image}`,
+                  }}
+                />
+              ) : (
+                <DefaultAvatar size={30} id={sender._id} />
+              )}
+              <TriangleRightIcon color={background || interlocatorMessage} />
+            </View>
+          </TouchableOpacity>
           <View style={{ maxWidth: '80%', width: '80%' }}>
             <RecivedMessage
               style={{ width: '100%', height: 230 }}
@@ -730,7 +738,6 @@ class Message extends Component {
         </View>
       )
     }
-
     if (type === 'video') {
       return myId === sender._id ? (
         <TouchableOpacity
@@ -789,19 +796,15 @@ class Message extends Component {
           </View>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={onPressMessage}
-          onLongPress={onLongPressMessage}
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 2,
+            marginBottom: 2,
+            alignItems: 'flex-end',
+          }}
         >
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 2,
-              marginBottom: 2,
-              alignItems: 'flex-end',
-            }}
-          >
+          <TouchableOpacity activeOpacity={0.8} onPress={toSenderProfile}>
             <View style={{ flexDirection: 'row' }}>
               {sender.image ? (
                 <ImageComponent
@@ -815,6 +818,12 @@ class Message extends Component {
               )}
               <TriangleRightIcon color={background || interlocatorMessage} />
             </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={onPressMessage}
+            onLongPress={onLongPressMessage}
+          >
             <View style={{ maxWidth: '80%', width: '80%' }}>
               <RecivedMessage
                 style={{ height: 180 }}
@@ -856,8 +865,8 @@ class Message extends Component {
                 </BottomLine>
               </RecivedMessage>
             </View>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
       )
     }
     if (type === 'file' && !isUploaded) {
@@ -920,19 +929,15 @@ class Message extends Component {
           </View>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity
-          activeOpacity={0.8}
-          onPress={onPressMessage}
-          onLongPress={onLongPressMessage}
+        <View
+          style={{
+            flexDirection: 'row',
+            marginTop: 2,
+            marginBottom: 2,
+            alignItems: 'flex-end',
+          }}
         >
-          <View
-            style={{
-              flexDirection: 'row',
-              marginTop: 2,
-              marginBottom: 2,
-              alignItems: 'flex-end',
-            }}
-          >
+          <TouchableOpacity activeOpacity={0.8} onPress={toSenderProfile}>
             <View style={{ flexDirection: 'row' }}>
               {sender.image ? (
                 <ImageComponent
@@ -946,6 +951,12 @@ class Message extends Component {
               )}
               <TriangleRightIcon color={background || interlocatorMessage} />
             </View>
+          </TouchableOpacity>
+          <TouchableOpacity
+            activeOpacity={0.8}
+            onPress={onPressMessage}
+            onLongPress={onLongPressMessage}
+          >
             <View
               style={{
                 display: 'flex',
@@ -994,8 +1005,8 @@ class Message extends Component {
                 </MessageInfo>
               </RecivedMessage>
             </View>
-          </View>
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
       )
     }
 

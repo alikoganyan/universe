@@ -23,7 +23,10 @@ export default class NewFeedReceivers extends Component {
         <SafeAreaView>
           <Wrapper>
             <Header back={this.navigateBack} />
-            <Content back={this.navigateBack} />
+            <Content
+              back={this.navigateBack}
+              navigate={this.props.navigation.navigate}
+            />
             <Bottom />
           </Wrapper>
         </SafeAreaView>

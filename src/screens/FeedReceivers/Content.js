@@ -8,6 +8,7 @@ import {
   ScrollView,
   Dimensions,
   InteractionManager,
+  TouchableOpacity,
 } from 'react-native'
 import styled from 'styled-components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -25,6 +26,7 @@ import {
   setFeedReceivers,
 } from '../../actions/participantsActions'
 import { setDialogs } from '../../actions/dialogsActions'
+import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
 const { HeaderHeight } = helper
 // const { black, green } = Colors
@@ -48,10 +50,10 @@ const Animated = styled(AnimatedScrollView)`
   flex-direction: row;
   width: ${Dimensions.get('window').width * 3};
 `
-const AnimatedBox = posed.View({
-  visible: { flex: 1 },
-  hidden: { flex: 0 },
-})
+// const AnimatedBox = posed.View({
+//   visible: { flex: 1 },
+//   hidden: { flex: 0 },
+// })
 // const AnimatedArrowWrapper = posed.View({
 //   down: { rotate: '0deg' },
 //   right: { rotate: '-90deg' },
@@ -83,14 +85,14 @@ const Box = styled(View)`
 //   align-items: center;
 //   padding-bottom: 20px;
 // `
-const BoxInner = styled(AnimatedBox)`
+const BoxInner = styled(View)`
   padding-bottom: 20px;
 `
 // const BoxItem = styled(Text)`
 //   color: #a7b0ba;
 //   width: 80%;
 // `
-const BoxInnerItem = styled(View)`
+const BoxInnerItem = styled(TouchableOpacity)`
   padding: 10px;
   padding-bottom: ${({ title }) => (title ? 20 : 0)}px;
   display: flex;
@@ -191,7 +193,10 @@ class Content extends Component {
                     {animationCompleted ? (
                       <BoxInner>
                         {workers.map((e, i) => (
-                          <BoxInnerItem key={i}>
+                          <BoxInnerItem
+                            key={i}
+                            onPress={() => this.toSenderProfile(e)}
+                          >
                             {!e.image ||
                             e.image === '/images/default_group.png' ||
                             e.image === '/images/default_avatar.jpg' ? (
@@ -292,6 +297,13 @@ class Content extends Component {
     })
   }
 
+  toSenderProfile = e => {
+    const { navigate, setProfile } = this.props
+    this.props.setIsMyProfile(false)
+    setProfile(e)
+    navigate('Profile')
+  }
+
   optionLeft = () => {
     const { options } = this.state
     const newState = { ...options }
@@ -352,6 +364,8 @@ const mapDispatchToProps = dispatch => ({
   setContacts: _ => dispatch(setContacts(_)),
   addReceiver: _ => dispatch(addFeedReceiver(_)),
   setReceivers: _ => dispatch(setFeedReceivers(_)),
+  setProfile: _ => dispatch(setProfile(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
 })
 export default connect(
   mapStateToProps,

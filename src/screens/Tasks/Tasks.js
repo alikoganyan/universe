@@ -15,7 +15,7 @@ export default class Tasks extends Component {
     return (
       <SafeAreaView>
         <Wrapper>
-          <Header back={this.navigateBack} />
+          <Header navigate={this.navigate} back={this.navigateBack} />
           <Content navigate={this.navigate} />
         </Wrapper>
       </SafeAreaView>

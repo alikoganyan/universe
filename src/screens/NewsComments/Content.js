@@ -24,6 +24,7 @@ import DefaultAvatar from '../../common/DefaultAvatar'
 import { setFeed } from '../../actions/newsActions'
 import { socket } from '../../utils/socket'
 import { SafeAreaView } from 'react-navigation'
+import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
 const { sidePadding, borderRadius, Colors, fontSize } = helper
 const { yellow, black, darkBlue2, grey2 } = Colors
@@ -41,7 +42,7 @@ const NewsItem = styled(View)`
   border-radius: ${borderRadius};
   margin: 0 ${sidePadding}px;
 `
-const Sender = styled(View)`
+const Sender = styled(TouchableOpacity)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -194,7 +195,7 @@ class Content extends Component {
     return (
       <Wrapper>
         <NewsItem>
-          <Sender>
+          <Sender onPress={() => this.toSenderProfile(creator)}>
             {image === '/images/default_avatar.jpg' ? (
               <DefaultAvatar size={30} style={{ marginRight: 10 }} />
             ) : (
@@ -259,6 +260,13 @@ class Content extends Component {
   componentWillUnmount() {
     const { setFeed } = this.props
     setFeed({})
+  }
+
+  toSenderProfile = sender => {
+    const { navigate, setProfile } = this.props
+    this.props.setIsMyProfile(false)
+    setProfile(sender)
+    navigate('Profile')
   }
 
   seeParticipants = () => {
@@ -367,6 +375,8 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   setFeed: _ => dispatch(setFeed(_)),
+  setProfile: _ => dispatch(setProfile(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
 })
 export default connect(
   mapStateToProps,

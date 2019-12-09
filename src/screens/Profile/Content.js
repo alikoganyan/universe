@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
+  TouchableWithoutFeedback,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -24,6 +25,7 @@ import { setDialogs } from '../../actions/dialogsActions'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import sendRequest from '../../utils/request'
 import { p_leave_group } from '../../constants/api'
+import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
 const { sidePadding, Colors, HeaderHeight, fontSize } = helper
 const { border, grey3, pink } = Colors
@@ -148,7 +150,7 @@ const ContactRole = styled(Text)`
 class Content extends Component {
   render() {
     const { UserData, status } = this.state
-    const { user, myProfile, currentDialog } = this.props
+    const { user, myProfile, currentDialog, profile } = this.props
     const {
       _id,
       image,
@@ -160,7 +162,7 @@ class Content extends Component {
       name,
       creator,
       department,
-    } = myProfile ? user : currentDialog
+    } = myProfile ? user : profile ? profile : currentDialog
     const chatName = isGroup
       ? name
       : first_name
@@ -284,39 +286,43 @@ class Content extends Component {
                     phone_number,
                   } = item
                   return (
-                    <View
-                      style={{
-                        display: 'flex',
-                        flexDirection: 'row',
-                        alignItems: 'center',
-                        justifyContent: 'space-between',
-                        padding: 10,
-                      }}
+                    <TouchableWithoutFeedback
+                      onPress={() => this.toSenderProfile(item)}
                     >
-                      <BoxInnerItem>
-                        {image === '/images/default_avatar.jpg' || !image ? (
-                          <DefaultAvatar size={36} />
-                        ) : (
-                          <ImageComponent
-                            size={36}
-                            source={{
-                              uri: `https://seruniverse.asmo.media${image}`,
-                            }}
-                            style={{ marginRight: 8 }}
-                          />
-                        )}
-                        <ContactInfo>
-                          <ContactName>
-                            {first_name
-                              ? `${first_name} ${last_name}`
-                              : phone_number}
-                          </ContactName>
-                          {role && role.name && (
-                            <ContactRole>{role.name}</ContactRole>
+                      <View
+                        style={{
+                          display: 'flex',
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          padding: 10,
+                        }}
+                      >
+                        <BoxInnerItem>
+                          {image === '/images/default_avatar.jpg' || !image ? (
+                            <DefaultAvatar size={36} />
+                          ) : (
+                            <ImageComponent
+                              size={36}
+                              source={{
+                                uri: `https://seruniverse.asmo.media${image}`,
+                              }}
+                              style={{ marginRight: 8 }}
+                            />
                           )}
-                        </ContactInfo>
-                      </BoxInnerItem>
-                    </View>
+                          <ContactInfo>
+                            <ContactName>
+                              {first_name
+                                ? `${first_name} ${last_name}`
+                                : phone_number}
+                            </ContactName>
+                            {role && role.name && (
+                              <ContactRole>{role.name}</ContactRole>
+                            )}
+                          </ContactInfo>
+                        </BoxInnerItem>
+                      </View>
+                    </TouchableWithoutFeedback>
                   )
                 }}
                 keyExtractor={item => item._id.toString()}
@@ -429,6 +435,18 @@ class Content extends Component {
     this.setState({ UserData: newUserData })
   }
 
+  componentWillUnmount() {
+    const { setProfile } = this.props
+    setProfile(null)
+  }
+
+  toSenderProfile = sender => {
+    const { navigate, setProfile } = this.props
+    this.props.setIsMyProfile(false)
+    setProfile(sender)
+    navigate('Profile')
+  }
+
   toChat = () => {
     const { setRoom, user, navigate } = this.props
     const { _id } = user
@@ -469,12 +487,13 @@ const mapStateToProps = state => ({
   currentChat: state.messageReducer.currentChat,
   currentDialog: state.dialogsReducer.currentDialog,
   user: state.userReducer.user,
+  profile: state.profileReducer.profile,
 })
 const mapDispatchToProps = dispatch => ({
-  // getMessages: _ => dispatch(getMessages(_)),
+  setProfile: _ => dispatch(setProfile(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
   setRoom: _ => dispatch(setRoom(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
-  // addMessage: _ => dispatch(addMessage(_)),
 })
 export default connect(
   mapStateToProps,

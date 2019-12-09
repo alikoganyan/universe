@@ -115,10 +115,8 @@ class Chat extends Component {
   }
 
   toProfile = () => {
-    const { navigation } = this.props
-    const { navigate } = navigation
     this.props.setIsMyProfile(false)
-    navigate('Profile')
+    this.navigate('Profile')
   }
 
   navigate = e => {

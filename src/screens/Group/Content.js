@@ -27,6 +27,7 @@ import { setDialog } from '../../actions/dialogsActions'
 import { d_message } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import Loader from '../../common/Loader'
+import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
 const {
   Colors: { gray2 },
@@ -97,6 +98,7 @@ class Content extends Component {
                     color={participant && participant.color}
                     onLongPressMessage={() => this._onLongPressMessage(item)}
                     onPressMessage={() => this._onPressMessage(item)}
+                    toSenderProfile={() => this.toSenderProfile(item.sender)}
                   />
                 )
               }}
@@ -311,6 +313,13 @@ class Content extends Component {
     })
   }
 
+  toSenderProfile = sender => {
+    const { navigation, setProfile } = this.props
+    this.props.setIsMyProfile(false)
+    setProfile(sender)
+    navigation.navigate('Profile')
+  }
+
   _onLongPressMessage = message => {
     this.setState(
       {
@@ -458,6 +467,8 @@ const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
   setDialog: _ => dispatch(setDialog(_)),
+  setProfile: _ => dispatch(setProfile(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
 })

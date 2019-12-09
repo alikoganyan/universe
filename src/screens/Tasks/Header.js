@@ -7,6 +7,7 @@ import helper from '../../utils/helpers'
 import { startSearch } from '../../actions/messageActions'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
+import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
 const { sidePadding, HeaderHeight, fontSize } = helper
 const Header = styled(View)`
@@ -51,13 +52,13 @@ const ToProfile = styled(TouchableOpacity)`
 `
 class HeaderComponent extends Component {
   render() {
-    const { back, currentTask, toProfile } = this.props
+    const { back, currentTask } = this.props
     const { first_name, last_name, phone_number, tasks, image } = currentTask
     return (
       <Header>
         <Left>
           <BackIcon onPress={back} />
-          <ToProfile onPress={toProfile}>
+          <ToProfile onPress={() => this.toSenderProfile(currentTask)}>
             {!image ||
             image === '/images/default_group.png' ||
             image === '/images/default_avatar.jpg' ? (
@@ -84,11 +85,22 @@ class HeaderComponent extends Component {
       </Header>
     )
   }
+
+  toSenderProfile = e => {
+    const { navigate, setProfile } = this.props
+    this.props.setIsMyProfile(false)
+    setProfile(e)
+    navigate('Profile')
+  }
 }
+
 const mapStateToProps = state => ({
   currentTask: state.tasksReducer.currentTask,
 })
-const mapDispatchToProps = dispatch => ({})
+const mapDispatchToProps = dispatch => ({
+  setProfile: _ => dispatch(setProfile(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
+})
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
