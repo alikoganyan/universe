@@ -20,7 +20,10 @@ class Forwarded extends PureComponent {
       <View
         style={[
           styles.root,
-          { backgroundColor: myMessage ? '#cfe9ba' : '#ececec' },
+          {
+            backgroundColor: myMessage ? '#cfe9ba' : '#ececec',
+            borderLeftColor: myMessage ? '#034402' : '#5f6368',
+          },
         ]}
       >
         <Text style={[styles.userName, { color: color ? color : '#034402' }]}>
@@ -85,7 +88,6 @@ const styles = StyleSheet.create({
     marginBottom: 4,
     borderRadius: 5,
     borderLeftWidth: 4,
-    borderLeftColor: '#034402',
   },
   userName: {
     color: '#034402',

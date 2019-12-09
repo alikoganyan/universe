@@ -560,7 +560,6 @@ class Message extends Component {
                     src={reply.src}
                     userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
                     text={reply.text}
-                    myMessage
                   />
                 )}
                 {sender.first_name && sender.last_name && isGroup && (
@@ -972,7 +971,6 @@ class Message extends Component {
                     src={reply.src}
                     userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
                     text={reply.text}
-                    myMessage
                   />
                 )}
                 {sender.first_name && sender.last_name && isGroup && (
