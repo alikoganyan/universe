@@ -47,7 +47,7 @@ const StyledImageBackground = styled(ImageBackground)`
 `
 const DateContainer = styled(View)`
   position: absolute;
-  top: 65px;
+  top: 10px;
   z-index: 10;
   width: 100%;
   align-items: center;

@@ -21,11 +21,12 @@ import MapView from 'react-native-maps'
 import FastImage from 'react-native-fast-image'
 // import { FileSystem } from 'expo';
 // import RNFS from 'react-native-fs'
-import helper, { getHamsterDate } from '../utils/helpers'
+import helper from '../utils/helpers'
 import { SingleImage } from 'react-native-zoom-lightbox'
 import LinearGradient from 'react-native-linear-gradient'
 import Forwarded from './Forwarded'
 import DefaultAvatar from './DefaultAvatar'
+import moment from 'moment'
 
 const { Colors, fontSize, borderRadius } = helper
 const {
@@ -247,7 +248,7 @@ class Message extends Component {
       enableUploadProgress,
       uploadProgress,
     } = item
-    const finalTime = getHamsterDate(created_at)
+    const finalTime = moment(created_at).format('HH:mm')
     const fileSize =
       size / 1024 > 1024
         ? `${(size / (1024 * 2)).toFixed(1)}МБ`
