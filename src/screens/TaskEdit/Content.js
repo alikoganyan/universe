@@ -109,7 +109,7 @@ const ReceiverComponent = props => {
           alignItems: 'center',
         }}
       >
-        {image === '/images/default_avatar.jpg' ? (
+        {!image ? (
           <DefaultAvatar />
         ) : (
           <ImageComponent

@@ -94,7 +94,7 @@ const ReceiverComponent = props => {
       <View
         style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
       >
-        {image === '/images/default_avatar.jpg' ? (
+        {!image ? (
           <DefaultAvatar />
         ) : (
           <ImageComponent

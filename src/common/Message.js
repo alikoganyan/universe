@@ -86,6 +86,7 @@ const MyMessages = styled(View)`
 
 const RecivedMessage = styled(View)`
   background: ${({ background }) => background || interlocatorMessage};
+  min-width: 35%;
   border-radius: ${borderRadius};
   border-bottom-right-radius: ${borderRadius};
   border-bottom-left-radius: 0;
@@ -121,6 +122,9 @@ const MessageDate = styled(Text)`
   textShadowOffset: {width: 0, height: 0};
   textShadowRadius: 0.01;
 `
+
+const MessageEdited = styled(MessageDate)``
+
 const MyMessageImage = styled(SingleImage)`
   min-width: 100%;
   height: 250px;
@@ -247,6 +251,7 @@ class Message extends Component {
       isUploading,
       enableUploadProgress,
       uploadProgress,
+      edited,
     } = item
     const finalTime = moment(created_at).format('HH:mm')
     const fileSize =
@@ -503,6 +508,7 @@ class Message extends Component {
                 )}
                 <MessageText>{text}</MessageText>
                 <MessageInfo>
+                  {edited ? <MessageEdited>edited </MessageEdited> : null}
                   <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
                   <Indicator color="black" read={messageRead} />
                 </MessageInfo>
@@ -576,6 +582,7 @@ class Message extends Component {
                 )}
                 <MessageText>{text}</MessageText>
                 <MessageInfo>
+                  {edited ? <MessageEdited>edited </MessageEdited> : null}
                   <MessageDate>{finalTime}</MessageDate>
                 </MessageInfo>
               </RecivedMessage>
