@@ -476,7 +476,7 @@ class Message extends Component {
                 )}
                 <MessageText>{text}</MessageText>
                 <MessageInfo>
-                  {edited ? <MessageEdited>edited </MessageEdited> : null}
+                  {edited ? <MessageEdited>Изменено </MessageEdited> : null}
                   <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
                   <Indicator color="black" read={messageRead} />
                 </MessageInfo>
@@ -536,7 +536,7 @@ class Message extends Component {
               )}
               <MessageText>{text}</MessageText>
               <MessageInfo>
-                {edited ? <MessageEdited>edited </MessageEdited> : null}
+                {edited ? <MessageEdited>Изменено </MessageEdited> : null}
                 <MessageDate>{finalTime}</MessageDate>
               </MessageInfo>
             </RecivedMessage>
