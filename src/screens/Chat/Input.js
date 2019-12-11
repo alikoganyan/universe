@@ -455,6 +455,7 @@ class InputComponent extends Component {
         const newDialog = { ...dialog }
         const msgIndex = newDialog.messages.findIndex(e => e._id === _id)
         newDialog.messages[msgIndex].text = text
+        newDialog.messages[msgIndex].edited = true
         this.props.setDialog(newDialog)
         this.stopEditing()
       },
