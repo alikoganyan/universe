@@ -97,6 +97,11 @@ export default {
     '#12ccc3',
     '#8621d9',
     '#d9218c',
+    '#FA790F',
+    '#2084d6',
+    '#4D8D30',
+    '#B78A4E',
+    '#913136',
   ],
   imageSize: {
     small: 20,
