@@ -86,7 +86,6 @@ const MyMessages = styled(View)`
 
 const RecivedMessage = styled(View)`
   background: ${({ background }) => background || interlocatorMessage};
-  min-width: 35%;
   border-radius: ${borderRadius};
   border-bottom-right-radius: ${borderRadius};
   border-bottom-left-radius: 0;
@@ -544,49 +543,46 @@ class Message extends Component {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignSelf: 'flex-start',
+              minWidth: '20%',
+              maxWidth: '80%',
+            }}
             activeOpacity={0.8}
             onPress={onPressMessage}
             onLongPress={onLongPressMessage}
           >
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignSelf: 'flex-start',
-                minWidth: '20%',
-                maxWidth: '80%',
-              }}
-            >
-              <RecivedMessage background={background || interlocatorMessage}>
-                {!!(resend && resend.sender) && (
-                  <Forwarded
-                    color={forwardedMessage}
-                    userName={`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
-                  />
-                )}
-                {!!(reply && reply.sender) && (
-                  <Forwarded
-                    color={replyedMessage}
-                    type={reply.type}
-                    fileName={reply.filename}
-                    geoData={reply.data}
-                    src={reply.src}
-                    userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
-                    text={reply.text}
-                  />
-                )}
-                {sender.first_name && sender.last_name && isGroup && (
-                  <ReviverName numberOfLines={1} style={{ color: color }}>
-                    {!!sender && `${sender.first_name} ${sender.last_name}`}
-                  </ReviverName>
-                )}
-                <MessageText>{text}</MessageText>
-                <MessageInfo>
-                  {edited ? <MessageEdited>edited </MessageEdited> : null}
-                  <MessageDate>{finalTime}</MessageDate>
-                </MessageInfo>
-              </RecivedMessage>
-            </View>
+            <RecivedMessage background={background || interlocatorMessage}>
+              {!!(resend && resend.sender) && (
+                <Forwarded
+                  color={forwardedMessage}
+                  userName={`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                />
+              )}
+              {!!(reply && reply.sender) && (
+                <Forwarded
+                  color={replyedMessage}
+                  type={reply.type}
+                  fileName={reply.filename}
+                  geoData={reply.data}
+                  src={reply.src}
+                  userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
+                  text={reply.text}
+                />
+              )}
+              {sender.first_name && sender.last_name && isGroup && (
+                <ReviverName numberOfLines={1} style={{ color: color }}>
+                  {!!sender && `${sender.first_name} ${sender.last_name}`}
+                </ReviverName>
+              )}
+              <MessageText>{text}</MessageText>
+              <MessageInfo>
+                {edited ? <MessageEdited>edited </MessageEdited> : null}
+                <MessageDate>{finalTime}</MessageDate>
+              </MessageInfo>
+            </RecivedMessage>
           </TouchableOpacity>
         </View>
       )
@@ -961,58 +957,55 @@ class Message extends Component {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignSelf: 'flex-start',
+              minWidth: '20%',
+              maxWidth: '80%',
+            }}
             activeOpacity={0.8}
             onPress={onPressMessage}
             onLongPress={onLongPressMessage}
           >
-            <View
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignSelf: 'flex-start',
-                minWidth: '20%',
-                maxWidth: '80%',
-              }}
-            >
-              <RecivedMessage background={background || interlocatorMessage}>
-                {!!(resend && resend.sender) && (
-                  <Forwarded
-                    color={forwardedMessage}
-                    userName={`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
-                  />
-                )}
-                {!!(reply && reply.sender) && (
-                  <Forwarded
-                    color={replyedMessage}
-                    type={reply.type}
-                    fileName={reply.filename}
-                    geoData={reply.data}
-                    src={reply.src}
-                    userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
-                    text={reply.text}
-                  />
-                )}
-                {sender.first_name && sender.last_name && isGroup && (
-                  <ReviverName numberOfLines={1} style={{ color: color }}>
-                    {!!sender && `${sender.first_name} ${sender.last_name}`}
-                  </ReviverName>
-                )}
-                <FileInfoWrapper>
-                  <FileIcon background={pink}>
-                    <ImageIcon />
-                  </FileIcon>
-                  <FileInfo>
-                    <MessageText style={{ maxWidth: '92%' }}>
-                      {filename}
-                    </MessageText>
-                    <FileSize color={pink}>{fileSize}</FileSize>
-                  </FileInfo>
-                </FileInfoWrapper>
-                <MessageInfo>
-                  <MessageDate>{finalTime}</MessageDate>
-                </MessageInfo>
-              </RecivedMessage>
-            </View>
+            <RecivedMessage background={background || interlocatorMessage}>
+              {!!(resend && resend.sender) && (
+                <Forwarded
+                  color={forwardedMessage}
+                  userName={`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                />
+              )}
+              {!!(reply && reply.sender) && (
+                <Forwarded
+                  color={replyedMessage}
+                  type={reply.type}
+                  fileName={reply.filename}
+                  geoData={reply.data}
+                  src={reply.src}
+                  userName={`${reply.sender.first_name} ${reply.sender.last_name}`}
+                  text={reply.text}
+                />
+              )}
+              {sender.first_name && sender.last_name && isGroup && (
+                <ReviverName numberOfLines={1} style={{ color: color }}>
+                  {!!sender && `${sender.first_name} ${sender.last_name}`}
+                </ReviverName>
+              )}
+              <FileInfoWrapper>
+                <FileIcon background={pink}>
+                  <ImageIcon />
+                </FileIcon>
+                <FileInfo>
+                  <MessageText style={{ maxWidth: '92%' }}>
+                    {filename}
+                  </MessageText>
+                  <FileSize color={pink}>{fileSize}</FileSize>
+                </FileInfo>
+              </FileInfoWrapper>
+              <MessageInfo>
+                <MessageDate>{finalTime}</MessageDate>
+              </MessageInfo>
+            </RecivedMessage>
           </TouchableOpacity>
         </View>
       )
