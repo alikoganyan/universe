@@ -15,6 +15,7 @@ class Forwarded extends PureComponent {
       fileName,
       type,
       color,
+      padding,
     } = this.props
     return (
       <View
@@ -26,7 +27,15 @@ class Forwarded extends PureComponent {
           },
         ]}
       >
-        <Text style={[styles.userName, { color: color ? color : '#034402' }]}>
+        <Text
+          style={[
+            styles.userName,
+            {
+              color: color ? color : '#034402',
+              paddingBottom: padding ? 5 : 0,
+            },
+          ]}
+        >
           {userName}
         </Text>
 
