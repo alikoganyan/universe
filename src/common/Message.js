@@ -754,48 +754,47 @@ class Message extends Component {
             activeOpacity={0.8}
             onPress={onPressMessage}
             onLongPress={onLongPressMessage}
+            style={{ maxWidth: '80%', width: '80%' }}
           >
-            <View style={{ maxWidth: '80%', width: '80%' }}>
-              <RecivedMessage
-                style={{ height: 180 }}
-                noPadding
-                background={background || interlocatorMessage}
-              >
-                {!!(resend && resend.sender) ? (
+            <RecivedMessage
+              style={{ height: 180 }}
+              noPadding
+              background={background || interlocatorMessage}
+            >
+              {!!(resend && resend.sender) ? (
+                <ShadowTopContainer>
+                  <WhiteTopText style={{ color: forwardedMessage }}>
+                    {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                  </WhiteTopText>
+                </ShadowTopContainer>
+              ) : (
+                isGroup && (
                   <ShadowTopContainer>
-                    <WhiteTopText style={{ color: forwardedMessage }}>
-                      {`Переслано от ${resend.sender.first_name} ${resend.sender.last_name}`}
+                    <WhiteTopText style={{ color: color }}>
+                      {!!sender && `${sender.first_name} ${sender.last_name}`}
                     </WhiteTopText>
                   </ShadowTopContainer>
-                ) : (
-                  isGroup && (
-                    <ShadowTopContainer>
-                      <WhiteTopText style={{ color: color }}>
-                        {!!sender && `${sender.first_name} ${sender.last_name}`}
-                      </WhiteTopText>
-                    </ShadowTopContainer>
-                  )
-                )}
-                <View
-                  style={{
-                    flex: 1,
-                    backgroundColor: 'black',
-                    justifyContent: 'center',
-                  }}
-                >
-                  <VideoPinBorder>
-                    <VideoPinTriangle />
-                  </VideoPinBorder>
-                </View>
-                <BottomLine
-                  start={{ x: 0, y: 0.5 }}
-                  end={{ x: 1.0, y: 1.0 }}
-                  colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
-                >
-                  <BottomLineTime>{finalTime}</BottomLineTime>
-                </BottomLine>
-              </RecivedMessage>
-            </View>
+                )
+              )}
+              <View
+                style={{
+                  flex: 1,
+                  backgroundColor: 'black',
+                  justifyContent: 'center',
+                }}
+              >
+                <VideoPinBorder>
+                  <VideoPinTriangle />
+                </VideoPinBorder>
+              </View>
+              <BottomLine
+                start={{ x: 0, y: 0.5 }}
+                end={{ x: 1.0, y: 1.0 }}
+                colors={['transparent', 'rgba(0, 0, 0, 0.1)']}
+              >
+                <BottomLineTime>{finalTime}</BottomLineTime>
+              </BottomLine>
+            </RecivedMessage>
           </TouchableOpacity>
         </View>
       )
