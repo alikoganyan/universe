@@ -333,7 +333,7 @@ class Content extends Component {
   }
 
   _onPressMessage = item => {
-    const { navigate, dialogs, currentChat, currentDialog } = this.props
+    const { navigate, dialog, currentDialog, onShowPreviewImages } = this.props
     const { first_name, last_name, phone_number } = currentDialog
     const {
       _id = 0,
@@ -365,9 +365,6 @@ class Content extends Component {
         break
       case 'image':
         {
-          const dialog = dialogs.filter(
-            dialog => dialog.room === currentChat,
-          )[0]
           const dialogMessages = dialog.messages || []
           let dialogImages = []
           let imageIndex = 0
@@ -384,7 +381,7 @@ class Content extends Component {
               }
             }
           })
-          this.props.onShowPreviewImages(dialogImages, imageIndex)
+          onShowPreviewImages(dialogImages, imageIndex)
         }
         break
 
