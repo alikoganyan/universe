@@ -14,6 +14,7 @@ import {
   addMessage,
   setCurrentChat,
   setCurrentRoomId,
+  setMessage,
 } from '../../actions/messageActions'
 // import { Notifications } from 'expo';
 import {
@@ -412,9 +413,10 @@ class Dialogs extends Component {
             }
       if (Object.keys(dialog).length) {
         if (e.dialog === dialog._id) {
+          this.props.setMessage(message)
           const updatedCurrentDialog = { ...dialog }
           updatedCurrentDialog.messages.push(message)
-          this.props.setDialog(updatedCurrentDialog)
+          // this.props.setDialog(updatedCurrentDialog)
           this.sortedDialog(updatedCurrentDialog)
         }
       } else {
@@ -597,6 +599,7 @@ class Dialogs extends Component {
 
 const mapStateToProps = state => ({
   dialogs: state.dialogsReducer.dialogs,
+  message: state.messageReducer.message,
   dialog: state.dialogsReducer.dialog,
   currentRoomId: state.messageReducer.currentRoomId,
   currentRoom: state.messageReducer.currentRoom,
@@ -612,6 +615,7 @@ const mapDispatchToProps = dispatch => ({
   setDialogs: _ => dispatch(setDialogs(_)),
   setDialog: _ => dispatch(setDialog(_)),
   addMessage: _ => dispatch(addMessage(_)),
+  setMessage: _ => dispatch(setMessage(_)),
   setUser: _ => dispatch(setUser(_)),
   setAllUsers: _ => dispatch(setAllUsers(_)),
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),

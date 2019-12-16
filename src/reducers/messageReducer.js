@@ -9,6 +9,9 @@ import {
   EDIT_MESSAGE,
   FORWARD_MESSAGE,
   REPLY_MESSAGE,
+  SET_MESSAGE,
+  DELETE_MESSAGE,
+  SET_FILE,
 } from '../actions/messageActions'
 import { LOG_OUT } from '../actions/userActions'
 
@@ -19,8 +22,11 @@ const initialState = {
   currentRoomId: null,
   editMessage: {},
   messages: [],
+  message: {},
   forwardMessage: {},
   replyMessage: {},
+  deleteMessage: {},
+  file: {},
 }
 
 export default (state = initialState, action) => {
@@ -28,35 +34,32 @@ export default (state = initialState, action) => {
   switch (type) {
     case GET_MESSAGES:
       return { ...state, messages: [...payload] }
-
     case SET_ROOM:
       return { ...state, currentRoom: payload }
-
     case ADD_MESSAGE:
       return { ...state, messages: [...state.messages, payload] }
-
+    case SET_MESSAGE:
+      return { ...state, message: { ...payload } }
     case STOP_SEARCH:
       return { ...state, search: false }
-
     case SET_CURRENT_CHAT:
       return { ...state, currentChat: payload }
-
     case SET_CURRENT_ROOM_ID:
       return { ...state, currentRoomId: payload }
-
     case START_SEARCH:
       return { ...state, search: true }
-
     case EDIT_MESSAGE:
       return { ...state, editMessage: payload }
-
     case FORWARD_MESSAGE:
       return { ...state, forwardMessage: payload }
-
     case REPLY_MESSAGE:
       return { ...state, replyMessage: payload }
+    case DELETE_MESSAGE:
+      return { ...state, deleteMessage: payload }
+    case SET_FILE:
+      return { ...state, file: payload }
     case LOG_OUT:
-        return initialState;
+      return initialState
     default:
       return state
   }

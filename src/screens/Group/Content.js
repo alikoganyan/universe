@@ -19,6 +19,7 @@ import helper, { getHamsterDate } from '../../utils/helpers'
 import { chatBg } from '../../assets/images'
 import { setTaskReceivers } from '../../actions/participantsActions'
 import {
+  deleteMessage,
   editMessage,
   forwardMessage,
   replyMessage,
@@ -57,11 +58,11 @@ const DateView = styled(View)`
   border-radius: 20px;
   padding: 3px 5px;
 `
+
 class Content extends Component {
   render() {
     const { messageLongPressActions, currentDate, participants } = this.state
-    const { search, editedMessage, dialog } = this.props
-    const messages = dialog ? [...dialog.messages] : []
+    const { search, editedMessage, messages } = this.props
     const isEditing = !!editedMessage.text
     const reversedMessages = [...messages].sort(
       (x, y) => new Date(y.created_at) - new Date(x.created_at),
@@ -72,13 +73,14 @@ class Content extends Component {
         <Wrapper search={search}>
           <StyledImageBackground source={chatBg}>
             <FlatList
+              onEndReached={this.handleScroll}
               ref="flatList"
               style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
               ListHeaderComponent={<FlatListHeader editing={isEditing} />}
               inverted={!!reversedMessages.length}
               data={reversedMessages}
               keyboardDismissMode="on-drag"
-              initialNumToRender={10}
+              initialNumToRender={30}
               animated
               onViewableItemsChanged={this.onViewableItemsChanged}
               viewabilityConfig={{
@@ -133,11 +135,18 @@ class Content extends Component {
     animationCompleted: false,
     currentDate: '',
     participants: [],
+    page: 1,
+    messages: [],
   }
 
   componentDidMount() {
     moment.locale('ru')
-    const { navigation } = this.props
+    const { navigation, dialog } = this.props
+    const { messages_from_pages } = dialog
+    const messages = dialog ? [...dialog.messages] : []
+    this.props.setMessages(messages)
+    // this.setState({messages})
+    this.setState({ page: messages_from_pages.nextPage })
 
     navigation.setParams({
       scrollToBottom: this._scrollToBottom,
@@ -149,6 +158,21 @@ class Content extends Component {
       })
     })
     this.generateColor()
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { messages } = this.props
+    if (nextProps.message._id !== this.props.message._id) {
+      messages.push(nextProps.message)
+      this.props.setMessages(messages)
+    }
+  }
+
+  handleScroll = () => {
+    const { page } = this.state
+    if (page) {
+      this.getMessage()
+    }
   }
 
   componentWillUnmount() {}
@@ -189,6 +213,43 @@ class Content extends Component {
       </TouchableOpacity>
     </Loader>
   )
+
+  getMessage = () => {
+    let { dialog, messages } = this.props
+    let { page } = this.state
+    sendRequest({
+      r_path: '/dialogs/messages_from_page_reverse',
+      method: 'post',
+      attr: {
+        dialog_id: dialog._id,
+        page: page,
+      },
+      success: res => {
+        this.setState({ page: res.nextPage })
+        messages = messages.concat(res.docs)
+        this.props.setMessages(messages)
+        // this.setState({messages})
+      },
+      failFunc: err => {},
+    })
+  }
+
+  getSelectedMessage = id => {
+    const { dialog } = this.props
+    sendRequest({
+      r_path: '/dialogs/messages_from_message',
+      method: 'post',
+      attr: {
+        dialog_id: dialog._id,
+        message_id: id,
+      },
+      success: res => {
+        // messages = messages.concat(res.docs)
+        // this.setState({messages: messages})
+      },
+      failFunc: err => {},
+    })
+  }
 
   getMessageDate = () => {
     const { currentDate } = this.state
@@ -296,11 +357,9 @@ class Content extends Component {
   }
 
   deleteMessage = currentMessage => {
-    const { dialog, currentRoomId } = this.props
-    dialog.messages = dialog.messages.filter(
-      message => message._id !== currentMessage._id,
-    )
-    this.props.setDialog(dialog)
+    const { currentRoomId } = this.props
+    let { messages } = this.props
+    const msgIndex = messages.findIndex(e => e._id === currentMessage._id)
     sendRequest({
       r_path: d_message,
       method: 'delete',
@@ -308,7 +367,11 @@ class Content extends Component {
         dialog_id: currentRoomId,
         messages: [currentMessage._id],
       },
-      success: res => {},
+      success: res => {
+        messages.splice(msgIndex, 1)
+        this.props.setMessages(messages)
+        this.props.deleteMessage({})
+      },
       failFunc: err => {},
     })
   }
@@ -332,6 +395,9 @@ class Content extends Component {
   }
 
   _onPressMessage = item => {
+    if (item.reply && item.reply._id) {
+      this.getSelectedMessage(item.reply._id)
+    }
     const { navigate, dialog, currentDialog } = this.props
     const { name: dialogName } = currentDialog
     const {
@@ -457,8 +523,13 @@ const mapStateToProps = state => ({
   search: state.messageReducer.search,
   currentRoom: state.messageReducer.currentRoom,
   editedMessage: state.messageReducer.editMessage,
+  replyMessage: state.messageReducer.replyMessage,
+  deleteMessage: state.messageReducer.deleteMessage,
+  file: state.messageReducer.file,
+  forwardMessage: state.messageReducer.forwardMessage,
   currentDialog: state.dialogsReducer.currentDialog,
   dialog: state.dialogsReducer.dialog,
+  message: state.messageReducer.message,
   currentChat: state.messageReducer.currentChat,
   currentRoomId: state.messageReducer.currentRoomId,
   user: state.userReducer.user,
@@ -471,6 +542,7 @@ const mapDispatchToProps = dispatch => ({
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
+  deleteMessage: _ => dispatch(deleteMessage(_)),
 })
 export default connect(
   mapStateToProps,

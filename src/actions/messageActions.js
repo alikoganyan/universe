@@ -2,6 +2,7 @@ import { store } from '../reducers/store'
 import { UPDATE_UPLOAD_MESSAGE_PROGRESS } from './dialogsActions'
 
 export const ADD_MESSAGE = 'ADD_MESSAGE'
+export const SET_MESSAGE = 'SET_MESSAGE'
 export const ADD_GROUP_MESSAGE = 'ADD_GROUP_MESSAGE'
 export const START_SEARCH = 'START_SEARCH'
 export const STOP_SEARCH = 'STOP_SEARCH'
@@ -12,9 +13,16 @@ export const SET_CURRENT_CHAT = 'SET_CURRENT_CHAT'
 export const SET_CURRENT_ROOM_ID = 'SET_CURRENT_ROOM_ID'
 export const FORWARD_MESSAGE = 'FORWARD_MESSAGE'
 export const REPLY_MESSAGE = 'REPLY_MESSAGE'
+export const DELETE_MESSAGE = 'DELETE_MESSAGE'
+export const SET_FILE = 'SET_FILE'
 
 export const addMessage = payload => ({
   type: ADD_MESSAGE,
+  payload,
+})
+
+export const setMessage = payload => ({
+  type: SET_MESSAGE,
   payload,
 })
 
@@ -58,6 +66,15 @@ export const forwardMessage = payload => ({
 
 export const replyMessage = payload => ({
   type: REPLY_MESSAGE,
+  payload,
+})
+export const deleteMessage = payload => ({
+  type: DELETE_MESSAGE,
+  payload,
+})
+
+export const setFile = payload => ({
+  type: SET_FILE,
   payload,
 })
 
