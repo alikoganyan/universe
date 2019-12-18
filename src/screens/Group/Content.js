@@ -20,7 +20,6 @@ import { chatBg } from '../../assets/images'
 import { setTaskReceivers } from '../../actions/participantsActions'
 import * as ICONS from '../../assets/icons'
 import _ from 'lodash'
-
 import {
   deleteMessage,
   editMessage,
@@ -129,8 +128,8 @@ class Content extends Component {
                   position: 'absolute',
                   width: 40,
                   height: 40,
-                  right: 30,
-                  bottom: 30,
+                  right: 20,
+                  bottom: 20,
                   zIndex: 10,
                   backgroundColor: '#fff',
                   borderRadius: 50 / 2,
@@ -237,7 +236,11 @@ class Content extends Component {
         prevPage: null,
       })
     }
-    this.refs.flatList.scrollToOffset({ x: 0, y: 0, animated: true })
+    this.refs.flatList.scrollToIndex({
+      animated: true,
+      index: 0,
+      viewPosition: 1,
+    })
   }
 
   generateColor = () => {
