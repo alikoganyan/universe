@@ -211,6 +211,7 @@ class Dialogs extends Component {
     socket.removeEventListener('need_update', this.socketNeedsUpdate)
     socket.removeEventListener('dialog_opened', this.socketDialogOpened)
     socket.removeEventListener('new_group', this.socketGetGroup)
+    socket.removeEventListener('message_edited', this.messageEdited)
     socket.on('update_dialogs', e => this.setDialogsSocket(e))
     socket.on('update_dialog', e => this.setDialogSocket(e))
     socket.on('update_profile', this.getProfile)
@@ -219,6 +220,7 @@ class Dialogs extends Component {
     socket.on('need_update', this.socketNeedsUpdate)
     socket.on('dialog_opened', this.socketDialogOpened)
     socket.on('new_group', this.socketGetGroup)
+    socket.on('message_edited', e => this.messageEdited(e))
   }
 
   componentWillUnmount() {
@@ -324,9 +326,9 @@ class Dialogs extends Component {
 
   setDialogSocket = e => {
     const { dialogs, setDialogs, currentRoomId } = this.props
-    const dialog = { ...e }
+    // const dialog = { ...e }
     if (e._id === currentRoomId) {
-      this.props.setDialog(dialog)
+      // this.props.setDialog(dialog)
     }
     const newDialog = dialogs.map(d => (d._id === e._id ? e : d))
     setDialogs(newDialog)
@@ -427,6 +429,10 @@ class Dialogs extends Component {
     } catch (err) {
       alert(`${JSON.stringify(e)} cannot be processed [${err}]`)
     }
+  }
+
+  messageEdited = e => {
+    // console.log(e)
   }
 
   sortedDialog = dialog => {

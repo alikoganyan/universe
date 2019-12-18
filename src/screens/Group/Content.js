@@ -18,6 +18,9 @@ import Message from '../../common/Message'
 import helper, { getHamsterDate } from '../../utils/helpers'
 import { chatBg } from '../../assets/images'
 import { setTaskReceivers } from '../../actions/participantsActions'
+import * as ICONS from '../../assets/icons'
+import _ from 'lodash'
+
 import {
   deleteMessage,
   editMessage,
@@ -29,6 +32,7 @@ import { d_message } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import Loader from '../../common/Loader'
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
+import Image from 'react-native-image-progress'
 
 const {
   Colors: { gray2 },
@@ -61,18 +65,29 @@ const DateView = styled(View)`
 
 class Content extends Component {
   render() {
-    const { messageLongPressActions, currentDate, participants } = this.state
+    const {
+      messageLongPressActions,
+      currentDate,
+      participants,
+      scrolledMessages,
+      buttonToDown,
+    } = this.state
     const { search, editedMessage, messages } = this.props
     const isEditing = !!editedMessage.text
-    const reversedMessages = [...messages].sort(
+    const currentMessages = scrolledMessages.length
+      ? scrolledMessages
+      : messages
+
+    let reversedMessages = [...currentMessages].sort(
       (x, y) => new Date(y.created_at) - new Date(x.created_at),
     )
-
+    reversedMessages = _.uniqBy(reversedMessages, '_id')
     return (
       <>
         <Wrapper search={search}>
           <StyledImageBackground source={chatBg}>
             <FlatList
+              onScroll={this.checkScrollPosition}
               onEndReached={this.handleScroll}
               ref="flatList"
               style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
@@ -107,6 +122,28 @@ class Content extends Component {
               keyExtractor={(item, index) => index.toString()}
               ListEmptyComponent={this.renderEmptyComponent}
             />
+            {buttonToDown ? (
+              <TouchableOpacity
+                onPress={this._scrollToBottom}
+                style={{
+                  position: 'absolute',
+                  width: 40,
+                  height: 40,
+                  right: 30,
+                  bottom: 30,
+                  zIndex: 10,
+                  backgroundColor: '#fff',
+                  borderRadius: 50 / 2,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Image
+                  style={{ width: 16, height: 16 }}
+                  source={ICONS.Arrow_down}
+                />
+              </TouchableOpacity>
+            ) : null}
           </StyledImageBackground>
         </Wrapper>
         {!!currentDate && (
@@ -135,23 +172,30 @@ class Content extends Component {
     animationCompleted: false,
     currentDate: '',
     participants: [],
+    totalPages: 0,
     page: 1,
+    nextPage: null,
+    prevPage: null,
     messages: [],
+    scrolledMessages: [],
+    switcher: true,
+    switcherDown: true,
+    buttonToDown: false,
   }
 
   componentDidMount() {
     moment.locale('ru')
     const { navigation, dialog } = this.props
     const { messages_from_pages } = dialog
-    const messages = dialog ? [...dialog.messages] : []
+    const messages = messages_from_pages.docs
     this.props.setMessages(messages)
-    // this.setState({messages})
-    this.setState({ page: messages_from_pages.nextPage })
-
+    this.setState({
+      nextPage: messages_from_pages.nextPage,
+      totalPages: messages_from_pages.totalPages,
+    })
     navigation.setParams({
       scrollToBottom: this._scrollToBottom,
     })
-
     InteractionManager.runAfterInteractions(() => {
       this.setState({
         animationCompleted: true,
@@ -169,8 +213,13 @@ class Content extends Component {
   }
 
   handleScroll = () => {
-    const { page } = this.state
-    if (page) {
+    const { switcher, nextPage, scrolledMessages } = this.state
+    const { messages } = this.props
+    if (switcher && nextPage) {
+      if (!scrolledMessages.length) {
+        this.setState({ page: Math.floor(messages.length / 30) + 1 })
+      }
+      this.setState({ switcher: false })
       this.getMessage()
     }
   }
@@ -178,6 +227,16 @@ class Content extends Component {
   componentWillUnmount() {}
 
   _scrollToBottom = () => {
+    const { scrolledMessages, messages } = this.state
+    if (scrolledMessages.length) {
+      // todo next page
+      // const nextPage = Math.floor(messages.length / 30) + 1 < totalPages ?  Math.floor(messages.length / 30) + 1 : null
+      this.setState({ scrolledMessages: [] })
+      this.setState({
+        page: Math.floor(messages.length / 30) + 1,
+        prevPage: null,
+      })
+    }
     this.refs.flatList.scrollToOffset({ x: 0, y: 0, animated: true })
   }
 
@@ -185,19 +244,15 @@ class Content extends Component {
     const { randomColors } = helper
     const { currentDialog } = this.props
     const { participants, creator } = currentDialog
-
     const allUsers = [...participants]
     allUsers.push(creator)
-
     for (let user of allUsers) {
       const randomIndex = Math.floor(Math.random() * 7)
       user.color = randomColors[randomIndex]
     }
-
     this.setState({
       participants: allUsers,
     })
-
     this.setState({ participants: allUsers })
   }
 
@@ -214,21 +269,62 @@ class Content extends Component {
     </Loader>
   )
 
-  getMessage = () => {
+  checkScrollPosition = event => {
+    const { lastPosition, switcherDown, prevPage } = this.state
+    if (event.nativeEvent.contentOffset.y > 400) {
+      this.setState({ buttonToDown: true })
+    } else {
+      this.setState({ buttonToDown: false })
+    }
+    if (
+      prevPage &&
+      switcherDown &&
+      lastPosition &&
+      lastPosition > event.nativeEvent.contentOffset.y &&
+      event.nativeEvent.contentOffset.y < 600
+    ) {
+      this.getMessage(true)
+
+      this.setState({ switcherDown: false })
+    } else if (!switcherDown && event.nativeEvent.contentOffset.y > 600) {
+      this.setState({ switcherDown: true })
+      // this.setState({page: nextPage})
+    }
+    this.setState({ lastPosition: event.nativeEvent.contentOffset.y })
+  }
+
+  getMessage = (scrollDown?) => {
     let { dialog, messages } = this.props
-    let { page } = this.state
+    let { page, scrolledMessages, prevPage } = this.state
     sendRequest({
       r_path: '/dialogs/messages_from_page_reverse',
       method: 'post',
       attr: {
         dialog_id: dialog._id,
-        page: page,
+        page: scrollDown ? prevPage : page,
       },
       success: res => {
-        this.setState({ page: res.nextPage })
-        messages = messages.concat(res.docs)
-        this.props.setMessages(messages)
-        // this.setState({messages})
+        // todo next  pageri vra heto ashxatel
+        // this.setState({ nextPage: res.nextPage, totalPages: res.totalPages })
+        if (!scrolledMessages.length) {
+          messages = messages.concat(res.docs)
+          this.props.setMessages(messages)
+        } else {
+          scrolledMessages = res.docs.concat(scrolledMessages)
+          this.setState({
+            scrolledMessages: scrolledMessages,
+            page: res.nextPage,
+          })
+        }
+        if (scrollDown) {
+          this.setState({ prevPage: res.prevPage })
+          this.refs.flatList.scrollToIndex({
+            animated: false,
+            index: 29,
+            viewPosition: 0,
+          })
+        }
+        this.setState({ switcher: true })
       },
       failFunc: err => {},
     })
@@ -244,8 +340,21 @@ class Content extends Component {
         message_id: id,
       },
       success: res => {
-        // messages = messages.concat(res.docs)
-        // this.setState({messages: messages})
+        this.setState({
+          scrolledMessages: res.docs,
+          page: res.nextPage,
+          prevPage: res.prevPage,
+        })
+        const index = this.refs.flatList.props.data.findIndex(
+          el => el._id === id,
+        )
+        if (index !== -1) {
+          this.refs.flatList.scrollToIndex({
+            animated: true,
+            index: index,
+            viewPosition: 0.5,
+          })
+        }
       },
       failFunc: err => {},
     })
@@ -396,7 +505,18 @@ class Content extends Component {
 
   _onPressMessage = item => {
     if (item.reply && item.reply._id) {
-      this.getSelectedMessage(item.reply._id)
+      const index = this.refs.flatList.props.data.findIndex(
+        el => el._id === item.reply._id,
+      )
+      if (index !== -1) {
+        this.refs.flatList.scrollToIndex({
+          animated: true,
+          index: index,
+          viewPosition: 0.5,
+        })
+      } else {
+        this.getSelectedMessage(item.reply._id)
+      }
     }
     const { navigate, dialog, currentDialog } = this.props
     const { name: dialogName } = currentDialog
@@ -530,6 +650,7 @@ const mapStateToProps = state => ({
   currentDialog: state.dialogsReducer.currentDialog,
   dialog: state.dialogsReducer.dialog,
   message: state.messageReducer.message,
+  renderedMessages: state.messageReducer.renderedMessages,
   currentChat: state.messageReducer.currentChat,
   currentRoomId: state.messageReducer.currentRoomId,
   user: state.userReducer.user,
