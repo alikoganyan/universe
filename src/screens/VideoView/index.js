@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { SafeAreaView, Text, View } from 'react-native'
+import { ActivityIndicator, SafeAreaView, Text, View } from 'react-native'
 import Video from 'react-native-video'
 import styled from 'styled-components'
 import helper from '../../utils/helpers'
@@ -32,8 +32,18 @@ const Right = styled(View)`
   justify-content: flex-end;
   width: ${sidePadding * 2}px;
 `
+const Loading = styled(ActivityIndicator)`
+  position: absolute;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+`
 
 export default class VideoViewScreen extends Component {
+  state = {
+    loading: true,
+  }
   render() {
     const {
       navigation: {
@@ -55,20 +65,28 @@ export default class VideoViewScreen extends Component {
           </Info>
           <Right />
         </Header>
-        <View style={{ flex: 1 }}>
+        <View
+          style={{
+            flexGrow: 1,
+            backgroundColor: Colors.black,
+            justifyContent: 'flex-end',
+          }}
+        >
           <Video
             endWithThumbnail
             source={{ uri }}
             ref={r => (this.player = r)}
             style={{
-              backgroundColor: Colors.black,
-              flex: 1,
+              height: '100%',
             }}
             paused={false}
             fullscreen
             fullscreenAutorotate
+            resizeMode="contain"
             controls
+            onLoad={() => this.setState({ loading: false })}
           />
+          <Loading animating={this.state.loading} size="small" />
         </View>
       </SafeAreaView>
     )
