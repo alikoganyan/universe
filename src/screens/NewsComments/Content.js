@@ -37,7 +37,7 @@ const Wrapper = styled(View)`
 const NewsItem = styled(View)`
   background: white;
   padding: 20px;
-  padding-bottom: 50px;
+  padding-bottom: 10px;
   border: 0.5px solid ${yellow};
   border-radius: ${borderRadius};
   margin: 0 ${sidePadding}px;
