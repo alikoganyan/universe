@@ -25,10 +25,8 @@ const { lightGrey1, black, yellow, red } = Colors
 const Wrapper = styled(View)`
   padding: 0 ${sidePadding * 2}px;
   justify-content: center;
-  flex-grow: 1;
-  height: 100%;
+  height: 90%;
 `
-
 const StyledInput = styled(TextInput)`
   border: 1px solid ${lightGrey1};
   border-width: 0;
@@ -97,60 +95,55 @@ class Content extends Component {
     const { text } = this.state
     const { receivers } = this.props
     return (
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled"
-      >
-        <Wrapper>
-          <StyledInput
-            password
-            onChangeText={this.handleChange}
-            value={text}
-            placeholder="Текст новости"
-            multiline
-            style={{
-              margin: 0,
-              textAlign: 'left',
-              paddingLeft: 10,
-              maxHeight: 130,
-            }}
-          />
-          <Recievers>
-            <DialogsLabel style={{ justifyContent: 'space-between' }}>
-              <TouchableOpacity
-                onPress={this.deleteFeed}
-                style={{ justifyContent: 'flex-start' }}
-              >
-                <DeleteFeed>Удалить</DeleteFeed>
-              </TouchableOpacity>
-              <Button onPress={this.proceed} background={yellow} color={black}>
-                Сохранить
-              </Button>
-            </DialogsLabel>
-          </Recievers>
-          <DialogsLabel>
+      <Wrapper>
+        <StyledInput
+          password
+          onChangeText={this.handleChange}
+          value={text}
+          placeholder="Текст новости"
+          multiline
+          style={{
+            margin: 0,
+            textAlign: 'left',
+            paddingLeft: 10,
+            maxHeight: 260,
+          }}
+        />
+        <Recievers>
+          <DialogsLabel style={{ justifyContent: 'space-between' }}>
             <TouchableOpacity
-              onPress={this.addParticipant}
-              style={{ justifyContent: 'flex-start', flexDirection: 'row' }}
+              onPress={this.deleteFeed}
+              style={{ justifyContent: 'flex-start' }}
             >
-              <GroupIcon right noPaddingAll />
-              <AddReciever>Добавить получателей</AddReciever>
+              <DeleteFeed>Удалить</DeleteFeed>
             </TouchableOpacity>
+            <Button onPress={this.proceed} background={yellow} color={black}>
+              Сохранить
+            </Button>
           </DialogsLabel>
+        </Recievers>
+        <DialogsLabel>
+          <TouchableOpacity
+            onPress={this.addParticipant}
+            style={{ justifyContent: 'flex-start', flexDirection: 'row' }}
+          >
+            <GroupIcon right noPaddingAll />
+            <AddReciever>Добавить получателей</AddReciever>
+          </TouchableOpacity>
+        </DialogsLabel>
 
-          <ScrollView>
-            {receivers.map((e, i) => (
-              <RecieverComponent
-                key={i}
-                onDelete={() => this.deleteReceiver(e)}
-                last={i === receivers.length}
-              >
-                {e}
-              </RecieverComponent>
-            ))}
-          </ScrollView>
-        </Wrapper>
-      </ScrollView>
+        <ScrollView>
+          {receivers.map((e, i) => (
+            <RecieverComponent
+              key={i}
+              onDelete={() => this.deleteReceiver(e)}
+              last={i === receivers.length}
+            >
+              {e}
+            </RecieverComponent>
+          ))}
+        </ScrollView>
+      </Wrapper>
     )
   }
 
