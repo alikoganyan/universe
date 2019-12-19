@@ -654,8 +654,11 @@ class Content extends Component {
         ((dialog.creator._id && dialog.creator._id === e._id) ||
           (dialog.participants[0] && dialog.participants[0]._id === e._id)),
     )
+
     if (e.isGroup) {
       this.props.setDialog(e)
+    } else {
+      this.props.setDialog(currentRoom)
     }
     if (currentRoom) {
       const { isGroup, participants, creator, room, _id } = currentRoom

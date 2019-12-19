@@ -7,7 +7,10 @@ import {
   InteractionManager,
   Alert,
   Clipboard,
+  TouchableOpacity,
 } from 'react-native'
+import Image from 'react-native-image-progress'
+
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ActionSheet from 'react-native-actionsheet'
@@ -26,6 +29,8 @@ import {
   setCurrentRoomId,
 } from '../../actions/messageActions'
 import { d_message } from '../../constants/api'
+import _ from 'lodash'
+import * as ICONS from '../../assets/icons'
 
 const Wrapper = styled(View)`
   background: white;
@@ -56,55 +61,61 @@ const DateView = styled(View)`
   border-radius: 20px;
   padding: 3px 5px;
 `
+
 class Content extends Component {
   render() {
-    const { messageLongPressActions, currentDate } = this.state
     const {
-      search,
-      dialogs,
-      currentChat,
-      editedMessage,
-      currentDialog,
-      dialog,
-      // currentRoomId,
-    } = this.props
+      messageLongPressActions,
+      currentDate,
+      scrolledMessages,
+      buttonToDown,
+    } = this.state
+    const { search, editedMessage, messages } = this.props
 
     // to do
     // console.log(dialogs, currentChat, currentRoomId)
 
-    const _dialog = Object.keys(dialog).length
-      ? dialog
-      : [...dialogs].find(e => {
-          if (!currentChat) {
-            return (
-              !e.isGroup &&
-              (e.creator._id === currentDialog._id ||
-                e.participants.some(p => p._id === currentDialog._id))
-            )
-          } else {
-            return e.room === currentChat
-          }
-          // if(e._id === currentRoomId) {
-          //   this.props.setDialog(e)
-          // }
-        })
+    // const _dialog = Object.keys(dialog).length
+    //   ? dialog
+    //   : [...dialogs].find(e => {
+    //     if (!currentChat) {
+    //       return (
+    //         !e.isGroup &&
+    //         (e.creator._id === currentDialog._id ||
+    //           e.participants.some(p => p._id === currentDialog._id))
+    //       )
+    //     } else {
+    //       return e.room === currentChat
+    //     }
+    //     // if(e._id === currentRoomId) {
+    //     //   this.props.setDialog(e)
+    //     // }
+    //   })
     // console.log(_dialog)
     const isEditing = !!editedMessage.text
-    const messages = _dialog ? [..._dialog.messages] : []
-    const reversedMessages = [...messages]
-      .reverse()
-      .sort((x, y) => new Date(y.created_at) - new Date(x.created_at))
+    // const messages = _dialog ? [..._dialog.messages] : []
+    const currentMessages = scrolledMessages.length
+      ? scrolledMessages
+      : messages
+
+    let reversedMessages = [...currentMessages].sort(
+      (x, y) => new Date(y.created_at) - new Date(x.created_at),
+    )
+
+    reversedMessages = _.uniqBy(reversedMessages, '_id')
 
     return (
       <>
         <Wrapper search={search}>
           <StyledImageBackground source={chatBg}>
             <StyledFlatList
+              onScroll={this.checkScrollPosition}
+              onEndReached={this.handleScroll}
               ref="flatList"
               ListHeaderComponent={<FlatListHeader editing={isEditing} />}
               inverted={!!reversedMessages.length}
               data={reversedMessages}
-              initialNumToRender={15}
+              initialNumToRender={30}
               keyboardDismissMode="on-drag"
               animated
               onViewableItemsChanged={this.onViewableItemsChanged}
@@ -121,6 +132,28 @@ class Content extends Component {
               )}
               keyExtractor={(item, index) => index.toString()}
             />
+            {buttonToDown ? (
+              <TouchableOpacity
+                onPress={this._scrollToBottom}
+                style={{
+                  position: 'absolute',
+                  width: 40,
+                  height: 40,
+                  right: 20,
+                  bottom: 20,
+                  zIndex: 10,
+                  backgroundColor: '#fff',
+                  borderRadius: 50 / 2,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}
+              >
+                <Image
+                  style={{ width: 16, height: 16 }}
+                  source={ICONS.Arrow_down}
+                />
+              </TouchableOpacity>
+            ) : null}
           </StyledImageBackground>
         </Wrapper>
         {!!currentDate && (
@@ -148,19 +181,27 @@ class Content extends Component {
     messageLongPressActions: [],
     animationCompleted: false,
     currentDate: '',
+    totalPages: 0,
+    page: 1,
+    nextPage: null,
+    prevPage: null,
+    messages: [],
+    scrolledMessages: [],
+    switcher: true,
+    switcherDown: true,
+    buttonToDown: false,
   }
 
   componentDidMount() {
     moment.locale('ru')
-    const {
-      navigation,
-      dialogs,
-      setDialogs,
-      user,
-      currentChat,
-      dialog,
-    } = this.props
-
+    const { navigation, dialog } = this.props
+    const { messages_from_pages } = dialog
+    const messages = messages_from_pages.docs
+    this.props.setMessages(messages)
+    this.setState({
+      nextPage: messages_from_pages.nextPage,
+      totalPages: messages_from_pages.totalPages,
+    })
     navigation.setParams({
       scrollToBottom: this._scrollToBottom,
     })
@@ -170,19 +211,27 @@ class Content extends Component {
       })
     })
 
-    const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
+    // const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
 
-    if (dialogIndex > -1) {
-      dialogs[dialogIndex].messages = dialogs[dialogIndex].messages.map(
-        message => ({
-          ...message,
-          viewers: [...message.viewers, user._id],
-        }),
-      )
-      if (!Object.keys(dialog).length) {
-        this.props.setDialog(dialogs[dialogIndex])
-      }
-      setDialogs(dialogs)
+    // if (dialogIndex > -1) {
+    //   dialogs[dialogIndex].messages = dialogs[dialogIndex].messages.map(
+    //     message => ({
+    //       ...message,
+    //       viewers: [...message.viewers, user._id],
+    //     }),
+    //   )
+    //   if (!Object.keys(dialog).length) {
+    //     this.props.setDialog(dialogs[dialogIndex])
+    //   }
+    //   setDialogs(dialogs)
+    // }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const { messages } = this.props
+    if (nextProps.message._id !== this.props.message._id) {
+      messages.push(nextProps.message)
+      this.props.setMessages(messages)
     }
   }
 
@@ -200,6 +249,129 @@ class Content extends Component {
       setDialogs(dialogs)
     }
     this.props.setDialog({})
+  }
+
+  getMessage = (scrollDown?) => {
+    let { dialog, messages } = this.props
+    let { page, scrolledMessages, prevPage } = this.state
+    sendRequest({
+      r_path: '/dialogs/messages_from_page_reverse',
+      method: 'post',
+      attr: {
+        dialog_id: dialog._id,
+        page: scrollDown ? prevPage : page,
+      },
+      success: res => {
+        // todo next  pageri vra heto ashxatel
+        // this.setState({ nextPage: res.nextPage, totalPages: res.totalPages })
+        if (!scrolledMessages.length) {
+          messages = messages.concat(res.docs)
+          this.props.setMessages(messages)
+        } else {
+          scrolledMessages = res.docs.concat(scrolledMessages)
+          this.setState({
+            scrolledMessages: scrolledMessages,
+            page: res.nextPage,
+          })
+        }
+        if (scrollDown) {
+          this.setState({ prevPage: res.prevPage })
+          this.refs.flatList.scrollToIndex({
+            animated: false,
+            index: 29,
+            viewPosition: 0,
+          })
+        }
+        this.setState({ switcher: true })
+      },
+      failFunc: err => {},
+    })
+  }
+
+  getSelectedMessage = id => {
+    const { dialog } = this.props
+    sendRequest({
+      r_path: '/dialogs/messages_from_message',
+      method: 'post',
+      attr: {
+        dialog_id: dialog._id,
+        message_id: id,
+      },
+      success: res => {
+        this.setState({
+          scrolledMessages: res.docs,
+          page: res.nextPage,
+          prevPage: res.prevPage,
+        })
+        const index = this.refs.flatList.props.data.findIndex(
+          el => el._id === id,
+        )
+        if (index !== -1) {
+          this.refs.flatList.scrollToIndex({
+            animated: true,
+            index: index,
+            viewPosition: 0.5,
+          })
+        }
+      },
+      failFunc: err => {},
+    })
+  }
+
+  checkScrollPosition = event => {
+    const { lastPosition, switcherDown, prevPage } = this.state
+    if (event.nativeEvent.contentOffset.y > 400) {
+      this.setState({ buttonToDown: true })
+    } else {
+      this.setState({ buttonToDown: false })
+    }
+    if (
+      prevPage &&
+      switcherDown &&
+      lastPosition &&
+      lastPosition > event.nativeEvent.contentOffset.y &&
+      event.nativeEvent.contentOffset.y < 600
+    ) {
+      this.getMessage(true)
+
+      this.setState({ switcherDown: false })
+    } else if (!switcherDown && event.nativeEvent.contentOffset.y > 600) {
+      this.setState({ switcherDown: true })
+      // this.setState({page: nextPage})
+    }
+    this.setState({ lastPosition: event.nativeEvent.contentOffset.y })
+  }
+
+  handleScroll = () => {
+    const { switcher, nextPage, scrolledMessages } = this.state
+    const { messages } = this.props
+    if (switcher && nextPage) {
+      if (!scrolledMessages.length) {
+        this.setState({ page: Math.floor(messages.length / 30) + 1 })
+      }
+      this.setState({ switcher: false })
+      this.getMessage()
+    }
+  }
+
+  _scrollToBottom = () => {
+    const { scrolledMessages, messages } = this.state
+    if (scrolledMessages.length) {
+      // todo next page
+      // const nextPage = Math.floor(messages.length / 30) + 1 < totalPages ?  Math.floor(messages.length / 30) + 1 : null
+      this.setState({ scrolledMessages: [] })
+      this.setState({
+        page: Math.floor(messages.length / 30) + 1,
+        prevPage: null,
+      })
+    }
+    if (messages.length) {
+      this.refs.flatList.scrollToIndex({
+        animated: true,
+        index: 0,
+        viewPosition: 1,
+      })
+    }
   }
 
   getMessageDate = () => {
@@ -333,6 +505,21 @@ class Content extends Component {
   }
 
   _onPressMessage = item => {
+    if (item.reply && item.reply._id) {
+      const index = this.refs.flatList.props.data.findIndex(
+        el => el._id === item.reply._id,
+      )
+      if (index !== -1) {
+        this.refs.flatList.scrollToIndex({
+          animated: true,
+          index: index,
+          viewPosition: 0.5,
+        })
+      } else {
+        this.getSelectedMessage(item.reply._id)
+      }
+    }
+
     const { navigate, dialog, currentDialog, onShowPreviewImages } = this.props
     const { first_name, last_name, phone_number } = currentDialog
     const {
@@ -478,13 +665,19 @@ const mapStateToProps = state => ({
   search: state.messageReducer.search,
   currentChat: state.messageReducer.currentChat,
   editedMessage: state.messageReducer.editMessage,
+  replyMessage: state.messageReducer.replyMessage,
+  deleteMessage: state.messageReducer.deleteMessage,
+  file: state.messageReducer.file,
+  forwardMessage: state.messageReducer.forwardMessage,
   currentRoomId: state.messageReducer.currentRoomId,
   currentRoom: state.messageReducer.currentRoom,
   user: state.userReducer.user,
   dialogs: state.dialogsReducer.dialogs,
   dialog: state.dialogsReducer.dialog,
   currentDialog: state.dialogsReducer.currentDialog,
+  message: state.messageReducer.message,
 })
+
 const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
   setDialogs: _ => dispatch(setDialogs(_)),

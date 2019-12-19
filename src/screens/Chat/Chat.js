@@ -66,6 +66,8 @@ class Chat extends Component {
             />
             <View style={{ flex: 1 }}>
               <Content
+                messages={this.state.messages}
+                setMessages={this.setMessages}
                 navigation={this.props.navigation}
                 navigate={this.navigate}
                 goBack={this.navigateBack}
@@ -73,7 +75,11 @@ class Chat extends Component {
               />
             </View>
             <Bottom>
-              <Input navigation={this.props.navigation} />
+              <Input
+                messages={this.state.messages}
+                setMessages={this.setMessages}
+                navigation={this.props.navigation}
+              />
             </Bottom>
           </Wrapper>
         </SafeAreaView>
@@ -89,6 +95,7 @@ class Chat extends Component {
 
   state = {
     currentChat: null,
+    messages: [],
   }
 
   componentDidMount() {}
@@ -107,6 +114,10 @@ class Chat extends Component {
     setRoom(null)
     this.props.setDialog(null)
     socket.emit('get_dialogs', { id: user._id })
+  }
+
+  setMessages = messages => {
+    this.setState({ messages: messages })
   }
 
   navigateBack = () => {

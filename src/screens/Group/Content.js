@@ -226,7 +226,8 @@ class Content extends Component {
   componentWillUnmount() {}
 
   _scrollToBottom = () => {
-    const { scrolledMessages, messages } = this.state
+    const { scrolledMessages } = this.state
+    const { messages } = this.props
     if (scrolledMessages.length) {
       // todo next page
       // const nextPage = Math.floor(messages.length / 30) + 1 < totalPages ?  Math.floor(messages.length / 30) + 1 : null
