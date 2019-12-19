@@ -236,11 +236,13 @@ class Content extends Component {
         prevPage: null,
       })
     }
-    this.refs.flatList.scrollToIndex({
-      animated: true,
-      index: 0,
-      viewPosition: 1,
-    })
+    if (messages.length) {
+      this.refs.flatList.scrollToIndex({
+        animated: true,
+        index: 0,
+        viewPosition: 1,
+      })
+    }
   }
 
   generateColor = () => {
