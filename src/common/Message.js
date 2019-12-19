@@ -712,6 +712,19 @@ class Message extends Component {
                     justifyContent: 'center',
                   }}
                 >
+                  <FastImage
+                    style={{
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      position: 'absolute',
+                    }}
+                    source={{
+                      uri: `https://seruniverse.asmo.media${item.src}`,
+                    }}
+                    resizeMode={FastImage.resizeMode.cover}
+                  />
                   <VideoPinBorder>
                     <VideoPinTriangle />
                   </VideoPinBorder>
@@ -783,6 +796,19 @@ class Message extends Component {
                   justifyContent: 'center',
                 }}
               >
+                <FastImage
+                  style={{
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    position: 'absolute',
+                  }}
+                  source={{
+                    uri: `https://seruniverse.asmo.media${item.src}`,
+                  }}
+                  resizeMode={FastImage.resizeMode.cover}
+                />
                 <VideoPinBorder>
                   <VideoPinTriangle />
                 </VideoPinBorder>
