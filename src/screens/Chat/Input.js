@@ -459,7 +459,6 @@ class InputComponent extends Component {
   _startSendingFile = (formDataObject = {}, imageUri = '') => {
     const {
       currentChat,
-      currentRoom,
       currentDialog,
       addUploadMessage: addUploadMessageProp,
       removeUploadMessage: removeUploadMessageProp,
@@ -515,10 +514,10 @@ class InputComponent extends Component {
         },
       },
       success: res => {
-        socket.emit('file', {
-          dialog_id: res.dialog._id,
-          participant: currentRoom,
-        })
+        // socket.emit('file', {
+        //   dialog_id: res.dialog._id,
+        //   participant: currentRoom,
+        // })
         messages.push(res.message)
         this.props.setMessages(messages)
         navigation.getParam('scrollToBottom')()
@@ -656,7 +655,6 @@ class InputComponent extends Component {
     const {
       forwardedMessage: { _id },
       currentRoomId,
-      messages,
     } = this.props
     const bodyReq = { message_id: _id, dialog_id: currentRoomId }
     sendRequest({
@@ -664,8 +662,6 @@ class InputComponent extends Component {
       method: 'post',
       attr: bodyReq,
       success: res => {
-        messages.push(res.message)
-        this.props.setMessages(messages)
         this.stopForwarding()
       },
       failFunc: err => {},
@@ -688,7 +684,6 @@ class InputComponent extends Component {
     const {
       repliedMessage: { _id },
       currentRoomId,
-      messages,
     } = this.props
     const { text } = this.state
     const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
@@ -697,8 +692,6 @@ class InputComponent extends Component {
       method: 'post',
       attr: bodyReq,
       success: res => {
-        messages.push(res.message)
-        this.props.setMessages(messages)
         this.stopReply()
       },
       failFunc: err => {},
