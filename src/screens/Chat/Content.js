@@ -501,7 +501,24 @@ class Content extends Component {
   }
 
   _scrollToBottom = () => {
-    this.refs.flatList.scrollToOffset({ x: 0, y: 0, animated: true })
+    const { scrolledMessages } = this.state
+    const { messages } = this.props
+    if (scrolledMessages.length) {
+      // todo next page
+      // const nextPage = Math.floor(messages.length / 30) + 1 < totalPages ?  Math.floor(messages.length / 30) + 1 : null
+      this.setState({ scrolledMessages: [] })
+      this.setState({
+        page: Math.floor(messages.length / 30) + 1,
+        prevPage: null,
+      })
+    }
+    if (messages.length) {
+      this.refs.flatList.scrollToIndex({
+        animated: true,
+        index: 0,
+        viewPosition: 1,
+      })
+    }
   }
 
   _onPressMessage = item => {
