@@ -34,7 +34,7 @@ import {
   setDialogs,
   addUploadMessage,
   removeUploadMessage,
-  updateUploadMessageProgress,
+  // updateUploadMessageProgress,
   setDialog,
 } from '../../actions/dialogsActions'
 
@@ -456,7 +456,7 @@ class InputComponent extends Component {
       currentRoom,
       addUploadMessage: addUploadMessageProp,
       removeUploadMessage: removeUploadMessageProp,
-      updateUploadMessageProgress: updateUploadMessageProgressProp,
+      // updateUploadMessageProgress: updateUploadMessageProgressProp,
       user,
       navigation,
       messages,
@@ -466,8 +466,8 @@ class InputComponent extends Component {
     form.append('room', currentChat)
     // form.append('')
     const tempMessageId = Date.now()
-    let prevProgress = 0
-    const progressMultiplier = 10
+    // let prevProgress = 0
+    // const progressMultiplier = 10
     addUploadMessageProp({
       room: currentChat,
       src: imageUri,
@@ -488,19 +488,19 @@ class InputComponent extends Component {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        onUploadProgress: progressEvent => {
-          const uploadProgress = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total,
-          )
-          if (uploadProgress >= prevProgress + progressMultiplier) {
-            prevProgress = uploadProgress
-            updateUploadMessageProgressProp({
-              room: currentChat,
-              tempId: tempMessageId,
-              uploadProgress,
-            })
-          }
-        },
+        // onUploadProgress: progressEvent => {
+        //   const uploadProgress = Math.round(
+        //     (progressEvent.loaded * 100) / progressEvent.total,
+        //   )
+        //   if (uploadProgress >= prevProgress + progressMultiplier) {
+        //     prevProgress = uploadProgress
+        //     updateUploadMessageProgressProp({
+        //       room: currentChat,
+        //       tempId: tempMessageId,
+        //       uploadProgress,
+        //     })
+        //   }
+        // },
       },
       success: res => {
         socket.emit('file', {
@@ -744,7 +744,7 @@ const mapDispatchToProps = dispatch => ({
   addMessage: _ => dispatch(addMessage(_)),
   addUploadMessage: _ => dispatch(addUploadMessage(_)),
   removeUploadMessage: _ => dispatch(removeUploadMessage(_)),
-  updateUploadMessageProgress: _ => dispatch(updateUploadMessageProgress(_)),
+  // updateUploadMessageProgress: _ => dispatch(updateUploadMessageProgress(_)),
   fEditMessage: _ => dispatch(editMessage(_)),
   startSearch: _ => dispatch(startSearch(_)),
   stopSearch: _ => dispatch(stopSearch(_)),
