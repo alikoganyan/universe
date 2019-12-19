@@ -196,12 +196,15 @@ class Content extends Component {
     moment.locale('ru')
     const { navigation, dialog } = this.props
     const { messages_from_pages } = dialog
-    const messages = messages_from_pages.docs
-    this.props.setMessages(messages)
-    this.setState({
-      nextPage: messages_from_pages.nextPage,
-      totalPages: messages_from_pages.totalPages,
-    })
+
+    if (Object.keys(dialog).length) {
+      const messages = messages_from_pages.docs
+      this.props.setMessages(messages)
+      this.setState({
+        nextPage: messages_from_pages.nextPage,
+        totalPages: messages_from_pages.totalPages,
+      })
+    }
     navigation.setParams({
       scrollToBottom: this._scrollToBottom,
     })
@@ -236,18 +239,18 @@ class Content extends Component {
   }
 
   componentWillUnmount() {
-    const { dialogs, setDialogs, user, currentChat } = this.props
-    const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
+    // const { dialogs, setDialogs, user, currentChat } = this.props
+    // const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
 
-    if (dialogIndex > -1) {
-      dialogs[dialogIndex].messages = dialogs[dialogIndex].messages.map(
-        message => ({
-          ...message,
-          viewers: [...message.viewers, user._id],
-        }),
-      )
-      setDialogs(dialogs)
-    }
+    // if (dialogIndex > -1) {
+    // //   dialogs[dialogIndex].messages = dialogs[dialogIndex].messages.map(
+    // //     message => ({
+    // //       ...message,
+    // //       viewers: [...message.viewers, user._id],
+    // //     }),
+    // //   )
+    // //   setDialogs(dialogs)
+    // // }
     this.props.setDialog({})
   }
 
