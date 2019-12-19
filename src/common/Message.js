@@ -511,6 +511,11 @@ class Message extends Component {
             onLongPress={onLongPressMessage}
           >
             <RecivedMessage background={background || interlocatorMessage}>
+              {sender.first_name && sender.last_name && isGroup && (
+                <ReviverName numberOfLines={1} style={{ color: color }}>
+                  {!!sender && `${sender.first_name} ${sender.last_name}`}
+                </ReviverName>
+              )}
               {!!(resend && resend.sender) && (
                 <Forwarded
                   color={forwardedMessage}
@@ -528,11 +533,6 @@ class Message extends Component {
                   text={reply.text}
                   padding
                 />
-              )}
-              {sender.first_name && sender.last_name && isGroup && (
-                <ReviverName numberOfLines={1} style={{ color: color }}>
-                  {!!sender && `${sender.first_name} ${sender.last_name}`}
-                </ReviverName>
               )}
               <MessageText>{text}</MessageText>
               <MessageInfo>
@@ -712,6 +712,19 @@ class Message extends Component {
                     justifyContent: 'center',
                   }}
                 >
+                  <FastImage
+                    style={{
+                      top: 0,
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      position: 'absolute',
+                    }}
+                    source={{
+                      uri: `https://seruniverse.asmo.media${item.src}`,
+                    }}
+                    resizeMode={FastImage.resizeMode.cover}
+                  />
                   <VideoPinBorder>
                     <VideoPinTriangle />
                   </VideoPinBorder>
@@ -783,6 +796,19 @@ class Message extends Component {
                   justifyContent: 'center',
                 }}
               >
+                <FastImage
+                  style={{
+                    top: 0,
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    position: 'absolute',
+                  }}
+                  source={{
+                    uri: `https://seruniverse.asmo.media${item.src}`,
+                  }}
+                  resizeMode={FastImage.resizeMode.cover}
+                />
                 <VideoPinBorder>
                   <VideoPinTriangle />
                 </VideoPinBorder>
