@@ -325,7 +325,12 @@ class Content extends Component {
   }
 
   checkScrollPosition = event => {
-    const { lastPosition, switcherDown, prevPage } = this.state
+    const {
+      lastPosition,
+      switcherDown,
+      prevPage,
+      scrolledMessages,
+    } = this.state
     if (event.nativeEvent.contentOffset.y > 400) {
       this.setState({ buttonToDown: true })
     } else {
@@ -336,7 +341,8 @@ class Content extends Component {
       switcherDown &&
       lastPosition &&
       lastPosition > event.nativeEvent.contentOffset.y &&
-      event.nativeEvent.contentOffset.y < 600
+      event.nativeEvent.contentOffset.y < 600 &&
+      scrolledMessages.length
     ) {
       this.getMessage(true)
 

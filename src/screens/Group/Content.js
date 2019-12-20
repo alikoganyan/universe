@@ -285,26 +285,25 @@ class Content extends Component {
       prevPage,
       scrolledMessages,
     } = this.state
-    if (scrolledMessages.length) {
-      if (event.nativeEvent.contentOffset.y > 400) {
-        this.setState({ buttonToDown: true })
-      } else {
-        this.setState({ buttonToDown: false })
-      }
-      if (
-        prevPage &&
-        switcherDown &&
-        lastPosition &&
-        lastPosition > event.nativeEvent.contentOffset.y &&
-        event.nativeEvent.contentOffset.y < 600
-      ) {
-        this.getMessage(true)
+    if (event.nativeEvent.contentOffset.y > 400) {
+      this.setState({ buttonToDown: true })
+    } else {
+      this.setState({ buttonToDown: false })
+    }
+    if (
+      prevPage &&
+      switcherDown &&
+      lastPosition &&
+      lastPosition > event.nativeEvent.contentOffset.y &&
+      event.nativeEvent.contentOffset.y < 600 &&
+      scrolledMessages.length
+    ) {
+      this.getMessage(true)
 
-        this.setState({ switcherDown: false })
-      } else if (!switcherDown && event.nativeEvent.contentOffset.y > 600) {
-        this.setState({ switcherDown: true })
-        // this.setState({page: nextPage})
-      }
+      this.setState({ switcherDown: false })
+    } else if (!switcherDown && event.nativeEvent.contentOffset.y > 600) {
+      this.setState({ switcherDown: true })
+      // this.setState({page: nextPage})
     }
     this.setState({ lastPosition: event.nativeEvent.contentOffset.y })
   }
