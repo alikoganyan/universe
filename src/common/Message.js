@@ -49,12 +49,12 @@ const UploadProgressContainer = styled(View)`
   border-radius: ${borderRadius};
 `
 
-const UploadProgressText = styled(Text)`
+/*const UploadProgressText = styled(Text)`
   color: ${Colors.white};
   font-family: 'OpenSans';
   font-size: 14px;
   padding: 8px;
-`
+`*/
 
 const MyMessage = styled(View)`
   display: flex;
@@ -96,8 +96,8 @@ const RecivedMessage = styled(View)`
 const MessageText = styled(Text)`
   font-size: ${fontSize.textSize};
   font-family: 'OpenSans';
-  textshadowcolor: ${Colors.black};
   color: ${Colors.black};
+  textshadowcolor: ${Colors.black};
 `
 const ReviverName = styled(Text)`
   font-family: 'OpenSans';
@@ -263,11 +263,8 @@ class Message extends Component {
       filename,
       size,
       data,
-      isUploaded,
-      isUploading,
-      enableUploadProgress,
-      uploadProgress,
       edited,
+      isUploading,
     } = item
     const finalTime = moment(created_at).format('HH:mm')
     const fileSize =
@@ -275,23 +272,25 @@ class Message extends Component {
         ? `${(size / (1024 * 2)).toFixed(1)}МБ`
         : `${(size / 1024).toFixed(1)}КБ`
     const messageRead = !!viewers.filter(e => e !== myId).length
-    if (type === 'file' && isUploading) {
+    if (isUploading) {
       return (
         <View style={{ display: 'flex', flexDirection: 'row' }}>
           <MyMessage background={background} style={{ padding: 0 }}>
-            <UploadProgressContainer
-              style={{
-                height: 100,
-                backgroundColor: Colors.black,
-                position: 'relative',
-              }}
-            >
+            <MyMessageImage
+              uri={src}
+              width={width}
+              height={height}
+              resizeMode="contain"
+            />
+            <UploadProgressContainer>
               <ActivityIndicator animating color={Colors.white} size="large" />
-              {!!enableUploadProgress && (
-                <UploadProgressText>{uploadProgress}%</UploadProgressText>
-              )}
+              {/*{!!enableUploadProgress && (*/}
+              {/*  <UploadProgressText>{uploadProgress}%</UploadProgressText>*/}
+              {/*)}*/}
             </UploadProgressContainer>
-            <MessageInfo>
+            <MessageInfo
+              style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
+            >
               <MessageDate color={Colors.norway}>Загрузка...</MessageDate>
             </MessageInfo>
           </MyMessage>
@@ -299,7 +298,8 @@ class Message extends Component {
         </View>
       )
     }
-    if (type === 'image' && !isUploaded) {
+
+    if (type === 'image') {
       this.readFile(
         src.split('file://')[1] ? src : `https://seruniverse.asmo.media${src}`,
         filename,
@@ -418,33 +418,7 @@ class Message extends Component {
         </View>
       )
     }
-    if (type === 'image' && isUploaded) {
-      return (
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <MyMessage background={background} style={{ padding: 0 }}>
-            <MyMessageImage
-              uri={src}
-              width={width}
-              height={height}
-              resizeMode="contain"
-            />
-            <UploadProgressContainer>
-              <ActivityIndicator animating color={Colors.white} size="large" />
-              {!!enableUploadProgress && (
-                <UploadProgressText>{uploadProgress}%</UploadProgressText>
-              )}
-            </UploadProgressContainer>
-            <MessageInfo
-              style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
-            >
-              <MessageDate color={Colors.norway}>Загрузка...</MessageDate>
-            </MessageInfo>
-          </MyMessage>
-          <TriangleLeftIcon color={myMessage} />
-        </View>
-      )
-    }
-    if (type === 'text' || !type) {
+    if (type === 'text') {
       return myId === sender._id ? (
         <TouchableOpacity
           activeOpacity={0.8}
@@ -825,7 +799,7 @@ class Message extends Component {
         </View>
       )
     }
-    if (type === 'file' && !isUploaded) {
+    if (type === 'file') {
       return myId === sender._id ? (
         <TouchableOpacity
           activeOpacity={0.8}

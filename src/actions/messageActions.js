@@ -15,6 +15,8 @@ export const FORWARD_MESSAGE = 'FORWARD_MESSAGE'
 export const REPLY_MESSAGE = 'REPLY_MESSAGE'
 export const DELETE_MESSAGE = 'DELETE_MESSAGE'
 export const SET_FILE = 'SET_FILE'
+export const ADD_PRELOADER = 'ADD_PRELOADER'
+export const REMOVE_PRELOADER = 'REMOVE_PRELOADER'
 
 export const addMessage = payload => ({
   type: ADD_MESSAGE,
@@ -68,6 +70,7 @@ export const replyMessage = payload => ({
   type: REPLY_MESSAGE,
   payload,
 })
+
 export const deleteMessage = payload => ({
   type: DELETE_MESSAGE,
   payload,
@@ -77,6 +80,31 @@ export const setFile = payload => ({
   type: SET_FILE,
   payload,
 })
+
+export const addPreloader = payload => {
+  const {
+    messageReducer: { uploadMessages = [] },
+  } = store.getState()
+  uploadMessages.push(payload)
+  return {
+    type: ADD_PRELOADER,
+    payload: uploadMessages,
+  }
+}
+
+export const removePreloader = payload => {
+  const {
+    messageReducer: { uploadMessages = [] },
+  } = store.getState()
+  const index = uploadMessages.findIndex(m => m.roomId === payload.roomId)
+  if (index !== -1) {
+    uploadMessages.splice(index, 1)
+  }
+  return {
+    type: REMOVE_PRELOADER,
+    payload: uploadMessages,
+  }
+}
 
 export const setGeoLoading = room => {
   let { dialogsReducer: { dialogs = [] } = {} } = store.getState()

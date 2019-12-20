@@ -25,6 +25,7 @@ import {
   editMessage,
   forwardMessage,
   replyMessage,
+  setMessage,
 } from '../../actions/messageActions'
 import { setDialog } from '../../actions/dialogsActions'
 import { d_message } from '../../constants/api'
@@ -71,7 +72,18 @@ class Content extends Component {
       scrolledMessages,
       buttonToDown,
     } = this.state
-    const { search, editedMessage, messages } = this.props
+    const { search, editedMessage, uploadMessages, currentRoomID } = this.props
+
+    let { messages } = this.props
+    messages = messages.filter(m => m.type !== 'loader')
+    messages = messages.concat(
+      uploadMessages.filter(m => m.roomId === currentRoomID),
+    )
+    if (uploadMessages.length) {
+      messages.push(uploadMessages[0])
+    } else {
+      messages.pop()
+    }
     const isEditing = !!editedMessage.text
     const currentMessages = scrolledMessages.length
       ? scrolledMessages
@@ -81,6 +93,7 @@ class Content extends Component {
       (x, y) => new Date(y.created_at) - new Date(x.created_at),
     )
     reversedMessages = _.uniqBy(reversedMessages, '_id')
+
     return (
       <>
         <Wrapper search={search}>
@@ -101,9 +114,13 @@ class Content extends Component {
                 itemVisiblePercentThreshold: 50,
               }}
               renderItem={({ item, index }) => {
-                const participant = participants.find(
-                  participant => participant._id === item.sender._id,
-                )
+                let participant
+                if (item.type !== 'loader') {
+                  participant = participants.find(
+                    participant => participant._id === item.sender._id,
+                  )
+                }
+                // console.log(item)
                 return (
                   <Message
                     key={index}
@@ -155,7 +172,7 @@ class Content extends Component {
         <ActionSheet
           ref={node => (this.ActionSheetMessage = node)}
           options={messageLongPressActions.map(({ title }) => title)}
-          cancelButtonIndex={messageLongPressActions.length - 1}
+          // cancelButtonIndex={messageLongPressActions.length - 1}
           onPress={index =>
             messageLongPressActions[index] &&
             messageLongPressActions[index].action &&
@@ -209,6 +226,23 @@ class Content extends Component {
       messages.push(nextProps.message)
       this.props.setMessages(messages)
     }
+    // console.log(nextProps.uploadMessages.length, this.props.uploadMessages.length)
+    // console.log(nextProps, this.props)
+    // console.log(nextProps.uploadMessages, this.props.uploadMessages)
+    // if (nextProps.uploadMessages.length !== this.props.uploadMessages.length) {
+    //   const newMessages = nextProps.messages.filter(m => !m.isUploading)
+    //   this.props.uploadMessages.map(um => {
+    //     if (um.roomId === this.props.currentRoomId) {
+    //       newMessages.push({
+    //         _id: um._id,
+    //         isUploading: um.isUploading,
+    //         created_at: um.created_at,
+    //       })
+    //     }
+    //   })
+    //   console.log(newMessages)
+    //   this.props.setMessages({ messages: newMessages })
+    // }
   }
 
   handleScroll = () => {
@@ -648,6 +682,7 @@ const mapStateToProps = state => ({
   editedMessage: state.messageReducer.editMessage,
   replyMessage: state.messageReducer.replyMessage,
   deleteMessage: state.messageReducer.deleteMessage,
+  uploadMessages: state.messageReducer.uploadMessages,
   file: state.messageReducer.file,
   forwardMessage: state.messageReducer.forwardMessage,
   currentDialog: state.dialogsReducer.currentDialog,
@@ -667,6 +702,7 @@ const mapDispatchToProps = dispatch => ({
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
   deleteMessage: _ => dispatch(deleteMessage(_)),
+  setMessage: _ => dispatch(setMessage(_)),
 })
 export default connect(
   mapStateToProps,

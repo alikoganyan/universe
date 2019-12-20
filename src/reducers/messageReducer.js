@@ -12,6 +12,8 @@ import {
   SET_MESSAGE,
   DELETE_MESSAGE,
   SET_FILE,
+  ADD_PRELOADER,
+  REMOVE_PRELOADER,
 } from '../actions/messageActions'
 import { LOG_OUT } from '../actions/userActions'
 
@@ -27,6 +29,7 @@ const initialState = {
   replyMessage: {},
   deleteMessage: {},
   file: {},
+  uploadMessages: [],
 }
 
 export default (state = initialState, action) => {
@@ -58,6 +61,10 @@ export default (state = initialState, action) => {
       return { ...state, deleteMessage: payload }
     case SET_FILE:
       return { ...state, file: payload }
+    case ADD_PRELOADER:
+      return { ...state, uploadMessages: [...payload] }
+    case REMOVE_PRELOADER:
+      return { ...state, uploadMessages: [...payload] }
     case LOG_OUT:
       return initialState
     default:
