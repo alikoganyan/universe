@@ -69,6 +69,7 @@ class Content extends Component {
       currentDate,
       scrolledMessages,
       buttonToDown,
+      selectedMessages,
     } = this.state
     const { search, editedMessage, messages } = this.props
 
@@ -124,6 +125,7 @@ class Content extends Component {
               }}
               renderItem={({ item, index }) => (
                 <Message
+                  selected={selectedMessages === item._id ? true : false}
                   key={index}
                   item={item}
                   onLongPressMessage={() => this._onLongPressMessage(item)}
@@ -190,6 +192,7 @@ class Content extends Component {
     switcher: true,
     switcherDown: true,
     buttonToDown: false,
+    selectedMessages: null,
   }
 
   componentDidMount() {
@@ -538,6 +541,10 @@ class Content extends Component {
       } else {
         this.getSelectedMessage(item.reply._id)
       }
+      this.setState({ selectedMessages: item.reply._id })
+      setTimeout(() => {
+        this.setState({ selectedMessages: false })
+      }, 2000)
     }
 
     const { navigate, dialog, currentDialog, onShowPreviewImages } = this.props

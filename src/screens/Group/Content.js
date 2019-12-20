@@ -70,6 +70,7 @@ class Content extends Component {
       participants,
       scrolledMessages,
       buttonToDown,
+      selectedMessages,
     } = this.state
     const { search, editedMessage, messages } = this.props
     const isEditing = !!editedMessage.text
@@ -106,6 +107,7 @@ class Content extends Component {
                 )
                 return (
                   <Message
+                    selected={selectedMessages === item._id ? true : false}
                     key={index}
                     withImage
                     read={!!item.viewers.length}
@@ -180,6 +182,7 @@ class Content extends Component {
     switcher: true,
     switcherDown: true,
     buttonToDown: false,
+    selectedMessages: null,
   }
 
   componentDidMount() {
@@ -276,25 +279,32 @@ class Content extends Component {
   )
 
   checkScrollPosition = event => {
-    const { lastPosition, switcherDown, prevPage } = this.state
-    if (event.nativeEvent.contentOffset.y > 400) {
-      this.setState({ buttonToDown: true })
-    } else {
-      this.setState({ buttonToDown: false })
-    }
-    if (
-      prevPage &&
-      switcherDown &&
-      lastPosition &&
-      lastPosition > event.nativeEvent.contentOffset.y &&
-      event.nativeEvent.contentOffset.y < 600
-    ) {
-      this.getMessage(true)
+    const {
+      lastPosition,
+      switcherDown,
+      prevPage,
+      scrolledMessages,
+    } = this.state
+    if (scrolledMessages.length) {
+      if (event.nativeEvent.contentOffset.y > 400) {
+        this.setState({ buttonToDown: true })
+      } else {
+        this.setState({ buttonToDown: false })
+      }
+      if (
+        prevPage &&
+        switcherDown &&
+        lastPosition &&
+        lastPosition > event.nativeEvent.contentOffset.y &&
+        event.nativeEvent.contentOffset.y < 600
+      ) {
+        this.getMessage(true)
 
-      this.setState({ switcherDown: false })
-    } else if (!switcherDown && event.nativeEvent.contentOffset.y > 600) {
-      this.setState({ switcherDown: true })
-      // this.setState({page: nextPage})
+        this.setState({ switcherDown: false })
+      } else if (!switcherDown && event.nativeEvent.contentOffset.y > 600) {
+        this.setState({ switcherDown: true })
+        // this.setState({page: nextPage})
+      }
     }
     this.setState({ lastPosition: event.nativeEvent.contentOffset.y })
   }
@@ -350,6 +360,7 @@ class Content extends Component {
           scrolledMessages: res.docs,
           page: res.nextPage,
           prevPage: res.prevPage,
+          selectedMessages: id,
         })
         const index = this.refs.flatList.props.data.findIndex(
           el => el._id === id,
@@ -523,6 +534,10 @@ class Content extends Component {
       } else {
         this.getSelectedMessage(item.reply._id)
       }
+      this.setState({ selectedMessages: item.reply._id })
+      setTimeout(() => {
+        this.setState({ selectedMessages: false })
+      }, 2000)
     }
     const { navigate, dialog, currentDialog } = this.props
     const { name: dialogName } = currentDialog

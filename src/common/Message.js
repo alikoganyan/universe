@@ -227,6 +227,12 @@ const styles = StyleSheet.create({
     marginBottom: 2,
     alignItems: 'flex-end',
   },
+  selected: {
+    backgroundColor: '#1d1dce38',
+  },
+  unSelected: {
+    backgroundColor: 'transparent',
+  },
   messageContainer: {
     display: 'flex',
     flexDirection: 'column',
@@ -248,6 +254,7 @@ class Message extends Component {
       onPressMessage,
       toSenderProfile,
       color,
+      selected,
     } = this.props
     const {
       viewers,
@@ -310,7 +317,13 @@ class Message extends Component {
           onPress={onPressMessage}
           onLongPress={onLongPressMessage}
         >
-          <View style={[styles.container, { justifyContent: 'flex-end' }]}>
+          <View
+            style={[
+              styles.container,
+              selected ? styles.selected : styles.unSelected,
+              { justifyContent: 'flex-end' },
+            ]}
+          >
             <View style={styles.messageContainer}>
               <MyMessages noPadding background={background}>
                 {!!(resend && resend.sender) && (
@@ -351,7 +364,12 @@ class Message extends Component {
           </View>
         </TouchableOpacity>
       ) : (
-        <View style={styles.container}>
+        <View
+          style={[
+            styles.container,
+            selected ? styles.selected : styles.unSelected,
+          ]}
+        >
           <TouchableOpacity activeOpacity={0.8} onPress={toSenderProfile}>
             <View style={{ flexDirection: 'row' }}>
               {sender.image ? (
@@ -451,7 +469,13 @@ class Message extends Component {
           onPress={onPressMessage}
           onLongPress={onLongPressMessage}
         >
-          <View style={[styles.container, { justifyContent: 'flex-end' }]}>
+          <View
+            style={[
+              styles.container,
+              selected ? styles.selected : styles.unSelected,
+              { justifyContent: 'flex-end' },
+            ]}
+          >
             <View style={styles.messageContainer}>
               <MyMessages background={background}>
                 {!!(resend && resend.sender) && (
@@ -488,7 +512,12 @@ class Message extends Component {
           </View>
         </TouchableOpacity>
       ) : (
-        <View style={styles.container}>
+        <View
+          style={[
+            styles.container,
+            selected ? styles.selected : styles.unSelected,
+          ]}
+        >
           <TouchableOpacity activeOpacity={0.8} onPress={toSenderProfile}>
             <View style={{ flexDirection: 'row' }}>
               {sender.image ? (
@@ -547,7 +576,13 @@ class Message extends Component {
     if (type === 'geo') {
       const { latitude = 0, longitude = 0 } = data ? data : {}
       return myId === sender._id ? (
-        <View style={[styles.container, { justifyContent: 'flex-end' }]}>
+        <View
+          style={[
+            styles.container,
+            selected ? styles.selected : styles.unSelected,
+            { justifyContent: 'flex-end' },
+          ]}
+        >
           <View style={{ maxWidth: '80%', width: '80%' }}>
             <MyMessages
               style={{ width: '100%', height: 230 }}
@@ -607,7 +642,12 @@ class Message extends Component {
           </View>
         </View>
       ) : (
-        <View style={styles.container}>
+        <View
+          style={[
+            styles.container,
+            selected ? styles.selected : styles.unSelected,
+          ]}
+        >
           <TouchableOpacity activeOpacity={0.8} onPress={toSenderProfile}>
             <View style={{ flexDirection: 'row' }}>
               {sender.image ? (
@@ -691,7 +731,13 @@ class Message extends Component {
           onPress={onPressMessage}
           onLongPress={onLongPressMessage}
         >
-          <View style={[styles.container, { justifyContent: 'flex-end' }]}>
+          <View
+            style={[
+              styles.container,
+              selected ? styles.selected : styles.unSelected,
+              { justifyContent: 'flex-end' },
+            ]}
+          >
             <View style={{ maxWidth: '80%', width: '80%' }}>
               <MyMessages
                 style={{ width: '100%', height: 180, zIndex: 5 }}
@@ -747,7 +793,12 @@ class Message extends Component {
           </View>
         </TouchableOpacity>
       ) : (
-        <View style={styles.container}>
+        <View
+          style={[
+            styles.container,
+            selected ? styles.selected : styles.unSelected,
+          ]}
+        >
           <TouchableOpacity activeOpacity={0.8} onPress={toSenderProfile}>
             <View style={{ flexDirection: 'row' }}>
               {sender.image ? (
@@ -832,7 +883,13 @@ class Message extends Component {
           onPress={onPressMessage}
           onLongPress={onLongPressMessage}
         >
-          <View style={[styles.container, { justifyContent: 'flex-end' }]}>
+          <View
+            style={[
+              styles.container,
+              selected ? styles.selected : styles.unSelected,
+              { justifyContent: 'flex-end' },
+            ]}
+          >
             <View style={styles.messageContainer}>
               <MyMessages background={background}>
                 {!!(resend && resend.sender) && (
@@ -868,7 +925,12 @@ class Message extends Component {
           </View>
         </TouchableOpacity>
       ) : (
-        <View style={styles.container}>
+        <View
+          style={[
+            styles.container,
+            selected ? styles.selected : styles.unSelected,
+          ]}
+        >
           <TouchableOpacity activeOpacity={0.8} onPress={toSenderProfile}>
             <View style={{ flexDirection: 'row' }}>
               {sender.image ? (
