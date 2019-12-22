@@ -505,12 +505,14 @@ class InputComponent extends Component {
         navigation.getParam('scrollToBottom')()
         this.props.removePreloader({
           roomId: currentRoomId,
+          _id: tempMessageId,
         })
         this.props.setFile({})
       },
       failFunc: err => {
         this.props.removePreloader({
           roomId: currentRoomId,
+          _id: tempMessageId,
         })
         removeUploadMessageProp({
           room: currentChat,
@@ -532,7 +534,17 @@ class InputComponent extends Component {
   }
 
   _selectGeo = async () => {
-    const { currentChat, navigation } = this.props
+    const { currentChat, currentRoomId, navigation } = this.props
+    const tempMessageId = Date.now()
+    this.props.addPreloader({
+      viewers: [1, 2, 3],
+      type: 'loader',
+      roomId: currentRoomId,
+      _id: tempMessageId,
+      created_at: new Date(),
+      isUploading: true,
+      geo: true,
+    })
     const coords = await getGeoCoords()
     if (coords) {
       const { latitude, longitude } = coords

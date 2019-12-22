@@ -25,6 +25,7 @@ import {
   editMessage,
   forwardMessage,
   replyMessage,
+  removePreloader,
   setMessage,
 } from '../../actions/messageActions'
 import { setDialog } from '../../actions/dialogsActions'
@@ -80,9 +81,7 @@ class Content extends Component {
       uploadMessages.filter(m => m.roomId === currentRoomID),
     )
     if (uploadMessages.length) {
-      messages.push(uploadMessages[0])
-    } else {
-      messages.pop()
+      messages.push(...uploadMessages)
     }
     const isEditing = !!editedMessage.text
     const currentMessages = scrolledMessages.length
@@ -221,28 +220,17 @@ class Content extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { messages } = this.props
+    const { messages, removePreloader, currentRoomId } = this.props
     if (nextProps.message._id !== this.props.message._id) {
       messages.push(nextProps.message)
       this.props.setMessages(messages)
+      if (nextProps.message.type === 'geo') {
+        removePreloader({
+          roomId: currentRoomId,
+          geo: true,
+        })
+      }
     }
-    // console.log(nextProps.uploadMessages.length, this.props.uploadMessages.length)
-    // console.log(nextProps, this.props)
-    // console.log(nextProps.uploadMessages, this.props.uploadMessages)
-    // if (nextProps.uploadMessages.length !== this.props.uploadMessages.length) {
-    //   const newMessages = nextProps.messages.filter(m => !m.isUploading)
-    //   this.props.uploadMessages.map(um => {
-    //     if (um.roomId === this.props.currentRoomId) {
-    //       newMessages.push({
-    //         _id: um._id,
-    //         isUploading: um.isUploading,
-    //         created_at: um.created_at,
-    //       })
-    //     }
-    //   })
-    //   console.log(newMessages)
-    //   this.props.setMessages({ messages: newMessages })
-    // }
   }
 
   handleScroll = () => {
@@ -696,6 +684,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
+  removePreloader: _ => dispatch(removePreloader(_)),
   setDialog: _ => dispatch(setDialog(_)),
   setProfile: _ => dispatch(setProfile(_)),
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),

@@ -1,19 +1,19 @@
 import React, { Component } from 'react'
 import {
-  Text,
-  View,
   ActivityIndicator,
-  TouchableOpacity,
   StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native'
 import styled from 'styled-components'
 import {
-  TriangleLeftIcon,
-  TriangleRightIcon,
-  CheckIcon,
   CheckAllIcon,
+  CheckIcon,
   ImageIcon,
   ImageIconBlue,
+  TriangleLeftIcon,
+  TriangleRightIcon,
 } from '../assets/index'
 import { connect } from 'react-redux'
 import ImageComponent from './Image'
@@ -22,7 +22,7 @@ import FastImage from 'react-native-fast-image'
 // import { FileSystem } from 'expo';
 // import RNFS from 'react-native-fs'
 import helper from '../utils/helpers'
-import { SingleImage } from 'react-native-zoom-lightbox'
+// import { SingleImage } from 'react-native-zoom-lightbox'
 import LinearGradient from 'react-native-linear-gradient'
 import Forwarded from './Forwarded'
 import DefaultAvatar from './DefaultAvatar'
@@ -56,21 +56,21 @@ const UploadProgressContainer = styled(View)`
   padding: 8px;
 `*/
 
-const MyMessage = styled(View)`
-  display: flex;
-  text-align: right;
-  margin: 5px 10px;
-  background: ${({ background }) => background || myMessage};
-  border-radius: ${borderRadius};
-  border-bottom-right-radius: 0;
-  max-width: 80%;
-  min-width: 20%;
-  margin-left: 20%;
-  position: relative;
-  flex-grow: 1;
-  z-index: 1;
-  overflow: hidden;
-`
+// const MyMessage = styled(View)`
+//   display: flex;
+//   text-align: right;
+//   margin: 5px 10px;
+//   background: ${({ background }) => background || myMessage};
+//   border-radius: ${borderRadius};
+//   border-bottom-right-radius: 0;
+//   max-width: 80%;
+//   min-width: 20%;
+//   margin-left: 20%;
+//   position: relative;
+//   flex-grow: 1;
+//   z-index: 1;
+//   overflow: hidden;
+// `
 
 // Vahe to do
 
@@ -124,10 +124,10 @@ const MessageDate = styled(Text)`
 
 const MessageEdited = styled(MessageDate)``
 
-const MyMessageImage = styled(SingleImage)`
-  min-width: 100%;
-  height: 250px;
-`
+// const MyMessageImage = styled(SingleImage)`
+//   min-width: 100%;
+//   height: 250px;
+// `
 
 const MyMessageCachedImage = styled(FastImage)`
   min-width: 100%;
@@ -258,7 +258,7 @@ class Message extends Component {
       src,
       type,
       width,
-      height,
+      // height,
       created_at,
       filename,
       size,
@@ -274,27 +274,37 @@ class Message extends Component {
     const messageRead = !!viewers.filter(e => e !== myId).length
     if (isUploading) {
       return (
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <MyMessage background={background} style={{ padding: 0 }}>
-            <MyMessageImage
-              uri={src}
-              width={width}
-              height={height}
-              resizeMode="contain"
-            />
-            <UploadProgressContainer>
-              <ActivityIndicator animating color={Colors.white} size="large" />
-              {/*{!!enableUploadProgress && (*/}
-              {/*  <UploadProgressText>{uploadProgress}%</UploadProgressText>*/}
-              {/*)}*/}
-            </UploadProgressContainer>
-            <MessageInfo
-              style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
-            >
-              <MessageDate color={Colors.norway}>Загрузка...</MessageDate>
-            </MessageInfo>
-          </MyMessage>
-          <TriangleLeftIcon color={myMessage} />
+        <View style={[styles.container, { justifyContent: 'flex-end' }]}>
+          <View style={styles.messageContainer}>
+            <MyMessages noPadding background={background}>
+              {src ? (
+                <MyMessageCachedImage
+                  source={{ uri: src }}
+                  resizeMode={FastImage.resizeMode.cover}
+                />
+              ) : (
+                <View style={{ width: 1000, height: 250 }} />
+              )}
+              <UploadProgressContainer>
+                <ActivityIndicator
+                  animating
+                  color={Colors.white}
+                  size="large"
+                />
+                {/*{!!enableUploadProgress && (*/}
+                {/*  <UploadProgressText>{uploadProgress}%</UploadProgressText>*/}
+                {/*)}*/}
+              </UploadProgressContainer>
+              <MessageInfo
+                style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}
+              >
+                <MessageDate color={Colors.norway}>Загрузка...</MessageDate>
+              </MessageInfo>
+            </MyMessages>
+          </View>
+          <View style={{ position: 'relative', right: -13 }}>
+            <TriangleLeftIcon color={background || myMessage} />
+          </View>
         </View>
       )
     }
