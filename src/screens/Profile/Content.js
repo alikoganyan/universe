@@ -411,7 +411,7 @@ class Content extends Component {
 
   componentDidMount() {
     const { myProfile, user, currentDialog } = this.props
-    const { role, phone_number, department, tasks } = myProfile
+    const { role, phone_number, department, tasks, isGroup } = myProfile
       ? user
       : currentDialog
 
@@ -435,7 +435,7 @@ class Content extends Component {
           }
         : null,
       { type: 'Телефон', value: phone_number || 'без номера', isGroup: false },
-      !myProfile
+      !myProfile && !isGroup
         ? {
             type: 'Задачи',
             value: tasks.length ? tasks.length : 0,
@@ -459,14 +459,14 @@ class Content extends Component {
             isGroup: true,
           }
         : undefined,
-      !myProfile
-        ? {
-            type: 'Задачи',
-            value: '32',
-            icon: <TaskIcon />,
-            isGroup: true,
-          }
-        : undefined,
+      // !myProfile
+      //   ? {
+      //       type: 'Задачи',
+      //       value: '32',
+      //       icon: <TaskIcon />,
+      //       isGroup: true,
+      //     }
+      //   : undefined,
       !myProfile
         ? {
             type: 'Общих файлов',
