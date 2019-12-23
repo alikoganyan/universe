@@ -34,6 +34,8 @@ import {
   forwardMessage,
   replyMessage,
   setGeoLoading,
+  setMessage,
+  setFile,
 } from '../../actions/messageActions'
 import {
   p_send_file,
@@ -441,35 +443,6 @@ class InputComponent extends Component {
     }
   }
 
-  confirmEditing = () => {
-    const { text, dialog } = this.state
-    const {
-      editedMessage: { _id },
-    } = this.props
-    const bodyReq = { text, message_id: _id }
-    sendRequest({
-      r_path: p_edit_message,
-      method: 'patch',
-      attr: bodyReq,
-      success: res => {
-        const newDialog = { ...dialog }
-        const msgIndex = newDialog.messages.findIndex(e => e._id === _id)
-        newDialog.messages[msgIndex].text = text
-        newDialog.messages[msgIndex].edited = true
-        this.props.setDialog(newDialog)
-        this.stopEditing()
-      },
-      failFunc: () => {},
-    })
-  }
-
-  stopEditing = () => {
-    const { fEditMessage } = this.props
-    const { prevText } = this.state
-    this.setState({ edit: false, text: prevText })
-    fEditMessage({})
-  }
-
   _selectMedia = async (options = {}) => {
     getImageFromPicker(
       result => {
@@ -486,7 +459,6 @@ class InputComponent extends Component {
   _startSendingFile = (formDataObject = {}, imageUri = '') => {
     const {
       currentChat,
-      currentRoom,
       currentDialog,
       addUploadMessage: addUploadMessageProp,
       removeUploadMessage: removeUploadMessageProp,
@@ -494,6 +466,7 @@ class InputComponent extends Component {
       user,
       setCurrentChat,
       navigation,
+      messages,
     } = this.props
 
     const form = new FormData()
@@ -541,20 +514,17 @@ class InputComponent extends Component {
         },
       },
       success: res => {
-        socket.emit('file', {
-          room: currentChat ? currentChat : null,
-          dialog_id: res.dialog._id,
-          participant: currentRoom,
-        })
+        // socket.emit('file', {
+        //   dialog_id: res.dialog._id,
+        //   participant: currentRoom,
+        // })
+        messages.push(res.message)
+        this.props.setMessages(messages)
         navigation.getParam('scrollToBottom')()
-        this.props.setDialog(res.dialog)
-        // const newDialogs = [...dialogs]
-        // const index = newDialogs.findIndex(e => e.room === currentChat)
-        // newDialogs[index] = res.dialog
-        // setDialogsProp(newDialogs)
         if (!currentChat) {
           setCurrentChat(res.dialog.room)
         }
+        this.props.setFile({})
       },
       failFunc: err => {
         Alert.alert('Ошибка', 'Что то пошло не так')
@@ -652,11 +622,39 @@ class InputComponent extends Component {
     this.ActionSheetPlus && this.ActionSheetPlus.show()
   }
 
+  confirmEditing = () => {
+    const { text } = this.state
+    const {
+      messages,
+      editedMessage: { _id },
+    } = this.props
+    const bodyReq = { text, message_id: _id }
+    sendRequest({
+      r_path: p_edit_message,
+      method: 'patch',
+      attr: bodyReq,
+      success: res => {
+        const msgIndex = messages.findIndex(e => e._id === _id)
+        messages[msgIndex].text = text
+        messages[msgIndex].edited = true
+        this.props.setMessages(messages)
+        this.stopEditing()
+      },
+      failFunc: () => {},
+    })
+  }
+
+  stopEditing = () => {
+    const { fEditMessage } = this.props
+    const { prevText } = this.state
+    this.setState({ edit: false, text: prevText })
+    fEditMessage({})
+  }
+
   confirmForwarding = () => {
     const {
       forwardedMessage: { _id },
       currentRoomId,
-      navigation,
     } = this.props
     const bodyReq = { message_id: _id, dialog_id: currentRoomId }
     sendRequest({
@@ -664,8 +662,6 @@ class InputComponent extends Component {
       method: 'post',
       attr: bodyReq,
       success: res => {
-        socket.emit('get_dialog', { _id: currentRoomId })
-        navigation.getParam('scrollToBottom')()
         this.stopForwarding()
       },
       failFunc: err => {},
@@ -697,7 +693,6 @@ class InputComponent extends Component {
       attr: bodyReq,
       success: res => {
         this.stopReply()
-        socket.emit('get_dialog', { _id: currentRoomId })
       },
       failFunc: err => {},
     })
@@ -705,7 +700,6 @@ class InputComponent extends Component {
 
   handleSendPress = () => {
     const { navigation } = this.props
-    navigation.getParam('scrollToBottom')()
     const { edit, reply } = this.state
     if (edit) {
       this.confirmEditing()
@@ -714,11 +708,15 @@ class InputComponent extends Component {
     } else {
       this.sendMessage()
     }
+
+    if (!edit) {
+      navigation.getParam('scrollToBottom')()
+    }
   }
 }
 
 const mapStateToProps = state => ({
-  messages: state.messageReducer.messages,
+  // messages: state.messageReducer.messages,
   currentRoom: state.messageReducer.currentRoom,
   editedMessage: state.messageReducer.editMessage,
   currentChat: state.messageReducer.currentChat,
@@ -742,6 +740,8 @@ const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
+  setMessage: _ => dispatch(setMessage(_)),
+  setFile: _ => dispatch(setFile(_)),
   setGeoLoading: _ => dispatch(setGeoLoading(_)),
 })
 export default connect(

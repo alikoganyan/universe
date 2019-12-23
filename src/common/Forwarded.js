@@ -23,7 +23,7 @@ class Forwarded extends PureComponent {
           styles.root,
           {
             backgroundColor: myMessage ? '#cfe9ba' : '#ececec',
-            borderLeftColor: myMessage ? '#034402' : '#5f6368',
+            borderLeftColor: color,
           },
         ]}
       >

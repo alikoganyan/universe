@@ -149,7 +149,21 @@ const ContactRole = styled(Text)`
 
 class Content extends Component {
   render() {
-    const { UserData, status } = this.state
+    const months = [
+      'Января',
+      'Февраля',
+      'Марта',
+      'Апреля',
+      'Мая',
+      'Июня',
+      'Июля',
+      'Августа',
+      'Сентября',
+      'Октябрь',
+      'Ноября',
+      'Декабря',
+    ]
+    const { UserData } = this.state
     const { user, myProfile, currentDialog, profile } = this.props
     const {
       _id,
@@ -163,6 +177,39 @@ class Content extends Component {
       creator,
       department,
     } = myProfile ? user : profile ? profile : currentDialog
+
+    const { last_visit } = currentDialog
+
+    const lastVisit = new Date(last_visit)
+    const lastVisitDay = Math.floor(lastVisit.getTime() / 1000 / 60 / 60 / 24)
+    const day = Math.floor(new Date().getTime() / 1000 / 60 / 60 / 24)
+    const lastVisitDifference = Math.abs(new Date() - lastVisit) / 60000
+    const minutes =
+      lastVisit.getMinutes() >= 10
+        ? lastVisit.getMinutes()
+        : `0${lastVisit.getMinutes()}`
+    const hours =
+      lastVisit.getHours() >= 10
+        ? lastVisit.getHours()
+        : `0${lastVisit.getHours()}`
+    const date =
+      lastVisit.getDate() >= 10
+        ? lastVisit.getDate()
+        : `0${lastVisit.getDate()}`
+    const month = months[lastVisit.getMonth()]
+    const lastSeenDate =
+      day - lastVisitDay === 1
+        ? `был вчера ${hours}:${minutes}`
+        : last_visit
+        ? lastVisitDifference < 5
+          ? 'был недавно'
+          : lastVisitDifference < 60
+          ? 'был в течении часа'
+          : lastVisitDifference < 1440
+          ? `был онлайн в ${hours}:${minutes}`
+          : `был онлайн ${date} ${month}`
+        : 'неизвестно'
+
     const chatName = isGroup
       ? name
       : first_name
@@ -200,7 +247,9 @@ class Content extends Component {
               department.name === 'Персональный' ? (
                 <Account>Персональный режим</Account>
               ) : null}
-              {!myProfile && !isGroup && <UserStatus>{status}</UserStatus>}
+              {!myProfile && !isGroup && (
+                <UserStatus>{lastSeenDate}</UserStatus>
+              )}
               {!myProfile && !isGroup && (
                 <SendMessage onPress={this.toChat}>
                   Написать сообщение
@@ -362,7 +411,10 @@ class Content extends Component {
 
   componentDidMount() {
     const { myProfile, user, currentDialog } = this.props
-    const { role, phone_number, department } = myProfile ? user : currentDialog
+    const { role, phone_number, department, tasks } = myProfile
+      ? user
+      : currentDialog
+
     const newUserData = [
       department && department.name !== 'Персональный'
         ? {
@@ -386,7 +438,7 @@ class Content extends Component {
       !myProfile
         ? {
             type: 'Задачи',
-            value: '4',
+            value: tasks.length ? tasks.length : 0,
             icon: <TaskIcon />,
             isGroup: false,
           }

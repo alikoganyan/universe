@@ -507,6 +507,7 @@ class InputComponent extends Component {
           roomId: currentRoomId,
           _id: tempMessageId,
         })
+        navigation.getParam('scrollToBottom')()
         this.props.setFile({})
       },
       failFunc: err => {
@@ -608,7 +609,6 @@ class InputComponent extends Component {
     const {
       forwardedMessage: { _id },
       currentRoomId,
-      messages,
     } = this.props
     const bodyReq = { message_id: _id, dialog_id: currentRoomId }
     sendRequest({
@@ -616,8 +616,6 @@ class InputComponent extends Component {
       method: 'post',
       attr: bodyReq,
       success: res => {
-        messages.push(res.message)
-        this.props.setMessages(messages)
         this.stopForwarding()
       },
       failFunc: err => {},
@@ -657,7 +655,6 @@ class InputComponent extends Component {
       repliedMessage: { _id },
       currentRoomId,
     } = this.props
-    let { messages } = this.props
     const { text } = this.state
     const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
     sendRequest({
@@ -665,8 +662,6 @@ class InputComponent extends Component {
       method: 'post',
       attr: bodyReq,
       success: res => {
-        messages.push(res.message)
-        this.props.setMessages(messages)
         this.stopReply()
       },
       failFunc: err => {
