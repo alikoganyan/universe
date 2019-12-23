@@ -15,6 +15,7 @@ import {
   setCurrentChat,
   setCurrentRoomId,
   setMessage,
+  removeAllPreloader,
 } from '../../actions/messageActions'
 // import { Notifications } from 'expo';
 import {
@@ -185,8 +186,8 @@ class Dialogs extends Component {
   componentDidMount() {
     this.getProfile()
 
-    const { user } = this.props
-
+    const { user, removeAllPreloader } = this.props
+    removeAllPreloader()
     // navigation.navigate('NewTask') // restore
     // clearInterval(this.interval)
     // this.interval = setInterval(() => {
@@ -622,6 +623,7 @@ const mapDispatchToProps = dispatch => ({
   setDialog: _ => dispatch(setDialog(_)),
   addMessage: _ => dispatch(addMessage(_)),
   setMessage: _ => dispatch(setMessage(_)),
+  removeAllPreloader: _ => dispatch(removeAllPreloader(_)),
   setUser: _ => dispatch(setUser(_)),
   setAllUsers: _ => dispatch(setAllUsers(_)),
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
