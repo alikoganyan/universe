@@ -7,6 +7,7 @@ import sendRequest from '../../utils/request'
 import { p_news } from '../../constants/api'
 import Content from './Content'
 import { setNews } from '../../actions/newsActions'
+import ScreenLoader from '../../common/ScreenLoader'
 
 const Wrapper = styled(View)`
   height: 100%;
@@ -14,8 +15,10 @@ const Wrapper = styled(View)`
 
 class News extends Component {
   render() {
+    const { companyLoading } = this.props
     return (
       <SafeAreaView behavior="padding">
+        {companyLoading && <ScreenLoader />}
         <Wrapper>
           <Content
             proceed={this.proceed}
@@ -65,6 +68,7 @@ class News extends Component {
   }
 }
 const mapStateToProps = state => ({
+  companyLoading: state.dialogsReducer.companyLoading,
   news: state.newsReducer.news,
 })
 const mapDispatchToProps = dispatch => ({
