@@ -25,6 +25,7 @@ import { setTaskReceivers } from '../../actions/participantsActions'
 import {
   editMessage,
   forwardMessage,
+  removePreloader,
   replyMessage,
   setCurrentRoomId,
 } from '../../actions/messageActions'
@@ -71,7 +72,16 @@ class Content extends Component {
       buttonToDown,
       selectedMessages,
     } = this.state
-    const { search, editedMessage, messages } = this.props
+    const { search, editedMessage, currentRoomId, uploadMessages } = this.props
+
+    let { messages } = this.props
+    messages = messages.filter(m => m.type !== 'loader')
+    messages = messages.concat(
+      uploadMessages.filter(m => m.roomId === currentRoomId),
+    )
+    if (uploadMessages.length) {
+      messages.push(...uploadMessages)
+    }
 
     // to do
     // console.log(dialogs, currentChat, currentRoomId)
@@ -125,7 +135,7 @@ class Content extends Component {
               }}
               renderItem={({ item, index }) => (
                 <Message
-                  selected={selectedMessages === item._id ? true : false}
+                  selected={selectedMessages === item._id}
                   key={index}
                   item={item}
                   onLongPressMessage={() => this._onLongPressMessage(item)}
@@ -234,10 +244,16 @@ class Content extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { messages } = this.props
+    const { messages, removePreloader, currentRoomId } = this.props
     if (nextProps.message._id !== this.props.message._id) {
       messages.push(nextProps.message)
       this.props.setMessages(messages)
+      if (nextProps.message.type === 'geo') {
+        removePreloader({
+          roomId: currentRoomId,
+          geo: true,
+        })
+      }
     }
   }
 
@@ -699,6 +715,7 @@ const mapStateToProps = state => ({
   currentChat: state.messageReducer.currentChat,
   editedMessage: state.messageReducer.editMessage,
   replyMessage: state.messageReducer.replyMessage,
+  uploadMessages: state.messageReducer.uploadMessages,
   deleteMessage: state.messageReducer.deleteMessage,
   file: state.messageReducer.file,
   forwardMessage: state.messageReducer.forwardMessage,
@@ -714,6 +731,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
+  removePreloader: _ => dispatch(removePreloader(_)),
   setDialog: _ => dispatch(setDialog(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
