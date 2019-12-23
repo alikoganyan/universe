@@ -32,13 +32,7 @@ import {
   p_forward_message,
   p_reply_message,
 } from '../../constants/api'
-import {
-  setDialogs,
-  addUploadMessage,
-  removeUploadMessage,
-  // updateUploadMessageProgress,
-  setDialog,
-} from '../../actions/dialogsActions'
+import { setDialogs, setDialog } from '../../actions/dialogsActions'
 
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
@@ -452,35 +446,12 @@ class InputComponent extends Component {
   }
 
   _startSendingFile = async (formDataObject = {}, imageUri = '') => {
-    const {
-      currentChat,
-      currentRoomId,
-      addUploadMessage: addUploadMessageProp,
-      removeUploadMessage: removeUploadMessageProp,
-      // updateUploadMessageProgress: updateUploadMessageProgressProp,
-      user,
-      navigation,
-      messages,
-    } = this.props
+    const { currentChat, currentRoomId, navigation, messages } = this.props
     const form = new FormData()
     form.append('file', formDataObject)
     form.append('room', currentChat)
     // form.append('')
     const tempMessageId = Date.now()
-    // let prevProgress = 0
-    // const progressMultiplier = 10
-    addUploadMessageProp({
-      room: currentChat,
-      src: imageUri,
-      type: imageUri ? 'image' : 'file',
-      isUploaded: true,
-      created_at: new Date(),
-      sender: { ...user },
-      tempId: tempMessageId,
-      viewers: [],
-      enableUploadProgress: true,
-      uploadProgress: 0,
-    })
     this.props.addPreloader({
       src: formDataObject.uri,
       viewers: [1, 2, 3],
@@ -514,10 +485,6 @@ class InputComponent extends Component {
         this.props.removePreloader({
           roomId: currentRoomId,
           _id: tempMessageId,
-        })
-        removeUploadMessageProp({
-          room: currentChat,
-          tempId: tempMessageId,
         })
       },
     })
@@ -706,9 +673,6 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   addMessage: _ => dispatch(addMessage(_)),
-  addUploadMessage: _ => dispatch(addUploadMessage(_)),
-  removeUploadMessage: _ => dispatch(removeUploadMessage(_)),
-  // updateUploadMessageProgress: _ => dispatch(updateUploadMessageProgress(_)),
   addPreloader: _ => dispatch(addPreloader(_)),
   removePreloader: _ => dispatch(removePreloader(_)),
   fEditMessage: _ => dispatch(editMessage(_)),

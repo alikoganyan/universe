@@ -33,9 +33,10 @@ import {
   editMessage,
   forwardMessage,
   replyMessage,
-  setGeoLoading,
   setMessage,
   setFile,
+  addPreloader,
+  removePreloader,
 } from '../../actions/messageActions'
 import {
   p_send_file,
@@ -44,13 +45,7 @@ import {
   p_reply_message,
 } from '../../constants/api'
 
-import {
-  setDialogs,
-  addUploadMessage,
-  removeUploadMessage,
-  updateUploadMessageProgress,
-  setDialog,
-} from '../../actions/dialogsActions'
+import { setDialogs, setDialog } from '../../actions/dialogsActions'
 import sendRequest from '../../utils/request'
 import { socket } from '../../utils/socket'
 import FastImage from 'react-native-fast-image'
@@ -459,11 +454,8 @@ class InputComponent extends Component {
   _startSendingFile = (formDataObject = {}, imageUri = '') => {
     const {
       currentChat,
+      currentRoomId,
       currentDialog,
-      addUploadMessage: addUploadMessageProp,
-      removeUploadMessage: removeUploadMessageProp,
-      updateUploadMessageProgress: updateUploadMessageProgressProp,
-      user,
       setCurrentChat,
       navigation,
       messages,
@@ -476,19 +468,14 @@ class InputComponent extends Component {
       : form.append('receiver', currentDialog._id)
 
     const tempMessageId = Date.now()
-    let prevProgress = 0
-    const progressMultiplier = 10
-    addUploadMessageProp({
-      room: currentChat,
-      src: imageUri,
-      type: imageUri ? 'image' : 'file',
-      isUploaded: true,
+    this.props.addPreloader({
+      src: formDataObject.uri,
+      viewers: [1, 2, 3],
+      type: 'loader',
+      roomId: currentRoomId,
+      _id: tempMessageId,
       created_at: new Date(),
-      sender: { ...user },
-      tempId: tempMessageId,
-      viewers: [],
-      enableUploadProgress: true,
-      uploadProgress: 0,
+      isUploading: true,
     })
     sendRequest({
       r_path: p_send_file,
@@ -498,79 +485,26 @@ class InputComponent extends Component {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
-        onUploadProgress: progressEvent => {
-          const uploadProgress = Math.round(
-            (progressEvent.loaded * 100) / progressEvent.total,
-          )
-          if (uploadProgress >= prevProgress + progressMultiplier) {
-            prevProgress = uploadProgress
-            updateUploadMessageProgressProp({
-              room: currentChat,
-              tempId: tempMessageId,
-              uploadProgress,
-              isFile: !imageUri,
-            })
-          }
-        },
       },
       success: res => {
-        // socket.emit('file', {
-        //   dialog_id: res.dialog._id,
-        //   participant: currentRoom,
-        // })
         messages.push(res.message)
         this.props.setMessages(messages)
         navigation.getParam('scrollToBottom')()
+        this.props.removePreloader({
+          roomId: currentRoomId,
+          _id: tempMessageId,
+        })
         if (!currentChat) {
           setCurrentChat(res.dialog.room)
         }
         this.props.setFile({})
       },
       failFunc: err => {
-        Alert.alert('Ошибка', 'Что то пошло не так')
-        removeUploadMessageProp({
-          room: currentChat,
-          tempId: tempMessageId,
+        this.props.removePreloader({
+          roomId: currentRoomId,
+          _id: tempMessageId,
         })
-        // if (!result.cancelled) {
-        //   sendRequest({
-        //     r_path: p_send_file,
-        //     method: 'post',
-        //     attr: form,
-        //     config: {
-        //       headers: {
-        //         'Content-Type': 'multipart/form-data',
-        //       },
-        //       onUploadProgress: progressEvent => {
-        //         const uploadProgress = Math.round(
-        //           (progressEvent.loaded * 100) / progressEvent.total,
-        //         )
-        //         updateUploadMessageProgressProp({
-        //           room: currentChat,
-        //           tempId: tempMessageId,
-        //           uploadProgress,
-        //         })
-        //       },
-        //     },
-        //     success: res => {
-        //       socket.emit('file', {
-        //         room: currentChat,
-        //         dialog_id: res.dialog._id,
-        //         participant: res.dialog.participants[0]._id,
-        //       })
-        //       const newDialogs = [...dialogs]
-        //       const index = newDialogs.findIndex(e => e.room === currentChat)
-        //       newDialogs[index] = res.dialog
-        //       setDialogsProp(newDialogs)
-        //     },
-        //     failFunc: err => {
-        //       removeUploadMessageProp({
-        //         room: currentChat,
-        //         tempId: tempMessageId,
-        //       })
-        //     },
-        //   })
-        // }
+        Alert.alert('Ошибка', 'Что то пошло не так')
       },
     })
   }
@@ -587,12 +521,20 @@ class InputComponent extends Component {
   }
 
   _selectGeo = async () => {
-    const { navigation, currentDialog } = this.props
+    const { navigation, currentRoomId, currentDialog } = this.props
+    const tempMessageId = Date.now()
+    this.props.addPreloader({
+      viewers: [1, 2, 3],
+      type: 'loader',
+      roomId: currentRoomId,
+      _id: tempMessageId,
+      created_at: new Date(),
+      isUploading: true,
+      geo: true,
+    })
     const coords = await getGeoCoords()
     if (coords) {
       const { latitude, longitude } = coords
-
-      // this.props.setGeoLoading(currentChat)
       socket.emit('geo', {
         receiver: currentDialog._id,
         geo_data: { latitude, longitude },
@@ -730,9 +672,8 @@ const mapStateToProps = state => ({
 })
 const mapDispatchToProps = dispatch => ({
   fEditMessage: _ => dispatch(editMessage(_)),
-  addUploadMessage: _ => dispatch(addUploadMessage(_)),
-  removeUploadMessage: _ => dispatch(removeUploadMessage(_)),
-  updateUploadMessageProgress: _ => dispatch(updateUploadMessageProgress(_)),
+  addPreloader: _ => dispatch(addPreloader(_)),
+  removePreloader: _ => dispatch(removePreloader(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   setDialog: _ => dispatch(setDialog(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
@@ -742,7 +683,6 @@ const mapDispatchToProps = dispatch => ({
   replyMessage: _ => dispatch(replyMessage(_)),
   setMessage: _ => dispatch(setMessage(_)),
   setFile: _ => dispatch(setFile(_)),
-  setGeoLoading: _ => dispatch(setGeoLoading(_)),
 })
 export default connect(
   mapStateToProps,
