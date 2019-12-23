@@ -74,6 +74,20 @@ const UploadProgressContainer = styled(View)`
 
 // Vahe to do
 
+const DateWrapper = styled(View)`
+  width: 100%;
+  align-items: center;
+  margin-bottom: 5px;
+  margin-top: 5px;
+`
+
+const DateText = styled(Text)`
+  padding: 5px 10px;
+  background-color: #0003;
+  border-radius: 50px;
+  color: #fff;
+`
+
 const MyMessages = styled(View)`
   background: ${({ background }) => background || myMessage};
   border-radius: ${borderRadius};
@@ -278,7 +292,9 @@ class Message extends Component {
       size / 1024 > 1024
         ? `${(size / (1024 * 2)).toFixed(1)}МБ`
         : `${(size / 1024).toFixed(1)}КБ`
-    const messageRead = !!viewers.filter(e => e !== myId).length
+
+    const messageRead =
+      type !== 'date' ? !!viewers.filter(e => e !== myId).length : null
     if (isUploading) {
       return (
         <View style={[styles.container, { justifyContent: 'flex-end' }]}>
@@ -315,7 +331,13 @@ class Message extends Component {
         </View>
       )
     }
-
+    if (type === 'date') {
+      return (
+        <DateWrapper>
+          <DateText>{item.date}</DateText>
+        </DateWrapper>
+      )
+    }
     if (type === 'image') {
       this.readFile(
         src.split('file://')[1] ? src : `https://seruniverse.asmo.media${src}`,

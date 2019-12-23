@@ -71,6 +71,8 @@ class Content extends Component {
       scrolledMessages,
       buttonToDown,
       selectedMessages,
+      page,
+      totalPages,
     } = this.state
     const { search, editedMessage, currentRoomId, uploadMessages } = this.props
 
@@ -83,26 +85,6 @@ class Content extends Component {
       messages.push(...uploadMessages)
     }
 
-    // to do
-    // console.log(dialogs, currentChat, currentRoomId)
-
-    // const _dialog = Object.keys(dialog).length
-    //   ? dialog
-    //   : [...dialogs].find(e => {
-    //     if (!currentChat) {
-    //       return (
-    //         !e.isGroup &&
-    //         (e.creator._id === currentDialog._id ||
-    //           e.participants.some(p => p._id === currentDialog._id))
-    //       )
-    //     } else {
-    //       return e.room === currentChat
-    //     }
-    //     // if(e._id === currentRoomId) {
-    //     //   this.props.setDialog(e)
-    //     // }
-    //   })
-    // console.log(_dialog)
     const isEditing = !!editedMessage.text
     // const messages = _dialog ? [..._dialog.messages] : []
     const currentMessages = scrolledMessages.length
@@ -114,6 +96,43 @@ class Content extends Component {
     )
 
     reversedMessages = _.uniqBy(reversedMessages, '_id')
+
+    let previousDate
+    reversedMessages.forEach((m, index) => {
+      if (
+        previousDate &&
+        previousDate !==
+          `${
+            this.getDayOfMonth[new Date(m.created_at).getMonth() + 1]
+          } ${new Date(m.created_at).getDate()}`
+      ) {
+        reversedMessages.splice(index, 0, {
+          type: 'date',
+          date: previousDate,
+        })
+      }
+      previousDate = `${
+        this.getDayOfMonth[new Date(m.created_at).getMonth() + 1]
+      } ${new Date(m.created_at).getDate()}`
+    })
+
+    if (
+      page === totalPages &&
+      reversedMessages[reversedMessages.length - 1].type !== 'date'
+    ) {
+      reversedMessages.splice(reversedMessages.length, 0, {
+        type: 'date',
+        date: `${
+          this.getDayOfMonth[
+            new Date(
+              reversedMessages[reversedMessages.length - 1].created_at,
+            ).getMonth() + 1
+          ]
+        } ${new Date(
+          reversedMessages[reversedMessages.length - 1].created_at,
+        ).getDate()}`,
+      })
+    }
 
     return (
       <>
@@ -226,21 +245,6 @@ class Content extends Component {
         animationCompleted: true,
       })
     })
-
-    // const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
-
-    // if (dialogIndex > -1) {
-    //   dialogs[dialogIndex].messages = dialogs[dialogIndex].messages.map(
-    //     message => ({
-    //       ...message,
-    //       viewers: [...message.viewers, user._id],
-    //     }),
-    //   )
-    //   if (!Object.keys(dialog).length) {
-    //     this.props.setDialog(dialogs[dialogIndex])
-    //   }
-    //   setDialogs(dialogs)
-    // }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -258,18 +262,6 @@ class Content extends Component {
   }
 
   componentWillUnmount() {
-    // const { dialogs, setDialogs, user, currentChat } = this.props
-    // const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
-
-    // if (dialogIndex > -1) {
-    // //   dialogs[dialogIndex].messages = dialogs[dialogIndex].messages.map(
-    // //     message => ({
-    // //       ...message,
-    // //       viewers: [...message.viewers, user._id],
-    // //     }),
-    // //   )
-    // //   setDialogs(dialogs)
-    // // }
     this.props.setDialog({})
   }
 
@@ -372,7 +364,9 @@ class Content extends Component {
 
   handleScroll = () => {
     const { switcher, nextPage, scrolledMessages } = this.state
-    const { messages } = this.props
+    let { messages } = this.props
+    messages = _.uniqBy(messages, '_id')
+
     if (switcher && nextPage) {
       if (!scrolledMessages.length) {
         this.setState({ page: Math.floor(messages.length / 30) + 1 })
@@ -462,10 +456,25 @@ class Content extends Component {
     }
   }
 
+  getDayOfMonth = {
+    1: 'Январь',
+    2: 'Февраль',
+    3: 'Март',
+    4: 'Апрель',
+    5: 'Май',
+    6: 'Июнь',
+    7: 'Июль',
+    8: 'Август',
+    9: 'Сентябрь',
+    10: 'Октябрь',
+    11: 'Ноябрь',
+    12: 'Декабрь',
+  }
+
   onViewableItemsChanged = ({ viewableItems, changed }) => {
     const { currentDate } = this.state
     const item = viewableItems[viewableItems.length - 1]
-    if (item) {
+    if (item.item.type !== 'date') {
       const [date] =
         typeof item.item.created_at === 'string'
           ? item.item.created_at.split('T')

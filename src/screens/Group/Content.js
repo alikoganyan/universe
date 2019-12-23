@@ -73,6 +73,8 @@ class Content extends Component {
       scrolledMessages,
       buttonToDown,
       selectedMessages,
+      page,
+      totalPages,
     } = this.state
     const { search, editedMessage, uploadMessages, currentRoomID } = this.props
 
@@ -94,6 +96,39 @@ class Content extends Component {
     )
     reversedMessages = _.uniqBy(reversedMessages, '_id')
 
+    let previousDate
+    reversedMessages.forEach((m, index) => {
+      const currentDate = `${
+        this.getDayOfMonth[new Date(m.created_at).getMonth() + 1]
+      } ${new Date(m.created_at).getDate()}`
+      if (previousDate && previousDate !== currentDate) {
+        reversedMessages.splice(index, 0, {
+          type: 'date',
+          date: previousDate,
+        })
+      }
+      previousDate = `${
+        this.getDayOfMonth[new Date(m.created_at).getMonth() + 1]
+      } ${new Date(m.created_at).getDate()}`
+    })
+
+    if (
+      page === totalPages &&
+      reversedMessages[reversedMessages.length - 1].type !== 'date'
+    ) {
+      reversedMessages.splice(reversedMessages.length, 0, {
+        type: 'date',
+        date: `${
+          this.getDayOfMonth[
+            new Date(
+              reversedMessages[reversedMessages.length - 1].created_at,
+            ).getMonth() + 1
+          ]
+        } ${new Date(
+          reversedMessages[reversedMessages.length - 1].created_at,
+        ).getDate()}`,
+      })
+    }
     return (
       <>
         <Wrapper search={search}>
@@ -115,18 +150,17 @@ class Content extends Component {
               }}
               renderItem={({ item, index }) => {
                 let participant
-                if (item.type !== 'loader') {
+                if (item.type !== 'loader' && item.type !== 'date') {
                   participant = participants.find(
                     participant => participant._id === item.sender._id,
                   )
                 }
-                // console.log(item)
                 return (
                   <Message
                     selected={selectedMessages === item._id ? true : false}
                     key={index}
                     withImage
-                    read={!!item.viewers.length}
+                    read={item.type !== 'date' ? !item.viewers.length : null}
                     isGroup
                     item={item}
                     color={participant && participant.color}
@@ -238,7 +272,8 @@ class Content extends Component {
 
   handleScroll = () => {
     const { switcher, nextPage, scrolledMessages } = this.state
-    const { messages } = this.props
+    let { messages } = this.props
+    messages = _.uniqBy(messages, '_id')
     if (switcher && nextPage) {
       if (!scrolledMessages.length) {
         this.setState({ page: Math.floor(messages.length / 30) + 1 })
@@ -458,10 +493,25 @@ class Content extends Component {
     }
   }
 
+  getDayOfMonth = {
+    1: 'Январь',
+    2: 'Февраль',
+    3: 'Март',
+    4: 'Апрель',
+    5: 'Май',
+    6: 'Июнь',
+    7: 'Июль',
+    8: 'Август',
+    9: 'Сентябрь',
+    10: 'Октябрь',
+    11: 'Ноябрь',
+    12: 'Декабрь',
+  }
+
   onViewableItemsChanged = ({ viewableItems, changed }) => {
     const { currentDate } = this.state
     const item = viewableItems[viewableItems.length - 1]
-    if (item) {
+    if (item && item.item.type !== 'date') {
       const [date] =
         typeof item.item.created_at === 'string'
           ? item.item.created_at.split('T')
