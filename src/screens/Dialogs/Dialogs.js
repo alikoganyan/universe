@@ -399,7 +399,7 @@ class Dialogs extends Component {
   }
 
   newMessageSocket = e => {
-    const { dialog, user } = this.props
+    const { dialog, dialogs } = this.props
     try {
       const message =
         e && e._id
@@ -415,16 +415,16 @@ class Dialogs extends Component {
               viewers: [],
             }
       if (Object.keys(dialog).length) {
-        if (e.dialog === dialog._id) {
+        if (e.dialog === dialog._id && e.company === dialog.company) {
           this.props.setMessage(message)
           const updatedCurrentDialog = { ...dialog }
           updatedCurrentDialog.messages.push(message)
-          // this.props.setDialog(updatedCurrentDialog)
           this.sortedDialog(updatedCurrentDialog)
         }
       } else {
-        socket.emit('get_dialogs', { id: user._id })
-        // to do
+        const currentDialog = dialogs.find(d => d._id === e.dialog)
+        currentDialog.messages.push(message)
+        this.sortedDialog(currentDialog)
         this.props.setCurrentRoomId(e.dialog)
       }
     } catch (err) {
