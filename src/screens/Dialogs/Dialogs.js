@@ -22,6 +22,7 @@ import {
   setDialogs,
   setCurrentDialogs,
   setDialog,
+  setCompanyLoading,
 } from '../../actions/dialogsActions'
 import {
   setAllUsers,
@@ -35,6 +36,7 @@ import TabPreHeader from '../../common/TabPreHeader'
 import sendRequest from '../../utils/request'
 import Company from '../../common/Company'
 import { setTaskList } from '../../actions/tasksActions'
+import ScreenLoader from '../../common/ScreenLoader'
 
 const { Colors } = helper
 const { blue, grey2, lightColor } = Colors
@@ -116,7 +118,7 @@ class Dialogs extends Component {
   }
 
   render() {
-    const { dialogs, navigation } = this.props
+    const { dialogs, navigation, companyLoading } = this.props
     const { congratulations } = this.state
 
     const opacity = this.scrollY.interpolate({
@@ -131,6 +133,7 @@ class Dialogs extends Component {
           title="Диалоги"
           opacity={opacity}
         />
+        {companyLoading && <ScreenLoader />}
         <Wrapper>
           {congratulations ? (
             <Congratulations
@@ -186,8 +189,9 @@ class Dialogs extends Component {
   componentDidMount() {
     this.getProfile()
 
-    const { user, removeAllPreloader } = this.props
-    removeAllPreloader()
+    const { user, setCompanyLoading } = this.props
+    setCompanyLoading(false)
+    this.props.removeAllPreloader()
     // navigation.navigate('NewTask') // restore
     // clearInterval(this.interval)
     // this.interval = setInterval(() => {
@@ -336,7 +340,7 @@ class Dialogs extends Component {
   }
 
   setDialogsSocket = e => {
-    const { setDialogs } = this.props
+    const { setDialogs, setCompanyLoading } = this.props
     const newDialogs = e.dialogs.length ? [...e.dialogs] : []
     const newDialogsSorted = newDialogs.length
       ? // eslint-disable-next-line array-callback-return
@@ -380,6 +384,7 @@ class Dialogs extends Component {
         })
       : []
     setDialogs(newDialogsSorted)
+    setCompanyLoading(false)
     this.props.setReset(true)
   }
 
@@ -440,6 +445,7 @@ class Dialogs extends Component {
     const { dialogs, setDialogs } = this.props
     const newDialogs = [...dialogs]
     const newDialog = { ...dialog }
+    this.props.setCompanyLoading(false)
     if (newDialog) {
       newDialogs[
         newDialogs.findIndex(event => event._id === dialog._id)
@@ -605,6 +611,7 @@ class Dialogs extends Component {
 }
 
 const mapStateToProps = state => ({
+  companyLoading: state.dialogsReducer.companyLoading,
   dialogs: state.dialogsReducer.dialogs,
   message: state.messageReducer.message,
   dialog: state.dialogsReducer.dialog,
@@ -631,6 +638,7 @@ const mapDispatchToProps = dispatch => ({
   setCompanies: _ => dispatch(setCompanies(_)),
   setTaskList: _ => dispatch(setTaskList(_)),
   setReset: _ => dispatch(setReset(_)),
+  setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
 })
 export default connect(
   mapStateToProps,

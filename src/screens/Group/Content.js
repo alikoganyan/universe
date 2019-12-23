@@ -84,7 +84,7 @@ class Content extends Component {
       uploadMessages.filter(m => m.roomId === currentRoomID),
     )
     if (uploadMessages.length) {
-      messages.push(...uploadMessages)
+      messages.push(...uploadMessages.filter(m => m.roomId === currentRoomID))
     }
     const isEditing = !!editedMessage.text
     const currentMessages = scrolledMessages.length

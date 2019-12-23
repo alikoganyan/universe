@@ -5,15 +5,19 @@ import { ActionSheetProvider } from '@expo/react-native-action-sheet'
 import SafeAreaView from '../../common/SafeAreaView'
 import Header from './Header'
 import Content from './Content'
+import { connect } from 'react-redux'
+import ScreenLoader from '../../common/ScreenLoader'
 
 const Wrapper = styled(View)`
   height: 100%;
 `
-export default class GroupInfo extends Component {
+class GroupInfo extends Component {
   render() {
+    const { companyLoading } = this.props
     return (
       <ActionSheetProvider>
         <SafeAreaView>
+          {companyLoading && <ScreenLoader />}
           <Wrapper>
             <Header navigate={this.props.navigation.navigate} />
             <Content navigate={this.props.navigation.navigate} />
@@ -28,3 +32,9 @@ export default class GroupInfo extends Component {
     navigation.goBack()
   }
 }
+
+const mapStateToProps = state => ({
+  companyLoading: state.dialogsReducer.companyLoading,
+})
+
+export default connect(mapStateToProps)(GroupInfo)

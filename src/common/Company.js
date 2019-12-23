@@ -14,7 +14,7 @@ import helper from '../utils/helpers'
 import sendRequest from '../utils/request'
 import { setTaskList } from '../actions/tasksActions'
 import { setCompanies, setContacts, setUser } from '../actions/userActions'
-import { setDialogs } from '../actions/dialogsActions'
+import { setDialogs, setCompanyLoading } from '../actions/dialogsActions'
 import DefaultAvatar from './DefaultAvatar'
 import { setNews } from '../actions/newsActions'
 import { socket } from '../utils/socket'
@@ -152,6 +152,7 @@ class Company extends Component {
 
   changeCompany = id => {
     this.setState({ modalVisible: false })
+    this.props.setCompanyLoading(true)
     sendRequest({
       r_path: '/profile/change_company',
       method: 'patch',
@@ -177,8 +178,13 @@ class Company extends Component {
             this.props.setNews(res.data.news)
             socket.emit('get_dialogs', { id: userData.user._id })
           },
-          failFunc: () => {},
+          failFunc: () => {
+            this.props.setCompanyLoading(false)
+          },
         })
+      },
+      failFunc: () => {
+        this.props.setCompanyLoading(false)
       },
       full_res: true,
     })
@@ -215,6 +221,7 @@ const mapDispatchToProps = dispatch => ({
   setCompanies: _ => dispatch(setCompanies(_)),
   setUser: _ => dispatch(setUser(_)),
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
+  setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
 })
 
 export default connect(
