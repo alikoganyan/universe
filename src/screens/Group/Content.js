@@ -75,6 +75,7 @@ class Content extends Component {
       selectedMessages,
       page,
       totalPages,
+      hideDate,
     } = this.state
     const { search, editedMessage, uploadMessages, currentRoomID } = this.props
 
@@ -136,6 +137,8 @@ class Content extends Component {
           <StyledImageBackground source={chatBg}>
             <FlatList
               onScroll={this.checkScrollPosition}
+              onMomentumScrollBegin={this.showDate}
+              onMomentumScrollEnd={this.hideDate}
               onEndReached={this.handleScroll}
               ref="flatList"
               style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
@@ -198,7 +201,7 @@ class Content extends Component {
             ) : null}
           </StyledImageBackground>
         </Wrapper>
-        {!!currentDate && (
+        {!!currentDate && hideDate && (
           <DateContainer>
             <DateView>
               <Text>{this.getMessageDate()}</Text>
@@ -234,6 +237,7 @@ class Content extends Component {
     switcherDown: true,
     buttonToDown: false,
     selectedMessages: null,
+    hideDate: false,
   }
 
   componentDidMount() {
@@ -284,7 +288,24 @@ class Content extends Component {
     }
   }
 
-  componentWillUnmount() {}
+  componentWillUnmount() {
+    this.props.setDialog({})
+  }
+
+  toggleDate = null
+
+  showDate = () => {
+    if (this.toggleDate) {
+      clearTimeout(this.toggleDate)
+    }
+    this.setState({ hideDate: true })
+  }
+  hideDate = () => {
+    this.toggleDate = setTimeout(() => {
+      this.setState({ hideDate: false })
+      this.toggleDate = null
+    }, 2000)
+  }
 
   _scrollToBottom = () => {
     const { scrolledMessages } = this.state
