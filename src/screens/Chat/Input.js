@@ -213,8 +213,8 @@ class InputComponent extends Component {
         <ActionSheet
           ref={node => (this.ActionSheetPlus = node)}
           title="Вложение"
-          options={['Файл', 'Галерея', 'Мою локацию', 'Отменить']}
-          cancelButtonIndex={2}
+          options={['Документы', 'Галерея', 'Мою локацию', 'Отменить']}
+          cancelButtonIndex={3}
           onPress={index => {
             switch (index) {
               case 0:
