@@ -3,11 +3,13 @@ import RNImagePicker from 'react-native-image-picker'
 import RNPermissions from 'react-native-permissions'
 
 const pickerOptions = {
+  /*
   title: null,
   takePhotoButtonTitle: 'Камера...',
   chooseFromLibraryButtonTitle: 'Выбрать из галереи...',
   cancelButtonTitle: 'Отмена',
-  mediaType: 'photo',
+ */
+  mediaType: 'mixed',
   noData: true, // disable base64
   maxWidth: 300,
   maxHeight: 300,
@@ -27,8 +29,8 @@ const pickerOptions = {
 }
 
 const getFormDataFromPath = (path, mediaType) => {
-  let name = '',
-    type = ''
+  let name
+  let type
   name = path
     ? path.substring(path.lastIndexOf('/') + 1)
     : mediaType === 'photo'
@@ -70,9 +72,9 @@ const parseImageResponse = (response = {}, mediaType) => {
   }
 }
 
-const getImageFromPicker = (success, reject, mergeOptions = {}) => {
+const getImageFromCamera = (success, reject, mergeOptions = {}) => {
   const options = { ...pickerOptions, ...mergeOptions }
-  RNImagePicker.showImagePicker(options, response => {
+  RNImagePicker.launchCamera(options, response => {
     if (response.didCancel) {
       reject && reject()
       return null
@@ -115,4 +117,49 @@ const getImageFromPicker = (success, reject, mergeOptions = {}) => {
   })
 }
 
-export default getImageFromPicker
+const getImageFromGallery = (success, reject, mergeOptions = {}) => {
+  const options = { ...pickerOptions, ...mergeOptions }
+  RNImagePicker.launchImageLibrary(options, response => {
+    if (response.didCancel) {
+      reject && reject()
+      return null
+    } else if (response.error) {
+      if (Platform.OS === 'ios') {
+        if (RNPermissions.canOpenSettings()) {
+          Alert.alert(
+            'Ошибка',
+            'Для выбора фото из галереи или снимка камеры необходимо разрешить приложению доступ к соответствующим разделам в настройках',
+            [
+              { text: 'ОК', onPress: () => {} },
+              {
+                text: 'Настройки',
+                onPress: () => {
+                  RNPermissions.openSettings()
+                },
+              },
+            ],
+          )
+        } else {
+          Alert.alert(
+            'Ошибка',
+            'Для выбора фото из галереи или снимка камеры необходимо разрешить приложению доступ к соответствующим разделам',
+          )
+        }
+      } else {
+        Alert.alert(
+          'Ошибка',
+          'Для выбора фото из галереи или снимка камеры необходимо разрешить приложению доступ к соответствующим разделам',
+        )
+      }
+      reject && reject()
+      return null
+    } else if (response.customButton) {
+      reject && reject()
+      return null
+    } else {
+      success && success(parseImageResponse(response, options.mediaType))
+    }
+  })
+}
+
+export { getImageFromCamera, getImageFromGallery }

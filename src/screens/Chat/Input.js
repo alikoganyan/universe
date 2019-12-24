@@ -11,7 +11,10 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ActionSheet from 'react-native-actionsheet'
 import _ from 'lodash'
-import getImageFromPicker from '../../utils/ImagePicker'
+import {
+  getImageFromCamera,
+  getImageFromGallery,
+} from '../../utils/ImagePicker'
 import RNDocumentPicker from 'react-native-document-picker'
 import getGeoCoords from '../../utils/geolocation'
 import {
@@ -210,7 +213,7 @@ class InputComponent extends Component {
         <ActionSheet
           ref={node => (this.ActionSheetPlus = node)}
           title="Вложение"
-          options={['Файл', 'Мою локацию', 'Отменить']}
+          options={['Файл', 'Галерея', 'Мою локацию', 'Отменить']}
           cancelButtonIndex={2}
           onPress={index => {
             switch (index) {
@@ -218,6 +221,9 @@ class InputComponent extends Component {
                 this._selectFile()
                 break
               case 1:
+                this._selectGallery()
+                break
+              case 2:
                 this._selectGeo()
                 break
               default:
@@ -439,7 +445,20 @@ class InputComponent extends Component {
   }
 
   _selectMedia = async (options = {}) => {
-    getImageFromPicker(
+    getImageFromCamera(
+      result => {
+        const { imageFormData = {}, uri = '' } = result
+        let imageSrc = /\.(gif|jpg|jpeg|tiff|png)$/i.test(uri) ? uri : ''
+
+        this._startSendingFile(imageFormData, imageSrc)
+      },
+      () => {},
+      options,
+    )
+  }
+
+  _selectGallery = async (options = {}) => {
+    getImageFromGallery(
       result => {
         const { imageFormData = {}, uri = '' } = result
         let imageSrc = /\.(gif|jpg|jpeg|tiff|png)$/i.test(uri) ? uri : ''
@@ -512,7 +531,7 @@ class InputComponent extends Component {
   _selectFile = async () => {
     try {
       const data = await RNDocumentPicker.pick({
-        type: [RNDocumentPicker.types.allFiles],
+        type: [RNDocumentPicker.types.allFiles, '.xls .pdf .pages .numbers'],
       })
       if (data) {
         this._startSendingFile(data, data.uri)
