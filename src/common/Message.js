@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import {
   ActivityIndicator,
+  Linking,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -22,6 +23,7 @@ import FastImage from 'react-native-fast-image'
 // import { FileSystem } from 'expo';
 // import RNFS from 'react-native-fs'
 import helper from '../utils/helpers'
+import Hyperlink from 'react-native-hyperlink'
 // import { SingleImage } from 'react-native-zoom-lightbox'
 import LinearGradient from 'react-native-linear-gradient'
 import Forwarded from './Forwarded'
@@ -504,7 +506,20 @@ class Message extends Component {
                     padding
                   />
                 )}
-                <MessageText>{text}</MessageText>
+
+                <Hyperlink
+                  linkStyle={{
+                    color: '#2980b9',
+                    textDecorationLine: 'underline',
+                  }}
+                  onPress={(url, text) => {
+                    Linking.openURL(url).catch(err =>
+                      alert('An error occurred', err),
+                    )
+                  }}
+                >
+                  <MessageText>{text}</MessageText>
+                </Hyperlink>
                 <MessageInfo>
                   {edited ? <MessageEdited>Изменено </MessageEdited> : null}
                   <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
