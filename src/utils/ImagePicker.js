@@ -11,9 +11,9 @@ const pickerOptions = {
  */
   mediaType: 'mixed',
   noData: true, // disable base64
-  maxWidth: 300,
-  maxHeight: 300,
-  quality: 0.8,
+  maxWidth: 1920,
+  maxHeight: 1080,
+  quality: 1,
   storageOptions: {
     skipBackup: true,
   },
