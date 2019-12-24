@@ -85,8 +85,6 @@ const DateWrapper = styled(View)`
 
 const DateText = styled(Text)`
   padding: 5px 10px;
-  background-color: #0003;
-  border-radius: 50px;
   color: #fff;
 `
 
@@ -336,7 +334,9 @@ class Message extends Component {
     if (type === 'date') {
       return (
         <DateWrapper>
-          <DateText>{item.date}</DateText>
+          <View style={{ backgroundColor: '#0003', borderRadius: 50 }}>
+            <DateText>{item.date}</DateText>
+          </View>
         </DateWrapper>
       )
     }
