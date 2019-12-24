@@ -114,6 +114,7 @@ class Content extends Component {
 
     if (
       page === totalPages &&
+      reversedMessages.length &&
       reversedMessages[reversedMessages.length - 1].type !== 'date'
     ) {
       reversedMessages.splice(reversedMessages.length, 0, {
