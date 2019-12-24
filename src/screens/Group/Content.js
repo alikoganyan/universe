@@ -533,7 +533,7 @@ class Content extends Component {
   onViewableItemsChanged = ({ viewableItems, changed }) => {
     const { currentDate } = this.state
     const item = viewableItems[viewableItems.length - 1]
-    if (item && item.item.type !== 'date') {
+    if (item && item.item && item.item.type !== 'date') {
       const [date] =
         typeof item.item.created_at === 'string'
           ? item.item.created_at.split('T')
