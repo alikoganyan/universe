@@ -584,7 +584,19 @@ class Message extends Component {
                   padding
                 />
               )}
-              <MessageText>{text}</MessageText>
+              <Hyperlink
+                linkStyle={{
+                  color: '#2980b9',
+                  textDecorationLine: 'underline',
+                }}
+                onPress={(url, text) => {
+                  Linking.openURL(url).catch(err =>
+                    alert('An error occurred', err),
+                  )
+                }}
+              >
+                <MessageText>{text}</MessageText>
+              </Hyperlink>
               <MessageInfo>
                 {edited ? <MessageEdited>Изменено </MessageEdited> : null}
                 <MessageDate>{finalTime}</MessageDate>
