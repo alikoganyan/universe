@@ -74,9 +74,19 @@ class Content extends Component {
       page,
       totalPages,
     } = this.state
-    const { search, editedMessage, currentRoomId, uploadMessages } = this.props
+    const {
+      search,
+      editedMessage,
+      currentRoomId,
+      uploadMessages,
+      dialog,
+    } = this.props
 
     let { messages } = this.props
+
+    if (!messages.length && Object.keys(dialog).length) {
+      this.props.setMessages(dialog.messages)
+    }
     messages = messages.filter(m => m.type !== 'loader')
     messages = messages.concat(
       uploadMessages.filter(m => m.roomId === currentRoomId),

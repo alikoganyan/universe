@@ -506,9 +506,14 @@ class InputComponent extends Component {
         },
       },
       success: res => {
-        messages.push(res.message)
-        this.props.setMessages(messages)
-        navigation.getParam('scrollToBottom')()
+        if (res.message) {
+          messages.push(res.message)
+          this.props.setMessages(messages)
+          navigation.getParam('scrollToBottom')()
+        }
+        if (res.dialog) {
+          this.props.setDialog(res.dialog)
+        }
         this.props.removePreloader({
           roomId: currentRoomId,
           _id: tempMessageId,
@@ -616,8 +621,14 @@ class InputComponent extends Component {
     const {
       forwardedMessage: { _id },
       currentRoomId,
+      dialog,
+      currentRoom,
     } = this.props
-    const bodyReq = { message_id: _id, dialog_id: currentRoomId }
+    const bodyReq = {
+      message_id: _id,
+      dialog_id: currentRoomId,
+      receiver: Object.keys(dialog).length ? currentRoom : null,
+    }
     sendRequest({
       r_path: p_forward_message,
       method: 'post',
