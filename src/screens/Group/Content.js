@@ -304,7 +304,7 @@ class Content extends Component {
     this.toggleDate = setTimeout(() => {
       this.setState({ hideDate: false })
       this.toggleDate = null
-    }, 2000)
+    }, 300)
   }
 
   _scrollToBottom = () => {
