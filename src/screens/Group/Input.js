@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import RNDocumentPicker from 'react-native-document-picker'
 import _ from 'lodash'
-import getImageFromPicker from '../../utils/ImagePicker'
+import getImageFromCamera from '../../utils/ImagePicker'
 import getGeoCoords from '../../utils/geolocation'
 import ActionSheet from 'react-native-actionsheet'
 import {
@@ -434,7 +434,7 @@ class InputComponent extends Component {
   }
 
   _selectMedia = async (options = {}) => {
-    getImageFromPicker(
+    getImageFromCamera(
       result => {
         const { imageFormData = {}, uri = '' } = result
         let imageSrc = /\.(gif|jpg|jpeg|tiff|png)$/i.test(uri) ? uri : ''

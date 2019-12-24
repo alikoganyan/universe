@@ -13,7 +13,7 @@ import helper from '../../utils/helpers'
 import { setUser } from '../../actions/userActions'
 import Button from '../../common/Button'
 // import { ImagePicker } from 'expo';
-import getImageFromPicker from '../../utils/ImagePicker'
+import getImageFromCamera from '../../utils/ImagePicker'
 import {
   p_update_group,
   p_delete_group,
@@ -227,7 +227,7 @@ class Content extends Component {
   }
 
   selectPhoto = async () => {
-    getImageFromPicker(result => {
+    getImageFromCamera(result => {
       const { imageFormData = {} } = result
       if (!result.cancelled) {
         this.setState({ imageFormData, image: imageFormData.uri })
