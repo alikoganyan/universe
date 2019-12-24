@@ -4,7 +4,10 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import RNDocumentPicker from 'react-native-document-picker'
 import _ from 'lodash'
-import getImageFromCamera from '../../utils/ImagePicker'
+import {
+  getImageFromCamera,
+  getImageFromGallery,
+} from '../../utils/ImagePicker'
 import getGeoCoords from '../../utils/geolocation'
 import ActionSheet from 'react-native-actionsheet'
 import {
@@ -197,7 +200,7 @@ class InputComponent extends Component {
         <ActionSheet
           ref={node => (this.ActionSheetPlus = node)}
           title="Вложение"
-          options={['Файл', 'Мою локацию', 'Отменить']}
+          options={['Документы', 'Галерея', 'Мою локацию', 'Отменить']}
           cancelButtonIndex={2}
           onPress={index => {
             switch (index) {
@@ -205,6 +208,9 @@ class InputComponent extends Component {
                 this._selectFile()
                 break
               case 1:
+                this._selectGallery()
+                break
+              case 2:
                 this._selectGeo()
                 break
               default:
@@ -438,6 +444,19 @@ class InputComponent extends Component {
       result => {
         const { imageFormData = {}, uri = '' } = result
         let imageSrc = /\.(gif|jpg|jpeg|tiff|png)$/i.test(uri) ? uri : ''
+        this._startSendingFile(imageFormData, imageSrc)
+      },
+      () => {},
+      options,
+    )
+  }
+
+  _selectGallery = async (options = {}) => {
+    getImageFromGallery(
+      result => {
+        const { imageFormData = {}, uri = '' } = result
+        let imageSrc = /\.(gif|jpg|jpeg|tiff|png)$/i.test(uri) ? uri : ''
+
         this._startSendingFile(imageFormData, imageSrc)
       },
       () => {},
