@@ -607,7 +607,12 @@ class Content extends Component {
       }, 2000)
     }
 
-    const { navigate, dialog, currentDialog, onShowPreviewImages } = this.props
+    const {
+      navigate,
+      currentDialog,
+      onShowPreviewImages,
+      messages,
+    } = this.props
     const { first_name, last_name, phone_number } = currentDialog
     const {
       _id = 0,
@@ -639,7 +644,7 @@ class Content extends Component {
         break
       case 'image':
         {
-          const dialogMessages = dialog.messages || []
+          const dialogMessages = messages || []
           let dialogImages = []
           let imageIndex = 0
           dialogMessages.forEach(message => {

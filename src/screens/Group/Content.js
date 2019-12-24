@@ -632,7 +632,7 @@ class Content extends Component {
         this.setState({ selectedMessages: false })
       }, 2000)
     }
-    const { navigate, dialog, currentDialog } = this.props
+    const { navigate, currentDialog, messages } = this.props
     const { name: dialogName } = currentDialog
     const {
       _id = 0,
@@ -664,7 +664,7 @@ class Content extends Component {
         break
       case 'image':
         {
-          const dialogMessages = dialog.messages || []
+          const dialogMessages = messages || []
           let dialogImages = []
           let imageIndex = 0
           dialogMessages.forEach(message => {
