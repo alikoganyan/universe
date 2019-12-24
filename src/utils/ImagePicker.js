@@ -16,7 +16,6 @@ const pickerOptions = {
   quality: 0.8,
   storageOptions: {
     skipBackup: true,
-    path: 'images',
   },
   permissionDenied: {
     // Android
