@@ -70,7 +70,7 @@ const RecieverComponent = props => {
       <View
         style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}
       >
-        {image === '/images/default_avatar.jpg' ? (
+        {!image ? (
           <DefaultAvatar />
         ) : (
           <ImageComponent
@@ -227,6 +227,7 @@ class Content extends Component {
       receivers,
       text,
     }
+
     sendRequest({
       r_path: p_news,
       method: 'patch',
