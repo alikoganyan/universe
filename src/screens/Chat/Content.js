@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import RNFetchBlob from 'rn-fetch-blob'
+
 import {
   View,
   Text,
@@ -8,6 +10,7 @@ import {
   Alert,
   Clipboard,
   TouchableOpacity,
+  Platform,
 } from 'react-native'
 
 import Image from 'react-native-image-progress'
@@ -34,6 +37,7 @@ import { d_message } from '../../constants/api'
 import _ from 'lodash'
 import * as ICONS from '../../assets/icons'
 import Loader from '../../common/Loader'
+import RNPermissions from 'react-native-permissions'
 
 const {
   Colors: { gray2 },
@@ -444,6 +448,83 @@ class Content extends Component {
     }
   }
 
+  download = async item => {
+    let status
+    await RNPermissions.check('storage').then(async response => {
+      status = response
+      if (response !== 'authorized') {
+        await RNPermissions.request('storage').then(response => {
+          status = response
+        })
+      }
+      if (status !== 'authorized') {
+        if (Platform.OS === 'ios') {
+          if (RNPermissions.canOpenSettings()) {
+            Alert.alert(
+              'Ошибка',
+              'Для загрузки файла необходимо разрешить приложению доступ к соответствующим разделам в настройках',
+              [
+                { text: 'ОК', onPress: () => {} },
+                {
+                  text: 'Настройки',
+                  onPress: () => {
+                    RNPermissions.openSettings()
+                  },
+                },
+              ],
+            )
+          } else {
+            Alert.alert(
+              'Ошибка',
+              'Для загрузки файла необходимо разрешить приложению доступ к соответствующим разделам',
+            )
+          }
+        } else {
+          Alert.alert(
+            'Ошибка',
+            'Для загрузки файла необходимо разрешить приложению доступ к соответствующим разделам',
+          )
+        }
+      } else {
+        try {
+          let url = `https://testser.univ.team${item.src}`
+          let fileName = item.filename
+          let date = new Date()
+          let ext = this.extention(url)
+          ext = `.${ext[0]}`
+          const { config, fs } = RNFetchBlob
+          let PictureDir = fs.dirs.PictureDir
+          let options = {
+            fileCache: true,
+            addAndroidDownloads: {
+              title: fileName,
+              useDownloadManager: true,
+              notification: true,
+              path: `${PictureDir}/${Math.floor(
+                date.getTime() + date.getSeconds() / 2,
+              )}${ext}`,
+              description: fileName,
+            },
+          }
+          config(options)
+            .fetch('GET', url)
+            .then(res => {
+              Alert.alert('Success Downloaded')
+            })
+        } catch (error) {
+          Alert.alert(
+            'Ошибка',
+            error.message ? String(error.message) : String(error),
+          )
+        }
+      }
+    })
+  }
+
+  extention = filename => {
+    return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined
+  }
+
   getMessageDate = () => {
     const { currentDate } = this.state
     const [now] = new Date().toISOString().split('T')
@@ -607,6 +688,7 @@ class Content extends Component {
   }
 
   _onPressMessage = item => {
+    this.download(item)
     if (item.reply && item.reply._id) {
       const index = this.refs.flatList.props.data.findIndex(
         el => el._id === item.reply._id,
