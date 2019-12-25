@@ -290,7 +290,7 @@ class Message extends Component {
     const finalTime = moment(created_at).format('HH:mm')
     const fileSize =
       size / 1024 > 1024
-        ? `${(size / (1024 * 2)).toFixed(1)}МБ`
+        ? `${(size / (1024 * 1024)).toFixed(1)}МБ`
         : `${(size / 1024).toFixed(1)}КБ`
 
     const messageRead =

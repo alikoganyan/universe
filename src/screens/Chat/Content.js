@@ -487,7 +487,7 @@ class Content extends Component {
         }
       } else {
         try {
-          let url = `https://testser.univ.team${item.src}`
+          let url = `https://seruniverse.asmo.media${item.src}`
           let fileName = item.filename
           let date = new Date()
           let ext = this.extention(url)
@@ -509,11 +509,11 @@ class Content extends Component {
           config(options)
             .fetch('GET', url)
             .then(res => {
-              Alert.alert('Success Downloaded')
+              Alert.alert('Успешно сохранено')
             })
         } catch (error) {
           Alert.alert(
-            'Ошибка',
+            'Что то пошло не так',
             error.message ? String(error.message) : String(error),
           )
         }
@@ -688,7 +688,6 @@ class Content extends Component {
   }
 
   _onPressMessage = item => {
-    this.download(item)
     if (item.reply && item.reply._id) {
       const index = this.refs.flatList.props.data.findIndex(
         el => el._id === item.reply._id,
@@ -803,12 +802,14 @@ class Content extends Component {
       action: () => this.forwardMessage(message),
     })
 
-    // if (message._id && message.type === 'image') {
-    //   actions.push({
-    //     title: 'Сохранить',
-    //     action: () => {},
-    //   })
-    // }
+    if (message._id && message.type === 'file') {
+      actions.push({
+        title: 'Сохранить',
+        action: () => {
+          this.download(message)
+        },
+      })
+    }
     if (message._id && message.sender._id === user._id) {
       actions.push({
         title: 'Удалить',

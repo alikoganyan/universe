@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   InteractionManager,
   Alert,
+  Platform,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -34,6 +35,8 @@ import sendRequest from '../../utils/request'
 import Loader from '../../common/Loader'
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 import Image from 'react-native-image-progress'
+import RNPermissions from 'react-native-permissions'
+import RNFetchBlob from 'rn-fetch-blob'
 
 const {
   Colors: { gray2 },
@@ -326,6 +329,83 @@ class Content extends Component {
         viewPosition: 1,
       })
     }
+  }
+
+  download = async item => {
+    let status
+    await RNPermissions.check('storage').then(async response => {
+      status = response
+      if (response !== 'authorized') {
+        await RNPermissions.request('storage').then(response => {
+          status = response
+        })
+      }
+      if (status !== 'authorized') {
+        if (Platform.OS === 'ios') {
+          if (RNPermissions.canOpenSettings()) {
+            Alert.alert(
+              'Ошибка',
+              'Для загрузки файла необходимо разрешить приложению доступ к соответствующим разделам в настройках',
+              [
+                { text: 'ОК', onPress: () => {} },
+                {
+                  text: 'Настройки',
+                  onPress: () => {
+                    RNPermissions.openSettings()
+                  },
+                },
+              ],
+            )
+          } else {
+            Alert.alert(
+              'Ошибка',
+              'Для загрузки файла необходимо разрешить приложению доступ к соответствующим разделам',
+            )
+          }
+        } else {
+          Alert.alert(
+            'Ошибка',
+            'Для загрузки файла необходимо разрешить приложению доступ к соответствующим разделам',
+          )
+        }
+      } else {
+        try {
+          let url = `https://seruniverse.asmo.media${item.src}`
+          let fileName = item.filename
+          let date = new Date()
+          let ext = this.extention(url)
+          ext = `.${ext[0]}`
+          const { config, fs } = RNFetchBlob
+          let PictureDir = fs.dirs.PictureDir
+          let options = {
+            fileCache: true,
+            addAndroidDownloads: {
+              title: fileName,
+              useDownloadManager: true,
+              notification: true,
+              path: `${PictureDir}/${Math.floor(
+                date.getTime() + date.getSeconds() / 2,
+              )}${ext}`,
+              description: fileName,
+            },
+          }
+          config(options)
+            .fetch('GET', url)
+            .then(res => {
+              Alert.alert('Успешно сохранено')
+            })
+        } catch (error) {
+          Alert.alert(
+            'Что то пошло не так',
+            error.message ? String(error.message) : String(error),
+          )
+        }
+      }
+    })
+  }
+
+  extention = filename => {
+    return /[.]/.exec(filename) ? /[^.]+$/.exec(filename) : undefined
   }
 
   generateColor = () => {
@@ -722,12 +802,14 @@ class Content extends Component {
       action: () => this.forwardMessage(message),
     })
 
-    // if (message._id && message.type === 'image') {
-    //   actions.push({
-    //     title: 'Сохранить',
-    //     action: () => {},
-    //   })
-    // }
+    if (message._id && message.type === 'file') {
+      actions.push({
+        title: 'Сохранить',
+        action: () => {
+          this.download(message)
+        },
+      })
+    }
     if (message._id && message.sender._id === user._id) {
       actions.push({
         title: 'Удалить',
