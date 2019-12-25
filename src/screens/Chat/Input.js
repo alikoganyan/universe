@@ -243,6 +243,8 @@ class InputComponent extends Component {
     reply: false,
   }
 
+  componentDidMount(): void {}
+
   componentWillUnmount() {
     this.stopEditing()
     this.stopReply()
@@ -621,19 +623,23 @@ class InputComponent extends Component {
     const {
       forwardedMessage: { _id },
       currentRoomId,
-      dialog,
-      currentRoom,
+      currentDialog,
+      currentChat,
     } = this.props
+
     const bodyReq = {
       message_id: _id,
       dialog_id: currentRoomId,
-      receiver: Object.keys(dialog).length ? currentRoom : null,
+      receiver: !currentChat ? currentDialog._id : null,
     }
     sendRequest({
       r_path: p_forward_message,
       method: 'post',
       attr: bodyReq,
       success: res => {
+        if (res.dialog) {
+          this.props.setDialog(res.dialog)
+        }
         this.stopForwarding()
       },
       failFunc: err => {},

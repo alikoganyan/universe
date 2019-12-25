@@ -84,24 +84,23 @@ class Dialogs extends Component {
       e => !e.viewers.includes(user._id) && e.sender._id !== user._id,
     ).length
 
-    const chatName = !isGroup
-      ? user._id !== creator._id
-        ? creator.first_name
-          ? `${creator.first_name} ${creator.last_name}`
-          : creator.phone_number
-        : participants[0] && participants[0].first_name
-        ? `${participants[0].first_name} ${participants[0].last_name}`
-        : participants[0].phone_number
-      : name || room
-    const chatImage = !isGroup
-      ? user._id === creator
-        ? user.image
-        : participants[0].image
-      : image
+    const chatName =
+      !isGroup && creator && participants.length
+        ? user._id !== creator._id
+          ? creator.first_name
+            ? `${creator.first_name} ${creator.last_name}`
+            : creator.phone_number && creator.phone_number
+          : participants[0] && participants[0].first_name
+          ? `${participants[0].first_name} ${participants[0].last_name}`
+          : participants[0].phone_number && participants[0].phone_number
+        : name || room
+    const chatImage =
+      !isGroup && participants.length
+        ? user._id === creator
+          ? user.image
+          : participants[0].image
+        : image
 
-    if (chatName === 'Test Test') {
-      // console.log('unreadMessages', unreadMessages, messages);
-    }
     return (
       <Dialog
         key={item._id}
@@ -120,7 +119,6 @@ class Dialogs extends Component {
   render() {
     const { dialogs, navigation, companyLoading } = this.props
     const { congratulations } = this.state
-
     const opacity = this.scrollY.interpolate({
       inputRange: [0, 90, 91],
       outputRange: [0, 0, 1],
@@ -224,7 +222,7 @@ class Dialogs extends Component {
     socket.on('new_dialog', e => this.socketNewDialog(e))
     socket.on('need_update', this.socketNeedsUpdate)
     socket.on('dialog_opened', this.socketDialogOpened)
-    socket.on('new_group', this.socketGetGroup)
+    socket.on('new_group', e => this.socketGetGroup(e))
     socket.on('message_edited', e => this.messageEdited(e))
   }
 
@@ -290,7 +288,11 @@ class Dialogs extends Component {
     socket.emit('get_dialogs', { id: user._id })
   }
 
-  socketGetGroup = () => {
+  socketGetGroup = e => {
+    if (e) {
+      const dialog = { ...e }
+      this.props.setDialog(dialog)
+    }
     socket.emit('get_dialogs')
   }
 

@@ -180,7 +180,7 @@ class Content extends Component {
     const chatImage = isGroup
       ? image
       : user._id === creator._id
-      ? participants[0].image
+      ? participants.length && participants[0].image
       : creator.image
     const lastGroupSender =
       isGroup && lastMessage && lastMessage.length && latestMessage

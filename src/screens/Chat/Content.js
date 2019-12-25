@@ -250,7 +250,7 @@ class Content extends Component {
     const { messages_from_pages } = dialog
 
     if (Object.keys(dialog).length) {
-      const messages = messages_from_pages.docs
+      const messages = dialog.messages
       this.props.setMessages(messages)
       this.setState({
         nextPage: messages_from_pages.nextPage,

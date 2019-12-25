@@ -244,7 +244,7 @@ class Content extends Component {
     moment.locale('ru')
     const { navigation, dialog } = this.props
     const { messages_from_pages } = dialog
-    const messages = messages_from_pages.docs
+    const messages = dialog.messages
     this.props.setMessages(messages)
     this.setState({
       nextPage: messages_from_pages.nextPage,

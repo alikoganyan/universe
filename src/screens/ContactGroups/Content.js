@@ -675,7 +675,6 @@ class Content extends Component {
     } else {
       const { room, _id } = e
       setRoom(_id)
-      setCurrentRoomId(_id)
       setCurrentChat(room)
       setCurrentDialogs(e)
     }
