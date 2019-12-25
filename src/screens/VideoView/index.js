@@ -70,6 +70,7 @@ export default class VideoViewScreen extends Component {
             flexGrow: 1,
             backgroundColor: Colors.black,
             justifyContent: 'flex-end',
+            paddingBottom: '9%',
           }}
         >
           <Video
