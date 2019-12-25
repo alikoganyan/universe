@@ -9,6 +9,7 @@ import {
   Clipboard,
   TouchableOpacity,
 } from 'react-native'
+
 import Image from 'react-native-image-progress'
 
 import styled from 'styled-components'
@@ -17,7 +18,7 @@ import ActionSheet from 'react-native-actionsheet'
 import moment from 'moment'
 import 'moment/locale/ru'
 import { chatBg } from '../../assets/images'
-import { getHamsterDate } from '../../utils/helpers'
+import helper, { getHamsterDate } from '../../utils/helpers'
 import Message from '../../common/Message'
 import sendRequest from '../../utils/request'
 import { setDialogs, setDialog } from '../../actions/dialogsActions'
@@ -32,7 +33,11 @@ import {
 import { d_message } from '../../constants/api'
 import _ from 'lodash'
 import * as ICONS from '../../assets/icons'
+import Loader from '../../common/Loader'
 
+const {
+  Colors: { gray2 },
+} = helper
 const Wrapper = styled(View)`
   background: white;
   z-index: 1;
@@ -175,6 +180,7 @@ class Content extends Component {
                 />
               )}
               keyExtractor={(item, index) => index.toString()}
+              ListEmptyComponent={this.renderEmptyComponent}
             />
             {buttonToDown ? (
               <TouchableOpacity
@@ -360,6 +366,19 @@ class Content extends Component {
       failFunc: err => {},
     })
   }
+
+  renderEmptyComponent = () => (
+    <Loader
+      hint="Пока нет сообщений в диалоге."
+      style={{ flex: 1, height: '100%' }}
+    >
+      <TouchableOpacity onPress={this.toContacts}>
+        <Text style={{ color: gray2, textAlign: 'center' }}>
+          Начните общение, отправив сообщение
+        </Text>
+      </TouchableOpacity>
+    </Loader>
+  )
 
   checkScrollPosition = event => {
     const {
