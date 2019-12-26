@@ -223,7 +223,6 @@ class Content extends Component {
         group_id: _id,
       },
       success: res => {
-        // setTimeout(() => socket.emit('get_dialogs'), 500)
         setDialogs(dialogs.filter(d => d._id !== _id))
         setParticipants([])
         forward()
@@ -317,7 +316,4 @@ const mapDispatchToProps = dispatch => ({
   setParticipants: _ => dispatch(setDialogParticipants(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

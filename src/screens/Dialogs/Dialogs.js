@@ -218,6 +218,7 @@ class Dialogs extends Component {
     socket.removeEventListener('message_edited', this.messageEdited)
     socket.removeEventListener('user_left_from_group', this.socketLeaveGroup)
     socket.removeEventListener('deleted_message', this.socketDeleteMessage)
+    socket.removeEventListener('delete_dialog', this.socketDeleteDialog)
     socket.on('update_dialogs', e => this.setDialogsSocket(e))
     socket.on('update_dialog', e => this.setDialogSocket(e))
     socket.on('update_profile', this.getProfile)
@@ -229,6 +230,7 @@ class Dialogs extends Component {
     socket.on('message_edited', e => this.messageEdited(e))
     socket.on('user_left_from_group', e => this.socketLeaveGroup(e))
     socket.on('deleted_message', e => this.socketDeleteMessage(e))
+    socket.on('delete_dialog', e => this.socketDeleteDialog(e))
   }
 
   componentWillUnmount() {
@@ -307,6 +309,14 @@ class Dialogs extends Component {
       setDialogs(dialogs)
     } else {
       setDeletedMessage(e)
+    }
+  }
+
+  socketDeleteDialog = e => {
+    const { dialogs, setDialogs } = this.props
+    if (e) {
+      const newDialogs = dialogs.filter(d => d._id !== e.dialog_id)
+      setDialogs(newDialogs)
     }
   }
 
