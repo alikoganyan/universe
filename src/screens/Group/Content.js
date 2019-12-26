@@ -80,15 +80,15 @@ class Content extends Component {
       totalPages,
       hideDate,
     } = this.state
-    const { search, editedMessage, uploadMessages, currentRoomID } = this.props
+    const { search, editedMessage, uploadMessages, currentRoomId } = this.props
 
     let { messages } = this.props
     messages = messages.filter(m => m.type !== 'loader')
     messages = messages.concat(
-      uploadMessages.filter(m => m.roomId === currentRoomID),
+      uploadMessages.filter(m => m.roomId === currentRoomId),
     )
     if (uploadMessages.length) {
-      messages.push(...uploadMessages.filter(m => m.roomId === currentRoomID))
+      messages.push(...uploadMessages.filter(m => m.roomId === currentRoomId))
     }
     const isEditing = !!editedMessage.text
     const currentMessages = scrolledMessages.length
