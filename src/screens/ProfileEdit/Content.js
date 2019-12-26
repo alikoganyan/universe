@@ -9,7 +9,7 @@ import { alterUser, setUser } from '../../actions/userActions'
 import helper from '../../utils/helpers'
 import ImageComponent from '../../common/Image'
 import RNDeviceInfo from 'react-native-device-info'
-import getImageFromCamera from '../../utils/ImagePicker'
+import { getImageFromPicker } from '../../utils/ImagePicker'
 import { socket } from '../../utils/socket'
 import { p_profile, p_profile_avatar } from '../../constants/api'
 import sendRequest from '../../utils/request'
@@ -270,7 +270,7 @@ class Content extends Component {
   }
 
   selectImage = () => {
-    getImageFromCamera(result => {
+    getImageFromPicker(result => {
       const { imageFormData = {} } = result
       if (!result.cancelled) {
         this.setState({ imageFormData, image: imageFormData.uri })
