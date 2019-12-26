@@ -22,7 +22,6 @@ import { setTaskReceivers } from '../../actions/participantsActions'
 import * as ICONS from '../../assets/icons'
 import _ from 'lodash'
 import {
-  deleteMessage,
   editMessage,
   forwardMessage,
   replyMessage,
@@ -265,7 +264,8 @@ class Content extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { messages, removePreloader, currentRoomId } = this.props
+    const { removePreloader, currentRoomId } = this.props
+    let { messages } = this.props
     if (nextProps.message._id !== this.props.message._id) {
       messages.push(nextProps.message)
       this.props.setMessages(messages)
@@ -275,6 +275,14 @@ class Content extends Component {
           geo: true,
         })
       }
+    }
+    if (
+      nextProps.deleteMessage.message_id !== this.props.deleteMessage.message_id
+    ) {
+      messages = messages.filter(
+        m => m._id !== nextProps.deleteMessage.message_id,
+      )
+      this.props.setMessages(messages)
     }
   }
 
@@ -658,7 +666,6 @@ class Content extends Component {
   deleteMessage = currentMessage => {
     const { currentRoomId } = this.props
     let { messages } = this.props
-    const msgIndex = messages.findIndex(e => e._id === currentMessage._id)
     sendRequest({
       r_path: d_message,
       method: 'delete',
@@ -666,13 +673,11 @@ class Content extends Component {
         dialog_id: currentRoomId,
         messages: [currentMessage._id],
       },
-      success: res => {
-        messages.splice(msgIndex, 1)
-        this.props.setMessages(messages)
-        this.props.deleteMessage({})
-      },
+      success: res => {},
       failFunc: err => {},
     })
+    messages = messages.filter(message => message._id !== currentMessage._id)
+    this.props.setMessages(messages)
   }
 
   toSenderProfile = sender => {
@@ -866,10 +871,6 @@ const mapDispatchToProps = dispatch => ({
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
-  deleteMessage: _ => dispatch(deleteMessage(_)),
   setMessage: _ => dispatch(setMessage(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

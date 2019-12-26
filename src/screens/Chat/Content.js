@@ -97,16 +97,17 @@ class Content extends Component {
     if (!messages.length && Object.keys(dialog).length) {
       this.props.setMessages(dialog.messages)
     }
-    messages = messages.filter(m => m.type !== 'loader')
-    messages = messages.concat(
-      uploadMessages.filter(m => m.roomId === currentRoomId),
-    )
-    if (uploadMessages.length) {
-      messages.push(...uploadMessages.filter(m => m.roomId === currentRoomId))
+    if (messages && messages.length) {
+      messages = messages.filter(m => m.type !== 'loader')
+      messages = messages.concat(
+        uploadMessages.filter(m => m.roomId === currentRoomId),
+      )
+      if (uploadMessages.length) {
+        messages.push(...uploadMessages.filter(m => m.roomId === currentRoomId))
+      }
     }
 
     const isEditing = !!editedMessage.text
-    // const messages = _dialog ? [..._dialog.messages] : []
     const currentMessages = scrolledMessages.length
       ? scrolledMessages
       : messages
@@ -272,7 +273,8 @@ class Content extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { messages, removePreloader, currentRoomId } = this.props
+    const { removePreloader, currentRoomId } = this.props
+    let { messages } = this.props
     if (nextProps.message._id !== this.props.message._id) {
       messages.push(nextProps.message)
       this.props.setMessages(messages)
@@ -282,6 +284,14 @@ class Content extends Component {
           geo: true,
         })
       }
+    }
+    if (
+      nextProps.deleteMessage.message_id !== this.props.deleteMessage.message_id
+    ) {
+      messages = messages.filter(
+        m => m._id !== nextProps.deleteMessage.message_id,
+      )
+      this.props.setMessages(messages)
     }
   }
 
@@ -638,13 +648,8 @@ class Content extends Component {
   }
 
   deleteMessage = currentMessage => {
-    const {
-      dialogs,
-      setDialogs,
-      currentChat,
-      currentRoomId,
-      dialog,
-    } = this.props
+    const { currentRoomId } = this.props
+    let { messages } = this.props
     sendRequest({
       r_path: d_message,
       method: 'delete',
@@ -655,15 +660,8 @@ class Content extends Component {
       success: res => {},
       failFunc: err => {},
     })
-    // const dialog = dialogs.filter(dialog => dialog.room === currentChat)[0]
-    const dialogIndex = dialogs.findIndex(dialog => dialog.room === currentChat)
-    dialog.messages = dialog.messages.filter(
-      message => message._id !== currentMessage._id,
-    )
-    const newDialogs = [...dialogs]
-    newDialogs[dialogIndex] = dialog
-    this.props.setDialog(dialog)
-    setDialogs(newDialogs)
+    messages = messages.filter(message => message._id !== currentMessage._id)
+    this.props.setMessages(messages)
   }
 
   _scrollToBottom = () => {
@@ -747,19 +745,23 @@ class Content extends Component {
           const dialogMessages = messages || []
           let dialogImages = []
           let imageIndex = 0
-          dialogMessages.forEach(message => {
-            if (message.type === 'image') {
-              dialogImages.push({
-                image: `https://seruniverse.asmo.media${message.src}`,
-                title: first_name ? `${first_name} ${last_name}` : phone_number,
-                description: getHamsterDate(message.created_at),
-                actions: this._getMessageActions(message).slice(0, -1),
-              })
-              if (message._id === _id) {
-                imageIndex = dialogImages.length - 1
+          if (dialogMessages && dialogMessages.length) {
+            dialogMessages.forEach(message => {
+              if (message.type === 'image') {
+                dialogImages.push({
+                  image: `https://seruniverse.asmo.media${message.src}`,
+                  title: first_name
+                    ? `${first_name} ${last_name}`
+                    : phone_number,
+                  description: getHamsterDate(message.created_at),
+                  actions: this._getMessageActions(message).slice(0, -1),
+                })
+                if (message._id === _id) {
+                  imageIndex = dialogImages.length - 1
+                }
               }
-            }
-          })
+            })
+          }
           onShowPreviewImages(dialogImages, imageIndex)
         }
         break
@@ -888,7 +890,4 @@ const mapDispatchToProps = dispatch => ({
   replyMessage: _ => dispatch(replyMessage(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

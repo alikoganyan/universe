@@ -16,6 +16,7 @@ import {
   setCurrentRoomId,
   setMessage,
   removeAllPreloader,
+  deleteMessage,
 } from '../../actions/messageActions'
 // import { Notifications } from 'expo';
 import {
@@ -216,6 +217,7 @@ class Dialogs extends Component {
     socket.removeEventListener('new_group', this.socketGetGroup)
     socket.removeEventListener('message_edited', this.messageEdited)
     socket.removeEventListener('user_left_from_group', this.socketLeaveGroup)
+    socket.removeEventListener('deleted_message', this.socketDeleteMessage)
     socket.on('update_dialogs', e => this.setDialogsSocket(e))
     socket.on('update_dialog', e => this.setDialogSocket(e))
     socket.on('update_profile', this.getProfile)
@@ -226,6 +228,7 @@ class Dialogs extends Component {
     socket.on('new_group', e => this.socketGetGroup(e))
     socket.on('message_edited', e => this.messageEdited(e))
     socket.on('user_left_from_group', e => this.socketLeaveGroup(e))
+    socket.on('deleted_message', e => this.socketDeleteMessage(e))
   }
 
   componentWillUnmount() {
@@ -292,6 +295,19 @@ class Dialogs extends Component {
   // todo
   socketLeaveGroup = e => {
     // console.log(e)
+  }
+
+  socketDeleteMessage = e => {
+    const { dialog, dialogs, setDialogs, setDeletedMessage } = this.props
+    if (!Object.keys(dialog).length) {
+      const currentDialogIndex = dialogs.findIndex(d => d._id === e.dialog_id)
+      dialogs[currentDialogIndex].messages = dialogs[
+        currentDialogIndex
+      ].messages.filter(m => m._id !== e.message_id)
+      setDialogs(dialogs)
+    } else {
+      setDeletedMessage(e)
+    }
   }
 
   socketGetGroup = e => {
@@ -636,6 +652,7 @@ const mapDispatchToProps = dispatch => ({
   setDialog: _ => dispatch(setDialog(_)),
   addMessage: _ => dispatch(addMessage(_)),
   setMessage: _ => dispatch(setMessage(_)),
+  setDeletedMessage: _ => dispatch(deleteMessage(_)),
   removeAllPreloader: _ => dispatch(removeAllPreloader(_)),
   setUser: _ => dispatch(setUser(_)),
   setAllUsers: _ => dispatch(setAllUsers(_)),
@@ -646,7 +663,4 @@ const mapDispatchToProps = dispatch => ({
   setReset: _ => dispatch(setReset(_)),
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Dialogs)
+export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)
