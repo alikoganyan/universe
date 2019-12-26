@@ -18,7 +18,7 @@ import { setDialogParticipants } from '../../actions/participantsActions'
 import { socket } from '../../utils/socket'
 import sendRequest from '../../utils/request'
 import { p_create_group } from '../../constants/api'
-import getImageFromCamera from '../../utils/ImagePicker'
+import { getImageFromPicker } from '../../utils/ImagePicker'
 
 const { Colors, sidePadding } = helper
 const { lightGrey1, black, green } = Colors
@@ -197,7 +197,7 @@ class Content extends Component {
   }
 
   selectPhoto = async e => {
-    getImageFromCamera(result => {
+    getImageFromPicker(result => {
       const { imageFormData = {} } = result
       if (!result.cancelled) {
         this.setState({ imageFormData, image: imageFormData.uri })
