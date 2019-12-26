@@ -7,6 +7,7 @@ import {
   SET_CURRENT_CHAT,
   SET_CURRENT_ROOM_ID,
   EDIT_MESSAGE,
+  EDITED_MESSAGE,
   FORWARD_MESSAGE,
   REPLY_MESSAGE,
   SET_MESSAGE,
@@ -23,6 +24,7 @@ const initialState = {
   currentChat: null,
   currentRoomId: null,
   editMessage: {},
+  editedMessage: {},
   messages: [],
   message: {},
   forwardMessage: {},
@@ -53,6 +55,8 @@ export default (state = initialState, action) => {
       return { ...state, search: true }
     case EDIT_MESSAGE:
       return { ...state, editMessage: payload }
+    case EDITED_MESSAGE:
+      return { ...state, editedMessage: payload }
     case FORWARD_MESSAGE:
       return { ...state, forwardMessage: payload }
     case REPLY_MESSAGE:

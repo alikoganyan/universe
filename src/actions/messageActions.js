@@ -7,6 +7,7 @@ export const ADD_GROUP_MESSAGE = 'ADD_GROUP_MESSAGE'
 export const START_SEARCH = 'START_SEARCH'
 export const STOP_SEARCH = 'STOP_SEARCH'
 export const EDIT_MESSAGE = 'EDIT_MESSAGE'
+export const EDITED_MESSAGE = 'EDITED_MESSAGE'
 export const GET_MESSAGES = 'GET_MESSAGES'
 export const SET_ROOM = 'SET_ROOM'
 export const SET_CURRENT_CHAT = 'SET_CURRENT_CHAT'
@@ -31,6 +32,11 @@ export const setMessage = payload => ({
 
 export const editMessage = payload => ({
   type: EDIT_MESSAGE,
+  payload,
+})
+
+export const getEditedMessage = payload => ({
+  type: EDITED_MESSAGE,
   payload,
 })
 

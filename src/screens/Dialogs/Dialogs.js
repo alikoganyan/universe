@@ -17,6 +17,7 @@ import {
   setMessage,
   removeAllPreloader,
   deleteMessage,
+  getEditedMessage,
 } from '../../actions/messageActions'
 // import { Notifications } from 'expo';
 import {
@@ -218,6 +219,7 @@ class Dialogs extends Component {
     socket.removeEventListener('message_edited', this.messageEdited)
     socket.removeEventListener('user_left_from_group', this.socketLeaveGroup)
     socket.removeEventListener('deleted_message', this.socketDeleteMessage)
+    socket.removeEventListener('message_edited', this.socketEditMessage)
     socket.removeEventListener('delete_dialog', this.socketDeleteDialog)
     socket.on('update_dialogs', e => this.setDialogsSocket(e))
     socket.on('update_dialog', e => this.setDialogSocket(e))
@@ -230,6 +232,7 @@ class Dialogs extends Component {
     socket.on('message_edited', e => this.messageEdited(e))
     socket.on('user_left_from_group', e => this.socketLeaveGroup(e))
     socket.on('deleted_message', e => this.socketDeleteMessage(e))
+    socket.on('message_edited', e => this.socketEditMessage(e))
     socket.on('delete_dialog', e => this.socketDeleteDialog(e))
   }
 
@@ -309,6 +312,23 @@ class Dialogs extends Component {
       setDialogs(dialogs)
     } else {
       setDeletedMessage(e)
+    }
+  }
+
+  socketEditMessage = ({ message }) => {
+    const { dialog, dialogs, setDialogs, setEditedMessage } = this.props
+    if (!Object.keys(dialog).length) {
+      const currentDialogIndex = dialogs.findIndex(
+        d => d._id === message.dialog,
+      )
+      const editedMessageIndex = dialogs[currentDialogIndex].messages.findIndex(
+        m => m._id === message._id,
+      )
+      dialogs[currentDialogIndex].messages[editedMessageIndex].text =
+        message.text
+      setDialogs(dialogs)
+    } else {
+      setEditedMessage(message)
     }
   }
 
@@ -663,6 +683,7 @@ const mapDispatchToProps = dispatch => ({
   addMessage: _ => dispatch(addMessage(_)),
   setMessage: _ => dispatch(setMessage(_)),
   setDeletedMessage: _ => dispatch(deleteMessage(_)),
+  setEditedMessage: _ => dispatch(getEditedMessage(_)),
   removeAllPreloader: _ => dispatch(removeAllPreloader(_)),
   setUser: _ => dispatch(setUser(_)),
   setAllUsers: _ => dispatch(setAllUsers(_)),

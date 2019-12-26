@@ -27,6 +27,7 @@ import {
   replyMessage,
   removePreloader,
   setMessage,
+  getEditedMessage,
 } from '../../actions/messageActions'
 import { setDialog } from '../../actions/dialogsActions'
 import { d_message } from '../../constants/api'
@@ -79,7 +80,13 @@ class Content extends Component {
       totalPages,
       hideDate,
     } = this.state
-    const { search, editedMessage, uploadMessages, currentRoomId } = this.props
+    const {
+      search,
+      editedMessage,
+      uploadMessages,
+      currentRoomId,
+      editedMessage2,
+    } = this.props
 
     let { messages } = this.props
     messages = messages.filter(m => m.type !== 'loader')
@@ -88,6 +95,13 @@ class Content extends Component {
     )
     if (uploadMessages.length) {
       messages.push(...uploadMessages.filter(m => m.roomId === currentRoomId))
+    }
+
+    if (editedMessage2) {
+      const messageIndex = messages.findIndex(m => m._id === editedMessage2._id)
+      messages[messageIndex].text = editedMessage2.text
+      this.props.setMessages(messages)
+      this.props.setEditedMessage(null)
     }
     const isEditing = !!editedMessage.text
     const currentMessages = scrolledMessages.length
@@ -849,6 +863,7 @@ const mapStateToProps = state => ({
   search: state.messageReducer.search,
   currentRoom: state.messageReducer.currentRoom,
   editedMessage: state.messageReducer.editMessage,
+  editedMessage2: state.messageReducer.editedMessage,
   replyMessage: state.messageReducer.replyMessage,
   deleteMessage: state.messageReducer.deleteMessage,
   uploadMessages: state.messageReducer.uploadMessages,
@@ -872,5 +887,6 @@ const mapDispatchToProps = dispatch => ({
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
   setMessage: _ => dispatch(setMessage(_)),
+  setEditedMessage: _ => dispatch(getEditedMessage(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

@@ -29,6 +29,7 @@ import { setTaskReceivers } from '../../actions/participantsActions'
 import {
   editMessage,
   forwardMessage,
+  getEditedMessage,
   removePreloader,
   replyMessage,
   setCurrentRoomId,
@@ -90,6 +91,7 @@ class Content extends Component {
       currentRoomId,
       uploadMessages,
       dialog,
+      editedMessage2,
     } = this.props
 
     let { messages } = this.props
@@ -104,6 +106,14 @@ class Content extends Component {
       )
       if (uploadMessages.length) {
         messages.push(...uploadMessages.filter(m => m.roomId === currentRoomId))
+      }
+      if (editedMessage2) {
+        const messageIndex = messages.findIndex(
+          m => m._id === editedMessage2._id,
+        )
+        messages[messageIndex].text = editedMessage2.text
+        this.props.setMessages(messages)
+        this.props.setEditedMessage(null)
       }
     }
 
@@ -866,6 +876,7 @@ const mapStateToProps = state => ({
   search: state.messageReducer.search,
   currentChat: state.messageReducer.currentChat,
   editedMessage: state.messageReducer.editMessage,
+  editedMessage2: state.messageReducer.editedMessage,
   replyMessage: state.messageReducer.replyMessage,
   uploadMessages: state.messageReducer.uploadMessages,
   deleteMessage: state.messageReducer.deleteMessage,
@@ -889,5 +900,6 @@ const mapDispatchToProps = dispatch => ({
   forwardMessage: _ => dispatch(forwardMessage(_)),
   replyMessage: _ => dispatch(replyMessage(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
+  setEditedMessage: _ => dispatch(getEditedMessage(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)
