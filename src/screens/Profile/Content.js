@@ -23,8 +23,6 @@ import ImageComponent from '../../common/Image'
 import { socket } from '../../utils/socket'
 import { setDialogs } from '../../actions/dialogsActions'
 import DefaultAvatar from '../../common/DefaultAvatar'
-import sendRequest from '../../utils/request'
-import { p_leave_group } from '../../constants/api'
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
 const { sidePadding, Colors, HeaderHeight, fontSize } = helper
@@ -411,9 +409,14 @@ class Content extends Component {
 
   componentDidMount() {
     const { myProfile, user, currentDialog } = this.props
-    const { role, phone_number, department, tasks, isGroup } = myProfile
-      ? user
-      : currentDialog
+    const {
+      role,
+      phone_number,
+      department,
+      tasks,
+      isGroup,
+      participants,
+    } = myProfile ? user : currentDialog
 
     const newUserData = [
       department && department.name !== 'Персональный'
@@ -438,7 +441,7 @@ class Content extends Component {
       !myProfile && !isGroup
         ? {
             type: 'Задачи',
-            value: tasks.length ? tasks.length : 0,
+            value: tasks && tasks.length ? tasks.length : 0,
             icon: <TaskIcon />,
             isGroup: false,
           }
@@ -454,7 +457,8 @@ class Content extends Component {
       !myProfile
         ? {
             type: 'Пользователей',
-            value: '4',
+            value:
+              participants && participants.length && participants.length + 1,
             icon: <GroupIcon />,
             isGroup: true,
           }
@@ -508,33 +512,22 @@ class Content extends Component {
   }
 
   leaveGroup = () => {
-    const {
-      // currentRoom,
-      currentDialog,
-      setDialogs,
-      dialog,
-      toDialogs,
-    } = this.props
-    sendRequest({
-      r_path: p_leave_group,
-      method: 'post',
-      attr: {
-        group_id: currentDialog._id,
-      },
-      success: res => {
-        // to do
-        const newDialogs = [...dialog].filter(e => e._id !== currentDialog._id)
+    const { dialog, toDialogs, dialogs, setDialogs } = this.props
+
+    socket.emit('leave_group', { dialog_id: dialog._id }, res => {
+      if (res.ok) {
+        const newDialogs = [...dialogs].filter(e => e._id !== dialog._id)
         setDialogs(newDialogs)
         toDialogs()
-      },
-      failFunc: err => {},
+      }
     })
   }
 }
 
 const mapStateToProps = state => ({
   messages: state.messageReducer,
-  dialog: state.dialogsReducer.dialogs,
+  dialog: state.dialogsReducer.dialog,
+  dialogs: state.dialogsReducer.dialogs,
   currentRoom: state.messageReducer.currentRoom,
   currentChat: state.messageReducer.currentChat,
   currentDialog: state.dialogsReducer.currentDialog,
