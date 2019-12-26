@@ -25,6 +25,7 @@ import DefaultAvatar from '../../common/DefaultAvatar'
 import { GroupIcon, CloseIcon } from '../../assets'
 import { setDialogParticipants } from '../../actions/participantsActions'
 import { socket } from '../../utils/socket'
+import { setDialogs } from '../../actions/dialogsActions'
 
 const { Colors, sidePadding } = helper
 const { lightGrey1, black, green, red } = Colors
@@ -207,7 +208,13 @@ class Content extends Component {
   }
 
   deleteGroup = () => {
-    const { defaultValues, setParticipants, forward } = this.props
+    const {
+      defaultValues,
+      setParticipants,
+      forward,
+      dialogs,
+      setDialogs,
+    } = this.props
     const { _id } = defaultValues
     sendRequest({
       r_path: p_delete_group,
@@ -216,7 +223,8 @@ class Content extends Component {
         group_id: _id,
       },
       success: res => {
-        setTimeout(() => socket.emit('get_dialogs'), 500)
+        // setTimeout(() => socket.emit('get_dialogs'), 500)
+        setDialogs(dialogs.filter(d => d._id !== _id))
         setParticipants([])
         forward()
       },
@@ -302,10 +310,12 @@ class Content extends Component {
 const mapStateToProps = state => ({
   id: state.userReducer.user.id,
   participants: state.participantsReducer.dialog.participants,
+  dialogs: state.dialogsReducer.dialogs,
 })
 const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setParticipants: _ => dispatch(setDialogParticipants(_)),
+  setDialogs: _ => dispatch(setDialogs(_)),
 })
 export default connect(
   mapStateToProps,
