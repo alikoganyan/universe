@@ -334,7 +334,9 @@ class Content extends Component {
                   } = item
                   return (
                     <TouchableWithoutFeedback
-                      onPress={() => this.toSenderProfile(item)}
+                      onPress={() =>
+                        this.props.toSenderProfile(item, currentDialog)
+                      }
                     >
                       <View
                         style={{
@@ -496,13 +498,6 @@ class Content extends Component {
     setProfile(null)
   }
 
-  toSenderProfile = sender => {
-    const { navigate, setProfile } = this.props
-    this.props.setIsMyProfile(false)
-    setProfile(sender)
-    navigate('Profile')
-  }
-
   toChat = () => {
     const { setRoom, user, navigate } = this.props
     const { _id } = user
@@ -540,7 +535,4 @@ const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

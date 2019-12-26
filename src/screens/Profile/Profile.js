@@ -21,6 +21,7 @@ import Content from './Content'
 import { setDialogs } from '../../actions/dialogsActions'
 import { p_logout } from '../../constants/api'
 import { logOut } from '../../actions/userActions'
+import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
 const { Colors, fontSize } = helper
 const { pink } = Colors
@@ -55,7 +56,7 @@ const Loading = styled(ActivityIndicator)`
 `
 class Profile extends Component {
   render() {
-    const { loading } = this.state
+    const { loading, previousProfile } = this.state
     const { user, currentDialog, myProfile, navigation } = this.props
 
     const myGroup = currentDialog.isGroup
@@ -71,7 +72,9 @@ class Profile extends Component {
               myProfile={myProfile || myGroup}
             />
             <Content
+              previousProfile={previousProfile}
               toChat={this.toChat}
+              toSenderProfile={this.toSenderProfile}
               myProfile={myProfile}
               navigate={navigation.navigate}
               toDialogs={this.toDialogs}
@@ -92,17 +95,29 @@ class Profile extends Component {
 
   state = {
     loading: false,
+    previousProfile: null,
   }
 
   navigateBack = () => {
     const { navigation } = this.props
-    navigation.goBack()
+    const { previousProfile } = this.state
+    previousProfile
+      ? this.toSenderProfile(previousProfile)
+      : navigation.goBack()
+    this.setState({ previousProfile: null })
   }
 
   toChat = () => {
     const { currentChat, user, navigation } = this.props
     socket.emit('select chat', { chatId: currentChat.id, userId: user.id })
     navigation.navigate('Chat')
+  }
+
+  toSenderProfile = (sender, previousProfile?) => {
+    const { setProfile } = this.props
+    this.setState({ previousProfile })
+    this.props.setIsMyProfile(false)
+    setProfile(sender)
   }
 
   toDialogs = () => {
@@ -157,8 +172,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setDialogs: _ => dispatch(setDialogs(_)),
   logOut: _ => dispatch(logOut()),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
+  setProfile: _ => dispatch(setProfile(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Profile)
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)
