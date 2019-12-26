@@ -215,6 +215,7 @@ class Dialogs extends Component {
     socket.removeEventListener('dialog_opened', this.socketDialogOpened)
     socket.removeEventListener('new_group', this.socketGetGroup)
     socket.removeEventListener('message_edited', this.messageEdited)
+    socket.removeEventListener('user_left_from_group', this.socketLeaveGroup)
     socket.on('update_dialogs', e => this.setDialogsSocket(e))
     socket.on('update_dialog', e => this.setDialogSocket(e))
     socket.on('update_profile', this.getProfile)
@@ -224,6 +225,7 @@ class Dialogs extends Component {
     socket.on('dialog_opened', this.socketDialogOpened)
     socket.on('new_group', e => this.socketGetGroup(e))
     socket.on('message_edited', e => this.messageEdited(e))
+    socket.on('user_left_from_group', e => this.socketLeaveGroup(e))
   }
 
   componentWillUnmount() {
@@ -286,6 +288,10 @@ class Dialogs extends Component {
   _handleAppStateChange = () => {
     const { user } = this.props
     socket.emit('get_dialogs', { id: user._id })
+  }
+  // todo
+  socketLeaveGroup = e => {
+    // console.log(e)
   }
 
   socketGetGroup = e => {
@@ -640,7 +646,4 @@ const mapDispatchToProps = dispatch => ({
   setReset: _ => dispatch(setReset(_)),
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Dialogs)
+export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)

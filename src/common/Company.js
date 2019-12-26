@@ -151,43 +151,46 @@ class Company extends Component {
   }
 
   changeCompany = id => {
+    const { company } = this.props
     this.setState({ modalVisible: false })
-    this.props.setCompanyLoading(true)
-    sendRequest({
-      r_path: '/profile/change_company',
-      method: 'patch',
-      attr: {
-        company_id: id,
-      },
-      success: res => {
-        sendRequest({
-          r_path: '/profile',
-          method: 'get',
-          success: data => {
-            const userData = { ...data }
-            this.props.setCompanies({
-              companies: userData.user.companies,
-              company: userData.user.company,
-            })
-            this.props.setUser(userData.user)
-            const tasksInc = [...res.data.tasks]
-            const tasksOut = [...res.data.created_tasks]
-            const tasksWithUsers = [...tasksInc, ...tasksOut]
-            this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
-            this.props.setContacts(res.data.contacts)
-            this.props.setNews(res.data.news)
-            socket.emit('get_dialogs', { id: userData.user._id })
-          },
-          failFunc: () => {
-            this.props.setCompanyLoading(false)
-          },
-        })
-      },
-      failFunc: () => {
-        this.props.setCompanyLoading(false)
-      },
-      full_res: true,
-    })
+    if (company._id !== id) {
+      this.props.setCompanyLoading(true)
+      sendRequest({
+        r_path: '/profile/change_company',
+        method: 'patch',
+        attr: {
+          company_id: id,
+        },
+        success: res => {
+          sendRequest({
+            r_path: '/profile',
+            method: 'get',
+            success: data => {
+              const userData = { ...data }
+              this.props.setCompanies({
+                companies: userData.user.companies,
+                company: userData.user.company,
+              })
+              this.props.setUser(userData.user)
+              const tasksInc = [...res.data.tasks]
+              const tasksOut = [...res.data.created_tasks]
+              const tasksWithUsers = [...tasksInc, ...tasksOut]
+              this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
+              this.props.setContacts(res.data.contacts)
+              this.props.setNews(res.data.news)
+              socket.emit('get_dialogs', { id: userData.user._id })
+            },
+            failFunc: () => {
+              this.props.setCompanyLoading(false)
+            },
+          })
+        },
+        failFunc: () => {
+          this.props.setCompanyLoading(false)
+        },
+        full_res: true,
+      })
+    }
   }
 }
 
@@ -224,7 +227,4 @@ const mapDispatchToProps = dispatch => ({
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Company)
+export default connect(mapStateToProps, mapDispatchToProps)(Company)
