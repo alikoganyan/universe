@@ -237,6 +237,7 @@ class Content extends Component {
       },
       success: res => {
         setParticipants([])
+        socket.emit('new_group', { group_id: res.group._id })
         socket.emit('get_dialogs')
       },
       failFunc: err => {},
@@ -256,7 +257,4 @@ const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setParticipants: _ => dispatch(setDialogParticipants(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
