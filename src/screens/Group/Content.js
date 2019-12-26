@@ -802,7 +802,12 @@ class Content extends Component {
       action: () => this.forwardMessage(message),
     })
 
-    if (message._id && message.type === 'file') {
+    if (
+      message._id &&
+      (message.type === 'file' ||
+        message.type === 'video' ||
+        message.type === 'image')
+    ) {
       actions.push({
         title: 'Сохранить',
         action: () => {
