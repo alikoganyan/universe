@@ -185,18 +185,54 @@ class InputComponent extends Component {
               ) : (
                 <CameraIconBlue
                   size={20}
-                  onPress={() =>
-                    this._selectMedia({
-                      mediaType: 'mixed',
-                      maxWidth: 1500,
-                      maxHeight: 1500,
-                    })
-                  }
+                  onPress={() => {
+                    if (Platform.OS === 'ios') {
+                      this._selectMedia()
+                    } else {
+                      this._showActionCamera()
+                    }
+                  }}
                 />
               )}
             </Right>
           </Wrapper>
         )}
+        <ActionSheet
+          ref={node => (this.ActionGallery = node)}
+          options={['Фото', 'Видео', 'Отменить']}
+          cancelButtonIndex={2}
+          onPress={index => {
+            switch (index) {
+              case 0:
+                this._selectGallery('photo')
+                break
+              case 1:
+                this._selectGallery('video')
+                break
+              default:
+                break
+            }
+          }}
+        />
+
+        <ActionSheet
+          ref={node => (this.ActionCamera = node)}
+          options={['Фото', 'Видео', 'Отменить']}
+          cancelButtonIndex={2}
+          onPress={index => {
+            switch (index) {
+              case 0:
+                this._selectMedia('photo')
+                break
+              case 1:
+                this._selectMedia('video')
+                break
+              default:
+                break
+            }
+          }}
+        />
+
         <ActionSheet
           ref={node => (this.ActionSheetPlus = node)}
           title="Вложение"
@@ -208,7 +244,11 @@ class InputComponent extends Component {
                 this._selectFile()
                 break
               case 1:
-                this._selectGallery()
+                if (Platform.OS === 'ios') {
+                  this._selectGallery()
+                } else {
+                  this._showActionGallery()
+                }
                 break
               case 2:
                 this._selectGeo()
@@ -439,7 +479,7 @@ class InputComponent extends Component {
     fEditMessage({})
   }
 
-  _selectMedia = async (options = {}) => {
+  _selectMedia = async (mediaType = 'mixed') => {
     getImageFromCamera(
       result => {
         const { imageFormData = {}, uri = '' } = result
@@ -447,11 +487,11 @@ class InputComponent extends Component {
         this._startSendingFile(imageFormData, imageSrc)
       },
       () => {},
-      options,
+      mediaType,
     )
   }
 
-  _selectGallery = async (options = {}) => {
+  _selectGallery = async (mediaType = 'mixed') => {
     getImageFromGallery(
       result => {
         const { imageFormData = {}, uri = '' } = result
@@ -460,7 +500,7 @@ class InputComponent extends Component {
         this._startSendingFile(imageFormData, imageSrc)
       },
       () => {},
-      options,
+      mediaType,
     )
   }
 
@@ -589,6 +629,14 @@ class InputComponent extends Component {
 
   _showActionSheetPlus = async () => {
     this.ActionSheetPlus && this.ActionSheetPlus.show()
+  }
+
+  _showActionCamera = async () => {
+    this.ActionCamera && this.ActionCamera.show()
+  }
+
+  _showActionGallery = async () => {
+    this.ActionGallery && this.ActionGallery.show()
   }
 
   confirmForwarding = () => {

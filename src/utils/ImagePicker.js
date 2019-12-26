@@ -2,25 +2,6 @@ import { Platform, Alert } from 'react-native'
 import RNImagePicker from 'react-native-image-picker'
 import RNPermissions from 'react-native-permissions'
 
-const pickerOptions = {
-  mediaType: 'mixed',
-  noData: true, // disable base64
-  maxWidth: 1920,
-  maxHeight: 1920,
-  quality: 1,
-  storageOptions: {
-    skipBackup: true,
-  },
-  permissionDenied: {
-    // Android
-    title: 'Доступ запрещен',
-    text:
-      'Для выбора фото из галереи или снимка камеры необходимо разрешить приложению доступ к соответствующим разделам',
-    reTryTitle: 'Настройки',
-    okTitle: 'ОК',
-  },
-}
-
 const getFormDataFromPath = (path, mediaType) => {
   let name
   let type
@@ -39,7 +20,7 @@ const getFormDataFromPath = (path, mediaType) => {
   }
 }
 
-const parseImageResponse = (response = {}, mediaType) => {
+const parseImageResponse = (response = {}, mediaType = 'mixed') => {
   const { uri = '', path = '', type = '' } = response
   let resultUri = '',
     resultFileName = '',
@@ -65,8 +46,25 @@ const parseImageResponse = (response = {}, mediaType) => {
   }
 }
 
-const getImageFromCamera = (success, reject, mergeOptions = {}) => {
-  const options = { ...pickerOptions, ...mergeOptions }
+const getImageFromCamera = (success, reject, mediaType) => {
+  const options = {
+    mediaType: mediaType,
+    noData: true, // disable base64
+    maxWidth: 1920,
+    maxHeight: 1920,
+    quality: 1,
+    storageOptions: {
+      skipBackup: true,
+    },
+    permissionDenied: {
+      // Android
+      title: 'Доступ запрещен',
+      text:
+        'Для выбора фото из галереи или снимка камеры необходимо разрешить приложению доступ к соответствующим разделам',
+      reTryTitle: 'Настройки',
+      okTitle: 'ОК',
+    },
+  }
   RNImagePicker.launchCamera(options, response => {
     if (response.didCancel) {
       reject && reject()
@@ -177,8 +175,25 @@ const getImageFromPicker = (success, reject) => {
   })
 }
 
-const getImageFromGallery = (success, reject, mergeOptions = {}) => {
-  const options = { ...pickerOptions, ...mergeOptions }
+const getImageFromGallery = (success, reject, mediaType = 'mixed') => {
+  const options = {
+    mediaType: mediaType,
+    noData: true, // disable base64
+    maxWidth: 1920,
+    maxHeight: 1920,
+    quality: 1,
+    storageOptions: {
+      skipBackup: true,
+    },
+    permissionDenied: {
+      // Android
+      title: 'Доступ запрещен',
+      text:
+        'Для выбора фото из галереи или снимка камеры необходимо разрешить приложению доступ к соответствующим разделам',
+      reTryTitle: 'Настройки',
+      okTitle: 'ОК',
+    },
+  }
   RNImagePicker.launchImageLibrary(options, response => {
     if (response.didCancel) {
       reject && reject()
