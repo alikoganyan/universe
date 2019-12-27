@@ -112,6 +112,7 @@ class Content extends Component {
           m => m._id === editedMessage2._id,
         )
         messages[messageIndex].text = editedMessage2.text
+        messages[messageIndex].edited = editedMessage2.edited
         this.props.setMessages(messages)
         this.props.setEditedMessage(null)
       }
@@ -913,7 +914,4 @@ const mapDispatchToProps = dispatch => ({
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setEditedMessage: _ => dispatch(getEditedMessage(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

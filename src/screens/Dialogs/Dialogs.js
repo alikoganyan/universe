@@ -221,6 +221,7 @@ class Dialogs extends Component {
     socket.removeEventListener('deleted_message', this.socketDeleteMessage)
     socket.removeEventListener('message_edited', this.socketEditMessage)
     socket.removeEventListener('delete_dialog', this.socketDeleteDialog)
+    socket.removeEventListener('admin_update', this.socketAdminUpdate)
     socket.on('update_dialogs', e => this.setDialogsSocket(e))
     socket.on('update_dialog', e => this.setDialogSocket(e))
     socket.on('update_profile', this.getProfile)
@@ -234,6 +235,7 @@ class Dialogs extends Component {
     socket.on('deleted_message', e => this.socketDeleteMessage(e))
     socket.on('message_edited', e => this.socketEditMessage(e))
     socket.on('delete_dialog', e => this.socketDeleteDialog(e))
+    socket.on('admin_update', e => this.socketAdminUpdate(e))
   }
 
   componentWillUnmount() {
@@ -242,26 +244,87 @@ class Dialogs extends Component {
     // AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
-  getProfile = () => {
+  setCompanyData = e => {
+    const tasksInc = [...e.tasks]
+    const tasksOut = [...e.created_tasks]
+    const tasksWithUsers = [...tasksInc, ...tasksOut]
+    this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
+    this.props.setUser(e)
+    this.props.setReset(true)
+  }
+
+  // setEmptyCompany = () => {
+  //   const tasksInc = []
+  //   const tasksOut = []
+  //   const tasksWithUsers = []
+  //   this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
+  //   this.props.setCompanies({
+  //     companies: [],
+  //     company: {},
+  //   })
+  //   this.props.setReset(true)
+  // }
+
+  getProfile = (adminChange?) => {
+    const { company } = this.props
     sendRequest({
       r_path: '/profile',
       method: 'get',
       success: res => {
         const userData = { ...res }
-        this.props.setCompanies({
-          companies: res.user.companies,
-          company: res.user.company,
-        })
-        this.props.setUser({
-          ...res.user,
-        })
         this.setState({ congratulations: !userData.user.first_name })
-        const tasksInc = [...userData.user.tasks]
-        const tasksOut = [...userData.user.created_tasks]
-        const tasksWithUsers = [...tasksInc, ...tasksOut]
-        this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
+        this.props.setCompanies({
+          companies: userData.user.companies,
+          company: userData.user.company,
+        })
+        if (
+          adminChange &&
+          userData.user.companies &&
+          userData.user.companies.length
+        ) {
+          const currentCompany = userData.user.companies.find(
+            c => c._id === company._id,
+          )
+          if (currentCompany) {
+            this.setCompanyData(userData.user)
+          } else {
+            this.changeCompany(userData.user.companies[0]._id)
+          }
+        } else {
+          this.setCompanyData(userData.user)
+          socket.emit('get_dialogs')
+        }
+
+        // todo
+        // } else if (adminChange && (!userData.user.companies || !userData.user.companies.length)) {
+        //   this.setEmptyCompany()
+        //     console.log(222)
+        // } else {
+        //   this.setCompanyData(userData.user)
+        //   socket.emit('get_dialogs')
+        // }
       },
-      failFunc: () => {},
+      failFunc: () => {
+        this.props.setCompanyLoading(false)
+      },
+    })
+  }
+
+  changeCompany = id => {
+    this.props.setCompanyLoading(true)
+    sendRequest({
+      r_path: '/profile/change_company',
+      method: 'patch',
+      attr: {
+        company_id: id,
+      },
+      success: res => {
+        this.getProfile()
+      },
+      failFunc: () => {
+        this.props.setCompanyLoading(false)
+      },
+      full_res: true,
     })
   }
 
@@ -300,6 +363,10 @@ class Dialogs extends Component {
   // todo
   socketLeaveGroup = e => {
     // console.log(e)
+  }
+
+  socketAdminUpdate = e => {
+    this.getProfile(true)
   }
 
   socketDeleteMessage = e => {
