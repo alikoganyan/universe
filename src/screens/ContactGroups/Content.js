@@ -26,6 +26,7 @@ import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
 import Company from '../../common/Company'
 import ImageComponent from '../../common/Image'
+import { setProfile } from '../../actions/profileAction'
 
 const { Colors, HeaderHeight, sidePadding } = helper
 const { green, black, grey2 } = Colors
@@ -646,6 +647,7 @@ class Content extends Component {
       setCurrentDialogs,
       setCurrentRoomId,
       dialogs,
+      setProfile,
     } = this.props
     const recipientId = !e.isGroup ? e._id : null
     const currentRoom = dialogs.find(
@@ -678,6 +680,7 @@ class Content extends Component {
       setCurrentChat(room)
       setCurrentDialogs(e)
     }
+    setProfile(e)
     navigate(e.isGroup ? 'Group' : 'Chat')
   }
 }
@@ -696,6 +699,7 @@ const mapDispatchToProps = dispatch => ({
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
   setReset: _ => dispatch(setReset(_)),
   setDialog: _ => dispatch(setDialog(_)),
+  setProfile: _ => dispatch(setProfile(_)),
 })
 export default connect(
   mapStateToProps,

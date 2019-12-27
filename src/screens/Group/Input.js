@@ -587,7 +587,6 @@ class InputComponent extends Component {
 
   sendMessage = () => {
     const { currentChat } = this.props
-
     // const {
     //   _id, first_name, last_name, middle_name, image
     // } = user;

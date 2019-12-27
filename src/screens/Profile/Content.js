@@ -17,11 +17,19 @@ import {
   GroupIconGrey,
 } from '../../assets/index'
 import Button from '../../common/Button'
-import { setRoom } from '../../actions/messageActions'
+import {
+  setCurrentChat,
+  setCurrentRoomId,
+  setRoom,
+} from '../../actions/messageActions'
 import helper from '../../utils/helpers'
 import ImageComponent from '../../common/Image'
 import { socket } from '../../utils/socket'
-import { setDialogs } from '../../actions/dialogsActions'
+import {
+  setCurrentDialogs,
+  setDialogs,
+  setDialog,
+} from '../../actions/dialogsActions'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
@@ -174,9 +182,9 @@ class Content extends Component {
       name,
       creator,
       department,
-    } = myProfile ? user : profile ? profile : currentDialog
+    } = myProfile ? user : profile
 
-    const { last_visit } = currentDialog
+    const { last_visit } = profile
 
     const lastVisit = new Date(last_visit)
     const lastVisitDay = Math.floor(lastVisit.getTime() / 1000 / 60 / 60 / 24)
@@ -249,7 +257,11 @@ class Content extends Component {
                 <UserStatus>{lastSeenDate}</UserStatus>
               )}
               {!myProfile && !isGroup && (
-                <SendMessage onPress={this.toChat}>
+                <SendMessage
+                  onPress={() => {
+                    this.toChat()
+                  }}
+                >
                   Написать сообщение
                 </SendMessage>
               )}
@@ -493,16 +505,42 @@ class Content extends Component {
     this.setState({ UserData: newUserData })
   }
 
-  componentWillUnmount() {
-    const { setProfile } = this.props
-    setProfile(null)
-  }
+  componentWillUnmount() {}
 
   toChat = () => {
-    const { setRoom, user, navigate } = this.props
-    const { _id } = user
-    socket.emit('select chat', { chatId: _id, userId: _id })
-    setRoom(_id)
+    const {
+      dialogs,
+      profile,
+      setRoom,
+      setCurrentRoomId,
+      setCurrentChat,
+      setCurrentDialogs,
+      user,
+      navigate,
+      setDialog,
+    } = this.props
+    const currentDialog = dialogs.find(
+      dialog =>
+        !dialog.isGroup &&
+        ((dialog.creator._id && dialog.creator._id === profile._id) ||
+          (dialog.participants[0] &&
+            dialog.participants[0]._id === profile._id)),
+    )
+    setDialog(currentDialog)
+    if (currentDialog) {
+      const { participants, creator, room, _id } = currentDialog
+      const cDialog =
+        user._id === creator._id ? { ...participants[0] } : { ...creator }
+      setRoom(profile._id)
+      setCurrentRoomId(_id)
+      setCurrentChat(room)
+      setCurrentDialogs(cDialog)
+      socket.emit('view', { room, viewer: user._id })
+    } else {
+      const { _id } = profile
+      setRoom(_id)
+      // setCurrentDialogs(profile)
+    }
     navigate('Chat')
   }
 
@@ -534,5 +572,12 @@ const mapDispatchToProps = dispatch => ({
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
   setRoom: _ => dispatch(setRoom(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
+  setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
+  setCurrentChat: _ => dispatch(setCurrentChat(_)),
+  setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
+  setDialog: _ => dispatch(setDialog(_)),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Content)

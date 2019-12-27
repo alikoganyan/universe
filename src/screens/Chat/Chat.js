@@ -14,7 +14,7 @@ import Header from './Header'
 import Input from './Input'
 import Content from './Content'
 import { socket } from '../../utils/socket'
-import { setIsMyProfile } from '../../actions/profileAction'
+import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 import { setDialog } from '../../actions/dialogsActions'
 
 const Wrapper = styled(View)`
@@ -141,9 +141,12 @@ const mapStateToProps = state => ({
   currentRoom: state.messageReducer.currentRoom,
   currentChat: state.messageReducer.currentChat,
   user: state.userReducer.user,
+  currentDialog: state.dialogsReducer.currentDialog,
+  profile: state.profileReducer.profile,
 })
 const mapDispatchToProps = dispatch => ({
   getMessages: _ => dispatch(getMessages(_)),
+  setProfile: _ => dispatch(setProfile(_)),
   setRoom: _ => dispatch(setRoom(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),

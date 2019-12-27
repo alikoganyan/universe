@@ -39,6 +39,7 @@ import sendRequest from '../../utils/request'
 import Company from '../../common/Company'
 import { setTaskList } from '../../actions/tasksActions'
 import ScreenLoader from '../../common/ScreenLoader'
+import { setProfile } from '../../actions/profileAction'
 
 const { Colors } = helper
 const { blue, grey2, lightColor } = Colors
@@ -628,6 +629,7 @@ class Dialogs extends Component {
       user,
       setCurrentDialogs,
       setCurrentRoomId,
+      setProfile,
     } = this.props
     const { isGroup, room, participants, creator, _id } = e
     const recipientId =
@@ -648,6 +650,7 @@ class Dialogs extends Component {
     this.props.setDialog(dialog)
     setCurrentDialogs(currentDialog)
     socket.emit('view', { room, viewer: user._id })
+    setProfile(e)
     navigation.navigate(e.isGroup ? 'Group' : 'Chat')
   }
 
@@ -693,5 +696,9 @@ const mapDispatchToProps = dispatch => ({
   setTaskList: _ => dispatch(setTaskList(_)),
   setReset: _ => dispatch(setReset(_)),
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
+  setProfile: _ => dispatch(setProfile(_)),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Dialogs)

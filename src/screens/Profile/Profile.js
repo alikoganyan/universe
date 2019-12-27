@@ -18,10 +18,15 @@ import { socket } from '../../utils/socket'
 import sendRequest from '../../utils/request'
 import Header from './Header'
 import Content from './Content'
-import { setDialogs } from '../../actions/dialogsActions'
+import {
+  setCurrentDialogs,
+  setDialog,
+  setDialogs,
+} from '../../actions/dialogsActions'
 import { p_logout } from '../../constants/api'
 import { logOut } from '../../actions/userActions'
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
+import { setCurrentChat, setCurrentRoomId } from '../../actions/messageActions'
 
 const { Colors, fontSize } = helper
 const { pink } = Colors
@@ -101,9 +106,16 @@ class Profile extends Component {
   navigateBack = () => {
     const { navigation } = this.props
     const { previousProfile } = this.state
-    previousProfile
-      ? this.toSenderProfile(previousProfile)
-      : navigation.goBack()
+
+    if (previousProfile) {
+      this.toSenderProfile(previousProfile)
+      this.props.setDialog(previousProfile)
+      this.props.setCurrentRoomId(previousProfile.room)
+      this.props.setCurrentChat(previousProfile.room)
+      this.props.setCurrentDialogs(previousProfile)
+    } else {
+      navigation.goBack()
+    }
     this.setState({ previousProfile: null })
   }
 
@@ -174,5 +186,12 @@ const mapDispatchToProps = dispatch => ({
   logOut: _ => dispatch(logOut()),
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
   setProfile: _ => dispatch(setProfile(_)),
+  setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
+  setCurrentChat: _ => dispatch(setCurrentChat(_)),
+  setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
+  setDialog: _ => dispatch(setDialog(_)),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(Profile)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Profile)
