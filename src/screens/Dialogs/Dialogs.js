@@ -39,7 +39,7 @@ import sendRequest from '../../utils/request'
 import Company from '../../common/Company'
 import { setTaskList } from '../../actions/tasksActions'
 import ScreenLoader from '../../common/ScreenLoader'
-import { setProfile } from '../../actions/profileAction'
+import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
 const { Colors } = helper
 const { blue, grey2, lightColor } = Colors
@@ -629,6 +629,7 @@ class Dialogs extends Component {
       setCurrentDialogs,
       setCurrentRoomId,
       setProfile,
+      setIsMyProfile,
     } = this.props
     e.messages.forEach(m => {
       if (!m.viewers.includes(user._id) && m.sender._id !== user._id) {
@@ -654,7 +655,29 @@ class Dialogs extends Component {
     this.props.setDialog(dialog)
     setCurrentDialogs(currentDialog)
     socket.emit('view', { room, viewer: user._id })
-    setProfile(e)
+    const chatImage =
+      !isGroup && participants.length
+        ? user._id === creator
+          ? user.image
+          : participants[0].image
+        : e.image
+
+    const chatName =
+      !isGroup && creator && participants.length
+        ? user._id !== creator._id
+          ? creator.first_name
+            ? `${creator.first_name} ${creator.last_name}`
+            : creator.phone_number && creator.phone_number
+          : participants[0] && participants[0].first_name
+          ? `${participants[0].first_name} ${participants[0].last_name}`
+          : participants[0].phone_number && participants[0].phone_number
+        : e.name || room
+    setProfile({
+      ...e,
+      name: chatName,
+      image: chatImage,
+    })
+    setIsMyProfile(false)
     navigation.navigate(e.isGroup ? 'Group' : 'Chat')
   }
 
@@ -698,6 +721,7 @@ const mapDispatchToProps = dispatch => ({
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setCompanies: _ => dispatch(setCompanies(_)),
   setTaskList: _ => dispatch(setTaskList(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
   setReset: _ => dispatch(setReset(_)),
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
   setProfile: _ => dispatch(setProfile(_)),
