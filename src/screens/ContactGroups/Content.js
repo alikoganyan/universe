@@ -570,22 +570,22 @@ class Content extends Component {
       name: e.name,
       data: e.users_this,
     }))
-    department.forEach(dep => {
-      dep.users_this.forEach(e => {
-        const exists = dialogs.findIndex(chat => chat._id === e._id) !== -1
-        const chat = dialogs.filter(
-          chat => chat._id === e._id && chat._id === user._id,
-        )[0]
-        const nonExisting = {
-          ...e,
-          creator: e,
-          participants: e,
-          room: `${e._id}_${user._id}`,
-        }
-        const conditon = exists || e._id !== user._id
-        conditon && userContactsAll.push(chat || nonExisting)
-      })
-    })
+    // department.forEach(dep => {
+    // dep.users_this.forEach(e => {
+    //   const exists = dialogs.findIndex(chat => chat._id === e._id) !== -1
+    //   const chat = dialogs.filter(
+    //     chat => chat._id === e._id && chat._id === user._id,
+    //   )[0]
+    //   const nonExisting = {
+    //     ...e,
+    //     creator: e,
+    //     participants: e,
+    //     room: `${e._id}_${user._id}`,
+    //   }
+    //   const conditon = exists || e._id !== user._id
+    //   conditon && userContactsAll.push(chat || nonExisting)
+    // })
+    // })
     const newCollapsed = [...collapsed]
     department.forEach(() => {
       newCollapsed.push(false)
@@ -697,7 +697,4 @@ const mapDispatchToProps = dispatch => ({
   setReset: _ => dispatch(setReset(_)),
   setDialog: _ => dispatch(setDialog(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
