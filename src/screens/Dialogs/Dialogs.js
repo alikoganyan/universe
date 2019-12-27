@@ -86,7 +86,6 @@ class Dialogs extends Component {
     const unreadMessages = messages.filter(
       e => !e.viewers.includes(user._id) && e.sender._id !== user._id,
     ).length
-
     const chatName =
       !isGroup && creator && participants.length
         ? user._id !== creator._id
@@ -631,6 +630,11 @@ class Dialogs extends Component {
       setCurrentRoomId,
       setProfile,
     } = this.props
+    e.messages.forEach(m => {
+      if (!m.viewers.includes(user._id) && m.sender._id !== user._id) {
+        m.viewers.push(user._id)
+      }
+    })
     const { isGroup, room, participants, creator, _id } = e
     const recipientId =
       !isGroup && user._id !== e.creator._id

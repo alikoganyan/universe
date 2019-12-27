@@ -107,7 +107,7 @@ class Content extends Component {
       if (uploadMessages.length) {
         messages.push(...uploadMessages.filter(m => m.roomId === currentRoomId))
       }
-      if (editedMessage2) {
+      if (editedMessage2 && editedMessage2.text) {
         const messageIndex = messages.findIndex(
           m => m._id === editedMessage2._id,
         )
@@ -132,6 +132,7 @@ class Content extends Component {
     reversedMessages.forEach((m, index) => {
       if (
         previousDate &&
+        reversedMessages.length &&
         previousDate !==
           `${
             this.getDayOfMonth[new Date(m.created_at).getMonth() + 1]
@@ -149,6 +150,7 @@ class Content extends Component {
 
     if (
       page === totalPages &&
+      reversedMessages.length &&
       reversedMessages[reversedMessages.length - 1].type !== 'date'
     ) {
       reversedMessages.splice(reversedMessages.length, 0, {
@@ -284,6 +286,7 @@ class Content extends Component {
 
   componentWillReceiveProps(nextProps) {
     const { removePreloader, currentRoomId } = this.props
+    const { dialog } = this.props
     let { messages } = this.props
     if (nextProps.message._id !== this.props.message._id) {
       messages.push(nextProps.message)
@@ -301,6 +304,10 @@ class Content extends Component {
       messages = messages.filter(
         m => m._id !== nextProps.deleteMessage.message_id,
       )
+      dialog.messages = dialog.messages.filter(
+        message => message._id !== nextProps.deleteMessage.message_id,
+      )
+      this.props.setDialog(dialog)
       this.props.setMessages(messages)
     }
   }
@@ -658,7 +665,7 @@ class Content extends Component {
   }
 
   deleteMessage = currentMessage => {
-    const { currentRoomId } = this.props
+    const { currentRoomId, dialog } = this.props
     let { messages } = this.props
     sendRequest({
       r_path: d_message,
@@ -671,6 +678,10 @@ class Content extends Component {
       failFunc: err => {},
     })
     messages = messages.filter(message => message._id !== currentMessage._id)
+    dialog.messages = dialog.messages.filter(
+      message => message._id !== currentMessage._id,
+    )
+    this.props.setDialog(dialog)
     this.props.setMessages(messages)
   }
 
@@ -902,4 +913,7 @@ const mapDispatchToProps = dispatch => ({
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setEditedMessage: _ => dispatch(getEditedMessage(_)),
 })
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Content)
