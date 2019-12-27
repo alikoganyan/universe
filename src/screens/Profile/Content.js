@@ -123,7 +123,7 @@ const LeaveGroup = styled(Text)`
   font-size: ${fontSize.sm};
   color: ${pink};
 `
-const BoxInnerItem = styled(View)`
+const BoxInnerItem = styled(TouchableOpacity)`
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -295,7 +295,11 @@ class Content extends Component {
                   padding: 10,
                 }}
               >
-                <BoxInnerItem>
+                <BoxInnerItem
+                  onPress={() =>
+                    this.props.toSenderProfile(creator, currentDialog)
+                  }
+                >
                   {creator.image === '/images/default_avatar.jpg' ||
                   !creator.image ? (
                     <DefaultAvatar size={36} />
