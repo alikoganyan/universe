@@ -95,7 +95,10 @@ const ArrowWrapper = styled(AnimatedArrowWrapper)``
 
 class Content extends Component {
   Contacts = () => {
-    if (this.props.user.company._id === 0) {
+    if (
+      this.props.user.company._id === 0 ||
+      !this.props.user.settings.partition_contacts
+    ) {
       if (this.state.allUsers && this.state.allUsers.length) {
         return (
           <ContactList>
@@ -392,7 +395,4 @@ const mapDispatchToProps = dispatch => ({
   addReceiver: _ => dispatch(addDialogParticipant(_)),
   setReceivers: _ => dispatch(setDialogParticipants(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

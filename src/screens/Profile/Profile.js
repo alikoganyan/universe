@@ -128,7 +128,7 @@ class Profile extends Component {
   toSenderProfile = (sender, previousProfile?) => {
     const { setProfile } = this.props
     this.setState({ previousProfile })
-    this.props.setIsMyProfile(false)
+    this.props.setIsMyProfile(sender._id === this.props.user._id)
     setProfile(sender)
   }
 
@@ -191,7 +191,4 @@ const mapDispatchToProps = dispatch => ({
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
   setDialog: _ => dispatch(setDialog(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Profile)
+export default connect(mapStateToProps, mapDispatchToProps)(Profile)

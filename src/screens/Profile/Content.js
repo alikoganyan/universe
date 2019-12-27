@@ -216,7 +216,7 @@ class Content extends Component {
           : `был онлайн ${date} ${month}`
         : 'неизвестно'
 
-    const chatName = isGroup
+    const chatName = name
       ? name
       : first_name
       ? `${first_name} ${last_name}`
@@ -581,7 +581,4 @@ const mapDispatchToProps = dispatch => ({
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
   setDialog: _ => dispatch(setDialog(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

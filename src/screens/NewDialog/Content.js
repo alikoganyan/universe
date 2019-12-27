@@ -145,7 +145,10 @@ class Content extends Component {
   }
 
   Contacts = () => {
-    if (this.props.user.company._id === 0) {
+    if (
+      this.props.user.company._id === 0 ||
+      !this.props.user.settings.partition_contacts
+    ) {
       return (
         <ContactList
           bounces={false}
@@ -342,7 +345,4 @@ const mapDispatchToProps = dispatch => ({
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
