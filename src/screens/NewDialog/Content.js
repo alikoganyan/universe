@@ -145,7 +145,10 @@ class Content extends Component {
   }
 
   Contacts = () => {
-    if (this.props.user.company._id === 0) {
+    if (
+      this.props.user.company._id === 0 ||
+      !this.props.user.settings.partition_contacts
+    ) {
       return (
         <ContactList
           bounces={false}
