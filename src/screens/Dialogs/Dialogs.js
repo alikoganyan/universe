@@ -341,9 +341,12 @@ class Dialogs extends Component {
   }
 
   socketGetGroup = e => {
-    if (e) {
-      const dialog = { ...e }
-      this.props.setDialog(dialog)
+    const { setDialog } = this.props
+    const room = e.room
+    if (room) {
+      socket.emit('subscribe_to_group', { room: room }, ({ dialog }) => {
+        setDialog(dialog)
+      })
     }
     socket.emit('get_dialogs')
   }
@@ -702,7 +705,4 @@ const mapDispatchToProps = dispatch => ({
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
   setProfile: _ => dispatch(setProfile(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Dialogs)
+export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)
