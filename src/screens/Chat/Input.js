@@ -80,6 +80,7 @@ const Wrapper = styled(View)`
 const Input = styled(AutoHeightInput)`
   display: flex;
   width: 100%;
+  max-height: 120px;
   overflow: hidden;
   padding-horizontal: 12px;
   padding-top: ${Platform.OS === 'ios' ? '8px' : '8px'};
@@ -767,7 +768,4 @@ const mapDispatchToProps = dispatch => ({
   setMessage: _ => dispatch(setMessage(_)),
   setFile: _ => dispatch(setFile(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(InputComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(InputComponent)
