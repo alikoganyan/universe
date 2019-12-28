@@ -372,10 +372,10 @@ class Dialogs extends Component {
   socketDeleteMessage = e => {
     const { dialog, dialogs, setDialogs, setDeletedMessage } = this.props
     if (!Object.keys(dialog).length) {
-      const currentDialogIndex = dialogs.findIndex(d => d._id === e.dialog_id)
-      dialogs[currentDialogIndex].messages = dialogs[
-        currentDialogIndex
-      ].messages.filter(m => m._id !== e.message_id)
+      const index = dialogs.findIndex(d => d._id === e.dialog_id)
+      dialogs[index].messages = dialogs[index].messages.filter(
+        m => m._id !== e.message_id,
+      )
       setDialogs(dialogs)
     } else {
       setDeletedMessage(e)

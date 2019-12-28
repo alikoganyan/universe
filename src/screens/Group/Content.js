@@ -29,7 +29,7 @@ import {
   setMessage,
   getEditedMessage,
 } from '../../actions/messageActions'
-import { setDialog } from '../../actions/dialogsActions'
+import { setDialog, setDialogs } from '../../actions/dialogsActions'
 import { d_message } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import Loader from '../../common/Loader'
@@ -685,7 +685,7 @@ class Content extends Component {
   }
 
   deleteMessage = currentMessage => {
-    const { currentRoomId, dialog } = this.props
+    const { currentRoomId, dialog, dialogs } = this.props
     let { messages } = this.props
     sendRequest({
       r_path: d_message,
@@ -698,10 +698,11 @@ class Content extends Component {
       failFunc: err => {},
     })
     messages = messages.filter(message => message._id !== currentMessage._id)
-    dialog.messages = dialog.messages.filter(
-      message => message._id !== currentMessage._id,
+    const index = dialogs.findIndex(d => d._id === dialog._id)
+    dialogs[index].messages = dialogs[index].messages.filter(
+      m => m._id !== currentMessage._id,
     )
-    this.props.setDialog(dialog)
+    setDialogs(dialogs)
     this.props.setMessages(messages)
   }
 
@@ -882,6 +883,7 @@ const mapStateToProps = state => ({
   forwardMessage: state.messageReducer.forwardMessage,
   currentDialog: state.dialogsReducer.currentDialog,
   dialog: state.dialogsReducer.dialog,
+  dialogs: state.dialogsReducer.dialogs,
   message: state.messageReducer.message,
   renderedMessages: state.messageReducer.renderedMessages,
   currentChat: state.messageReducer.currentChat,
