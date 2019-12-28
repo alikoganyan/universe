@@ -938,7 +938,7 @@ class Message extends Component {
                     <ImageIconBlue />
                   </FileIcon>
                   <FileInfo>
-                    <MessageText noPadding style={{ maxWidth: '92%' }}>
+                    <MessageText noPadding style={{}}>
                       {filename}
                     </MessageText>
                     <FileSize>{fileSize}</FileSize>
@@ -1013,9 +1013,7 @@ class Message extends Component {
                   <ImageIcon />
                 </FileIcon>
                 <FileInfo>
-                  <MessageText style={{ maxWidth: '92%' }}>
-                    {filename}
-                  </MessageText>
+                  <MessageText style={{}}>{filename}</MessageText>
                   <FileSize color={pink}>{fileSize}</FileSize>
                 </FileInfo>
               </FileInfoWrapper>
