@@ -511,15 +511,16 @@ class Content extends Component {
         ListEmptyComponent={this._renderEmptyComponent}
         ref={ref => (this.groupRef = ref)}
         renderItem={({ item }) => {
-          const { participants, _id, name, isGroup } = item
-          const { image } = item.image
+          const { participants, _id, name, isGroup, image } = item
           return isGroup ? (
             <BoxInnerItem key={_id} onPress={() => this.toChat(item)}>
-              {!image ? (
-                <DefaultAvatar isGroup={isGroup} id={_id} size={36} />
+              {!image || image === '/images/default_avatar.jpg' ? (
+                <DefaultAvatar isGroup={item.isGroup} id={item._id} size={36} />
               ) : (
                 <ImageComponent
-                  source={{ uri: `https://seruniverse.asmo.media${image}` }}
+                  source={{
+                    uri: `https://seruniverse.asmo.media${image}`,
+                  }}
                   size={36}
                 />
               )}
@@ -701,7 +702,4 @@ const mapDispatchToProps = dispatch => ({
   setDialog: _ => dispatch(setDialog(_)),
   setProfile: _ => dispatch(setProfile(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
