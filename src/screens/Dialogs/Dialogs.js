@@ -526,7 +526,7 @@ class Dialogs extends Component {
   }
 
   newMessageSocket = e => {
-    const { dialog, company, dialogs } = this.props
+    const { dialog, company, dialogs, user } = this.props
     try {
       if (e.company === company._id) {
         const message =
@@ -544,6 +544,9 @@ class Dialogs extends Component {
               }
         if (Object.keys(dialog).length) {
           if (e.dialog === dialog._id) {
+            if (!message.viewers.includes(user._id)) {
+              message.viewers.push(user._id)
+            }
             this.props.setMessage(message)
             const updatedCurrentDialog = { ...dialog }
             updatedCurrentDialog.messages.push(message)
