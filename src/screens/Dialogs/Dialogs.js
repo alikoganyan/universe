@@ -526,33 +526,35 @@ class Dialogs extends Component {
   }
 
   newMessageSocket = e => {
-    const { dialog, dialogs } = this.props
+    const { dialog, company, dialogs } = this.props
     try {
-      const message =
-        e && e._id
-          ? {
-              ...e,
-            }
-          : {
-              ...e,
-              text: e.text,
-              type: e.type,
-              created_at: new Date(),
-              sender: { ...e.sender },
-              viewers: [],
-            }
-      if (Object.keys(dialog).length) {
-        if (e.dialog === dialog._id && e.company === dialog.company) {
-          this.props.setMessage(message)
-          const updatedCurrentDialog = { ...dialog }
-          updatedCurrentDialog.messages.push(message)
-          this.sortedDialog(updatedCurrentDialog)
+      if (e.company === company._id) {
+        const message =
+          e && e._id
+            ? {
+                ...e,
+              }
+            : {
+                ...e,
+                text: e.text,
+                type: e.type,
+                created_at: new Date(),
+                sender: { ...e.sender },
+                viewers: [],
+              }
+        if (Object.keys(dialog).length) {
+          if (e.dialog === dialog._id) {
+            this.props.setMessage(message)
+            const updatedCurrentDialog = { ...dialog }
+            updatedCurrentDialog.messages.push(message)
+            this.sortedDialog(updatedCurrentDialog)
+          }
+        } else {
+          const currentDialog = dialogs.find(d => d._id === e.dialog)
+          currentDialog.messages.push(message)
+          this.sortedDialog(currentDialog)
+          this.props.setCurrentRoomId(e.dialog)
         }
-      } else {
-        const currentDialog = dialogs.find(d => d._id === e.dialog)
-        currentDialog.messages.push(message)
-        this.sortedDialog(currentDialog)
-        this.props.setCurrentRoomId(e.dialog)
       }
     } catch (err) {
       alert(`${JSON.stringify(e)} cannot be processed [${err}]`)
