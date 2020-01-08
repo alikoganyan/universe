@@ -11,6 +11,7 @@ import { getPushesPermissionStatusAndToken } from './actions/pushesActions'
 import { connectToSocket } from './utils/socket'
 import { setUser, setAuth } from './actions/userActions'
 import { setDialogsUserId } from './actions/dialogsActions'
+import OfflineNotice from './common/OfflineNotice'
 
 // const Roboto = require('./assets/fonts/Roboto-Regular.ttf')
 
@@ -19,7 +20,7 @@ console.disableYellowBox = true
 
 export default class AppComponent extends Component {
   render() {
-    const { loaded, logged } = this.state
+    const { loaded, logged, connected } = this.state
     const Navigator = createRootNavigator(loaded && logged)
 
     if (!loaded) {
@@ -32,6 +33,7 @@ export default class AppComponent extends Component {
       <Provider store={store}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
         {/* {logged && !connected && <Offline />} */}
+        {!connected && <OfflineNotice />}
         <Navigator />
       </Provider>
     )
