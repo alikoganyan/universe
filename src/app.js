@@ -48,7 +48,7 @@ export default class AppComponent extends Component {
   appState = AppState.currentState
 
   async componentDidMount() {
-    NetInfo.addEventListener(
+    NetInfo.isConnected.addEventListener(
       'connectionChange',
       this.handleFirstConnectivityChange,
     )
@@ -86,22 +86,14 @@ export default class AppComponent extends Component {
 
   componentWillUnmount() {
     BackHandler.removeEventListener('hardwareBackPress', this._handleBackButton)
-    NetInfo.removeEventListener(
+    NetInfo.isConnected.removeEventListener(
       'connectionChange',
       this.handleFirstConnectivityChange,
     )
   }
 
-  handleFirstConnectivityChange = connectionInfo => {
-    if (connectionInfo.type === 'none') {
-      this.setState({
-        connected: false,
-      })
-    } else {
-      this.setState({
-        connected: true,
-      })
-    }
+  handleFirstConnectivityChange = connected => {
+    this.setState({ connected })
   }
 
   _handleBackButton = () => {
