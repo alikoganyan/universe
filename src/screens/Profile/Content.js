@@ -426,7 +426,7 @@ class Content extends Component {
   }
 
   componentDidMount() {
-    const { myProfile, user, currentDialog } = this.props
+    const { myProfile, user, profile } = this.props
     const {
       role,
       phone_number,
@@ -434,7 +434,7 @@ class Content extends Component {
       tasks,
       isGroup,
       participants,
-    } = myProfile ? user : currentDialog
+    } = myProfile ? user : profile
 
     const newUserData = [
       department && department.name !== 'Персональный'

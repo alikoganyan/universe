@@ -224,6 +224,12 @@ class Dialogs extends Component {
     socket.removeEventListener('dialog_opened', this.socketDialogOpened)
     socket.removeEventListener('new_group', this.socketGetGroup)
     socket.removeEventListener('deleted_from_group', this.socketDeleteGroup)
+    socket.removeEventListener('change_group_name', this.socketChangeGroup)
+    socket.removeEventListener('change_group_image', this.socketChangeGroup)
+    socket.removeEventListener(
+      'change_group_participants',
+      this.socketChangeGroup,
+    )
     socket.removeEventListener('message_edited', this.messageEdited)
     socket.removeEventListener('user_left_from_group', this.socketLeaveGroup)
     socket.removeEventListener('deleted_message', this.socketDeleteMessage)
@@ -239,6 +245,11 @@ class Dialogs extends Component {
     socket.on('dialog_opened', this.socketDialogOpened)
     socket.on('new_group', e => this.socketGetGroup(e))
     socket.on('deleted_from_group', e => this.socketDeleteGroup(e))
+    socket.on('change_group_name', e => this.socketChangeGroup(e, 'name'))
+    socket.on('change_group_image', e => this.socketChangeGroup(e, 'image'))
+    socket.on('change_group_participants', e =>
+      this.socketChangeGroup(e, 'participants'),
+    )
     socket.on('message_edited', e => this.messageEdited(e))
     socket.on('user_left_from_group', e => this.socketLeaveGroup(e))
     socket.on('deleted_message', e => this.socketDeleteMessage(e))
@@ -414,6 +425,25 @@ class Dialogs extends Component {
       const newDialogs = dialogs.filter(d => d._id !== e.dialog_id)
       setDialogs(newDialogs)
     }
+  }
+
+  socketChangeGroup = (e, type) => {
+    const {
+      setDialogs,
+      dialogs,
+      dialog,
+      setDialog,
+      setCurrentDialogs,
+      setProfile,
+    } = this.props
+    if (dialog._id === e.dialog_id) {
+      dialog[type] = e[type]
+      setCurrentDialogs(dialog)
+      setDialog(dialog)
+      setProfile(dialog)
+    }
+    dialogs.find(d => e.dialog_id === d._id)[type] = e[type]
+    setDialogs(dialogs)
   }
 
   socketDeleteGroup = e => {
