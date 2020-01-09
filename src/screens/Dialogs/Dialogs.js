@@ -274,7 +274,7 @@ class Dialogs extends Component {
   //   this.props.setReset(true)
   // }
 
-  getProfile = (adminChange?) => {
+  getProfile = (adminChange = false) => {
     const { company } = this.props
     sendRequest({
       r_path: '/profile',
@@ -418,24 +418,27 @@ class Dialogs extends Component {
 
   socketDeleteGroup = e => {
     const { setDialogs, dialogs, currentRoomId } = this.props
-    const newDialogs = dialogs.filter(d => e.dialog_id !== d._id)
     const deletedDialog = dialogs.find(d => e.dialog_id === d._id)
-    setDialogs(newDialogs)
-    Alert.alert(
-      `Вас удалили из группы ${deletedDialog.name}`,
-      '',
-      [
-        {
-          text: 'OK',
-          onPress: () => {
-            if (e.dialog_id === currentRoomId) {
-              this.props.navigation.navigate('Dialogs')
-            }
+
+    if (deletedDialog) {
+      const newDialogs = dialogs.filter(d => e.dialog_id !== d._id)
+      setDialogs(newDialogs)
+      Alert.alert(
+        `Вас удалили из группы ${deletedDialog.name}`,
+        '',
+        [
+          {
+            text: 'OK',
+            onPress: () => {
+              if (e.dialog_id === currentRoomId) {
+                this.props.navigation.navigate('Dialogs')
+              }
+            },
           },
-        },
-      ],
-      { cancelable: false },
-    )
+        ],
+        { cancelable: false },
+      )
+    }
   }
 
   socketGetGroup = e => {
