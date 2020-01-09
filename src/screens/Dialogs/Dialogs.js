@@ -1,6 +1,13 @@
 /* eslint-disable array-callback-return */
 import React, { Component } from 'react'
-import { View, Text, Animated, TouchableOpacity, AppState } from 'react-native'
+import {
+  View,
+  Text,
+  Animated,
+  TouchableOpacity,
+  AppState,
+  Alert,
+} from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import _ from 'lodash'
@@ -216,6 +223,7 @@ class Dialogs extends Component {
     socket.removeEventListener('need_update', this.socketNeedsUpdate)
     socket.removeEventListener('dialog_opened', this.socketDialogOpened)
     socket.removeEventListener('new_group', this.socketGetGroup)
+    socket.removeEventListener('deleted_from_group', this.socketDeleteGroup)
     socket.removeEventListener('message_edited', this.messageEdited)
     socket.removeEventListener('user_left_from_group', this.socketLeaveGroup)
     socket.removeEventListener('deleted_message', this.socketDeleteMessage)
@@ -230,6 +238,7 @@ class Dialogs extends Component {
     socket.on('need_update', this.socketNeedsUpdate)
     socket.on('dialog_opened', this.socketDialogOpened)
     socket.on('new_group', e => this.socketGetGroup(e))
+    socket.on('deleted_from_group', e => this.socketDeleteGroup(e))
     socket.on('message_edited', e => this.messageEdited(e))
     socket.on('user_left_from_group', e => this.socketLeaveGroup(e))
     socket.on('deleted_message', e => this.socketDeleteMessage(e))
@@ -405,6 +414,28 @@ class Dialogs extends Component {
       const newDialogs = dialogs.filter(d => d._id !== e.dialog_id)
       setDialogs(newDialogs)
     }
+  }
+
+  socketDeleteGroup = e => {
+    const { setDialogs, dialogs, currentRoomId } = this.props
+    const newDialogs = dialogs.filter(d => e.dialog_id !== d._id)
+    const deletedDialog = dialogs.find(d => e.dialog_id === d._id)
+    setDialogs(newDialogs)
+    Alert.alert(
+      `Вас удалили из группы ${deletedDialog.name}`,
+      '',
+      [
+        {
+          text: 'OK',
+          onPress: () => {
+            if (e.dialog_id === currentRoomId) {
+              this.props.navigation.navigate('Dialogs')
+            }
+          },
+        },
+      ],
+      { cancelable: false },
+    )
   }
 
   socketGetGroup = e => {
