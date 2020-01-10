@@ -436,14 +436,18 @@ class Dialogs extends Component {
       setCurrentDialogs,
       setProfile,
     } = this.props
-    if (dialog._id === e.dialog_id) {
-      dialog[type] = e[type]
-      setCurrentDialogs(dialog)
-      setDialog(dialog)
-      setProfile(dialog)
+    if (!!(dialog[type] && e[type])) {
+      if (dialog._id === e.dialog_id) {
+        dialog[type] = e[type]
+        setCurrentDialogs(dialog)
+        setDialog(dialog)
+        setProfile(dialog)
+      }
     }
-    dialogs.find(d => e.dialog_id === d._id)[type] = e[type]
-    setDialogs(dialogs)
+    if (dialogs.length && e[type]) {
+      dialogs.find(d => e.dialog_id === d._id)[type] = e[type]
+      setDialogs(dialogs)
+    }
   }
 
   socketDeleteGroup = e => {
