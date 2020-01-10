@@ -196,8 +196,7 @@ class Dialogs extends Component {
   componentDidMount() {
     this.getProfile()
 
-    const { user, setCompanyLoading } = this.props
-    setCompanyLoading(false)
+    const { user } = this.props
     this.props.removeAllPreloader()
     // navigation.navigate('NewTask') // restore
     // clearInterval(this.interval)
@@ -260,6 +259,8 @@ class Dialogs extends Component {
 
   componentWillUnmount() {
     this.props.setDialog(null)
+    this.props.setCompanyLoading(false)
+
     // disconnectFromSocket()
     // AppState.removeEventListener('change', this._handleAppStateChange);
   }
@@ -286,6 +287,7 @@ class Dialogs extends Component {
   // }
 
   getProfile = (adminChange = false) => {
+    this.props.setCompanyLoading(true)
     const { company } = this.props
     sendRequest({
       r_path: '/profile',
