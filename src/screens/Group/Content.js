@@ -362,9 +362,10 @@ class Content extends Component {
   }
 
   download = async item => {
+    // console.log(RNFS, item)
     await RNFS.downloadFile({
       fromUrl: `https://seruniverse.asmo.media${item.src}`,
-      toFile: `${RNFS.DocumentDirectoryPath}/${item.name}`,
+      toFile: `${RNFS.DocumentDirectoryPath}/${item.filename}`,
     }).promise.then(r => {
       // console.log(r)
       // this.setState({ isDone: true })
