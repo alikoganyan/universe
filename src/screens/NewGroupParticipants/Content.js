@@ -172,9 +172,7 @@ class Content extends Component {
                       <RoundCheckbox
                         size={24}
                         backgroundColor={green}
-                        checked={this.state.checkedList
-                          .filter(item => item.department_id === e._id)
-                          .every(({ checked }) => checked)}
+                        checked={this.isChecked(e._id)}
                         onValueChange={() => this.addAllReceivers(e._id)}
                       />
                       <BoxItem title>{e.name}</BoxItem>
@@ -278,6 +276,14 @@ class Content extends Component {
     animationCompleted: false,
   }
 
+  isChecked = id => {
+    const { checkedList, users } = this.state
+    const currentDep = users.department.find(d => d._id === id)
+    return checkedList.filter(e =>
+      currentDep.users_this.some(u => e.id === u._id),
+    )
+  }
+
   componentDidMount() {
     InteractionManager.runAfterInteractions(() => {
       this.setState({
@@ -351,8 +357,11 @@ class Content extends Component {
 
   addAllReceivers = id => {
     const { setReceivers } = this.props
-    const { checkedList } = this.state
-    const dep = checkedList.filter(e => id === e.department_id)
+    const { checkedList, users } = this.state
+    const currentDep = users.department.find(d => d._id === id)
+    const dep = checkedList.filter(e =>
+      currentDep.users_this.some(u => e.id === u._id),
+    )
     const is = dep.every(e => e.checked)
     dep.forEach(e => (e.checked = !is))
     this.setState({ ...this.state, checkedList })
