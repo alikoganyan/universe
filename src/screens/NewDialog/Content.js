@@ -14,7 +14,7 @@ import posed from 'react-native-pose'
 import Collapsible from 'react-native-collapsible'
 import { connect } from 'react-redux'
 import { GroupIconWhite, ArrowDownIcon } from '../../assets/index'
-import helper, { getUsersByDepartments } from '../../utils/helpers'
+import helper from '../../utils/helpers'
 import sendRequest from '../../utils/request'
 import { p_users_from_role_or_position } from '../../constants/api'
 import ImageComponent from '../../common/Image'
@@ -55,6 +55,14 @@ const ContactList = styled(Animated.FlatList)`
 const Box = styled(View)`
   padding-top: 20px;
   border: 1px solid #e8ebee;
+  border-width: 0;
+  border-top-width: 1px;
+  border-bottom-width: ${({ last }) => (last ? 1 : 0)}px;
+`
+
+const BoxChild = styled(View)`
+  padding-top: 20px;
+  border: 1px solid black;
   border-width: 0;
   border-top-width: 1px;
   border-bottom-width: ${({ last }) => (last ? 1 : 0)}px;
@@ -145,6 +153,7 @@ class Content extends Component {
   }
 
   Contacts = () => {
+    const { user } = this.props
     if (
       this.props.user.company._id === 0 ||
       !this.props.user.settings.partition_contacts
@@ -195,61 +204,162 @@ class Content extends Component {
           bounces={false}
           data={this.state.users.department}
           ref={ref => (this.usersRef = ref)}
-          renderItem={({ item, index }) => (
-            <Box last={index === this.state.users.department.length - 1}>
-              <BoxTitle
-                onPress={() =>
-                  this.state.collapsed[index]
-                    ? this.collapseDepartment(index)
-                    : this.showDepartment(index)
-                }
-              >
-                <BoxItem title>{item.title}</BoxItem>
-                <ArrowWrapper
-                  pose={this.state.collapsed[index] ? 'right' : 'down'}
+          renderItem={({ item, index }) => {
+            const data = [...item.subdivisions, ...item.users_this]
+            return (
+              <Box last={index === this.state.users.department.length - 1}>
+                <BoxTitle
+                  onPress={() =>
+                    this.state.collapsed[index]
+                      ? this.collapseDepartment(index)
+                      : this.showDepartment(index)
+                  }
                 >
-                  <ArrowDownIcon />
-                </ArrowWrapper>
-              </BoxTitle>
-              <Collapsible collapsed={this.state.collapsed[index] || false}>
-                <BoxInner>
-                  {item.workers &&
-                    item.workers.length &&
-                    item.workers.map((e, i) => (
-                      <TouchableOpacity key={i} onPress={() => this.toChat(e)}>
-                        <BoxInnerItem>
-                          {!e.image ||
-                          e.image === '/images/default_avatar.jpg' ? (
-                            <DefaultAvatar
-                              isGroup={e.isGroup}
-                              id={e._id}
-                              size={36}
-                            />
-                          ) : (
-                            <ImageComponent
-                              size={33}
-                              source={{
-                                uri: `https://seruniverse.asmo.media${e.image}`,
-                              }}
-                            />
-                          )}
-                          <ContactInfo>
-                            <ContactName>
-                              {e.first_name
-                                ? `${e.first_name} ${e.last_name}`
-                                : e.phone_number}
-                            </ContactName>
-                            {e.role ? (
-                              <ContactRole>{e.role.name}</ContactRole>
-                            ) : null}
-                          </ContactInfo>
-                        </BoxInnerItem>
-                      </TouchableOpacity>
-                    ))}
-                </BoxInner>
-              </Collapsible>
-            </Box>
-          )}
+                  <BoxItem title>{item.name}</BoxItem>
+                  <ArrowWrapper
+                    pose={this.state.collapsed[index] ? 'right' : 'down'}
+                  >
+                    <ArrowDownIcon />
+                  </ArrowWrapper>
+                </BoxTitle>
+                <Collapsible collapsed={this.state.collapsed[index] || false}>
+                  <BoxInner>
+                    {data &&
+                      data.length &&
+                      data.map((e, i) =>
+                        e.name ? (
+                          <TouchableOpacity
+                            key={i}
+                            onPress={() => this.toChat(e)}
+                          >
+                            <BoxInnerItem>
+                              {/*<ContactInfo>*/}
+                              {/*  <ContactName>*/}
+                              {/*    {e.first_name*/}
+                              {/*      ? `${e.first_name} ${e.last_name}`*/}
+                              {/*      : e.name}*/}
+                              {/*  </ContactName>*/}
+                              {/*  {e.role ? (*/}
+                              {/*    <ContactRole>{e.role.name}</ContactRole>*/}
+                              {/*  ) : null}*/}
+                              {/*</ContactInfo>*/}
+
+                              <BoxChild
+                                last={index === item.subdivisions.length - 1}
+                              >
+                                <BoxTitle
+                                  onPress={() =>
+                                    this.state.collapsed[index]
+                                      ? this.collapseDepartment(index)
+                                      : this.showDepartment(index)
+                                  }
+                                >
+                                  <BoxItem title>{item.name}</BoxItem>
+                                  <ArrowWrapper
+                                    pose={
+                                      this.state.collapsed[index]
+                                        ? 'right'
+                                        : 'down'
+                                    }
+                                  >
+                                    <ArrowDownIcon />
+                                  </ArrowWrapper>
+                                </BoxTitle>
+                                <Collapsible
+                                  collapsed={
+                                    this.state.collapsed[index] || false
+                                  }
+                                >
+                                  <BoxInner>
+                                    {e.users_this &&
+                                      e.users_this.length &&
+                                      e.users_this.map(
+                                        (e, i) =>
+                                          e._id !== user._id && (
+                                            <TouchableOpacity
+                                              key={i}
+                                              onPress={() => this.toChat(e)}
+                                            >
+                                              <BoxInnerItem>
+                                                {!e.image ||
+                                                e.image ===
+                                                  '/images/default_avatar.jpg' ? (
+                                                  <DefaultAvatar
+                                                    isGroup={e.isGroup}
+                                                    id={e._id}
+                                                    size={36}
+                                                  />
+                                                ) : (
+                                                  <ImageComponent
+                                                    size={33}
+                                                    source={{
+                                                      uri: `https://seruniverse.asmo.media${e.image}`,
+                                                    }}
+                                                  />
+                                                )}
+                                                <ContactInfo>
+                                                  <ContactName>
+                                                    {e.first_name
+                                                      ? `${e.first_name} ${e.last_name}`
+                                                      : e.phone_number}
+                                                  </ContactName>
+                                                  {e.role ? (
+                                                    <ContactRole>
+                                                      {e.role.name}
+                                                    </ContactRole>
+                                                  ) : null}
+                                                </ContactInfo>
+                                              </BoxInnerItem>
+                                            </TouchableOpacity>
+                                          ),
+                                      )}
+                                  </BoxInner>
+                                </Collapsible>
+                              </BoxChild>
+                            </BoxInnerItem>
+                          </TouchableOpacity>
+                        ) : (
+                          e._id !== user._id && (
+                            <TouchableOpacity
+                              key={i}
+                              onPress={() => this.toChat(e)}
+                            >
+                              <BoxInnerItem>
+                                {!e.image ||
+                                e.image === '/images/default_avatar.jpg' ? (
+                                  <DefaultAvatar
+                                    isGroup={e.isGroup}
+                                    id={e._id}
+                                    size={36}
+                                  />
+                                ) : (
+                                  <ImageComponent
+                                    size={33}
+                                    source={{
+                                      uri: `https://seruniverse.asmo.media${e.image}`,
+                                    }}
+                                  />
+                                )}
+                                <ContactInfo>
+                                  <ContactName>
+                                    {e.first_name
+                                      ? `${e.first_name} ${e.last_name}`
+                                      : e.phone_number}
+                                  </ContactName>
+                                  {e.role ? (
+                                    <ContactRole>{e.role.name}</ContactRole>
+                                  ) : null}
+                                </ContactInfo>
+                              </BoxInnerItem>
+                            </TouchableOpacity>
+                          )
+                        ),
+                      )}
+                  </BoxInner>
+                </Collapsible>
+              </Box>
+            )
+          }}
         />
       )
     }
@@ -285,16 +395,21 @@ class Content extends Component {
         access_field: 'view_contacts',
       },
       success: res => {
-        this.setState({ allUsers: res.users })
-        const formatedUsers = getUsersByDepartments(
-          res.users || [],
-          this.props.user.company._id,
-        )
-        this.setState({ users: { department: formatedUsers } })
-        for (let i = 0; i < formatedUsers.length; i += 1) {
-          newDCollapsed.push(true)
+        if (res && res.company && res.users) {
+          const departments = res.company.subdivisions
+          this.setState({ allUsers: res.users })
+          // const formatedUsers = getUsersByDepartments(
+          //   res.users || [],
+          //   this.props.user.company._id,
+          // )
+
+          // console.log(formatedUsers);
+          this.setState({ users: { department: departments } })
+          for (let i = 0; i < departments.length; i += 1) {
+            newDCollapsed.push(true)
+          }
+          this.setState({ collapsed: newDCollapsed })
         }
-        this.setState({ collapsed: newDCollapsed })
       },
       failFunc: () => {},
     })

@@ -571,6 +571,7 @@ class Content extends Component {
       id: e._id,
       name: e.name,
       data: e.users_this,
+      subdivisions: e.subdivisions,
     }))
     // department.forEach(dep => {
     // dep.users_this.forEach(e => {
