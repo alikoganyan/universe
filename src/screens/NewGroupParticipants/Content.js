@@ -306,21 +306,26 @@ class Content extends Component {
       },
       success: res => {
         this.setState({ allUsers: res.users })
-        const formatedUsers = res.company.subdivisions
-        formatedUsers.forEach(
+        let updatedDepartaments = [...res.company.subdivisions]
+
+        const formatedUsers = [...res.company.subdivisions]
+        formatedUsers.forEach(d => {
+          updatedDepartaments = [...updatedDepartaments, ...d.subdivisions]
+        })
+        updatedDepartaments.forEach(
           d =>
             (d.users_this = d.users_this.filter(
               u => u._id !== this.props.user._id,
             )),
         )
-        this.setState({ users: { department: formatedUsers } })
+        this.setState({ users: { department: updatedDepartaments } })
         const checkedList = res.users.map(user => ({
           id: user._id,
           checked: participants.some(e => e._id === user._id),
           department_id: null,
         }))
 
-        formatedUsers.forEach(({ users_this, _id }) =>
+        updatedDepartaments.forEach(({ users_this, _id }) =>
           users_this.forEach(user => {
             const index = checkedList.findIndex(u => u.id === user._id)
             if (index !== -1) {
