@@ -573,6 +573,10 @@ class Content extends Component {
         updatedDepartaments = [...updatedDepartaments, ...d.subdivisions]
       })
 
+      updatedDepartaments.forEach(d => {
+        d.users_this = d.users_this.filter(u => u._id !== this.props.user._id)
+      })
+
       const data = updatedDepartaments.map(e => ({
         id: e._id,
         name: e.name,

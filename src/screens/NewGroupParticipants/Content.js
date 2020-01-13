@@ -279,9 +279,9 @@ class Content extends Component {
   isChecked = id => {
     const { checkedList, users } = this.state
     const currentDep = users.department.find(d => d._id === id)
-    return checkedList.filter(e =>
-      currentDep.users_this.some(u => e.id === u._id),
-    )
+    return checkedList
+      .filter(e => currentDep.users_this.some(u => e.id === u._id))
+      .every(u => u.checked)
   }
 
   componentDidMount() {
