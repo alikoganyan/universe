@@ -21,7 +21,6 @@ import {
   trySignToPushes,
   requestDisablePushes,
 } from '../../actions/pushesActions'
-import { setCompanyLoading } from '../../actions/dialogsActions'
 
 const { Colors, sidePadding, fontSize, borderRadius, HeaderHeight } = helper
 const { lightGrey1, blue, lightBlue, grey2, white, black } = Colors
@@ -314,7 +313,6 @@ class Content extends Component {
   }
 
   handleToggle = e => {
-    this.props.setCompanyLoading(true)
     const { settings } = this.state
     const newSettings = [...settings]
     const item = newSettings.filter(({ label }) => e === label)[0]
@@ -340,7 +338,6 @@ class Content extends Component {
           success: res => {
             const { user } = res
             this.props.setUser({ ...user })
-            this.props.setCompanyLoading(false)
           },
         })
       },
@@ -377,7 +374,6 @@ const mapStateToProps = ({
   userReducer,
   pushesReducer,
 }) => ({
-  companyLoading: dialogsReducer.companyLoading,
   messages: messageReducer,
   dialog: dialogsReducer.dialogs,
   currentRoom: messageReducer.currentRoom,
@@ -394,6 +390,5 @@ const mapDispatchToProps = dispatch => ({
   trySignToPushes: trySignToPushes(dispatch),
   requestDisablePushes: requestDisablePushes(dispatch),
   setUser: _ => dispatch(setUser(_)),
-  setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

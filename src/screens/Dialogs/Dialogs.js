@@ -287,7 +287,9 @@ class Dialogs extends Component {
   // }
 
   getProfile = (adminChange = false) => {
-    this.props.setCompanyLoading(true)
+    if (!adminChange) {
+      this.props.setCompanyLoading(true)
+    }
     sendRequest({
       r_path: '/profile',
       method: 'get',
@@ -401,7 +403,10 @@ class Dialogs extends Component {
       )
       setDialogs(dialogs)
     } else {
-      setDeletedMessage(e)
+      const currentDialog = dialogs.find(d => d._id === e.dialog)
+      if (currentDialog) {
+        setDeletedMessage(e)
+      }
     }
   }
 
@@ -411,12 +416,14 @@ class Dialogs extends Component {
       const currentDialogIndex = dialogs.findIndex(
         d => d._id === message.dialog,
       )
-      const editedMessageIndex = dialogs[currentDialogIndex].messages.findIndex(
-        m => m._id === message._id,
-      )
-      dialogs[currentDialogIndex].messages[editedMessageIndex].text =
-        message.text
-      setDialogs(dialogs)
+      if (currentDialogIndex) {
+        const editedMessageIndex = dialogs[
+          currentDialogIndex
+        ].messages.findIndex(m => m._id === message._id)
+        dialogs[currentDialogIndex].messages[editedMessageIndex].text =
+          message.text
+        setDialogs(dialogs)
+      }
     } else {
       setEditedMessage(message)
     }
@@ -625,9 +632,11 @@ class Dialogs extends Component {
           }
         } else {
           const currentDialog = dialogs.find(d => d._id === e.dialog)
-          currentDialog.messages.push(message)
-          this.sortedDialog(currentDialog)
-          this.props.setCurrentRoomId(e.dialog)
+          if (currentDialog) {
+            currentDialog.messages.push(message)
+            this.sortedDialog(currentDialog)
+            this.props.setCurrentRoomId(e.dialog)
+          }
         }
       }
     } catch (err) {
