@@ -21,6 +21,7 @@ import {
   trySignToPushes,
   requestDisablePushes,
 } from '../../actions/pushesActions'
+import { setCompanyLoading } from '../../actions/dialogsActions'
 
 const { Colors, sidePadding, fontSize, borderRadius, HeaderHeight } = helper
 const { lightGrey1, blue, lightBlue, grey2, white, black } = Colors
@@ -290,35 +291,22 @@ class Content extends Component {
   }
 
   componentDidMount() {
-    this.setState({ isLoading: true })
-    sendRequest({
-      r_path: '/profile',
-      method: 'get',
-      success: res => {
-        const { settings, langs } = this.state
-        const { user } = res
-        this.props.setUser({ ...user })
-        const newSettings = [...settings]
-        newSettings.forEach(e => {
-          if (e.item === 'language') {
-            e.option.value = 'Изменить'
-            e.status = langs[e.item]
-          }
-          if (e.item === 'notifications') {
-            // e.status = pushesPermissions ? 'Включены' : 'Выключены';
-          } else {
-            e.option.value = user.settings[e.item]
-          }
-        })
-        setTimeout(() => {
-          this.setState({ settings: newSettings })
-        }, 0)
-        this.setState({ isLoading: false })
-      },
-      failFunc: () => {
-        this.setState({ isLoading: false })
-      },
+    const { user } = this.props
+    const { settings, langs } = this.state
+    this.props.setUser({ ...user })
+    const newSettings = [...settings]
+    newSettings.forEach(e => {
+      if (e.item === 'language') {
+        e.option.value = 'Изменить'
+        e.status = langs[e.item]
+      }
+      if (e.item === 'notifications') {
+        // e.status = pushesPermissions ? 'Включены' : 'Выключены';
+      } else {
+        e.option.value = user.settings[e.item]
+      }
     })
+    this.setState({ settings: newSettings })
   }
 
   pickerClose = () => {
@@ -326,6 +314,7 @@ class Content extends Component {
   }
 
   handleToggle = e => {
+    this.props.setCompanyLoading(true)
     const { settings } = this.state
     const newSettings = [...settings]
     const item = newSettings.filter(({ label }) => e === label)[0]
@@ -351,6 +340,7 @@ class Content extends Component {
           success: res => {
             const { user } = res
             this.props.setUser({ ...user })
+            this.props.setCompanyLoading(false)
           },
         })
       },
@@ -387,6 +377,7 @@ const mapStateToProps = ({
   userReducer,
   pushesReducer,
 }) => ({
+  companyLoading: dialogsReducer.companyLoading,
   messages: messageReducer,
   dialog: dialogsReducer.dialogs,
   currentRoom: messageReducer.currentRoom,
@@ -403,8 +394,6 @@ const mapDispatchToProps = dispatch => ({
   trySignToPushes: trySignToPushes(dispatch),
   requestDisablePushes: requestDisablePushes(dispatch),
   setUser: _ => dispatch(setUser(_)),
+  setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
