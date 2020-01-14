@@ -254,7 +254,7 @@ class Dialogs extends Component {
     socket.on('deleted_message', e => this.socketDeleteMessage(e))
     socket.on('message_edited', e => this.socketEditMessage(e))
     socket.on('delete_dialog', e => this.socketDeleteDialog(e))
-    socket.on('admin_update', e => this.socketAdminUpdate(e))
+    socket.on('admin_update', this.socketAdminUpdate)
   }
 
   componentWillUnmount() {
@@ -312,6 +312,7 @@ class Dialogs extends Component {
           } else {
             this.changeCompany(userData.user.companies[0]._id)
           }
+          this.props.setCompanyLoading(false)
         } else {
           this.setCompanyData(userData.user)
           socket.emit('get_dialogs')
@@ -387,7 +388,7 @@ class Dialogs extends Component {
     // console.log(e)
   }
 
-  socketAdminUpdate = e => {
+  socketAdminUpdate = () => {
     this.getProfile(true)
   }
 
