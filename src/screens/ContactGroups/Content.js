@@ -568,32 +568,47 @@ class Content extends Component {
       })
       const allContacts = company.users.filter(({ _id }) => _id !== user._id)
       const userContactsAll = [...allContacts]
-      let updatedDepartaments = [...department]
-      department.forEach(d => {
-        updatedDepartaments = [...updatedDepartaments, ...d.subdivisions]
-      })
+      this.updatedDepartaments = department
 
-      updatedDepartaments.forEach(d => {
-        d.users_this = d.users_this.filter(u => u._id !== this.props.user._id)
-      })
-
-      const data = updatedDepartaments.map(e => ({
-        id: e._id,
-        name: e.name,
-        data: e.users_this,
-      }))
+      this.subdivisonsThree(department)
 
       const newCollapsed = [...collapsed]
       department.forEach(() => {
         newCollapsed.push(false)
       })
       this.setState({
-        userContacts: data,
         allContacts: [...allContacts, ...dialogs.filter(e => e.isGroup)],
         userContactsAll: userContactsAll,
         collapsed: newCollapsed,
       })
     }
+  }
+
+  updatedDepartaments = []
+
+  subdivisonsThree = dep => {
+    dep.forEach(d => {
+      this.updatedDepartaments = [
+        ...this.updatedDepartaments,
+        ...d.subdivisions,
+      ]
+      if (d.subdivisions.length) {
+        this.subdivisonsThree(d.subdivisions)
+      }
+    })
+    this.updatedDepartaments.forEach(d => {
+      d.users_this = d.users_this.filter(u => u._id !== this.props.user._id)
+    })
+
+    const data = this.updatedDepartaments.map(e => ({
+      id: e._id,
+      name: e.name,
+      data: e.users_this,
+    }))
+
+    this.setState({
+      userContacts: data,
+    })
   }
 
   collapseDepartment = i => {

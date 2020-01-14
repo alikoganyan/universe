@@ -288,7 +288,6 @@ class Dialogs extends Component {
 
   getProfile = (adminChange = false) => {
     this.props.setCompanyLoading(true)
-    const { company } = this.props
     sendRequest({
       r_path: '/profile',
       method: 'get',
@@ -305,8 +304,9 @@ class Dialogs extends Component {
           userData.user.companies.length
         ) {
           const currentCompany = userData.user.companies.find(
-            c => c._id === company._id,
+            c => c._id === userData.user.company._id,
           )
+
           if (currentCompany) {
             this.setCompanyData(userData.user)
           } else {
