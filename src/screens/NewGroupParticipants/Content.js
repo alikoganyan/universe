@@ -306,26 +306,25 @@ class Content extends Component {
       },
       success: res => {
         this.setState({ allUsers: res.users })
-        let updatedDepartaments = [...res.company.subdivisions]
 
         const formatedUsers = [...res.company.subdivisions]
-        formatedUsers.forEach(d => {
-          updatedDepartaments = [...updatedDepartaments, ...d.subdivisions]
+        this.updatedDepartaments = formatedUsers
+
+        this.subdivisonsThree(formatedUsers)
+
+        this.updatedDepartaments.forEach(d => {
+          d.users_this = d.users_this.filter(u => u._id !== this.props.user._id)
         })
-        updatedDepartaments.forEach(
-          d =>
-            (d.users_this = d.users_this.filter(
-              u => u._id !== this.props.user._id,
-            )),
-        )
-        this.setState({ users: { department: updatedDepartaments } })
+
+        this.setState({ users: { department: this.updatedDepartaments } })
+
         const checkedList = res.users.map(user => ({
           id: user._id,
           checked: participants.some(e => e._id === user._id),
           department_id: null,
         }))
 
-        updatedDepartaments.forEach(({ users_this, _id }) =>
+        this.updatedDepartaments.forEach(({ users_this, _id }) =>
           users_this.forEach(user => {
             const index = checkedList.findIndex(u => u.id === user._id)
             if (index !== -1) {
@@ -337,6 +336,20 @@ class Content extends Component {
         this.setState({ checkedList })
       },
       failFunc: err => {},
+    })
+  }
+
+  updatedDepartaments = []
+
+  subdivisonsThree = dep => {
+    dep.forEach(d => {
+      this.updatedDepartaments = [
+        ...this.updatedDepartaments,
+        ...d.subdivisions,
+      ]
+      if (d.subdivisions.length) {
+        this.subdivisonsThree(d.subdivisions)
+      }
     })
   }
 

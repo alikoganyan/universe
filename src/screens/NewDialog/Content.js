@@ -14,7 +14,7 @@ import posed from 'react-native-pose'
 import Collapsible from 'react-native-collapsible'
 import { connect } from 'react-redux'
 import { GroupIconWhite, ArrowDownIcon } from '../../assets/index'
-import helper, { getUsersByDepartments } from '../../utils/helpers'
+import helper from '../../utils/helpers'
 import sendRequest from '../../utils/request'
 import { p_users_from_role_or_position } from '../../constants/api'
 import ImageComponent from '../../common/Image'
@@ -204,7 +204,7 @@ class Content extends Component {
                     : this.showDepartment(index)
                 }
               >
-                <BoxItem title>{item.title}</BoxItem>
+                <BoxItem title>{item.name}</BoxItem>
                 <ArrowWrapper
                   pose={this.state.collapsed[index] ? 'right' : 'down'}
                 >
@@ -213,9 +213,9 @@ class Content extends Component {
               </BoxTitle>
               <Collapsible collapsed={this.state.collapsed[index] || false}>
                 <BoxInner>
-                  {item.workers &&
-                    item.workers.length &&
-                    item.workers.map((e, i) => (
+                  {item.users_this &&
+                    item.users_this.length &&
+                    item.users_this.map((e, i) => (
                       <TouchableOpacity key={i} onPress={() => this.toChat(e)}>
                         <BoxInnerItem>
                           {!e.image ||
@@ -286,17 +286,36 @@ class Content extends Component {
       },
       success: res => {
         this.setState({ allUsers: res.users })
-        const formatedUsers = getUsersByDepartments(
-          res.users || [],
-          this.props.user.company._id,
-        )
-        this.setState({ users: { department: formatedUsers } })
+
+        const formatedUsers = [...res.company.subdivisions]
+        this.updatedDepartaments = formatedUsers
+
+        this.subdivisonsThree(formatedUsers)
+
+        this.updatedDepartaments.forEach(d => {
+          d.users_this = d.users_this.filter(u => u._id !== this.props.user._id)
+        })
+        this.setState({ users: { department: this.updatedDepartaments } })
         for (let i = 0; i < formatedUsers.length; i += 1) {
           newDCollapsed.push(true)
         }
         this.setState({ collapsed: newDCollapsed })
       },
       failFunc: () => {},
+    })
+  }
+
+  updatedDepartaments = []
+
+  subdivisonsThree = dep => {
+    dep.forEach(d => {
+      this.updatedDepartaments = [
+        ...this.updatedDepartaments,
+        ...d.subdivisions,
+      ]
+      if (d.subdivisions.length) {
+        this.subdivisonsThree(d.subdivisions)
+      }
     })
   }
 
