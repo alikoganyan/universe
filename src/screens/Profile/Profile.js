@@ -154,7 +154,7 @@ class Profile extends Component {
             },
           })
           this.props.logOut()
-          AsyncStorage.clear()
+          AsyncStorage.removeItem('user')
         } catch (e) {}
         this.setState({ loading: false }, () => navigation.navigate('Login'))
       },
