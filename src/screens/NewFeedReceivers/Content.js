@@ -147,7 +147,10 @@ const Option = styled(Text)`
 
 class Content extends Component {
   MiddleContacts = () => {
-    if (this.props.user.company._id === 0) {
+    if (
+      this.props.user.company._id === 0 ||
+      !this.props.user.settings.partition_contacts
+    ) {
       return (
         <ContactList>
           {this.state.allContacts.map(e => (
