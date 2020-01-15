@@ -69,3 +69,4 @@ buck-out/
 *.jsbundle
 node_modules
 .expo/packager-info.json
+package-lock.json
