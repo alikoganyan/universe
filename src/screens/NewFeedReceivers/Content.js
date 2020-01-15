@@ -335,8 +335,91 @@ class Content extends Component {
     )
   }
 
+  ContactsInGroup = () => {
+    const { groups, collapsedGroups } = this.state
+
+    return (
+      <ContactList>
+        {groups.map((e, i) => (
+          <Box key={i} last={i === groups.length - 1}>
+            <BoxTitle
+              onPress={() =>
+                collapsedGroups[i] ? this.collapseGroups(i) : this.showGroup(i)
+              }
+            >
+              <>
+                <RoundCheckbox
+                  size={24}
+                  backgroundColor={yellow}
+                  checked={this.state.checkedList
+                    .filter(u => u.groups.some(id => id === e._id))
+                    .every(u => u.checked)}
+                  onValueChange={() => this.addGroupReceivers(e)}
+                />
+                <BoxItem title>{e.name}</BoxItem>
+              </>
+              <ArrowWrapper pose={collapsedGroups[i] ? 'right' : 'down'}>
+                <ArrowDownIcon />
+              </ArrowWrapper>
+            </BoxTitle>
+            <Collapsible collapsed={collapsedGroups[i] || false}>
+              {this.state.animationCompleted ? (
+                <BoxInner>
+                  {e.participants.map(user => (
+                    <TouchableOpacity
+                      key={user._id}
+                      onPress={() => {
+                        this.addReceiver(user)
+                      }}
+                    >
+                      <BoxInnerItem>
+                        {this.state.checkedList.some(
+                          e => e.id === user._id && e.checked,
+                        ) ? (
+                          <RoundCheckbox
+                            size={36}
+                            backgroundColor={yellow}
+                            checked
+                            onValueChange={() => this.addReceiver(user)}
+                          />
+                        ) : !user.image ||
+                          user.image === '/images/default_group.png' ||
+                          user.image === '/images/default_avatar.jpg' ? (
+                          <DefaultAvatar size={36} id={user._id} />
+                        ) : (
+                          <ImageComponent
+                            source={{
+                              uri: `https://seruniverse.asmo.media${user.image}`,
+                            }}
+                            size={36}
+                          />
+                        )}
+                        <ContactInfo>
+                          <ContactName>
+                            {user.first_name
+                              ? `${user.first_name} ${user.last_name}`
+                              : user.phone_number}
+                          </ContactName>
+                          {user.role ? (
+                            <ContactRole>
+                              {user.role.name || 'no role'}
+                            </ContactRole>
+                          ) : null}
+                        </ContactInfo>
+                      </BoxInnerItem>
+                    </TouchableOpacity>
+                  ))}
+                </BoxInner>
+              ) : null}
+            </Collapsible>
+          </Box>
+        ))}
+      </ContactList>
+    )
+  }
+
   render() {
-    const { groups, collapsedGroups, options } = this.state
+    const { options } = this.state
     const { active } = options
 
     return (
@@ -360,87 +443,7 @@ class Content extends Component {
             >
               <this.AllContacts />
               <this.MiddleContacts />
-              <ContactList>
-                {groups.map((e, i) => (
-                  <Box key={i} last={i === groups.length - 1}>
-                    <BoxTitle
-                      onPress={() =>
-                        collapsedGroups[i]
-                          ? this.collapseGroups(i)
-                          : this.showGroup(i)
-                      }
-                    >
-                      <>
-                        <RoundCheckbox
-                          size={24}
-                          backgroundColor={yellow}
-                          checked={this.state.checkedList
-                            .filter(u => u.groups.some(id => id === e._id))
-                            .every(u => u.checked)}
-                          onValueChange={() => this.addGroupReceivers(e)}
-                        />
-                        <BoxItem title>{e.name}</BoxItem>
-                      </>
-                      <ArrowWrapper
-                        pose={collapsedGroups[i] ? 'right' : 'down'}
-                      >
-                        <ArrowDownIcon />
-                      </ArrowWrapper>
-                    </BoxTitle>
-                    <Collapsible collapsed={collapsedGroups[i] || false}>
-                      {this.state.animationCompleted ? (
-                        <BoxInner>
-                          {e.participants.map(user => (
-                            <TouchableOpacity
-                              key={user._id}
-                              onPress={() => {
-                                this.addReceiver(user)
-                              }}
-                            >
-                              <BoxInnerItem>
-                                {this.state.checkedList.some(
-                                  e => e.id === user._id && e.checked,
-                                ) ? (
-                                  <RoundCheckbox
-                                    size={36}
-                                    backgroundColor={yellow}
-                                    checked
-                                    onValueChange={() => this.addReceiver(user)}
-                                  />
-                                ) : !user.image ||
-                                  user.image === '/images/default_group.png' ||
-                                  user.image ===
-                                    '/images/default_avatar.jpg' ? (
-                                  <DefaultAvatar size={36} id={user._id} />
-                                ) : (
-                                  <ImageComponent
-                                    source={{
-                                      uri: `https://seruniverse.asmo.media${user.image}`,
-                                    }}
-                                    size={36}
-                                  />
-                                )}
-                                <ContactInfo>
-                                  <ContactName>
-                                    {user.first_name
-                                      ? `${user.first_name} ${user.last_name}`
-                                      : user.phone_number}
-                                  </ContactName>
-                                  {user.role ? (
-                                    <ContactRole>
-                                      {user.role.name || 'no role'}
-                                    </ContactRole>
-                                  ) : null}
-                                </ContactInfo>
-                              </BoxInnerItem>
-                            </TouchableOpacity>
-                          ))}
-                        </BoxInner>
-                      ) : null}
-                    </Collapsible>
-                  </Box>
-                ))}
-              </ContactList>
+              <this.ContactsInGroup />
             </Animated>
           </KeyboardAwareScrollView>
         </Wrapper>
@@ -659,7 +662,6 @@ class Content extends Component {
 
 const mapStateToProps = state => ({
   messages: state.messageReducer,
-  dialog: state.dialogsReducer.dialogs,
   currentRoom: state.messageReducer.currentRoom,
   currentChat: state.messageReducer.currentChat,
   user: state.userReducer.user,
