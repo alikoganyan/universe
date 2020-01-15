@@ -195,61 +195,65 @@ class Content extends Component {
           bounces={false}
           data={this.state.users.department}
           ref={ref => (this.usersRef = ref)}
-          renderItem={({ item, index }) => (
-            <Box last={index === this.state.users.department.length - 1}>
-              <BoxTitle
-                onPress={() =>
-                  this.state.collapsed[index]
-                    ? this.collapseDepartment(index)
-                    : this.showDepartment(index)
-                }
-              >
-                <BoxItem title>{item.name}</BoxItem>
-                <ArrowWrapper
-                  pose={this.state.collapsed[index] ? 'right' : 'down'}
+          renderItem={({ item, index }) =>
+            !!(item.users_this && item.users_this.length) && (
+              <Box last={index === this.state.users.department.length - 1}>
+                <BoxTitle
+                  onPress={() =>
+                    this.state.collapsed[index]
+                      ? this.collapseDepartment(index)
+                      : this.showDepartment(index)
+                  }
                 >
-                  <ArrowDownIcon />
-                </ArrowWrapper>
-              </BoxTitle>
-              <Collapsible collapsed={this.state.collapsed[index] || false}>
-                <BoxInner>
-                  {item.users_this &&
-                    item.users_this.length &&
-                    item.users_this.map((e, i) => (
-                      <TouchableOpacity key={i} onPress={() => this.toChat(e)}>
-                        <BoxInnerItem>
-                          {!e.image ||
-                          e.image === '/images/default_avatar.jpg' ? (
-                            <DefaultAvatar
-                              isGroup={e.isGroup}
-                              id={e._id}
-                              size={36}
-                            />
-                          ) : (
-                            <ImageComponent
-                              size={33}
-                              source={{
-                                uri: `https://seruniverse.asmo.media${e.image}`,
-                              }}
-                            />
-                          )}
-                          <ContactInfo>
-                            <ContactName>
-                              {e.first_name
-                                ? `${e.first_name} ${e.last_name}`
-                                : e.phone_number}
-                            </ContactName>
-                            {e.role ? (
-                              <ContactRole>{e.role.name}</ContactRole>
-                            ) : null}
-                          </ContactInfo>
-                        </BoxInnerItem>
-                      </TouchableOpacity>
-                    ))}
-                </BoxInner>
-              </Collapsible>
-            </Box>
-          )}
+                  <BoxItem title>{item.name}</BoxItem>
+                  <ArrowWrapper
+                    pose={this.state.collapsed[index] ? 'right' : 'down'}
+                  >
+                    <ArrowDownIcon />
+                  </ArrowWrapper>
+                </BoxTitle>
+                <Collapsible collapsed={this.state.collapsed[index] || false}>
+                  <BoxInner>
+                    {!!(item.users_this && item.users_this.length) &&
+                      item.users_this.map((e, i) => (
+                        <TouchableOpacity
+                          key={i}
+                          onPress={() => this.toChat(e)}
+                        >
+                          <BoxInnerItem>
+                            {!e.image ||
+                            e.image === '/images/default_avatar.jpg' ? (
+                              <DefaultAvatar
+                                isGroup={e.isGroup}
+                                id={e._id}
+                                size={36}
+                              />
+                            ) : (
+                              <ImageComponent
+                                size={33}
+                                source={{
+                                  uri: `https://seruniverse.asmo.media${e.image}`,
+                                }}
+                              />
+                            )}
+                            <ContactInfo>
+                              <ContactName>
+                                {e.first_name
+                                  ? `${e.first_name} ${e.last_name}`
+                                  : e.phone_number}
+                              </ContactName>
+                              {e.role ? (
+                                <ContactRole>{e.role.name}</ContactRole>
+                              ) : null}
+                            </ContactInfo>
+                          </BoxInnerItem>
+                        </TouchableOpacity>
+                      ))}
+                  </BoxInner>
+                </Collapsible>
+              </Box>
+            )
+          }
         />
       )
     }
