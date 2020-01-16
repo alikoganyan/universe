@@ -397,16 +397,16 @@ class Dialogs extends Component {
   socketDeleteMessage = e => {
     const { dialog, dialogs, setDialogs, setDeletedMessage } = this.props
     if (!Object.keys(dialog).length) {
-      const index = dialogs.findIndex(d => d._id === e.dialog_id)
-      dialogs[index].messages = dialogs[index].messages.filter(
-        m => m._id !== e.message_id,
-      )
-      setDialogs(dialogs)
-    } else {
-      const currentDialog = dialogs.find(d => d._id === e.dialog)
+      const currentDialog = dialogs.find(d => d._id === e.dialog_id)
       if (currentDialog) {
-        setDeletedMessage(e)
+        const index = dialogs.findIndex(d => d._id === e.dialog_id)
+        dialogs[index].messages = dialogs[index].messages.filter(
+          m => m._id !== e.message_id,
+        )
+        setDialogs(dialogs)
       }
+    } else {
+      setDeletedMessage(e)
     }
   }
 
@@ -416,7 +416,7 @@ class Dialogs extends Component {
       const currentDialogIndex = dialogs.findIndex(
         d => d._id === message.dialog,
       )
-      if (currentDialogIndex) {
+      if (currentDialogIndex || typeof currentDialogIndex === 'number') {
         const editedMessageIndex = dialogs[
           currentDialogIndex
         ].messages.findIndex(m => m._id === message._id)
