@@ -111,7 +111,7 @@ const MessageText = styled(Text)`
   font-size: ${fontSize.textSize};
   font-family: 'OpenSans';
   color: ${Colors.black};
-  textshadowcolor: ${Colors.black};
+  textShadowColor: ${Colors.black};
 `
 const ReviverName = styled(Text)`
   font-family: 'OpenSans';
