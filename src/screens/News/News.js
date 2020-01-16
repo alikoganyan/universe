@@ -7,7 +7,7 @@ import sendRequest from '../../utils/request'
 import { p_news } from '../../constants/api'
 import Content from './Content'
 import { setNews } from '../../actions/newsActions'
-import ScreenLoader from '../../common/ScreenLoader'
+import OfflineNotice from '../../common/OfflineNotice'
 
 const Wrapper = styled(View)`
   height: 100%;
@@ -18,7 +18,7 @@ class News extends Component {
     const { companyLoading } = this.props
     return (
       <SafeAreaView behavior="padding">
-        {companyLoading && <ScreenLoader />}
+        {companyLoading && <OfflineNotice text="Обновляется" bgColor="green" />}
         <Wrapper>
           <Content
             proceed={this.proceed}
@@ -74,7 +74,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setNews: _ => dispatch(setNews(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(News)
+export default connect(mapStateToProps, mapDispatchToProps)(News)

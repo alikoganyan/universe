@@ -190,7 +190,7 @@ PODS:
     - React
   - RNFS (2.15.2):
     - React
-  - RNGestureHandler (1.5.2):
+  - RNGestureHandler (1.5.3):
     - React
   - RNSVG (9.13.6):
     - React
@@ -335,7 +335,7 @@ SPEC CHECKSUMS:
   RNCAsyncStorage: 8539fc80a0075fcc9c8e2dff84cd22dc5bf1dacf
   RNDeviceInfo: bdc3e922b2ed0f086e9d9ab534e61bc316f08576
   RNFS: 54da03c2b7d862c42ea3ca8c7f86f892760a535a
-  RNGestureHandler: 946a7691e41df61e2c4b1884deab41a4cdc3afff
+  RNGestureHandler: 02905abe54e1f6e59c081a10b4bd689721e17aa6
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   SDWebImage: 609192dcf3898c910a2848032372ead951e66364
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64

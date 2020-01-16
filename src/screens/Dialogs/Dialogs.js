@@ -45,7 +45,8 @@ import TabPreHeader from '../../common/TabPreHeader'
 import sendRequest from '../../utils/request'
 import Company from '../../common/Company'
 import { setTaskList } from '../../actions/tasksActions'
-import ScreenLoader from '../../common/ScreenLoader'
+import OfflineNotice from '../../common/OfflineNotice'
+
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
 const { Colors } = helper
@@ -140,7 +141,7 @@ class Dialogs extends Component {
           title="Диалоги"
           opacity={opacity}
         />
-        {companyLoading && <ScreenLoader />}
+        {companyLoading && <OfflineNotice text="Обновляется" bgColor="green" />}
         <Wrapper>
           {congratulations ? (
             <Congratulations

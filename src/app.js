@@ -26,15 +26,18 @@ export default class AppComponent extends Component {
     if (!loaded) {
       return null
     }
-    // if (!connected && !logged) {
-    //   return <OfflineScreen />
-    // }
     return (
       <Provider store={store}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
         {/* {logged && !connected && <Offline />} */}
-        {!connected && <OfflineNotice />}
         <Navigator />
+        {!connected && (
+          <OfflineNotice
+            text="Нет соединения с интернетом"
+            bgColor="#b52424"
+            conntecionError
+          />
+        )}
       </Provider>
     )
   }
