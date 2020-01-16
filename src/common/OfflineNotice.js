@@ -21,8 +21,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     width,
-    position: 'absolute',
-    top: 30,
+
     zIndex: 10,
   },
   offlineText: {
