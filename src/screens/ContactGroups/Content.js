@@ -248,7 +248,7 @@ class Content extends Component {
   scrollY = new Animated.Value(0)
 
   _renderEmptyComponent = () => (
-    <Loader marginTop={70} hint="Пока нет контактов." style={{ flex: 1 }}>
+    <Loader marginTop={30} hint="Пока нет контактов." style={{ flex: 1 }}>
       <TouchableOpacity onPress={this.toContacts}>
         <Text style={{ color: grey2, textAlign: 'center' }}>
           Похоже произошла ошибка, обратитесь к администратору системы
