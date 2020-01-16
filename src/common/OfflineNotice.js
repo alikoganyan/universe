@@ -1,16 +1,11 @@
 import React, { PureComponent } from 'react'
-import { View, Text, Dimensions, StyleSheet } from 'react-native'
+import { View, Text, Dimensions, StyleSheet, Platform } from 'react-native'
 import ScreenLoader from './ScreenLoader'
 
 const { width } = Dimensions.get('window')
 function MiniOfflineSign(props) {
   return (
-    <View
-      style={[
-        styles.offlineContainer,
-        { backgroundColor: props.bgColor, top: props.conntecionError ? 44 : 0 },
-      ]}
-    >
+    <View style={[styles.offlineContainer, { backgroundColor: props.bgColor }]}>
       <Text style={styles.offlineText}>{props.text}</Text>
       <ScreenLoader color="red" />
     </View>
@@ -19,11 +14,7 @@ function MiniOfflineSign(props) {
 class OfflineNotice extends PureComponent {
   render() {
     return (
-      <MiniOfflineSign
-        text={this.props.text}
-        conntecionError={this.props.conntecionError}
-        bgColor={this.props.bgColor}
-      />
+      <MiniOfflineSign text={this.props.text} bgColor={this.props.bgColor} />
     )
   }
 }
@@ -35,7 +26,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width,
     position: 'absolute',
-    top: 0,
+    top: Platform.OS === 'ios' ? 30 : 0,
     zIndex: 10,
   },
   offlineText: {
