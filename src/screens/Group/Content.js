@@ -363,12 +363,39 @@ class Content extends Component {
 
   download = async item => {
     // console.log(RNFS, item)
-    await RNFS.downloadFile({
-      fromUrl: `https://seruniverse.asmo.media${item.src}`,
-      toFile: `${RNFS.DocumentDirectoryPath}/${item.filename}`,
-    }).promise.then(r => {
-      // console.log(r)
-      // this.setState({ isDone: true })
+    // await RNFS.downloadFile({
+    //   fromUrl: `https://seruniverse.asmo.media${item.src}`,
+    //   background: true,
+    //   toFile: `${RNFS.DocumentDirectoryPath}/${item.filename}`,
+    // }).promise.then(r => {
+    //   console.log(r)
+    //   // this.setState({ isDone: true })
+    // })
+
+    // let failedDownloads
+    const fromPath = `https://seruniverse.asmo.media${item.src}`
+    const toPath = `${RNFS.DocumentDirectoryPath}/${item.filename}`
+    const options = {
+      fromUrl: fromPath,
+      toFile: toPath,
+      background: true,
+      progressDivider: 10,
+    }
+    RNFS.exists(toPath).then(response => {
+      // console.log(response, options)
+      if (response) {
+        RNFS.downloadFile(options)
+          .promise.then(response => {
+            // console.log(response, 22);
+            if (response.statusCode !== 200) {
+              // if (failedDownloads.indexOf(tempArray[i].Image) <= -1) {
+              //   failedDownloads.push(tempArray[i].Image)
+              // } throw response
+              // console.log(111)
+            }
+          })
+          .catch(err => err)
+      }
     })
 
     // let status
