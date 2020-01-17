@@ -184,7 +184,7 @@ class Content extends Component {
       department,
     } = myProfile ? user : profile
 
-    const { last_visit } = profile
+    const { last_visit } = profile | user
 
     const lastVisit = new Date(last_visit)
     const lastVisitDay = Math.floor(lastVisit.getTime() / 1000 / 60 / 60 / 24)

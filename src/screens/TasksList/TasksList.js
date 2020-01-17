@@ -5,7 +5,7 @@ import Content from './Content'
 import SafeAreaView from '../../common/SafeAreaView'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
-import ScreenLoader from '../../common/ScreenLoader'
+import OfflineNotice from '../../common/OfflineNotice'
 
 const { sidePadding } = helper
 const Wrapper = styled(View)`
@@ -18,7 +18,9 @@ class Tasks extends Component {
     return (
       <SafeAreaView behavior="padding">
         <Wrapper>
-          {companyLoading && <ScreenLoader />}
+          {companyLoading && (
+            <OfflineNotice text="Обновляется" bgColor="green" />
+          )}
           <Content navigate={this.navigate} />
         </Wrapper>
       </SafeAreaView>

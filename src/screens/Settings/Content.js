@@ -290,35 +290,22 @@ class Content extends Component {
   }
 
   componentDidMount() {
-    this.setState({ isLoading: true })
-    sendRequest({
-      r_path: '/profile',
-      method: 'get',
-      success: res => {
-        const { settings, langs } = this.state
-        const { user } = res
-        this.props.setUser({ ...user })
-        const newSettings = [...settings]
-        newSettings.forEach(e => {
-          if (e.item === 'language') {
-            e.option.value = 'Изменить'
-            e.status = langs[e.item]
-          }
-          if (e.item === 'notifications') {
-            // e.status = pushesPermissions ? 'Включены' : 'Выключены';
-          } else {
-            e.option.value = user.settings[e.item]
-          }
-        })
-        setTimeout(() => {
-          this.setState({ settings: newSettings })
-        }, 0)
-        this.setState({ isLoading: false })
-      },
-      failFunc: () => {
-        this.setState({ isLoading: false })
-      },
+    const { user } = this.props
+    const { settings, langs } = this.state
+    this.props.setUser({ ...user })
+    const newSettings = [...settings]
+    newSettings.forEach(e => {
+      if (e.item === 'language') {
+        e.option.value = 'Изменить'
+        e.status = langs[e.item]
+      }
+      if (e.item === 'notifications') {
+        // e.status = pushesPermissions ? 'Включены' : 'Выключены';
+      } else {
+        e.option.value = user.settings[e.item]
+      }
     })
+    this.setState({ settings: newSettings })
   }
 
   pickerClose = () => {
@@ -404,7 +391,4 @@ const mapDispatchToProps = dispatch => ({
   requestDisablePushes: requestDisablePushes(dispatch),
   setUser: _ => dispatch(setUser(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

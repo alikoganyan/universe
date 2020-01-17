@@ -561,42 +561,53 @@ class Content extends Component {
   mount = () => {
     const { collapsed } = this.state
     const { user, dialogs, company } = this.props
-    const department = company.subdivisions.map(e => {
-      e.users_this = e.users_this.filter(({ _id }) => _id !== user._id)
-      return e
+    if (company && Object.keys(company).length) {
+      const department = company.subdivisions.map(e => {
+        e.users_this = e.users_this.filter(({ _id }) => _id !== user._id)
+        return e
+      })
+      const allContacts = company.users.filter(({ _id }) => _id !== user._id)
+      const userContactsAll = [...allContacts]
+      this.updatedDepartaments = department
+
+      this.subdivisonsThree(department)
+
+      const newCollapsed = [...collapsed]
+      department.forEach(() => {
+        newCollapsed.push(false)
+      })
+      this.setState({
+        allContacts: [...allContacts, ...dialogs.filter(e => e.isGroup)],
+        userContactsAll: userContactsAll,
+        collapsed: newCollapsed,
+      })
+    }
+  }
+
+  updatedDepartaments = []
+
+  subdivisonsThree = dep => {
+    dep.forEach(d => {
+      this.updatedDepartaments = [
+        ...this.updatedDepartaments,
+        ...d.subdivisions,
+      ]
+      if (d.subdivisions.length) {
+        this.subdivisonsThree(d.subdivisions)
+      }
     })
-    const allContacts = company.users.filter(({ _id }) => _id !== user._id)
-    const userContactsAll = [...allContacts]
-    const data = department.map(e => ({
+    this.updatedDepartaments.forEach(d => {
+      d.users_this = d.users_this.filter(u => u._id !== this.props.user._id)
+    })
+
+    const data = this.updatedDepartaments.map(e => ({
       id: e._id,
       name: e.name,
       data: e.users_this,
     }))
-    // department.forEach(dep => {
-    // dep.users_this.forEach(e => {
-    //   const exists = dialogs.findIndex(chat => chat._id === e._id) !== -1
-    //   const chat = dialogs.filter(
-    //     chat => chat._id === e._id && chat._id === user._id,
-    //   )[0]
-    //   const nonExisting = {
-    //     ...e,
-    //     creator: e,
-    //     participants: e,
-    //     room: `${e._id}_${user._id}`,
-    //   }
-    //   const conditon = exists || e._id !== user._id
-    //   conditon && userContactsAll.push(chat || nonExisting)
-    // })
-    // })
-    const newCollapsed = [...collapsed]
-    department.forEach(() => {
-      newCollapsed.push(false)
-    })
+
     this.setState({
       userContacts: data,
-      allContacts: [...allContacts, ...dialogs.filter(e => e.isGroup)],
-      userContactsAll: userContactsAll,
-      collapsed: newCollapsed,
     })
   }
 

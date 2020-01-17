@@ -42,7 +42,7 @@ const HeaderContainer = styled(Animated.View)`
 
 class Content extends Component {
   render() {
-    const { tasksWithUsers, navigate, tasksInc, tasksOut } = this.props
+    const { navigate, tasksWithUsers, tasksInc, tasksOut } = this.props
     const opacity = this.scrollY.interpolate({
       inputRange: [0, 90, 91],
       outputRange: [0, 0, 1],
@@ -51,7 +51,6 @@ class Content extends Component {
       inputRange: [0, 50, 51],
       outputRange: [0, 50, 50],
     })
-
     const allUserTasks = []
     tasksWithUsers.forEach(task => {
       const index = allUserTasks.findIndex(
@@ -126,7 +125,7 @@ class Content extends Component {
               })
           ) : (
             <View style={{ flex: 1 }}>
-              <Loader hint="Пока нет задач">
+              <Loader hint="Пока нет задач" height={130} width={200}>
                 <Text style={{ color: grey2, textAlign: 'center' }}>
                   Поставьте вашу первую задачу, нажав на иконку &quot;плюс&quot;
                 </Text>
@@ -152,7 +151,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setTaskList: _ => dispatch(setTaskList(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

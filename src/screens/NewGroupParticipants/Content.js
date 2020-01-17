@@ -6,8 +6,8 @@ import {
   TouchableOpacity,
   ScrollView,
   Dimensions,
-  TouchableWithoutFeedback,
   InteractionManager,
+  Animated as AnimatedNative,
 } from 'react-native'
 import styled from 'styled-components'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
@@ -27,7 +27,22 @@ import {
 } from '../../actions/participantsActions'
 
 const { Colors } = helper
-const { green } = Colors
+const { green, black, yellow } = Colors
+const AnimatedScrollView = posed.View({
+  left: {
+    x: 0,
+    transition: { duration: 300, ease: 'easeOut' },
+  },
+  center: {
+    x: -Dimensions.get('window').width,
+    transition: { duration: 300, ease: 'easeOut' },
+  },
+
+  right: {
+    x: -Dimensions.get('window').width * 2,
+    transition: { duration: 300, ease: 'easeOut' },
+  },
+})
 const AnimatedBox = posed.View({
   visible: { flex: 1 },
   hidden: { flex: 0 },
@@ -36,6 +51,12 @@ const AnimatedArrowWrapper = posed.View({
   down: { rotate: '0deg' },
   right: { rotate: '-90deg' },
 })
+
+const Animated = styled(AnimatedScrollView)`
+  display: flex;
+  flex-direction: row;
+  width: ${Dimensions.get('window').width * 3};
+`
 const Wrapper = styled(View)`
   padding-top: 0px;
   background: white;
@@ -91,67 +112,46 @@ const ContactRole = styled(Text)`
   align-items: flex-start;
   justify-content: center;
 `
+
+const OptionsWrap = styled(AnimatedNative.View)`
+  padding-top: 13px;
+  background-color: #ffffff;
+`
+const Options = styled(AnimatedNative.View)`
+  display: flex;
+  align-self: center;
+  background: ${green};
+  flex-direction: row;
+  justify-content: space-between;
+  border-radius: 16;
+  padding: 1px;
+  overflow: hidden;
+  width: ${Dimensions.get('window').width - helper.sidePadding * 2}px;
+`
+const Option = styled(Text)`
+  color: ${({ active }) => (active ? black : 'white')};
+  background: ${({ active }) => (active ? 'white' : 'transparent')};
+  border: ${({ active }) => (active ? '1px rgba(0, 0, 0, 0.1) solid' : '0')};
+  border-color: ${({ active }) =>
+    active ? 'rgba(0, 0, 0, 0.1)' : 'transparent'};
+  border-style: solid;
+  min-width: 27%;
+  border-radius: 15;
+  padding: 8px 10px 7px;
+  overflow: hidden;
+  text-align: center;
+`
 const ArrowWrapper = styled(AnimatedArrowWrapper)``
 
 class Content extends Component {
-  Contacts = () => {
+  MiddleContacts = () => {
     if (
       this.props.user.company._id === 0 ||
       !this.props.user.settings.partition_contacts
     ) {
-      if (this.state.allUsers && this.state.allUsers.length) {
-        return (
-          <ContactList>
-            {this.state.allUsers.map(e => (
-              <TouchableWithoutFeedback
-                key={e._id}
-                onPress={() => this.addReceiver(e)}
-              >
-                <BoxInnerItem>
-                  {this.includes(e) ? (
-                    <RoundCheckbox
-                      size={36}
-                      backgroundColor={green}
-                      checked
-                      onValueChange={() => this.addReceiver(e)}
-                    />
-                  ) : !e.image ||
-                    e.image === '/images/default_group.png' ||
-                    e.image === '/images/default_avatar.jpg' ? (
-                    <DefaultAvatar size={36} id={e._id} />
-                  ) : (
-                    <ImageComponent
-                      source={{
-                        uri: `https://seruniverse.asmo.media${e.image}`,
-                      }}
-                      size={36}
-                    />
-                  )}
-                  <ContactInfo>
-                    <ContactName>
-                      {e.first_name
-                        ? `${e.first_name} ${e.last_name}`
-                        : e.phone_number}
-                    </ContactName>
-                    {e.role ? (
-                      <ContactRole>{e.role.name || 'no role'}</ContactRole>
-                    ) : null}
-                  </ContactInfo>
-                </BoxInnerItem>
-              </TouchableWithoutFeedback>
-            ))}
-          </ContactList>
-        )
-      } else {
-        return null
-      }
+      return <this.AllContacts />
     } else {
-      if (
-        this.state.users.department &&
-        this.state.users.department.length &&
-        this.state.checkedList &&
-        this.state.checkedList.length
-      ) {
+      if (this.state.users.department.length && this.state.checkedList.length) {
         return (
           <ContactList>
             {this.state.users.department
@@ -171,10 +171,8 @@ class Content extends Component {
                     <>
                       <RoundCheckbox
                         size={24}
-                        backgroundColor={green}
-                        checked={this.state.checkedList
-                          .filter(item => item.department_id === e._id)
-                          .every(({ checked }) => checked)}
+                        backgroundColor={yellow}
+                        checked={this.isChecked(e._id)}
                         onValueChange={() => this.addAllReceivers(e._id)}
                       />
                       <BoxItem title>{e.name}</BoxItem>
@@ -206,7 +204,7 @@ class Content extends Component {
                               ) ? (
                                 <RoundCheckbox
                                   size={36}
-                                  backgroundColor={green}
+                                  backgroundColor={yellow}
                                   checked
                                   onValueChange={() => this.addReceiver(user)}
                                 />
@@ -250,12 +248,166 @@ class Content extends Component {
     }
   }
 
+  AllContacts = () => {
+    const allUsers = []
+    this.state.allContacts.forEach(item => {
+      allUsers.push(item)
+    })
+
+    return (
+      <ContactList>
+        {allUsers.map(e => (
+          <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
+            <BoxInnerItem>
+              {this.includes(e) ? (
+                <RoundCheckbox
+                  size={36}
+                  backgroundColor={yellow}
+                  checked
+                  onValueChange={() => this.addReceiver(e)}
+                />
+              ) : !e.image ||
+                e.image === '/images/default_group.png' ||
+                e.image === '/images/default_avatar.jpg' ? (
+                <DefaultAvatar size={36} id={e._id} />
+              ) : (
+                <ImageComponent
+                  source={{
+                    uri: `https://seruniverse.asmo.media${e.image}`,
+                  }}
+                  size={36}
+                />
+              )}
+              <ContactInfo>
+                <ContactName>
+                  {e.first_name
+                    ? `${e.first_name} ${e.last_name}`
+                    : e.phone_number}
+                </ContactName>
+                {e.role ? (
+                  <ContactRole>{e.role.name || 'no role'}</ContactRole>
+                ) : null}
+              </ContactInfo>
+            </BoxInnerItem>
+          </TouchableOpacity>
+        ))}
+      </ContactList>
+    )
+  }
+
+  ContactsInGroup = () => {
+    const { groups, collapsedGroups } = this.state
+
+    return (
+      <ContactList>
+        {groups.map(
+          (e, i) =>
+            !!(e.participants && e.participants.length) && (
+              <Box key={i} last={i === groups.length - 1}>
+                <BoxTitle
+                  onPress={() =>
+                    collapsedGroups[i]
+                      ? this.collapseGroups(i)
+                      : this.showGroup(i)
+                  }
+                >
+                  <>
+                    <RoundCheckbox
+                      size={24}
+                      backgroundColor={yellow}
+                      checked={this.state.checkedList
+                        .filter(u => u.groups.some(id => id === e._id))
+                        .every(u => u.checked)}
+                      onValueChange={() => this.addGroupReceivers(e)}
+                    />
+                    <BoxItem title>{e.name}</BoxItem>
+                  </>
+                  <ArrowWrapper pose={collapsedGroups[i] ? 'right' : 'down'}>
+                    <ArrowDownIcon />
+                  </ArrowWrapper>
+                </BoxTitle>
+                <Collapsible collapsed={collapsedGroups[i] || false}>
+                  {this.state.animationCompleted ? (
+                    <BoxInner>
+                      {e.participants.map(user => (
+                        <TouchableOpacity
+                          key={user._id}
+                          onPress={() => {
+                            this.addReceiver(user)
+                          }}
+                        >
+                          <BoxInnerItem>
+                            {this.state.checkedList.some(
+                              e => e.id === user._id && e.checked,
+                            ) ? (
+                              <RoundCheckbox
+                                size={36}
+                                backgroundColor={yellow}
+                                checked
+                                onValueChange={() => this.addReceiver(user)}
+                              />
+                            ) : !user.image ||
+                              user.image === '/images/default_group.png' ||
+                              user.image === '/images/default_avatar.jpg' ? (
+                              <DefaultAvatar size={36} id={user._id} />
+                            ) : (
+                              <ImageComponent
+                                source={{
+                                  uri: `https://seruniverse.asmo.media${user.image}`,
+                                }}
+                                size={36}
+                              />
+                            )}
+                            <ContactInfo>
+                              <ContactName>
+                                {user.first_name
+                                  ? `${user.first_name} ${user.last_name}`
+                                  : user.phone_number}
+                              </ContactName>
+                              {user.role ? (
+                                <ContactRole>
+                                  {user.role.name || 'no role'}
+                                </ContactRole>
+                              ) : null}
+                            </ContactInfo>
+                          </BoxInnerItem>
+                        </TouchableOpacity>
+                      ))}
+                    </BoxInner>
+                  ) : null}
+                </Collapsible>
+              </Box>
+            ),
+        )}
+      </ContactList>
+    )
+  }
   render() {
+    const { options } = this.state
+    const { active } = options
     return (
       <SafeAreaView>
         <Wrapper>
           <KeyboardAwareScrollView enableOnAndroid>
-            <this.Contacts />
+            <OptionsWrap>
+              <Options>
+                {options.options.map((e, i) => (
+                  <TouchableOpacity
+                    key={i}
+                    onPress={() => this.selectOption(i)}
+                  >
+                    <Option active={active === i}>{e}</Option>
+                  </TouchableOpacity>
+                ))}
+              </Options>
+            </OptionsWrap>
+            <Animated
+              pose={active === 0 ? 'left' : active === 1 ? 'center' : 'right'}
+            >
+              <this.AllContacts />
+              <this.MiddleContacts />
+              <this.ContactsInGroup />
+            </Animated>
           </KeyboardAwareScrollView>
         </Wrapper>
       </SafeAreaView>
@@ -263,19 +415,20 @@ class Content extends Component {
   }
 
   state = {
-    usersToAdd: [],
     collapsed: [],
-    allUsers: [],
+    collapsedGroups: [],
+    allContacts: [],
     checkedList: [],
     users: {
       department: [],
     },
     options: {
-      active: 1,
+      active: 0,
       options: ['Все', 'Пользователи', 'Группы'],
     },
     groups: [],
     animationCompleted: false,
+    selectedGroup: '',
   }
 
   componentDidMount() {
@@ -288,10 +441,28 @@ class Content extends Component {
     const { participants } = this.props
 
     const newDCollapsed = [...collapsed]
+    const newGCollapsed = []
     for (let i = 0; i <= users.department.length; i++) {
       newDCollapsed.push(false)
     }
-    this.setState({ collapsed: newDCollapsed })
+    const groups = this.props.dialogs
+      .filter(d => d.isGroup)
+      .map(g => {
+        g.participants = [g.creator, ...g.participants].filter(
+          u => u._id !== this.props.user._id,
+        )
+        g.participants = g.participants.filter(
+          (u, i) => g.participants.findIndex(user => user._id === u._id) === i,
+        )
+        return g
+      })
+    newGCollapsed.push(...groups.map(() => true))
+    this.setState({
+      ...this.state,
+      collapsed: newDCollapsed,
+      groups,
+      collapsedGroups: newGCollapsed,
+    })
     sendRequest({
       r_path: p_users_from_role_or_position,
       method: 'post',
@@ -299,22 +470,27 @@ class Content extends Component {
         access_field: 'create_groups',
       },
       success: res => {
-        this.setState({ allUsers: res.users })
-        const formatedUsers = res.company.subdivisions
-        formatedUsers.forEach(
-          d =>
-            (d.users_this = d.users_this.filter(
-              u => u._id !== this.props.user._id,
-            )),
-        )
-        this.setState({ users: { department: formatedUsers } })
+        this.setState({ allContacts: res.users })
+
+        const formatedUsers = [...res.company.subdivisions]
+        this.updatedDepartaments = formatedUsers
+
+        this.subdivisonsThree(formatedUsers)
+
+        this.updatedDepartaments.forEach(d => {
+          d.users_this = d.users_this.filter(u => u._id !== this.props.user._id)
+        })
+
+        this.setState({ users: { department: this.updatedDepartaments } })
+
         const checkedList = res.users.map(user => ({
           id: user._id,
           checked: participants.some(e => e._id === user._id),
           department_id: null,
+          groups: [],
         }))
 
-        formatedUsers.forEach(({ users_this, _id }) =>
+        this.updatedDepartaments.forEach(({ users_this, _id }) =>
           users_this.forEach(user => {
             const index = checkedList.findIndex(u => u.id === user._id)
             if (index !== -1) {
@@ -323,9 +499,32 @@ class Content extends Component {
           }),
         )
 
+        groups.forEach(g =>
+          g.participants.forEach(user => {
+            const index = checkedList.findIndex(u => u.id === user._id)
+            if (index !== -1) {
+              checkedList[index].groups.push(g._id)
+            }
+          }),
+        )
+
         this.setState({ checkedList })
       },
       failFunc: err => {},
+    })
+  }
+
+  updatedDepartaments = []
+
+  subdivisonsThree = dep => {
+    dep.forEach(d => {
+      this.updatedDepartaments = [
+        ...this.updatedDepartaments,
+        ...d.subdivisions,
+      ]
+      if (d.subdivisions.length) {
+        this.subdivisonsThree(d.subdivisions)
+      }
     })
   }
 
@@ -351,15 +550,39 @@ class Content extends Component {
 
   addAllReceivers = id => {
     const { setReceivers } = this.props
-    const { checkedList } = this.state
-    const dep = checkedList.filter(e => id === e.department_id)
+    const { checkedList, users } = this.state
+    const currentDep = users.department.find(d => d._id === id)
+    const dep = checkedList.filter(e =>
+      currentDep.users_this.some(u => e.id === u._id),
+    )
     const is = dep.every(e => e.checked)
     dep.forEach(e => (e.checked = !is))
     this.setState({ ...this.state, checkedList })
-    const newReceivers = this.state.allUsers.filter(
+    const newReceivers = this.state.allContacts.filter(
       e => checkedList.find(o => o.id === e._id)?.checked,
     )
     setReceivers(newReceivers)
+  }
+
+  addGroupReceivers = e => {
+    const { setReceivers } = this.props
+    const { checkedList } = this.state
+    const users = checkedList.filter(u => u.groups.some(id => id === e._id))
+    const is = users.every(u => u.checked)
+    users.forEach(u => (u.checked = !is))
+    this.setState({ ...this.state, checkedList })
+    const newReceivers = this.state.allContacts.filter(
+      e => checkedList.find(o => o.id === e._id)?.checked,
+    )
+    setReceivers(newReceivers)
+  }
+
+  isChecked = id => {
+    const { checkedList, users } = this.state
+    const currentDep = users.department.find(d => d._id === id)
+    return checkedList
+      .filter(e => currentDep.users_this.some(u => e.id === u._id))
+      .every(u => u.checked)
   }
 
   includes = e => {
@@ -374,17 +597,36 @@ class Content extends Component {
     this.setState({ collapsed: newDCollapsed })
   }
 
+  collapseGroups = i => {
+    const { collapsedGroups } = this.state
+    collapsedGroups[i] = false
+    this.setState({ ...this.state, collapsedGroups })
+  }
+
   showDepartment = i => {
     const { collapsed } = this.state
     const newDCollapsed = [...collapsed]
     newDCollapsed[i] = true
     this.setState({ collapsed: newDCollapsed })
   }
+
+  showGroup = i => {
+    const { collapsedGroups } = this.state
+    collapsedGroups[i] = true
+    this.setState({ ...this.state, collapsedGroups })
+  }
+
+  selectOption = e => {
+    const { options } = this.state
+    const newState = { ...options }
+    newState.active = e
+    this.setState({ options: newState })
+  }
 }
 
 const mapStateToProps = state => ({
   messages: state.messageReducer,
-  dialog: state.dialogsReducer.dialogs,
+  dialogs: state.dialogsReducer.dialogs,
   currentRoom: state.messageReducer.currentRoom,
   currentChat: state.messageReducer.currentChat,
   user: state.userReducer.user,

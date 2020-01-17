@@ -6,7 +6,7 @@ import SafeAreaView from '../../common/SafeAreaView'
 import Header from './Header'
 import Content from './Content'
 import { connect } from 'react-redux'
-import ScreenLoader from '../../common/ScreenLoader'
+import OfflineNotice from '../../common/OfflineNotice'
 
 const Wrapper = styled(View)`
   height: 100%;
@@ -17,7 +17,9 @@ class GroupInfo extends Component {
     return (
       <ActionSheetProvider>
         <SafeAreaView>
-          {companyLoading && <ScreenLoader />}
+          {companyLoading && (
+            <OfflineNotice text="Обновляется" bgColor="green" />
+          )}
           <Wrapper>
             <Header navigate={this.props.navigation.navigate} />
             <Content navigate={this.props.navigation.navigate} />

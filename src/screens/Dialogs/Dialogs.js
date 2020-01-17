@@ -45,7 +45,8 @@ import TabPreHeader from '../../common/TabPreHeader'
 import sendRequest from '../../utils/request'
 import Company from '../../common/Company'
 import { setTaskList } from '../../actions/tasksActions'
-import ScreenLoader from '../../common/ScreenLoader'
+import OfflineNotice from '../../common/OfflineNotice'
+
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
 const { Colors } = helper
@@ -140,7 +141,7 @@ class Dialogs extends Component {
           title="Диалоги"
           opacity={opacity}
         />
-        {companyLoading && <ScreenLoader />}
+        {companyLoading && <OfflineNotice text="Обновляется" bgColor="green" />}
         <Wrapper>
           {congratulations ? (
             <Congratulations
@@ -196,8 +197,7 @@ class Dialogs extends Component {
   componentDidMount() {
     this.getProfile()
 
-    const { user, setCompanyLoading } = this.props
-    setCompanyLoading(false)
+    const { user } = this.props
     this.props.removeAllPreloader()
     // navigation.navigate('NewTask') // restore
     // clearInterval(this.interval)
@@ -255,11 +255,13 @@ class Dialogs extends Component {
     socket.on('deleted_message', e => this.socketDeleteMessage(e))
     socket.on('message_edited', e => this.socketEditMessage(e))
     socket.on('delete_dialog', e => this.socketDeleteDialog(e))
-    socket.on('admin_update', e => this.socketAdminUpdate(e))
+    socket.on('admin_update', this.socketAdminUpdate)
   }
 
   componentWillUnmount() {
     this.props.setDialog(null)
+    this.props.setCompanyLoading(false)
+
     // disconnectFromSocket()
     // AppState.removeEventListener('change', this._handleAppStateChange);
   }
@@ -286,7 +288,9 @@ class Dialogs extends Component {
   // }
 
   getProfile = (adminChange = false) => {
-    const { company } = this.props
+    if (!adminChange) {
+      this.props.setCompanyLoading(true)
+    }
     sendRequest({
       r_path: '/profile',
       method: 'get',
@@ -303,13 +307,15 @@ class Dialogs extends Component {
           userData.user.companies.length
         ) {
           const currentCompany = userData.user.companies.find(
-            c => c._id === company._id,
+            c => c._id === userData.user.company._id,
           )
+
           if (currentCompany) {
             this.setCompanyData(userData.user)
           } else {
             this.changeCompany(userData.user.companies[0]._id)
           }
+          this.props.setCompanyLoading(false)
         } else {
           this.setCompanyData(userData.user)
           socket.emit('get_dialogs')
@@ -385,18 +391,21 @@ class Dialogs extends Component {
     // console.log(e)
   }
 
-  socketAdminUpdate = e => {
+  socketAdminUpdate = () => {
     this.getProfile(true)
   }
 
   socketDeleteMessage = e => {
     const { dialog, dialogs, setDialogs, setDeletedMessage } = this.props
     if (!Object.keys(dialog).length) {
-      const index = dialogs.findIndex(d => d._id === e.dialog_id)
-      dialogs[index].messages = dialogs[index].messages.filter(
-        m => m._id !== e.message_id,
-      )
-      setDialogs(dialogs)
+      const currentDialog = dialogs.find(d => d._id === e.dialog_id)
+      if (currentDialog) {
+        const index = dialogs.findIndex(d => d._id === e.dialog_id)
+        dialogs[index].messages = dialogs[index].messages.filter(
+          m => m._id !== e.message_id,
+        )
+        setDialogs(dialogs)
+      }
     } else {
       setDeletedMessage(e)
     }
@@ -408,12 +417,14 @@ class Dialogs extends Component {
       const currentDialogIndex = dialogs.findIndex(
         d => d._id === message.dialog,
       )
-      const editedMessageIndex = dialogs[currentDialogIndex].messages.findIndex(
-        m => m._id === message._id,
-      )
-      dialogs[currentDialogIndex].messages[editedMessageIndex].text =
-        message.text
-      setDialogs(dialogs)
+      if (currentDialogIndex || typeof currentDialogIndex === 'number') {
+        const editedMessageIndex = dialogs[
+          currentDialogIndex
+        ].messages.findIndex(m => m._id === message._id)
+        dialogs[currentDialogIndex].messages[editedMessageIndex].text =
+          message.text
+        setDialogs(dialogs)
+      }
     } else {
       setEditedMessage(message)
     }
@@ -622,9 +633,11 @@ class Dialogs extends Component {
           }
         } else {
           const currentDialog = dialogs.find(d => d._id === e.dialog)
-          currentDialog.messages.push(message)
-          this.sortedDialog(currentDialog)
-          this.props.setCurrentRoomId(e.dialog)
+          if (currentDialog) {
+            currentDialog.messages.push(message)
+            this.sortedDialog(currentDialog)
+            this.props.setCurrentRoomId(e.dialog)
+          }
         }
       }
     } catch (err) {

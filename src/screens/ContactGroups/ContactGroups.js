@@ -5,7 +5,7 @@ import { ActionSheetProvider } from '@expo/react-native-action-sheet'
 import SafeAreaView from '../../common/SafeAreaView'
 import Content from './Content'
 import { connect } from 'react-redux'
-import ScreenLoader from '../../common/ScreenLoader'
+import OfflineNotice from '../../common/OfflineNotice'
 
 const Wrapper = styled(View)`
   height: 100%;
@@ -17,7 +17,9 @@ class ContactGroups extends Component {
     return (
       <ActionSheetProvider>
         <SafeAreaView>
-          {companyLoading && <ScreenLoader />}
+          {companyLoading && (
+            <OfflineNotice text="Обновляется" bgColor="green" />
+          )}
           <Wrapper>
             <Content navigate={navigation.navigate} />
           </Wrapper>

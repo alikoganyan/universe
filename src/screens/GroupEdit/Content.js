@@ -31,6 +31,7 @@ const { Colors, sidePadding } = helper
 const { lightGrey1, black, green, red } = Colors
 const Wrapper = styled(View)`
   padding: 0 ${sidePadding}px;
+  padding-bottom: 10px;
   justify-content: center;
   flex-grow: 1;
   height: 100%;
@@ -121,75 +122,70 @@ class Content extends Component {
       )
     }
     return (
-      <ScrollView
-        contentContainerStyle={{ flexGrow: 1 }}
-        keyboardShouldPersistTaps="handled"
-      >
-        <Wrapper>
-          <TouchableOpacity onPress={this.selectPhoto}>
-            {!image ? (
-              <DefaultAvatar
-                isGroup
-                style={{ alignSelf: 'center', marginBottom: 20 }}
-                size={70}
-              />
-            ) : (
-              <ImageComponent
-                size={70}
-                source={{
-                  uri: imageFormData
-                    ? image
-                    : `https://seruniverse.asmo.media${image}`,
-                }}
-                style={{ alignSelf: 'center', marginBottom: 20 }}
-              />
-            )}
+      <Wrapper>
+        <TouchableOpacity onPress={this.selectPhoto}>
+          {!image ? (
+            <DefaultAvatar
+              isGroup
+              style={{ alignSelf: 'center', marginBottom: 20 }}
+              size={70}
+            />
+          ) : (
+            <ImageComponent
+              size={70}
+              source={{
+                uri: imageFormData
+                  ? image
+                  : `https://seruniverse.asmo.media${image}`,
+              }}
+              style={{ alignSelf: 'center', marginBottom: 20 }}
+            />
+          )}
+        </TouchableOpacity>
+        <StyledInput
+          password
+          onChangeText={this.handleChange}
+          value={text}
+          placeholder="Новая группа"
+          multiline
+          style={{
+            margin: 0,
+            textAlign: 'left',
+            paddingLeft: 10,
+            maxHeight: 130,
+          }}
+        />
+        <ButtonBox>
+          <TouchableOpacity onPress={this.deleteGroup}>
+            <DeleteGroup>Удалить группу</DeleteGroup>
           </TouchableOpacity>
-          <StyledInput
-            password
-            onChangeText={this.handleChange}
-            value={text}
-            placeholder="Новая группа"
-            multiline
-            style={{
-              margin: 0,
-              textAlign: 'left',
-              paddingLeft: 10,
-              maxHeight: 130,
-            }}
-          />
-          <ButtonBox>
-            <TouchableOpacity onPress={this.deleteGroup}>
-              <DeleteGroup>Удалить группу</DeleteGroup>
+          <Button onPress={this.proceed} background={green} color={black}>
+            Сохранить
+          </Button>
+        </ButtonBox>
+        <Receivers>
+          <DialogsLabel>
+            <TouchableOpacity
+              onPress={this.addParticipant}
+              style={{ flexDirection: 'row', alignItems: 'center' }}
+            >
+              <GroupIcon noPaddingAll right />
+              <AddReceiver>Добавить участников</AddReceiver>
             </TouchableOpacity>
-            <Button onPress={this.proceed} background={green} color={black}>
-              Сохранить
-            </Button>
-          </ButtonBox>
-          <Receivers>
-            <DialogsLabel>
-              <TouchableOpacity
-                onPress={this.addParticipant}
-                style={{ flexDirection: 'row', alignItems: 'center' }}
+          </DialogsLabel>
+          <ScrollView style={{ maxHeight: 300, zIndex: 1000 }}>
+            {participants.map((e, i) => (
+              <ReceiverComponent
+                key={i}
+                onDelete={() => this.deleteParticipant(e)}
+                last={i === participants.length}
               >
-                <GroupIcon noPaddingAll right />
-                <AddReceiver>Добавить участников</AddReceiver>
-              </TouchableOpacity>
-            </DialogsLabel>
-            <ScrollView style={{ maxHeight: 300 }}>
-              {participants.map((e, i) => (
-                <ReceiverComponent
-                  key={i}
-                  onDelete={() => this.deleteParticipant(e)}
-                  last={i === participants.length}
-                >
-                  {e}
-                </ReceiverComponent>
-              ))}
-            </ScrollView>
-          </Receivers>
-        </Wrapper>
-      </ScrollView>
+                {e}
+              </ReceiverComponent>
+            ))}
+          </ScrollView>
+        </Receivers>
+      </Wrapper>
     )
   }
 
