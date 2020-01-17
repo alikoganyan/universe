@@ -36,7 +36,7 @@ import sendRequest from '../../utils/request'
 import Loader from '../../common/Loader'
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 import Image from 'react-native-image-progress'
-// import RNPermissions from 'react-native-permissions'
+import RNPermissions from 'react-native-permissions'
 import RNFetchBlob from 'rn-fetch-blob'
 
 const {
@@ -362,100 +362,39 @@ class Content extends Component {
   }
 
   download = async item => {
-    // let status
-    // await RNPermissions.check('storage').then(async response => {
-    //   status = response
-    //   if (response !== 'authorized') {
-    //     await RNPermissions.request('storage').then(response => {
-    //       status = response
-    //     })
-    //   }
-    //   if (status !== 'authorized') {
-    //     if (Platform.OS === 'ios') {
-    //       if (RNPermissions.canOpenSettings()) {
-    //         Alert.alert(
-    //           'Ошибка',
-    //           'Для загрузки файла необходимо разрешить приложению доступ к соответствующим разделам в настройках',
-    //           [
-    //             { text: 'ОК', onPress: () => {} },
-    //             {
-    //               text: 'Настройки',
-    //               onPress: () => {
-    //                 RNPermissions.openSettings()
-    //               },
-    //             },
-    //           ],
-    //         )
-    //       } else {
-    //         Alert.alert(
-    //           'Ошибка',
-    //           'Для загрузки файла необходимо разрешить приложению доступ к соответствующим разделам',
-    //         )
-    //       }
-    //     } else {
-    //       Alert.alert(
-    //         'Ошибка',
-    //         'Для загрузки файла необходимо разрешить приложению доступ к соответствующим разделам',
-    //       )
-    //     }
-    //   } else {
-    //     try {
-    //       let url = `https://seruniverse.asmo.media${item.src}`
-    //       let fileName = item.filename
-    //       let date = new Date()
-    //       let ext = this.extention(url)
-    //       ext = `.${ext[0]}`
-    //       const { config, fs } = RNFetchBlob
-    //       let PictureDir = fs.dirs.PictureDir
-    //       let options = {
-    //         fileCache: true,
-    //         addAndroidDownloads: {
-    //           title: fileName,
-    //           useDownloadManager: true,
-    //           notification: true,
-    //           path: `${PictureDir}/${Math.floor(
-    //             date.getTime() + date.getSeconds() / 2,
-    //           )}${ext}`,
-    //           description: fileName,
-    //         },
-    //       }
-    //       config(options)
-    //         .fetch('GET', url)
-    //         .then(res => {
-    //           Alert.alert('Успешно сохранено')
-    //         })
-    //     } catch (error) {
-    //       Alert.alert(
-    //         'Что то пошло не так',
-    //         error.message ? String(error.message) : String(error),
-    //       )
-    //     }
-    //   }
-    // })
+    let url = `https://seruniverse.asmo.media${item.src}`
+
     try {
-      let url = `https://seruniverse.asmo.media${item.src}`
-      let fileName = item.filename
-      let date = new Date()
-      let ext = this.extention(url)
-      ext = `.${ext[0]}`
-      const { config, fs } = RNFetchBlob
-      let PictureDir = fs.dirs.PictureDir
-      let options = {
-        fileCache: true,
-        addAndroidDownloads: {
-          title: fileName,
-          useDownloadManager: true,
-          notification: true,
-          path: `${PictureDir}/${Math.floor(
-            date.getTime() + date.getSeconds() / 2,
-          )}${ext}`,
-          description: fileName,
-        },
-      }
       if (Platform.OS === 'android') {
-        config(options)
-          .fetch('GET', url)
-          .then(res => {})
+        RNPermissions.check('storage').then(async response => {
+          // let status = response
+          // if (response !== 'authorized') {
+          //   await RNPermissions.request('storage').then(response => {
+          //     status = response
+          //   })
+          // }
+          let fileName = item.filename
+          let date = new Date()
+          let ext = this.extention(url)
+          ext = `.${ext[0]}`
+          const { config, fs } = RNFetchBlob
+          let PictureDir = fs.dirs.PictureDir
+          let options = {
+            fileCache: true,
+            addAndroidDownloads: {
+              title: fileName,
+              useDownloadManager: true,
+              notification: true,
+              path: `${PictureDir}/${Math.floor(
+                date.getTime() + date.getSeconds() / 2,
+              )}${ext}`,
+              description: fileName,
+            },
+          }
+          config(options)
+            .fetch('GET', url)
+            .then(res => {})
+        })
       } else {
         await CameraRoll.saveToCameraRoll(url)
       }
