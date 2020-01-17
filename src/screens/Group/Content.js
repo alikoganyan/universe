@@ -363,16 +363,15 @@ class Content extends Component {
 
   download = async item => {
     let url = `https://seruniverse.asmo.media${item.src}`
-
     try {
       if (Platform.OS === 'android') {
         RNPermissions.check('storage').then(async response => {
-          // let status = response
-          // if (response !== 'authorized') {
-          //   await RNPermissions.request('storage').then(response => {
-          //     status = response
-          //   })
-          // }
+          let status = response
+          if (status !== 'authorized') {
+            await RNPermissions.request('storage').then(response => {
+              status = response
+            })
+          }
           let fileName = item.filename
           let date = new Date()
           let ext = this.extention(url)
@@ -393,12 +392,14 @@ class Content extends Component {
           }
           config(options)
             .fetch('GET', url)
-            .then(res => {})
+            .then(res => {
+              Alert.alert('Успешно сохранено')
+            })
         })
       } else {
         await CameraRoll.saveToCameraRoll(url)
+        Alert.alert('Успешно сохранено')
       }
-      Alert.alert('Успешно сохранено')
     } catch (error) {
       Alert.alert(
         'Что то пошло не так',
