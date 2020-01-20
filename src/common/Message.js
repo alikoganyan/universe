@@ -561,7 +561,7 @@ class Message extends Component {
             onLongPress={onLongPressMessage}
           >
             <RecivedMessage background={background || interlocatorMessage}>
-              {sender.first_name && sender.last_name && isGroup && (
+              {!!(sender.first_name && sender.last_name && isGroup) && (
                 <ReviverName numberOfLines={1} style={{ color: color }}>
                   {!!sender && `${sender.first_name} ${sender.last_name}`}
                 </ReviverName>

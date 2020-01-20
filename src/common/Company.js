@@ -114,7 +114,14 @@ class Company extends Component {
                   <UserText style={{ marginLeft: 4 }}>
                     <UserTextInner>
                       <UserTitle>
-                        {user.first_name} {user.last_name}
+                        {!!(user && user.first_name && user.last_name) &&
+                          `${user.first_name  } ${  user.last_name}`}
+                        {!!(
+                          user &&
+                          !user.first_name &&
+                          !user.last_name &&
+                          user.phone_number
+                        ) && user.phone_number}
                       </UserTitle>
                     </UserTextInner>
                   </UserText>
@@ -227,7 +234,4 @@ const mapDispatchToProps = dispatch => ({
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
 })
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Company)
+export default connect(mapStateToProps, mapDispatchToProps)(Company)
