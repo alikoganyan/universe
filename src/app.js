@@ -59,6 +59,7 @@ export default class AppComponent extends Component {
     const notifications = firebase.notifications()
     notifications.setBadge(0)
     notifications.removeAllDeliveredNotifications()
+    notifications.cancelAllNotifications()
 
     AsyncStorage.getItem('user')
       .then(res => {
@@ -104,6 +105,12 @@ export default class AppComponent extends Component {
   }
 
   _handleAppStateChange = nextAppState => {
+    if (nextAppState === 'active') {
+      firebase.notifications().setBadge(0)
+      firebase.notifications().removeAllDeliveredNotifications()
+      firebase.notifications().cancelAllNotifications()
+    }
+
     this.appState = nextAppState
   }
 
