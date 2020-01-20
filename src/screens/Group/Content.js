@@ -38,7 +38,6 @@ import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 import Image from 'react-native-image-progress'
 import RNPermissions from 'react-native-permissions'
 import RNFetchBlob from 'rn-fetch-blob'
-import FileViewer from 'react-native-file-viewer'
 
 const {
   Colors: { gray2 },
@@ -703,20 +702,6 @@ class Content extends Component {
   }
 
   _onPressMessage = item => {
-    // console.log(item);
-    // console.log(item.src);
-    //
-    const path =
-      'https://www.adobe.com/content/dam/Adobe/en/devnet/pdf/pdfs/PDF32000_2008.pdf'
-    FileViewer.open(path)
-      .then(e => {
-        // console.log(e,222)
-        // success
-      })
-      .catch(error => {
-        // console.log(error);
-        // error
-      })
     if (item.reply && item.reply._id) {
       const index = this.refs.flatList.props.data.findIndex(
         el => el._id === item.reply._id,

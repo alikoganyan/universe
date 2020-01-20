@@ -190,8 +190,7 @@ class Content extends Component {
 
   deleteReceiver = e => {
     const { _id } = e
-    const { receivers } = this.state
-    const { setFeedReceivers } = this.props
+    const { receivers, setFeedReceivers } = this.props
     const newReceivers = [...receivers].filter(e => e._id !== _id)
     setFeedReceivers(newReceivers)
   }
@@ -222,9 +221,11 @@ class Content extends Component {
   editFeed = newFeed => {
     const { back } = this.props
     const { _id, text, receivers } = newFeed
+    const listReceivers = []
+    receivers.forEach(r => listReceivers.push(r._id))
     const reqBody = {
       news_id: _id,
-      receivers,
+      receivers: listReceivers,
       text,
     }
 
@@ -235,7 +236,9 @@ class Content extends Component {
       success: res => {
         back()
       },
-      failFunc: err => {},
+      failFunc: err => {
+        // console.log(err);
+      },
     })
   }
 
@@ -259,7 +262,4 @@ const mapDispatchToProps = dispatch => ({
   setNews: _ => dispatch(setNews(_)),
   setFeedReceivers: _ => dispatch(setFeedReceivers(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

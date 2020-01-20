@@ -169,30 +169,15 @@ class Content extends Component {
   }
 
   proceed = () => {
-    const { receivers, forward, addFeed, user } = this.props
+    const { receivers, forward, addFeed } = this.props
     const { text } = this.state
     if (!text || !receivers.length) {
       this.setState({
         touched: true,
       })
     } else {
-      let idList = []
-      // eslint-disable-next-line array-callback-return
-      receivers.map(e => {
-        idList = [...idList, e._id]
-      })
-      const newFeed = {
-        receivers,
-        tags: [],
-        likes_сount: 0,
-        likes: [],
-        text,
-        comments: [],
-        creator: { ...user },
-        created_at: new Date(),
-        updated_at: new Date(),
-      }
-      addFeed(newFeed)
+      const idList = []
+      receivers.forEach(e => idList.push(e._id))
       if (text && receivers.length) {
         sendRequest({
           r_path: p_news,
@@ -204,6 +189,7 @@ class Content extends Component {
             },
           },
           success: res => {
+            addFeed(res.news)
             forward()
           },
           failFunc: err => {},
@@ -228,7 +214,4 @@ const mapDispatchToProps = dispatch => ({
   setFeedReceivers: _ => dispatch(setFeedReceivers(_)),
   setReceivers: _ => dispatch(setFeedReceivers(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
