@@ -75,6 +75,7 @@ rn_path = '../node_modules/react-native'
 
   pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
 
+
   target 'universeTests' do
     inherit! :search_paths
     # Pods for testing
@@ -88,7 +89,7 @@ post_install do |installer|
         config.build_settings['CLANG_ENABLE_MODULES'] = 'No'
       end
     end
-    
+
     if target.name == "React"
       target.remove_from_project
     end
