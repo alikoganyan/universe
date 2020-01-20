@@ -706,7 +706,8 @@ class Content extends Component {
     // console.log(item);
     // console.log(item.src);
     //
-    const path = item.src
+    const path =
+      'https://www.adobe.com/content/dam/Adobe/en/devnet/pdf/pdfs/PDF32000_2008.pdf'
     FileViewer.open(path)
       .then(e => {
         // console.log(e,222)
