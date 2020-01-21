@@ -73,7 +73,6 @@ const ContactList = styled(Animated.FlatList)`
   overflow: hidden;
   flex: 1;
   height: auto;
-  margin-bottom: 50px;
 `
 const Box = styled(View)`
   padding-top: 20px;
