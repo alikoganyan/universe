@@ -27,6 +27,7 @@ import {
   setCurrentChat,
 } from '../../actions/messageActions'
 import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
+import _ from 'lodash'
 
 const { Colors, HeaderHeight, fontSize } = helper
 const { green, black, grey2 } = Colors
@@ -289,7 +290,18 @@ class Content extends Component {
         access_field: 'view_contacts',
       },
       success: res => {
-        this.setState({ allUsers: res.users })
+        const allContacts = _.orderBy(
+          res.users,
+          [
+            user => {
+              if (user.first_name) {
+                return user.first_name.toLowerCase()
+              } else return
+            },
+          ],
+          ['desc'],
+        ).reverse()
+        this.setState({ allUsers: allContacts })
 
         const formatedUsers = [...res.company.subdivisions]
         this.updatedDepartaments = formatedUsers

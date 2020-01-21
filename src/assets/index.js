@@ -9,6 +9,7 @@ const {
   IconDarkColor,
   IconLightColor,
   IconSize,
+  IconMiddle,
   IconSizeSmall,
   IconSizeLarge,
 } = helper
@@ -1036,7 +1037,7 @@ export function WriteMessageBlue(props) {
                 source={SVG.Search}
             /> */}
       <Image
-        style={{ width: IconSize, height: IconSize }}
+        style={{ width: IconMiddle, height: IconMiddle }}
         resizeMode="contain"
         source={ICONS.Write_message_blue}
       />

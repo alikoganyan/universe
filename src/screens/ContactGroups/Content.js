@@ -27,6 +27,7 @@ import TabPreHeader from '../../common/TabPreHeader'
 import Company from '../../common/Company'
 import ImageComponent from '../../common/Image'
 import { setProfile } from '../../actions/profileAction'
+import _ from 'lodash'
 
 const { Colors, HeaderHeight, sidePadding } = helper
 const { green, black, grey2 } = Colors
@@ -72,6 +73,7 @@ const ContactList = styled(Animated.FlatList)`
   overflow: hidden;
   flex: 1;
   height: auto;
+  margin-bottom: 50px;
 `
 const Box = styled(View)`
   padding-top: 20px;
@@ -321,7 +323,7 @@ class Content extends Component {
         onScroll={Animated.event(
           [
             {
-              nativeEvent: { contentOffset: { y: this.scrollY } },
+              nativeEvent: { contentOffset: { x: this.scrollY } },
             },
           ],
           {
@@ -566,7 +568,18 @@ class Content extends Component {
         e.users_this = e.users_this.filter(({ _id }) => _id !== user._id)
         return e
       })
-      const allContacts = company.users.filter(({ _id }) => _id !== user._id)
+      let allContacts = _.orderBy(
+        company.users.filter(({ _id }) => _id !== user._id),
+        [
+          user => {
+            if (user.first_name) {
+              return user.first_name.toLowerCase()
+            } else return
+          },
+        ],
+        ['desc'],
+      ).reverse()
+
       const userContactsAll = [...allContacts]
       this.updatedDepartaments = department
 

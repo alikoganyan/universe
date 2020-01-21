@@ -24,6 +24,7 @@ import {
   setTaskReceivers,
 } from '../../actions/participantsActions'
 import { setDialogs } from '../../actions/dialogsActions'
+import _ from 'lodash'
 
 /*
 const AnimatedScrollView = posed.View({
@@ -153,7 +154,18 @@ class Content extends Component {
         access_field: 'tasks_assignment',
       },
       success: res => {
-        this.setState({ users: res.users })
+        const allContacts = _.orderBy(
+          res.users,
+          [
+            user => {
+              if (user.first_name) {
+                return user.first_name.toLowerCase()
+              } else return
+            },
+          ],
+          ['desc'],
+        ).reverse()
+        this.setState({ users: allContacts })
       },
       failFunc: err => {},
     })
@@ -234,7 +246,4 @@ const mapDispatchToProps = dispatch => ({
   addReceiver: _ => dispatch(addTaskReceiver(_)),
   setReceivers: _ => dispatch(setTaskReceivers(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

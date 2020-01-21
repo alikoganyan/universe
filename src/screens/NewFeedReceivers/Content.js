@@ -28,6 +28,7 @@ import {
   setFeedReceivers,
 } from '../../actions/participantsActions'
 import { setDialogs } from '../../actions/dialogsActions'
+import _ from 'lodash'
 
 const { Colors, HeaderHeight } = helper
 const { green, black, yellow } = Colors
@@ -507,7 +508,18 @@ class Content extends Component {
         access_field: 'create_news',
       },
       success: res => {
-        this.setState({ allContacts: res.users })
+        const allContacts = _.orderBy(
+          res.users,
+          [
+            user => {
+              if (user.first_name) {
+                return user.first_name.toLowerCase()
+              } else return
+            },
+          ],
+          ['desc'],
+        ).reverse()
+        this.setState({ allContacts })
         setContacts(res.users)
 
         const formatedUsers = [...res.company.subdivisions]

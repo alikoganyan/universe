@@ -25,6 +25,7 @@ import {
   addDialogParticipant,
   setDialogParticipants,
 } from '../../actions/participantsActions'
+import _ from 'lodash'
 
 const { Colors } = helper
 const { green, black, yellow } = Colors
@@ -470,7 +471,18 @@ class Content extends Component {
         access_field: 'create_groups',
       },
       success: res => {
-        this.setState({ allContacts: res.users })
+        const allContacts = _.orderBy(
+          res.users,
+          [
+            user => {
+              if (user.first_name) {
+                return user.first_name.toLowerCase()
+              } else return
+            },
+          ],
+          ['desc'],
+        ).reverse()
+        this.setState({ allContacts })
 
         const formatedUsers = [...res.company.subdivisions]
         this.updatedDepartaments = formatedUsers
