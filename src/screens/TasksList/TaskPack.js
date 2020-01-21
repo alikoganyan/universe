@@ -93,6 +93,7 @@ const NewMessages = styled(Text)`
   align-self: center;
 `
 const TaskStatusTextContainer = styled(View)`
+  align-items: center;
   border: 1px solid ${lightGrey1};
   border-radius: 15px;
   padding: 2px 8px;
@@ -212,7 +213,4 @@ const mapDispatchToProps = dispatch => ({
   setIncTasks: _ => dispatch(setIncTasks(_)),
   setOutTasks: _ => dispatch(setOutTasks(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(TaskPack)
+export default connect(mapStateToProps, mapDispatchToProps)(TaskPack)

@@ -146,7 +146,7 @@ class Content extends Component {
           password
           onChangeText={this.handleChange}
           value={text}
-          placeholder="Новая группа"
+          placeholder="Редактировать группу"
           multiline
           style={{
             margin: 0,

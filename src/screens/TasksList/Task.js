@@ -87,6 +87,7 @@ const TaskStatus = styled(View)`
   margin-top: 1px;
 `
 const TaskStatusTextContainer = styled(View)`
+  align-items: center;
   border: 1px solid ${lightGrey1};
   border-radius: 15px;
   padding: 2px 8px;
@@ -114,7 +115,7 @@ class Tasks extends Component {
         case 'set':
           stat = 'В работе'
           break
-        case 'done':
+        case 'completed':
           stat = 'Выполнена'
           break
         default:
@@ -152,7 +153,7 @@ class Tasks extends Component {
                 {tasks[tasks.length - 1].name}
               </TaskLastMessage>
               <TaskStatus>
-                <TaskStatusTextContainer>
+                <TaskStatusTextContainer style={{ alignItems: 'center' }}>
                   <TasksIcon noPaddingAll />
                   <TaskStatusText>{stat}</TaskStatusText>
                 </TaskStatusTextContainer>
@@ -209,7 +210,4 @@ const mapStateToProps = state => ({})
 const mapDispatchToProps = dispatch => ({
   setTask: _ => dispatch(setTask(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Tasks)
+export default connect(mapStateToProps, mapDispatchToProps)(Tasks)

@@ -107,13 +107,13 @@ const CreateDialog = styled(TouchableOpacity)`
   align-self: center;
   background: ${green};
   padding: 5px 10px;
+  padding-left: 0px;
   width: 184px;
   height: 38px;
   border-radius: 50000px;
   margin-top: 10px;
 `
 const CreateDialogText = styled(Text)`
-  margin-left: 10px;
   color: white;
   font-size: ${fontSize.text};
 `
