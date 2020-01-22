@@ -28,7 +28,7 @@ import { socket } from '../../utils/socket'
 import { setDialogs } from '../../actions/dialogsActions'
 
 const { Colors, sidePadding } = helper
-const { lightGrey1, black, green, red } = Colors
+const { lightGrey1, black, green, red, white } = Colors
 const Wrapper = styled(View)`
   padding: 0 ${sidePadding}px;
   padding-bottom: 10px;
@@ -85,6 +85,20 @@ const AddReceiver = styled(Text)`
 const DeleteGroup = styled(Text)`
   color: ${red};
 `
+const Title = styled(View)`
+  position: absolute;
+  background-color: ${green};
+  height: 45px;
+  width: 100%;
+  top: 30px;
+  justify-content: center;
+  align-items: center;
+`
+
+const TitleName = styled(Text)`
+  font-size: 18px;
+  color: ${white};
+`
 class Content extends Component {
   render() {
     const { text, image, imageFormData } = this.state
@@ -122,70 +136,75 @@ class Content extends Component {
       )
     }
     return (
-      <Wrapper>
-        <TouchableOpacity onPress={this.selectPhoto}>
-          {!image ? (
-            <DefaultAvatar
-              isGroup
-              style={{ alignSelf: 'center', marginBottom: 20 }}
-              size={70}
-            />
-          ) : (
-            <ImageComponent
-              size={70}
-              source={{
-                uri: imageFormData
-                  ? image
-                  : `https://seruniverse.asmo.media${image}`,
-              }}
-              style={{ alignSelf: 'center', marginBottom: 20 }}
-            />
-          )}
-        </TouchableOpacity>
-        <StyledInput
-          password
-          onChangeText={this.handleChange}
-          value={text}
-          placeholder="Редактировать группу"
-          multiline
-          style={{
-            margin: 0,
-            textAlign: 'left',
-            paddingLeft: 10,
-            maxHeight: 130,
-          }}
-        />
-        <ButtonBox>
-          <TouchableOpacity onPress={this.deleteGroup}>
-            <DeleteGroup>Удалить группу</DeleteGroup>
+      <View>
+        <Title>
+          <TitleName>Редактировать группу</TitleName>
+        </Title>
+        <Wrapper>
+          <TouchableOpacity onPress={this.selectPhoto}>
+            {!image ? (
+              <DefaultAvatar
+                isGroup
+                style={{ alignSelf: 'center', marginBottom: 20 }}
+                size={70}
+              />
+            ) : (
+              <ImageComponent
+                size={70}
+                source={{
+                  uri: imageFormData
+                    ? image
+                    : `https://seruniverse.asmo.media${image}`,
+                }}
+                style={{ alignSelf: 'center', marginBottom: 20 }}
+              />
+            )}
           </TouchableOpacity>
-          <Button onPress={this.proceed} background={green} color={black}>
-            Сохранить
-          </Button>
-        </ButtonBox>
-        <Receivers>
-          <DialogsLabel>
-            <TouchableOpacity
-              onPress={this.addParticipant}
-              style={{ flexDirection: 'row', alignItems: 'center' }}
-            >
-              <GroupIcon noPaddingAll right />
-              <AddReceiver>Добавить участников</AddReceiver>
+          <StyledInput
+            password
+            onChangeText={this.handleChange}
+            value={text}
+            placeholder="Название группы"
+            multiline
+            style={{
+              margin: 0,
+              textAlign: 'left',
+              paddingLeft: 10,
+              maxHeight: 130,
+            }}
+          />
+          <ButtonBox>
+            <TouchableOpacity onPress={this.deleteGroup}>
+              <DeleteGroup>Удалить группу</DeleteGroup>
             </TouchableOpacity>
-          </DialogsLabel>
-          <ScrollView style={{ maxHeight: 300, zIndex: 1000 }}>
-            {participants.map((e, i) => (
-              <ReceiverComponent
-                key={i}
-                onDelete={() => this.deleteParticipant(e)}
-                last={i === participants.length}
+            <Button onPress={this.proceed} background={green} color={black}>
+              Сохранить
+            </Button>
+          </ButtonBox>
+          <Receivers>
+            <DialogsLabel>
+              <TouchableOpacity
+                onPress={this.addParticipant}
+                style={{ flexDirection: 'row', alignItems: 'center' }}
               >
-                {e}
-              </ReceiverComponent>
-            ))}
-          </ScrollView>
-        </Receivers>
-      </Wrapper>
+                <GroupIcon noPaddingAll right />
+                <AddReceiver>Добавить участников</AddReceiver>
+              </TouchableOpacity>
+            </DialogsLabel>
+            <ScrollView style={{ maxHeight: 300, zIndex: 1000 }}>
+              {participants.map((e, i) => (
+                <ReceiverComponent
+                  key={i}
+                  onDelete={() => this.deleteParticipant(e)}
+                  last={i === participants.length}
+                >
+                  {e}
+                </ReceiverComponent>
+              ))}
+            </ScrollView>
+          </Receivers>
+        </Wrapper>
+      </View>
     )
   }
 

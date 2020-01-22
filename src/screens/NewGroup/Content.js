@@ -21,7 +21,7 @@ import { p_create_group } from '../../constants/api'
 import { getImageFromPicker } from '../../utils/ImagePicker'
 
 const { Colors, sidePadding } = helper
-const { lightGrey1, black, green } = Colors
+const { lightGrey1, black, green, white } = Colors
 const Wrapper = styled(View)`
   padding: 0 ${sidePadding}px;
   justify-content: center;
@@ -77,6 +77,22 @@ const AddReceiver = styled(Text)`
 const DialogsLabelText = styled(Text)`
   margin-left: 5px;
 `
+
+const Title = styled(View)`
+  position: absolute;
+  background-color: ${green};
+  height: 45px;
+  width: 100%;
+  top: 30px;
+  justify-content: center;
+  align-items: center;
+`
+
+const TitleName = styled(Text)`
+  font-size: 18px;
+  color: ${white};
+`
+
 class Content extends Component {
   render() {
     const { text, image, imageFormData } = this.state
@@ -118,6 +134,9 @@ class Content extends Component {
         contentContainerStyle={{ flexGrow: 1 }}
         keyboardShouldPersistTaps="handled"
       >
+        <Title>
+          <TitleName>Новая группа</TitleName>
+        </Title>
         <Wrapper>
           <TouchableOpacity onPress={this.selectPhoto}>
             {!image ? (
@@ -142,7 +161,7 @@ class Content extends Component {
             password
             onChangeText={this.handleChange}
             value={text}
-            placeholder="Новая группа"
+            placeholder="Название группы"
             multiline
             style={{
               margin: 0,
