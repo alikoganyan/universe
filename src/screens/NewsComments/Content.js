@@ -41,6 +41,7 @@ const NewsItem = styled(View)`
   border: 0.5px solid ${yellow};
   border-radius: ${borderRadius};
   margin: 0 ${sidePadding}px;
+  max-height: 500px;
 `
 const Sender = styled(TouchableOpacity)`
   display: flex;
@@ -159,7 +160,7 @@ const MessageDate = styled(Text)`
   font-size: ${fontSize.sm};
 `
 const FeedText = styled(ScrollView)`
-  max-height: 100px;
+  max-height: 100%;
 `
 
 const NewsText = styled(Text)`
@@ -378,7 +379,4 @@ const mapDispatchToProps = dispatch => ({
   setProfile: _ => dispatch(setProfile(_)),
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

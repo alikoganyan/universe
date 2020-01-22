@@ -330,7 +330,13 @@ class Dialogs extends Component {
         //   socket.emit('get_dialogs')
         // }
       },
-      failFunc: () => {
+      failFunc: e => {
+        this.props.setCompanies({
+          companies: this.props.user.companies,
+          company: this.props.user.company,
+        })
+        // this.props.setNews(res.data.news)
+
         this.props.setCompanyLoading(false)
       },
     })
