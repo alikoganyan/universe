@@ -322,7 +322,7 @@ class Content extends Component {
         onScroll={Animated.event(
           [
             {
-              nativeEvent: { contentOffset: { x: this.scrollY } },
+              nativeEvent: { contentOffset: { y: this.scrollY } },
             },
           ],
           {
