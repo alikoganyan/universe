@@ -114,8 +114,8 @@ class Company extends Component {
                   <UserText style={{ marginLeft: 4 }}>
                     <UserTextInner>
                       <UserTitle>
-                        {!!(user && user.first_name && user.last_name) &&
-                          `${user.first_name  } ${  user.last_name}`}
+                        {!!(user && user.first_name) && user.first_name}
+                        {!!(user && user.last_name) && user.last_name}
                         {!!(
                           user &&
                           !user.first_name &&
