@@ -259,17 +259,18 @@ class Content extends Component {
   }
 
   componentDidMount() {
-    // console.log(FileViewer);
-    // console.log(111);
     moment.locale('ru')
     const { navigation, dialog } = this.props
     const { messages_from_pages } = dialog
     const messages = dialog.messages
     this.props.setMessages(messages)
-    this.setState({
-      nextPage: messages_from_pages.nextPage,
-      totalPages: messages_from_pages.totalPages,
-    })
+    if (messages_from_pages) {
+      this.setState({
+        nextPage: messages_from_pages.nextPage,
+        totalPages: messages_from_pages.totalPages,
+      })
+    }
+
     navigation.setParams({
       scrollToBottom: this._scrollToBottom,
     })
@@ -301,9 +302,11 @@ class Content extends Component {
       messages = messages.filter(
         m => m._id !== nextProps.deleteMessage.message_id,
       )
-      dialog.messages = dialog.messages.filter(
-        message => message._id !== nextProps.deleteMessage.message_id,
-      )
+      if (!!(Object.keys(dialog).length && dialog.messages)) {
+        dialog.messages = dialog.messages.filter(
+          message => message._id !== nextProps.deleteMessage.message_id,
+        )
+      }
       this.props.setDialog(dialog)
 
       this.props.setMessages(messages)
@@ -324,7 +327,7 @@ class Content extends Component {
   }
 
   componentWillUnmount() {
-    this.props.setDialog({})
+    // this.props.setDialog({})
   }
 
   toggleDate = null

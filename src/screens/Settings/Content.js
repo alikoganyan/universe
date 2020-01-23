@@ -147,10 +147,9 @@ class Content extends Component {
       navigate,
       user,
     } = this.props
-    const settings =
-      user.company._id === 0
-        ? this.state.settings.slice(0, this.state.settings.length - 1)
-        : this.state.settings
+    const settings = !!(user && user.company._id === 0)
+      ? this.state.settings.slice(0, this.state.settings.length - 1)
+      : this.state.settings
     if (isLoading) return null
     return (
       <SafeAreaView>
