@@ -316,7 +316,7 @@ class Content extends Component {
   }
 
   componentWillUnmount() {
-    this.props.setDialog({})
+    // this.props.setDialog({})
   }
 
   toggleDate = null

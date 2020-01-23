@@ -110,7 +110,7 @@ class Chat extends Component {
     setCurrentChat(null)
     setCurrentRoomId(null)
     setRoom(null)
-    this.props.setDialog(null)
+    // this.props.setDialog(null)
     socket.emit('get_dialogs', { id: user._id })
   }
 
@@ -144,7 +144,4 @@ const mapDispatchToProps = dispatch => ({
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Chat)
+export default connect(mapStateToProps, mapDispatchToProps)(Chat)

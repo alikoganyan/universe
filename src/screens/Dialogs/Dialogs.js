@@ -259,7 +259,7 @@ class Dialogs extends Component {
   }
 
   componentWillUnmount() {
-    this.props.setDialog(null)
+    // this.props.setDialog(null)
     this.props.setCompanyLoading(false)
 
     // disconnectFromSocket()
