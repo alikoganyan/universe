@@ -92,7 +92,7 @@ class Content extends Component {
     const { participants } = this.props
     const ReceiverComponent = props => {
       const { children, last = false, onDelete } = props
-      const { image, role, first_name, phone_number } = children
+      const { image, role, first_name, phone_number, last_name } = children
       return (
         <Receiver last={last}>
           <View
@@ -111,7 +111,11 @@ class Content extends Component {
             )}
             <View style={{ flex: 1 }}>
               <ReceiverInfo>
-                <Text numberOfLines={1}>{first_name || phone_number}</Text>
+                <Text numberOfLines={1}>
+                  {!!(first_name && last_name)
+                    ? `${first_name} ${last_name}`
+                    : phone_number}
+                </Text>
                 {role ? (
                   <Department numberOfLines={1}>{role.name}</Department>
                 ) : null}
