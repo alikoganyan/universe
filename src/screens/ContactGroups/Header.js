@@ -36,10 +36,10 @@ const Input = styled(TextInput)`
 
 class HeaderComponent extends Component {
   render() {
-    const { input, focused } = this.state
+    const { input } = this.state
     return (
       <Wrapper>
-        <Header>
+        <Header valueChange={this.props.changeOption}>
           <SearchIconGray />
           <Input
             value={input}
@@ -47,7 +47,7 @@ class HeaderComponent extends Component {
             onFocus={this.handleFocus}
             placeholder="Поиск"
           />
-          {focused && (
+          {!!input && (
             <CloseIcon
               onPress={this.onBlur}
               marginLeft={false}
@@ -62,10 +62,10 @@ class HeaderComponent extends Component {
 
   state = {
     input: '',
-    focused: false,
   }
 
   handleInputChange = e => {
+    this.props.onValueChange(e)
     this.setState({ input: e })
   }
 
@@ -74,7 +74,8 @@ class HeaderComponent extends Component {
   }
 
   onBlur = () => {
-    this.setState({ focused: false, input: '' })
+    this.handleInputChange('')
+    this.setState({ input: '' })
   }
 }
 

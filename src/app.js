@@ -33,7 +33,7 @@ export default class AppComponent extends Component {
         <Navigator />
         {!connected && (
           <OfflineNotice
-            text="Нет соединения с интернетом"
+            text="Соединение..."
             bgColor="#b52424"
             conntecionError
           />

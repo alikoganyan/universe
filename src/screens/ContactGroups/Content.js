@@ -212,7 +212,7 @@ class Content extends Component {
             <Title>Контакты</Title>
             <Company navigate={navigate} />
           </HeaderContainer>
-          <Header />
+          <Header onValueChange={this.filterAllContacts} />
           <OptionsWrap>
             <Options>
               {options.options.map((e, i) => (
@@ -235,8 +235,12 @@ class Content extends Component {
   }
 
   state = {
+    inputValue: '',
     collapsed: [],
     allContacts: [],
+    filtredAllContacts: null,
+    filteredUserContactsAll: null,
+    filteredGroups: null,
     users: {
       department: [],
     },
@@ -258,14 +262,67 @@ class Content extends Component {
     </Loader>
   )
 
+  filterAllContacts = val => {
+    const { options, allContacts, userContactsAll } = this.state
+    const { dialogs } = this.props
+    const { active } = options
+    if (active === 0 && allContacts && allContacts.length) {
+      const filtredAllContacts = allContacts.filter(
+        e =>
+          (e.first_name &&
+            e.last_name &&
+            (e.first_name.toLowerCase() + e.last_name.toLowerCase()).indexOf(
+              val.replace(/\s/g, '').toLowerCase(),
+            ) !== -1) ||
+          (e.name &&
+            e.name
+              .toLowerCase()
+              .replace(/\s/g, '')
+              .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1) ||
+          (e.phone_number &&
+            e.phone_number
+              .toLowerCase()
+              .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1),
+      )
+      this.setState({ filtredAllContacts: val ? filtredAllContacts : null })
+    } else if (active === 1 && userContactsAll && userContactsAll.length) {
+      const filtredAllContacts = userContactsAll.filter(
+        e =>
+          (e.first_name &&
+            e.last_name &&
+            (e.first_name.toLowerCase() + e.last_name.toLowerCase()).indexOf(
+              val.replace(/\s/g, '').toLowerCase(),
+            ) !== -1) ||
+          (e.phone_number &&
+            e.phone_number
+              .toLowerCase()
+              .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1),
+      )
+      this.setState({
+        filteredUserContactsAll: val ? filtredAllContacts : null,
+      })
+    } else if (active === 2 && dialogs && dialogs.length) {
+      const filtredGroups = dialogs.filter(
+        e =>
+          e.isGroup &&
+          e.name &&
+          e.name
+            .replace(/\s/g, '')
+            .toLowerCase()
+            .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1,
+      )
+      this.setState({ filteredGroups: val ? filtredGroups : null })
+    }
+  }
+
   AllContacts = () => {
-    const { allContacts } = this.state
+    const { allContacts, filtredAllContacts } = this.state
 
     return (
       <ContactList
         bounces={false}
         contentContainerStyle={{ paddingBottom: 170 }}
-        data={allContacts}
+        data={filtredAllContacts || allContacts}
         ListEmptyComponent={this._renderEmptyComponent}
         ref={ref => (this.allRef = ref)}
         renderItem={({ item }) => {
@@ -334,14 +391,14 @@ class Content extends Component {
   }
 
   MiddleContacts = () => {
-    const { userContactsAll } = this.state
+    const { userContactsAll, filteredUserContactsAll } = this.state
     if (this.props.user && this.props.user.company) {
       if (this.props.user.company._id === 0) {
         return (
           <ContactList
             bounces={false}
             contentContainerStyle={{ paddingBottom: 170 }}
-            data={userContactsAll}
+            data={filteredUserContactsAll || userContactsAll}
             ListEmptyComponent={this._renderEmptyComponent}
             ref={ref => (this.usersRef = ref)}
             renderItem={({ item }) => (
@@ -387,7 +444,7 @@ class Content extends Component {
             data={
               this.props.user.settings.partition_contacts
                 ? this.state.userContacts
-                : this.state.userContactsAll
+                : filteredUserContactsAll || this.state.userContactsAll
             }
             ListEmptyComponent={this._renderEmptyComponent}
             ref={ref => (this.usersRef = ref)}
@@ -504,11 +561,12 @@ class Content extends Component {
 
   GroupContacts = () => {
     const { dialogs } = this.props
+    const { filteredGroups } = this.state
     return (
       <ContactList
         bounces={false}
         contentContainerStyle={{ paddingBottom: 170 }}
-        data={dialogs}
+        data={filteredGroups || dialogs}
         ListEmptyComponent={this._renderEmptyComponent}
         ref={ref => (this.groupRef = ref)}
         renderItem={({ item }) => {
