@@ -211,7 +211,7 @@ class Content extends Component {
               <TimeSent>{date}</TimeSent>
             </SenderInfo>
           </Sender>
-          <FeedText>
+          <FeedText nestedScrollEnabled>
             <NewsText>{feed.text}</NewsText>
           </FeedText>
           <NewsItemInfo>
