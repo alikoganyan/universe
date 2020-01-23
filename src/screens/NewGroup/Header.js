@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { View, Dimensions } from 'react-native'
+import { View, Dimensions, Text } from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
 import { CloseIcon } from '../../assets/index'
 import helper from '../../utils/helpers'
-const { sidePadding, HeaderHeight } = helper
+const { sidePadding, HeaderHeight, Colors, fontSize } = helper
+const { grey3 } = Colors
 const Wrapper = styled(View)`
   width: ${Dimensions.get('window').width - sidePadding * 2}px;
   align-self: center;
@@ -27,6 +28,12 @@ const Top = styled(View)`
   height: ${HeaderHeight};
   width: 100%;
 `
+
+const HeaderText = styled(Text)`
+  font-size: ${fontSize.header};
+  color: ${grey3};
+`
+
 class Header extends Component {
   render() {
     return (
@@ -35,6 +42,8 @@ class Header extends Component {
           <Left>
             <CloseIcon right onPress={this.back} />
           </Left>
+          <HeaderText>Новая группа</HeaderText>
+          <View style={{ width: 50 }}></View>
         </Top>
       </Wrapper>
     )
@@ -47,7 +56,4 @@ class Header extends Component {
 }
 const mapStateToProps = () => ({})
 const mapDispatchToProps = () => ({})
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Header)
+export default connect(mapStateToProps, mapDispatchToProps)(Header)

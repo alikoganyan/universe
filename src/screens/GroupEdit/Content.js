@@ -28,7 +28,7 @@ import { socket } from '../../utils/socket'
 import { setDialogs } from '../../actions/dialogsActions'
 
 const { Colors, sidePadding } = helper
-const { lightGrey1, black, green, red, white } = Colors
+const { lightGrey1, black, green, red } = Colors
 const Wrapper = styled(View)`
   padding: 0 ${sidePadding}px;
   padding-bottom: 10px;
@@ -85,20 +85,7 @@ const AddReceiver = styled(Text)`
 const DeleteGroup = styled(Text)`
   color: ${red};
 `
-const Title = styled(View)`
-  position: absolute;
-  background-color: ${green};
-  height: 45px;
-  width: 100%;
-  top: 30px;
-  justify-content: center;
-  align-items: center;
-`
 
-const TitleName = styled(Text)`
-  font-size: 18px;
-  color: ${white};
-`
 class Content extends Component {
   render() {
     const { text, image, imageFormData } = this.state
@@ -137,9 +124,6 @@ class Content extends Component {
     }
     return (
       <View>
-        <Title>
-          <TitleName>Редактировать группу</TitleName>
-        </Title>
         <Wrapper>
           <TouchableOpacity onPress={this.selectPhoto}>
             {!image ? (
