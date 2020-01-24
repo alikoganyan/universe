@@ -190,8 +190,8 @@ class Content extends Component {
     const { animationCompleted } = this.state
     const { feed } = this.props
     const { comments, creator, receivers } = feed
-    const { first_name, last_name, image } = creator
-    const reversedCommnets = [...comments].reverse()
+    const { first_name, last_name, image } = creator || {}
+    const reversedCommnets = comments ? [...comments].reverse() : []
     const date = getHamsterDate(feed.created_at)
     return (
       <Wrapper>
@@ -220,12 +220,16 @@ class Content extends Component {
               <HeartIcon />
               <ReactionsText>{feed.likes_сount || 0}</ReactionsText>
               <CommentIcon left />
-              <ReactionsText>{feed.comments.length}</ReactionsText>
+              <ReactionsText>
+                {feed.comments && feed.comments.length}
+              </ReactionsText>
             </Reactions>
           </NewsItemInfo>
         </NewsItem>
         <SeeReceivers onPress={this.seeParticipants}>
-          <SeeReceiversText>{receivers.length} получатели</SeeReceiversText>
+          <SeeReceiversText>
+            {receivers && receivers.length} получатели
+          </SeeReceiversText>
           <ArrowRightIcon left noPaddingAll />
         </SeeReceivers>
         {animationCompleted ? (
