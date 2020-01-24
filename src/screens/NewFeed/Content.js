@@ -184,9 +184,10 @@ class Content extends Component {
       })
     } else {
       const idList = []
+      this.setState({ disabled: true })
+
       receivers.forEach(e => idList.push(e._id))
       if (text && receivers.length) {
-        this.setState({ disabled: true })
         sendRequest({
           r_path: p_news,
           method: 'post',
@@ -198,7 +199,7 @@ class Content extends Component {
           },
           success: res => {
             addFeed(res.news)
-            this.setState({ disabled: false })
+            // this.setState({ disabled: false })
             forward()
           },
           failFunc: err => {
