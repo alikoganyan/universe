@@ -110,7 +110,7 @@ class Chat extends Component {
     setCurrentChat(null)
     setCurrentRoomId(null)
     setRoom(null)
-    // this.props.setDialog(null)
+    // this.props.setDialog({})
     socket.emit('get_dialogs', { id: user._id })
   }
 

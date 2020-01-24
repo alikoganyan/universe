@@ -230,7 +230,6 @@ class Dialogs extends Component {
       'change_group_participants',
       this.socketChangeGroup,
     )
-    socket.removeEventListener('message_edited', this.messageEdited)
     socket.removeEventListener('user_left_from_group', this.socketLeaveGroup)
     socket.removeEventListener('deleted_message', this.socketDeleteMessage)
     socket.removeEventListener('message_edited', this.socketEditMessage)
@@ -250,7 +249,6 @@ class Dialogs extends Component {
     socket.on('change_group_participants', e =>
       this.socketChangeGroup(e, 'participants'),
     )
-    socket.on('message_edited', e => this.messageEdited(e))
     socket.on('user_left_from_group', e => this.socketLeaveGroup(e))
     socket.on('deleted_message', e => this.socketDeleteMessage(e))
     socket.on('message_edited', e => this.socketEditMessage(e))
@@ -261,6 +259,7 @@ class Dialogs extends Component {
   componentWillUnmount() {
     // this.props.setDialog(null)
     this.props.setCompanyLoading(false)
+    this.props.setCurrentRoomId(null)
 
     // disconnectFromSocket()
     // AppState.removeEventListener('change', this._handleAppStateChange);
@@ -402,8 +401,8 @@ class Dialogs extends Component {
   }
 
   socketDeleteMessage = e => {
-    const { dialog, dialogs, setDialogs, setDeletedMessage } = this.props
-    if (!Object.keys(dialog).length) {
+    const { dialogs, setDialogs, setDeletedMessage, currentRoomId } = this.props
+    if (!currentRoomId) {
       const currentDialog = dialogs.find(d => d._id === e.dialog_id)
       if (currentDialog) {
         const index = dialogs.findIndex(d => d._id === e.dialog_id)
@@ -418,8 +417,8 @@ class Dialogs extends Component {
   }
 
   socketEditMessage = ({ message }) => {
-    const { dialog, dialogs, setDialogs, setEditedMessage } = this.props
-    if (!Object.keys(dialog).length) {
+    const { dialogs, setDialogs, setEditedMessage, currentRoomId } = this.props
+    if (!currentRoomId) {
       const currentDialogIndex = dialogs.findIndex(
         d => d._id === message.dialog,
       )
@@ -427,9 +426,16 @@ class Dialogs extends Component {
         const editedMessageIndex = dialogs[
           currentDialogIndex
         ].messages.findIndex(m => m._id === message._id)
-        dialogs[currentDialogIndex].messages[editedMessageIndex].text =
-          message.text
-        setDialogs(dialogs)
+        if (
+          editedMessageIndex !== -1 &&
+          dialogs[currentDialogIndex].messages[editedMessageIndex]
+        ) {
+          dialogs[currentDialogIndex].messages[editedMessageIndex].text =
+            message.text
+          dialogs[currentDialogIndex].messages[editedMessageIndex].edited =
+            message.edited
+          setDialogs(dialogs)
+        }
       }
     } else {
       setEditedMessage(message)
@@ -611,7 +617,7 @@ class Dialogs extends Component {
   }
 
   newMessageSocket = e => {
-    const { dialog, company, dialogs, user } = this.props
+    const { dialog, company, dialogs, user, currentRoomId } = this.props
     try {
       if (e.company === company._id) {
         const message =
@@ -627,7 +633,7 @@ class Dialogs extends Component {
                 sender: { ...e.sender },
                 viewers: [],
               }
-        if (Object.keys(dialog).length) {
+        if (currentRoomId) {
           if (e.dialog === dialog._id) {
             if (!message.viewers.includes(user._id)) {
               message.viewers.push(user._id)
@@ -642,7 +648,7 @@ class Dialogs extends Component {
           if (currentDialog) {
             currentDialog.messages.push(message)
             this.sortedDialog(currentDialog)
-            this.props.setCurrentRoomId(e.dialog)
+            // this.props.setCurrentRoomId(e.dialog)
           }
         }
       }
