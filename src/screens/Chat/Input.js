@@ -645,6 +645,8 @@ class InputComponent extends Component {
       editedMessage: { _id },
     } = this.props
     const bodyReq = { text, message_id: _id }
+    this.stopEditing()
+
     sendRequest({
       r_path: p_edit_message,
       method: 'patch',
@@ -654,7 +656,6 @@ class InputComponent extends Component {
         messages[msgIndex].text = text
         messages[msgIndex].edited = true
         this.props.setMessages(messages)
-        this.stopEditing()
       },
       failFunc: () => {},
     })
@@ -674,6 +675,7 @@ class InputComponent extends Component {
       currentDialog,
       currentChat,
     } = this.props
+    this.stopForwarding()
 
     const bodyReq = {
       message_id: _id,
@@ -688,7 +690,6 @@ class InputComponent extends Component {
         if (res.dialog) {
           this.props.setDialog(res.dialog)
         }
-        this.stopForwarding()
       },
       failFunc: err => {},
     })
@@ -713,13 +714,13 @@ class InputComponent extends Component {
     } = this.props
     const { text } = this.state
     const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
+    this.stopReply()
+
     sendRequest({
       r_path: p_reply_message,
       method: 'post',
       attr: bodyReq,
-      success: res => {
-        this.stopReply()
-      },
+      success: res => {},
       failFunc: err => {},
     })
   }

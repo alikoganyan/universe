@@ -98,7 +98,7 @@ class Content extends Component {
       messages.push(...uploadMessages.filter(m => m.roomId === currentRoomId))
     }
 
-    if (editedMessage2 && editedMessage2.text) {
+    if (editedMessage2 && editedMessage2.text && messages.length) {
       const messageIndex = messages.findIndex(m => m._id === editedMessage2._id)
       messages[messageIndex].text = editedMessage2.text
       messages[messageIndex].edited = editedMessage2.edited
