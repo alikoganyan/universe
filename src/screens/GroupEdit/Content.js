@@ -210,6 +210,10 @@ class Content extends Component {
     setParticipants(participants)
   }
 
+  componentWillUnmount() {
+    this.props.setParticipants([])
+  }
+
   deleteGroup = () => {
     const {
       defaultValues,
