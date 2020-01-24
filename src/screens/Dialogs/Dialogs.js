@@ -195,9 +195,14 @@ class Dialogs extends Component {
   scrollY = new Animated.Value(0)
 
   componentDidMount() {
+    const { user } = this.props
+
+    this.props.setCompanies({
+      companies: this.props.user.companies,
+      company: this.props.user.company,
+    })
     this.getProfile()
 
-    const { user } = this.props
     this.props.removeAllPreloader()
     // navigation.navigate('NewTask') // restore
     // clearInterval(this.interval)
@@ -308,7 +313,6 @@ class Dialogs extends Component {
           const currentCompany = userData.user.companies.find(
             c => c._id === userData.user.company._id,
           )
-
           if (currentCompany) {
             this.setCompanyData(userData.user)
           } else {

@@ -19,6 +19,7 @@ import DefaultAvatar from './DefaultAvatar'
 import { setNews } from '../actions/newsActions'
 import { socket } from '../utils/socket'
 import { setIsMyProfile } from '../actions/profileAction'
+import AsyncStorage from '@react-native-community/async-storage'
 
 const { fontSize, sidePadding, Colors } = helper
 const { lightGrey2 } = Colors
@@ -173,6 +174,16 @@ class Company extends Component {
             r_path: '/profile',
             method: 'get',
             success: data => {
+              AsyncStorage.getItem('user').then(res => {
+                const value = JSON.parse(res)
+                if (value) {
+                  value.company = data.user.company
+                  AsyncStorage.setItem(
+                    'user',
+                    JSON.stringify({ ...value, lastLogin: new Date() }),
+                  )
+                }
+              })
               const userData = { ...data }
               this.props.setCompanies({
                 companies: userData.user.companies,
