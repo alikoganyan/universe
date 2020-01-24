@@ -417,28 +417,40 @@ class Dialogs extends Component {
   }
 
   socketEditMessage = ({ message }) => {
-    const { dialogs, setDialogs, setEditedMessage, currentRoomId } = this.props
-    if (!currentRoomId) {
-      const currentDialogIndex = dialogs.findIndex(
-        d => d._id === message.dialog,
-      )
-      if (currentDialogIndex || typeof currentDialogIndex === 'number') {
-        const editedMessageIndex = dialogs[
-          currentDialogIndex
-        ].messages.findIndex(m => m._id === message._id)
+    const {
+      dialogs,
+      setDialogs,
+      setEditedMessage,
+      currentRoomId,
+      company,
+    } = this.props
+    if (message.company === company._id) {
+      if (!currentRoomId) {
+        const currentDialogIndex = dialogs.findIndex(
+          d => d._id === message.dialog,
+        )
         if (
-          editedMessageIndex !== -1 &&
-          dialogs[currentDialogIndex].messages[editedMessageIndex]
+          currentDialogIndex ||
+          (typeof currentDialogIndex === 'number' &&
+            dialogs[currentDialogIndex].messages.length)
         ) {
-          dialogs[currentDialogIndex].messages[editedMessageIndex].text =
-            message.text
-          dialogs[currentDialogIndex].messages[editedMessageIndex].edited =
-            message.edited
-          setDialogs(dialogs)
+          const editedMessageIndex = dialogs[
+            currentDialogIndex
+          ].messages.findIndex(m => m._id === message._id)
+          if (
+            editedMessageIndex !== -1 &&
+            dialogs[currentDialogIndex].messages[editedMessageIndex]
+          ) {
+            dialogs[currentDialogIndex].messages[editedMessageIndex].text =
+              message.text
+            dialogs[currentDialogIndex].messages[editedMessageIndex].edited =
+              message.edited
+            setDialogs(dialogs)
+          }
         }
+      } else {
+        setEditedMessage(message)
       }
-    } else {
-      setEditedMessage(message)
     }
   }
 
