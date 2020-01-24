@@ -114,7 +114,12 @@ class Content extends Component {
               <TouchableOpacity onPress={this.addParticipant}>
                 <AddReciever>Добавить</AddReciever>
               </TouchableOpacity>
-              <Button onPress={this.proceed} background={yellow} color={black}>
+              <Button
+                onPress={this.proceed}
+                background={yellow}
+                color={black}
+                disabled={this.state.disabled}
+              >
                 Продолжить
               </Button>
             </DialogsLabel>
@@ -148,6 +153,7 @@ class Content extends Component {
   state = {
     text: '',
     touched: false,
+    disabled: false,
   }
 
   componentDidMount() {}
@@ -171,6 +177,7 @@ class Content extends Component {
   proceed = () => {
     const { receivers, forward, addFeed } = this.props
     const { text } = this.state
+
     if (!text || !receivers.length) {
       this.setState({
         touched: true,
@@ -179,6 +186,7 @@ class Content extends Component {
       const idList = []
       receivers.forEach(e => idList.push(e._id))
       if (text && receivers.length) {
+        this.setState({ disabled: true })
         sendRequest({
           r_path: p_news,
           method: 'post',
@@ -190,9 +198,12 @@ class Content extends Component {
           },
           success: res => {
             addFeed(res.news)
+            this.setState({ disabled: false })
             forward()
           },
-          failFunc: err => {},
+          failFunc: err => {
+            this.setState({ disabled: false })
+          },
         })
       }
     }
