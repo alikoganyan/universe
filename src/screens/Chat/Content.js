@@ -113,8 +113,11 @@ class Content extends Component {
         const messageIndex = messages.findIndex(
           m => m._id === editedMessage2._id,
         )
-        messages[messageIndex].text = editedMessage2.text
-        messages[messageIndex].edited = editedMessage2.edited
+        if (messages && messageIndex !== -1) {
+          messages[messageIndex].text = editedMessage2.text
+          messages[messageIndex].edited = editedMessage2.edited
+        }
+
         this.props.setMessages(messages)
         this.props.setEditedMessage(null)
       }
