@@ -740,6 +740,8 @@ class Content extends Component {
     )
 
     if (e.isGroup) {
+      setCurrentRoomId(e._id)
+
       this.props.setDialog(e)
     } else {
       this.props.setDialog(currentRoom)
