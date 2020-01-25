@@ -405,18 +405,26 @@ class Dialogs extends Component {
   }
 
   socketDeleteMessage = e => {
-    const { dialogs, setDialogs, setDeletedMessage, currentRoomId } = this.props
-    if (!currentRoomId) {
-      const currentDialog = dialogs.find(d => d._id === e.dialog_id)
-      if (currentDialog) {
-        const index = dialogs.findIndex(d => d._id === e.dialog_id)
-        dialogs[index].messages = dialogs[index].messages.filter(
-          m => m._id !== e.message_id,
-        )
-        setDialogs(dialogs)
+    const {
+      dialogs,
+      setDialogs,
+      setDeletedMessage,
+      currentRoomId,
+      company,
+    } = this.props
+    if (e.company_id === company._id) {
+      if (!currentRoomId) {
+        const currentDialog = dialogs.find(d => d._id === e.dialog_id)
+        if (currentDialog) {
+          const index = dialogs.findIndex(d => d._id === e.dialog_id)
+          dialogs[index].messages = dialogs[index].messages.filter(
+            m => m._id !== e.message_id,
+          )
+          setDialogs(dialogs)
+        }
+      } else {
+        setDeletedMessage(e)
       }
-    } else {
-      setDeletedMessage(e)
     }
   }
 

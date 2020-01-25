@@ -52,6 +52,7 @@ class HeaderComponent extends PureComponent {
             onChangeText={this.handleInputChange}
             onFocus={this.handleFocus}
             placeholder="Поиск"
+            editable={false}
           />
           {focused && (
             <CloseIcon
@@ -123,7 +124,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setDialogs: _ => dispatch(setDialogs(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(HeaderComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
