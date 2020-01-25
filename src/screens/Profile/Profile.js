@@ -64,9 +64,11 @@ class Profile extends Component {
     const { loading, previousProfile } = this.state
     const { user, currentDialog, myProfile, navigation } = this.props
 
-    const myGroup = currentDialog.isGroup
-      ? currentDialog.creator._id === user._id
-      : false
+    const myGroup =
+      !previousProfile && currentDialog.isGroup
+        ? currentDialog.creator._id === user._id
+        : false
+
     return (
       <ActionSheetProvider>
         <SafeAreaView behavior="padding">
