@@ -188,7 +188,7 @@ class InputComponent extends Component {
                 onChangeText={e => this.handleChange(e)}
                 value={text}
                 blurOnSubmit={false}
-                autoHeight
+                autoHeight={Platform.OS !== 'ios'}
                 multiline
               />
             </Body>
