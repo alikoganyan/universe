@@ -421,18 +421,20 @@ class Content extends Component {
 
   generateColor = () => {
     const { randomColors } = helper
-    const { currentDialog } = this.props
-    const { participants, creator } = currentDialog
-    const allUsers = [...participants]
-    allUsers.push(creator)
-    for (let user of allUsers) {
-      const randomIndex = Math.floor(Math.random() * 7)
-      user.color = randomColors[randomIndex]
+    const { dialog } = this.props
+    const { participants = [], creator } = dialog
+    const allUsers = [...participants] || []
+    if (allUsers.length) {
+      allUsers.push(creator)
+      for (let user of allUsers) {
+        const randomIndex = Math.floor(Math.random() * 7)
+        user.color = randomColors[randomIndex]
+      }
+      this.setState({
+        participants: allUsers,
+      })
+      this.setState({ participants: allUsers })
     }
-    this.setState({
-      participants: allUsers,
-    })
-    this.setState({ participants: allUsers })
   }
 
   renderEmptyComponent = () => (

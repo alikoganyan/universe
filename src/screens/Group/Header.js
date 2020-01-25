@@ -110,8 +110,8 @@ const ToProfile = styled(TouchableOpacity)`
 
 class HeaderComponent extends Component {
   render() {
-    const { back, search, startSearch, stopSearch, currentDialog } = this.props
-    const { name, participants, image, _id } = currentDialog
+    const { back, search, startSearch, stopSearch, dialog } = this.props
+    const { name, participants, image, _id } = dialog
     return (
       <Header>
         <Top>
@@ -213,6 +213,7 @@ class HeaderComponent extends Component {
 const mapStateToProps = state => ({
   search: state.messageReducer.search,
   dialogs: state.dialogsReducer.dialogs,
+  dialog: state.dialogsReducer.dialog,
   currentRoom: state.messageReducer.currentRoom,
   currentRoomId: state.messageReducer.currentRoomId,
   currentChat: state.messageReducer.currentChat,
@@ -224,7 +225,4 @@ const mapDispatchToProps = dispatch => ({
   stopSearch: _ => dispatch(stopSearch(_)),
   getMessages: _ => dispatch(getMessages(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(HeaderComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
