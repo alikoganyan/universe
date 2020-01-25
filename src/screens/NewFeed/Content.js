@@ -178,13 +178,15 @@ class Content extends Component {
     const { receivers, forward, addFeed } = this.props
     const { text } = this.state
 
+    this.setState({ disabled: true })
+
     if (!text || !receivers.length) {
       this.setState({
         touched: true,
+        disabled: false,
       })
     } else {
       const idList = []
-      this.setState({ disabled: true })
 
       receivers.forEach(e => idList.push(e._id))
       if (text && receivers.length) {
