@@ -17,7 +17,7 @@ import { setCompanies, setContacts, setUser } from '../actions/userActions'
 import { setDialogs, setCompanyLoading } from '../actions/dialogsActions'
 import DefaultAvatar from './DefaultAvatar'
 import { setNews } from '../actions/newsActions'
-import { socket } from '../utils/socket'
+// import { socket } from '../utils/socket'
 import { setIsMyProfile } from '../actions/profileAction'
 import AsyncStorage from '@react-native-community/async-storage'
 
@@ -115,7 +115,7 @@ class Company extends Component {
                   <UserText style={{ marginLeft: 4 }}>
                     <UserTextInner>
                       <UserTitle>
-                        {!!(user && user.first_name) && `${user.first_name  } `}
+                        {!!(user && user.first_name) && `${user.first_name} `}
                         {!!(user && user.last_name) && user.last_name}
                         {!!(
                           user &&
@@ -190,13 +190,16 @@ class Company extends Component {
                 company: userData.user.company,
               })
               this.props.setUser(userData.user)
+              this.props.setDialogs(userData.user.company.dialogs)
               const tasksInc = [...res.data.tasks]
               const tasksOut = [...res.data.created_tasks]
               const tasksWithUsers = [...tasksInc, ...tasksOut]
               this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
               this.props.setContacts(res.data.contacts)
               this.props.setNews(res.data.news)
-              socket.emit('get_dialogs', { id: userData.user._id })
+              this.props.setCompanyLoading(false)
+
+              // socket.emit('get_dialogs', { id: userData.user._id })
             },
             failFunc: () => {
               this.props.setCompanyLoading(false)
