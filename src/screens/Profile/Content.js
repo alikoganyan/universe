@@ -131,7 +131,6 @@ const LeaveGroup = styled(Text)`
   color: ${pink};
 `
 const BoxInnerItem = styled(TouchableOpacity)`
-   border: 1px solid red
   display: flex;
   flex-direction: row;
   align-items: center;
