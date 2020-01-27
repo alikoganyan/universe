@@ -94,6 +94,7 @@ class Dialogs extends Component {
     const unreadMessages = messages.filter(
       e => !e.viewers.includes(user._id) && e.sender._id !== user._id,
     ).length
+
     const chatName =
       !isGroup && creator && participants.length
         ? user._id !== creator._id
@@ -216,8 +217,7 @@ class Dialogs extends Component {
     //         const dialog = [...dialogs].filter(chat => chat.room === room)[0];
     //         this.toChat(dialog);
     //     });
-
-    AppState.addEventListener('change', this._handleAppStateChange)
+    // AppState.addEventListener('change', this._handleAppStateChange)
 
     socket.emit('get_dialogs', { id: user._id })
     socket.removeEventListener('update_dialogs', this.setDialogsSocket)
@@ -259,15 +259,27 @@ class Dialogs extends Component {
     socket.on('message_edited', e => this.socketEditMessage(e))
     socket.on('delete_dialog', e => this.socketDeleteDialog(e))
     socket.on('admin_update', this.socketAdminUpdate)
+    AppState.addEventListener('change', this.handleAppStateChange)
   }
 
   componentWillUnmount() {
+    AppState.removeEventListener('change', this.handleAppStateChange)
+
     // this.props.setDialog(null)
     this.props.setCompanyLoading(false)
     this.props.setCurrentRoomId(null)
 
     // disconnectFromSocket()
     // AppState.removeEventListener('change', this._handleAppStateChange);
+  }
+
+  handleAppStateChange = nextAppState => {
+    const { currentChat, user } = this.props
+    if (nextAppState === 'background' && currentChat) {
+      socket.emit('leave', { room: currentChat, viewer: user._id })
+    } else if (nextAppState === 'active' && currentChat) {
+      socket.emit('view', { room: currentChat, viewer: user._id })
+    }
   }
 
   setCompanyData = e => {
