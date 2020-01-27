@@ -196,7 +196,7 @@ class Dialogs extends Component {
   scrollY = new Animated.Value(0)
 
   componentDidMount() {
-    const { user } = this.props
+    // const { user } = this.props
 
     this.props.setCompanies({
       companies: this.props.user.companies,
@@ -219,7 +219,7 @@ class Dialogs extends Component {
     //     });
     // AppState.addEventListener('change', this._handleAppStateChange)
 
-    socket.emit('get_dialogs', { id: user._id })
+    // socket.emit('get_dialogs', { id: user._id })
     socket.removeEventListener('update_dialogs', this.setDialogsSocket)
     socket.removeEventListener('update_dialog', this.setDialogSocket)
     socket.removeEventListener('update_profile', this.getProfile)
