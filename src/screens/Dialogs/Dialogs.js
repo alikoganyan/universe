@@ -330,11 +330,13 @@ class Dialogs extends Component {
           } else {
             this.changeCompany(userData.user.companies[0]._id)
           }
-          this.props.setCompanyLoading(false)
         } else {
           this.setCompanyData(userData.user)
-          socket.emit('get_dialogs')
+          setDialogs(userData.user.company.dialogs)
+          // socket.emit('get_dialogs')
         }
+
+        this.props.setCompanyLoading(false)
 
         // todo
         // } else if (adminChange && (!userData.user.companies || !userData.user.companies.length)) {
