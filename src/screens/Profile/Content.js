@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   Dimensions,
   ScrollView,
-  TouchableWithoutFeedback,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -132,6 +131,7 @@ const LeaveGroup = styled(Text)`
   color: ${pink};
 `
 const BoxInnerItem = styled(TouchableOpacity)`
+   border: 1px solid red
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -308,6 +308,7 @@ class Content extends Component {
                 }}
               >
                 <BoxInnerItem
+                  // style={}
                   onPress={() =>
                     this.props.toSenderProfile(creator, currentDialog)
                   }
@@ -349,45 +350,43 @@ class Content extends Component {
                     phone_number,
                   } = item
                   return (
-                    <TouchableWithoutFeedback
-                      onPress={() =>
-                        this.props.toSenderProfile(item, currentDialog)
-                      }
+                    <View
+                      style={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        padding: 10,
+                      }}
                     >
-                      <View
-                        style={{
-                          display: 'flex',
-                          flexDirection: 'row',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          padding: 10,
-                        }}
+                      <BoxInnerItem
+                        onPress={() =>
+                          this.props.toSenderProfile(item, currentDialog)
+                        }
                       >
-                        <BoxInnerItem>
-                          {image === '/images/default_avatar.jpg' || !image ? (
-                            <DefaultAvatar size={36} />
-                          ) : (
-                            <ImageComponent
-                              size={36}
-                              source={{
-                                uri: `https://seruniverse.asmo.media${image}`,
-                              }}
-                              style={{ marginRight: 8 }}
-                            />
+                        {image === '/images/default_avatar.jpg' || !image ? (
+                          <DefaultAvatar size={36} />
+                        ) : (
+                          <ImageComponent
+                            size={36}
+                            source={{
+                              uri: `https://seruniverse.asmo.media${image}`,
+                            }}
+                            style={{ marginRight: 8 }}
+                          />
+                        )}
+                        <ContactInfo>
+                          <ContactName>
+                            {first_name
+                              ? `${first_name} ${last_name}`
+                              : phone_number}
+                          </ContactName>
+                          {role && role.name && (
+                            <ContactRole>{role.name}</ContactRole>
                           )}
-                          <ContactInfo>
-                            <ContactName>
-                              {first_name
-                                ? `${first_name} ${last_name}`
-                                : phone_number}
-                            </ContactName>
-                            {role && role.name && (
-                              <ContactRole>{role.name}</ContactRole>
-                            )}
-                          </ContactInfo>
-                        </BoxInnerItem>
-                      </View>
-                    </TouchableWithoutFeedback>
+                        </ContactInfo>
+                      </BoxInnerItem>
+                    </View>
                   )
                 }}
                 keyExtractor={item => item._id.toString()}

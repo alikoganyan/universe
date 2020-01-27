@@ -124,6 +124,7 @@ class HeaderComponent extends Component {
                   onPress={back}
                   size={23}
                   right
+                  dialogBack
                 />
                 <ToProfile onPress={this.toProfile}>
                   {!image ||

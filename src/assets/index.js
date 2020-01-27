@@ -106,10 +106,12 @@ export function BackIcon(props) {
     noPaddingAll,
     marginLeft = true,
     size = IconSize,
+    dialogBack,
     ...rest
   } = props
   return (
     <StyledTouchableOpacity
+      style={{ paddingTop: 10, paddingBottom: 10 }}
       onPress={onPress}
       left={left}
       right={right}

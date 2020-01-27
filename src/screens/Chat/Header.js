@@ -173,6 +173,7 @@ class HeaderComponent extends Component {
                   marginLeft={false}
                   noPaddingAll
                   onPress={back}
+                  dialogBack
                   right
                   size={23}
                 />
@@ -279,7 +280,4 @@ const mapDispatchToProps = dispatch => ({
   stopSearch: _ => dispatch(stopSearch()),
   getMessages: _ => dispatch(getMessages(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(HeaderComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
