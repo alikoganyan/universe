@@ -259,6 +259,7 @@ class Dialogs extends Component {
     socket.on('message_edited', e => this.socketEditMessage(e))
     socket.on('delete_dialog', e => this.socketDeleteDialog(e))
     socket.on('admin_update', this.socketAdminUpdate)
+
     AppState.addEventListener('change', this.handleAppStateChange)
   }
 

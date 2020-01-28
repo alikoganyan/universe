@@ -1,10 +1,11 @@
 import React from 'react'
-import { Dimensions, Platform, Text } from 'react-native'
+import { Text } from 'react-native'
 import {
   createStackNavigator,
   createAppContainer,
-  createDrawerNavigator,
+  // createDrawerNavigator,
   createBottomTabNavigator,
+  createSwitchNavigator,
 } from 'react-navigation'
 import styled from 'styled-components'
 import {
@@ -14,7 +15,6 @@ import {
   Signup,
   Signup2,
   Signup3,
-  FirstScreen,
   PinCode,
   Login,
   Restore,
@@ -27,7 +27,6 @@ import {
   NewPost,
   CreateTask,
   Profile,
-  DrawerComponent,
   ContactGroups,
   NewsComments,
   NewDialog,
@@ -137,93 +136,177 @@ const TabBarNavigation = createBottomTabNavigator(
   },
 )
 
-const createRootNavigator = (logged = false) => {
-  // eslint-disable-next-line no-unused-vars
-  const AppDrawerNavigator = createDrawerNavigator(
+// const createRootNavigator = (logged = false) => {
+//   // eslint-disable-next-line no-unused-vars
+//   // const AppDrawerNavigator = createDrawerNavigator(
+//   //   {
+//   //     Home: {
+//   //       screen: FirstScreen,
+//   //       navigationOptions: {
+//   //         headerMode: 'none',
+//   //         gesturesEnabled: false,
+//   //       },
+//   //     },
+//   //   },
+//   //   {
+//   //     drawerWidth: Dimensions.get('window').width * 0.8,
+//   //     contentComponent: ({ navigation }) => (
+//   //       <DrawerComponent navigation={navigation} />
+//   //     ),
+//   //     drawerLockMode: 'locked-open',
+//   //   },
+//   // )
+//   const initialRouteName = Platform.isPad
+//     ? 'IpadView'
+//     : logged
+//     ? 'Dialogs'
+//     : 'Login'
+//   const AppStackNavigator = createStackNavigator(
+//     {
+//       Group: { screen: Group },
+//       Dialogs: TabBarNavigation,
+//       Chat: { screen: Chat },
+//       Login: {
+//         screen: Login,
+//         navigationOptions: {
+//           gesturesEnabled: false,
+//         },
+//         defaultNavigationOptions: {
+//           gesturesEnabled: false,
+//         },
+//       },
+//       Signup: { screen: Signup },
+//       Signup2: { screen: Signup2 },
+//       Signup3: { screen: Signup3 },
+//       PinCode: { screen: PinCode },
+//       Restore: { screen: Restore },
+//       Restore2: { screen: Restore2 },
+//       Restore3: { screen: Restore3 },
+//       GroupInfo: { screen: GroupInfo },
+//       GroupName: { screen: GroupName },
+//       NewPost: { screen: NewPost },
+//       CreateTask: { screen: CreateTask },
+//       Profile: { screen: Profile },
+//       NewsComments: { screen: NewsComments },
+//       TasksInc: { screen: TasksInc },
+//       TasksOut: { screen: TasksOut },
+//       Tasks: { screen: Tasks },
+//       NewContact: { screen: NewContact },
+//       NewDialog: { screen: NewDialog },
+//       FirstInstall: { screen: FirstInstall },
+//       NewFeed: { screen: NewFeed },
+//       FeedEdit: { screen: FeedEdit },
+//       NewTask: { screen: NewTask },
+//       NewFeedReceivers: { screen: NewFeedReceivers },
+//       ProfileEdit: { screen: ProfileEdit },
+//       NewTaskReceivers: { screen: NewTaskReceivers },
+//       NewGroupParticipants: { screen: NewGroupParticipants },
+//       NewGroup: { screen: NewGroup },
+//       IpadView: { screen: IpadView },
+//       // FirstScreen: {
+//       //   screen: AppDrawerNavigator,
+//       //   transitionSpec: {
+//       //     duration: 0,
+//       //   },
+//       // },
+//       FeedReceivers: { screen: FeedReceivers },
+//       TaskEdit: { screen: TaskEdit },
+//       GroupEdit: { screen: GroupEdit },
+//       WebView: { screen: WebView },
+//       MapView: { screen: MapView },
+//       VideoView: { screen: VideoView },
+//     },
+//     {
+//       initialRouteName,
+//       headerMode: 'none',
+//     },
+//   )
+//
+//   return createAppContainer(AppStackNavigator)
+// }
+
+const publicNavigation = createStackNavigator({
+  Login: {
+    screen: Login,
+    navigationOptions: {
+      gesturesEnabled: false,
+    },
+    defaultNavigationOptions: {
+      gesturesEnabled: false,
+    },
+  },
+  Signup: { screen: Signup },
+  Signup2: { screen: Signup2 },
+  Signup3: { screen: Signup3 },
+  PinCode: { screen: PinCode },
+  Restore: { screen: Restore },
+  Restore2: { screen: Restore2 },
+  Restore3: { screen: Restore3 },
+})
+
+const AppStackNavigator = createStackNavigator(
+  {
+    Group: { screen: Group },
+    Dialogs: { screen: TabBarNavigation },
+    Chat: { screen: Chat },
+    GroupInfo: { screen: GroupInfo },
+    GroupName: { screen: GroupName },
+    NewPost: { screen: NewPost },
+    CreateTask: { screen: CreateTask },
+    Profile: { screen: Profile },
+    NewsComments: { screen: NewsComments },
+    TasksInc: { screen: TasksInc },
+    TasksOut: { screen: TasksOut },
+    Tasks: { screen: Tasks },
+    NewContact: { screen: NewContact },
+    NewDialog: { screen: NewDialog },
+    FirstInstall: { screen: FirstInstall },
+    NewFeed: { screen: NewFeed },
+    FeedEdit: { screen: FeedEdit },
+    NewTask: { screen: NewTask },
+    NewFeedReceivers: { screen: NewFeedReceivers },
+    ProfileEdit: { screen: ProfileEdit },
+    NewTaskReceivers: { screen: NewTaskReceivers },
+    NewGroupParticipants: { screen: NewGroupParticipants },
+    NewGroup: { screen: NewGroup },
+    IpadView: { screen: IpadView },
+    // FirstScreen: {
+    //   screen: AppDrawerNavigator,
+    //   transitionSpec: {
+    //     duration: 0,
+    //   },
+    // },
+    FeedReceivers: { screen: FeedReceivers },
+    TaskEdit: { screen: TaskEdit },
+    GroupEdit: { screen: GroupEdit },
+    WebView: { screen: WebView },
+    MapView: { screen: MapView },
+    VideoView: { screen: VideoView },
+  },
+  {
+    initialRouteName: 'Dialogs',
+    headerMode: 'none',
+  },
+)
+
+const switchNavigator = (signedInd, navigation) =>
+  createSwitchNavigator(
     {
-      Home: {
-        screen: FirstScreen,
+      Auth: {
+        screen: publicNavigation,
         navigationOptions: {
-          headerMode: 'none',
-          gesturesEnabled: false,
+          navigation,
         },
       },
+      App: AppStackNavigator,
     },
     {
-      drawerWidth: Dimensions.get('window').width * 0.8,
-      contentComponent: ({ navigation }) => (
-        <DrawerComponent navigation={navigation} />
-      ),
-      drawerLockMode: 'locked-open',
-    },
-  )
-  const initialRouteName = Platform.isPad
-    ? 'IpadView'
-    : logged
-    ? 'Dialogs'
-    : 'Login'
-  const AppStackNavigator = createStackNavigator(
-    {
-      Group: { screen: Group },
-      Dialogs: TabBarNavigation,
-      Chat: { screen: Chat },
-      Login: {
-        screen: Login,
-        navigationOptions: {
-          gesturesEnabled: false,
-        },
-        defaultNavigationOptions: {
-          gesturesEnabled: false,
-        },
-      },
-      Signup: { screen: Signup },
-      Signup2: { screen: Signup2 },
-      Signup3: { screen: Signup3 },
-      PinCode: { screen: PinCode },
-      Restore: { screen: Restore },
-      Restore2: { screen: Restore2 },
-      Restore3: { screen: Restore3 },
-      GroupInfo: { screen: GroupInfo },
-      GroupName: { screen: GroupName },
-      NewPost: { screen: NewPost },
-      CreateTask: { screen: CreateTask },
-      Profile: { screen: Profile },
-      NewsComments: { screen: NewsComments },
-      TasksInc: { screen: TasksInc },
-      TasksOut: { screen: TasksOut },
-      Tasks: { screen: Tasks },
-      NewContact: { screen: NewContact },
-      NewDialog: { screen: NewDialog },
-      FirstInstall: { screen: FirstInstall },
-      NewFeed: { screen: NewFeed },
-      FeedEdit: { screen: FeedEdit },
-      NewTask: { screen: NewTask },
-      NewFeedReceivers: { screen: NewFeedReceivers },
-      ProfileEdit: { screen: ProfileEdit },
-      NewTaskReceivers: { screen: NewTaskReceivers },
-      NewGroupParticipants: { screen: NewGroupParticipants },
-      NewGroup: { screen: NewGroup },
-      IpadView: { screen: IpadView },
-      FirstScreen: {
-        screen: AppDrawerNavigator,
-        transitionSpec: {
-          duration: 0,
-        },
-      },
-      FeedReceivers: { screen: FeedReceivers },
-      TaskEdit: { screen: TaskEdit },
-      GroupEdit: { screen: GroupEdit },
-      WebView: { screen: WebView },
-      MapView: { screen: MapView },
-      VideoView: { screen: VideoView },
-    },
-    {
-      initialRouteName,
-      headerMode: 'none',
+      initialRouteName: signedInd ? 'App' : 'Auth',
     },
   )
 
-  return createAppContainer(AppStackNavigator)
+// export default createRootNavigator
+
+export const RootNavigator = (signedInd, navigation) => {
+  return createAppContainer(switchNavigator(signedInd, navigation))
 }
-
-export default createRootNavigator

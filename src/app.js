@@ -6,7 +6,7 @@ import firebase from 'react-native-firebase'
 // import { Font, Notifications } from 'expo';
 import { store } from './reducers/store'
 import { Provider } from 'react-redux'
-import createRootNavigator from './screens/Navigator'
+import { RootNavigator } from './screens/Navigator'
 import { getPushesPermissionStatusAndToken } from './actions/pushesActions'
 import { connectToSocket } from './utils/socket'
 import { setUser, setAuth } from './actions/userActions'
@@ -21,7 +21,7 @@ console.disableYellowBox = true
 export default class AppComponent extends Component {
   render() {
     const { loaded, logged, connected } = this.state
-    const Navigator = createRootNavigator(loaded && logged)
+    const Navigator = RootNavigator(loaded && logged)
 
     if (!loaded) {
       return null
@@ -30,7 +30,7 @@ export default class AppComponent extends Component {
       <Provider store={store}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
         {/* {logged && !connected && <Offline />} */}
-        <Navigator />
+        <Navigator key="navigator" />
         {!connected && (
           <OfflineNotice
             text="Соединение..."
