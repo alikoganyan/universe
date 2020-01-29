@@ -28,6 +28,7 @@ import Company from '../../common/Company'
 import ImageComponent from '../../common/Image'
 import { setProfile } from '../../actions/profileAction'
 import _ from 'lodash'
+import AnimatedEllipsis from 'react-native-animated-ellipsis'
 
 const { Colors, HeaderHeight, sidePadding } = helper
 const { green, black, grey2 } = Colors
@@ -182,7 +183,7 @@ const Head = styled(Animated.View)`
 class Content extends Component {
   render() {
     const { options } = this.state
-    const { navigate } = this.props
+    const { navigate, connection, companyLoading } = this.props
     const { active } = options
 
     const opacity = this.scrollY.interpolate({
@@ -209,7 +210,26 @@ class Content extends Component {
           <HeaderContainer
             style={{ transform: [{ translateY: titleTranslateY }] }}
           >
-            <Title>Контакты</Title>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Title style={{ paddingRight: 0 }}>
+                {!connection
+                  ? 'Соединение'
+                  : !!companyLoading
+                  ? 'Обновляется'
+                  : 'Контакты'}{' '}
+              </Title>
+              {!!(!connection || companyLoading) && (
+                <AnimatedEllipsis
+                  style={{ color: 'black', top: -5, fontSize: 35, left: 0 }}
+                />
+              )}
+            </View>
             <Company navigate={navigate} />
           </HeaderContainer>
           <Header onValueChange={this.filterAllContacts} />
@@ -774,6 +794,8 @@ const mapStateToProps = state => ({
   user: state.userReducer.user,
   reset: state.userReducer.reset,
   company: state.userReducer.company,
+  connection: state.baseReducer.connection,
+  companyLoading: state.dialogsReducer.companyLoading,
 })
 const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),

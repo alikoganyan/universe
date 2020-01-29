@@ -25,6 +25,7 @@ import {
 } from '../../actions/messageActions'
 import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
+import AnimatedEllipsis from 'react-native-animated-ellipsis'
 
 const { sidePadding, HeaderHeight, Colors, fontSize } = helper
 const { border } = Colors
@@ -125,7 +126,15 @@ class HeaderComponent extends Component {
       'Ноября',
       'Декабря',
     ]
-    const { back, search, startSearch, stopSearch, currentDialog } = this.props
+    const {
+      back,
+      search,
+      startSearch,
+      stopSearch,
+      currentDialog,
+      companyLoading,
+      connection,
+    } = this.props
     const {
       first_name,
       last_name,
@@ -192,9 +201,25 @@ class HeaderComponent extends Component {
                     <InfoChatName numberOfLines={1} ellipsizeMode="tail">
                       {first_name ? `${first_name} ${last_name}` : phone_number}
                     </InfoChatName>
-                    <InfoParticipants numberOfLines={1}>
-                      {lastSeenDate}
-                    </InfoParticipants>
+
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                      }}
+                    >
+                      <InfoParticipants numberOfLines={1}>
+                        {!connection
+                          ? 'Соединение'
+                          : !!companyLoading
+                          ? 'Обновляется'
+                          : lastSeenDate}
+                      </InfoParticipants>
+                      {!!(!connection || companyLoading) && (
+                        <AnimatedEllipsis
+                          style={{ color: 'black', fontSize: fontSize.sm }}
+                        />
+                      )}
+                    </View>
                   </Info>
                 </ToProfile>
               </>
@@ -273,6 +298,8 @@ const mapStateToProps = state => ({
   currentRoomId: state.messageReducer.currentRoomId,
   currentChat: state.messageReducer.currentChat,
   currentDialog: state.dialogsReducer.currentDialog,
+  companyLoading: state.dialogsReducer.companyLoading,
+  connection: state.baseReducer.connection,
 })
 const mapDispatchToProps = dispatch => ({
   addMessage: _ => dispatch(addMessage(_)),

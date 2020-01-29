@@ -48,6 +48,7 @@ import sendRequest from '../../utils/request'
 import Company from '../../common/Company'
 import { setTaskList } from '../../actions/tasksActions'
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
+import { setNews } from '../../actions/newsActions'
 
 const { Colors } = helper
 const { blue, grey2, lightColor } = Colors
@@ -202,6 +203,8 @@ class Dialogs extends Component {
       companies: this.props.user.companies,
       company: this.props.user.company,
     })
+    this.props.setNews(this.props.user.news)
+
     this.getProfile()
 
     this.props.removeAllPreloader()
@@ -301,6 +304,7 @@ class Dialogs extends Component {
   // }
 
   getProfile = (adminChange = false) => {
+    const { setDialogs } = this.props
     if (!adminChange) {
       this.props.setCompanyLoading(true)
     }
@@ -376,7 +380,6 @@ class Dialogs extends Component {
 
   _renderListHeader = () => {
     const { companyLoading, connection } = this.props
-    // console.log(connection);
     const translateY = this.scrollY.interpolate({
       inputRange: [0, 50, 51],
       outputRange: [0, 50, 50],
@@ -950,5 +953,6 @@ const mapDispatchToProps = dispatch => ({
   setReset: _ => dispatch(setReset(_)),
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
   setProfile: _ => dispatch(setProfile(_)),
+  setNews: _ => dispatch(setNews(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)

@@ -11,6 +11,7 @@ import { setTaskList } from '../../actions/tasksActions'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
 import Company from '../../common/Company'
+import AnimatedEllipsis from 'react-native-animated-ellipsis'
 
 const { HeaderHeight, Colors } = helper
 const { grey2 } = Colors
@@ -42,7 +43,14 @@ const HeaderContainer = styled(Animated.View)`
 
 class Content extends Component {
   render() {
-    const { navigate, tasksWithUsers, tasksInc, tasksOut } = this.props
+    const {
+      navigate,
+      tasksWithUsers,
+      tasksInc,
+      tasksOut,
+      companyLoading,
+      connection,
+    } = this.props
     const opacity = this.scrollY.interpolate({
       inputRange: [0, 90, 91],
       outputRange: [0, 0, 1],
@@ -93,7 +101,27 @@ class Content extends Component {
           )}
         >
           <HeaderContainer style={{ transform: [{ translateY }] }}>
-            <Title>Задачи</Title>
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'center',
+                alignItems: 'center',
+              }}
+            >
+              <Title style={{ paddingRight: 0 }}>
+                {!connection
+                  ? 'Соединение'
+                  : !!companyLoading
+                  ? 'Обновляется'
+                  : 'Задачи'}{' '}
+              </Title>
+              {!!(!connection || companyLoading) && (
+                <AnimatedEllipsis
+                  style={{ color: 'black', top: -5, fontSize: 35, left: 0 }}
+                />
+              )}
+            </View>
+            {/*<Title>Задачи</Title>*/}
             <Company navigate={this.props.navigate} />
           </HeaderContainer>
           <Header />
@@ -147,6 +175,8 @@ const mapStateToProps = state => ({
   tasksOut: state.tasksReducer.tasksOut,
   tasksInc: state.tasksReducer.tasksInc,
   tasksWithUsers: state.tasksReducer.tasksWithUsers,
+  connection: state.baseReducer.connection,
+  companyLoading: state.dialogsReducer.companyLoading,
 })
 const mapDispatchToProps = dispatch => ({
   setTaskList: _ => dispatch(setTaskList(_)),

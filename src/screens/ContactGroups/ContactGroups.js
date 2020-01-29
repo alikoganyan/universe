@@ -5,7 +5,6 @@ import { ActionSheetProvider } from '@expo/react-native-action-sheet'
 import SafeAreaView from '../../common/SafeAreaView'
 import Content from './Content'
 import { connect } from 'react-redux'
-import OfflineNotice from '../../common/OfflineNotice'
 
 const Wrapper = styled(View)`
   height: 100%;
@@ -13,13 +12,10 @@ const Wrapper = styled(View)`
 
 class ContactGroups extends Component {
   render() {
-    const { navigation, companyLoading } = this.props
+    const { navigation } = this.props
     return (
       <ActionSheetProvider>
         <SafeAreaView>
-          {companyLoading && (
-            <OfflineNotice text="Обновляется" bgColor="green" />
-          )}
           <Wrapper>
             <Content navigate={navigation.navigate} />
           </Wrapper>
@@ -34,8 +30,6 @@ class ContactGroups extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  companyLoading: state.dialogsReducer.companyLoading,
-})
+const mapStateToProps = state => ({})
 
 export default connect(mapStateToProps)(ContactGroups)
