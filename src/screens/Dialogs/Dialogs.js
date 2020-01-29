@@ -16,6 +16,8 @@ import Dialog from './Dialog'
 import Loader from '../../common/Loader'
 import Congratulations from '../../common/Congratulations'
 import SafeAreaView from '../../common/SafeAreaView'
+import AnimatedEllipsis from 'react-native-animated-ellipsis'
+
 import {
   setRoom,
   addMessage,
@@ -45,8 +47,6 @@ import TabPreHeader from '../../common/TabPreHeader'
 import sendRequest from '../../utils/request'
 import Company from '../../common/Company'
 import { setTaskList } from '../../actions/tasksActions'
-import OfflineNotice from '../../common/OfflineNotice'
-
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
 const { Colors } = helper
@@ -128,7 +128,7 @@ class Dialogs extends Component {
   }
 
   render() {
-    const { dialogs, navigation, companyLoading } = this.props
+    const { dialogs, navigation } = this.props
     const { congratulations } = this.state
     const opacity = this.scrollY.interpolate({
       inputRange: [0, 90, 91],
@@ -142,7 +142,7 @@ class Dialogs extends Component {
           title="Диалоги"
           opacity={opacity}
         />
-        {companyLoading && <OfflineNotice text="Обновляется" bgColor="green" />}
+        {/*{companyLoading && <OfflineNotice text="Обновляется" bgColor="green" />}*/}
         <Wrapper>
           {congratulations ? (
             <Congratulations
@@ -375,6 +375,8 @@ class Dialogs extends Component {
   }
 
   _renderListHeader = () => {
+    const { companyLoading, connection } = this.props
+    // console.log(connection);
     const translateY = this.scrollY.interpolate({
       inputRange: [0, 50, 51],
       outputRange: [0, 50, 50],
@@ -383,7 +385,26 @@ class Dialogs extends Component {
     return (
       <>
         <HeaderContainer style={{ transform: [{ translateY }] }}>
-          <Title>Диалоги</Title>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Title style={{ paddingRight: 0 }}>
+              {!connection
+                ? 'Соединение'
+                : !!companyLoading
+                ? 'Обновляется'
+                : 'Диалоги'}{' '}
+            </Title>
+            {!!(!connection || companyLoading) && (
+              <AnimatedEllipsis
+                style={{ color: 'black', top: -5, fontSize: 35, left: 0 }}
+              />
+            )}
+          </View>
           <Company navigate={this.props.navigation.navigate} />
         </HeaderContainer>
         <Header />
@@ -907,6 +928,7 @@ const mapStateToProps = state => ({
   currentDialog: state.dialogsReducer.currentDialog,
   companies: state.userReducer.companies,
   company: state.userReducer.company,
+  connection: state.baseReducer.connection,
 })
 const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),
