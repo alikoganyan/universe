@@ -28,7 +28,10 @@ import {
   setFile,
   addPreloader,
   removePreloader,
+  setSendingMessages,
 } from '../../actions/messageActions'
+import moment from 'moment'
+
 import {
   p_send_file,
   p_edit_message,
@@ -584,43 +587,76 @@ class InputComponent extends Component {
     }
   }
 
-  discardSelect = () => {}
-
   sendMessage = () => {
     const { currentChat } = this.props
-    // const {
-    //   _id, first_name, last_name, middle_name, image
-    // } = user;
     const { text } = this.state
     if (text.trim()) {
-      // const message = {
-      //   _id: Math.random().toString(36).substring(7),
-      //   sender: {
-      //     _id,
-      //     first_name,
-      //     last_name,
-      //     middle_name,
-      //     image
-      //   },
-      //   text: text.trim(),
-      //   created_at: new Date(),
-      //   type: 'text',
-      //   viewers: []
-      // };
-      // const newDialogs = [...dialogs];
-      // const newDialog = { ...newDialogs.filter(event => event.room === currentChat)[0] };
-      // if (newDialog) {
-      //   newDialog.messages = [...newDialog.messages, message];
-      //   newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog;
-      //   const newDialogSorted = newDialogs.sort((a, b) => {
-      //     if (b.messages.length && a.messages.length) return new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at);
-      //   });
-      //   setDialogs(newDialogSorted);
-      socket.emit('group_message', { room: currentChat, message: text.trim() })
-      // }
+      const date = moment()
+        .utc()
+        .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+      this.getCurrentCompany(text.trim(), date, 'text')
+      socket.emit('group_message', {
+        room: currentChat,
+        message: text.trim(),
+        date,
+      })
     }
-
     this.setState({ text: '' })
+  }
+
+  getCurrentCompany = (text, date, type) => {
+    const { sendingMessages, user, dialog } = this.props
+    const { company } = user
+    let newSendingMessages = { ...sendingMessages }
+    const companyKey = company._id
+    const dialogKey = dialog._id
+    if (!newSendingMessages[companyKey]) {
+      newSendingMessages[companyKey] = {}
+    }
+    if (!newSendingMessages[companyKey][dialogKey]) {
+      newSendingMessages[companyKey][dialogKey] = {
+        messages: [],
+      }
+    }
+    if (newSendingMessages[companyKey][dialogKey].messages) {
+      this.createMessage(
+        newSendingMessages,
+        companyKey,
+        dialogKey,
+        text,
+        date,
+        type,
+      )
+    }
+  }
+
+  createMessage = (
+    newSendingMessages,
+    companyKey,
+    dialogKey,
+    text,
+    date,
+    type,
+  ) => {
+    const { setSendingMessages, dialog, user } = this.props
+    const currentDialog = newSendingMessages[companyKey][dialogKey]
+    let lastItemId = currentDialog.messages.length
+      ? currentDialog.messages[currentDialog.messages.length - 1]._id
+      : 0
+    const newMessage = {
+      text: text,
+      type: type,
+      viewers: [user._id],
+      dialog: dialog._id,
+      company: user.company._id,
+      created_at: date,
+      updated_at: date,
+      sender: { ...user },
+      _id: --lastItemId,
+      myMessage: true,
+    }
+    newSendingMessages[companyKey][dialogKey].messages.push(newMessage)
+    setSendingMessages(newSendingMessages)
   }
 
   handleChange = e => {
@@ -735,6 +771,7 @@ const mapStateToProps = state => ({
   forwardedMessage: state.messageReducer.forwardMessage,
   currentRoomId: state.messageReducer.currentRoomId,
   repliedMessage: state.messageReducer.replyMessage,
+  sendingMessages: state.messageReducer.sendingMessages,
 })
 const mapDispatchToProps = dispatch => ({
   addMessage: _ => dispatch(addMessage(_)),
@@ -749,5 +786,6 @@ const mapDispatchToProps = dispatch => ({
   setDialog: _ => dispatch(setDialog(_)),
   setMessage: _ => dispatch(setMessage(_)),
   setFile: _ => dispatch(setFile(_)),
+  setSendingMessages: _ => dispatch(setSendingMessages(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(InputComponent)

@@ -15,6 +15,8 @@ import {
   ImageIconBlue,
   TriangleLeftIcon,
   TriangleRightIcon,
+  PendingIcon,
+  FailedIcon,
 } from '../assets/index'
 import { connect } from 'react-redux'
 import ImageComponent from './Image'
@@ -227,12 +229,18 @@ const FileInfo = styled(View)`
 const FileSize = styled(Text)`
   color: ${({ color }) => color || 'black'};
 `
-const Indicator = ({ read = false, color }) =>
-  read ? (
+const Indicator = ({ read = false, color, pending = false, failed }) => {
+  // console.log(pending )
+  return read ? (
     <CheckAllIcon color={color} noPaddingAll />
+  ) : failed ? (
+    <FailedIcon />
+  ) : pending ? (
+    <PendingIcon />
   ) : (
     <CheckIcon color={color} noPaddingAll />
   )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -485,7 +493,7 @@ class Message extends Component {
             ]}
           >
             <View style={styles.messageContainer}>
-              <MyMessages background={background}>
+              <MyMessages background={background} faildMessage={item.failed}>
                 {!!(resend && resend.sender) && (
                   <Forwarded
                     color={forwardedMessage}
@@ -523,7 +531,12 @@ class Message extends Component {
                 <MessageInfo>
                   {edited ? <MessageEdited>Изменено </MessageEdited> : null}
                   <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
-                  <Indicator color="black" read={messageRead} />
+                  <Indicator
+                    color="black"
+                    read={messageRead}
+                    pending={item.myMessage && !item.failed}
+                    failed={item.failed}
+                  />
                 </MessageInfo>
               </MyMessages>
             </View>

@@ -724,6 +724,50 @@ export function CheckIcon(props) {
   )
 }
 
+export function PendingIcon(props) {
+  const {
+    // color = 'white',
+    left = true,
+    right,
+    noPaddingAll = true,
+  } = props
+  return (
+    <StyledTouchableOpacity
+      left={left}
+      right={right}
+      noPaddingAll={noPaddingAll}
+    >
+      <Image
+        style={{ width: IconSize, height: IconSize }}
+        resizeMode="contain"
+        source={ICONS.PendingMessage}
+      />
+    </StyledTouchableOpacity>
+  )
+}
+
+export function FailedIcon(props) {
+  const {
+    // color = 'white',
+    left = true,
+    right,
+    noPaddingAll = true,
+  } = props
+  return (
+    <StyledTouchableOpacity
+      left={left}
+      right={right}
+      noPaddingAll={noPaddingAll}
+    >
+      <Image
+        style={{ width: IconSize + 2, height: IconSize + 2 }}
+        resizeMode="contain"
+        source={ICONS.FailedMessage}
+      />
+    </StyledTouchableOpacity>
+  )
+}
+
 export function CheckAllIcon(props) {
   const {
     color = 'white',

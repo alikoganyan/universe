@@ -29,6 +29,7 @@ import {
   removePreloader,
   setMessage,
   getEditedMessage,
+  setSendingMessages,
 } from '../../actions/messageActions'
 import { setDialog, setDialogs } from '../../actions/dialogsActions'
 import { d_message } from '../../constants/api'
@@ -38,6 +39,7 @@ import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 import Image from 'react-native-image-progress'
 import RNPermissions from 'react-native-permissions'
 import RNFetchBlob from 'rn-fetch-blob'
+import { socket } from '../../utils/socket'
 
 const {
   Colors: { gray2 },
@@ -87,9 +89,14 @@ class Content extends Component {
       uploadMessages,
       currentRoomId,
       editedMessage2,
+      sendingMessages,
+      dialog,
     } = this.props
-
     let { messages } = this.props
+
+    const companyKey = dialog.company
+    const dialogKey = dialog._id
+
     messages = messages.filter(m => m.type !== 'loader')
     messages = messages.concat(
       uploadMessages.filter(m => m.roomId === currentRoomId),
@@ -112,7 +119,15 @@ class Content extends Component {
       ? scrolledMessages
       : messages
 
-    let reversedMessages = [...currentMessages].sort(
+    const newSendingMessages = !!(
+      sendingMessages[companyKey] &&
+      sendingMessages[companyKey][dialogKey] &&
+      sendingMessages[companyKey][dialogKey].messages
+    )
+      ? sendingMessages[companyKey][dialogKey].messages
+      : []
+
+    let reversedMessages = [...currentMessages, ...newSendingMessages].sort(
       (x, y) => new Date(y.created_at) - new Date(x.created_at),
     )
     reversedMessages = _.uniqBy(reversedMessages, '_id')
@@ -340,6 +355,7 @@ class Content extends Component {
     }
     this.setState({ hideDate: true })
   }
+
   hideDate = () => {
     this.toggleDate = setTimeout(() => {
       this.setState({ hideDate: false })
@@ -668,26 +684,49 @@ class Content extends Component {
     ])
   }
 
+  repeatMessage = message => {
+    // todo date dnel ev hin@ jnjel amenanerqevic avelacnel
+    const { currentChat } = this.props
+    socket.emit('group_message', { room: currentChat, message: message.text })
+  }
+
   deleteMessage = currentMessage => {
-    const { currentRoomId, dialog, dialogs } = this.props
+    const {
+      currentRoomId,
+      dialog,
+      dialogs,
+      setSendingMessages,
+      sendingMessages,
+    } = this.props
     let { messages } = this.props
-    sendRequest({
-      r_path: d_message,
-      method: 'delete',
-      attr: {
-        dialog_id: currentRoomId,
-        messages: [currentMessage._id],
-      },
-      success: res => {},
-      failFunc: err => {},
-    })
-    messages = messages.filter(message => message._id !== currentMessage._id)
-    const index = dialogs.findIndex(d => d._id === dialog._id)
-    dialogs[index].messages = dialogs[index].messages.filter(
-      m => m._id !== currentMessage._id,
-    )
-    setDialogs(dialogs)
-    this.props.setMessages(messages)
+
+    if (currentMessage.myMessage && currentMessage.failed) {
+      const companyKey = dialog.company
+      const dialogKey = dialog._id
+      let receivedMessages = { ...sendingMessages }
+      receivedMessages[companyKey][dialogKey].messages = receivedMessages[
+        companyKey
+      ][dialogKey].messages.filter(m => m._id !== currentMessage._id)
+      setSendingMessages(receivedMessages)
+    } else {
+      sendRequest({
+        r_path: d_message,
+        method: 'delete',
+        attr: {
+          dialog_id: currentRoomId,
+          messages: [currentMessage._id],
+        },
+        success: res => {},
+        failFunc: err => {},
+      })
+      messages = messages.filter(message => message._id !== currentMessage._id)
+      const index = dialogs.findIndex(d => d._id === dialog._id)
+      dialogs[index].messages = dialogs[index].messages.filter(
+        m => m._id !== currentMessage._id,
+      )
+      setDialogs(dialogs)
+      this.props.setMessages(messages)
+    }
   }
 
   toSenderProfile = sender => {
@@ -786,50 +825,58 @@ class Content extends Component {
   _getMessageActions = message => {
     const { user } = this.props
     let actions = []
-    if (
-      message._id &&
-      message.type === 'text' &&
-      message.sender._id === user._id
-    ) {
+    if (!message.myMessage) {
+      if (
+        message._id &&
+        message.type === 'text' &&
+        message.sender._id === user._id
+      ) {
+        actions.push({
+          title: 'Сделать задачей',
+          action: () => this.turnToTask(message),
+        })
+        actions.push({
+          title: 'Редактировать',
+          action: () => this.editMessage(message),
+        })
+      }
+
+      if (message._id && message.type === 'text') {
+        actions.push({
+          title: 'Копировать',
+          action: () => this.copyMessage(message),
+        })
+      }
+
       actions.push({
-        title: 'Сделать задачей',
-        action: () => this.turnToTask(message),
+        title: 'Ответить',
+        action: () => this.replyMessage(message),
       })
       actions.push({
-        title: 'Редактировать',
-        action: () => this.editMessage(message),
+        title: 'Переслать',
+        action: () => this.forwardMessage(message),
+      })
+
+      if (
+        message._id &&
+        (message.type === 'file' ||
+          message.type === 'video' ||
+          message.type === 'image')
+      ) {
+        actions.push({
+          title: 'Сохранить',
+          action: () => {
+            this.download(message)
+          },
+        })
+      }
+    } else if (message.myMessage && message.failed) {
+      actions.push({
+        title: 'Повторить',
+        action: () => this.repeatMessage(message),
       })
     }
 
-    if (message._id && message.type === 'text') {
-      actions.push({
-        title: 'Копировать',
-        action: () => this.copyMessage(message),
-      })
-    }
-
-    actions.push({
-      title: 'Ответить',
-      action: () => this.replyMessage(message),
-    })
-    actions.push({
-      title: 'Переслать',
-      action: () => this.forwardMessage(message),
-    })
-
-    if (
-      message._id &&
-      (message.type === 'file' ||
-        message.type === 'video' ||
-        message.type === 'image')
-    ) {
-      actions.push({
-        title: 'Сохранить',
-        action: () => {
-          this.download(message)
-        },
-      })
-    }
     if (message._id && message.sender._id === user._id) {
       actions.push({
         title: 'Удалить',
@@ -873,6 +920,7 @@ const mapStateToProps = state => ({
   currentChat: state.messageReducer.currentChat,
   currentRoomId: state.messageReducer.currentRoomId,
   user: state.userReducer.user,
+  sendingMessages: state.messageReducer.sendingMessages,
 })
 const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
@@ -885,5 +933,6 @@ const mapDispatchToProps = dispatch => ({
   replyMessage: _ => dispatch(replyMessage(_)),
   setMessage: _ => dispatch(setMessage(_)),
   setEditedMessage: _ => dispatch(getEditedMessage(_)),
+  setSendingMessages: _ => dispatch(setSendingMessages(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

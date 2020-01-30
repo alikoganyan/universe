@@ -27,6 +27,7 @@ import {
   removeAllPreloader,
   deleteMessage,
   getEditedMessage,
+  setSendingMessages,
 } from '../../actions/messageActions'
 // import { Notifications } from 'expo';
 import {
@@ -426,10 +427,6 @@ class Dialogs extends Component {
     </Loader>
   )
 
-  _handleAppStateChange = () => {
-    const { user } = this.props
-    socket.emit('get_dialogs', { id: user._id })
-  }
   // todo
   socketLeaveGroup = e => {
     // console.log(e)
@@ -676,7 +673,32 @@ class Dialogs extends Component {
   }
 
   newMessageSocket = e => {
-    const { dialog, company, dialogs, user, currentRoomId } = this.props
+    const {
+      dialog,
+      company,
+      dialogs,
+      user,
+      currentRoomId,
+      sendingMessages,
+      setSendingMessages,
+    } = this.props
+    const companyKey = e.company
+    const dialogKey = e.dialog
+    let receivedMessages = { ...sendingMessages }
+
+    if (
+      e.sender._id === user._id &&
+      sendingMessages[companyKey] &&
+      sendingMessages[companyKey][dialogKey]
+    ) {
+      receivedMessages[companyKey][dialogKey].messages = sendingMessages[
+        companyKey
+      ][dialogKey].messages.filter(
+        m => m.created_at !== e.created_at && m.text !== e.text,
+      )
+      setSendingMessages(receivedMessages)
+    }
+
     try {
       if (e.company === company._id) {
         const message =
@@ -786,42 +808,6 @@ class Dialogs extends Component {
     setDialogs(e.result)
   }
 
-  selectChat = () => {
-    // const { getMessages } = this.props;
-    // getMessages(e)
-  }
-
-  chatMessage = e => {
-    const { addMessage, dialogs } = this.props
-    addMessage(e)
-    const newFlatListData = [...dialogs]
-    newFlatListData.sort(
-      (a, b) => new Date(a.lastMessage) - new Date(b.lastMessage),
-    )
-    // this.setState({FlatListData: newFlatListData })?
-  }
-
-  // newMessage = e => {
-  //   const { senderId, chatId } = e
-  //   const { user, dialogs } = this.props
-  //   const chat = chatId
-  //     .split('room')[1]
-  //     // eslint-disable-next-line no-useless-escape
-  //     .replace(/\_/, '')
-  //     .replace(senderId, '')
-  //   const newFlatListData = [...dialogs]
-  //   const index = newFlatListData.findIndex(event => event.id === e.senderId)
-  //   const myIndex = newFlatListData.findIndex(event => event.id === user.id)
-  //   if (newFlatListData[index] || newFlatListData[myIndex]) {
-  //     if (chat === user.id) newFlatListData[index].text = e.text
-  //     if (senderId === user.id) newFlatListData[myIndex].text = e.text
-  //   }
-  //   newFlatListData.sort(
-  //     (a, b) => new Date(b.lastMessage) - new Date(a.lastMessage),
-  //   )
-  //   if (chat === user.id || senderId === user.id) setDialogs(newFlatListData)
-  // }
-
   dialogs = e => {
     const { user } = this.props
     const { dialogs, messages, unread } = e
@@ -857,7 +843,18 @@ class Dialogs extends Component {
       setCurrentRoomId,
       setProfile,
       setIsMyProfile,
+      sendingMessages,
     } = this.props
+    const companyKey = e.company
+    const dialogKey = e._id
+
+    if (
+      sendingMessages[companyKey] &&
+      sendingMessages[companyKey][dialogKey] &&
+      sendingMessages[companyKey][dialogKey].messages
+    ) {
+      this.clearReceivedMessages(e)
+    }
     e.messages.forEach(m => {
       if (!m.viewers.includes(user._id) && m.sender._id !== user._id) {
         m.viewers.push(user._id)
@@ -908,6 +905,26 @@ class Dialogs extends Component {
     navigation.navigate(e.isGroup ? 'Group' : 'Chat')
   }
 
+  clearReceivedMessages = dialog => {
+    const { sendingMessages, setSendingMessages } = this.props
+    const companyKey = dialog.company
+    const dialogKey = dialog._id
+    let receivedMessages = { ...sendingMessages }
+    dialog.messages.forEach(m => {
+      receivedMessages[companyKey][dialogKey].messages = sendingMessages[
+        companyKey
+      ][dialogKey].messages.filter(
+        e => m.created_at !== e.created_at && m.text !== e.text,
+      )
+    })
+    if (receivedMessages[companyKey][dialogKey].messages.length) {
+      receivedMessages[companyKey][dialogKey].messages.forEach(m => {
+        m.failed = true
+      })
+    }
+    setSendingMessages(receivedMessages)
+  }
+
   handleScroll = event => {
     const { y } = event.nativeEvent.contentOffset
     const { scrolled } = this.state
@@ -932,6 +949,7 @@ const mapStateToProps = state => ({
   companies: state.userReducer.companies,
   company: state.userReducer.company,
   connection: state.baseReducer.connection,
+  sendingMessages: state.messageReducer.sendingMessages,
 })
 const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),
@@ -954,5 +972,6 @@ const mapDispatchToProps = dispatch => ({
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
   setProfile: _ => dispatch(setProfile(_)),
   setNews: _ => dispatch(setNews(_)),
+  setSendingMessages: _ => dispatch(setSendingMessages(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)

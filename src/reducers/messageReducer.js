@@ -15,6 +15,7 @@ import {
   SET_FILE,
   ADD_PRELOADER,
   REMOVE_PRELOADER,
+  SET_SENDING_MESSAGES,
 } from '../actions/messageActions'
 import { LOG_OUT } from '../actions/userActions'
 
@@ -31,6 +32,7 @@ const initialState = {
   replyMessage: {},
   deleteMessage: {},
   file: {},
+  sendingMessages: {},
   uploadMessages: [],
 }
 
@@ -39,6 +41,8 @@ export default (state = initialState, action) => {
   switch (type) {
     case GET_MESSAGES:
       return { ...state, messages: [...payload] }
+    case SET_SENDING_MESSAGES:
+      return { ...state, sendingMessages: payload }
     case SET_ROOM:
       return { ...state, currentRoom: payload }
     case ADD_MESSAGE:
