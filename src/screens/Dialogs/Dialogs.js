@@ -682,54 +682,56 @@ class Dialogs extends Component {
       sendingMessages,
       setSendingMessages,
     } = this.props
-    const companyKey = e.company
-    const dialogKey = e.dialog
-    let receivedMessages = { ...sendingMessages }
-
-    if (
-      e.sender._id === user._id &&
-      sendingMessages[companyKey] &&
-      sendingMessages[companyKey][dialogKey]
-    ) {
-      receivedMessages[companyKey][dialogKey].messages = sendingMessages[
-        companyKey
-      ][dialogKey].messages.filter(
-        m => m.created_at !== e.created_at && m.text !== e.text,
-      )
-      setSendingMessages(receivedMessages)
-    }
-
     try {
-      if (e.company === company._id) {
-        const message =
-          e && e._id
-            ? {
-                ...e,
+      if (e) {
+        const companyKey = e.company
+        const dialogKey = e.dialog
+        let receivedMessages = { ...sendingMessages }
+        if (
+          e.sender._id === user._id &&
+          companyKey &&
+          dialogKey &&
+          sendingMessages[companyKey] &&
+          sendingMessages[companyKey][dialogKey]
+        ) {
+          receivedMessages[companyKey][dialogKey].messages = sendingMessages[
+            companyKey
+          ][dialogKey].messages.filter(
+            m => m.created_at !== e.created_at && m.text !== e.text,
+          )
+          setSendingMessages(receivedMessages)
+        }
+        if (e.company === company._id) {
+          const message =
+            e && e._id
+              ? {
+                  ...e,
+                }
+              : {
+                  ...e,
+                  text: e.text,
+                  type: e.type,
+                  created_at: new Date(),
+                  sender: { ...e.sender },
+                  viewers: [],
+                }
+          if (currentRoomId) {
+            if (e.dialog === dialog._id) {
+              if (!message.viewers.includes(user._id)) {
+                message.viewers.push(user._id)
               }
-            : {
-                ...e,
-                text: e.text,
-                type: e.type,
-                created_at: new Date(),
-                sender: { ...e.sender },
-                viewers: [],
-              }
-        if (currentRoomId) {
-          if (e.dialog === dialog._id) {
-            if (!message.viewers.includes(user._id)) {
-              message.viewers.push(user._id)
+              this.props.setMessage(message)
+              const updatedCurrentDialog = { ...dialog }
+              updatedCurrentDialog.messages.push(message)
+              this.sortedDialog(updatedCurrentDialog)
             }
-            this.props.setMessage(message)
-            const updatedCurrentDialog = { ...dialog }
-            updatedCurrentDialog.messages.push(message)
-            this.sortedDialog(updatedCurrentDialog)
-          }
-        } else {
-          const currentDialog = dialogs.find(d => d._id === e.dialog)
-          if (currentDialog) {
-            currentDialog.messages.push(message)
-            this.sortedDialog(currentDialog)
-            // this.props.setCurrentRoomId(e.dialog)
+          } else {
+            const currentDialog = dialogs.find(d => d._id === e.dialog)
+            if (currentDialog) {
+              currentDialog.messages.push(message)
+              this.sortedDialog(currentDialog)
+              // this.props.setCurrentRoomId(e.dialog)
+            }
           }
         }
       }
@@ -849,6 +851,8 @@ class Dialogs extends Component {
     const dialogKey = e._id
 
     if (
+      companyKey &&
+      dialogKey &&
       sendingMessages[companyKey] &&
       sendingMessages[companyKey][dialogKey] &&
       sendingMessages[companyKey][dialogKey].messages
