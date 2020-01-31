@@ -12,6 +12,7 @@ import { connectToSocket } from './utils/socket'
 import { setUser, setAuth } from './actions/userActions'
 import { setDialogsUserId } from './actions/dialogsActions'
 import { setInternetConnection } from './actions/baseActions'
+import { setSendingMessages } from './actions/messageActions'
 // import OfflineNotice from './common/OfflineNotice'
 
 // const Roboto = require('./assets/fonts/Roboto-Regular.ttf')
@@ -80,6 +81,13 @@ export default class AppComponent extends Component {
       .finally(() => {
         this.setState({ loaded: true })
       })
+
+    AsyncStorage.getItem('failedMessages').then(res => {
+      const value = JSON.parse(res)
+      if (value) {
+        store.dispatch(setSendingMessages(value))
+      }
+    })
     // await Font.loadAsync({
     //     'Roboto-Regular': Roboto
     // });

@@ -127,7 +127,6 @@ class Content extends Component {
     )
       ? sendingMessages[companyKey][dialogKey].messages
       : []
-
     let reversedMessages = [...currentMessages, ...newSendingMessages].sort(
       (x, y) => new Date(y.created_at) - new Date(x.created_at),
     )

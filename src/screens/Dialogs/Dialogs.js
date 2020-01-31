@@ -199,14 +199,6 @@ class Dialogs extends Component {
   scrollY = new Animated.Value(0)
 
   componentDidMount() {
-    const { setSendingMessages } = this.props
-    AsyncStorage.getItem('failedMessages').then(res => {
-      const value = JSON.parse(res)
-      if (value) {
-        setSendingMessages(value)
-      }
-    })
-
     this.props.setCompanies({
       companies: this.props.user.companies,
       company: this.props.user.company,
@@ -216,21 +208,7 @@ class Dialogs extends Component {
     this.getProfile()
 
     this.props.removeAllPreloader()
-    // navigation.navigate('NewTask') // restore
-    // clearInterval(this.interval)
-    // this.interval = setInterval(() => {
-    //  if (!socket.connected) connectToSocket()
-    // }, 2000)
 
-    // Notifications.addListener((notification) => {
-    // 	const { dialogs } = this.props;
-    //         const { room } = notification.data;
-    //         const dialog = [...dialogs].filter(chat => chat.room === room)[0];
-    //         this.toChat(dialog);
-    //     });
-    // AppState.addEventListener('change', this._handleAppStateChange)
-
-    // socket.emit('get_dialogs', { id: user._id })
     socket.removeAllListeners('update_dialogs')
     socket.removeAllListeners('update_dialog')
     socket.removeAllListeners('update_profile')
@@ -273,12 +251,8 @@ class Dialogs extends Component {
   componentWillUnmount() {
     AppState.removeEventListener('change', this.handleAppStateChange)
 
-    // this.props.setDialog(null)
     this.props.setCompanyLoading(false)
     this.props.setCurrentRoomId(null)
-
-    // disconnectFromSocket()
-    // AppState.removeEventListener('change', this._handleAppStateChange);
   }
 
   handleAppStateChange = nextAppState => {
@@ -325,28 +299,19 @@ class Dialogs extends Component {
       method: 'get',
       success: res => {
         const userData = { ...res }
-
         const companyKey = userData.user.company._id
-        if (typeof companyKey === 'number' && sendingMessages[companyKey]) {
-          userData.user.company.dialogs.forEach(d => {
-            const dialogKey = d._id
-            const dialog = sendingMessages[companyKey][dialogKey] ? d : false
-            if (dialog && dialog.messages && dialog.messages.length) {
-              this.clearReceivedMessages(dialog)
-            }
-          })
-        }
-        // const dialogKey = ._id
-        //
-        // if (
-        //   typeof companyKey === 'number' &&
-        //   typeof dialogKey === 'number' &&
-        //   sendingMessages[companyKey] &&
-        //   sendingMessages[companyKey][dialogKey] &&
-        //   sendingMessages[companyKey][dialogKey].messages
-        // ) {
-        //   this.clearReceivedMessages(e)
-        // }
+        setTimeout(() => {
+          if (typeof companyKey === 'number' && sendingMessages[companyKey]) {
+            userData.user.company.dialogs.forEach(d => {
+              const dialogKey = d._id
+              const dialog = sendingMessages[companyKey][dialogKey] ? d : false
+              if (dialog && dialog.messages && dialog.messages.length) {
+                this.clearReceivedMessages(dialog)
+              }
+            })
+          }
+        }, 500)
+
         this.setState({ congratulations: !userData.user.first_name })
         this.props.setCompanies({
           companies: userData.user.companies,
@@ -372,23 +337,13 @@ class Dialogs extends Component {
         }
 
         this.props.setCompanyLoading(false)
-
-        // todo
-        // } else if (adminChange && (!userData.user.companies || !userData.user.companies.length)) {
-        //   this.setEmptyCompany()
-        //     console.log(222)
-        // } else {
-        //   this.setCompanyData(userData.user)
-        //   socket.emit('get_dialogs')
-        // }
       },
       failFunc: e => {
         this.props.setCompanies({
           companies: this.props.user.companies,
           company: this.props.user.company,
         })
-        // this.props.setNews(res.data.news)
-
+        this.props.setNews(this.props.user.news)
         this.props.setCompanyLoading(false)
       },
     })
@@ -876,20 +831,8 @@ class Dialogs extends Component {
       setCurrentRoomId,
       setProfile,
       setIsMyProfile,
-      // sendingMessages,
     } = this.props
-    // const companyKey = e.company
-    // const dialogKey = e._id
-    //
-    // if (
-    //   typeof companyKey === 'number' &&
-    //   typeof dialogKey === 'number' &&
-    //   sendingMessages[companyKey] &&
-    //   sendingMessages[companyKey][dialogKey] &&
-    //   sendingMessages[companyKey][dialogKey].messages
-    // ) {
-    //   this.clearReceivedMessages(e)
-    // }
+
     e.messages.forEach(m => {
       if (!m.viewers.includes(user._id) && m.sender._id !== user._id) {
         m.viewers.push(user._id)
@@ -945,6 +888,11 @@ class Dialogs extends Component {
     const companyKey = dialog.company
     const dialogKey = dialog._id
     let receivedMessages = { ...sendingMessages }
+    // todo
+    // if(receivedMessages[companyKey] && receivedMessages[companyKey][dialogKey] && !receivedMessages[companyKey][dialogKey].messages.length) {
+    //   console.log(receivedMessages[companyKey][dialogKey])
+    //   delete
+    // }
     dialog.messages.forEach(m => {
       receivedMessages[companyKey][dialogKey].messages = sendingMessages[
         companyKey
