@@ -689,8 +689,8 @@ class Dialogs extends Component {
         let receivedMessages = { ...sendingMessages }
         if (
           e.sender._id === user._id &&
-          companyKey &&
-          dialogKey &&
+          typeof companyKey === 'number' &&
+          typeof dialogKey === 'number' &&
           sendingMessages[companyKey] &&
           sendingMessages[companyKey][dialogKey]
         ) {
@@ -851,8 +851,8 @@ class Dialogs extends Component {
     const dialogKey = e._id
 
     if (
-      companyKey &&
-      dialogKey &&
+      typeof companyKey === 'number' &&
+      typeof dialogKey === 'number' &&
       sendingMessages[companyKey] &&
       sendingMessages[companyKey][dialogKey] &&
       sendingMessages[companyKey][dialogKey].messages

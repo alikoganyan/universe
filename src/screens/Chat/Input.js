@@ -616,7 +616,7 @@ class InputComponent extends Component {
       const date = moment()
         .utc()
         .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
-      getCurrentCompany(text.trim(), date, 'text', this.props)
+      getCurrentCompany(text.trim(), date, 'text', this.props, 'message')
       socket.emit('message', {
         receiver: currentRoom,
         message: text.trim(),
@@ -680,13 +680,23 @@ class InputComponent extends Component {
       currentDialog,
       currentChat,
     } = this.props
-    this.stopForwarding()
-
+    const date = moment()
+      .utc()
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    getCurrentCompany(
+      this.props.forwardedMessage.text,
+      date,
+      this.props.forwardedMessage.type,
+      this.props,
+      'forward',
+    )
     const bodyReq = {
       message_id: _id,
       dialog_id: currentRoomId,
       receiver: !currentChat ? currentDialog._id : null,
+      date,
     }
+    this.stopForwarding()
     sendRequest({
       r_path: p_forward_message,
       method: 'post',
@@ -718,9 +728,12 @@ class InputComponent extends Component {
       currentRoomId,
     } = this.props
     const { text } = this.state
-    const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
+    const date = moment()
+      .utc()
+      .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
+    getCurrentCompany(text.trim(), date, 'text', this.props, 'reply')
+    const bodyReq = { message_id: _id, dialog_id: currentRoomId, text, date }
     this.stopReply()
-
     sendRequest({
       r_path: p_reply_message,
       method: 'post',
