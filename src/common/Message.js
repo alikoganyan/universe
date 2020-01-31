@@ -76,8 +76,6 @@ const UploadProgressContainer = styled(View)`
 //   overflow: hidden;
 // `
 
-// Vahe to do
-
 const DateWrapper = styled(View)`
   width: 100%;
   align-items: center;
@@ -109,12 +107,14 @@ const RecivedMessage = styled(View)`
   padding-top: ${({ noPadding }) => (noPadding ? 0 : 5)}px;
   padding-bottom: ${({ noPadding }) => (noPadding ? 0 : 5)}px;
 `
+
 const MessageText = styled(Text)`
   font-size: ${fontSize.textSize};
   font-family: 'OpenSans';
   color: ${Colors.black};
   textshadowcolor: ${Colors.black};
 `
+
 const ReviverName = styled(Text)`
   font-family: 'OpenSans';
 `
@@ -127,7 +127,6 @@ const MessageInfo = styled(View)`
   margin-right: ${({ paddings }) => (paddings ? 8 : 0)}px;
   padding-bottom: ${({ paddings }) => (paddings ? 5 : 0)}px;
 `
-// Vahe
 
 const MessageDate = styled(Text)`
   color: ${({ color }) => color || Colors.jumbo};
@@ -139,11 +138,6 @@ const MessageDate = styled(Text)`
 `
 
 const MessageEdited = styled(MessageDate)``
-
-// const MyMessageImage = styled(SingleImage)`
-//   min-width: 100%;
-//   height: 250px;
-// `
 
 const MyMessageCachedImage = styled(FastImage)`
   min-width: 100%;
@@ -161,23 +155,28 @@ const BottomLine = styled(LinearGradient)`
   padding: 5px 10px;
   font-size: ${fontSize.sm};
 `
+
 const ShadowTopContainer = styled(View)`
   width: 100%;
 `
+
 const WhiteTopText = styled(Text)`
   font-size: ${fontSize.md};
   color: ${Colors.white};
   padding: 5px 10px;
 `
+
 const BottomLineInfo = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
 `
+
 const BottomLineTime = styled(Text)`
   color: white;
 `
+
 const VideoPinBorder = styled(View)`
   width: 70px;
   height: 70px;
@@ -209,6 +208,7 @@ const FileInfoWrapper = styled(View)`
   padding-bottom: 0;
   align-items: center;
 `
+
 const FileIcon = styled(View)`
   display: flex;
   flex-direction: row;
@@ -219,6 +219,7 @@ const FileIcon = styled(View)`
   height: 50px;
   border-radius: 25px;
 `
+
 const FileInfo = styled(View)`
   display: flex;
   flex-direction: column;
@@ -226,11 +227,12 @@ const FileInfo = styled(View)`
   justify-content: center;
   padding-left: 10px;
 `
+
 const FileSize = styled(Text)`
   color: ${({ color }) => color || 'black'};
 `
+
 const Indicator = ({ read = false, color, pending = false, failed }) => {
-  // console.log(pending )
   return read ? (
     <CheckAllIcon color={color} noPaddingAll />
   ) : failed ? (
