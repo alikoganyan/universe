@@ -42,6 +42,7 @@ import * as ICONS from '../../assets/icons'
 import Loader from '../../common/Loader'
 import RNPermissions from 'react-native-permissions'
 import { socket } from '../../utils/socket'
+import { getCurrentCompany } from '../../helper/message'
 // import RNPermissions from 'react-native-permissions'
 
 const {
@@ -696,7 +697,17 @@ class Content extends Component {
 
   repeatMessage = message => {
     // todo date dnel ev hin@ jnjel amenanerqevic avelacnel
-    const { currentRoom } = this.props
+    const { currentRoom, sendingMessages, setSendingMessages } = this.props
+    const receivedMessages = { ...sendingMessages }
+    receivedMessages[message.company][
+      message.dialog
+    ].messages = receivedMessages[message.company][
+      message.dialog
+    ].messages.filter(
+      m => m.created_at !== message.created_at && m.text !== message.text,
+    )
+    setSendingMessages(receivedMessages)
+    getCurrentCompany(message.text.trim(), 'text', this.props, 'message')
     socket.emit('message', { receiver: currentRoom, message: message.text })
   }
 

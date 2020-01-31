@@ -40,6 +40,7 @@ import Image from 'react-native-image-progress'
 import RNPermissions from 'react-native-permissions'
 import RNFetchBlob from 'rn-fetch-blob'
 import { socket } from '../../utils/socket'
+import { getCurrentCompany } from '../../helper/message'
 
 const {
   Colors: { gray2 },
@@ -685,8 +686,18 @@ class Content extends Component {
   }
 
   repeatMessage = message => {
-    // todo date dnel ev hin@ jnjel amenanerqevic avelacnel
-    const { currentChat } = this.props
+    const { currentChat, sendingMessages, setSendingMessages } = this.props
+    const receivedMessages = { ...sendingMessages }
+    receivedMessages[message.company][
+      message.dialog
+    ].messages = receivedMessages[message.company][
+      message.dialog
+    ].messages.filter(
+      m => m.created_at !== message.created_at && m.text !== message.text,
+    )
+    setSendingMessages(receivedMessages)
+    getCurrentCompany(message.text.trim(), 'text', this.props, 'message')
+
     socket.emit('group_message', { room: currentChat, message: message.text })
   }
 

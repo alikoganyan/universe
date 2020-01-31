@@ -17,6 +17,7 @@ import Loader from '../../common/Loader'
 import Congratulations from '../../common/Congratulations'
 import SafeAreaView from '../../common/SafeAreaView'
 import AnimatedEllipsis from 'react-native-animated-ellipsis'
+import AsyncStorage from '@react-native-community/async-storage'
 
 import {
   setRoom,
@@ -198,7 +199,13 @@ class Dialogs extends Component {
   scrollY = new Animated.Value(0)
 
   componentDidMount() {
-    // const { user } = this.props
+    const { setSendingMessages } = this.props
+    AsyncStorage.getItem('failedMessages').then(res => {
+      const value = JSON.parse(res)
+      if (value) {
+        setSendingMessages(value)
+      }
+    })
 
     this.props.setCompanies({
       companies: this.props.user.companies,
@@ -275,9 +282,13 @@ class Dialogs extends Component {
   }
 
   handleAppStateChange = nextAppState => {
-    const { currentChat, user } = this.props
+    const { currentChat, user, sendingMessages } = this.props
     if (nextAppState === 'background' && currentChat) {
       socket.emit('leave', { room: currentChat, viewer: user._id })
+      AsyncStorage.setItem(
+        'failedMessages',
+        JSON.stringify({ ...sendingMessages }),
+      )
     } else if (nextAppState === 'active' && currentChat) {
       socket.emit('view', { room: currentChat, viewer: user._id })
     }
@@ -305,7 +316,7 @@ class Dialogs extends Component {
   // }
 
   getProfile = (adminChange = false) => {
-    const { setDialogs } = this.props
+    const { setDialogs, sendingMessages } = this.props
     if (!adminChange) {
       this.props.setCompanyLoading(true)
     }
@@ -314,6 +325,28 @@ class Dialogs extends Component {
       method: 'get',
       success: res => {
         const userData = { ...res }
+
+        const companyKey = userData.user.company._id
+        if (typeof companyKey === 'number' && sendingMessages[companyKey]) {
+          userData.user.company.dialogs.forEach(d => {
+            const dialogKey = d._id
+            const dialog = sendingMessages[companyKey][dialogKey] ? d : false
+            if (dialog && dialog.messages && dialog.messages.length) {
+              this.clearReceivedMessages(dialog)
+            }
+          })
+        }
+        // const dialogKey = ._id
+        //
+        // if (
+        //   typeof companyKey === 'number' &&
+        //   typeof dialogKey === 'number' &&
+        //   sendingMessages[companyKey] &&
+        //   sendingMessages[companyKey][dialogKey] &&
+        //   sendingMessages[companyKey][dialogKey].messages
+        // ) {
+        //   this.clearReceivedMessages(e)
+        // }
         this.setState({ congratulations: !userData.user.first_name })
         this.props.setCompanies({
           companies: userData.user.companies,
@@ -804,8 +837,6 @@ class Dialogs extends Component {
     navigation.navigate('Profile')
   }
 
-  news = () => {}
-
   find = e => {
     setDialogs(e.result)
   }
@@ -845,20 +876,20 @@ class Dialogs extends Component {
       setCurrentRoomId,
       setProfile,
       setIsMyProfile,
-      sendingMessages,
+      // sendingMessages,
     } = this.props
-    const companyKey = e.company
-    const dialogKey = e._id
-
-    if (
-      typeof companyKey === 'number' &&
-      typeof dialogKey === 'number' &&
-      sendingMessages[companyKey] &&
-      sendingMessages[companyKey][dialogKey] &&
-      sendingMessages[companyKey][dialogKey].messages
-    ) {
-      this.clearReceivedMessages(e)
-    }
+    // const companyKey = e.company
+    // const dialogKey = e._id
+    //
+    // if (
+    //   typeof companyKey === 'number' &&
+    //   typeof dialogKey === 'number' &&
+    //   sendingMessages[companyKey] &&
+    //   sendingMessages[companyKey][dialogKey] &&
+    //   sendingMessages[companyKey][dialogKey].messages
+    // ) {
+    //   this.clearReceivedMessages(e)
+    // }
     e.messages.forEach(m => {
       if (!m.viewers.includes(user._id) && m.sender._id !== user._id) {
         m.viewers.push(user._id)
@@ -927,6 +958,10 @@ class Dialogs extends Component {
       })
     }
     setSendingMessages(receivedMessages)
+    AsyncStorage.setItem(
+      'failedMessages',
+      JSON.stringify({ ...sendingMessages }),
+    )
   }
 
   handleScroll = event => {

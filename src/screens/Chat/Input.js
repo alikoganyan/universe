@@ -620,7 +620,6 @@ class InputComponent extends Component {
       socket.emit('message', {
         receiver: currentRoom,
         message: text.trim(),
-        date,
       })
     }
 

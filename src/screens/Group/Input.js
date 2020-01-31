@@ -599,7 +599,6 @@ class InputComponent extends Component {
       socket.emit('group_message', {
         room: currentChat,
         message: text.trim(),
-        date,
       })
     }
     this.setState({ text: '' })
