@@ -1,4 +1,6 @@
-export const getCurrentCompany = (text, date, type, props, messageType) => {
+import moment from 'moment'
+
+export const getCurrentCompany = (text, type, props, messageType) => {
   const { sendingMessages, user, dialog } = props
   const { company } = user
   let newSendingMessages = { ...sendingMessages }
@@ -18,7 +20,6 @@ export const getCurrentCompany = (text, date, type, props, messageType) => {
       companyKey,
       dialogKey,
       text,
-      date,
       type,
       props,
       messageType,
@@ -31,7 +32,7 @@ const createMessage = (
   companyKey,
   dialogKey,
   text,
-  date,
+  // date,
   type,
   props,
   messageType,
@@ -41,6 +42,9 @@ const createMessage = (
   let lastItemId = currentDialog.messages.length
     ? currentDialog.messages[currentDialog.messages.length - 1]._id
     : 0
+  const date = moment()
+    .utc()
+    .format('YYYY-MM-DDTHH:mm:ss.SSS[Z]')
   const newMessage = {
     text: text,
     type: type,
