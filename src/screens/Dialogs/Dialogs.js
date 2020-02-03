@@ -209,8 +209,9 @@ class Dialogs extends Component {
       companies: this.props.user.companies,
       company: this.props.user.company,
     })
+    this.props.setDialogs(this.props.user.company.dialogs)
     this.props.setNews(this.props.user.news)
-    this.getProfile()
+    // this.getProfile()
 
     this.props.removeAllPreloader()
 
