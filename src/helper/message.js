@@ -1,4 +1,5 @@
 import moment from 'moment'
+import AsyncStorage from '@react-native-community/async-storage'
 
 export const getCurrentCompany = (text, type, props, messageType) => {
   const { sendingMessages, user, dialog } = props
@@ -66,4 +67,8 @@ const createMessage = (
   }
   newSendingMessages[companyKey][dialogKey].messages.push(newMessage)
   setSendingMessages(newSendingMessages)
+  AsyncStorage.setItem(
+    'failedMessages',
+    JSON.stringify({ ...newSendingMessages }),
+  )
 }

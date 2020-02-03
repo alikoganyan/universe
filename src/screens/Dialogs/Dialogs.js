@@ -199,12 +199,17 @@ class Dialogs extends Component {
   scrollY = new Animated.Value(0)
 
   componentDidMount() {
+    AsyncStorage.getItem('failedMessages').then(res => {
+      const value = JSON.parse(res)
+      if (value) {
+        this.props.setSendingMessages(value)
+      }
+    })
     this.props.setCompanies({
       companies: this.props.user.companies,
       company: this.props.user.company,
     })
     this.props.setNews(this.props.user.news)
-
     this.getProfile()
 
     this.props.removeAllPreloader()
@@ -256,13 +261,9 @@ class Dialogs extends Component {
   }
 
   handleAppStateChange = nextAppState => {
-    const { currentChat, user, sendingMessages } = this.props
+    const { currentChat, user } = this.props
     if (nextAppState === 'background' && currentChat) {
       socket.emit('leave', { room: currentChat, viewer: user._id })
-      AsyncStorage.setItem(
-        'failedMessages',
-        JSON.stringify({ ...sendingMessages }),
-      )
     } else if (nextAppState === 'active' && currentChat) {
       socket.emit('view', { room: currentChat, viewer: user._id })
     }
@@ -297,21 +298,9 @@ class Dialogs extends Component {
     sendRequest({
       r_path: '/profile',
       method: 'get',
-      success: res => {
+      success: async res => {
         const userData = { ...res }
         const companyKey = userData.user.company._id
-        setTimeout(() => {
-          if (typeof companyKey === 'number' && sendingMessages[companyKey]) {
-            userData.user.company.dialogs.forEach(d => {
-              const dialogKey = d._id
-              const dialog = sendingMessages[companyKey][dialogKey] ? d : false
-              if (dialog && dialog.messages && dialog.messages.length) {
-                this.clearReceivedMessages(dialog)
-              }
-            })
-          }
-        }, 500)
-
         this.setState({ congratulations: !userData.user.first_name })
         this.props.setCompanies({
           companies: userData.user.companies,
@@ -335,8 +324,10 @@ class Dialogs extends Component {
           setDialogs(userData.user.company.dialogs)
           // socket.emit('get_dialogs')
         }
-
         this.props.setCompanyLoading(false)
+        if (typeof companyKey === 'number' && sendingMessages[companyKey]) {
+          this.clearReceivedMessages(userData.user.company.dialogs, companyKey)
+        }
       },
       failFunc: e => {
         this.props.setCompanies({
@@ -365,6 +356,42 @@ class Dialogs extends Component {
       },
       full_res: true,
     })
+  }
+
+  clearReceivedMessages = (dialogs, companyKey) => {
+    const { sendingMessages, setSendingMessages } = this.props
+    let receivedMessages = { ...sendingMessages }
+    if (
+      receivedMessages &&
+      receivedMessages[companyKey] &&
+      Object.keys(receivedMessages[companyKey]).length
+    ) {
+      dialogs.forEach(d => {
+        const dialogKey = d._id
+        const dialog = receivedMessages[companyKey][dialogKey]
+          ? receivedMessages[companyKey][dialogKey]
+          : false
+        if (dialog && dialog.messages && !dialog.messages.length) {
+          delete receivedMessages[companyKey][dialogKey]
+        }
+        if (dialog && dialog.messages && dialog.messages.length) {
+          d.messages.forEach(m => {
+            dialog.messages = dialog.messages.filter(e => m.text !== e.text)
+          })
+          dialog.messages.forEach(m => {
+            m.failed = true
+          })
+        }
+      })
+    }
+    if (!Object.keys(receivedMessages[companyKey]).length) {
+      delete receivedMessages[companyKey]
+    }
+    setSendingMessages(receivedMessages)
+    AsyncStorage.setItem(
+      'failedMessages',
+      JSON.stringify({ ...receivedMessages }),
+    )
   }
 
   _renderListHeader = () => {
@@ -684,10 +711,12 @@ class Dialogs extends Component {
         ) {
           receivedMessages[companyKey][dialogKey].messages = sendingMessages[
             companyKey
-          ][dialogKey].messages.filter(
-            m => m.created_at !== e.created_at && m.text !== e.text,
-          )
+          ][dialogKey].messages.filter(m => m.text !== e.text)
           setSendingMessages(receivedMessages)
+          AsyncStorage.setItem(
+            'failedMessages',
+            JSON.stringify({ ...receivedMessages }),
+          )
         }
         if (e.company === company._id) {
           const message =
@@ -881,35 +910,6 @@ class Dialogs extends Component {
     })
     setIsMyProfile(false)
     navigation.navigate(e.isGroup ? 'Group' : 'Chat')
-  }
-
-  clearReceivedMessages = dialog => {
-    const { sendingMessages, setSendingMessages } = this.props
-    const companyKey = dialog.company
-    const dialogKey = dialog._id
-    let receivedMessages = { ...sendingMessages }
-    // todo
-    // if(receivedMessages[companyKey] && receivedMessages[companyKey][dialogKey] && !receivedMessages[companyKey][dialogKey].messages.length) {
-    //   console.log(receivedMessages[companyKey][dialogKey])
-    //   delete
-    // }
-    dialog.messages.forEach(m => {
-      receivedMessages[companyKey][dialogKey].messages = sendingMessages[
-        companyKey
-      ][dialogKey].messages.filter(
-        e => m.created_at !== e.created_at && m.text !== e.text,
-      )
-    })
-    if (receivedMessages[companyKey][dialogKey].messages.length) {
-      receivedMessages[companyKey][dialogKey].messages.forEach(m => {
-        m.failed = true
-      })
-    }
-    setSendingMessages(receivedMessages)
-    AsyncStorage.setItem(
-      'failedMessages',
-      JSON.stringify({ ...sendingMessages }),
-    )
   }
 
   handleScroll = event => {
