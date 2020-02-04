@@ -232,7 +232,14 @@ class Content extends Component {
             </View>
             <Company navigate={navigate} />
           </HeaderContainer>
-          <Header onValueChange={this.filterAllContacts} />
+          <Header
+            ref="header"
+            onValueChange={
+              this.props.user.settings.partition_contacts && active === 1
+                ? this.filterWithDepartaments
+                : this.filterAllContacts
+            }
+          />
           <OptionsWrap>
             <Options>
               {options.options.map((e, i) => (
@@ -269,6 +276,7 @@ class Content extends Component {
       options: ['Все', 'Пользователи', 'Группы'],
     },
     userContacts: [],
+    filteredUserContacts: null,
   }
   scrollY = new Animated.Value(0)
 
@@ -281,6 +289,34 @@ class Content extends Component {
       </TouchableOpacity>
     </Loader>
   )
+
+  filterWithDepartaments = val => {
+    const { userContacts } = this.state
+    const filteredUserContacts = userContacts.map(d => {
+      if (d.data && d.data.length) {
+        const filtredDep = d.data.filter(
+          e =>
+            (e.first_name &&
+              e.last_name &&
+              (e.first_name.toLowerCase() + e.last_name.toLowerCase()).indexOf(
+                val.replace(/\s/g, '').toLowerCase(),
+              ) !== -1) ||
+            (e.name &&
+              e.name
+                .toLowerCase()
+                .replace(/\s/g, '')
+                .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1) ||
+            (e.phone_number &&
+              e.phone_number
+                .toLowerCase()
+                .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1),
+        )
+        return { ...d, data: [...filtredDep] }
+      }
+      return d
+    })
+    this.setState({ filteredUserContacts })
+  }
 
   filterAllContacts = val => {
     const { options, allContacts, userContactsAll } = this.state
@@ -337,7 +373,6 @@ class Content extends Component {
 
   AllContacts = () => {
     const { allContacts, filtredAllContacts } = this.state
-
     return (
       <ContactList
         bounces={false}
@@ -411,7 +446,12 @@ class Content extends Component {
   }
 
   MiddleContacts = () => {
-    const { userContactsAll, filteredUserContactsAll } = this.state
+    const {
+      userContactsAll,
+      filteredUserContactsAll,
+      userContacts,
+      filteredUserContacts,
+    } = this.state
     if (this.props.user && this.props.user.company) {
       if (this.props.user.company._id === 0) {
         return (
@@ -463,7 +503,7 @@ class Content extends Component {
             contentContainerStyle={{ paddingBottom: 170 }}
             data={
               this.props.user.settings.partition_contacts
-                ? this.state.userContacts
+                ? filteredUserContacts || userContacts
                 : filteredUserContactsAll || this.state.userContactsAll
             }
             ListEmptyComponent={this._renderEmptyComponent}
@@ -738,6 +778,9 @@ class Content extends Component {
     } = this.state
     this.setAnimatedValue(active)
     this.setState({ options: { ...options, active: e } })
+    if (e !== active) {
+      this.refs.header.onBlur()
+    }
   }
 
   toChat = e => {
