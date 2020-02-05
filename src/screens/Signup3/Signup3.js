@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Dimensions } from 'react-native'
+import { View } from 'react-native'
 import styled from 'styled-components'
 import SafeAreaView from '../../common/SafeAreaView'
 import Header from './Header'
@@ -17,7 +17,10 @@ export default class Signup extends Component {
       <SafeAreaView behavior="padding">
         <Wrapper>
           <Header back={this.navigateBack} />
-          <Content forward={this.moveForward} />
+          <Content
+            forward={this.moveForward}
+            navigate={this.props.navigation.navigate}
+          />
         </Wrapper>
       </SafeAreaView>
     )
