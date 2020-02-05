@@ -179,6 +179,7 @@ class Content extends Component {
               onMomentumScrollBegin={this.showDate}
               onMomentumScrollEnd={this.hideDate}
               onEndReached={this.handleScroll}
+              onEndReachedThreshold={0.5}
               ref="flatList"
               style={{ paddingRight: 5, paddingLeft: 5, zIndex: 2 }}
               ListHeaderComponent={<FlatListHeader editing={isEditing} />}
@@ -287,6 +288,7 @@ class Content extends Component {
     this.props.setMessages(messages)
     if (messages_from_pages) {
       this.setState({
+        page: messages_from_pages.nextPage,
         nextPage: messages_from_pages.nextPage,
         totalPages: messages_from_pages.totalPages,
       })
@@ -340,19 +342,6 @@ class Content extends Component {
       })
       this.props.setMessages(messages)
       setDialogViewers(null)
-    }
-  }
-
-  handleScroll = () => {
-    const { switcher, nextPage, scrolledMessages } = this.state
-    let { messages } = this.props
-    messages = _.uniqBy(messages, '_id')
-    if (switcher && nextPage) {
-      if (!scrolledMessages.length) {
-        this.setState({ page: Math.floor(messages.length / 30) + 1 })
-      }
-      this.setState({ switcher: false })
-      this.getMessage()
     }
   }
 
@@ -479,6 +468,19 @@ class Content extends Component {
     </Loader>
   )
 
+  handleScroll = () => {
+    const { switcher, page, scrolledMessages } = this.state
+    let { messages } = this.props
+    messages = _.uniqBy(messages, '_id')
+    if (switcher && page) {
+      if (!scrolledMessages.length) {
+        this.setState({ page: Math.floor(messages.length / 30) + 1 })
+      }
+      this.setState({ switcher: false })
+      this.getMessage()
+    }
+  }
+
   checkScrollPosition = event => {
     const {
       lastPosition,
@@ -529,9 +531,11 @@ class Content extends Component {
           scrolledMessages = res.docs.concat(scrolledMessages)
           this.setState({
             scrolledMessages: scrolledMessages,
-            page: res.nextPage,
           })
         }
+        this.setState({
+          page: res.nextPage,
+        })
         if (scrollDown) {
           this.setState({ prevPage: res.prevPage })
           this.refs.flatList.scrollToIndex({
@@ -540,7 +544,9 @@ class Content extends Component {
             viewPosition: 0,
           })
         }
-        this.setState({ switcher: true })
+        setTimeout(() => {
+          this.setState({ switcher: true })
+        }, 1000)
       },
       failFunc: err => {},
     })

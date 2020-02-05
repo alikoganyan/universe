@@ -199,6 +199,7 @@ class Content extends Component {
               onMomentumScrollBegin={this.showDate}
               onMomentumScrollEnd={this.hideDate}
               onEndReached={this.handleScroll}
+              onEndReachedThreshold={0.5}
               ref="flatList"
               ListHeaderComponent={<FlatListHeader editing={isEditing} />}
               inverted={!!reversedMessages.length}
@@ -293,6 +294,7 @@ class Content extends Component {
       const messages = dialog.messages
       this.props.setMessages(messages)
       this.setState({
+        page: messages_from_pages.nextPage,
         nextPage: messages_from_pages.nextPage,
         totalPages: messages_from_pages.totalPages,
       })
@@ -364,6 +366,69 @@ class Content extends Component {
     }, 300)
   }
 
+  checkScrollPosition = event => {
+    const {
+      lastPosition,
+      switcherDown,
+      prevPage,
+      scrolledMessages,
+    } = this.state
+    if (event.nativeEvent.contentOffset.y > 400) {
+      this.setState({ buttonToDown: true })
+    } else {
+      this.setState({ buttonToDown: false })
+    }
+    if (
+      prevPage &&
+      switcherDown &&
+      lastPosition &&
+      lastPosition > event.nativeEvent.contentOffset.y &&
+      event.nativeEvent.contentOffset.y < 600 &&
+      scrolledMessages.length
+    ) {
+      this.getMessage(true)
+
+      this.setState({ switcherDown: false })
+    } else if (!switcherDown && event.nativeEvent.contentOffset.y > 600) {
+      this.setState({ switcherDown: true })
+      // this.setState({page: nextPage})
+    }
+    this.setState({ lastPosition: event.nativeEvent.contentOffset.y })
+  }
+
+  handleScroll = () => {
+    const { switcher, page, scrolledMessages } = this.state
+    let { messages } = this.props
+    messages = _.uniqBy(messages, '_id')
+    if (switcher && page) {
+      if (!scrolledMessages.length) {
+        this.setState({ page: Math.floor(messages.length / 30) + 1 })
+      }
+      this.setState({ switcher: false })
+      this.getMessage()
+    }
+  }
+
+  _scrollToBottom = () => {
+    const { scrolledMessages, messages } = this.state
+    if (scrolledMessages.length) {
+      // todo next page
+      // const nextPage = Math.floor(messages.length / 30) + 1 < totalPages ?  Math.floor(messages.length / 30) + 1 : null
+      this.setState({ scrolledMessages: [] })
+      this.setState({
+        page: Math.floor(messages.length / 30) + 1,
+        prevPage: null,
+      })
+    }
+    if (messages.length) {
+      this.refs.flatList.scrollToIndex({
+        animated: true,
+        index: 0,
+        viewPosition: 1,
+      })
+    }
+  }
+
   getMessage = (scrollDown?) => {
     let { dialog, messages } = this.props
     let { page, scrolledMessages, prevPage } = this.state
@@ -384,9 +449,11 @@ class Content extends Component {
           scrolledMessages = res.docs.concat(scrolledMessages)
           this.setState({
             scrolledMessages: scrolledMessages,
-            page: res.nextPage,
           })
         }
+        this.setState({
+          page: res.nextPage,
+        })
         if (scrollDown) {
           this.setState({ prevPage: res.prevPage })
           this.refs.flatList.scrollToIndex({
@@ -395,7 +462,9 @@ class Content extends Component {
             viewPosition: 0,
           })
         }
-        this.setState({ switcher: true })
+        setTimeout(() => {
+          this.setState({ switcher: true })
+        }, 1000)
       },
       failFunc: err => {},
     })
@@ -443,70 +512,6 @@ class Content extends Component {
       </TouchableOpacity>
     </Loader>
   )
-
-  checkScrollPosition = event => {
-    const {
-      lastPosition,
-      switcherDown,
-      prevPage,
-      scrolledMessages,
-    } = this.state
-    if (event.nativeEvent.contentOffset.y > 400) {
-      this.setState({ buttonToDown: true })
-    } else {
-      this.setState({ buttonToDown: false })
-    }
-    if (
-      prevPage &&
-      switcherDown &&
-      lastPosition &&
-      lastPosition > event.nativeEvent.contentOffset.y &&
-      event.nativeEvent.contentOffset.y < 600 &&
-      scrolledMessages.length
-    ) {
-      this.getMessage(true)
-
-      this.setState({ switcherDown: false })
-    } else if (!switcherDown && event.nativeEvent.contentOffset.y > 600) {
-      this.setState({ switcherDown: true })
-      // this.setState({page: nextPage})
-    }
-    this.setState({ lastPosition: event.nativeEvent.contentOffset.y })
-  }
-
-  handleScroll = () => {
-    const { switcher, nextPage, scrolledMessages } = this.state
-    let { messages } = this.props
-    messages = _.uniqBy(messages, '_id')
-
-    if (switcher && nextPage) {
-      if (!scrolledMessages.length) {
-        this.setState({ page: Math.floor(messages.length / 30) + 1 })
-      }
-      this.setState({ switcher: false })
-      this.getMessage()
-    }
-  }
-
-  _scrollToBottom = () => {
-    const { scrolledMessages, messages } = this.state
-    if (scrolledMessages.length) {
-      // todo next page
-      // const nextPage = Math.floor(messages.length / 30) + 1 < totalPages ?  Math.floor(messages.length / 30) + 1 : null
-      this.setState({ scrolledMessages: [] })
-      this.setState({
-        page: Math.floor(messages.length / 30) + 1,
-        prevPage: null,
-      })
-    }
-    if (messages.length) {
-      this.refs.flatList.scrollToIndex({
-        animated: true,
-        index: 0,
-        viewPosition: 1,
-      })
-    }
-  }
 
   download = async item => {
     let url = `https://seruniverse.asmo.media${item.src}`
