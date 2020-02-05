@@ -25,7 +25,11 @@ import { chatBg } from '../../assets/images'
 import helper, { getHamsterDate } from '../../utils/helpers'
 import Message from '../../common/Message'
 import sendRequest from '../../utils/request'
-import { setDialogs, setDialog } from '../../actions/dialogsActions'
+import {
+  setDialogs,
+  setDialog,
+  setDialogViewers,
+} from '../../actions/dialogsActions'
 import { setTaskReceivers } from '../../actions/participantsActions'
 import {
   editMessage,
@@ -304,7 +308,7 @@ class Content extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { removePreloader, currentRoomId } = this.props
+    const { removePreloader, currentRoomId, setDialogViewers } = this.props
     const { dialog } = this.props
     let { messages } = this.props
     if (nextProps.message._id !== this.props.message._id) {
@@ -328,6 +332,16 @@ class Content extends Component {
       )
       this.props.setDialog(dialog)
       this.props.setMessages(messages)
+    }
+
+    if (nextProps.dialogViewers) {
+      messages.forEach(m => {
+        if (!m.viewers.includes(nextProps.dialogViewers.viewer)) {
+          m.viewers.push(nextProps.dialogViewers.viewer)
+        }
+      })
+      this.props.setMessages(messages)
+      setDialogViewers(null)
     }
   }
 
@@ -937,6 +951,7 @@ const mapStateToProps = state => ({
   currentDialog: state.dialogsReducer.currentDialog,
   message: state.messageReducer.message,
   sendingMessages: state.messageReducer.sendingMessages,
+  dialogViewers: state.dialogsReducer.dialogViewers,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -950,5 +965,6 @@ const mapDispatchToProps = dispatch => ({
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setEditedMessage: _ => dispatch(getEditedMessage(_)),
   setSendingMessages: _ => dispatch(setSendingMessages(_)),
+  setDialogViewers: _ => dispatch(setDialogViewers(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

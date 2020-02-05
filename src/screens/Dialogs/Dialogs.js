@@ -36,6 +36,7 @@ import {
   setCurrentDialogs,
   setDialog,
   setCompanyLoading,
+  setDialogViewers,
 } from '../../actions/dialogsActions'
 import {
   setAllUsers,
@@ -587,26 +588,22 @@ class Dialogs extends Component {
   }
 
   socketDialogOpened = e => {
-    const { dialogs, setDialogs } = this.props
+    const { dialogs, setDialogs, currentRoomId, setDialogViewers } = this.props
     const { dialog_id, viewer } = e
     const newMessages = []
     const newDialogs = [...dialogs]
     const newDialog = newDialogs.filter(e => e._id === dialog_id)[0]
     if (newDialog) {
       const newDialogIndex = newDialogs.findIndex(e => e._id === dialog_id)
-      // if (currentDialog._id === dialog_id) {
-      //  currentDialog.messages && currentDialog.messages.map(e => {
-      //      newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
-      //  });
-      // } else {
-      // }
+      if (currentRoomId === e.dialog_id) {
+        setDialogViewers({ ...e })
+      }
       newDialog.messages &&
         newDialog.messages.forEach(e => {
           newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
         })
       newDialogs[newDialogIndex] = newDialog
       newDialog.messages = newMessages
-      // if (currentDialog._id === dialog_id) getMessages(newMessages)
       setDialogs(newDialogs)
     }
   }
@@ -961,5 +958,6 @@ const mapDispatchToProps = dispatch => ({
   setProfile: _ => dispatch(setProfile(_)),
   setNews: _ => dispatch(setNews(_)),
   setSendingMessages: _ => dispatch(setSendingMessages(_)),
+  setDialogViewers: _ => dispatch(setDialogViewers(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)

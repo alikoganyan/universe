@@ -6,12 +6,14 @@ import {
   UPDATE_UPLOAD_MESSAGE_PROGRESS,
   SET_DIALOG,
   SET_COMPANY_LOADING,
+  SET_DIALOG_VIEWERS,
 } from '../actions/dialogsActions'
 import { LOG_OUT } from '../actions/userActions'
 const initialState = {
   dialogs: [],
   currentDialog: {},
   dialog: {},
+  dialogViewers: null,
 }
 
 const dialogsReducer = (state = initialState, action) => {
@@ -22,7 +24,8 @@ const dialogsReducer = (state = initialState, action) => {
     case REMOVE_UPLOAD_MESSAGE:
     case UPDATE_UPLOAD_MESSAGE_PROGRESS:
       return { ...state, dialogs: payload ? [...payload] : [] }
-
+    case SET_DIALOG_VIEWERS:
+      return { ...state, dialogViewers: payload }
     case SET_CURRENT_DIALOGS:
       return { ...state, currentDialog: { ...payload } }
     case SET_DIALOG:

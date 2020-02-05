@@ -31,7 +31,11 @@ import {
   getEditedMessage,
   setSendingMessages,
 } from '../../actions/messageActions'
-import { setDialog, setDialogs } from '../../actions/dialogsActions'
+import {
+  setDialog,
+  setDialogs,
+  setDialogViewers,
+} from '../../actions/dialogsActions'
 import { d_message } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import Loader from '../../common/Loader'
@@ -300,7 +304,7 @@ class Content extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { removePreloader, currentRoomId } = this.props
+    const { removePreloader, currentRoomId, setDialogViewers } = this.props
     const { dialog } = this.props
     let { messages } = this.props
     if (nextProps.message._id !== this.props.message._id) {
@@ -327,6 +331,15 @@ class Content extends Component {
       this.props.setDialog(dialog)
 
       this.props.setMessages(messages)
+    }
+    if (nextProps.dialogViewers) {
+      messages.forEach(m => {
+        if (!m.viewers.includes(nextProps.dialogViewers.viewer)) {
+          m.viewers.push(nextProps.dialogViewers.viewer)
+        }
+      })
+      this.props.setMessages(messages)
+      setDialogViewers(null)
     }
   }
 
@@ -931,6 +944,7 @@ const mapStateToProps = state => ({
   currentRoomId: state.messageReducer.currentRoomId,
   user: state.userReducer.user,
   sendingMessages: state.messageReducer.sendingMessages,
+  dialogViewers: state.dialogsReducer.dialogViewers,
 })
 const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
@@ -944,5 +958,6 @@ const mapDispatchToProps = dispatch => ({
   setMessage: _ => dispatch(setMessage(_)),
   setEditedMessage: _ => dispatch(getEditedMessage(_)),
   setSendingMessages: _ => dispatch(setSendingMessages(_)),
+  setDialogViewers: _ => dispatch(setDialogViewers(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)
