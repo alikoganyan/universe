@@ -255,6 +255,8 @@ class Content extends Component {
       allUsers.push(item)
     })
 
+    // console.log(this.state.allContacts);
+
     return (
       <ContactList>
         {allUsers.map(e => (
@@ -433,6 +435,9 @@ class Content extends Component {
   }
 
   componentDidMount() {
+    this.props.valueChange.callback = val => {
+      // console.log(val)
+    }
     InteractionManager.runAfterInteractions(() => {
       this.setState({
         animationCompleted: true,
@@ -599,7 +604,7 @@ class Content extends Component {
 
   includes = e => {
     const { participants } = this.props
-    return !!participants.filter(user => e._id === user._id)[0]
+    return participants.some(user => e._id === user._id)
   }
 
   collapseDepartment = i => {
