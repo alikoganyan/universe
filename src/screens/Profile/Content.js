@@ -461,7 +461,7 @@ class Content extends Component {
             icon: <TaskIcon />,
             isGroup: false,
           }
-        : undefined,
+        : null,
       !myProfile
         ? {
             type: 'Общих групп',
@@ -469,7 +469,7 @@ class Content extends Component {
             icon: <GroupIcon />,
             isGroup: false,
           }
-        : undefined,
+        : null,
       !myProfile
         ? {
             type: 'Пользователей',
@@ -478,7 +478,7 @@ class Content extends Component {
             icon: <GroupIcon />,
             isGroup: true,
           }
-        : undefined,
+        : null,
       // !myProfile
       //   ? {
       //       type: 'Задачи',
@@ -494,7 +494,7 @@ class Content extends Component {
             icon: <FilesRedIcon />,
             isGroup: false,
           }
-        : undefined,
+        : null,
       !myProfile
         ? {
             type: 'Общих файлов',
@@ -502,7 +502,7 @@ class Content extends Component {
             icon: <FilesRedIcon />,
             isGroup: true,
           }
-        : undefined,
+        : null,
     ]
     this.setState({ UserData: newUserData })
   }
