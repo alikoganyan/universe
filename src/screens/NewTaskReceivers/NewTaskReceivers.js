@@ -18,12 +18,15 @@ const Bottom = styled(View)`
 
 export default class NewFeedReceivers extends Component {
   render() {
+    const valueChange = {
+      callback: null,
+    }
     return (
       <ActionSheetProvider>
         <SafeAreaView>
           <Wrapper>
-            <Header back={this.navigateBack} />
-            <Content back={this.navigateBack} />
+            <Header back={this.navigateBack} valueChange={valueChange} />
+            <Content back={this.navigateBack} valueChange={valueChange} />
             <Bottom />
           </Wrapper>
         </SafeAreaView>

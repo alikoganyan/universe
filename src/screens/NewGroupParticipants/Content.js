@@ -29,7 +29,8 @@ import _ from 'lodash'
 
 import {
   filterAllContacts,
-  // filterWithDepartaments,
+  filterWithDepartaments,
+  filterWithGroups,
 } from '../../helper/filterContacts'
 
 const { Colors } = helper
@@ -151,17 +152,18 @@ const ArrowWrapper = styled(AnimatedArrowWrapper)``
 
 class Content extends Component {
   MiddleContacts = () => {
-    // console.log(this.state.departments);
+    const { departments, filteredDepartments, checkedList } = this.state
+    const newDepartments = filteredDepartments || departments
     if (
       this.props.user.company._id === 0 ||
       !this.props.user.settings.partition_contacts
     ) {
       return <this.AllContacts />
     } else {
-      if (this.state.departments.length && this.state.checkedList.length) {
+      if (newDepartments.length && checkedList.length) {
         return (
           <ContactList>
-            {this.state.departments
+            {newDepartments
               .filter(e => e.users_this.length)
               .map((e, i) => (
                 <Box key={i} last={i === this.state.departments.length - 1}>
@@ -292,11 +294,11 @@ class Content extends Component {
   }
 
   ContactsInGroup = () => {
-    const { groups, collapsedGroups } = this.state
-
+    const { groups, collapsedGroups, filteredGroups } = this.state
+    const newGroups = filteredGroups || groups
     return (
       <ContactList>
-        {groups.map(
+        {newGroups.map(
           (e, i) =>
             !!(e.participants && e.participants.length) && (
               <Box key={i} last={i === groups.length - 1}>
@@ -418,9 +420,6 @@ class Content extends Component {
     departments: [],
     filteredDepartments: null,
     checkedList: [],
-    users: {
-      department: [],
-    },
     options: {
       active: 0,
       options: ['Все', 'Пользователи', 'Группы'],
@@ -432,14 +431,14 @@ class Content extends Component {
   }
 
   componentDidMount() {
-    this.props.valueChange.callback = val => {
-      filterAllContacts(val, this.state, this.props, this)
-    }
     InteractionManager.runAfterInteractions(() => {
       this.setState({
         animationCompleted: true,
       })
     })
+
+    this.changeInputValue()
+
     const { collapsed, departments } = this.state
     const { participants } = this.props
 
@@ -528,6 +527,19 @@ class Content extends Component {
     })
   }
 
+  changeInputValue = () => {
+    this.props.valueChange.callback = val => {
+      const { user } = this.props
+      const { options } = this.state
+      const { active } = options
+      user.settings.partition_contacts && active === 1
+        ? filterWithDepartaments(val, this.state, this)
+        : active === 2
+        ? filterWithGroups(val, this.state, this)
+        : filterAllContacts(val, this.state, this.props, this)
+    }
+  }
+
   updatedDepartaments = []
 
   subdivisonsThree = dep => {
@@ -576,6 +588,8 @@ class Content extends Component {
       e => checkedList.find(o => o.id === e._id)?.checked,
     )
     setReceivers(newReceivers)
+    this.setState({ filterWithDepartaments: null })
+    this.props.valueChange.clearInput()
   }
 
   addGroupReceivers = e => {
@@ -589,6 +603,8 @@ class Content extends Component {
       e => checkedList.find(o => o.id === e._id)?.checked,
     )
     setReceivers(newReceivers)
+    this.setState({ filteredGroups: null })
+    this.props.valueChange.clearInput()
   }
 
   isChecked = id => {
@@ -635,6 +651,9 @@ class Content extends Component {
     const newState = { ...options }
     newState.active = e
     this.setState({ options: newState })
+    if (e !== options.active) {
+      this.props.valueChange.clearInput(e)
+    }
   }
 }
 

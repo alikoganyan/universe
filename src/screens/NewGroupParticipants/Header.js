@@ -114,21 +114,21 @@ class HeaderComponent extends Component {
     input: '',
   }
 
+  componentDidMount() {
+    this.props.valueChange.clearInput = () => {
+      this.stopSearch()
+    }
+  }
+
   handleInputChange = e => {
     if (this.props.valueChange.callback) {
       this.props.valueChange.callback(e)
     }
-
     this.setState({ input: e })
   }
 
   handleFocus = () => {
     this.setState({ focused: true })
-  }
-
-  onBlur = () => {
-    this.handleInputChange('')
-    this.setState({ input: '' })
   }
 
   startSearch = () => {
@@ -137,7 +137,12 @@ class HeaderComponent extends Component {
 
   stopSearch = () => {
     this.setState({ search: false })
-    this.onBlur()
+    this.clearInput()
+  }
+
+  clearInput = () => {
+    this.handleInputChange('')
+    this.setState({ input: '' })
   }
 
   addParticipants = () => {
