@@ -235,7 +235,11 @@ class Content extends Component {
           <Header
             ref="header"
             onValueChange={
-              this.props.user.settings.partition_contacts && active === 1
+              !!(
+                Object.keys(this.props.user).length &&
+                this.props.user.settings.partition_contacts &&
+                active === 1
+              )
                 ? this.filterWithDepartaments
                 : this.filterAllContacts
             }
@@ -253,9 +257,13 @@ class Content extends Component {
         <AnimatedScroll
           pose={active === 0 ? 'left' : active === 1 ? 'center' : 'right'}
         >
-          <this.AllContacts />
-          <this.MiddleContacts />
-          <this.GroupContacts />
+          {!!Object.keys(this.props.user).length && (
+            <>
+              <this.AllContacts />
+              <this.MiddleContacts />
+              <this.GroupContacts />
+            </>
+          )}
         </AnimatedScroll>
       </Wrapper>
     )
