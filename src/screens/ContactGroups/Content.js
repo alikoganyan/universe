@@ -279,8 +279,8 @@ class Content extends Component {
       active: 1,
       options: ['Все', 'Пользователи', 'Группы'],
     },
-    userContacts: [],
-    filteredUserContacts: null,
+    departments: [],
+    filteredDepartments: null,
   }
   scrollY = new Animated.Value(0)
 
@@ -372,11 +372,12 @@ class Content extends Component {
     const {
       userContactsAll,
       filteredUserContactsAll,
-      userContacts,
-      filteredUserContacts,
+      departments,
+      filteredDepartments,
     } = this.state
     if (this.props.user && this.props.user.company) {
       if (this.props.user.company._id === 0) {
+        // console.log(userContactsAll,filteredUserContactsAll)
         return (
           <ContactList
             bounces={false}
@@ -426,7 +427,7 @@ class Content extends Component {
             contentContainerStyle={{ paddingBottom: 170 }}
             data={
               this.props.user.settings.partition_contacts
-                ? filteredUserContacts || userContacts
+                ? filteredDepartments || departments
                 : filteredUserContactsAll || this.state.userContactsAll
             }
             ListEmptyComponent={this._renderEmptyComponent}
@@ -437,7 +438,7 @@ class Content extends Component {
                   <Box
                     key={item._id}
                     first={!index}
-                    last={index === this.state.userContacts.length - 1}
+                    last={index === this.state.departments.length - 1}
                   >
                     <BoxTitle
                       onPress={() =>
@@ -660,7 +661,7 @@ class Content extends Component {
     }))
 
     this.setState({
-      userContacts: data,
+      departments: data,
     })
   }
 

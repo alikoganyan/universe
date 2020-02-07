@@ -137,6 +137,7 @@ class HeaderComponent extends Component {
 
   stopSearch = () => {
     this.setState({ search: false })
+    this.onBlur()
   }
 
   addParticipants = () => {

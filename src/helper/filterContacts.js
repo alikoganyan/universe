@@ -21,7 +21,11 @@ export const filterAllContacts = (val, state, props, that) => {
             .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1),
     )
     that.setState({ filtredAllContacts: val ? filtredAllContacts : null })
-  } else if (active === 1 && userContactsAll && userContactsAll.length) {
+  } else if (
+    (active === 1 || active === 0) &&
+    userContactsAll &&
+    userContactsAll.length
+  ) {
     const filtredAllContacts = userContactsAll.filter(
       e =>
         (e.first_name &&
@@ -52,8 +56,8 @@ export const filterAllContacts = (val, state, props, that) => {
 }
 
 export const filterWithDepartaments = (val, state, that) => {
-  const { userContacts } = state
-  const filteredUserContacts = userContacts.map(d => {
+  const { departments } = state
+  const filteredDepartments = departments.map(d => {
     if (d.data && d.data.length) {
       const filtredDep = d.data.filter(
         e =>
@@ -76,5 +80,5 @@ export const filterWithDepartaments = (val, state, that) => {
     }
     return d
   })
-  that.setState({ filteredUserContacts })
+  that.setState({ filteredDepartments })
 }

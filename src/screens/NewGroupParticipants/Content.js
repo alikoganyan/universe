@@ -27,6 +27,11 @@ import {
 } from '../../actions/participantsActions'
 import _ from 'lodash'
 
+import {
+  filterAllContacts,
+  // filterWithDepartaments,
+} from '../../helper/filterContacts'
+
 const { Colors } = helper
 const { green, black, yellow } = Colors
 const AnimatedScrollView = posed.View({
@@ -146,22 +151,20 @@ const ArrowWrapper = styled(AnimatedArrowWrapper)``
 
 class Content extends Component {
   MiddleContacts = () => {
+    // console.log(this.state.departments);
     if (
       this.props.user.company._id === 0 ||
       !this.props.user.settings.partition_contacts
     ) {
       return <this.AllContacts />
     } else {
-      if (this.state.users.department.length && this.state.checkedList.length) {
+      if (this.state.departments.length && this.state.checkedList.length) {
         return (
           <ContactList>
-            {this.state.users.department
+            {this.state.departments
               .filter(e => e.users_this.length)
               .map((e, i) => (
-                <Box
-                  key={i}
-                  last={i === this.state.users.department.length - 1}
-                >
+                <Box key={i} last={i === this.state.departments.length - 1}>
                   <BoxTitle
                     onPress={() =>
                       this.state.collapsed[i]
@@ -191,11 +194,6 @@ class Content extends Component {
                           <TouchableOpacity
                             key={user._id}
                             onPress={() => {
-                              /*  if (this.state.checkedList) {
-                                const list = [...this.state.checkedList]
-                                list[i][j] = !receivers || !receivers.length ? false : receivers.some(elem => elem._id === user._id )
-                                this.setState({checkedList: list})
-                              }*/
                               this.addReceiver(user)
                             }}
                           >
@@ -250,16 +248,11 @@ class Content extends Component {
   }
 
   AllContacts = () => {
-    const allUsers = []
-    this.state.allContacts.forEach(item => {
-      allUsers.push(item)
-    })
-
-    // console.log(this.state.allContacts);
-
+    const { userContactsAll, filteredUserContactsAll } = this.state
+    const allContacts = filteredUserContactsAll || userContactsAll
     return (
       <ContactList>
-        {allUsers.map(e => (
+        {allContacts.map(e => (
           <TouchableOpacity key={e._id} onPress={() => this.addReceiver(e)}>
             <BoxInnerItem>
               {this.includes(e) ? (
@@ -420,7 +413,10 @@ class Content extends Component {
   state = {
     collapsed: [],
     collapsedGroups: [],
-    allContacts: [],
+    userContactsAll: [],
+    filteredUserContactsAll: null,
+    departments: [],
+    filteredDepartments: null,
     checkedList: [],
     users: {
       department: [],
@@ -430,25 +426,26 @@ class Content extends Component {
       options: ['Все', 'Пользователи', 'Группы'],
     },
     groups: [],
+    filteredGroups: null,
     animationCompleted: false,
     selectedGroup: '',
   }
 
   componentDidMount() {
     this.props.valueChange.callback = val => {
-      // console.log(val)
+      filterAllContacts(val, this.state, this.props, this)
     }
     InteractionManager.runAfterInteractions(() => {
       this.setState({
         animationCompleted: true,
       })
     })
-    const { collapsed, users } = this.state
+    const { collapsed, departments } = this.state
     const { participants } = this.props
 
     const newDCollapsed = [...collapsed]
     const newGCollapsed = []
-    for (let i = 0; i <= users.department.length; i++) {
+    for (let i = 0; i <= departments.length; i++) {
       newDCollapsed.push(false)
     }
     const groups = this.props.dialogs
@@ -476,7 +473,7 @@ class Content extends Component {
         access_field: 'create_groups',
       },
       success: res => {
-        const allContacts = _.orderBy(
+        const userContactsAll = _.orderBy(
           res.users,
           [
             user => {
@@ -487,7 +484,7 @@ class Content extends Component {
           ],
           ['desc'],
         ).reverse()
-        this.setState({ allContacts })
+        this.setState({ userContactsAll })
 
         const formatedUsers = [...res.company.subdivisions]
         this.updatedDepartaments = formatedUsers
@@ -498,7 +495,7 @@ class Content extends Component {
           d.users_this = d.users_this.filter(u => u._id !== this.props.user._id)
         })
 
-        this.setState({ users: { department: this.updatedDepartaments } })
+        this.setState({ departments: this.updatedDepartaments })
 
         const checkedList = res.users.map(user => ({
           id: user._id,
@@ -567,15 +564,15 @@ class Content extends Component {
 
   addAllReceivers = id => {
     const { setReceivers } = this.props
-    const { checkedList, users } = this.state
-    const currentDep = users.department.find(d => d._id === id)
+    const { checkedList, departments } = this.state
+    const currentDep = departments.find(d => d._id === id)
     const dep = checkedList.filter(e =>
       currentDep.users_this.some(u => e.id === u._id),
     )
     const is = dep.every(e => e.checked)
     dep.forEach(e => (e.checked = !is))
     this.setState({ ...this.state, checkedList })
-    const newReceivers = this.state.allContacts.filter(
+    const newReceivers = this.state.userContactsAll.filter(
       e => checkedList.find(o => o.id === e._id)?.checked,
     )
     setReceivers(newReceivers)
@@ -588,15 +585,15 @@ class Content extends Component {
     const is = users.every(u => u.checked)
     users.forEach(u => (u.checked = !is))
     this.setState({ ...this.state, checkedList })
-    const newReceivers = this.state.allContacts.filter(
+    const newReceivers = this.state.userContactsAll.filter(
       e => checkedList.find(o => o.id === e._id)?.checked,
     )
     setReceivers(newReceivers)
   }
 
   isChecked = id => {
-    const { checkedList, users } = this.state
-    const currentDep = users.department.find(d => d._id === id)
+    const { checkedList, departments } = this.state
+    const currentDep = departments.find(d => d._id === id)
     return checkedList
       .filter(e => currentDep.users_this.some(u => e.id === u._id))
       .every(u => u.checked)
