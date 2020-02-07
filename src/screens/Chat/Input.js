@@ -1,12 +1,5 @@
 import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  Dimensions,
-  Platform,
-  Alert,
-  StyleSheet,
-} from 'react-native'
+import { View, Text, Dimensions, Platform, StyleSheet } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ActionSheet from 'react-native-actionsheet'
@@ -569,7 +562,6 @@ class InputComponent extends Component {
           roomId: currentRoomId,
           _id: tempMessageId,
         })
-        Alert.alert('Ошибка', 'Что то пошло не так')
       },
     })
   }

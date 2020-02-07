@@ -30,7 +30,7 @@ export const connectToSocket = (token = store.getState().userReducer.auth) => {
           socket.emit('get_dialogs', {
             id: store.getState().userReducer.user._id,
           }),
-        1000,
+        0,
       )
     })
     socket.on('error', error => {})

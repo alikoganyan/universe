@@ -22,11 +22,8 @@ import { connect } from 'react-redux'
 import ImageComponent from './Image'
 import MapView from 'react-native-maps'
 import FastImage from 'react-native-fast-image'
-// import { FileSystem } from 'expo';
-// import RNFS from 'react-native-fs'
 import helper from '../utils/helpers'
 import Hyperlink from 'react-native-hyperlink'
-// import { SingleImage } from 'react-native-zoom-lightbox'
 import LinearGradient from 'react-native-linear-gradient'
 import Forwarded from './Forwarded'
 import DefaultAvatar from './DefaultAvatar'
@@ -52,29 +49,6 @@ const UploadProgressContainer = styled(View)`
   justify-content: center;
   border-radius: ${borderRadius};
 `
-
-/*const UploadProgressText = styled(Text)`
-  color: ${Colors.white};
-  font-family: 'OpenSans';
-  font-size: 14px;
-  padding: 8px;
-`*/
-
-// const MyMessage = styled(View)`
-//   display: flex;
-//   text-align: right;
-//   margin: 5px 10px;
-//   background: ${({ background }) => background || myMessage};
-//   border-radius: ${borderRadius};
-//   border-bottom-right-radius: 0;
-//   max-width: 80%;
-//   min-width: 20%;
-//   margin-left: 20%;
-//   position: relative;
-//   flex-grow: 1;
-//   z-index: 1;
-//   overflow: hidden;
-// `
 
 const DateWrapper = styled(View)`
   width: 100%;

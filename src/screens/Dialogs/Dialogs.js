@@ -200,6 +200,7 @@ class Dialogs extends Component {
   scrollY = new Animated.Value(0)
 
   componentDidMount() {
+    this.props.setCompanyLoading(true)
     AsyncStorage.getItem('failedMessages').then(res => {
       const value = JSON.parse(res)
       if (value) {
@@ -210,10 +211,9 @@ class Dialogs extends Component {
       companies: this.props.user.companies,
       company: this.props.user.company,
     })
-    this.props.setDialogs(this.props.user.company.dialogs)
     this.props.setNews(this.props.user.news)
+    this.getUnreadedMessages()
     this.getProfile()
-
     this.props.removeAllPreloader()
 
     socket.removeAllListeners('update_dialogs')
@@ -279,7 +279,7 @@ class Dialogs extends Component {
     this.props.setUser(e)
     this.props.setReset(true)
   }
-
+  d
   // setEmptyCompany = () => {
   //   const tasksInc = []
   //   const tasksOut = []
@@ -292,8 +292,70 @@ class Dialogs extends Component {
   //   this.props.setReset(true)
   // }
 
+  getUnreadedMessages = () => {
+    const { dialogs } = this.props
+    let newDialogs = [...dialogs]
+    if (newDialogs && newDialogs.length) {
+      socket.emit('get_unreaded_messages', null, ({ unreadedMessages }) => {
+        unreadedMessages.forEach(d => {
+          const dIndex = dialogs.findIndex(dialog => dialog._id === d.dialog_id)
+          newDialogs[dIndex].messages = _.uniqBy(
+            [...newDialogs[dIndex].messages, ...d.messages],
+            '_id',
+          )
+        })
+        this.sortedAllDialogs(newDialogs)
+      })
+    }
+  }
+
+  sortedAllDialogs = dialogs => {
+    const { setDialogs } = this.props
+    const newDialogs =
+      dialogs.length &&
+      dialogs.sort((a, b) => {
+        if (b.messages.length && a.messages.length) {
+          const aCreation = new Date(a.created_at)
+          const aLastMessage = new Date(
+            a.messages[a.messages.length - 1].created_at,
+          )
+          const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
+          const bCreation = new Date(b.created_at)
+          const bLastMessage = new Date(
+            b.messages[b.messages.length - 1].created_at,
+          )
+          const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
+          return bDate - aDate
+        }
+        if (b.messages.length && !a.messages.length) {
+          const aCreation = new Date(a.created_at)
+          const bCreation = new Date(b.created_at)
+          const bLastMessage = new Date(
+            b.messages[b.messages.length - 1].created_at,
+          )
+          const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
+          return bDate - aCreation
+        }
+        if (!b.messages.length && a.messages.length) {
+          const aCreation = new Date(a.created_at)
+          const aLastMessage = new Date(
+            a.messages[a.messages.length - 1].created_at,
+          )
+          const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
+          const bCreation = new Date(b.created_at)
+          return bCreation - aDate
+        }
+        if (!b.messages.length && !a.messages.length) {
+          const aCreation = new Date(a.created_at)
+          const bCreation = new Date(b.created_at)
+          return bCreation - aCreation
+        }
+      })
+    setDialogs(newDialogs)
+  }
+
   getProfile = (adminChange = false) => {
-    const { setDialogs, sendingMessages } = this.props
+    const { sendingMessages } = this.props
     if (!adminChange) {
       this.props.setCompanyLoading(true)
     }
@@ -323,10 +385,7 @@ class Dialogs extends Component {
           }
         } else {
           this.setCompanyData(userData.user)
-          setDialogs(userData.user.company.dialogs)
-          // socket.emit('get_dialogs')
         }
-        this.props.setCompanyLoading(false)
         if (typeof companyKey === 'number' && sendingMessages[companyKey]) {
           this.clearReceivedMessages(userData.user.company.dialogs, companyKey)
         }
@@ -337,13 +396,13 @@ class Dialogs extends Component {
           company: this.props.user.company,
         })
         this.props.setNews(this.props.user.news)
-        this.props.setCompanyLoading(false)
       },
     })
   }
 
   changeCompany = id => {
     this.props.setCompanyLoading(true)
+    socket.emit('get_dialogs')
     sendRequest({
       r_path: '/profile/change_company',
       method: 'patch',
@@ -667,6 +726,8 @@ class Dialogs extends Component {
       : []
     setDialogs(newDialogsSorted)
     setCompanyLoading(false)
+    this.props.setCompanyLoading(false)
+
     this.props.setReset(true)
   }
 

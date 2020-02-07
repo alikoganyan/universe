@@ -25,13 +25,20 @@ import {
   setRoom,
   addMessage,
   setCurrentChat,
+  setCurrentRoomId,
 } from '../../actions/messageActions'
-import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
+import {
+  setDialogs,
+  setCurrentDialogs,
+  setDialog,
+} from '../../actions/dialogsActions'
 import _ from 'lodash'
 import {
   filterAllContacts,
   filterWithDepartaments,
 } from '../../helper/filterContacts'
+import { socket } from '../../utils/socket'
+import { setProfile } from '../../actions/profileAction'
 
 const { Colors, HeaderHeight, fontSize } = helper
 const { green, black, grey2 } = Colors
@@ -134,7 +141,7 @@ class Content extends Component {
               <GroupIconWhite />
               <CreateDialogText>Создать группу</CreateDialogText>
             </CreateDialog>
-            <this.AllContacts />
+            {!!Object.keys(this.props.user).length && <this.AllContacts />}
           </KeyboardAwareScrollView>
         </Wrapper>
         {/* </ScrollView> */}
@@ -359,29 +366,51 @@ class Content extends Component {
     })
   }
 
-  toChat = event => {
+  toChat = e => {
     const {
-      setCurrentDialogs,
-      navigate,
-      getMessages,
       setRoom,
-      dialog,
+      setCurrentChat,
+      navigate,
+      user,
+      setCurrentDialogs,
+      setCurrentRoomId,
+      dialogs,
+      setProfile,
     } = this.props
-    const dialogIncludes = dialog.filter(
-      e =>
-        (e.creator._id && e.creator._id === event._id) ||
-        (e.participants[0] && e.participants[0]._id === event._id),
-    )[0]
-    setCurrentDialogs(event)
-    setRoom(event._id)
-    getMessages(dialogIncludes ? dialogIncludes.messages : [])
+    const recipientId = !e.isGroup ? e._id : null
+    const currentRoom = dialogs.find(
+      dialog =>
+        !dialog.isGroup &&
+        ((dialog.creator._id && dialog.creator._id === e._id) ||
+          (dialog.participants[0] && dialog.participants[0]._id === e._id)),
+    )
+    if (currentRoom) {
+      const { isGroup, participants, creator, room, _id } = currentRoom
+      const currentDialog = isGroup
+        ? { ...e }
+        : user._id === creator._id
+        ? { ...participants[0] }
+        : { ...creator }
+      this.props.setDialog(currentRoom)
+      setRoom(recipientId)
+      setCurrentRoomId(_id)
+      setCurrentChat(room)
+      setCurrentDialogs(currentDialog)
+      socket.emit('view', { room, viewer: user._id })
+    } else {
+      const { room, _id } = e
+      setRoom(_id)
+      setCurrentChat(room)
+      setCurrentDialogs(e)
+    }
+    setProfile(e)
     navigate('Chat')
   }
 }
 
 const mapStateToProps = state => ({
   messages: state.messageReducer,
-  dialog: state.dialogsReducer.dialogs,
+  dialogs: state.dialogsReducer.dialogs,
   currentRoom: state.messageReducer.currentRoom,
   currentChat: state.messageReducer.currentChat,
   user: state.userReducer.user,
@@ -391,10 +420,13 @@ const mapDispatchToProps = dispatch => ({
   getMessages: _ => dispatch(getMessages(_)),
   setRoom: _ => dispatch(setRoom(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
+  setDialog: _ => dispatch(setDialog(_)),
   addMessage: _ => dispatch(addMessage(_)),
   setAllUsers: _ => dispatch(setAllUsers(_)),
   setContacts: _ => dispatch(setContacts(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
+  setProfile: _ => dispatch(setProfile(_)),
+  setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

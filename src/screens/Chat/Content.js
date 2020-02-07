@@ -108,7 +108,7 @@ class Content extends Component {
     const companyKey = dialog.company
     const dialogKey = dialog._id
 
-    if (!messages.length && Object.keys(dialog).length) {
+    if (!messages.length && Object.keys(dialog).length && currentRoomId) {
       this.props.setMessages(dialog.messages)
     }
     if (messages && messages.length) {
@@ -287,10 +287,10 @@ class Content extends Component {
 
   componentDidMount() {
     moment.locale('ru')
-    const { navigation, dialog } = this.props
+    const { navigation, dialog, currentRoomId } = this.props
     const { messages_from_pages } = dialog
 
-    if (Object.keys(dialog).length) {
+    if (Object.keys(dialog).length && currentRoomId) {
       const messages = dialog.messages
       this.props.setMessages(messages)
       this.setState({
