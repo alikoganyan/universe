@@ -19,12 +19,22 @@ const Bottom = styled(View)`
 
 export default class ContactGroups extends Component {
   render() {
+    const valueChange = {
+      callback: null,
+    }
     return (
       <ActionSheetProvider>
         <SafeAreaView>
           <Wrapper>
-            <Header toProfile={this.toProfile} back={this.navigateBack} />
-            <Content navigate={this.props.navigation.navigate} />
+            <Header
+              toProfile={this.toProfile}
+              back={this.navigateBack}
+              valueChange={valueChange}
+            />
+            <Content
+              navigate={this.props.navigation.navigate}
+              valueChange={valueChange}
+            />
             <Bottom />
           </Wrapper>
         </SafeAreaView>

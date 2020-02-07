@@ -29,6 +29,10 @@ import ImageComponent from '../../common/Image'
 import { setProfile } from '../../actions/profileAction'
 import _ from 'lodash'
 import AnimatedEllipsis from 'react-native-animated-ellipsis'
+import {
+  filterAllContacts,
+  filterWithDepartaments,
+} from '../../helper/filterContacts'
 
 const { Colors, HeaderHeight, sidePadding } = helper
 const { green, black, grey2 } = Colors
@@ -234,15 +238,15 @@ class Content extends Component {
           </HeaderContainer>
           <Header
             ref="header"
-            onValueChange={
+            onValueChange={val => {
               !!(
                 Object.keys(this.props.user).length &&
                 this.props.user.settings.partition_contacts &&
                 active === 1
               )
-                ? this.filterWithDepartaments
-                : this.filterAllContacts
-            }
+                ? filterWithDepartaments(val, this.state, this)
+                : filterAllContacts(val, this.state, this.props, this)
+            }}
           />
           <OptionsWrap>
             <Options>
@@ -283,8 +287,8 @@ class Content extends Component {
       active: 1,
       options: ['Все', 'Пользователи', 'Группы'],
     },
-    userContacts: [],
-    filteredUserContacts: null,
+    departments: [],
+    filteredDepartments: null,
   }
   scrollY = new Animated.Value(0)
 
@@ -297,87 +301,6 @@ class Content extends Component {
       </TouchableOpacity>
     </Loader>
   )
-
-  filterWithDepartaments = val => {
-    const { userContacts } = this.state
-    const filteredUserContacts = userContacts.map(d => {
-      if (d.data && d.data.length) {
-        const filtredDep = d.data.filter(
-          e =>
-            (e.first_name &&
-              e.last_name &&
-              (e.first_name.toLowerCase() + e.last_name.toLowerCase()).indexOf(
-                val.replace(/\s/g, '').toLowerCase(),
-              ) !== -1) ||
-            (e.name &&
-              e.name
-                .toLowerCase()
-                .replace(/\s/g, '')
-                .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1) ||
-            (e.phone_number &&
-              e.phone_number
-                .toLowerCase()
-                .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1),
-        )
-        return { ...d, data: [...filtredDep] }
-      }
-      return d
-    })
-    this.setState({ filteredUserContacts })
-  }
-
-  filterAllContacts = val => {
-    const { options, allContacts, userContactsAll } = this.state
-    const { dialogs } = this.props
-    const { active } = options
-    if (active === 0 && allContacts && allContacts.length) {
-      const filtredAllContacts = allContacts.filter(
-        e =>
-          (e.first_name &&
-            e.last_name &&
-            (e.first_name.toLowerCase() + e.last_name.toLowerCase()).indexOf(
-              val.replace(/\s/g, '').toLowerCase(),
-            ) !== -1) ||
-          (e.name &&
-            e.name
-              .toLowerCase()
-              .replace(/\s/g, '')
-              .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1) ||
-          (e.phone_number &&
-            e.phone_number
-              .toLowerCase()
-              .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1),
-      )
-      this.setState({ filtredAllContacts: val ? filtredAllContacts : null })
-    } else if (active === 1 && userContactsAll && userContactsAll.length) {
-      const filtredAllContacts = userContactsAll.filter(
-        e =>
-          (e.first_name &&
-            e.last_name &&
-            (e.first_name.toLowerCase() + e.last_name.toLowerCase()).indexOf(
-              val.replace(/\s/g, '').toLowerCase(),
-            ) !== -1) ||
-          (e.phone_number &&
-            e.phone_number
-              .toLowerCase()
-              .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1),
-      )
-      this.setState({
-        filteredUserContactsAll: val ? filtredAllContacts : null,
-      })
-    } else if (active === 2 && dialogs && dialogs.length) {
-      const filtredGroups = dialogs.filter(
-        e =>
-          e.isGroup &&
-          e.name &&
-          e.name
-            .replace(/\s/g, '')
-            .toLowerCase()
-            .indexOf(val.replace(/\s/g, '').toLowerCase()) !== -1,
-      )
-      this.setState({ filteredGroups: val ? filtredGroups : null })
-    }
-  }
 
   AllContacts = () => {
     const { allContacts, filtredAllContacts } = this.state
@@ -457,11 +380,12 @@ class Content extends Component {
     const {
       userContactsAll,
       filteredUserContactsAll,
-      userContacts,
-      filteredUserContacts,
+      departments,
+      filteredDepartments,
     } = this.state
     if (this.props.user && this.props.user.company) {
       if (this.props.user.company._id === 0) {
+        // console.log(userContactsAll,filteredUserContactsAll)
         return (
           <ContactList
             bounces={false}
@@ -511,7 +435,7 @@ class Content extends Component {
             contentContainerStyle={{ paddingBottom: 170 }}
             data={
               this.props.user.settings.partition_contacts
-                ? filteredUserContacts || userContacts
+                ? filteredDepartments || departments
                 : filteredUserContactsAll || this.state.userContactsAll
             }
             ListEmptyComponent={this._renderEmptyComponent}
@@ -522,7 +446,7 @@ class Content extends Component {
                   <Box
                     key={item._id}
                     first={!index}
-                    last={index === this.state.userContacts.length - 1}
+                    last={index === this.state.departments.length - 1}
                   >
                     <BoxTitle
                       onPress={() =>
@@ -745,7 +669,7 @@ class Content extends Component {
     }))
 
     this.setState({
-      userContacts: data,
+      departments: data,
     })
   }
 

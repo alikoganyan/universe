@@ -33,6 +33,10 @@ import {
   setDialog,
 } from '../../actions/dialogsActions'
 import _ from 'lodash'
+import {
+  filterAllContacts,
+  filterWithDepartaments,
+} from '../../helper/filterContacts'
 import { socket } from '../../utils/socket'
 import { setProfile } from '../../actions/profileAction'
 
@@ -137,7 +141,7 @@ class Content extends Component {
               <GroupIconWhite />
               <CreateDialogText>Создать группу</CreateDialogText>
             </CreateDialog>
-            {!!Object.keys(this.props.user).length && <this.Contacts />}
+            {!!Object.keys(this.props.user).length && <this.AllContacts />}
           </KeyboardAwareScrollView>
         </Wrapper>
         {/* </ScrollView> */}
@@ -147,19 +151,32 @@ class Content extends Component {
 
   state = {
     collapsed: [],
-    users: {
-      department: [],
+    userContactsAll: [],
+    filteredUserContactsAll: null,
+    departments: [],
+    filteredDepartments: null,
+    options: {
+      active: 0,
     },
   }
 
-  Contacts = () => {
-    const { user } = this.props
-    if (user.company._id === 0 || !user.settings.partition_contacts) {
+  AllContacts = () => {
+    const {
+      userContactsAll,
+      filteredUserContactsAll,
+      departments,
+      filteredDepartments,
+    } = this.state
+
+    if (
+      this.props.user.company._id === 0 ||
+      !this.props.user.settings.partition_contacts
+    ) {
       return (
         <ContactList
           bounces={false}
           contentContainerStyle={{ paddingBottom: 170 }}
-          data={this.state.allUsers}
+          data={filteredUserContactsAll || userContactsAll}
           ref={ref => (this.usersRef = ref)}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => this.toChat(item)}>
@@ -199,11 +216,11 @@ class Content extends Component {
       return (
         <ContactList
           bounces={false}
-          data={this.state.users.department}
+          data={filteredDepartments || departments}
           ref={ref => (this.usersRef = ref)}
           renderItem={({ item, index }) =>
             !!(item.users_this && item.users_this.length) && (
-              <Box last={index === this.state.users.department.length - 1}>
+              <Box last={index === this.state.departments.length - 1}>
                 <BoxTitle
                   onPress={() =>
                     this.state.collapsed[index]
@@ -287,7 +304,7 @@ class Content extends Component {
   componentDidMount() {
     const { collapsed } = this.state
     const newDCollapsed = [...collapsed]
-
+    this.changeInputValue()
     sendRequest({
       r_path: p_users_from_role_or_position,
       method: 'post',
@@ -306,7 +323,7 @@ class Content extends Component {
           ],
           ['desc'],
         ).reverse()
-        this.setState({ allUsers: allContacts })
+        this.setState({ userContactsAll: allContacts })
 
         const formatedUsers = [...res.company.subdivisions]
         this.updatedDepartaments = formatedUsers
@@ -316,7 +333,7 @@ class Content extends Component {
         this.updatedDepartaments.forEach(d => {
           d.users_this = d.users_this.filter(u => u._id !== this.props.user._id)
         })
-        this.setState({ users: { department: this.updatedDepartaments } })
+        this.setState({ departments: this.updatedDepartaments })
         for (let i = 0; i < formatedUsers.length; i += 1) {
           newDCollapsed.push(true)
         }
@@ -324,6 +341,15 @@ class Content extends Component {
       },
       failFunc: () => {},
     })
+  }
+
+  changeInputValue = () => {
+    this.props.valueChange.callback = val => {
+      const { user } = this.props
+      user.settings.partition_contacts
+        ? filterWithDepartaments(val, this.state, this)
+        : filterAllContacts(val, this.state, this.props, this)
+    }
   }
 
   updatedDepartaments = []
@@ -338,13 +364,6 @@ class Content extends Component {
         this.subdivisonsThree(d.subdivisions)
       }
     })
-  }
-
-  selectOption = e => {
-    const { options } = this.state
-    const newState = { ...options }
-    newState.active = e
-    this.setState({ options: newState })
   }
 
   toChat = e => {
