@@ -289,15 +289,16 @@ class Content extends Component {
     moment.locale('ru')
     const { navigation, dialog, currentRoomId } = this.props
     const { messages_from_pages } = dialog
-
     if (Object.keys(dialog).length && currentRoomId) {
       const messages = dialog.messages
       this.props.setMessages(messages)
-      this.setState({
-        page: messages_from_pages.nextPage,
-        nextPage: messages_from_pages.nextPage,
-        totalPages: messages_from_pages.totalPages,
-      })
+      if (messages_from_pages) {
+        this.setState({
+          page: messages_from_pages.nextPage,
+          nextPage: messages_from_pages.nextPage,
+          totalPages: messages_from_pages.totalPages,
+        })
+      }
     }
     navigation.setParams({
       scrollToBottom: this._scrollToBottom,
