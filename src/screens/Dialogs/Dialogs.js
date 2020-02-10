@@ -30,7 +30,6 @@ import {
   getEditedMessage,
   setSendingMessages,
 } from '../../actions/messageActions'
-// import { Notifications } from 'expo';
 import {
   setDialogs,
   setCurrentDialogs,
@@ -52,6 +51,7 @@ import Company from '../../common/Company'
 import { setTaskList } from '../../actions/tasksActions'
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 import { setNews } from '../../actions/newsActions'
+import { sortedAllDialogs } from '../../helper/sortedDialogs'
 
 const { Colors } = helper
 const { blue, grey2, lightColor } = Colors
@@ -304,54 +304,9 @@ class Dialogs extends Component {
             '_id',
           )
         })
-        this.sortedAllDialogs(newDialogs)
+        sortedAllDialogs(newDialogs, this.props)
       })
     }
-  }
-
-  sortedAllDialogs = dialogs => {
-    const { setDialogs } = this.props
-    const newDialogs =
-      dialogs.length &&
-      dialogs.sort((a, b) => {
-        if (b.messages.length && a.messages.length) {
-          const aCreation = new Date(a.created_at)
-          const aLastMessage = new Date(
-            a.messages[a.messages.length - 1].created_at,
-          )
-          const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
-          const bCreation = new Date(b.created_at)
-          const bLastMessage = new Date(
-            b.messages[b.messages.length - 1].created_at,
-          )
-          const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
-          return bDate - aDate
-        }
-        if (b.messages.length && !a.messages.length) {
-          const aCreation = new Date(a.created_at)
-          const bCreation = new Date(b.created_at)
-          const bLastMessage = new Date(
-            b.messages[b.messages.length - 1].created_at,
-          )
-          const bDate = bCreation > bLastMessage ? bCreation : bLastMessage
-          return bDate - aCreation
-        }
-        if (!b.messages.length && a.messages.length) {
-          const aCreation = new Date(a.created_at)
-          const aLastMessage = new Date(
-            a.messages[a.messages.length - 1].created_at,
-          )
-          const aDate = aCreation > aLastMessage ? aCreation : aLastMessage
-          const bCreation = new Date(b.created_at)
-          return bCreation - aDate
-        }
-        if (!b.messages.length && !a.messages.length) {
-          const aCreation = new Date(a.created_at)
-          const bCreation = new Date(b.created_at)
-          return bCreation - aCreation
-        }
-      })
-    setDialogs(newDialogs)
   }
 
   getProfile = (adminChange = false) => {
@@ -631,14 +586,15 @@ class Dialogs extends Component {
   }
 
   socketGetGroup = e => {
-    const { setDialog } = this.props
+    const { setDialog, dialogs } = this.props
     const room = e.room
     if (room) {
       socket.emit('subscribe_to_group', { room: room }, ({ dialog }) => {
+        dialogs.push(dialog)
+        sortedAllDialogs(dialogs, this.props)
         setDialog(dialog)
       })
     }
-    socket.emit('get_dialogs')
   }
 
   // to do
@@ -675,11 +631,10 @@ class Dialogs extends Component {
   setDialogSocket = e => {
     const { dialogs, setDialogs, setCurrentRoomId } = this.props
     const dialog = { ...e }
-    this.props.setDialog(dialog)
     const hasDialog = dialogs.some(d => d._id === dialog._id)
     if (!hasDialog) {
       dialogs.push(dialog)
-      this.sortedAllDialogs(dialogs)
+      sortedAllDialogs(dialogs, this.props)
     } else {
       const newDialog = dialogs.map(d => (d._id === e._id ? e : d))
       setDialogs(newDialog)

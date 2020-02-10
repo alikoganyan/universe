@@ -19,6 +19,8 @@ import { socket } from '../../utils/socket'
 import sendRequest from '../../utils/request'
 import { p_create_group } from '../../constants/api'
 import { getImageFromPicker } from '../../utils/ImagePicker'
+import { setDialogs } from '../../actions/dialogsActions'
+import { sortedAllDialogs } from '../../helper/sortedDialogs'
 
 const { Colors, sidePadding } = helper
 const { lightGrey1, black, green } = Colors
@@ -219,7 +221,7 @@ class Content extends Component {
   }
 
   proceed = e => {
-    const { participants, forward, setParticipants } = this.props
+    const { participants, forward, setParticipants, dialogs } = this.props
     const { text, imageFormData } = this.state
     let idList = []
     participants.map(e => (idList = [...idList, e._id]))
@@ -237,9 +239,10 @@ class Content extends Component {
         },
       },
       success: res => {
+        dialogs.push(res.group)
+        sortedAllDialogs(dialogs, this.props)
         setParticipants([])
         socket.emit('new_group', { group_id: res.group._id })
-        socket.emit('get_dialogs')
       },
       failFunc: err => {},
     })
@@ -253,9 +256,11 @@ class Content extends Component {
 const mapStateToProps = state => ({
   id: state.userReducer.user.id,
   participants: state.participantsReducer.dialog.participants,
+  dialogs: state.dialogsReducer.dialogs,
 })
 const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setParticipants: _ => dispatch(setDialogParticipants(_)),
+  setDialogs: _ => dispatch(setDialogs(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)
