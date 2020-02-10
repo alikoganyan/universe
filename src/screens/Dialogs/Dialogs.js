@@ -476,17 +476,16 @@ class Dialogs extends Component {
       company,
     } = this.props
     if (e.company_id === company._id) {
-      if (!currentRoomId) {
-        const currentDialog = dialogs.find(d => d._id === e.dialog_id)
-        if (currentDialog) {
-          const index = dialogs.findIndex(d => d._id === e.dialog_id)
-          dialogs[index].messages = dialogs[index].messages.filter(
-            m => m._id !== e.message_id,
-          )
-          setDialogs(dialogs)
-        }
-      } else {
+      if (currentRoomId) {
         setDeletedMessage(e)
+      }
+      const currentDialog = dialogs.find(d => d._id === e.dialog_id)
+      if (currentDialog) {
+        const index = dialogs.findIndex(d => d._id === e.dialog_id)
+        dialogs[index].messages = dialogs[index].messages.filter(
+          m => m._id !== e.message_id,
+        )
+        setDialogs(dialogs)
       }
     }
   }
@@ -500,31 +499,30 @@ class Dialogs extends Component {
       company,
     } = this.props
     if (message.company === company._id) {
-      if (!currentRoomId) {
-        const currentDialogIndex = dialogs.findIndex(
-          d => d._id === message.dialog,
-        )
-        if (
-          currentDialogIndex ||
-          (typeof currentDialogIndex === 'number' &&
-            dialogs[currentDialogIndex].messages.length)
-        ) {
-          const editedMessageIndex = dialogs[
-            currentDialogIndex
-          ].messages.findIndex(m => m._id === message._id)
-          if (
-            editedMessageIndex !== -1 &&
-            dialogs[currentDialogIndex].messages[editedMessageIndex]
-          ) {
-            dialogs[currentDialogIndex].messages[editedMessageIndex].text =
-              message.text
-            dialogs[currentDialogIndex].messages[editedMessageIndex].edited =
-              message.edited
-            setDialogs(dialogs)
-          }
-        }
-      } else {
+      if (currentRoomId) {
         setEditedMessage(message)
+      }
+      const currentDialogIndex = dialogs.findIndex(
+        d => d._id === message.dialog,
+      )
+      if (
+        currentDialogIndex ||
+        (typeof currentDialogIndex === 'number' &&
+          dialogs[currentDialogIndex].messages.length)
+      ) {
+        const editedMessageIndex = dialogs[
+          currentDialogIndex
+        ].messages.findIndex(m => m._id === message._id)
+        if (
+          editedMessageIndex !== -1 &&
+          dialogs[currentDialogIndex].messages[editedMessageIndex]
+        ) {
+          dialogs[currentDialogIndex].messages[editedMessageIndex].text =
+            message.text
+          dialogs[currentDialogIndex].messages[editedMessageIndex].edited =
+            message.edited
+          setDialogs(dialogs)
+        }
       }
     }
   }
@@ -763,13 +761,12 @@ class Dialogs extends Component {
               updatedCurrentDialog.messages.push(message)
               this.sortedDialog(updatedCurrentDialog)
             }
-          } else {
-            const currentDialog = dialogs.find(d => d._id === e.dialog)
-            if (currentDialog) {
-              currentDialog.messages.push(message)
-              this.sortedDialog(currentDialog)
-              // this.props.setCurrentRoomId(e.dialog)
-            }
+          }
+          const currentDialog = dialogs.find(d => d._id === e.dialog)
+          if (currentDialog) {
+            currentDialog.messages.push(message)
+            this.sortedDialog(currentDialog)
+            // this.props.setCurrentRoomId(e.dialog)
           }
         }
       }
