@@ -73,6 +73,7 @@ class HeaderComponent extends Component {
                 onChangeText={this.handleInputChange}
                 onFocus={this.handleFocus}
                 placeholder="Поиск"
+                autoFocus
               />
             </>
           )}
