@@ -18,6 +18,7 @@ import Congratulations from '../../common/Congratulations'
 import SafeAreaView from '../../common/SafeAreaView'
 import AnimatedEllipsis from 'react-native-animated-ellipsis'
 import AsyncStorage from '@react-native-community/async-storage'
+import { ActionSheetProvider } from '@expo/react-native-action-sheet'
 
 import {
   setRoom,
@@ -140,56 +141,58 @@ class Dialogs extends Component {
     })
 
     return (
-      <SafeAreaView behavior="padding">
-        <TabPreHeader
-          onWritePress={() => navigation.navigate('NewDialog')}
-          title="Диалоги"
-          opacity={opacity}
-        />
-        {/*{companyLoading && <OfflineNotice text="Обновляется" bgColor="green" />}*/}
-        <Wrapper>
-          {congratulations ? (
-            <Congratulations
-              title="Поздравляем с регистрацией."
-              onClickOutside={this.closeCongratulations}
-            >
-              <Text style={{ color: lightColor, textAlign: 'center' }}>
-                Не забудьте заполнить
-              </Text>
-              <TouchableOpacity onPress={this.toProfileEdit}>
-                <Text style={{ color: blue, textAlign: 'center' }}>
-                  свой профиль и поменять пароль.
-                </Text>
-              </TouchableOpacity>
-            </Congratulations>
-          ) : null}
-          <StyledFlatList
-            ref={ref => {
-              this.flatList = ref
-            }}
-            ListHeaderComponent={this._renderListHeader}
-            ListEmptyComponent={this._renderEmptyComponent}
-            keyboardDismissMode="on-drag"
-            initialNumToRender={20}
-            data={dialogs}
-            keyboardShouldPersistTaps="always"
-            renderItem={this._renderItem}
-            keyExtractor={(item, index) => item._id.toString()}
-            contentContainerStyle={{ paddingBottom: 60 }}
-            scrollEventThrottle={16}
-            onScroll={Animated.event(
-              [
-                {
-                  nativeEvent: { contentOffset: { y: this.scrollY } },
-                },
-              ],
-              {
-                useNativeDriver: true,
-              },
-            )}
+      <ActionSheetProvider>
+        <SafeAreaView behavior="padding">
+          <TabPreHeader
+            onWritePress={() => navigation.navigate('NewDialog')}
+            title="Диалоги"
+            opacity={opacity}
           />
-        </Wrapper>
-      </SafeAreaView>
+          {/*{companyLoading && <OfflineNotice text="Обновляется" bgColor="green" />}*/}
+          <Wrapper>
+            {congratulations ? (
+              <Congratulations
+                title="Поздравляем с регистрацией."
+                onClickOutside={this.closeCongratulations}
+              >
+                <Text style={{ color: lightColor, textAlign: 'center' }}>
+                  Не забудьте заполнить
+                </Text>
+                <TouchableOpacity onPress={this.toProfileEdit}>
+                  <Text style={{ color: blue, textAlign: 'center' }}>
+                    свой профиль и поменять пароль.
+                  </Text>
+                </TouchableOpacity>
+              </Congratulations>
+            ) : null}
+            <StyledFlatList
+              ref={ref => {
+                this.flatList = ref
+              }}
+              ListHeaderComponent={this._renderListHeader}
+              ListEmptyComponent={this._renderEmptyComponent}
+              keyboardDismissMode="on-drag"
+              initialNumToRender={20}
+              data={dialogs}
+              keyboardShouldPersistTaps="always"
+              renderItem={this._renderItem}
+              keyExtractor={(item, index) => item._id.toString()}
+              contentContainerStyle={{ paddingBottom: 60 }}
+              scrollEventThrottle={16}
+              onScroll={Animated.event(
+                [
+                  {
+                    nativeEvent: { contentOffset: { y: this.scrollY } },
+                  },
+                ],
+                {
+                  useNativeDriver: true,
+                },
+              )}
+            />
+          </Wrapper>
+        </SafeAreaView>
+      </ActionSheetProvider>
     )
   }
 

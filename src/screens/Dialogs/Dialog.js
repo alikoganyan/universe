@@ -1,11 +1,5 @@
 import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  TouchableHighlight,
-  Platform,
-  ActionSheetIOS,
-} from 'react-native'
+import { View, Text, TouchableHighlight } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import helper, { getHamsterDate } from '../../utils/helpers'
@@ -13,6 +7,7 @@ import DefaultAvatar from '../../common/DefaultAvatar'
 import { socket } from '../../utils/socket'
 import ImageComponent from '../../common/Image'
 import sendRequest from '../../utils/request'
+import { connectActionSheet } from '@expo/react-native-action-sheet'
 
 // import { FilesRedIcon, TaskIcon, LocationIcon } from '../../assets'
 
@@ -245,17 +240,20 @@ class Content extends Component {
   }
 
   handleHold = () => {
-    const options =
-      Platform.OS === 'ios' ? ['Отменить', 'Удалить'] : ['Удалить']
-
-    ActionSheetIOS.showActionSheetWithOptions(
+    this.props.showActionSheetWithOptions(
       {
-        options,
-        destructiveButtonIndex: 1,
+        options: ['Удалить', 'Отменить'],
         cancelButtonIndex: 0,
+        showSeparators: true,
+        textStyle: {
+          textAlign: 'center',
+          width: '100%',
+          color: blue,
+          fontSize: 18,
+        },
       },
       buttonIndex => {
-        if (buttonIndex === 1) {
+        if (buttonIndex === 0) {
           this.deleteDialog(this.props.item._id)
         }
       },
@@ -285,4 +283,6 @@ const mapStateToProps = state => ({
   user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({})
-export default connect(mapStateToProps, mapDispatchToProps)(Content)
+const ConnectedApp = connectActionSheet(Content)
+
+export default connect(mapStateToProps, mapDispatchToProps)(ConnectedApp)
