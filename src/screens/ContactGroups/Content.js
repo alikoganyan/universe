@@ -742,6 +742,14 @@ class Content extends Component {
     } else {
       this.props.setDialog(currentRoom)
     }
+    const dialog = e.isGroup ? e : currentRoom
+    if (dialog) {
+      dialog.messages.forEach(m => {
+        if (!m.viewers.includes(user._id) && m.sender._id !== user._id) {
+          m.viewers.push(user._id)
+        }
+      })
+    }
     if (currentRoom) {
       const { isGroup, participants, creator, room, _id } = currentRoom
       const currentDialog = isGroup
