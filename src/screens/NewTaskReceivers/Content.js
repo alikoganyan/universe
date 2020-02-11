@@ -19,6 +19,7 @@ import sendRequest from '../../utils/request'
 import { p_users_from_role_or_position } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
+
 import {
   addTaskReceiver,
   setTaskReceivers,
@@ -32,7 +33,7 @@ const Wrapper = styled(View)`
   padding-top: 0px;
   background: white;
   margin-bottom: 110px;
-  height: 100%;
+  height: ${Dimensions.get('window').height - helper.HeaderHeight - 20};
 `
 const ContactList = styled(ScrollView)`
   display: flex;
@@ -70,7 +71,10 @@ class Content extends Component {
     return (
       <SafeAreaView>
         <Wrapper>
-          <KeyboardAwareScrollView enableOnAndroid>
+          <KeyboardAwareScrollView
+            contentContainerStyle={{ flex: 1 }}
+            enableOnAndroid
+          >
             <ContactList>
               <FlatList
                 data={filtredAllContacts || allContacts}
