@@ -24,7 +24,6 @@ import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { GroupIcon, CloseIcon } from '../../assets'
 import { setDialogParticipants } from '../../actions/participantsActions'
-import { socket } from '../../utils/socket'
 import { setDialogs } from '../../actions/dialogsActions'
 
 const { Colors, sidePadding } = helper
@@ -262,7 +261,14 @@ class Content extends Component {
   }
 
   proceed = () => {
-    const { participants, forward, setParticipants, defaultValues } = this.props
+    const {
+      participants,
+      forward,
+      setParticipants,
+      defaultValues,
+      dialogs,
+      setDialogs,
+    } = this.props
     const { name, _id } = defaultValues
     const { text, imageFormData } = this.state
     let idList = []
@@ -278,8 +284,11 @@ class Content extends Component {
         group_id: _id,
       },
       success: res => {
+        const dialog = dialogs.find(d => d._id === _id)
+        dialog.name = res.name
+        dialog.participants = res.participants
+        setDialogs(dialogs)
         imageFormData && this.saveImage()
-        setTimeout(() => socket.emit('get_dialogs'), 0)
         setParticipants([])
         forward()
       },

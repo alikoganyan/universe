@@ -12,6 +12,7 @@ import helper, { getHamsterDate } from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { socket } from '../../utils/socket'
 import ImageComponent from '../../common/Image'
+import sendRequest from '../../utils/request'
 
 // import { FilesRedIcon, TaskIcon, LocationIcon } from '../../assets'
 
@@ -114,48 +115,15 @@ const NewMessagesText = styled(Text)`
   text-align: center;
   font-size: 13px;
 `
-// const LastFile = styled(View)`
-//   padding-left: 10px;
-//   padding-top: 4px;
-//   flex-direction: row;
-//   justify-content: flex-start;
-//   align-items: center;
-// `
-// const LastFileItem = styled(View)`
-//   height: 20px;
-//   border: 0.3px ${grey3};
-//   border-radius: 10px;
-//   overflow: hidden;
-//   display: flex;
-//   flex-direction: row;
-//   justify-content: center;
-//   align-items: center;
-//   width: 42%;
-//   margin-right: 5px;
-// `
-// const LastFileItemText = styled(Text)`
-//   font-size: ${fontSize.sm};
-//   color: ${grey3};
-//   margin-left: 5px;
-// `
-// const LastFiles = styled(Text)`
-//   font-size: ${fontSize.sm};
-//   height: ${fontSize.sm};
-//   color: ${grey2};
-// `
+
 class Content extends Component {
   render() {
     const { title, user, image, lastMessage, item, unreadMessages } = this.props
 
-    const { phone, _id, creator, /*created_at,*/ isGroup, participants } = item
+    const { phone, _id, creator, isGroup, participants } = item
 
     const latestMessage = lastMessage[lastMessage.length - 1] || {}
-    // let lastTextMessage = lastMessage.filter(e => e.type === 'text')
-    // lastTextMessage = lastTextMessage.length
-    //   ? lastTextMessage[lastTextMessage.length - 1].text
-    //   : ''
-    // const lastFiles =
-    //   latestMessage && latestMessage.type !== 'text' ? [latestMessage] : []
+
     const lastMessageDate = Object.keys(latestMessage).length
       ? new Date(latestMessage.created_at)
       : new Date(item.created_at)
@@ -240,46 +208,6 @@ class Content extends Component {
                         : 'Файл'}
                     </DialogLastMessage>
                   )}
-
-                  {/* {!!lastFiles.length && (
-                    <LastFile>
-                      {lastFiles.map((e, i) => {
-                        const { filename, type } = e
-                        return (
-                          i < 2 && (
-                            <LastFileItem key={i}>
-                              {type === 'image' && (
-                                <FilesRedIcon noPaddingAll size={10} />
-                              )}
-                              {type === 'task' && (
-                                <TaskIcon noPaddingAll size={10} />
-                              )}
-                              {type === 'geo' && (
-                                <LocationIcon noPaddingAll size={10} />
-                              )}
-                              {filename ? (
-                                <LastFileItemText>
-                                  {filename.length > 8
-                                    ? filename.substr(-8)
-                                    : filename}
-                                </LastFileItemText>
-                              ) : null}
-                            </LastFileItem>
-                          )
-                        )
-                      })}
-                      {lastFiles.length && lastFiles.length - 1 ? (
-                        <LastFiles>
-                          +
-                          {lastFiles.length > 1
-                            ? lastFiles.length - 1
-                            : lastFiles.length}
-                        </LastFiles>
-                      ) : (
-                        <LastFiles>123</LastFiles>
-                      )}
-                    </LastFile>
-                  )} */}
                 </>
               )}
               {phone && (
@@ -317,19 +245,31 @@ class Content extends Component {
   }
 
   handleHold = () => {
-    Platform.os === 'ios' &&
-      ActionSheetIOS.showActionSheetWithOptions(
-        {
-          options: ['Cancel', 'Remove'],
-          destructiveButtonIndex: 1,
-          cancelButtonIndex: 0,
-        },
-        buttonIndex => {
-          if (buttonIndex === 1) {
-            /* destructive action */
-          }
-        },
-      )
+    const options =
+      Platform.OS === 'ios' ? ['Отменить', 'Удалить'] : ['Удалить']
+
+    ActionSheetIOS.showActionSheetWithOptions(
+      {
+        options,
+        destructiveButtonIndex: 1,
+        cancelButtonIndex: 0,
+      },
+      buttonIndex => {
+        if (buttonIndex === 1) {
+          this.deleteDialog(this.props.item._id)
+        }
+      },
+    )
+  }
+
+  deleteDialog = dialog_id => {
+    sendRequest({
+      r_path: '/dialogs/delete_dialog',
+      method: 'delete',
+      attr: { dialog_id },
+      success: res => {},
+      failFunc: e => {},
+    })
   }
 
   handleClick = () => {
@@ -345,7 +285,4 @@ const mapStateToProps = state => ({
   user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({})
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

@@ -10,7 +10,7 @@ import createRootNavigator from './screens/Navigator'
 import { getPushesPermissionStatusAndToken } from './actions/pushesActions'
 import { connectToSocket } from './utils/socket'
 import { setUser, setAuth } from './actions/userActions'
-import { setDialogsUserId } from './actions/dialogsActions'
+import { setDialogs, setDialogsUserId } from './actions/dialogsActions'
 import { setInternetConnection } from './actions/baseActions'
 // import OfflineNotice from './common/OfflineNotice'
 
@@ -79,6 +79,12 @@ export default class AppComponent extends Component {
       .finally(() => {
         this.setState({ loaded: true })
       })
+    AsyncStorage.getItem('dialogs').then(res => {
+      const value = JSON.parse(res)
+      if (value && value.dialogs && value.dialogs.length) {
+        store.dispatch(setDialogs(value.dialogs))
+      }
+    })
     // await Font.loadAsync({
     //     'Roboto-Regular': Roboto
     // });

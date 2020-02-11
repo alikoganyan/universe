@@ -486,6 +486,7 @@ class Dialogs extends Component {
           m => m._id !== e.message_id,
         )
         setDialogs(dialogs)
+        AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs }))
       }
     }
   }
@@ -522,6 +523,7 @@ class Dialogs extends Component {
           dialogs[currentDialogIndex].messages[editedMessageIndex].edited =
             message.edited
           setDialogs(dialogs)
+          AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs }))
         }
       }
     }
@@ -532,6 +534,7 @@ class Dialogs extends Component {
     if (e) {
       const newDialogs = dialogs.filter(d => d._id !== e.dialog_id)
       setDialogs(newDialogs)
+      AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs: newDialogs }))
     }
   }
 
@@ -555,6 +558,7 @@ class Dialogs extends Component {
     if (dialogs.length && e[type]) {
       dialogs.find(d => e.dialog_id === d._id)[type] = e[type]
       setDialogs(dialogs)
+      AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs }))
     }
   }
 
@@ -565,6 +569,8 @@ class Dialogs extends Component {
     if (deletedDialog) {
       const newDialogs = dialogs.filter(d => e.dialog_id !== d._id)
       setDialogs(newDialogs)
+      AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs: newDialogs }))
+
       Alert.alert(
         `Вас удалили из группы ${deletedDialog.name}`,
         '',
@@ -618,6 +624,7 @@ class Dialogs extends Component {
       newDialogs[newDialogIndex] = newDialog
       newDialog.messages = newMessages
       setDialogs(newDialogs)
+      AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs: newDialogs }))
     }
   }
 
@@ -636,6 +643,7 @@ class Dialogs extends Component {
     } else {
       const newDialog = dialogs.map(d => (d._id === e._id ? e : d))
       setDialogs(newDialog)
+      AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs: newDialog }))
     }
     setDialog(dialog)
     setCurrentRoomId(dialog._id)
@@ -685,7 +693,12 @@ class Dialogs extends Component {
           }
         })
       : []
+
     setDialogs(newDialogsSorted)
+    AsyncStorage.setItem(
+      'dialogs',
+      JSON.stringify({ dialogs: newDialogsSorted }),
+    )
     setCompanyLoading(false)
     this.props.setCompanyLoading(false)
 
@@ -832,6 +845,10 @@ class Dialogs extends Component {
           })
           .map(e => ({ ...e, messages: _.uniqBy(e.messages, '_id') }))
       setDialogs(newDialogSorted)
+      AsyncStorage.setItem(
+        'dialogs',
+        JSON.stringify({ dialogs: newDialogSorted }),
+      )
     }
   }
 
@@ -867,6 +884,7 @@ class Dialogs extends Component {
     })
     newDialogs.sort((x, y) => x.lastMessage < y.lastMessage)
     setDialogs(newDialogs)
+    AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs: newDialogs }))
   }
 
   toChat = e => {
