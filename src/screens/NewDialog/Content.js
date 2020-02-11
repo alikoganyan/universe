@@ -55,6 +55,7 @@ const Wrapper = styled(View)`
   padding-top: 0px;
   background: white;
   margin-top: ${HeaderHeight};
+  height: ${Dimensions.get('window').height - HeaderHeight - 20};
 `
 const ContactList = styled(Animated.FlatList)`
   padding: 30px;

@@ -33,7 +33,7 @@ import {
   filterWithGroups,
 } from '../../helper/filterContacts'
 
-const { Colors } = helper
+const { Colors, HeaderHeight } = helper
 const { green, black, yellow } = Colors
 const AnimatedScrollView = posed.View({
   left: {
@@ -68,6 +68,7 @@ const Wrapper = styled(View)`
   padding-top: 0px;
   background: white;
   margin-bottom: 110px;
+  height: ${Dimensions.get('window').height - HeaderHeight - 20};
 `
 const ContactList = styled(ScrollView)`
   padding: 30px;
