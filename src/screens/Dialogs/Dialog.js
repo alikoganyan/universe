@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableHighlight } from 'react-native'
+import { View, Text, TouchableHighlight, Platform } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import helper, { getHamsterDate } from '../../utils/helpers'
@@ -240,9 +240,11 @@ class Content extends Component {
   }
 
   handleHold = () => {
+    const options =
+      Platform.OS === 'ios' ? ['Отменить', 'Удалить'] : ['Удалить', 'Отменить']
     this.props.showActionSheetWithOptions(
       {
-        options: ['Удалить', 'Отменить'],
+        options,
         cancelButtonIndex: 0,
         showSeparators: true,
         textStyle: {
@@ -253,7 +255,10 @@ class Content extends Component {
         },
       },
       buttonIndex => {
-        if (buttonIndex === 0) {
+        if (
+          (Platform.OS === 'ios' && buttonIndex === 1) ||
+          (Platform.OS === 'android' && buttonIndex === 0)
+        ) {
           this.deleteDialog(this.props.item._id)
         }
       },
