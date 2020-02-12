@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Platform } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage'
+import { View, ScrollView, Platform, AsyncStorage } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { ActionSheetProvider } from '@expo/react-native-action-sheet'
-import helper from '../../utils/helpers'
 import SafeAreaView from '../../common/SafeAreaView'
 import { setCurrentChat } from '../../actions/messageActions'
 import { socket } from '../../utils/socket'
@@ -58,7 +56,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ProfileEdit)
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileEdit)

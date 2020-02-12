@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { View } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage'
+import { View, AsyncStorage } from 'react-native'
 import { connect } from 'react-redux'
 import {
   setUser,
@@ -38,7 +37,6 @@ class FirstScreen extends Component {
     const { setUser, setAuth } = this.props
     AsyncStorage.getItem('user').then(res => {
       const value = JSON.parse(res)
-      const tokenActive = value
       if (value) {
         setUser({ ...value })
         setAuth(value.access_token)
@@ -60,7 +58,4 @@ const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(FirstScreen)
+export default connect(mapStateToProps, mapDispatchToProps)(FirstScreen)

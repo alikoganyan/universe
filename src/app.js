@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
-import { BackHandler, StatusBar, AppState, NetInfo } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage'
+import {
+  BackHandler,
+  StatusBar,
+  AppState,
+  NetInfo,
+  AsyncStorage,
+} from 'react-native'
 import GlobalFont from 'react-native-global-font'
 import firebase from 'react-native-firebase'
 // import { Font, Notifications } from 'expo';

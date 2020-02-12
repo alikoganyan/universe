@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
+  AsyncStorage,
 } from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
@@ -19,7 +20,6 @@ import DefaultAvatar from './DefaultAvatar'
 import { setNews } from '../actions/newsActions'
 import { socket } from '../utils/socket'
 import { setIsMyProfile } from '../actions/profileAction'
-import AsyncStorage from '@react-native-community/async-storage'
 
 const { fontSize, sidePadding, Colors } = helper
 const { lightGrey2 } = Colors

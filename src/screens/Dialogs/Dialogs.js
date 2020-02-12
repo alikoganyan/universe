@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   AppState,
   Alert,
+  AsyncStorage,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -17,7 +18,6 @@ import Loader from '../../common/Loader'
 import Congratulations from '../../common/Congratulations'
 import SafeAreaView from '../../common/SafeAreaView'
 import AnimatedEllipsis from 'react-native-animated-ellipsis'
-import AsyncStorage from '@react-native-community/async-storage'
 import { ActionSheetProvider } from '@expo/react-native-action-sheet'
 
 import {

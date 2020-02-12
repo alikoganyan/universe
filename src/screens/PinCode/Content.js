@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import { View } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage'
+import { View, AsyncStorage } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { setUser } from '../../actions/userActions'
 // import PINCode from '@haskkor/react-native-pincode'
+import helper from '../../utils/helpers'
 const Wrapper = styled(View)`
   padding-bottom: 50px;
   display: flex;
@@ -16,7 +16,7 @@ const Wrapper = styled(View)`
 const Dot = styled(View)`
   width: 10px;
   height: 10px;
-  background: ${({ active }) => (active ? '#fff' : lightGrey1)};
+  background: ${({ active }) => (active ? '#fff' : helper.Colors.lightGrey1)};
   border-radius: 5;
   margin-right: ${({ last }) => (!last ? '20px' : 0)};
 `
@@ -90,7 +90,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

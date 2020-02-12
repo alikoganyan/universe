@@ -7,8 +7,8 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  AsyncStorage,
 } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage'
 // import { Constants } from 'expo';
 import RNDeviceInfo from 'react-native-device-info'
 import PhoneInput from 'react-native-phone-input'
@@ -335,7 +335,4 @@ const mapDispatchToProps = dispatch => ({
   setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
   trySignToPushes: trySignToPushes(dispatch),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
