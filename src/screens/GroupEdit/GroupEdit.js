@@ -20,6 +20,7 @@ export default class Signup extends Component {
             addParticipant={this.addParticipant}
             forward={this.moveForward}
             defaultValues={defaultValues}
+            navigation={this.props.navigation}
           />
         </Wrapper>
       </SafeAreaView>

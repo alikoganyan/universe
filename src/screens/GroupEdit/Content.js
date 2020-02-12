@@ -24,7 +24,14 @@ import ImageComponent from '../../common/Image'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { GroupIcon, CloseIcon } from '../../assets'
 import { setDialogParticipants } from '../../actions/participantsActions'
-import { setDialogs } from '../../actions/dialogsActions'
+import {
+  setCurrentDialogs,
+  setDialog,
+  setDialogs,
+} from '../../actions/dialogsActions'
+import { toChat } from '../../helper/chat'
+import { setCurrentChat, setCurrentRoomId } from '../../actions/messageActions'
+import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 
 const { Colors, sidePadding } = helper
 const { lightGrey1, black, green, red } = Colors
@@ -263,7 +270,6 @@ class Content extends Component {
   proceed = () => {
     const {
       participants,
-      forward,
       setParticipants,
       defaultValues,
       dialogs,
@@ -290,7 +296,8 @@ class Content extends Component {
         setDialogs(dialogs)
         imageFormData && this.saveImage()
         setParticipants([])
-        forward()
+        toChat(dialog, this.props)
+        // forward()
       },
       failFunc: err => {},
     })
@@ -326,10 +333,18 @@ const mapStateToProps = state => ({
   id: state.userReducer.user.id,
   participants: state.participantsReducer.dialog.participants,
   dialogs: state.dialogsReducer.dialogs,
+  user: state.userReducer.user,
 })
+
 const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setParticipants: _ => dispatch(setDialogParticipants(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
+  setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
+  setCurrentChat: _ => dispatch(setCurrentChat(_)),
+  setDialog: _ => dispatch(setDialog(_)),
+  setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
+  setProfile: _ => dispatch(setProfile(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

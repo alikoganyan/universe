@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import SafeAreaView from '../../common/SafeAreaView'
 import Header from './Header'
 import Content from './Content'
-import helper from '../../utils/helpers'
 
 const Wrapper = styled(View)`
   height: 100%;
@@ -12,12 +11,13 @@ const Wrapper = styled(View)`
 export default class Signup extends Component {
   render() {
     return (
-      <SafeAreaView behavior="padding"  enabled={Platform.OS === 'ios'}>
+      <SafeAreaView behavior="padding" enabled={Platform.OS === 'ios'}>
         <Wrapper>
           <Header back={this.back} />
           <Content
             addParticipant={this.addParticipant}
             forward={this.moveForward}
+            navigation={this.props.navigation}
           />
         </Wrapper>
       </SafeAreaView>

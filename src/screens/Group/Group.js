@@ -119,8 +119,9 @@ class Chat extends Component {
   }
 
   navigateBack = () => {
+    // todo
     const { navigation } = this.props
-    navigation.goBack()
+    navigation.navigate('Dialogs')
   }
 
   toProfile = () => {
