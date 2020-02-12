@@ -148,7 +148,6 @@ class Dialogs extends Component {
             title="Диалоги"
             opacity={opacity}
           />
-          {/*{companyLoading && <OfflineNotice text="Обновляется" bgColor="green" />}*/}
           <Wrapper>
             {congratulations ? (
               <Congratulations
@@ -204,17 +203,7 @@ class Dialogs extends Component {
 
   componentDidMount() {
     this.props.setCompanyLoading(true)
-    AsyncStorage.getItem('failedMessages').then(res => {
-      const value = JSON.parse(res)
-      if (value) {
-        this.props.setSendingMessages(value)
-      }
-    })
-    this.props.setCompanies({
-      companies: this.props.user.companies,
-      company: this.props.user.company,
-    })
-    this.props.setNews(this.props.user.news)
+    this.cachingData()
     this.getUnreadedMessages()
     this.getProfile()
     this.props.removeAllPreloader()
@@ -263,6 +252,25 @@ class Dialogs extends Component {
 
     this.props.setCompanyLoading(false)
     this.props.setCurrentRoomId(null)
+  }
+
+  cachingData = () => {
+    const { setCompanies, setNews, user } = this.props
+    setCompanies({
+      companies: user.companies,
+      company: user.company,
+    })
+    setNews(user.news)
+    const tasksInc = [...user.tasks]
+    const tasksOut = [...user.created_tasks]
+    const tasksWithUsers = [...tasksInc, ...tasksOut]
+    this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
+    AsyncStorage.getItem('failedMessages').then(res => {
+      const value = JSON.parse(res)
+      if (value) {
+        this.props.setSendingMessages(value)
+      }
+    })
   }
 
   handleAppStateChange = nextAppState => {
@@ -999,6 +1007,7 @@ const mapDispatchToProps = dispatch => ({
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
   setProfile: _ => dispatch(setProfile(_)),
   setNews: _ => dispatch(setNews(_)),
+
   setSendingMessages: _ => dispatch(setSendingMessages(_)),
   setDialogViewers: _ => dispatch(setDialogViewers(_)),
 })
