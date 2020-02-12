@@ -245,7 +245,7 @@ class Content extends Component {
     this.props.showActionSheetWithOptions(
       {
         options,
-        cancelButtonIndex: 0,
+        cancelButtonIndex: Platform.OS === 'ios' ? 0 : 1,
         showSeparators: true,
         textStyle: {
           textAlign: 'center',
