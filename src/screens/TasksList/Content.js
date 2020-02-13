@@ -19,6 +19,7 @@ const Wrapper = styled(View)`
   max-height: ${Dimensions.get('window').height - HeaderHeight}px;
   display: flex;
   align-self: center;
+  width: 100%;
 `
 const StyledScrollView = styled(Animated.ScrollView)`
   height: ${Dimensions.get('window').height - HeaderHeight - 20}px;
