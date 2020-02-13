@@ -1,14 +1,8 @@
 import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  Dimensions,
-  TouchableOpacity,
-  TextInput,
-} from 'react-native'
+import { View, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
-import { BackIcon, SearchIcon, EditIcon, CloseIcon } from '../../assets/index'
+import { BackIcon, EditIcon } from '../../assets/index'
 import helper from '../../utils/helpers'
 import { p_news_search } from '../../constants/api'
 import ImageComponent from '../../common/Image'
@@ -17,7 +11,7 @@ import { setNews } from '../../actions/newsActions'
 import sendRequest from '../../utils/request'
 import { setIsMyProfile } from '../../actions/profileAction'
 
-const { sidePadding, HeaderHeight, fontSize } = helper
+const { sidePadding, HeaderHeight } = helper
 
 const Header = styled(View)`
   width: 100%;
@@ -35,29 +29,14 @@ const Left = styled(View)`
   flex-direction: row;
   align-items: center;
 `
-const Input = styled(TextInput)`
-  margin-left: ${Dimensions.get('window').width * 0.085};
-`
-const HeaderText = styled(Text)`
-  font-size: ${fontSize.header};
-  position: relative;
-  left: -10px;
-`
+
 const Right = styled(Left)`
   justify-content: flex-end;
 `
-// const UserImage = styled(Image)`
-//     background: red;
-//     width: 30px;
-//     height: 30px;
-//     border-radius: 15px;
-//     margin-left:${sidePadding}px;
-// `
 
 class HeaderComponent extends Component {
   render() {
     const { back, user, feed } = this.props
-    const { search, find } = this.state
     const { image } = user
 
     if (!feed.creator) {
@@ -66,45 +45,24 @@ class HeaderComponent extends Component {
     return (
       <Header>
         <Left>
-          {!search ? (
-            <>
-              <BackIcon onPress={back} right />
-              <HeaderText>Новости</HeaderText>
-            </>
-          ) : (
-            <>
-              <SearchIcon />
-              <Input
-                placeholder="поиск"
-                value={find}
-                onChangeText={this.find}
-              />
-            </>
-          )}
+          <BackIcon onPress={back} right />
         </Left>
         <Right>
-          {!search ? (
-            <>
-              {user._id === feed.creator._id && (
-                <EditIcon right onPress={this.editFeed} />
-              )}
-              <SearchIcon right onPress={this.startSearch} />
-              <TouchableOpacity onPress={this.toProfile}>
-                {!image ||
-                image === '/images/default_group.png' ||
-                image === '/images/default_avatar.jpg' ? (
-                  <DefaultAvatar size="header" style={{ marginLeft: 10 }} />
-                ) : (
-                  <ImageComponent
-                    source={{ uri: `https://seruniverse.asmo.media${image}` }}
-                    size="header"
-                  />
-                )}
-              </TouchableOpacity>
-            </>
-          ) : (
-            <CloseIcon onPress={this.stopSearch} />
+          {user._id === feed.creator._id && (
+            <EditIcon right onPress={this.editFeed} />
           )}
+          <TouchableOpacity onPress={this.toProfile}>
+            {!image ||
+            image === '/images/default_group.png' ||
+            image === '/images/default_avatar.jpg' ? (
+              <DefaultAvatar size="header" style={{ marginLeft: 10 }} />
+            ) : (
+              <ImageComponent
+                source={{ uri: `https://seruniverse.asmo.media${image}` }}
+                size="header"
+              />
+            )}
+          </TouchableOpacity>
         </Right>
       </Header>
     )
@@ -176,7 +134,4 @@ const mapDispatchToProps = dispatch => ({
   setNews: _ => dispatch(setNews(_)),
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(HeaderComponent)
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)
