@@ -53,6 +53,11 @@ import { setTaskList } from '../../actions/tasksActions'
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
 import { setNews } from '../../actions/newsActions'
 import { sortedAllDialogs } from '../../helper/sortedDialogs'
+import {
+  setDialogParticipants,
+  setFeedReceivers,
+  setTaskReceivers,
+} from '../../actions/participantsActions'
 
 const { Colors } = helper
 const { blue, grey2, lightColor } = Colors
@@ -202,6 +207,9 @@ class Dialogs extends Component {
   scrollY = new Animated.Value(0)
 
   componentDidMount() {
+    this.props.setTaskReceivers([])
+    this.props.setParticipants([])
+    this.props.setReceivers([])
     this.props.setCompanyLoading(true)
     this.cachingData()
     this.getUnreadedMessages()
@@ -1007,8 +1015,10 @@ const mapDispatchToProps = dispatch => ({
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
   setProfile: _ => dispatch(setProfile(_)),
   setNews: _ => dispatch(setNews(_)),
-
+  setParticipants: _ => dispatch(setDialogParticipants(_)),
+  setReceivers: _ => dispatch(setFeedReceivers(_)),
   setSendingMessages: _ => dispatch(setSendingMessages(_)),
   setDialogViewers: _ => dispatch(setDialogViewers(_)),
+  setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)
