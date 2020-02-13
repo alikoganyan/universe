@@ -103,7 +103,28 @@ class HeaderComponent extends Component {
               )}
             </>
           ) : (
-            <CloseIcon onPress={this.stopSearch} />
+            <>
+              <CloseIcon onPress={this.stopSearch} />
+              {!participants.length ? (
+                <TouchableOpacity onPress={toProfile}>
+                  {!image || image === '/images/default_avatar.jpg' ? (
+                    <DefaultAvatar size="header" />
+                  ) : (
+                    <ImageComponent
+                      size="header"
+                      source={{ uri: `https://seruniverse.asmo.media${image}` }}
+                    />
+                  )}
+                </TouchableOpacity>
+              ) : (
+                <CheckGreyIcon
+                  size={22}
+                  noPaddingAll
+                  right
+                  onPress={this.addParticipants}
+                />
+              )}
+            </>
           )}
         </Right>
       </Header>
