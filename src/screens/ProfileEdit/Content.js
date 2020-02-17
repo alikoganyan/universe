@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
+import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
@@ -15,6 +15,7 @@ import { p_profile, p_profile_avatar } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import { validateEmail } from '../../helper/validation'
+import * as ICONS from '../../assets/icons'
 
 const { Colors, HeaderHeight, fontSize } = helper
 const { grey2, blue, lightGrey1 } = Colors
@@ -89,8 +90,27 @@ const ErrorText = styled(Text)`
   font-size: ${fontSize.sm};
   text-align: center;
 `
+const ShowHidePassword = styled(TouchableOpacity)`
+  position: absolute;
+  right: 10px;
+  z-index: 20;
+  width: 30px;
+  height: 30px
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const Input = props => {
-  const { style, value, children, onChange, pass, keyboardType } = props
+  const {
+    style,
+    value,
+    children,
+    onChange,
+    pass,
+    keyboardType,
+    hidePassword,
+  } = props
   return (
     <StyledInput
       value={value}
@@ -98,7 +118,7 @@ const Input = props => {
       multiline={false}
       onChange={onChange}
       placeholder={children}
-      secureTextEntry={pass}
+      secureTextEntry={pass && hidePassword}
       placeholderTextColor={lightGrey1}
       keyboardType={keyboardType}
     />
@@ -200,8 +220,21 @@ class Content extends Component {
               </Error>
             )}
             <InputBox key={4} err={!!passwordError}>
+              <ShowHidePassword
+                onPress={() => this.hideShowPassword('password')}
+              >
+                <Image
+                  style={{ width: 20, height: 20 }}
+                  resizeMode="contain"
+                  source={this.state.password ? ICONS.ShowEye : ICONS.HideEye}
+                />
+              </ShowHidePassword>
               <InputLabel numberOfLines={1}>Пароль</InputLabel>
-              <Input pass onChange={e => this.handleChange(e, 'password')} />
+              <Input
+                pass
+                hidePassword={this.state.password}
+                onChange={e => this.handleChange(e, 'password')}
+              />
             </InputBox>
             {!!passwordError && (
               <Error>
@@ -209,8 +242,23 @@ class Content extends Component {
               </Error>
             )}
             <InputBox key={5} err={!!repasswordError}>
+              <ShowHidePassword
+                onPress={() => this.hideShowPassword('confirmPassword')}
+              >
+                <Image
+                  style={{ width: 20, height: 20 }}
+                  resizeMode="contain"
+                  source={
+                    this.state.confirmPassword ? ICONS.ShowEye : ICONS.HideEye
+                  }
+                />
+              </ShowHidePassword>
               <InputLabel numberOfLines={2}>Повторите пароль</InputLabel>
-              <Input pass onChange={e => this.handleChange(e, 'repassword')} />
+              <Input
+                pass
+                hidePassword={this.state.confirmPassword}
+                onChange={e => this.handleChange(e, 'repassword')}
+              />
             </InputBox>
             {!!repasswordError && (
               <Error>
@@ -229,6 +277,8 @@ class Content extends Component {
   }
 
   state = {
+    password: true,
+    confirmPassword: true,
     lastNameError: false,
     firstNameError: false,
     middleNameError: false,
@@ -263,14 +313,13 @@ class Content extends Component {
       user: { ...statUser, ...user, password: '' },
       image: user.image,
     })
-    // setInterval(() => this.setState({
-    //     lastNameError: !this.state.lastNameError,
-    //     firstNameError: !this.state.firstNameError,
-    //     middleNameError: !this.state.middleNameError,
-    //     emailError: !this.state.emailError,
-    //     passwordError: !this.state.passwordError,
-    //     repasswordError: !this.state.repasswordError
-    // }), 2000)
+  }
+
+  hideShowPassword = type => {
+    const { password, confirmPassword } = this.state
+    let togglePassword = type === 'password' ? password : confirmPassword
+    togglePassword = !togglePassword
+    this.setState({ [type]: togglePassword })
   }
 
   selectImage = () => {

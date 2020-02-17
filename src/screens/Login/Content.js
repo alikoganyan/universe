@@ -8,6 +8,7 @@ import {
   Keyboard,
   TouchableWithoutFeedback,
   AsyncStorage,
+  Image,
 } from 'react-native'
 // import { Constants } from 'expo';
 import RNDeviceInfo from 'react-native-device-info'
@@ -26,6 +27,7 @@ import { p_login } from '../../constants/api'
 import Button from '../../common/Button'
 import sendRequest from '../../utils/request'
 import { connectToSocket } from '../../utils/socket'
+import * as ICONS from '../../assets/icons'
 
 const { Colors, fontSize } = helper
 const { lightGrey1, blue, pink, black } = Colors
@@ -86,6 +88,18 @@ const StyledPhoneInput = styled(PhoneInput)`
   margin-bottom: 10px;
   color: black;
   ${({ style }) => style};
+`
+
+const ShowHidePassword = styled(TouchableOpacity)`
+  position: absolute;
+  right: 10px;
+  top: -5;
+  z-index: 20;
+  width: 30px;
+  height: 30px
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `
 // eslint-disable-next-line no-unused-vars
 const Input = props => {
@@ -192,17 +206,28 @@ class Content extends Component {
               )}
             </TouchableOpacity>
           </ControlBar>
-          <StyledInput
-            password
-            onChangeText={this.handleChangePassword}
-            value={password}
-            placeholder="Пароль"
-            secureTextEntry
-            style={{
-              color: invalidPassword ? pink : black,
-              borderColor: invalidPassword ? pink : lightGrey1,
-            }}
-          />
+          <View>
+            <ShowHidePassword onPress={this.hideShowPassword}>
+              <Image
+                style={{ width: 20, height: 20 }}
+                resizeMode="contain"
+                source={this.state.hidePassword ? ICONS.ShowEye : ICONS.HideEye}
+              />
+            </ShowHidePassword>
+            <StyledInput
+              password
+              maxLength={12}
+              onChangeText={this.handleChangePassword}
+              value={password}
+              placeholder="Пароль"
+              secureTextEntry={this.state.hidePassword}
+              style={{
+                color: invalidPassword ? pink : black,
+                borderColor: invalidPassword ? pink : lightGrey1,
+              }}
+            />
+          </View>
+
           <ControlBar>
             <TouchableOpacity onPress={this.restorePass}>
               {invalidPassword ? (
@@ -230,6 +255,7 @@ class Content extends Component {
     password: '',
     invalidPassword: false,
     invalidPhone: false,
+    hidePassword: true,
   }
   inputRef = null
 
@@ -245,6 +271,13 @@ class Content extends Component {
     this.setState({
       phone: `+${this.inputRef.getCountryCode(country)}`,
     })
+  }
+
+  hideShowPassword = () => {
+    const { hidePassword } = this.state
+    let togglePassword = hidePassword
+    togglePassword = !togglePassword
+    this.setState({ hidePassword: togglePassword })
   }
 
   storeUserData = user => {
