@@ -137,22 +137,14 @@ class Content extends Component {
           <View>
             <Title>Авторизация</Title>
           </View>
-          <PhoneNumber err={invalidPhone}>
-            {/* <StyledInput
-              style={{
-                margin: 0,
-                width: '20%',
-                textAlign: 'left',
-                paddingLeft: 10,
-                color: invalidPhone ? pink : black,
-                borderColor: invalidPhone ? pink : lightGrey1,
-              }}
-              inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
-              keyboardType="phone-pad"
-              value={country}
-              onChangeText={this.handleChangeCountry}
-              editable={false}
-            /> */}
+          <PhoneNumber
+            err={invalidPhone}
+            style={{
+              borderColor: invalidPhone ? pink : lightGrey1,
+              borderBottomWidth: 1,
+              alignItems: 'center',
+            }}
+          >
             <StyledPhoneInput
               password
               onChangePhoneNumber={this.handleChangePhone}
@@ -165,13 +157,28 @@ class Content extends Component {
               ref={ref => (this.inputRef = ref)}
               style={{
                 margin: 0,
-                width: '78%',
-                flex: 1,
+                width: '20%',
                 textAlign: 'left',
                 paddingLeft: 10,
-                color: invalidPhone ? pink : black,
-                borderColor: invalidPhone ? pink : lightGrey1,
+                color: 'white',
+                borderColor: '#ffffff',
               }}
+            />
+            <TextInput
+              style={{
+                margin: 0,
+                width: '80%',
+                flex: 1,
+                textAlign: 'left',
+                position: 'absolute',
+                right: 0,
+                top: 2,
+              }}
+              maxLength={15}
+              value={phone}
+              ellipsizeMode="tail"
+              numberOfLines={1}
+              onChangeText={this.validatePhoneInput}
             />
           </PhoneNumber>
           <ControlBar>
@@ -226,6 +233,12 @@ class Content extends Component {
   inputRef = null
 
   componentDidMount = () => {}
+
+  validatePhoneInput = e => {
+    if (e.length > 0) {
+      this.handleChangePhone(e)
+    }
+  }
 
   onSelectCountry = country => {
     this.setState({
