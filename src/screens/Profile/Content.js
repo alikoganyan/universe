@@ -429,8 +429,6 @@ class Content extends Component {
       role,
       phone_number,
       email,
-      first_name,
-      last_name,
       department,
       tasks,
       isGroup,
@@ -456,8 +454,6 @@ class Content extends Component {
           }
         : null,
       { type: 'Телефон', value: phone_number || 'без номера', isGroup: false },
-      { type: 'Имя', value: first_name || '', isGroup: false },
-      { type: 'Фамилия', value: last_name || '', isGroup: false },
       { type: 'Электронная почта', value: email || '', isGroup: false },
       !myProfile && !isGroup
         ? {
