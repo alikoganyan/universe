@@ -14,6 +14,7 @@ import { socket } from '../../utils/socket'
 import { p_profile, p_profile_avatar } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import DefaultAvatar from '../../common/DefaultAvatar'
+import { validateEmail } from '../../helper/validation'
 
 const { Colors, HeaderHeight, fontSize } = helper
 const { grey2, blue, lightGrey1 } = Colors
@@ -185,7 +186,10 @@ class Content extends Component {
               <Input
                 value={email}
                 keyboardType="email-address"
-                onChange={e => this.handleChange(e, 'email')}
+                onChange={e => {
+                  this.handleChange(e, 'email')
+                  validateEmail(e.nativeEvent.text, this)
+                }}
               >
                 example@gmail.com
               </Input>
@@ -333,7 +337,7 @@ class Content extends Component {
       lastNameError: !last_name ? 'Не менее 2х символов' : '',
       firstNameError: !first_name ? 'Не менее 2х символов' : '',
       middleNameError: !middle_name ? 'Не менее 2х символов' : '',
-      emailError: !email ? 'Email не валиден' : '',
+      emailError: !email ? 'Неправильный электронная почта' : '',
     })
     if (first_name && last_name && middle_name && email) {
       sendRequest({
@@ -379,7 +383,4 @@ const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   alterUser: _ => dispatch(alterUser(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
