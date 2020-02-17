@@ -244,10 +244,6 @@ class Content extends Component {
 
     if (!password || password.length < 4)
       this.setState({ invalidPassword: true })
-    setTimeout(
-      () => this.setState({ invalidPhone: false, invalidPassword: false }),
-      5000,
-    )
     sendRequest({
       r_path: p_login,
       method: 'post',
