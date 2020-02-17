@@ -160,7 +160,6 @@ class Content extends Component {
                 width: '20%',
                 textAlign: 'left',
                 paddingLeft: 10,
-                color: 'white',
                 borderColor: '#ffffff',
               }}
             />
@@ -172,7 +171,10 @@ class Content extends Component {
                 textAlign: 'left',
                 position: 'absolute',
                 right: 0,
-                top: 2,
+                top: 0,
+                height: 22,
+                padding: 0,
+                color: invalidPhone ? pink : black,
               }}
               maxLength={15}
               value={phone}
