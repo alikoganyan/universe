@@ -110,6 +110,7 @@ const Input = props => {
     pass,
     keyboardType,
     hidePassword,
+    maxLength,
   } = props
   return (
     <StyledInput
@@ -121,6 +122,7 @@ const Input = props => {
       secureTextEntry={pass && hidePassword}
       placeholderTextColor={lightGrey1}
       keyboardType={keyboardType}
+      maxLength={maxLength}
     />
   )
 }
@@ -234,6 +236,7 @@ class Content extends Component {
                 pass
                 hidePassword={this.state.password}
                 onChange={e => this.handleChange(e, 'password')}
+                maxLength={12}
               />
             </InputBox>
             {!!passwordError && (
@@ -258,6 +261,7 @@ class Content extends Component {
                 pass
                 hidePassword={this.state.confirmPassword}
                 onChange={e => this.handleChange(e, 'repassword')}
+                maxLength={12}
               />
             </InputBox>
             {!!repasswordError && (

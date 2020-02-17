@@ -93,7 +93,7 @@ const StyledPhoneInput = styled(PhoneInput)`
 const ShowHidePassword = styled(TouchableOpacity)`
   position: absolute;
   right: 10px;
-  top: -5;
+  top: ${Platform.OS === 'ios' ? -5 : 10}px;
   z-index: 20;
   width: 30px;
   height: 30px
