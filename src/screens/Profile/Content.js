@@ -428,12 +428,14 @@ class Content extends Component {
     const {
       role,
       phone_number,
+      email,
+      first_name,
+      last_name,
       department,
       tasks,
       isGroup,
       participants,
     } = myProfile ? user : profile
-
     const newUserData = [
       department && department.name !== 'Персональный'
         ? {
@@ -454,6 +456,9 @@ class Content extends Component {
           }
         : null,
       { type: 'Телефон', value: phone_number || 'без номера', isGroup: false },
+      { type: 'Имя', value: first_name || '', isGroup: false },
+      { type: 'Фамилия', value: last_name || '', isGroup: false },
+      { type: 'Электронная почта', value: email || '', isGroup: false },
       !myProfile && !isGroup
         ? {
             type: 'Задачи',
@@ -479,14 +484,6 @@ class Content extends Component {
             isGroup: true,
           }
         : null,
-      // !myProfile
-      //   ? {
-      //       type: 'Задачи',
-      //       value: '32',
-      //       icon: <TaskIcon />,
-      //       isGroup: true,
-      //     }
-      //   : undefined,
       !myProfile
         ? {
             type: 'Общих файлов',

@@ -917,7 +917,6 @@ class Dialogs extends Component {
       setProfile,
       setIsMyProfile,
     } = this.props
-
     e.messages.forEach(m => {
       if (!m.viewers.includes(user._id) && m.sender._id !== user._id) {
         m.viewers.push(user._id)
@@ -959,11 +958,15 @@ class Dialogs extends Component {
           ? `${participants[0].first_name} ${participants[0].last_name}`
           : participants[0].phone_number && participants[0].phone_number
         : e.name || room
-    setProfile({
-      ...e,
-      name: chatName,
-      image: chatImage,
-    })
+    setProfile(
+      e.isGroup
+        ? {
+            ...e,
+            name: chatName,
+            image: chatImage,
+          }
+        : { ...e.participants[0] },
+    )
     setIsMyProfile(false)
     navigation.navigate(e.isGroup ? 'Group' : 'Chat')
   }
