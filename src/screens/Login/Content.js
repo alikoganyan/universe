@@ -178,8 +178,7 @@ class Content extends Component {
               }}
               maxLength={15}
               value={phone}
-              ellipsizeMode="tail"
-              numberOfLines={1}
+              keyboardType="phone-pad"
               onChangeText={this.validatePhoneInput}
             />
           </PhoneNumber>
