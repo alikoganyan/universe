@@ -322,7 +322,7 @@ class Content extends Component {
   }
 
   apply = () => {
-    const { user, imageFormData } = this.state
+    const { user, imageFormData, emailError } = this.state
     const { back, alterUser } = this.props
     const userRedux = this.props.user
     const {
@@ -339,6 +339,10 @@ class Content extends Component {
       middleNameError: !middle_name ? 'Не менее 2х символов' : '',
       emailError: !email ? 'Неправильный электронная почта' : '',
     })
+    validateEmail(email, this)
+    if (emailError) {
+      return
+    }
     if (first_name && last_name && middle_name && email) {
       sendRequest({
         r_path: p_profile,
