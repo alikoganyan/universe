@@ -289,8 +289,10 @@ class Content extends Component {
     const { phone: phone_number, password } = this.state
     if (!this.inputRef.isValidNumber()) this.setState({ invalidPhone: true })
 
-    if (!password || password.length < 4)
+    if (!password || password.length < 4) {
       this.setState({ invalidPassword: true })
+      return
+    }
     sendRequest({
       r_path: p_login,
       method: 'post',
