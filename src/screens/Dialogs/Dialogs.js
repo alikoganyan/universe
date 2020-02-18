@@ -19,7 +19,7 @@ import Congratulations from '../../common/Congratulations'
 import SafeAreaView from '../../common/SafeAreaView'
 import AnimatedEllipsis from 'react-native-animated-ellipsis'
 import { ActionSheetProvider } from '@expo/react-native-action-sheet'
-
+import { trySignToPushes } from '../../actions/pushesActions'
 import {
   setRoom,
   addMessage,
@@ -215,7 +215,6 @@ class Dialogs extends Component {
     this.getUnreadedMessages()
     this.getProfile()
     this.props.removeAllPreloader()
-
     socket.removeAllListeners('update_dialogs')
     socket.removeAllListeners('update_dialog')
     socket.removeAllListeners('update_profile')
@@ -290,6 +289,11 @@ class Dialogs extends Component {
     }
   }
 
+  checkNotificationPermissions = () => {
+    const { trySignToPushes } = this.props
+    trySignToPushes(false)
+  }
+
   setCompanyData = e => {
     const tasksInc = [...e.tasks]
     const tasksOut = [...e.created_tasks]
@@ -329,7 +333,7 @@ class Dialogs extends Component {
   }
 
   getProfile = (adminChange = false) => {
-    const { sendingMessages } = this.props
+    const { sendingMessages, pushesPermissionsGranted } = this.props
     if (!adminChange) {
       this.props.setCompanyLoading(true)
     }
@@ -339,6 +343,7 @@ class Dialogs extends Component {
       success: async res => {
         const userData = { ...res }
         const companyKey = userData.user.company._id
+        const notifications = userData.user.settings.notifications
         this.setState({ congratulations: !userData.user.first_name })
         this.props.setCompanies({
           companies: userData.user.companies,
@@ -359,6 +364,14 @@ class Dialogs extends Component {
           }
         } else {
           this.setCompanyData(userData.user)
+        }
+
+        if (
+          !notifications.push_token &&
+          notifications.enable &&
+          pushesPermissionsGranted
+        ) {
+          this.checkNotificationPermissions()
         }
         if (typeof companyKey === 'number' && sendingMessages[companyKey]) {
           this.clearReceivedMessages(userData.user.company.dialogs, companyKey)
@@ -996,6 +1009,7 @@ const mapStateToProps = state => ({
   company: state.userReducer.company,
   connection: state.baseReducer.connection,
   sendingMessages: state.messageReducer.sendingMessages,
+  pushesPermissionsGranted: state.pushesReducer.permissions,
 })
 const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),
@@ -1023,5 +1037,6 @@ const mapDispatchToProps = dispatch => ({
   setSendingMessages: _ => dispatch(setSendingMessages(_)),
   setDialogViewers: _ => dispatch(setDialogViewers(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
+  trySignToPushes: trySignToPushes(dispatch),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)
