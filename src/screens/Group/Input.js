@@ -674,7 +674,11 @@ class InputComponent extends Component {
     } = this.props
     const { text } = this.state
     getCurrentCompany(text.trim(), 'text', this.props, 'reply')
-    const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
+    const bodyReq = {
+      message_id: _id,
+      dialog_id: currentRoomId,
+      text: text.trim(),
+    }
     this.stopReply()
     sendRequest({
       r_path: p_reply_message,
