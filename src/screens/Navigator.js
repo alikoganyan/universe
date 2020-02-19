@@ -225,24 +225,29 @@ const TabBarNavigation = createBottomTabNavigator(
 //   return createAppContainer(AppStackNavigator)
 // }
 
-const publicNavigation = createStackNavigator({
-  Login: {
-    screen: Login,
-    navigationOptions: {
-      gesturesEnabled: false,
+const publicNavigation = createStackNavigator(
+  {
+    Login: {
+      screen: Login,
+      navigationOptions: {
+        gesturesEnabled: false,
+      },
+      defaultNavigationOptions: {
+        gesturesEnabled: false,
+      },
     },
-    defaultNavigationOptions: {
-      gesturesEnabled: false,
-    },
+    Signup: { screen: Signup },
+    Signup2: { screen: Signup2 },
+    Signup3: { screen: Signup3 },
+    PinCode: { screen: PinCode },
+    Restore: { screen: Restore },
+    Restore2: { screen: Restore2 },
+    Restore3: { screen: Restore3 },
   },
-  Signup: { screen: Signup },
-  Signup2: { screen: Signup2 },
-  Signup3: { screen: Signup3 },
-  PinCode: { screen: PinCode },
-  Restore: { screen: Restore },
-  Restore2: { screen: Restore2 },
-  Restore3: { screen: Restore3 },
-})
+  {
+    headerMode: 'none',
+  },
+)
 
 const AppStackNavigator = createStackNavigator(
   {
