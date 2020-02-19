@@ -20,7 +20,11 @@ import {
   setCurrentChat,
   setCurrentRoomId,
 } from '../../actions/messageActions'
-import { setCurrentDialogs, setDialog } from '../../actions/dialogsActions'
+import {
+  setCurrentDialogs,
+  setDialog,
+  setDialogs,
+} from '../../actions/dialogsActions'
 import { socket } from '../../utils/socket'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
@@ -33,6 +37,8 @@ import {
   filterAllContacts,
   filterWithDepartaments,
 } from '../../helper/filterContacts'
+
+import { viewUnreadedMessages } from '../../helper/message'
 
 const { Colors, HeaderHeight, sidePadding } = helper
 const { green, black, grey2 } = Colors
@@ -734,6 +740,7 @@ class Content extends Component {
           dialog.creator._id === e._id) ||
           (dialog.participants[0] && dialog.participants[0]._id === e._id)),
     )
+    let hasUnreadedMessages = false
 
     if (e.isGroup) {
       setCurrentRoomId(e._id)
@@ -747,8 +754,14 @@ class Content extends Component {
       dialog.messages.forEach(m => {
         if (!m.viewers.includes(user._id) && m.sender._id !== user._id) {
           m.viewers.push(user._id)
+          if (!hasUnreadedMessages) {
+            hasUnreadedMessages = true
+          }
         }
       })
+      if (hasUnreadedMessages) {
+        viewUnreadedMessages(dialog, this.props)
+      }
     }
     if (currentRoom) {
       const { isGroup, participants, creator, room, _id } = currentRoom
@@ -789,6 +802,7 @@ const mapDispatchToProps = dispatch => ({
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
   setReset: _ => dispatch(setReset(_)),
   setDialog: _ => dispatch(setDialog(_)),
+  setDialogs: _ => dispatch(setDialogs(_)),
   setProfile: _ => dispatch(setProfile(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

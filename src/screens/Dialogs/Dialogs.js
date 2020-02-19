@@ -58,6 +58,7 @@ import {
   setFeedReceivers,
   setTaskReceivers,
 } from '../../actions/participantsActions'
+import { viewUnreadedMessages } from '../../helper/message'
 
 const { Colors } = helper
 const { blue, grey2, lightColor } = Colors
@@ -931,9 +932,13 @@ class Dialogs extends Component {
       setProfile,
       setIsMyProfile,
     } = this.props
+    let hasUnreadedMessages = false
     e.messages.forEach(m => {
       if (!m.viewers.includes(user._id) && m.sender._id !== user._id) {
         m.viewers.push(user._id)
+        if (!hasUnreadedMessages) {
+          hasUnreadedMessages = true
+        }
       }
     })
     const { isGroup, room, participants, creator, _id } = e
@@ -981,6 +986,9 @@ class Dialogs extends Component {
           }
         : { ...e.participants[0] },
     )
+    if (hasUnreadedMessages) {
+      viewUnreadedMessages(e, this.props)
+    }
     setIsMyProfile(false)
     navigation.navigate(e.isGroup ? 'Group' : 'Chat')
   }

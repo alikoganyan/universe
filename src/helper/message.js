@@ -72,3 +72,12 @@ const createMessage = (
     JSON.stringify({ ...newSendingMessages }),
   )
 }
+
+export const viewUnreadedMessages = (e, props) => {
+  const { dialogs, setDialogs } = props
+  const newDialogs = [...dialogs]
+  const dialogIndex = newDialogs.findIndex(d => d._id === e._id)
+  newDialogs[dialogIndex].messages = e.messages
+  setDialogs(newDialogs)
+  AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs: newDialogs }))
+}
