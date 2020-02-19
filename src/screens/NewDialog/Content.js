@@ -25,9 +25,20 @@ import {
   setRoom,
   addMessage,
   setCurrentChat,
+  setCurrentRoomId,
 } from '../../actions/messageActions'
-import { setDialogs, setCurrentDialogs } from '../../actions/dialogsActions'
+import {
+  setDialogs,
+  setCurrentDialogs,
+  setDialog,
+} from '../../actions/dialogsActions'
 import _ from 'lodash'
+import {
+  filterAllContacts,
+  filterWithDepartaments,
+} from '../../helper/filterContacts'
+import { socket } from '../../utils/socket'
+import { setProfile } from '../../actions/profileAction'
 
 const { Colors, HeaderHeight, fontSize } = helper
 const { green, black, grey2 } = Colors
@@ -44,6 +55,7 @@ const Wrapper = styled(View)`
   padding-top: 0px;
   background: white;
   margin-top: ${HeaderHeight};
+  height: ${Dimensions.get('window').height - HeaderHeight - 20};
 `
 const ContactList = styled(Animated.FlatList)`
   padding: 30px;
@@ -130,7 +142,7 @@ class Content extends Component {
               <GroupIconWhite />
               <CreateDialogText>Создать группу</CreateDialogText>
             </CreateDialog>
-            <this.Contacts />
+            {!!Object.keys(this.props.user).length && <this.AllContacts />}
           </KeyboardAwareScrollView>
         </Wrapper>
         {/* </ScrollView> */}
@@ -140,12 +152,23 @@ class Content extends Component {
 
   state = {
     collapsed: [],
-    users: {
-      department: [],
+    userContactsAll: [],
+    filteredUserContactsAll: null,
+    departments: [],
+    filteredDepartments: null,
+    options: {
+      active: 0,
     },
   }
 
-  Contacts = () => {
+  AllContacts = () => {
+    const {
+      userContactsAll,
+      filteredUserContactsAll,
+      departments,
+      filteredDepartments,
+    } = this.state
+
     if (
       this.props.user.company._id === 0 ||
       !this.props.user.settings.partition_contacts
@@ -154,7 +177,7 @@ class Content extends Component {
         <ContactList
           bounces={false}
           contentContainerStyle={{ paddingBottom: 170 }}
-          data={this.state.allUsers}
+          data={filteredUserContactsAll || userContactsAll}
           ref={ref => (this.usersRef = ref)}
           renderItem={({ item }) => (
             <TouchableOpacity onPress={() => this.toChat(item)}>
@@ -194,11 +217,11 @@ class Content extends Component {
       return (
         <ContactList
           bounces={false}
-          data={this.state.users.department}
+          data={filteredDepartments || departments}
           ref={ref => (this.usersRef = ref)}
           renderItem={({ item, index }) =>
             !!(item.users_this && item.users_this.length) && (
-              <Box last={index === this.state.users.department.length - 1}>
+              <Box last={index === this.state.departments.length - 1}>
                 <BoxTitle
                   onPress={() =>
                     this.state.collapsed[index]
@@ -282,7 +305,7 @@ class Content extends Component {
   componentDidMount() {
     const { collapsed } = this.state
     const newDCollapsed = [...collapsed]
-
+    this.changeInputValue()
     sendRequest({
       r_path: p_users_from_role_or_position,
       method: 'post',
@@ -301,7 +324,7 @@ class Content extends Component {
           ],
           ['desc'],
         ).reverse()
-        this.setState({ allUsers: allContacts })
+        this.setState({ userContactsAll: allContacts })
 
         const formatedUsers = [...res.company.subdivisions]
         this.updatedDepartaments = formatedUsers
@@ -311,7 +334,7 @@ class Content extends Component {
         this.updatedDepartaments.forEach(d => {
           d.users_this = d.users_this.filter(u => u._id !== this.props.user._id)
         })
-        this.setState({ users: { department: this.updatedDepartaments } })
+        this.setState({ departments: this.updatedDepartaments })
         for (let i = 0; i < formatedUsers.length; i += 1) {
           newDCollapsed.push(true)
         }
@@ -319,6 +342,15 @@ class Content extends Component {
       },
       failFunc: () => {},
     })
+  }
+
+  changeInputValue = () => {
+    this.props.valueChange.callback = val => {
+      const { user } = this.props
+      user.settings.partition_contacts
+        ? filterWithDepartaments(val, this.state, this)
+        : filterAllContacts(val, this.state, this.props, this)
+    }
   }
 
   updatedDepartaments = []
@@ -335,36 +367,51 @@ class Content extends Component {
     })
   }
 
-  selectOption = e => {
-    const { options } = this.state
-    const newState = { ...options }
-    newState.active = e
-    this.setState({ options: newState })
-  }
-
-  toChat = event => {
+  toChat = e => {
     const {
-      setCurrentDialogs,
-      navigate,
-      getMessages,
       setRoom,
-      dialog,
+      setCurrentChat,
+      navigate,
+      user,
+      setCurrentDialogs,
+      setCurrentRoomId,
+      dialogs,
+      setProfile,
     } = this.props
-    const dialogIncludes = dialog.filter(
-      e =>
-        (e.creator._id && e.creator._id === event._id) ||
-        (e.participants[0] && e.participants[0]._id === event._id),
-    )[0]
-    setCurrentDialogs(event)
-    setRoom(event._id)
-    getMessages(dialogIncludes ? dialogIncludes.messages : [])
+    const recipientId = !e.isGroup ? e._id : null
+    const currentRoom = dialogs.find(
+      dialog =>
+        !dialog.isGroup &&
+        ((dialog.creator._id && dialog.creator._id === e._id) ||
+          (dialog.participants[0] && dialog.participants[0]._id === e._id)),
+    )
+    if (currentRoom) {
+      const { isGroup, participants, creator, room, _id } = currentRoom
+      const currentDialog = isGroup
+        ? { ...e }
+        : user._id === creator._id
+        ? { ...participants[0] }
+        : { ...creator }
+      this.props.setDialog(currentRoom)
+      setRoom(recipientId)
+      setCurrentRoomId(_id)
+      setCurrentChat(room)
+      setCurrentDialogs(currentDialog)
+      socket.emit('view', { room, viewer: user._id })
+    } else {
+      const { room, _id } = e
+      setRoom(_id)
+      setCurrentChat(room)
+      setCurrentDialogs(e)
+    }
+    setProfile(e)
     navigate('Chat')
   }
 }
 
 const mapStateToProps = state => ({
   messages: state.messageReducer,
-  dialog: state.dialogsReducer.dialogs,
+  dialogs: state.dialogsReducer.dialogs,
   currentRoom: state.messageReducer.currentRoom,
   currentChat: state.messageReducer.currentChat,
   user: state.userReducer.user,
@@ -374,10 +421,13 @@ const mapDispatchToProps = dispatch => ({
   getMessages: _ => dispatch(getMessages(_)),
   setRoom: _ => dispatch(setRoom(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
+  setDialog: _ => dispatch(setDialog(_)),
   addMessage: _ => dispatch(addMessage(_)),
   setAllUsers: _ => dispatch(setAllUsers(_)),
   setContacts: _ => dispatch(setContacts(_)),
   setCurrentChat: _ => dispatch(setCurrentChat(_)),
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
+  setProfile: _ => dispatch(setProfile(_)),
+  setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

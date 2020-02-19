@@ -19,6 +19,7 @@ import sendRequest from '../../utils/request'
 import { p_users_from_role_or_position } from '../../constants/api'
 import { setContacts, setAllUsers } from '../../actions/userActions'
 import { getMessages, setRoom, addMessage } from '../../actions/messageActions'
+
 import {
   addTaskReceiver,
   setTaskReceivers,
@@ -26,27 +27,13 @@ import {
 import { setDialogs } from '../../actions/dialogsActions'
 import _ from 'lodash'
 
-/*
-const AnimatedScrollView = posed.View({
-  left: {
-    x: Dimensions.get('window').width,
-    transition: { duration: 300, ease: 'easeOut' },
-  },
-  center: {
-    x: 0,
-    transition: { duration: 300, ease: 'easeOut' },
-  },
+import { filterAllContacts } from '../../helper/filterContacts'
 
-  right: {
-    x: -Dimensions.get('window').width,
-    transition: { duration: 300, ease: 'easeOut' },
-  },
-})*/
 const Wrapper = styled(View)`
   padding-top: 0px;
   background: white;
   margin-bottom: 110px;
-  height: 100%;
+  height: ${Dimensions.get('window').height - helper.HeaderHeight - 20};
 `
 const ContactList = styled(ScrollView)`
   display: flex;
@@ -80,14 +67,17 @@ const ContactRole = styled(Text)`
 
 class Content extends Component {
   render() {
-    const { users } = this.state
+    const { allContacts, filtredAllContacts } = this.state
     return (
       <SafeAreaView>
         <Wrapper>
-          <KeyboardAwareScrollView enableOnAndroid>
+          <KeyboardAwareScrollView
+            contentContainerStyle={{ flex: 1 }}
+            enableOnAndroid
+          >
             <ContactList>
               <FlatList
-                data={users}
+                data={filtredAllContacts || allContacts}
                 renderItem={({ item }) => (
                   <BoxInnerItem onPress={() => this.addReceiver(item)}>
                     {!item.image ||
@@ -124,15 +114,12 @@ class Content extends Component {
 
   state = {
     collapsed: [],
-    users: {
-      department: [],
-    },
-    options: {
-      active: 1,
-      options: ['Все', 'Пользователи', 'Группы'],
-    },
-    groups: [],
+    allContacts: [],
+    filtredAllContacts: null,
     animationCompleted: false,
+    options: {
+      active: 0,
+    },
   }
 
   componentDidMount() {
@@ -141,11 +128,9 @@ class Content extends Component {
         animationCompleted: true,
       })
     })
-    const { collapsed, users } = this.state
+    this.changeInputValue()
+    const { collapsed } = this.state
     const newDCollapsed = [...collapsed]
-    for (let i = 0; i <= users.department.length; i++) {
-      newDCollapsed.push(false)
-    }
     this.setState({ collapsed: newDCollapsed })
     sendRequest({
       r_path: p_users_from_role_or_position,
@@ -165,26 +150,16 @@ class Content extends Component {
           ],
           ['desc'],
         ).reverse()
-        this.setState({ users: allContacts })
+        this.setState({ allContacts })
       },
       failFunc: err => {},
     })
   }
 
-  optionLeft = () => {
-    const { options } = this.state
-    const newState = { ...options }
-    const { length } = options.options
-    newState.active = options.active < length - 1 ? options.active + 1 : 0
-    this.setState({ options: newState })
-  }
-
-  optionRight = () => {
-    const { options } = this.state
-    const newState = { ...options }
-    const { length } = options.options
-    newState.active = options.active > 0 ? options.active - 1 : length - 1
-    this.setState({ options: newState })
+  changeInputValue = () => {
+    this.props.valueChange.callback = val => {
+      filterAllContacts(val, this.state, this.props, this)
+    }
   }
 
   addReceiver = e => {
@@ -193,37 +168,9 @@ class Content extends Component {
     back()
   }
 
-  addAllReceivers = e => {
-    const { receivers, setReceivers } = this.props
-    const newReceivers =
-      JSON.stringify(e) === JSON.stringify(receivers) ? [] : e
-    setReceivers(newReceivers)
-  }
-
   includes = e => {
     const { receivers } = this.props
     return !!receivers.filter(user => e._id === user._id)[0]
-  }
-
-  collapseDepartment = i => {
-    const { collapsed } = this.state
-    const newDCollapsed = [...collapsed]
-    newDCollapsed[i] = false
-    this.setState({ collapsed: newDCollapsed })
-  }
-
-  showDepartment = i => {
-    const { collapsed } = this.state
-    const newDCollapsed = [...collapsed]
-    newDCollapsed[i] = true
-    this.setState({ collapsed: newDCollapsed })
-  }
-
-  selectOption = e => {
-    const { options } = this.state
-    const newState = { ...options }
-    newState.active = e
-    this.setState({ options: newState })
   }
 }
 

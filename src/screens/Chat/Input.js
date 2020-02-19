@@ -1,12 +1,5 @@
 import React, { Component } from 'react'
-import {
-  View,
-  Text,
-  Dimensions,
-  Platform,
-  Alert,
-  StyleSheet,
-} from 'react-native'
+import { View, Text, Dimensions, Platform, StyleSheet } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ActionSheet from 'react-native-actionsheet'
@@ -26,10 +19,6 @@ import {
 import helper from '../../utils/helpers'
 import AutoHeightInput from '../../common/AutoHeightInput'
 import {
-  // addMessage,
-  // startSearch,
-  // stopSearch,
-  // getMessages,
   setCurrentChat,
   setRoom,
   setCurrentRoomId,
@@ -40,7 +29,10 @@ import {
   setFile,
   addPreloader,
   removePreloader,
+  setSendingMessages,
 } from '../../actions/messageActions'
+import { getCurrentCompany } from '../../helper/message'
+
 import {
   p_send_file,
   p_edit_message,
@@ -570,7 +562,6 @@ class InputComponent extends Component {
           roomId: currentRoomId,
           _id: tempMessageId,
         })
-        Alert.alert('Ошибка', 'Что то пошло не так')
       },
     })
   }
@@ -609,17 +600,18 @@ class InputComponent extends Component {
     }
   }
 
-  discardSelect = () => {}
-
   sendMessage = () => {
     const { currentRoom } = this.props
     const { text } = this.state
     if (text.trim()) {
-      socket.emit('message', { receiver: currentRoom, message: text.trim() })
-      this.setState({ text: '' })
-    } else {
-      this.setState({ text: '' })
+      getCurrentCompany(text.trim(), 'text', this.props, 'message')
+      socket.emit('message', {
+        receiver: currentRoom,
+        message: text.trim(),
+      })
     }
+
+    this.setState({ text: '' })
   }
 
   handleChange = e => {
@@ -675,13 +667,18 @@ class InputComponent extends Component {
       currentDialog,
       currentChat,
     } = this.props
-    this.stopForwarding()
-
+    getCurrentCompany(
+      this.props.forwardedMessage.text,
+      this.props.forwardedMessage.type,
+      this.props,
+      'forward',
+    )
     const bodyReq = {
       message_id: _id,
       dialog_id: currentRoomId,
       receiver: !currentChat ? currentDialog._id : null,
     }
+    this.stopForwarding()
     sendRequest({
       r_path: p_forward_message,
       method: 'post',
@@ -713,9 +710,14 @@ class InputComponent extends Component {
       currentRoomId,
     } = this.props
     const { text } = this.state
-    const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
-    this.stopReply()
 
+    getCurrentCompany(text.trim(), 'text', this.props, 'reply')
+    const bodyReq = {
+      message_id: _id,
+      dialog_id: currentRoomId,
+      text: text.trim(),
+    }
+    this.stopReply()
     sendRequest({
       r_path: p_reply_message,
       method: 'post',
@@ -754,6 +756,7 @@ const mapStateToProps = state => ({
   forwardedMessage: state.messageReducer.forwardMessage,
   currentRoomId: state.messageReducer.currentRoomId,
   repliedMessage: state.messageReducer.replyMessage,
+  sendingMessages: state.messageReducer.sendingMessages,
 })
 const mapDispatchToProps = dispatch => ({
   fEditMessage: _ => dispatch(editMessage(_)),
@@ -768,5 +771,6 @@ const mapDispatchToProps = dispatch => ({
   replyMessage: _ => dispatch(replyMessage(_)),
   setMessage: _ => dispatch(setMessage(_)),
   setFile: _ => dispatch(setFile(_)),
+  setSendingMessages: _ => dispatch(setSendingMessages(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(InputComponent)

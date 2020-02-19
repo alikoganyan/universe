@@ -6,6 +6,7 @@ import {
   StyleSheet,
   Text,
   TouchableWithoutFeedback,
+  AsyncStorage,
 } from 'react-native'
 import { connect } from 'react-redux'
 import styled from 'styled-components'
@@ -17,9 +18,8 @@ import { setCompanies, setContacts, setUser } from '../actions/userActions'
 import { setDialogs, setCompanyLoading } from '../actions/dialogsActions'
 import DefaultAvatar from './DefaultAvatar'
 import { setNews } from '../actions/newsActions'
-// import { socket } from '../utils/socket'
+import { socket } from '../utils/socket'
 import { setIsMyProfile } from '../actions/profileAction'
-import AsyncStorage from '@react-native-community/async-storage'
 
 const { fontSize, sidePadding, Colors } = helper
 const { lightGrey2 } = Colors
@@ -170,6 +170,7 @@ class Company extends Component {
           company_id: id,
         },
         success: res => {
+          socket.emit('get_dialogs')
           sendRequest({
             r_path: '/profile',
             method: 'get',
@@ -190,7 +191,6 @@ class Company extends Component {
                 company: userData.user.company,
               })
               this.props.setUser(userData.user)
-              this.props.setDialogs(userData.user.company.dialogs)
               const tasksInc = [...res.data.tasks]
               const tasksOut = [...res.data.created_tasks]
               const tasksWithUsers = [...tasksInc, ...tasksOut]

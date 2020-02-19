@@ -111,7 +111,7 @@ class Chat extends Component {
     setCurrentRoomId(null)
     setRoom(null)
     // this.props.setDialog({})
-    socket.emit('get_dialogs', { id: user._id })
+    // socket.emit('get_dialogs', { id: user._id })
   }
 
   setMessages = messages => {
@@ -119,8 +119,9 @@ class Chat extends Component {
   }
 
   navigateBack = () => {
+    // todo
     const { navigation } = this.props
-    navigation.goBack()
+    navigation.navigate('Dialogs')
   }
 
   toProfile = () => {

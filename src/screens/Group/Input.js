@@ -28,7 +28,10 @@ import {
   setFile,
   addPreloader,
   removePreloader,
+  setSendingMessages,
 } from '../../actions/messageActions'
+import { getCurrentCompany } from '../../helper/message'
+
 import {
   p_send_file,
   p_edit_message,
@@ -584,42 +587,16 @@ class InputComponent extends Component {
     }
   }
 
-  discardSelect = () => {}
-
   sendMessage = () => {
     const { currentChat } = this.props
-    // const {
-    //   _id, first_name, last_name, middle_name, image
-    // } = user;
     const { text } = this.state
     if (text.trim()) {
-      // const message = {
-      //   _id: Math.random().toString(36).substring(7),
-      //   sender: {
-      //     _id,
-      //     first_name,
-      //     last_name,
-      //     middle_name,
-      //     image
-      //   },
-      //   text: text.trim(),
-      //   created_at: new Date(),
-      //   type: 'text',
-      //   viewers: []
-      // };
-      // const newDialogs = [...dialogs];
-      // const newDialog = { ...newDialogs.filter(event => event.room === currentChat)[0] };
-      // if (newDialog) {
-      //   newDialog.messages = [...newDialog.messages, message];
-      //   newDialogs[newDialogs.findIndex(event => event.room === currentChat)] = newDialog;
-      //   const newDialogSorted = newDialogs.sort((a, b) => {
-      //     if (b.messages.length && a.messages.length) return new Date(b.messages[b.messages.length - 1].created_at) - new Date(a.messages[a.messages.length - 1].created_at);
-      //   });
-      //   setDialogs(newDialogSorted);
-      socket.emit('group_message', { room: currentChat, message: text.trim() })
-      // }
+      getCurrentCompany(text.trim(), 'text', this.props, 'message')
+      socket.emit('group_message', {
+        room: currentChat,
+        message: text.trim(),
+      })
     }
-
     this.setState({ text: '' })
   }
 
@@ -644,6 +621,13 @@ class InputComponent extends Component {
       forwardedMessage: { _id },
       currentRoomId,
     } = this.props
+
+    getCurrentCompany(
+      this.props.forwardedMessage.text,
+      this.props.forwardedMessage.type,
+      this.props,
+      'forward',
+    )
     const bodyReq = { message_id: _id, dialog_id: currentRoomId }
     this.stopForwarding()
     sendRequest({
@@ -689,7 +673,12 @@ class InputComponent extends Component {
       currentRoomId,
     } = this.props
     const { text } = this.state
-    const bodyReq = { message_id: _id, dialog_id: currentRoomId, text }
+    getCurrentCompany(text.trim(), 'text', this.props, 'reply')
+    const bodyReq = {
+      message_id: _id,
+      dialog_id: currentRoomId,
+      text: text.trim(),
+    }
     this.stopReply()
     sendRequest({
       r_path: p_reply_message,
@@ -735,6 +724,7 @@ const mapStateToProps = state => ({
   forwardedMessage: state.messageReducer.forwardMessage,
   currentRoomId: state.messageReducer.currentRoomId,
   repliedMessage: state.messageReducer.replyMessage,
+  sendingMessages: state.messageReducer.sendingMessages,
 })
 const mapDispatchToProps = dispatch => ({
   addMessage: _ => dispatch(addMessage(_)),
@@ -749,5 +739,6 @@ const mapDispatchToProps = dispatch => ({
   setDialog: _ => dispatch(setDialog(_)),
   setMessage: _ => dispatch(setMessage(_)),
   setFile: _ => dispatch(setFile(_)),
+  setSendingMessages: _ => dispatch(setSendingMessages(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(InputComponent)

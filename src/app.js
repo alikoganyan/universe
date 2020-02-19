@@ -1,6 +1,11 @@
 import React, { Component } from 'react'
-import { BackHandler, StatusBar, AppState, NetInfo } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage'
+import {
+  BackHandler,
+  StatusBar,
+  AppState,
+  NetInfo,
+  AsyncStorage,
+} from 'react-native'
 import GlobalFont from 'react-native-global-font'
 import firebase from 'react-native-firebase'
 // import { Font, Notifications } from 'expo';
@@ -10,8 +15,9 @@ import { RootNavigator } from './screens/Navigator'
 import { getPushesPermissionStatusAndToken } from './actions/pushesActions'
 import { connectToSocket } from './utils/socket'
 import { setUser, setAuth } from './actions/userActions'
-import { setDialogsUserId } from './actions/dialogsActions'
-import OfflineNotice from './common/OfflineNotice'
+import { setDialogs, setDialogsUserId } from './actions/dialogsActions'
+import { setInternetConnection } from './actions/baseActions'
+// import OfflineNotice from './common/OfflineNotice'
 
 // const Roboto = require('./assets/fonts/Roboto-Regular.ttf')
 
@@ -20,24 +26,15 @@ console.disableYellowBox = true
 
 export default class AppComponent extends Component {
   render() {
-    const { loaded, logged, connected } = this.state
+    const { loaded, logged } = this.state
     const Navigator = RootNavigator(loaded && logged)
-
     if (!loaded) {
       return null
     }
     return (
       <Provider store={store}>
         <StatusBar backgroundColor="white" barStyle="dark-content" />
-        {/* {logged && !connected && <Offline />} */}
         <Navigator key="navigator" />
-        {!connected && (
-          <OfflineNotice
-            text="Соединение..."
-            bgColor="#b52424"
-            conntecionError
-          />
-        )}
       </Provider>
     )
   }
@@ -60,7 +57,6 @@ export default class AppComponent extends Component {
     notifications.setBadge(0)
     notifications.removeAllDeliveredNotifications()
     notifications.cancelAllNotifications()
-
     AsyncStorage.getItem('user')
       .then(res => {
         const value = JSON.parse(res)
@@ -79,6 +75,12 @@ export default class AppComponent extends Component {
       .finally(() => {
         this.setState({ loaded: true })
       })
+    AsyncStorage.getItem('dialogs').then(res => {
+      const value = JSON.parse(res)
+      if (value && value.dialogs && value.dialogs.length) {
+        store.dispatch(setDialogs(value.dialogs))
+      }
+    })
     // await Font.loadAsync({
     //     'Roboto-Regular': Roboto
     // });
@@ -97,6 +99,8 @@ export default class AppComponent extends Component {
   }
 
   handleFirstConnectivityChange = connected => {
+    // console.log(connected);
+    store.dispatch(setInternetConnection(connected))
     this.setState({ connected })
   }
 

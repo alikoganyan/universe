@@ -105,7 +105,6 @@ export function BackIcon(props) {
     noPadding,
     noPaddingAll,
     marginLeft = true,
-    size = IconSize,
     dialogBack,
     ...rest
   } = props
@@ -126,7 +125,7 @@ export function BackIcon(props) {
                 source={SVG.Arrow_back}
             /> */}
       <Image
-        style={{ width: size, height: size }}
+        style={{ width: IconMiddle, height: IconMiddle }}
         resizeMode="contain"
         source={ICONS.Arrow_back_blue}
       />
@@ -423,7 +422,7 @@ export function EditIcon(props) {
                     source={SVG.Edit}
                 /> */}
       <Image
-        style={{ width: IconSize, height: IconSize }}
+        style={{ width: IconMiddle, height: IconMiddle }}
         resizeMode="contain"
         source={ICONS.Edit}
       />
@@ -724,6 +723,50 @@ export function CheckIcon(props) {
   )
 }
 
+export function PendingIcon(props) {
+  const {
+    // color = 'white',
+    left = true,
+    right,
+    noPaddingAll = true,
+  } = props
+  return (
+    <StyledTouchableOpacity
+      left={left}
+      right={right}
+      noPaddingAll={noPaddingAll}
+    >
+      <Image
+        style={{ width: IconSize, height: IconSize }}
+        resizeMode="contain"
+        source={ICONS.PendingMessage}
+      />
+    </StyledTouchableOpacity>
+  )
+}
+
+export function FailedIcon(props) {
+  const {
+    // color = 'white',
+    left = true,
+    right,
+    noPaddingAll = true,
+  } = props
+  return (
+    <StyledTouchableOpacity
+      left={left}
+      right={right}
+      noPaddingAll={noPaddingAll}
+    >
+      <Image
+        style={{ width: IconSize + 2, height: IconSize + 2 }}
+        resizeMode="contain"
+        source={ICONS.FailedMessage}
+      />
+    </StyledTouchableOpacity>
+  )
+}
+
 export function CheckAllIcon(props) {
   const {
     color = 'white',
@@ -764,7 +807,7 @@ export function PapperPlaneIcon(props) {
                     source={SVG.New_dialog}
                 /> */}
       <Image
-        style={{ width: size || IconSize, height: size || IconSize }}
+        style={{ width: size || IconMiddle, height: size || IconMiddle }}
         resizeMode="contain"
         source={ICONS.New_dialog}
       />

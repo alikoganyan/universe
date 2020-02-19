@@ -15,16 +15,15 @@ import {
   ImageIconBlue,
   TriangleLeftIcon,
   TriangleRightIcon,
+  PendingIcon,
+  FailedIcon,
 } from '../assets/index'
 import { connect } from 'react-redux'
 import ImageComponent from './Image'
 import MapView from 'react-native-maps'
 import FastImage from 'react-native-fast-image'
-// import { FileSystem } from 'expo';
-// import RNFS from 'react-native-fs'
 import helper from '../utils/helpers'
 import Hyperlink from 'react-native-hyperlink'
-// import { SingleImage } from 'react-native-zoom-lightbox'
 import LinearGradient from 'react-native-linear-gradient'
 import Forwarded from './Forwarded'
 import DefaultAvatar from './DefaultAvatar'
@@ -50,31 +49,6 @@ const UploadProgressContainer = styled(View)`
   justify-content: center;
   border-radius: ${borderRadius};
 `
-
-/*const UploadProgressText = styled(Text)`
-  color: ${Colors.white};
-  font-family: 'OpenSans';
-  font-size: 14px;
-  padding: 8px;
-`*/
-
-// const MyMessage = styled(View)`
-//   display: flex;
-//   text-align: right;
-//   margin: 5px 10px;
-//   background: ${({ background }) => background || myMessage};
-//   border-radius: ${borderRadius};
-//   border-bottom-right-radius: 0;
-//   max-width: 80%;
-//   min-width: 20%;
-//   margin-left: 20%;
-//   position: relative;
-//   flex-grow: 1;
-//   z-index: 1;
-//   overflow: hidden;
-// `
-
-// Vahe to do
 
 const DateWrapper = styled(View)`
   width: 100%;
@@ -107,12 +81,14 @@ const RecivedMessage = styled(View)`
   padding-top: ${({ noPadding }) => (noPadding ? 0 : 5)}px;
   padding-bottom: ${({ noPadding }) => (noPadding ? 0 : 5)}px;
 `
+
 const MessageText = styled(Text)`
   font-size: ${fontSize.textSize};
   font-family: 'OpenSans';
   color: ${Colors.black};
   textshadowcolor: ${Colors.black};
 `
+
 const ReviverName = styled(Text)`
   font-family: 'OpenSans';
 `
@@ -125,7 +101,6 @@ const MessageInfo = styled(View)`
   margin-right: ${({ paddings }) => (paddings ? 8 : 0)}px;
   padding-bottom: ${({ paddings }) => (paddings ? 5 : 0)}px;
 `
-// Vahe
 
 const MessageDate = styled(Text)`
   color: ${({ color }) => color || Colors.jumbo};
@@ -137,11 +112,6 @@ const MessageDate = styled(Text)`
 `
 
 const MessageEdited = styled(MessageDate)``
-
-// const MyMessageImage = styled(SingleImage)`
-//   min-width: 100%;
-//   height: 250px;
-// `
 
 const MyMessageCachedImage = styled(FastImage)`
   min-width: 100%;
@@ -159,23 +129,28 @@ const BottomLine = styled(LinearGradient)`
   padding: 5px 10px;
   font-size: ${fontSize.sm};
 `
+
 const ShadowTopContainer = styled(View)`
   width: 100%;
 `
+
 const WhiteTopText = styled(Text)`
   font-size: ${fontSize.md};
   color: ${Colors.white};
   padding: 5px 10px;
 `
+
 const BottomLineInfo = styled(View)`
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-end;
 `
+
 const BottomLineTime = styled(Text)`
   color: white;
 `
+
 const VideoPinBorder = styled(View)`
   width: 70px;
   height: 70px;
@@ -207,6 +182,7 @@ const FileInfoWrapper = styled(View)`
   padding-bottom: 0;
   align-items: center;
 `
+
 const FileIcon = styled(View)`
   display: flex;
   flex-direction: row;
@@ -217,6 +193,7 @@ const FileIcon = styled(View)`
   height: 50px;
   border-radius: 25px;
 `
+
 const FileInfo = styled(View)`
   display: flex;
   flex-direction: column;
@@ -224,15 +201,22 @@ const FileInfo = styled(View)`
   justify-content: center;
   padding-left: 10px;
 `
+
 const FileSize = styled(Text)`
   color: ${({ color }) => color || 'black'};
 `
-const Indicator = ({ read = false, color }) =>
-  read ? (
+
+const Indicator = ({ read = false, color, pending = false, failed }) => {
+  return read ? (
     <CheckAllIcon color={color} noPaddingAll />
+  ) : failed ? (
+    <FailedIcon />
+  ) : pending ? (
+    <PendingIcon />
   ) : (
     <CheckIcon color={color} noPaddingAll />
   )
+}
 
 const styles = StyleSheet.create({
   container: {
@@ -485,7 +469,7 @@ class Message extends Component {
             ]}
           >
             <View style={styles.messageContainer}>
-              <MyMessages background={background}>
+              <MyMessages background={background} faildMessage={item.failed}>
                 {!!(resend && resend.sender) && (
                   <Forwarded
                     color={forwardedMessage}
@@ -523,7 +507,12 @@ class Message extends Component {
                 <MessageInfo>
                   {edited ? <MessageEdited>Изменено </MessageEdited> : null}
                   <MessageDate color={Colors.norway}>{finalTime}</MessageDate>
-                  <Indicator color="black" read={messageRead} />
+                  <Indicator
+                    color="black"
+                    read={messageRead}
+                    pending={item.myMessage && !item.failed}
+                    failed={item.failed}
+                  />
                 </MessageInfo>
               </MyMessages>
             </View>

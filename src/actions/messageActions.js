@@ -19,6 +19,7 @@ export const SET_FILE = 'SET_FILE'
 export const ADD_PRELOADER = 'ADD_PRELOADER'
 export const REMOVE_PRELOADER = 'REMOVE_PRELOADER'
 export const REMOVE_ALL_PRELOADER = 'REMOVE_ALL_PRELOADER'
+export const SET_SENDING_MESSAGES = 'SET_SENDING_MESSAGES'
 
 export const addMessage = payload => ({
   type: ADD_MESSAGE,
@@ -27,6 +28,11 @@ export const addMessage = payload => ({
 
 export const setMessage = payload => ({
   type: SET_MESSAGE,
+  payload,
+})
+
+export const setSendingMessages = payload => ({
+  type: SET_SENDING_MESSAGES,
   payload,
 })
 

@@ -25,7 +25,11 @@ import { chatBg } from '../../assets/images'
 import helper, { getHamsterDate } from '../../utils/helpers'
 import Message from '../../common/Message'
 import sendRequest from '../../utils/request'
-import { setDialogs, setDialog } from '../../actions/dialogsActions'
+import {
+  setDialogs,
+  setDialog,
+  setDialogViewers,
+} from '../../actions/dialogsActions'
 import { setTaskReceivers } from '../../actions/participantsActions'
 import {
   editMessage,
@@ -34,12 +38,15 @@ import {
   removePreloader,
   replyMessage,
   setCurrentRoomId,
+  setSendingMessages,
 } from '../../actions/messageActions'
 import { d_message } from '../../constants/api'
 import _ from 'lodash'
 import * as ICONS from '../../assets/icons'
 import Loader from '../../common/Loader'
 import RNPermissions from 'react-native-permissions'
+import { socket } from '../../utils/socket'
+import { getCurrentCompany } from '../../helper/message'
 // import RNPermissions from 'react-native-permissions'
 
 const {
@@ -94,11 +101,14 @@ class Content extends Component {
       uploadMessages,
       dialog,
       editedMessage2,
+      sendingMessages,
     } = this.props
-
     let { messages } = this.props
 
-    if (!messages.length && Object.keys(dialog).length) {
+    const companyKey = dialog.company
+    const dialogKey = dialog._id
+
+    if (!messages.length && Object.keys(dialog).length && currentRoomId) {
       this.props.setMessages(dialog.messages)
     }
     if (messages && messages.length) {
@@ -117,7 +127,6 @@ class Content extends Component {
           messages[messageIndex].text = editedMessage2.text
           messages[messageIndex].edited = editedMessage2.edited
         }
-
         this.props.setMessages(messages)
         this.props.setEditedMessage(null)
       }
@@ -128,7 +137,15 @@ class Content extends Component {
       ? scrolledMessages
       : messages
 
-    let reversedMessages = [...currentMessages].sort(
+    const newSendingMessages = !!(
+      sendingMessages[companyKey] &&
+      sendingMessages[companyKey][dialogKey] &&
+      sendingMessages[companyKey][dialogKey].messages
+    )
+      ? sendingMessages[companyKey][dialogKey].messages
+      : []
+
+    let reversedMessages = [...currentMessages, ...newSendingMessages].sort(
       (x, y) => new Date(y.created_at) - new Date(x.created_at),
     )
 
@@ -182,6 +199,7 @@ class Content extends Component {
               onMomentumScrollBegin={this.showDate}
               onMomentumScrollEnd={this.hideDate}
               onEndReached={this.handleScroll}
+              onEndReachedThreshold={0.5}
               ref="flatList"
               ListHeaderComponent={<FlatListHeader editing={isEditing} />}
               inverted={!!reversedMessages.length}
@@ -269,16 +287,18 @@ class Content extends Component {
 
   componentDidMount() {
     moment.locale('ru')
-    const { navigation, dialog } = this.props
+    const { navigation, dialog, currentRoomId } = this.props
     const { messages_from_pages } = dialog
-
-    if (Object.keys(dialog).length) {
+    if (Object.keys(dialog).length && currentRoomId) {
       const messages = dialog.messages
       this.props.setMessages(messages)
-      this.setState({
-        nextPage: messages_from_pages.nextPage,
-        totalPages: messages_from_pages.totalPages,
-      })
+      if (messages_from_pages) {
+        this.setState({
+          page: messages_from_pages.nextPage,
+          nextPage: messages_from_pages.nextPage,
+          totalPages: messages_from_pages.totalPages,
+        })
+      }
     }
     navigation.setParams({
       scrollToBottom: this._scrollToBottom,
@@ -291,7 +311,7 @@ class Content extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { removePreloader, currentRoomId } = this.props
+    const { removePreloader, currentRoomId, setDialogViewers } = this.props
     const { dialog } = this.props
     let { messages } = this.props
     if (nextProps.message._id !== this.props.message._id) {
@@ -316,6 +336,16 @@ class Content extends Component {
       this.props.setDialog(dialog)
       this.props.setMessages(messages)
     }
+
+    if (nextProps.dialogViewers) {
+      messages.forEach(m => {
+        if (!m.viewers.includes(nextProps.dialogViewers.viewer)) {
+          m.viewers.push(nextProps.dialogViewers.viewer)
+        }
+      })
+      this.props.setMessages(messages)
+      setDialogViewers(null)
+    }
   }
 
   componentWillUnmount() {
@@ -335,6 +365,69 @@ class Content extends Component {
       this.setState({ hideDate: false })
       this.toggleDate = null
     }, 300)
+  }
+
+  checkScrollPosition = event => {
+    const {
+      lastPosition,
+      switcherDown,
+      prevPage,
+      scrolledMessages,
+    } = this.state
+    if (event.nativeEvent.contentOffset.y > 400) {
+      this.setState({ buttonToDown: true })
+    } else {
+      this.setState({ buttonToDown: false })
+    }
+    if (
+      prevPage &&
+      switcherDown &&
+      lastPosition &&
+      lastPosition > event.nativeEvent.contentOffset.y &&
+      event.nativeEvent.contentOffset.y < 600 &&
+      scrolledMessages.length
+    ) {
+      this.getMessage(true)
+
+      this.setState({ switcherDown: false })
+    } else if (!switcherDown && event.nativeEvent.contentOffset.y > 600) {
+      this.setState({ switcherDown: true })
+      // this.setState({page: nextPage})
+    }
+    this.setState({ lastPosition: event.nativeEvent.contentOffset.y })
+  }
+
+  handleScroll = () => {
+    const { switcher, page, scrolledMessages } = this.state
+    let { messages } = this.props
+    messages = _.uniqBy(messages, '_id')
+    if (switcher && page) {
+      if (!scrolledMessages.length) {
+        this.setState({ page: Math.floor(messages.length / 30) + 1 })
+      }
+      this.setState({ switcher: false })
+      this.getMessage()
+    }
+  }
+
+  _scrollToBottom = () => {
+    const { scrolledMessages, messages } = this.state
+    if (scrolledMessages.length) {
+      // todo next page
+      // const nextPage = Math.floor(messages.length / 30) + 1 < totalPages ?  Math.floor(messages.length / 30) + 1 : null
+      this.setState({ scrolledMessages: [] })
+      this.setState({
+        page: Math.floor(messages.length / 30) + 1,
+        prevPage: null,
+      })
+    }
+    if (messages.length) {
+      this.refs.flatList.scrollToIndex({
+        animated: true,
+        index: 0,
+        viewPosition: 1,
+      })
+    }
   }
 
   getMessage = (scrollDown?) => {
@@ -357,9 +450,11 @@ class Content extends Component {
           scrolledMessages = res.docs.concat(scrolledMessages)
           this.setState({
             scrolledMessages: scrolledMessages,
-            page: res.nextPage,
           })
         }
+        this.setState({
+          page: res.nextPage,
+        })
         if (scrollDown) {
           this.setState({ prevPage: res.prevPage })
           this.refs.flatList.scrollToIndex({
@@ -368,7 +463,9 @@ class Content extends Component {
             viewPosition: 0,
           })
         }
-        this.setState({ switcher: true })
+        setTimeout(() => {
+          this.setState({ switcher: true })
+        }, 1000)
       },
       failFunc: err => {},
     })
@@ -416,70 +513,6 @@ class Content extends Component {
       </TouchableOpacity>
     </Loader>
   )
-
-  checkScrollPosition = event => {
-    const {
-      lastPosition,
-      switcherDown,
-      prevPage,
-      scrolledMessages,
-    } = this.state
-    if (event.nativeEvent.contentOffset.y > 400) {
-      this.setState({ buttonToDown: true })
-    } else {
-      this.setState({ buttonToDown: false })
-    }
-    if (
-      prevPage &&
-      switcherDown &&
-      lastPosition &&
-      lastPosition > event.nativeEvent.contentOffset.y &&
-      event.nativeEvent.contentOffset.y < 600 &&
-      scrolledMessages.length
-    ) {
-      this.getMessage(true)
-
-      this.setState({ switcherDown: false })
-    } else if (!switcherDown && event.nativeEvent.contentOffset.y > 600) {
-      this.setState({ switcherDown: true })
-      // this.setState({page: nextPage})
-    }
-    this.setState({ lastPosition: event.nativeEvent.contentOffset.y })
-  }
-
-  handleScroll = () => {
-    const { switcher, nextPage, scrolledMessages } = this.state
-    let { messages } = this.props
-    messages = _.uniqBy(messages, '_id')
-
-    if (switcher && nextPage) {
-      if (!scrolledMessages.length) {
-        this.setState({ page: Math.floor(messages.length / 30) + 1 })
-      }
-      this.setState({ switcher: false })
-      this.getMessage()
-    }
-  }
-
-  _scrollToBottom = () => {
-    const { scrolledMessages, messages } = this.state
-    if (scrolledMessages.length) {
-      // todo next page
-      // const nextPage = Math.floor(messages.length / 30) + 1 < totalPages ?  Math.floor(messages.length / 30) + 1 : null
-      this.setState({ scrolledMessages: [] })
-      this.setState({
-        page: Math.floor(messages.length / 30) + 1,
-        prevPage: null,
-      })
-    }
-    if (messages.length) {
-      this.refs.flatList.scrollToIndex({
-        animated: true,
-        index: 0,
-        viewPosition: 1,
-      })
-    }
-  }
 
   download = async item => {
     let url = `https://seruniverse.asmo.media${item.src}`
@@ -645,25 +678,57 @@ class Content extends Component {
   }
 
   deleteMessage = currentMessage => {
-    const { currentRoomId, dialogs, dialog } = this.props
+    const {
+      currentRoomId,
+      dialogs,
+      dialog,
+      setSendingMessages,
+      sendingMessages,
+    } = this.props
     let { messages } = this.props
-    sendRequest({
-      r_path: d_message,
-      method: 'delete',
-      attr: {
-        dialog_id: currentRoomId,
-        messages: [currentMessage._id],
-      },
-      success: res => {},
-      failFunc: err => {},
-    })
-    messages = messages.filter(message => message._id !== currentMessage._id)
-    const index = dialogs.findIndex(d => d._id === dialog._id)
-    dialogs[index].messages = dialogs[index].messages.filter(
-      m => m._id !== currentMessage._id,
+    if (currentMessage.myMessage && currentMessage.failed) {
+      const companyKey = dialog.company
+      const dialogKey = dialog._id
+      let receivedMessages = { ...sendingMessages }
+      receivedMessages[companyKey][dialogKey].messages = receivedMessages[
+        companyKey
+      ][dialogKey].messages.filter(m => m._id !== currentMessage._id)
+      setSendingMessages(receivedMessages)
+    } else {
+      sendRequest({
+        r_path: d_message,
+        method: 'delete',
+        attr: {
+          dialog_id: currentRoomId,
+          messages: [currentMessage._id],
+        },
+        success: res => {},
+        failFunc: err => {},
+      })
+      messages = messages.filter(message => message._id !== currentMessage._id)
+      const index = dialogs.findIndex(d => d._id === dialog._id)
+      dialogs[index].messages = dialogs[index].messages.filter(
+        m => m._id !== currentMessage._id,
+      )
+      setDialogs(dialogs)
+      this.props.setMessages(messages)
+    }
+  }
+
+  repeatMessage = message => {
+    // todo date dnel ev hin@ jnjel amenanerqevic avelacnel
+    const { currentRoom, sendingMessages, setSendingMessages } = this.props
+    const receivedMessages = { ...sendingMessages }
+    receivedMessages[message.company][
+      message.dialog
+    ].messages = receivedMessages[message.company][
+      message.dialog
+    ].messages.filter(
+      m => m.created_at !== message.created_at && m.text !== message.text,
     )
-    setDialogs(dialogs)
-    this.props.setMessages(messages)
+    setSendingMessages(receivedMessages)
+    getCurrentCompany(message.text.trim(), 'text', this.props, 'message')
+    socket.emit('message', { receiver: currentRoom, message: message.text })
   }
 
   _scrollToBottom = () => {
@@ -777,49 +842,59 @@ class Content extends Component {
     const { user, dialog } = this.props
     this.props.setCurrentRoomId(dialog._id)
     let actions = []
-    if (
-      message._id &&
-      message.type === 'text' &&
-      message.sender._id === user._id
-    ) {
+    if (!message.myMessage) {
+      if (
+        message._id &&
+        message.type === 'text' &&
+        message.sender._id === user._id
+      ) {
+        actions.push({
+          title: 'Сделать задачей',
+          action: () => this.turnToTask(message),
+        })
+        actions.push({
+          title: 'Редактировать',
+          action: () => this.editMessage(message),
+        })
+      }
+      if (message._id && message.type === 'text') {
+        actions.push({
+          title: 'Копировать',
+          action: () => this.copyMessage(message),
+        })
+      }
       actions.push({
-        title: 'Сделать задачей',
-        action: () => this.turnToTask(message),
+        title: 'Ответить',
+        action: () => this.replyMessage(message),
       })
       actions.push({
-        title: 'Редактировать',
-        action: () => this.editMessage(message),
+        title: 'Переслать',
+        action: () => this.forwardMessage(message),
       })
-    }
-    if (message._id && message.type === 'text') {
-      actions.push({
-        title: 'Копировать',
-        action: () => this.copyMessage(message),
-      })
-    }
-    actions.push({
-      title: 'Ответить',
-      action: () => this.replyMessage(message),
-    })
-    actions.push({
-      title: 'Переслать',
-      action: () => this.forwardMessage(message),
-    })
 
-    if (
-      message._id &&
-      (message.type === 'file' ||
-        message.type === 'video' ||
-        message.type === 'image')
-    ) {
+      if (
+        message._id &&
+        (message.type === 'file' ||
+          message.type === 'video' ||
+          message.type === 'image')
+      ) {
+        actions.push({
+          title: 'Сохранить',
+          action: () => {
+            this.download(message)
+          },
+        })
+      }
+    } else if (message.myMessage && message.failed) {
       actions.push({
-        title: 'Сохранить',
-        action: () => {
-          this.download(message)
-        },
+        title: 'Повторить',
+        action: () => this.repeatMessage(message),
       })
     }
-    if (message._id && message.sender._id === user._id) {
+    if (
+      (message.myMessage && message.failed) ||
+      !!(message._id && message.sender._id === user._id)
+    ) {
       actions.push({
         title: 'Удалить',
         action: () => this.messageDeleteConfirmation(message),
@@ -881,6 +956,8 @@ const mapStateToProps = state => ({
   dialog: state.dialogsReducer.dialog,
   currentDialog: state.dialogsReducer.currentDialog,
   message: state.messageReducer.message,
+  sendingMessages: state.messageReducer.sendingMessages,
+  dialogViewers: state.dialogsReducer.dialogViewers,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -893,5 +970,7 @@ const mapDispatchToProps = dispatch => ({
   replyMessage: _ => dispatch(replyMessage(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setEditedMessage: _ => dispatch(getEditedMessage(_)),
+  setSendingMessages: _ => dispatch(setSendingMessages(_)),
+  setDialogViewers: _ => dispatch(setDialogViewers(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

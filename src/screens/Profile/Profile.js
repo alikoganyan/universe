@@ -5,8 +5,8 @@ import {
   Dimensions,
   TouchableOpacity,
   ActivityIndicator,
+  AsyncStorage,
 } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage'
 // import { Constants } from 'expo';
 import RNDeviceInfo from 'react-native-device-info'
 import styled from 'styled-components'
@@ -156,7 +156,8 @@ class Profile extends Component {
             },
           })
           this.props.logOut()
-          AsyncStorage.removeItem('user')
+          AsyncStorage.clear()
+          // AsyncStorage.removeItem('user')
         } catch (e) {}
         this.setState({ loading: false }, () => navigation.navigate('Login'))
       },

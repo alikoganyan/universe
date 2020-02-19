@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TextInput, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import CheckBox from 'react-native-check-box'
@@ -33,15 +33,6 @@ const PhoneNumber = styled(View)`
   margin-bottom: 20px;
 `
 
-const StyledInput = styled(TextInput)`
-  border: 1px solid ${lightGrey1};
-  border-width: 0;
-  border-bottom-width: 1px;
-  padding-bottom: 10px;
-  text-align: center;
-  margin-bottom: 10px;
-  ${({ style }) => style}
-`
 const ButtonBox = styled(View)`
   align-self: center;
   justify-content: center;
@@ -79,7 +70,11 @@ class Content extends Component {
               />
               <CheckBoxLabel>
                 <Text>{e.label} </Text>
-                <TouchableOpacity>
+                <TouchableOpacity
+                  onPress={() =>
+                    this.props.navigate('WebView', { uri: e.link })
+                  }
+                >
                   <LinkText>{e.linkText}</LinkText>
                 </TouchableOpacity>
               </CheckBoxLabel>
@@ -106,19 +101,19 @@ class Content extends Component {
         value: false,
         linkText: 'Условия использования',
         linkComp: 'linkComp',
-        link: '',
+        link: 'https://agreement.univ.center/terms-of-use/',
       },
       {
         value: false,
         linkText: 'Пользовательское соглашение',
         linkComp: 'linkComp',
-        link: '',
+        link: 'https://agreement.univ.center/agreement/',
       },
       {
         value: false,
         linkText: 'Соглашение об Использовании персональных данных',
         linkComp: 'linkComp',
-        link: '',
+        link: 'https://agreement.univ.center/confidentiality/',
       },
     ],
   }
@@ -148,7 +143,4 @@ const mapStateToProps = state => ({
   register: state.userReducer.register,
 })
 const mapDispatchToProps = dispatch => ({})
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

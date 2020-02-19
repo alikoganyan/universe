@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   AppState,
   Alert,
+  AsyncStorage,
 } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -16,6 +17,9 @@ import Dialog from './Dialog'
 import Loader from '../../common/Loader'
 import Congratulations from '../../common/Congratulations'
 import SafeAreaView from '../../common/SafeAreaView'
+import AnimatedEllipsis from 'react-native-animated-ellipsis'
+import { ActionSheetProvider } from '@expo/react-native-action-sheet'
+import { trySignToPushes } from '../../actions/pushesActions'
 import {
   setRoom,
   addMessage,
@@ -25,13 +29,14 @@ import {
   removeAllPreloader,
   deleteMessage,
   getEditedMessage,
+  setSendingMessages,
 } from '../../actions/messageActions'
-// import { Notifications } from 'expo';
 import {
   setDialogs,
   setCurrentDialogs,
   setDialog,
   setCompanyLoading,
+  setDialogViewers,
 } from '../../actions/dialogsActions'
 import {
   setAllUsers,
@@ -45,9 +50,14 @@ import TabPreHeader from '../../common/TabPreHeader'
 import sendRequest from '../../utils/request'
 import Company from '../../common/Company'
 import { setTaskList } from '../../actions/tasksActions'
-import OfflineNotice from '../../common/OfflineNotice'
-
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
+import { setNews } from '../../actions/newsActions'
+import { sortedAllDialogs } from '../../helper/sortedDialogs'
+import {
+  setDialogParticipants,
+  setFeedReceivers,
+  setTaskReceivers,
+} from '../../actions/participantsActions'
 
 const { Colors } = helper
 const { blue, grey2, lightColor } = Colors
@@ -128,7 +138,7 @@ class Dialogs extends Component {
   }
 
   render() {
-    const { dialogs, navigation, companyLoading } = this.props
+    const { dialogs, navigation } = this.props
     const { congratulations } = this.state
     const opacity = this.scrollY.interpolate({
       inputRange: [0, 90, 91],
@@ -136,56 +146,57 @@ class Dialogs extends Component {
     })
 
     return (
-      <SafeAreaView behavior="padding">
-        <TabPreHeader
-          onWritePress={() => navigation.navigate('NewDialog')}
-          title="Диалоги"
-          opacity={opacity}
-        />
-        {companyLoading && <OfflineNotice text="Обновляется" bgColor="green" />}
-        <Wrapper>
-          {congratulations ? (
-            <Congratulations
-              title="Поздравляем с регистрацией."
-              onClickOutside={this.closeCongratulations}
-            >
-              <Text style={{ color: lightColor, textAlign: 'center' }}>
-                Не забудьте заполнить
-              </Text>
-              <TouchableOpacity onPress={this.toProfileEdit}>
-                <Text style={{ color: blue, textAlign: 'center' }}>
-                  свой профиль и поменять пароль.
-                </Text>
-              </TouchableOpacity>
-            </Congratulations>
-          ) : null}
-          <StyledFlatList
-            ref={ref => {
-              this.flatList = ref
-            }}
-            ListHeaderComponent={this._renderListHeader}
-            ListEmptyComponent={this._renderEmptyComponent}
-            keyboardDismissMode="on-drag"
-            initialNumToRender={20}
-            data={dialogs}
-            keyboardShouldPersistTaps="always"
-            renderItem={this._renderItem}
-            keyExtractor={(item, index) => item._id.toString()}
-            contentContainerStyle={{ paddingBottom: 60 }}
-            scrollEventThrottle={16}
-            onScroll={Animated.event(
-              [
-                {
-                  nativeEvent: { contentOffset: { y: this.scrollY } },
-                },
-              ],
-              {
-                useNativeDriver: true,
-              },
-            )}
+      <ActionSheetProvider>
+        <SafeAreaView behavior="padding">
+          <TabPreHeader
+            onWritePress={() => navigation.navigate('NewDialog')}
+            title="Диалоги"
+            opacity={opacity}
           />
-        </Wrapper>
-      </SafeAreaView>
+          <Wrapper>
+            {congratulations ? (
+              <Congratulations
+                title="Поздравляем с регистрацией."
+                onClickOutside={this.closeCongratulations}
+              >
+                <Text style={{ color: lightColor, textAlign: 'center' }}>
+                  Не забудьте заполнить
+                </Text>
+                <TouchableOpacity onPress={this.toProfileEdit}>
+                  <Text style={{ color: blue, textAlign: 'center' }}>
+                    свой профиль и поменять пароль.
+                  </Text>
+                </TouchableOpacity>
+              </Congratulations>
+            ) : null}
+            <StyledFlatList
+              ref={ref => {
+                this.flatList = ref
+              }}
+              ListHeaderComponent={this._renderListHeader}
+              ListEmptyComponent={this._renderEmptyComponent}
+              keyboardDismissMode="on-drag"
+              initialNumToRender={20}
+              data={dialogs}
+              keyboardShouldPersistTaps="always"
+              renderItem={this._renderItem}
+              keyExtractor={(item, index) => item._id.toString()}
+              contentContainerStyle={{ paddingBottom: 60 }}
+              scrollEventThrottle={16}
+              onScroll={Animated.event(
+                [
+                  {
+                    nativeEvent: { contentOffset: { y: this.scrollY } },
+                  },
+                ],
+                {
+                  useNativeDriver: true,
+                },
+              )}
+            />
+          </Wrapper>
+        </SafeAreaView>
+      </ActionSheetProvider>
     )
   }
 
@@ -196,50 +207,31 @@ class Dialogs extends Component {
   scrollY = new Animated.Value(0)
 
   componentDidMount() {
-    // const { user } = this.props
-
-    this.props.setCompanies({
-      companies: this.props.user.companies,
-      company: this.props.user.company,
-    })
+    this.props.setTaskReceivers([])
+    this.props.setParticipants([])
+    this.props.setReceivers([])
+    this.props.setCompanyLoading(true)
+    this.cachingData()
+    this.getUnreadedMessages()
     this.getProfile()
-
     this.props.removeAllPreloader()
-    // navigation.navigate('NewTask') // restore
-    // clearInterval(this.interval)
-    // this.interval = setInterval(() => {
-    //  if (!socket.connected) connectToSocket()
-    // }, 2000)
-
-    // Notifications.addListener((notification) => {
-    // 	const { dialogs } = this.props;
-    //         const { room } = notification.data;
-    //         const dialog = [...dialogs].filter(chat => chat.room === room)[0];
-    //         this.toChat(dialog);
-    //     });
-    // AppState.addEventListener('change', this._handleAppStateChange)
-
-    // socket.emit('get_dialogs', { id: user._id })
-    socket.removeEventListener('update_dialogs', this.setDialogsSocket)
-    socket.removeEventListener('update_dialog', this.setDialogSocket)
-    socket.removeEventListener('update_profile', this.getProfile)
-    socket.removeEventListener('new_message', this.newMessageSocket)
-    socket.removeEventListener('new_dialog', this.socketNewDialog)
-    socket.removeEventListener('need_update', this.socketNeedsUpdate)
-    socket.removeEventListener('dialog_opened', this.socketDialogOpened)
-    socket.removeEventListener('new_group', this.socketGetGroup)
-    socket.removeEventListener('deleted_from_group', this.socketDeleteGroup)
-    socket.removeEventListener('change_group_name', this.socketChangeGroup)
-    socket.removeEventListener('change_group_image', this.socketChangeGroup)
-    socket.removeEventListener(
-      'change_group_participants',
-      this.socketChangeGroup,
-    )
-    socket.removeEventListener('user_left_from_group', this.socketLeaveGroup)
-    socket.removeEventListener('deleted_message', this.socketDeleteMessage)
-    socket.removeEventListener('message_edited', this.socketEditMessage)
-    socket.removeEventListener('delete_dialog', this.socketDeleteDialog)
-    socket.removeEventListener('admin_update', this.socketAdminUpdate)
+    socket.removeAllListeners('update_dialogs')
+    socket.removeAllListeners('update_dialog')
+    socket.removeAllListeners('update_profile')
+    socket.removeAllListeners('new_message')
+    socket.removeAllListeners('new_dialog')
+    socket.removeAllListeners('need_update')
+    socket.removeAllListeners('dialog_opened')
+    socket.removeAllListeners('new_group')
+    socket.removeAllListeners('deleted_from_group')
+    socket.removeAllListeners('change_group_name')
+    socket.removeAllListeners('change_group_image')
+    socket.removeAllListeners('change_group_participants')
+    socket.removeAllListeners('user_left_from_group')
+    socket.removeAllListeners('deleted_message')
+    socket.removeAllListeners('message_edited')
+    socket.removeAllListeners('delete_dialog')
+    socket.removeAllListeners('admin_update')
     socket.on('update_dialogs', e => this.setDialogsSocket(e))
     socket.on('update_dialog', e => this.setDialogSocket(e))
     socket.on('update_profile', this.getProfile)
@@ -266,12 +258,27 @@ class Dialogs extends Component {
   componentWillUnmount() {
     AppState.removeEventListener('change', this.handleAppStateChange)
 
-    // this.props.setDialog(null)
     this.props.setCompanyLoading(false)
     this.props.setCurrentRoomId(null)
+  }
 
-    // disconnectFromSocket()
-    // AppState.removeEventListener('change', this._handleAppStateChange);
+  cachingData = () => {
+    const { setCompanies, setNews, user } = this.props
+    setCompanies({
+      companies: user.companies,
+      company: user.company,
+    })
+    setNews(user.news)
+    const tasksInc = [...user.tasks]
+    const tasksOut = [...user.created_tasks]
+    const tasksWithUsers = [...tasksInc, ...tasksOut]
+    this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
+    AsyncStorage.getItem('failedMessages').then(res => {
+      const value = JSON.parse(res)
+      if (value) {
+        this.props.setSendingMessages(value)
+      }
+    })
   }
 
   handleAppStateChange = nextAppState => {
@@ -283,6 +290,11 @@ class Dialogs extends Component {
     }
   }
 
+  checkNotificationPermissions = () => {
+    const { trySignToPushes } = this.props
+    trySignToPushes(false)
+  }
+
   setCompanyData = e => {
     const tasksInc = [...e.tasks]
     const tasksOut = [...e.created_tasks]
@@ -291,7 +303,7 @@ class Dialogs extends Component {
     this.props.setUser(e)
     this.props.setReset(true)
   }
-
+  d
   // setEmptyCompany = () => {
   //   const tasksInc = []
   //   const tasksOut = []
@@ -304,15 +316,35 @@ class Dialogs extends Component {
   //   this.props.setReset(true)
   // }
 
+  getUnreadedMessages = () => {
+    const { dialogs } = this.props
+    let newDialogs = [...dialogs]
+    if (newDialogs && newDialogs.length) {
+      socket.emit('get_unreaded_messages', null, ({ unreadedMessages }) => {
+        unreadedMessages.forEach(d => {
+          const dIndex = dialogs.findIndex(dialog => dialog._id === d.dialog_id)
+          newDialogs[dIndex].messages = _.uniqBy(
+            [...newDialogs[dIndex].messages, ...d.messages],
+            '_id',
+          )
+        })
+        sortedAllDialogs(newDialogs, this.props)
+      })
+    }
+  }
+
   getProfile = (adminChange = false) => {
+    const { sendingMessages, pushesPermissionsGranted } = this.props
     if (!adminChange) {
       this.props.setCompanyLoading(true)
     }
     sendRequest({
       r_path: '/profile',
       method: 'get',
-      success: res => {
+      success: async res => {
         const userData = { ...res }
+        const companyKey = userData.user.company._id
+        const notifications = userData.user.settings.notifications
         this.setState({ congratulations: !userData.user.first_name })
         this.props.setCompanies({
           companies: userData.user.companies,
@@ -333,35 +365,32 @@ class Dialogs extends Component {
           }
         } else {
           this.setCompanyData(userData.user)
-          setDialogs(userData.user.company.dialogs)
-          // socket.emit('get_dialogs')
         }
 
-        this.props.setCompanyLoading(false)
-
-        // todo
-        // } else if (adminChange && (!userData.user.companies || !userData.user.companies.length)) {
-        //   this.setEmptyCompany()
-        //     console.log(222)
-        // } else {
-        //   this.setCompanyData(userData.user)
-        //   socket.emit('get_dialogs')
-        // }
+        if (
+          !notifications.push_token &&
+          notifications.enable &&
+          pushesPermissionsGranted
+        ) {
+          this.checkNotificationPermissions()
+        }
+        if (typeof companyKey === 'number' && sendingMessages[companyKey]) {
+          this.clearReceivedMessages(userData.user.company.dialogs, companyKey)
+        }
       },
       failFunc: e => {
         this.props.setCompanies({
           companies: this.props.user.companies,
           company: this.props.user.company,
         })
-        // this.props.setNews(res.data.news)
-
-        this.props.setCompanyLoading(false)
+        this.props.setNews(this.props.user.news)
       },
     })
   }
 
   changeCompany = id => {
     this.props.setCompanyLoading(true)
+    socket.emit('get_dialogs')
     sendRequest({
       r_path: '/profile/change_company',
       method: 'patch',
@@ -378,7 +407,44 @@ class Dialogs extends Component {
     })
   }
 
+  clearReceivedMessages = (dialogs, companyKey) => {
+    const { sendingMessages, setSendingMessages } = this.props
+    let receivedMessages = { ...sendingMessages }
+    if (
+      receivedMessages &&
+      receivedMessages[companyKey] &&
+      Object.keys(receivedMessages[companyKey]).length
+    ) {
+      dialogs.forEach(d => {
+        const dialogKey = d._id
+        const dialog = receivedMessages[companyKey][dialogKey]
+          ? receivedMessages[companyKey][dialogKey]
+          : false
+        if (dialog && dialog.messages && !dialog.messages.length) {
+          delete receivedMessages[companyKey][dialogKey]
+        }
+        if (dialog && dialog.messages && dialog.messages.length) {
+          d.messages.forEach(m => {
+            dialog.messages = dialog.messages.filter(e => m.text !== e.text)
+          })
+          dialog.messages.forEach(m => {
+            m.failed = true
+          })
+        }
+      })
+    }
+    if (!Object.keys(receivedMessages[companyKey]).length) {
+      delete receivedMessages[companyKey]
+    }
+    setSendingMessages(receivedMessages)
+    AsyncStorage.setItem(
+      'failedMessages',
+      JSON.stringify({ ...receivedMessages }),
+    )
+  }
+
   _renderListHeader = () => {
+    const { companyLoading, connection } = this.props
     const translateY = this.scrollY.interpolate({
       inputRange: [0, 50, 51],
       outputRange: [0, 50, 50],
@@ -387,7 +453,26 @@ class Dialogs extends Component {
     return (
       <>
         <HeaderContainer style={{ transform: [{ translateY }] }}>
-          <Title>Диалоги</Title>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Title style={{ paddingRight: 0 }}>
+              {!connection
+                ? 'Соединение'
+                : !!companyLoading
+                ? 'Обновляется'
+                : 'Диалоги'}{' '}
+            </Title>
+            {!!(!connection || companyLoading) && (
+              <AnimatedEllipsis
+                style={{ color: 'black', top: -5, fontSize: 35, left: 0 }}
+              />
+            )}
+          </View>
           <Company navigate={this.props.navigation.navigate} />
         </HeaderContainer>
         <Header />
@@ -406,10 +491,6 @@ class Dialogs extends Component {
     </Loader>
   )
 
-  _handleAppStateChange = () => {
-    const { user } = this.props
-    socket.emit('get_dialogs', { id: user._id })
-  }
   // todo
   socketLeaveGroup = e => {
     // console.log(e)
@@ -428,17 +509,17 @@ class Dialogs extends Component {
       company,
     } = this.props
     if (e.company_id === company._id) {
-      if (!currentRoomId) {
-        const currentDialog = dialogs.find(d => d._id === e.dialog_id)
-        if (currentDialog) {
-          const index = dialogs.findIndex(d => d._id === e.dialog_id)
-          dialogs[index].messages = dialogs[index].messages.filter(
-            m => m._id !== e.message_id,
-          )
-          setDialogs(dialogs)
-        }
-      } else {
+      if (currentRoomId) {
         setDeletedMessage(e)
+      }
+      const currentDialog = dialogs.find(d => d._id === e.dialog_id)
+      if (currentDialog) {
+        const index = dialogs.findIndex(d => d._id === e.dialog_id)
+        dialogs[index].messages = dialogs[index].messages.filter(
+          m => m._id !== e.message_id,
+        )
+        setDialogs(dialogs)
+        AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs }))
       }
     }
   }
@@ -452,31 +533,31 @@ class Dialogs extends Component {
       company,
     } = this.props
     if (message.company === company._id) {
-      if (!currentRoomId) {
-        const currentDialogIndex = dialogs.findIndex(
-          d => d._id === message.dialog,
-        )
-        if (
-          currentDialogIndex ||
-          (typeof currentDialogIndex === 'number' &&
-            dialogs[currentDialogIndex].messages.length)
-        ) {
-          const editedMessageIndex = dialogs[
-            currentDialogIndex
-          ].messages.findIndex(m => m._id === message._id)
-          if (
-            editedMessageIndex !== -1 &&
-            dialogs[currentDialogIndex].messages[editedMessageIndex]
-          ) {
-            dialogs[currentDialogIndex].messages[editedMessageIndex].text =
-              message.text
-            dialogs[currentDialogIndex].messages[editedMessageIndex].edited =
-              message.edited
-            setDialogs(dialogs)
-          }
-        }
-      } else {
+      if (currentRoomId) {
         setEditedMessage(message)
+      }
+      const currentDialogIndex = dialogs.findIndex(
+        d => d._id === message.dialog,
+      )
+      if (
+        currentDialogIndex ||
+        (typeof currentDialogIndex === 'number' &&
+          dialogs[currentDialogIndex].messages.length)
+      ) {
+        const editedMessageIndex = dialogs[
+          currentDialogIndex
+        ].messages.findIndex(m => m._id === message._id)
+        if (
+          editedMessageIndex !== -1 &&
+          dialogs[currentDialogIndex].messages[editedMessageIndex]
+        ) {
+          dialogs[currentDialogIndex].messages[editedMessageIndex].text =
+            message.text
+          dialogs[currentDialogIndex].messages[editedMessageIndex].edited =
+            message.edited
+          setDialogs(dialogs)
+          AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs }))
+        }
       }
     }
   }
@@ -486,6 +567,7 @@ class Dialogs extends Component {
     if (e) {
       const newDialogs = dialogs.filter(d => d._id !== e.dialog_id)
       setDialogs(newDialogs)
+      AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs: newDialogs }))
     }
   }
 
@@ -509,6 +591,7 @@ class Dialogs extends Component {
     if (dialogs.length && e[type]) {
       dialogs.find(d => e.dialog_id === d._id)[type] = e[type]
       setDialogs(dialogs)
+      AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs }))
     }
   }
 
@@ -519,6 +602,8 @@ class Dialogs extends Component {
     if (deletedDialog) {
       const newDialogs = dialogs.filter(d => e.dialog_id !== d._id)
       setDialogs(newDialogs)
+      AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs: newDialogs }))
+
       Alert.alert(
         `Вас удалили из группы ${deletedDialog.name}`,
         '',
@@ -538,14 +623,15 @@ class Dialogs extends Component {
   }
 
   socketGetGroup = e => {
-    const { setDialog } = this.props
+    const { setDialog, dialogs } = this.props
     const room = e.room
     if (room) {
       socket.emit('subscribe_to_group', { room: room }, ({ dialog }) => {
+        dialogs.push(dialog)
+        sortedAllDialogs(dialogs, this.props)
         setDialog(dialog)
       })
     }
-    socket.emit('get_dialogs')
   }
 
   // to do
@@ -554,27 +640,24 @@ class Dialogs extends Component {
   }
 
   socketDialogOpened = e => {
-    const { dialogs, setDialogs } = this.props
+    const { dialogs, setDialogs, currentRoomId, setDialogViewers } = this.props
     const { dialog_id, viewer } = e
     const newMessages = []
     const newDialogs = [...dialogs]
     const newDialog = newDialogs.filter(e => e._id === dialog_id)[0]
     if (newDialog) {
       const newDialogIndex = newDialogs.findIndex(e => e._id === dialog_id)
-      // if (currentDialog._id === dialog_id) {
-      //  currentDialog.messages && currentDialog.messages.map(e => {
-      //      newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
-      //  });
-      // } else {
-      // }
+      if (currentRoomId === e.dialog_id) {
+        setDialogViewers({ ...e })
+      }
       newDialog.messages &&
         newDialog.messages.forEach(e => {
           newMessages.push({ ...e, viewers: [...e.viewers, viewer] })
         })
       newDialogs[newDialogIndex] = newDialog
       newDialog.messages = newMessages
-      // if (currentDialog._id === dialog_id) getMessages(newMessages)
       setDialogs(newDialogs)
+      AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs: newDialogs }))
     }
   }
 
@@ -584,11 +667,19 @@ class Dialogs extends Component {
   }
 
   setDialogSocket = e => {
-    const { dialogs, setDialogs } = this.props
+    const { dialogs, setDialogs, setCurrentRoomId, setDialog } = this.props
     const dialog = { ...e }
-    this.props.setDialog(dialog)
-    const newDialog = dialogs.map(d => (d._id === e._id ? e : d))
-    setDialogs(newDialog)
+    const hasDialog = dialogs.some(d => d._id === dialog._id)
+    if (!hasDialog) {
+      dialogs.push(dialog)
+      sortedAllDialogs(dialogs, this.props)
+    } else {
+      const newDialog = dialogs.map(d => (d._id === e._id ? e : d))
+      setDialogs(newDialog)
+      AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs: newDialog }))
+    }
+    setDialog(dialog)
+    setCurrentRoomId(dialog._id)
   }
 
   setDialogsSocket = e => {
@@ -635,8 +726,15 @@ class Dialogs extends Component {
           }
         })
       : []
+
     setDialogs(newDialogsSorted)
+    AsyncStorage.setItem(
+      'dialogs',
+      JSON.stringify({ dialogs: newDialogsSorted }),
+    )
     setCompanyLoading(false)
+    this.props.setCompanyLoading(false)
+
     this.props.setReset(true)
   }
 
@@ -656,33 +754,61 @@ class Dialogs extends Component {
   }
 
   newMessageSocket = e => {
-    const { dialog, company, dialogs, user, currentRoomId } = this.props
+    const {
+      dialog,
+      company,
+      dialogs,
+      user,
+      currentRoomId,
+      sendingMessages,
+      setSendingMessages,
+    } = this.props
     try {
-      if (e.company === company._id) {
-        const message =
-          e && e._id
-            ? {
-                ...e,
+      if (e) {
+        const companyKey = e.company
+        const dialogKey = e.dialog
+        let receivedMessages = { ...sendingMessages }
+        if (
+          e.sender._id === user._id &&
+          typeof companyKey === 'number' &&
+          typeof dialogKey === 'number' &&
+          sendingMessages[companyKey] &&
+          sendingMessages[companyKey][dialogKey]
+        ) {
+          receivedMessages[companyKey][dialogKey].messages = sendingMessages[
+            companyKey
+          ][dialogKey].messages.filter(m => m.text !== e.text)
+          setSendingMessages(receivedMessages)
+          AsyncStorage.setItem(
+            'failedMessages',
+            JSON.stringify({ ...receivedMessages }),
+          )
+        }
+        if (e.company === company._id) {
+          const message =
+            e && e._id
+              ? {
+                  ...e,
+                }
+              : {
+                  ...e,
+                  text: e.text,
+                  type: e.type,
+                  created_at: new Date(),
+                  sender: { ...e.sender },
+                  viewers: [],
+                }
+          if (currentRoomId) {
+            if (e.dialog === dialog._id) {
+              if (!message.viewers.includes(user._id)) {
+                message.viewers.push(user._id)
               }
-            : {
-                ...e,
-                text: e.text,
-                type: e.type,
-                created_at: new Date(),
-                sender: { ...e.sender },
-                viewers: [],
-              }
-        if (currentRoomId) {
-          if (e.dialog === dialog._id) {
-            if (!message.viewers.includes(user._id)) {
-              message.viewers.push(user._id)
+              this.props.setMessage(message)
+              const updatedCurrentDialog = { ...dialog }
+              updatedCurrentDialog.messages.push(message)
+              this.sortedDialog(updatedCurrentDialog)
             }
-            this.props.setMessage(message)
-            const updatedCurrentDialog = { ...dialog }
-            updatedCurrentDialog.messages.push(message)
-            this.sortedDialog(updatedCurrentDialog)
           }
-        } else {
           const currentDialog = dialogs.find(d => d._id === e.dialog)
           if (currentDialog) {
             currentDialog.messages.push(message)
@@ -752,6 +878,10 @@ class Dialogs extends Component {
           })
           .map(e => ({ ...e, messages: _.uniqBy(e.messages, '_id') }))
       setDialogs(newDialogSorted)
+      AsyncStorage.setItem(
+        'dialogs',
+        JSON.stringify({ dialogs: newDialogSorted }),
+      )
     }
   }
 
@@ -760,47 +890,9 @@ class Dialogs extends Component {
     navigation.navigate('Profile')
   }
 
-  news = () => {}
-
   find = e => {
     setDialogs(e.result)
   }
-
-  selectChat = () => {
-    // const { getMessages } = this.props;
-    // getMessages(e)
-  }
-
-  chatMessage = e => {
-    const { addMessage, dialogs } = this.props
-    addMessage(e)
-    const newFlatListData = [...dialogs]
-    newFlatListData.sort(
-      (a, b) => new Date(a.lastMessage) - new Date(b.lastMessage),
-    )
-    // this.setState({FlatListData: newFlatListData })?
-  }
-
-  // newMessage = e => {
-  //   const { senderId, chatId } = e
-  //   const { user, dialogs } = this.props
-  //   const chat = chatId
-  //     .split('room')[1]
-  //     // eslint-disable-next-line no-useless-escape
-  //     .replace(/\_/, '')
-  //     .replace(senderId, '')
-  //   const newFlatListData = [...dialogs]
-  //   const index = newFlatListData.findIndex(event => event.id === e.senderId)
-  //   const myIndex = newFlatListData.findIndex(event => event.id === user.id)
-  //   if (newFlatListData[index] || newFlatListData[myIndex]) {
-  //     if (chat === user.id) newFlatListData[index].text = e.text
-  //     if (senderId === user.id) newFlatListData[myIndex].text = e.text
-  //   }
-  //   newFlatListData.sort(
-  //     (a, b) => new Date(b.lastMessage) - new Date(a.lastMessage),
-  //   )
-  //   if (chat === user.id || senderId === user.id) setDialogs(newFlatListData)
-  // }
 
   dialogs = e => {
     const { user } = this.props
@@ -825,6 +917,7 @@ class Dialogs extends Component {
     })
     newDialogs.sort((x, y) => x.lastMessage < y.lastMessage)
     setDialogs(newDialogs)
+    AsyncStorage.setItem('dialogs', JSON.stringify({ dialogs: newDialogs }))
   }
 
   toChat = e => {
@@ -879,11 +972,15 @@ class Dialogs extends Component {
           ? `${participants[0].first_name} ${participants[0].last_name}`
           : participants[0].phone_number && participants[0].phone_number
         : e.name || room
-    setProfile({
-      ...e,
-      name: chatName,
-      image: chatImage,
-    })
+    setProfile(
+      e.isGroup
+        ? {
+            ...e,
+            name: chatName,
+            image: chatImage,
+          }
+        : { ...e.participants[0] },
+    )
     setIsMyProfile(false)
     navigation.navigate(e.isGroup ? 'Group' : 'Chat')
   }
@@ -911,6 +1008,9 @@ const mapStateToProps = state => ({
   currentDialog: state.dialogsReducer.currentDialog,
   companies: state.userReducer.companies,
   company: state.userReducer.company,
+  connection: state.baseReducer.connection,
+  sendingMessages: state.messageReducer.sendingMessages,
+  pushesPermissionsGranted: state.pushesReducer.permissions,
 })
 const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),
@@ -932,5 +1032,12 @@ const mapDispatchToProps = dispatch => ({
   setReset: _ => dispatch(setReset(_)),
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
   setProfile: _ => dispatch(setProfile(_)),
+  setNews: _ => dispatch(setNews(_)),
+  setParticipants: _ => dispatch(setDialogParticipants(_)),
+  setReceivers: _ => dispatch(setFeedReceivers(_)),
+  setSendingMessages: _ => dispatch(setSendingMessages(_)),
+  setDialogViewers: _ => dispatch(setDialogViewers(_)),
+  setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
+  trySignToPushes: trySignToPushes(dispatch),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)

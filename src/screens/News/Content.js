@@ -18,6 +18,7 @@ import Loader from '../../common/Loader'
 import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
 import Company from '../../common/Company'
+import AnimatedEllipsis from 'react-native-animated-ellipsis'
 
 const { borderRadius, Colors, fontSize, sidePadding, HeaderHeight } = helper
 const { yellow, darkBlue2, grey2 } = Colors
@@ -210,6 +211,8 @@ class Content extends Component {
   }
 
   _renderListHeader = () => {
+    const { companyLoading, connection } = this.props
+
     const translateY = this.scrollY.interpolate({
       inputRange: [0, 50, 51],
       outputRange: [0, 50, 50],
@@ -218,7 +221,26 @@ class Content extends Component {
     return (
       <>
         <HeaderContainer style={{ transform: [{ translateY }] }}>
-          <Title>Новости</Title>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <Title style={{ paddingRight: 0 }}>
+              {!connection
+                ? 'Соединение'
+                : !!companyLoading
+                ? 'Обновляется'
+                : 'Новости'}{' '}
+            </Title>
+            {!!(!connection || companyLoading) && (
+              <AnimatedEllipsis
+                style={{ color: 'black', top: -5, fontSize: 35, left: 0 }}
+              />
+            )}
+          </View>
           <Company navigate={this.props.navigate} />
         </HeaderContainer>
         <Header />
@@ -234,12 +256,11 @@ class Content extends Component {
 const mapStateToProps = state => ({
   news: state.newsReducer.news,
   user: state.userReducer.user,
+  companyLoading: state.dialogsReducer.companyLoading,
+  connection: state.baseReducer.connection,
 })
 const mapDispatchToProps = dispatch => ({
   setFeed: _ => dispatch(setFeed(_)),
   setNews: _ => dispatch(setNews(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

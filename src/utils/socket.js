@@ -11,7 +11,7 @@ export const connectToSocket = (token = store.getState().userReducer.auth) => {
     reconnectionDelayMax: 5000,
     reconnectionAttempts: Infinity,
     path: socketPath,
-    transports: ['polling', 'websocket'],
+    transports: ['websocket'],
     upgrade: false,
     secure: true,
     query: {
@@ -30,12 +30,12 @@ export const connectToSocket = (token = store.getState().userReducer.auth) => {
           socket.emit('get_dialogs', {
             id: store.getState().userReducer.user._id,
           }),
-        1000,
+        0,
       )
     })
     socket.on('error', error => {})
     socket.on('reconnect_attempt', () => {
-      socket.io.opts.transports = ['polling']
+      socket.io.opts.transports = ['websocket']
       // socket.io.opts.transports = ['polling', 'websocket']
     })
   }

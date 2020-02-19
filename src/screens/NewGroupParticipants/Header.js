@@ -16,9 +16,7 @@ import {
   CheckGreyIcon,
 } from '../../assets/index'
 import helper from '../../utils/helpers'
-import { p_tasks_search, g_users } from '../../constants/api'
 import ImageComponent from '../../common/Image'
-import sendRequest from '../../utils/request'
 import { setTasks } from '../../actions/tasksActions'
 import DefaultAvatar from '../../common/DefaultAvatar'
 
@@ -57,7 +55,7 @@ const HeaderText = styled(Text)`
 class HeaderComponent extends Component {
   render() {
     const { back, user, toProfile, participants } = this.props
-    const { search, find } = this.state
+    const { search, input } = this.state
     const { image } = user
     return (
       <Header>
@@ -71,9 +69,11 @@ class HeaderComponent extends Component {
             <>
               <SearchIcon />
               <Input
-                placeholder="поиск"
-                value={find}
-                onChangeText={this.find}
+                value={input}
+                onChangeText={this.handleInputChange}
+                onFocus={this.handleFocus}
+                placeholder="Поиск"
+                autoFocus
               />
             </>
           )}
@@ -103,7 +103,28 @@ class HeaderComponent extends Component {
               )}
             </>
           ) : (
-            <CloseIcon onPress={this.stopSearch} />
+            <>
+              <CloseIcon onPress={this.stopSearch} />
+              {!participants.length ? (
+                <TouchableOpacity onPress={toProfile}>
+                  {!image || image === '/images/default_avatar.jpg' ? (
+                    <DefaultAvatar size="header" />
+                  ) : (
+                    <ImageComponent
+                      size="header"
+                      source={{ uri: `https://seruniverse.asmo.media${image}` }}
+                    />
+                  )}
+                </TouchableOpacity>
+              ) : (
+                <CheckGreyIcon
+                  size={22}
+                  noPaddingAll
+                  right
+                  onPress={this.addParticipants}
+                />
+              )}
+            </>
           )}
         </Right>
       </Header>
@@ -112,62 +133,24 @@ class HeaderComponent extends Component {
 
   state = {
     search: false,
-    find: '',
+    input: '',
   }
 
-  find = e => {
-    this.setState({ find: e })
-    e
-      ? sendRequest({
-          r_path: p_tasks_search,
-          method: 'post',
-          attr: {
-            text: e,
-            withUser: true,
-          },
-          success: ({ users }) => {
-            const tasksList = []
-            users.map(user => {
-              const { tasks } = user
-              tasks &&
-                tasks.map((e, i) => {
-                  if (
-                    i === 0 &&
-                    (e.creator === user._id || e.performers.includes(user._id))
-                  ) {
-                    tasksList.push(user)
-                  }
-                })
-            })
-            setTimeout(() => {
-              this.setState({ FlatListData: [...tasksList] })
-            }, 0)
-          },
-          failFunc: err => {},
-        })
-      : sendRequest({
-          r_path: g_users,
-          method: 'get',
-          success: ({ users }) => {
-            const tasksList = []
-            users.map(user => {
-              const { tasks } = user
-              tasks &&
-                tasks.map((e, i) => {
-                  if (
-                    i === 0 &&
-                    (e.creator === user._id || e.performers.includes(user._id))
-                  ) {
-                    tasksList.push(user)
-                  }
-                })
-            })
-            setTimeout(() => {
-              this.setState({ FlatListData: [...tasksList] })
-            }, 0)
-          },
-          failFunc: err => {},
-        })
+  componentDidMount() {
+    this.props.valueChange.clearInput = () => {
+      this.stopSearch()
+    }
+  }
+
+  handleInputChange = e => {
+    if (this.props.valueChange.callback) {
+      this.props.valueChange.callback(e)
+    }
+    this.setState({ input: e })
+  }
+
+  handleFocus = () => {
+    this.setState({ focused: true })
   }
 
   startSearch = () => {
@@ -176,11 +159,12 @@ class HeaderComponent extends Component {
 
   stopSearch = () => {
     this.setState({ search: false })
+    this.clearInput()
   }
 
-  addTask = e => {
-    const { navigate } = this.props
-    navigate('NewTask')
+  clearInput = () => {
+    this.handleInputChange('')
+    this.setState({ input: '' })
   }
 
   addParticipants = () => {
@@ -194,10 +178,9 @@ const mapStateToProps = state => ({
   tasks: state.tasksReducer.tasks,
   participants: state.participantsReducer.dialog.participants,
 })
+
 const mapDispatchToProps = dispatch => ({
   setTasks: _ => dispatch(setTasks(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(HeaderComponent)
+
+export default connect(mapStateToProps, mapDispatchToProps)(HeaderComponent)

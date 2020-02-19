@@ -7,8 +7,9 @@ import {
   Platform,
   Keyboard,
   TouchableWithoutFeedback,
+  AsyncStorage,
+  Image,
 } from 'react-native'
-import AsyncStorage from '@react-native-community/async-storage'
 // import { Constants } from 'expo';
 import RNDeviceInfo from 'react-native-device-info'
 import PhoneInput from 'react-native-phone-input'
@@ -26,6 +27,7 @@ import { p_login } from '../../constants/api'
 import Button from '../../common/Button'
 import sendRequest from '../../utils/request'
 import { connectToSocket } from '../../utils/socket'
+import * as ICONS from '../../assets/icons'
 
 const { Colors, fontSize } = helper
 const { lightGrey1, blue, pink, black } = Colors
@@ -87,6 +89,18 @@ const StyledPhoneInput = styled(PhoneInput)`
   color: black;
   ${({ style }) => style};
 `
+
+const ShowHidePassword = styled(TouchableOpacity)`
+  position: absolute;
+  right: 10px;
+  top: ${Platform.OS === 'ios' ? -5 : 10}px;
+  z-index: 20;
+  width: 30px;
+  height: 30px
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
 // eslint-disable-next-line no-unused-vars
 const Input = props => {
   const {
@@ -137,22 +151,14 @@ class Content extends Component {
           <View>
             <Title>Авторизация</Title>
           </View>
-          <PhoneNumber err={invalidPhone}>
-            {/* <StyledInput
-              style={{
-                margin: 0,
-                width: '20%',
-                textAlign: 'left',
-                paddingLeft: 10,
-                color: invalidPhone ? pink : black,
-                borderColor: invalidPhone ? pink : lightGrey1,
-              }}
-              inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
-              keyboardType="phone-pad"
-              value={country}
-              onChangeText={this.handleChangeCountry}
-              editable={false}
-            /> */}
+          <PhoneNumber
+            err={invalidPhone}
+            style={{
+              borderColor: invalidPhone ? pink : lightGrey1,
+              borderBottomWidth: 1,
+              alignItems: 'center',
+            }}
+          >
             <StyledPhoneInput
               password
               onChangePhoneNumber={this.handleChangePhone}
@@ -165,13 +171,29 @@ class Content extends Component {
               ref={ref => (this.inputRef = ref)}
               style={{
                 margin: 0,
-                width: '78%',
-                flex: 1,
+                width: '20%',
                 textAlign: 'left',
                 paddingLeft: 10,
-                color: invalidPhone ? pink : black,
-                borderColor: invalidPhone ? pink : lightGrey1,
+                borderColor: '#ffffff',
               }}
+            />
+            <TextInput
+              style={{
+                margin: 0,
+                width: '80%',
+                flex: 1,
+                textAlign: 'left',
+                position: 'absolute',
+                right: 0,
+                top: 0,
+                height: 22,
+                padding: 0,
+                color: invalidPhone ? pink : black,
+              }}
+              maxLength={15}
+              value={phone}
+              keyboardType="phone-pad"
+              onChangeText={this.validatePhoneInput}
             />
           </PhoneNumber>
           <ControlBar>
@@ -184,17 +206,28 @@ class Content extends Component {
               )}
             </TouchableOpacity>
           </ControlBar>
-          <StyledInput
-            password
-            onChangeText={this.handleChangePassword}
-            value={password}
-            placeholder="Пароль"
-            secureTextEntry
-            style={{
-              color: invalidPassword ? pink : black,
-              borderColor: invalidPassword ? pink : lightGrey1,
-            }}
-          />
+          <View>
+            <ShowHidePassword onPress={this.hideShowPassword}>
+              <Image
+                style={{ width: 20, height: 20 }}
+                resizeMode="contain"
+                source={this.state.hidePassword ? ICONS.ShowEye : ICONS.HideEye}
+              />
+            </ShowHidePassword>
+            <StyledInput
+              password
+              maxLength={12}
+              onChangeText={this.handleChangePassword}
+              value={password}
+              placeholder="Пароль"
+              secureTextEntry={this.state.hidePassword}
+              style={{
+                color: invalidPassword ? pink : black,
+                borderColor: invalidPassword ? pink : lightGrey1,
+              }}
+            />
+          </View>
+
           <ControlBar>
             <TouchableOpacity onPress={this.restorePass}>
               {invalidPassword ? (
@@ -222,15 +255,29 @@ class Content extends Component {
     password: '',
     invalidPassword: false,
     invalidPhone: false,
+    hidePassword: true,
   }
   inputRef = null
 
   componentDidMount = () => {}
 
+  validatePhoneInput = e => {
+    if (e.length > 0) {
+      this.handleChangePhone(e)
+    }
+  }
+
   onSelectCountry = country => {
     this.setState({
       phone: `+${this.inputRef.getCountryCode(country)}`,
     })
+  }
+
+  hideShowPassword = () => {
+    const { hidePassword } = this.state
+    let togglePassword = hidePassword
+    togglePassword = !togglePassword
+    this.setState({ hidePassword: togglePassword })
   }
 
   storeUserData = user => {
@@ -242,12 +289,10 @@ class Content extends Component {
     const { phone: phone_number, password } = this.state
     if (!this.inputRef.isValidNumber()) this.setState({ invalidPhone: true })
 
-    if (!password || password.length < 4)
+    if (!password || password.length < 4) {
       this.setState({ invalidPassword: true })
-    setTimeout(
-      () => this.setState({ invalidPhone: false, invalidPassword: false }),
-      5000,
-    )
+      return
+    }
     sendRequest({
       r_path: p_login,
       method: 'post',
@@ -335,7 +380,4 @@ const mapDispatchToProps = dispatch => ({
   setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
   trySignToPushes: trySignToPushes(dispatch),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

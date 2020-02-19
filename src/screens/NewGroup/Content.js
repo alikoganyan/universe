@@ -19,6 +19,15 @@ import { socket } from '../../utils/socket'
 import sendRequest from '../../utils/request'
 import { p_create_group } from '../../constants/api'
 import { getImageFromPicker } from '../../utils/ImagePicker'
+import {
+  setCurrentDialogs,
+  setDialog,
+  setDialogs,
+} from '../../actions/dialogsActions'
+import { sortedAllDialogs } from '../../helper/sortedDialogs'
+import { setCurrentChat, setCurrentRoomId } from '../../actions/messageActions'
+import { setIsMyProfile, setProfile } from '../../actions/profileAction'
+import { toChat } from '../../helper/chat'
 
 const { Colors, sidePadding } = helper
 const { lightGrey1, black, green } = Colors
@@ -219,7 +228,7 @@ class Content extends Component {
   }
 
   proceed = e => {
-    const { participants, forward, setParticipants } = this.props
+    const { participants, setParticipants, dialogs } = this.props
     const { text, imageFormData } = this.state
     let idList = []
     participants.map(e => (idList = [...idList, e._id]))
@@ -237,13 +246,15 @@ class Content extends Component {
         },
       },
       success: res => {
+        dialogs.push(res.group)
+        sortedAllDialogs(dialogs, this.props)
         setParticipants([])
         socket.emit('new_group', { group_id: res.group._id })
-        socket.emit('get_dialogs')
+        toChat(res.group, this.props)
       },
       failFunc: err => {},
     })
-    forward()
+    // forward()
   }
 
   handleChange = e => {
@@ -253,9 +264,19 @@ class Content extends Component {
 const mapStateToProps = state => ({
   id: state.userReducer.user.id,
   participants: state.participantsReducer.dialog.participants,
+  dialogs: state.dialogsReducer.dialogs,
+  user: state.userReducer.user,
 })
+
 const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setParticipants: _ => dispatch(setDialogParticipants(_)),
+  setDialogs: _ => dispatch(setDialogs(_)),
+  setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
+  setCurrentChat: _ => dispatch(setCurrentChat(_)),
+  setDialog: _ => dispatch(setDialog(_)),
+  setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
+  setProfile: _ => dispatch(setProfile(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, Platform } from 'react-native'
+import { View, Text, TouchableOpacity, Platform, TextInput } from 'react-native'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -100,7 +100,13 @@ class Content extends Component {
       <Wrapper>
         <Title>Регистрация</Title>
         <SubTitle>Телефон</SubTitle>
-        <PhoneNumber>
+        <PhoneNumber
+          style={{
+            borderColor: error ? pink : lightGrey1,
+            borderBottomWidth: 1,
+            alignItems: 'center',
+          }}
+        >
           <StyledPhoneInput
             password
             onChangePhoneNumber={this.handlePhone}
@@ -113,13 +119,29 @@ class Content extends Component {
             ref={ref => (this.inputRef = ref)}
             style={{
               margin: 0,
-              width: '95%',
-              flex: 1,
+              width: '20%',
               textAlign: 'left',
               paddingLeft: 10,
-              color: error ? pink : black,
-              borderColor: error ? pink : lightGrey1,
+              borderColor: '#ffffff',
             }}
+          />
+          <TextInput
+            style={{
+              margin: 0,
+              width: '80%',
+              flex: 1,
+              textAlign: 'left',
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              height: 22,
+              padding: 0,
+              color: error ? pink : black,
+            }}
+            maxLength={15}
+            value={phone}
+            onChangeText={this.validatePhoneInput}
+            keyboardType="phone-pad"
           />
         </PhoneNumber>
         {error ? <View>{error}</View> : null}
@@ -145,6 +167,12 @@ class Content extends Component {
     this.setState({
       phone: `+${this.inputRef.getCountryCode(country)}`,
     })
+  }
+
+  validatePhoneInput = e => {
+    if (e.length > 0) {
+      this.handlePhone(e)
+    }
   }
 
   proceed = () => {
@@ -207,7 +235,4 @@ const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
