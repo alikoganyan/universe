@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -13,6 +13,7 @@ import {
   setAuth,
   setRegisterUserNumber,
 } from '../../actions/userActions'
+import * as ICONS from '../../assets/icons'
 
 const { Colors, fontSize, minPassLength } = helper
 const { blue, red } = Colors
@@ -46,12 +47,25 @@ const Error = styled(Text)`
   font-size: ${fontSize.sm};
   align-self: center;
 `
+const ShowHidePassword = styled(TouchableOpacity)`
+  position: absolute;
+  right: 10px;
+  top: 20px;
+  z-index: 20;
+  width: 30px;
+  height: 30px
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`
+
 const Input = props => {
   const {
     autoFocus = false,
     keyboardType = 'default',
     children,
     password = false,
+    hidePassword,
     value,
     style,
     editable,
@@ -68,7 +82,7 @@ const Input = props => {
         paddingLeft: 0,
       }}
       keyboardType={keyboardType}
-      password={password}
+      password={password && hidePassword}
       value={value}
       style={{
         ...style,
@@ -89,26 +103,51 @@ class Content extends Component {
       <Wrapper>
         <Title>Восстановить пароль</Title>
         <PhoneNumber>
-          <Input
-            autoFocus
-            style={{ minWidth: '100%' }}
-            value={pass}
-            onChangeText={this.handleChangePass}
-            password
-          >
-            Новый пароль
-          </Input>
+          <View>
+            <ShowHidePassword onPress={() => this.hideShowPassword('password')}>
+              <Image
+                style={{ width: 20, height: 20 }}
+                resizeMode="contain"
+                source={this.state.password ? ICONS.ShowEye : ICONS.HideEye}
+              />
+            </ShowHidePassword>
+            <Input
+              autoFocus
+              style={{ minWidth: '100%' }}
+              value={pass}
+              onChangeText={this.handleChangePass}
+              password
+              hidePassword={this.state.password}
+            >
+              Новый пароль
+            </Input>
+          </View>
+
           {err.type === 'length' || err.type === 'nopass' ? (
             <Error>{err.msg}</Error>
           ) : null}
-          <Input
-            style={{ minWidth: '100%' }}
-            value={repass}
-            onChangeText={this.handleChangeRepass}
-            password
-          >
-            Повторите пароль
-          </Input>
+          <View>
+            <ShowHidePassword
+              onPress={() => this.hideShowPassword('confirmPassword')}
+            >
+              <Image
+                style={{ width: 20, height: 20 }}
+                resizeMode="contain"
+                source={
+                  this.state.confirmPassword ? ICONS.ShowEye : ICONS.HideEye
+                }
+              />
+            </ShowHidePassword>
+            <Input
+              style={{ minWidth: '100%' }}
+              value={repass}
+              onChangeText={this.handleChangeRepass}
+              password
+              hidePassword={this.state.confirmPassword}
+            >
+              Повторите пароль
+            </Input>
+          </View>
           {err.type === 'repass' ? <Error>{err.msg}</Error> : <Error />}
         </PhoneNumber>
         <ControlBar>
@@ -124,10 +163,19 @@ class Content extends Component {
     pass: '',
     repass: '',
     err: {},
+    password: true,
+    confirmPassword: true,
   }
 
   componentDidMount() {
     // const { register } = this.props;
+  }
+
+  hideShowPassword = type => {
+    const { password, confirmPassword } = this.state
+    let togglePassword = type === 'password' ? password : confirmPassword
+    togglePassword = !togglePassword
+    this.setState({ [type]: togglePassword })
   }
 
   handleChangePass = e => {
@@ -219,7 +267,4 @@ const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
