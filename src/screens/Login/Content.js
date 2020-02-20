@@ -28,6 +28,7 @@ import Button from '../../common/Button'
 import sendRequest from '../../utils/request'
 import { connectToSocket } from '../../utils/socket'
 import * as ICONS from '../../assets/icons'
+import CountryPicker from 'react-native-country-picker-modal'
 
 const { Colors, fontSize } = helper
 const { lightGrey1, blue, pink, black } = Colors
@@ -168,6 +169,7 @@ class Content extends Component {
               placeholder="XXX-XXX-XX-XX"
               keyboardType="phone-pad"
               onSelectCountry={this.onSelectCountry}
+              onPressFlag={this.onPressFlag}
               ref={ref => (this.inputRef = ref)}
               style={{
                 margin: 0,
@@ -195,6 +197,18 @@ class Content extends Component {
               keyboardType="phone-pad"
               onChangeText={this.validatePhoneInput}
             />
+            <CountryPicker
+              hideAlphabetFilter
+              showCallingCode
+              ref={ref => {
+                this.countryPicker = ref
+              }}
+              onChange={value => this.selectCountry(value)}
+              translation="rus"
+              cca2={this.state.cca2}
+            >
+              <View />
+            </CountryPicker>
           </PhoneNumber>
           <ControlBar>
             <TouchableOpacity onPress={this.signup}>
@@ -227,7 +241,6 @@ class Content extends Component {
               }}
             />
           </View>
-
           <ControlBar>
             <TouchableOpacity onPress={this.restorePass}>
               {invalidPassword ? (
@@ -256,10 +269,25 @@ class Content extends Component {
     invalidPassword: false,
     invalidPhone: false,
     hidePassword: true,
+    cca2: '+7',
   }
   inputRef = null
 
-  componentDidMount = () => {}
+  componentDidMount() {
+    this.onPressFlag = this.onPressFlag.bind(this)
+    this.selectCountry = this.selectCountry.bind(this)
+    this.setState({
+      pickerData: this.inputRef.getPickerData(),
+    })
+  }
+
+  onPressFlag() {
+    this.countryPicker.openModal()
+  }
+
+  selectCountry(country) {
+    this.inputRef.selectCountry(country.cca2.toLowerCase())
+  }
 
   validatePhoneInput = e => {
     if (e.length > 0) {
@@ -363,10 +391,6 @@ class Content extends Component {
 
   handleChangePhone = e => {
     this.setState({ phone: e, invalidPhone: false })
-  }
-
-  handleChangeCountry = e => {
-    this.setState({ country: e })
   }
 }
 

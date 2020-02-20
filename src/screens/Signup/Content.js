@@ -4,12 +4,12 @@ import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import PhoneInput from 'react-native-phone-input'
+import CountryPicker from 'react-native-country-picker-modal'
 import helper from '../../utils/helpers'
 import { setUser, setRegisterUserNumber } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
 import { p_get_sms } from '../../constants/api'
 import Button from '../../common/Button'
-
 const { Colors, fontSize } = helper
 const { lightGrey1, blue, pink, black } = Colors
 const Wrapper = styled(View)`
@@ -23,12 +23,12 @@ const Title = styled(Text)`
   font-size: ${fontSize.large};
   text-align: center;
 `
-const SubTitle = styled(Text)`
-  width: 100%;
-  color: ${lightGrey1};
-  text-align: center;
-  font-size: ${fontSize.text};
-`
+// const SubTitle = styled(Text)`
+//   width: 100%;
+//   color: ${lightGrey1};
+//   text-align: center;
+//   font-size: ${fontSize.text};
+// `
 const PhoneNumber = styled(View)`
   display: flex;
   flex-direction: row;
@@ -99,7 +99,7 @@ class Content extends Component {
     return (
       <Wrapper>
         <Title>Регистрация</Title>
-        <SubTitle>Телефон</SubTitle>
+        {/*<SubTitle>Телефон</SubTitle>*/}
         <PhoneNumber
           style={{
             borderColor: error ? pink : lightGrey1,
@@ -116,6 +116,7 @@ class Content extends Component {
             placeholder="XXX-XXX-XX-XX"
             keyboardType="phone-pad"
             onSelectCountry={this.onSelectCountry}
+            onPressFlag={this.onPressFlag}
             ref={ref => (this.inputRef = ref)}
             style={{
               margin: 0,
@@ -143,6 +144,18 @@ class Content extends Component {
             onChangeText={this.validatePhoneInput}
             keyboardType="phone-pad"
           />
+          <CountryPicker
+            hideAlphabetFilter
+            showCallingCode
+            ref={ref => {
+              this.countryPicker = ref
+            }}
+            onChange={value => this.selectCountry(value)}
+            translation="rus"
+            cca2={this.state.cca2}
+          >
+            <View />
+          </CountryPicker>
         </PhoneNumber>
         {error ? <View>{error}</View> : null}
         <ButtonBox>
@@ -158,11 +171,25 @@ class Content extends Component {
     country: '+7',
     phone: '+7',
     error: false,
+    cca2: '+7',
   }
   inputRef = null
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.onPressFlag = this.onPressFlag.bind(this)
+    this.selectCountry = this.selectCountry.bind(this)
+    this.setState({
+      pickerData: this.inputRef.getPickerData(),
+    })
+  }
 
+  onPressFlag() {
+    this.countryPicker.openModal()
+  }
+
+  selectCountry(country) {
+    this.inputRef.selectCountry(country.cca2.toLowerCase())
+  }
   onSelectCountry = country => {
     this.setState({
       phone: `+${this.inputRef.getCountryCode(country)}`,
@@ -218,10 +245,6 @@ class Content extends Component {
   login = () => {
     const { navigate } = this.props
     navigate('Login')
-  }
-
-  handleCountry = e => {
-    this.setState({ country: e, error: false })
   }
 
   handlePhone = e => {

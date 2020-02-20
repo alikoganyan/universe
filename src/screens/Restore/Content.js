@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput } from 'react-native'
-import FloatingLabel from 'react-native-floating-labels'
+import { View, Text, TouchableOpacity, TextInput, Platform } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import helper from '../../utils/helpers'
@@ -8,23 +7,38 @@ import { p_get_restore_password } from '../../constants/api'
 import { setRegisterUserNumber } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
 import Button from '../../common/Button'
+import PhoneInput from 'react-native-phone-input'
+import CountryPicker from 'react-native-country-picker-modal'
 
 const { Colors, fontSize } = helper
 const { blue, lightGrey1, pink, black } = Colors
 const Wrapper = styled(View)`
   padding: 0 20%;
-  padding-bottom: 10%;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
-  align-items: center;
-  flex: 1;
+  flex-grow: 1;
 `
 const Title = styled(Text)`
   width: 100%;
-  font-size: 20px;
+  margin-bottom: 30px;
+  font-size: ${fontSize.large};
   text-align: center;
-  margin-bottom: 20px;
+`
+
+const PhoneNumber = styled(View)`
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+`
+
+const StyledPhoneInput = styled(PhoneInput)`
+  border: 1px solid ${lightGrey1};
+  border-width: 0;
+  border-bottom-width: 1px;
+  padding-bottom: ${Platform.OS === 'ios' ? 11 : 6}px;
+  text-align: center;
+  margin-bottom: 10px;
+  color: black;
+  ${({ style }) => style};
 `
 const ControlBar = styled(View)`
   display: flex;
@@ -33,26 +47,7 @@ const ControlBar = styled(View)`
   align-items: center;
   margin-top: 20px;
 `
-const PhoneNumber = styled(View)`
-  display: flex;
-  flex-direction: row;
-  align-items: flex-end;
-`
-const StyledInput = styled(TextInput)`
-  border: 1px solid ${lightGrey1};
-  border-width: 0;
-  border-bottom-width: 1px;
-  padding-bottom: 10px;
-  text-align: center;
-  margin-bottom: 10px;
-  margin-left: 20px;
-  ${({ style }) => style};
-`
-const Label = styled(Title)`
-  font-size: 15px;
-  color: ${lightGrey1};
-  margin-bottom: 0px;
-`
+
 const Error = styled(Text)`
   font-size: ${fontSize.sm};
 `
@@ -64,72 +59,69 @@ const ErrorText = styled(Text)`
 const ErrorTextLink = styled(ErrorText)`
   color: ${blue};
 `
-const Input = props => {
-  const {
-    children,
-    password = false,
-    value,
-    style,
-    editable,
-    inputStyle,
-    labelStyle,
-    keyboardType,
-    ...rest
-  } = props
-  return (
-    <FloatingLabel
-      labelStyle={{ fontSize: 15, ...labelStyle }}
-      inputStyle={{
-        fontSize: 15,
-        borderWidth: 0,
-        borderBottomWidth: 1,
-        display: 'flex',
-        borderColor: lightGrey1,
-        ...inputStyle,
-      }}
-      keyboardType={keyboardType}
-      password={password}
-      value={value}
-      style={{ ...style }}
-      editable={editable}
-      {...rest}
-    >
-      {children}
-    </FloatingLabel>
-  )
-}
+
 class Content extends Component {
   render() {
-    const { country, phone, error } = this.state
+    const { phone, error } = this.state
     return (
       <Wrapper>
         <Title>Восстановление пароля</Title>
-        <Label>Телефон</Label>
-        <PhoneNumber>
-          <Input
-            value={country}
-            onChangeText={this.handleCountry}
-            style={{ width: '20%' }}
-            inputStyle={{ paddingLeft: 0, textAlign: 'center' }}
-            keyboardType="phone-pad"
-          />
-          <StyledInput
+        <PhoneNumber
+          style={{
+            borderColor: error ? pink : lightGrey1,
+            borderBottomWidth: 1,
+            alignItems: 'center',
+          }}
+        >
+          <StyledPhoneInput
             password
             onChangeText={this.handlePhone}
+            allowZeroAfterCountryCode={false}
+            initialCountry="ru"
             value={phone}
             placeholder="XXX-XXX-XX-XX"
-            maxLength={10}
+            keyboardType="phone-pad"
+            onSelectCountry={this.onSelectCountry}
+            onPressFlag={this.onPressFlag}
+            ref={ref => (this.inputRef = ref)}
             style={{
               margin: 0,
-              width: '75%',
+              width: '20%',
+              textAlign: 'left',
+              paddingLeft: 10,
+              borderColor: '#ffffff',
+            }}
+          />
+          <TextInput
+            style={{
+              margin: 0,
+              width: '80%',
               flex: 1,
               textAlign: 'left',
-              paddingLeft: 20,
+              position: 'absolute',
+              right: 0,
+              top: 0,
+              height: 22,
+              padding: 0,
               color: error ? pink : black,
-              borderColor: error ? pink : lightGrey1,
             }}
+            maxLength={15}
+            value={phone}
+            onChangeText={this.validatePhoneInput}
             keyboardType="phone-pad"
           />
+          <CountryPicker
+            hideAlphabetFilter
+            showCallingCode
+            ref={ref => {
+              this.countryPicker = ref
+            }}
+            onChange={value => this.selectCountry(value)}
+            translation="rus"
+            cca2={this.state.cca2}
+          >
+            <View />
+          </CountryPicker>
         </PhoneNumber>
         {error ? <View>{error}</View> : null}
         <ControlBar>
@@ -149,18 +141,35 @@ class Content extends Component {
   state = {
     error: false,
     country: '+7',
-    phone: '',
+    phone: '+7',
+    cca2: '+7',
   }
 
   componentDidMount() {
-    const { register } = this.props
-    const { phone } = register
-    const phone_number = phone.split('+7')[1]
-    this.setState({ phone: phone_number })
+    this.onPressFlag = this.onPressFlag.bind(this)
+    this.selectCountry = this.selectCountry.bind(this)
+    this.setState({
+      pickerData: this.inputRef.getPickerData(),
+    })
   }
 
-  handleCountry = e => {
-    this.setState({ country: e, error: false })
+  onPressFlag() {
+    this.countryPicker.openModal()
+  }
+
+  selectCountry(country) {
+    this.inputRef.selectCountry(country.cca2.toLowerCase())
+  }
+  onSelectCountry = country => {
+    this.setState({
+      phone: `+${this.inputRef.getCountryCode(country)}`,
+    })
+  }
+
+  validatePhoneInput = e => {
+    if (e.length > 0) {
+      this.handlePhone(e)
+    }
   }
 
   handlePhone = e => {
@@ -172,28 +181,26 @@ class Content extends Component {
   }
 
   getRestorePassword = () => {
-    const { country, phone } = this.state
+    const { phone } = this.state
     const { navigate, setRegisterUserNumber } = this.props
-    const phone_number = country.concat(phone)
     if (!phone) {
       this.setState({ error: <Error>Введите телефон</Error> })
     }
-    if (phone_number && phone_number.length < 9) {
+    if (phone && phone.length < 9) {
       this.setState({
         error: <Error>Проверьте правильность введенного номера</Error>,
       })
     }
-    phone_number &&
-      phone &&
-      phone_number.length >= 9 &&
+    phone &&
+      phone.length >= 9 &&
       sendRequest({
         r_path: p_get_restore_password,
         method: 'post',
         attr: {
-          phone_number,
+          phone_number: phone,
         },
         success: () => {
-          setRegisterUserNumber(phone_number)
+          setRegisterUserNumber(phone)
           setTimeout(() => navigate('Restore2'), 0)
         },
         failFunc: err => {
@@ -225,7 +232,4 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
