@@ -213,7 +213,7 @@ class Dialogs extends Component {
     this.props.setReceivers([])
     this.props.setCompanyLoading(true)
     this.cachingData()
-    this.getUnreadedMessages()
+    // this.getUnreadedMessages()
     this.getProfile()
     this.props.removeAllPreloader()
     socket.removeAllListeners('update_dialogs')
