@@ -108,7 +108,7 @@ class Content extends Component {
             maxLength={15}
             value={phone}
             onChangeText={this.validatePhoneInput}
-            keyboardType="phone-pad"
+            keyboardType="numeric"
           />
           <CountryPicker
             hideAlphabetFilter
@@ -167,7 +167,7 @@ class Content extends Component {
   }
 
   validatePhoneInput = e => {
-    if (e.length > 0) {
+    if (e.length > 0 && /^[0-9]*$/.test(e.substring(1).toString())) {
       this.handlePhone(e)
     }
   }
