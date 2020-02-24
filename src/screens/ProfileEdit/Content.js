@@ -371,7 +371,7 @@ class Content extends Component {
       this.setState({ passwordText: e.nativeEvent.text })
     } else if (unit === 'repassword') {
       if (passwordText !== e.nativeEvent.text) {
-        this.setState({ repasswordError: 'password are not match' })
+        this.setState({ repasswordError: 'Пароль не совпадает' })
       } else {
         this.setState({ repasswordError: false })
       }

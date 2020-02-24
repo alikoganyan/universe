@@ -42,21 +42,18 @@ export default class ImagesViewer extends Component {
     isMenuVisible: false,
   }
 
-  componentDidMount() {
-    this.backHandler = BackHandler.addEventListener(
-      'hardwareBackPress',
-      this.handleBackPress,
-    )
-  }
+  componentDidMount() {}
 
-  componentWillUnmount() {
-    this.backHandler.remove()
-  }
+  componentWillUnmount() {}
 
   componentDidUpdate(prevProps) {
     const { isVisible, index } = this.props
     const { isVisible: prevIsVisible } = prevProps
     if (isVisible !== prevIsVisible && isVisible) {
+      this.backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        this.handleBackPress,
+      )
       this.setState({ current: index })
     }
   }
@@ -80,6 +77,7 @@ export default class ImagesViewer extends Component {
   }
 
   _onHideMenu = () => {
+    this.backHandler.remove()
     this.setState({ isMenuVisible: false })
   }
 
