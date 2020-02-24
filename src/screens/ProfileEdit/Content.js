@@ -126,6 +126,7 @@ const Input = props => {
     />
   )
 }
+
 class Content extends Component {
   render() {
     const {
@@ -283,6 +284,7 @@ class Content extends Component {
   state = {
     password: true,
     confirmPassword: true,
+    passwordText: '',
     lastNameError: false,
     firstNameError: false,
     middleNameError: false,
@@ -360,10 +362,20 @@ class Content extends Component {
   }
 
   handleChange = (e, unit) => {
-    const { user } = this.state
+    const { user, passwordText } = this.state
     const newUser = { ...user }
     newUser[unit] = e.nativeEvent.text
     this.setState({ user: newUser })
+
+    if (unit === 'password') {
+      this.setState({ passwordText: e.nativeEvent.text })
+    } else if (unit === 'repassword') {
+      if (passwordText !== e.nativeEvent.text) {
+        this.setState({ repasswordError: 'password are not match' })
+      } else {
+        this.setState({ repasswordError: false })
+      }
+    }
   }
 
   toChat = () => {
@@ -375,7 +387,7 @@ class Content extends Component {
   }
 
   apply = () => {
-    const { user, imageFormData, emailError } = this.state
+    const { user, imageFormData, emailError, repasswordError } = this.state
     const { back, alterUser } = this.props
     const userRedux = this.props.user
     const {
@@ -393,7 +405,7 @@ class Content extends Component {
       emailError: !email ? 'Неправильный электронная почта' : '',
     })
     validateEmail(email, this)
-    if (emailError) {
+    if (emailError || repasswordError) {
       return
     }
     if (first_name && last_name && middle_name && email) {
