@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Dimensions } from 'react-native'
+import { View, BackHandler } from 'react-native'
 import styled from 'styled-components'
 import SafeAreaView from '../../common/SafeAreaView'
 import Header from './Header'
@@ -27,8 +27,21 @@ export default class Signup extends Component {
     this.props.navigation.goBack()
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackPress,
+    )
+  }
 
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+
+  handleBackPress = () => {
+    this.navigateBack()
+    return true
+  }
   moveForward = () => {
     this.props.navigation.navigate('Signup2')
   }

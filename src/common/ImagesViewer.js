@@ -7,6 +7,7 @@ import {
   Image,
   StyleSheet,
   Platform,
+  BackHandler,
 } from 'react-native'
 import RNDeviceInfo from 'react-native-device-info'
 import ImageViewer from 'react-native-image-zoom-viewer'
@@ -41,12 +42,28 @@ export default class ImagesViewer extends Component {
     isMenuVisible: false,
   }
 
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackPress,
+    )
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+
   componentDidUpdate(prevProps) {
     const { isVisible, index } = this.props
     const { isVisible: prevIsVisible } = prevProps
     if (isVisible !== prevIsVisible && isVisible) {
       this.setState({ current: index })
     }
+  }
+
+  handleBackPress = () => {
+    this._onCloseViewer() // works best when the goBack is async
+    return true
   }
 
   _onPressDots = () => {

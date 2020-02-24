@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Text, View } from 'react-native'
+import { BackHandler, View } from 'react-native'
 import styled from 'styled-components'
 import Header from './Header'
 import Content from './Content'
@@ -20,6 +20,22 @@ export default class PinCode extends Component {
         </Wrapper>
       </SafeAreaView>
     )
+  }
+
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackPress,
+    )
+  }
+
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+
+  handleBackPress = () => {
+    this.navigate('Restore')
+    return true
   }
 
   navigate = e => {
