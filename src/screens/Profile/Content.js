@@ -215,7 +215,7 @@ class Content extends Component {
           : `был онлайн ${date} ${month}`
         : 'неизвестно'
 
-    const chatName = name
+    const userName = name
       ? name
       : first_name
       ? `${first_name} ${last_name}`
@@ -245,7 +245,7 @@ class Content extends Component {
             )}
             <UserInfo>
               <UserName>
-                <Name>{chatName}</Name>
+                <Name>{userName}</Name>
               </UserName>
               {department &&
               department.name &&
@@ -425,6 +425,21 @@ class Content extends Component {
 
   componentDidMount() {
     const { myProfile, user, profile } = this.props
+
+    this.createUserInfo(myProfile ? user : profile)
+  }
+
+  componentWillReceiveProps(nextProps, nextContext) {
+    const { myProfile } = this.props
+    if (myProfile && nextProps.user.email !== this.props.user.email) {
+      this.createUserInfo(nextProps.user)
+    }
+  }
+
+  componentWillUnmount() {}
+
+  createUserInfo = profile => {
+    const { myProfile } = this.props
     const {
       role,
       phone_number,
@@ -433,7 +448,8 @@ class Content extends Component {
       tasks,
       isGroup,
       participants,
-    } = myProfile ? user : profile
+    } = profile
+
     const newUserData = [
       department && department.name !== 'Персональный'
         ? {
@@ -499,8 +515,6 @@ class Content extends Component {
     ]
     this.setState({ UserData: newUserData })
   }
-
-  componentWillUnmount() {}
 
   toChat = () => {
     const {
