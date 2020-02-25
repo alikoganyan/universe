@@ -1,5 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, TextInput, Image } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  TextInput,
+  Image,
+  Dimensions,
+} from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import { TaskIcon, GroupIcon, FilesRedIcon } from '../../assets/index'
@@ -14,8 +21,10 @@ import { socket } from '../../utils/socket'
 import { p_profile, p_profile_avatar } from '../../constants/api'
 import sendRequest from '../../utils/request'
 import DefaultAvatar from '../../common/DefaultAvatar'
-import { validateEmail } from '../../helper/validation'
+import { validateEmail , passwordLevel } from '../../helper/validation'
 import * as ICONS from '../../assets/icons'
+import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter'
+
 
 const { Colors, HeaderHeight, fontSize } = helper
 const { grey2, blue, lightGrey1 } = Colors
@@ -237,9 +246,25 @@ class Content extends Component {
                 pass
                 hidePassword={this.state.password}
                 onChange={e => this.handleChange(e, 'password')}
-                maxLength={12}
+                maxLength={20}
               />
             </InputBox>
+            <View
+              style={{
+                display: 'flex',
+                justifyContent: 'center',
+                width: '100%',
+              }}
+            >
+              <BarPasswordStrengthDisplay
+                password={this.state.passwordText}
+                scoreLimit={100}
+                levels={passwordLevel}
+                width={Math.round(Dimensions.get('window').width) / 2 + 22}
+                wrapperStyle={{ display: 'flex', alignItems: 'flex-end' }}
+              />
+            </View>
+
             {!!passwordError && (
               <Error>
                 <ErrorText>{passwordError}</ErrorText>
@@ -262,7 +287,7 @@ class Content extends Component {
                 pass
                 hidePassword={this.state.confirmPassword}
                 onChange={e => this.handleChange(e, 'repassword')}
-                maxLength={12}
+                maxLength={20}
               />
             </InputBox>
             {!!repasswordError && (

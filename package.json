@@ -56,6 +56,7 @@
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-native-linear-gradient": "^2.5.6",
     "react-native-maps": "^0.25.0",
+    "react-native-password-strength-meter": "0.0.3",
     "react-native-permissions": "^1.2.0",
     "react-native-phone-input": "^0.2.4",
     "react-native-pose": "^0.9.1",

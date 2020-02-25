@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
@@ -14,6 +14,8 @@ import {
   setRegisterUserNumber,
 } from '../../actions/userActions'
 import * as ICONS from '../../assets/icons'
+import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter'
+import { passwordLevel } from '../../helper/validation'
 
 const { Colors, fontSize, minPassLength } = helper
 const { blue, red } = Colors
@@ -121,6 +123,13 @@ class Content extends Component {
             >
               Новый пароль
             </Input>
+            <BarPasswordStrengthDisplay
+              password={this.state.pass}
+              scoreLimit={100}
+              levels={passwordLevel}
+              width={Math.round(Dimensions.get('window').width) / 2 + 22}
+              wrapperStyle={{ display: 'flex', alignItems: 'flex-end' }}
+            />
           </View>
 
           {err.type === 'length' || err.type === 'nopass' ? (
