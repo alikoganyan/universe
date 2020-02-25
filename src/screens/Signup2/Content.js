@@ -98,7 +98,7 @@ class Content extends Component {
               background={blue}
               color="white"
             >
-              Отправить
+              Повторить
             </Button>
           )}
         </Controls>
@@ -109,7 +109,7 @@ class Content extends Component {
   state = {
     sms: '',
     error: 0,
-    deadline: 30,
+    deadline: 60,
     tries: 30,
     err: false,
   }
@@ -155,7 +155,7 @@ class Content extends Component {
   sendAgain = () => {
     const { register } = this.props
     const { phone } = register
-    this.setState({ deadline: 30 }, () => {
+    this.setState({ deadline: 60 }, () => {
       sendRequest({
         r_path: p_get_sms,
         method: 'post',
@@ -190,7 +190,4 @@ const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setRegisterUserSms: _ => dispatch(setRegisterUserSms(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)
