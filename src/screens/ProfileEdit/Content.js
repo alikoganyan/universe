@@ -18,15 +18,19 @@ import ImageComponent from '../../common/Image'
 import RNDeviceInfo from 'react-native-device-info'
 import { getImageFromPicker } from '../../utils/ImagePicker'
 import { socket } from '../../utils/socket'
-import { p_profile, p_profile_avatar } from '../../constants/api'
+import {
+  d_profile_avatar,
+  p_profile,
+  p_profile_avatar,
+} from '../../constants/api'
 import sendRequest from '../../utils/request'
 import DefaultAvatar from '../../common/DefaultAvatar'
-import { validateEmail , passwordLevel } from '../../helper/validation'
+import { validateEmail, passwordLevel } from '../../helper/validation'
 import * as ICONS from '../../assets/icons'
+
 import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter'
 
-
-const { Colors, HeaderHeight, fontSize } = helper
+const { Colors, HeaderHeight, fontSize, IconMiddle } = helper
 const { grey2, blue, lightGrey1 } = Colors
 const Wrapper = styled(View)`
   padding-top: 30px;
@@ -78,6 +82,10 @@ const ButtonText = styled(Text)`
   display: flex;
   align-self: center;
   justify-content: center;
+`
+const DeleteAvatar = styled(TouchableOpacity)`
+  position: absolute;
+  right: 10;
 `
 const StyledInput = styled(TextInput)`
   flex: 2;
@@ -154,28 +162,42 @@ class Content extends Component {
     return (
       <Wrapper>
         <User>
-          <TouchableOpacity onPress={this.selectImage}>
-            {!image ||
-            image === '/images/default_group.png' ||
-            image === '/images/default_avatar.jpg' ? (
-              <DefaultAvatar size={80} />
-            ) : (
-              <ImageComponent
-                size={80}
-                source={{
-                  uri: imageFormData
-                    ? image
-                    : `https://seruniverse.asmo.media${image}`,
-                }}
-                style={{
-                  marginTop: 0,
-                  marginBottom: 16,
-                  marginRight: 10,
-                  marginLeft: 10,
-                }}
-              />
+          <View style={{ position: 'relative' }}>
+            <TouchableOpacity onPress={this.selectImage}>
+              {!image ||
+              image === '/images/default_group.png' ||
+              image === '/images/default_avatar.jpg' ? (
+                <DefaultAvatar size={80} />
+              ) : (
+                <>
+                  <ImageComponent
+                    size={80}
+                    source={{
+                      uri: imageFormData
+                        ? image
+                        : `https://seruniverse.asmo.media${image}`,
+                    }}
+                    style={{
+                      marginTop: 0,
+                      marginBottom: 16,
+                      marginRight: 10,
+                      marginLeft: 10,
+                    }}
+                  />
+                </>
+              )}
+            </TouchableOpacity>
+            {!!image && (
+              <DeleteAvatar onPress={this.deleteImageIsState}>
+                <Image
+                  style={{ width: IconMiddle, height: IconMiddle }}
+                  resizeMode="contain"
+                  source={ICONS.Delete}
+                />
+              </DeleteAvatar>
             )}
-          </TouchableOpacity>
+          </View>
+
           <UserInfo>
             <InputBox key={0} err={!!lastNameError}>
               <InputLabel numberOfLines={1}>Фамилия</InputLabel>
@@ -318,6 +340,7 @@ class Content extends Component {
     repasswordError: false,
     imageFormData: null,
     image: '',
+    imageDeleted: false,
     user: {
       email: '',
       first_name: '',
@@ -380,7 +403,27 @@ class Content extends Component {
         const newUser = { ...user }
         newUser.image = res.newImage
         setUser(newUser)
-        this.setState({ user: newUser })
+        this.setState({ user: newUser, imageDeleted: false })
+      },
+      failFunc: err => {},
+    })
+  }
+
+  deleteImageIsState = () => {
+    this.setState({ image: '', imageDeleted: true })
+  }
+
+  deleteImage = () => {
+    const { setUser, user } = this.props
+
+    sendRequest({
+      r_path: d_profile_avatar,
+      method: 'delete',
+      attr: {},
+      success: res => {
+        const newUser = { ...user }
+        newUser.image = ''
+        setUser(newUser)
       },
       failFunc: err => {},
     })
@@ -412,7 +455,13 @@ class Content extends Component {
   }
 
   apply = () => {
-    const { user, imageFormData, emailError, repasswordError } = this.state
+    const {
+      user,
+      imageFormData,
+      emailError,
+      repasswordError,
+      imageDeleted,
+    } = this.state
     const { back, alterUser } = this.props
     const userRedux = this.props.user
     const {
@@ -460,6 +509,9 @@ class Content extends Component {
         },
         failFunc: err => {},
       })
+      if (imageDeleted) {
+        this.deleteImage()
+      }
       back()
     }
   }
