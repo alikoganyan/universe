@@ -188,7 +188,7 @@ class Content extends Component {
   }
 
   handleChangePass = e => {
-    this.setState({ pass: e })
+    this.setState({ pass: e, err: {} })
   }
 
   handleChangeRepass = e => {
