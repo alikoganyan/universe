@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import GlobalFont from 'react-native-global-font'
 import firebase from 'react-native-firebase'
+import * as Sentry from '@sentry/react-native'
 // import { Font, Notifications } from 'expo';
 import { store } from './reducers/store'
 import { Provider } from 'react-redux'
@@ -17,6 +18,10 @@ import { connectToSocket } from './utils/socket'
 import { setUser, setAuth } from './actions/userActions'
 import { setDialogs, setDialogsUserId } from './actions/dialogsActions'
 import { setInternetConnection } from './actions/baseActions'
+
+Sentry.init({
+  dsn: 'https://25a865a3ea6942c5b17b74015b514274@sentry.io/3069672',
+})
 // import OfflineNotice from './common/OfflineNotice'
 
 // const Roboto = require('./assets/fonts/Roboto-Regular.ttf')
@@ -69,11 +74,13 @@ export default class AppComponent extends Component {
           store.dispatch(setDialogsUserId(value._id))
           store.dispatch(setAuth(value.access_token))
           connectToSocket(value.access_token)
-          this.setState({ logged: true })
+          this.setState({ logged: true, loaded: true })
         }
       })
       .finally(() => {
-        this.setState({ loaded: true })
+        if (!this.state.loaded) {
+          this.setState({ loaded: true })
+        }
       })
     AsyncStorage.getItem('dialogs').then(res => {
       const value = JSON.parse(res)
@@ -101,7 +108,7 @@ export default class AppComponent extends Component {
   handleFirstConnectivityChange = connected => {
     // console.log(connected);
     store.dispatch(setInternetConnection(connected))
-    this.setState({ connected })
+    // this.setState({ connected })
   }
 
   _handleBackButton = () => {

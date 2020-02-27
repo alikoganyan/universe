@@ -3,7 +3,6 @@ import { Text } from 'react-native'
 import {
   createStackNavigator,
   createAppContainer,
-  // createDrawerNavigator,
   createBottomTabNavigator,
   createSwitchNavigator,
 } from 'react-navigation'
@@ -136,95 +135,6 @@ const TabBarNavigation = createBottomTabNavigator(
   },
 )
 
-// const createRootNavigator = (logged = false) => {
-//   // eslint-disable-next-line no-unused-vars
-//   // const AppDrawerNavigator = createDrawerNavigator(
-//   //   {
-//   //     Home: {
-//   //       screen: FirstScreen,
-//   //       navigationOptions: {
-//   //         headerMode: 'none',
-//   //         gesturesEnabled: false,
-//   //       },
-//   //     },
-//   //   },
-//   //   {
-//   //     drawerWidth: Dimensions.get('window').width * 0.8,
-//   //     contentComponent: ({ navigation }) => (
-//   //       <DrawerComponent navigation={navigation} />
-//   //     ),
-//   //     drawerLockMode: 'locked-open',
-//   //   },
-//   // )
-//   const initialRouteName = Platform.isPad
-//     ? 'IpadView'
-//     : logged
-//     ? 'Dialogs'
-//     : 'Login'
-//   const AppStackNavigator = createStackNavigator(
-//     {
-//       Group: { screen: Group },
-//       Dialogs: TabBarNavigation,
-//       Chat: { screen: Chat },
-//       Login: {
-//         screen: Login,
-//         navigationOptions: {
-//           gesturesEnabled: false,
-//         },
-//         defaultNavigationOptions: {
-//           gesturesEnabled: false,
-//         },
-//       },
-//       Signup: { screen: Signup },
-//       Signup2: { screen: Signup2 },
-//       Signup3: { screen: Signup3 },
-//       PinCode: { screen: PinCode },
-//       Restore: { screen: Restore },
-//       Restore2: { screen: Restore2 },
-//       Restore3: { screen: Restore3 },
-//       GroupInfo: { screen: GroupInfo },
-//       GroupName: { screen: GroupName },
-//       NewPost: { screen: NewPost },
-//       CreateTask: { screen: CreateTask },
-//       Profile: { screen: Profile },
-//       NewsComments: { screen: NewsComments },
-//       TasksInc: { screen: TasksInc },
-//       TasksOut: { screen: TasksOut },
-//       Tasks: { screen: Tasks },
-//       NewContact: { screen: NewContact },
-//       NewDialog: { screen: NewDialog },
-//       FirstInstall: { screen: FirstInstall },
-//       NewFeed: { screen: NewFeed },
-//       FeedEdit: { screen: FeedEdit },
-//       NewTask: { screen: NewTask },
-//       NewFeedReceivers: { screen: NewFeedReceivers },
-//       ProfileEdit: { screen: ProfileEdit },
-//       NewTaskReceivers: { screen: NewTaskReceivers },
-//       NewGroupParticipants: { screen: NewGroupParticipants },
-//       NewGroup: { screen: NewGroup },
-//       IpadView: { screen: IpadView },
-//       // FirstScreen: {
-//       //   screen: AppDrawerNavigator,
-//       //   transitionSpec: {
-//       //     duration: 0,
-//       //   },
-//       // },
-//       FeedReceivers: { screen: FeedReceivers },
-//       TaskEdit: { screen: TaskEdit },
-//       GroupEdit: { screen: GroupEdit },
-//       WebView: { screen: WebView },
-//       MapView: { screen: MapView },
-//       VideoView: { screen: VideoView },
-//     },
-//     {
-//       initialRouteName,
-//       headerMode: 'none',
-//     },
-//   )
-//
-//   return createAppContainer(AppStackNavigator)
-// }
-
 const publicNavigation = createStackNavigator(
   {
     Login: {
@@ -251,8 +161,8 @@ const publicNavigation = createStackNavigator(
 
 const AppStackNavigator = createStackNavigator(
   {
-    Group: { screen: Group },
     Dialogs: { screen: TabBarNavigation },
+    Group: { screen: Group },
     Chat: { screen: Chat },
     GroupInfo: { screen: GroupInfo },
     GroupName: { screen: GroupName },
@@ -275,12 +185,6 @@ const AppStackNavigator = createStackNavigator(
     NewGroupParticipants: { screen: NewGroupParticipants },
     NewGroup: { screen: NewGroup },
     IpadView: { screen: IpadView },
-    // FirstScreen: {
-    //   screen: AppDrawerNavigator,
-    //   transitionSpec: {
-    //     duration: 0,
-    //   },
-    // },
     FeedReceivers: { screen: FeedReceivers },
     TaskEdit: { screen: TaskEdit },
     GroupEdit: { screen: GroupEdit },
