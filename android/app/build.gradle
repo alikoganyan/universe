@@ -109,6 +109,7 @@ android {
         versionName "2.0.76"
         versionCode 68
         setProperty("archivesBaseName", "univ-$versionName($versionCode)")
+        multiDexEnabled true
     }
 
     signingConfigs {
@@ -152,8 +153,8 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-doc-viewer')
     implementation project(':@sentry_react-native')
-    implementation project(':react-native-file-viewer')
     implementation project(':@react-native-community_cameraroll')
     implementation project(':rn-fetch-blob')
     implementation project(':react-native-geolocation-service')

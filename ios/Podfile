@@ -79,6 +79,8 @@ rn_path = '../node_modules/react-native'
 
   pod 'RNSentry', :path => '../node_modules/@sentry/react-native'
 
+  pod 'RNReactNativeDocViewer', :path => '../node_modules/react-native-doc-viewer'
+
   target 'universeTests' do
     inherit! :search_paths
     # Pods for testing

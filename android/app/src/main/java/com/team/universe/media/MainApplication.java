@@ -2,6 +2,7 @@ package elize.univ.team;
 
 import android.app.Application;
 
+import com.reactlibrary.RNReactNativeDocViewerPackage;
 import com.facebook.react.ReactApplication;
 import com.brentvatne.react.ReactVideoPackage;
 import com.actionsheet.ActionSheetPackage;
@@ -44,6 +45,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage()
+          ,new RNReactNativeDocViewerPackage()
           ,new RNFirebaseAnalyticsPackage()
           ,new RNFetchBlobPackage()
           ,new RNFusedLocationPackage()

@@ -1,8 +1,8 @@
 rootProject.name = 'universe'
+include ':react-native-doc-viewer'
+project(':react-native-doc-viewer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-doc-viewer/android')
 include ':@sentry_react-native'
 project(':@sentry_react-native').projectDir = new File(rootProject.projectDir, '../node_modules/@sentry/react-native/android')
-include ':react-native-file-viewer'
-project(':react-native-file-viewer').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-file-viewer/android')
 include ':@react-native-community_cameraroll'
 project(':@react-native-community_cameraroll').projectDir = new File(rootProject.projectDir, '../node_modules/@react-native-community/cameraroll/android')
 include ':rn-fetch-blob'

@@ -195,6 +195,8 @@ PODS:
     - React
   - RNGestureHandler (1.6.0):
     - React
+  - RNReactNativeDocViewer (1.0.0):
+    - React
   - RNSentry (1.3.3):
     - React
     - Sentry (~> 4.4.0)
@@ -245,6 +247,7 @@ DEPENDENCIES:
   - RNDeviceInfo (from `../node_modules/react-native-device-info`)
   - RNFS (from `../node_modules/react-native-fs`)
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
+  - RNReactNativeDocViewer (from `../node_modules/react-native-doc-viewer`)
   - "RNSentry (from `../node_modules/@sentry/react-native`)"
   - RNSVG (from `../node_modules/react-native-svg`)
   - yoga (from `../node_modules/react-native/ReactCommon/yoga/yoga.podspec`)
@@ -311,6 +314,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-fs"
   RNGestureHandler:
     :path: "../node_modules/react-native-gesture-handler"
+  RNReactNativeDocViewer:
+    :path: "../node_modules/react-native-doc-viewer"
   RNSentry:
     :path: "../node_modules/@sentry/react-native"
   RNSVG:
@@ -356,12 +361,13 @@ SPEC CHECKSUMS:
   RNDeviceInfo: 17e34f6dd902f08d88cbe2c0b7a01be948d43641
   RNFS: 2bd9eb49dc82fa9676382f0585b992c424cd59df
   RNGestureHandler: dde546180bf24af0b5f737c8ad04b6f3fa51609a
+  RNReactNativeDocViewer: 571c6ac38483531b8fb521d02a6ba54652ed10a7
   RNSentry: 86baf0c87120cd5eb491d073989f8cbc1a2174c6
   RNSVG: 8ba35cbeb385a52fd960fd28db9d7d18b4c2974f
   SDWebImage: 609192dcf3898c910a2848032372ead951e66364
   Sentry: 14bdd673870e8cf64932b149fad5bbbf39a9b390
   yoga: 92b2102c3d373d1a790db4ab761d2b0ffc634f64
 
-PODFILE CHECKSUM: 4b26e854dcd9ff32792972a6077fb68690294dec
+PODFILE CHECKSUM: ebaa8b094ed63ff30a149fe9e9e926cb09e41407
 
 COCOAPODS: 1.9.0

@@ -8650,6 +8650,11 @@ react-native-device-info@^2.2.2:
   resolved "https://registry.yarnpkg.com/react-native-device-info/-/react-native-device-info-2.3.2.tgz#db2b8f135aaf2515583e367ab791dcc7d2f0d14c"
   integrity sha512-ccpPuUbwhw5uYdVwN1UJp6ykMZz6U/u82HNM3oJ7O6MP8RIMlMDkHbqR4O0sDtUSuRMGiqqRzFtmOLFYeQ0ODw==
 
+react-native-doc-viewer@^2.7.8:
+  version "2.7.8"
+  resolved "https://registry.yarnpkg.com/react-native-doc-viewer/-/react-native-doc-viewer-2.7.8.tgz#43d065328fb1b7ec90d321e5bd234711e807c8f6"
+  integrity sha1-Q9BlMo+xt+yQ0yHlvSNHEegHyPY=
+
 react-native-document-picker@^3.2.2:
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-3.2.4.tgz#8e1801ba9b81f42f928e8e5e519c3d8e1320cfab"
@@ -8674,11 +8679,6 @@ react-native-fetch-blob@0.10.8:
   dependencies:
     base-64 "0.1.0"
     glob "7.0.6"
-
-react-native-file-viewer@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/react-native-file-viewer/-/react-native-file-viewer-2.0.2.tgz#55fb73d611d8f5468c887f6dc4e9ff1e69668512"
-  integrity sha512-5xxT6T7bT4vgnt0iVVhULlk2HOmNcOj3UJHkxgv57xDmiRVkEVySZYvmXMpw9n3k+U0iuFHlKPt4D7hnF/I2FQ==
 
 react-native-firebase@^5.5.5:
   version "5.6.0"

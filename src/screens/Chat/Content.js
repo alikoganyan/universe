@@ -15,7 +15,7 @@ import {
 } from 'react-native'
 
 import Image from 'react-native-image-progress'
-
+import OpenFile from 'react-native-doc-viewer'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import ActionSheet from 'react-native-actionsheet'
@@ -753,25 +753,6 @@ class Content extends Component {
   }
 
   _onPressMessage = item => {
-    if (item.reply && item.reply._id) {
-      const index = this.refs.flatList.props.data.findIndex(
-        el => el._id === item.reply._id,
-      )
-      if (index !== -1) {
-        this.refs.flatList.scrollToIndex({
-          animated: true,
-          index: index,
-          viewPosition: 0.5,
-        })
-      } else {
-        this.getSelectedMessage(item.reply._id)
-      }
-      this.setState({ selectedMessages: item.reply._id })
-      setTimeout(() => {
-        this.setState({ selectedMessages: false })
-      }, 2000)
-    }
-
     const {
       navigate,
       currentDialog,
@@ -832,7 +813,44 @@ class Content extends Component {
           onShowPreviewImages(dialogImages, imageIndex)
         }
         break
-
+      case 'file':
+        if (Platform.OS === 'ios') {
+          OpenFile.openDoc(
+            [
+              {
+                url: `https://seruniverse.asmo.media${item.src}`,
+                fileNameOptional: item.filename,
+              },
+            ],
+            (error, url) => {
+              if (error) {
+                // console.log('error', error)
+              } else {
+                // console.log(url)
+              }
+            },
+          )
+        } else {
+          //Android
+          OpenFile.openDoc(
+            [
+              {
+                url: `https://www.huf-haus.com/fileadmin/Bilder/Header/ART_3/Header_HUF_Haus_ART_3___1_.jpg`,
+                fileName: item.filename,
+                fileType: 'jpg',
+                cache: false,
+              },
+            ],
+            (error, url) => {
+              if (error) {
+                // console.log('error', error)
+              } else {
+                // console.log(url)
+              }
+            },
+          )
+        }
+        break
       default:
         break
     }
