@@ -43,7 +43,8 @@ export default class PinCode extends Component {
   }
 
   componentDidMount() {
-    BackHandler.addEventListener('hardwareBackPress', this._handleBackButton)
+    // this.props.navigation.navigate('CreatePassword')
+    BackHandler.addEventListener('hardwareBa  ckPress', this._handleBackButton)
   }
 
   componentWillUnmount() {

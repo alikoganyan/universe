@@ -33,6 +33,6 @@ export default class Signup extends Component {
   componentDidMount() {}
 
   moveForward = () => {
-    this.props.navigation.navigate('Login')
+    this.props.navigation.navigate('CreatePassword')
   }
 }

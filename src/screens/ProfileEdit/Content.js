@@ -439,7 +439,7 @@ class Content extends Component {
       this.setState({ passwordText: e.nativeEvent.text })
     } else if (unit === 'repassword') {
       if (passwordText !== e.nativeEvent.text) {
-        this.setState({ repasswordError: 'Пароль не совпадает' })
+        this.setState({ repasswordError: 'Пароли не совпадают' })
       } else {
         this.setState({ repasswordError: false })
       }
