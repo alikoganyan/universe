@@ -166,7 +166,7 @@ class Content extends Component {
                 background={blue}
                 color="#fff"
               >
-                Создать
+                Создать и войти
               </Button>
             </TouchableOpacity>
           </ControlBar>
