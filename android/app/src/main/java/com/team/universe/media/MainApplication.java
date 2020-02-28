@@ -26,6 +26,7 @@ import com.facebook.soloader.SoLoader;
 import com.agontuk.RNFusedLocation.RNFusedLocationPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import io.invertase.firebase.analytics.RNFirebaseAnalyticsPackage;
+import io.sentry.RNSentryPackage;
 
 import java.util.Arrays;
 import java.util.List;
@@ -44,6 +45,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage()
+          ,new RNSentryPackage()
           ,new RNFirebaseAnalyticsPackage()
           ,new RNFetchBlobPackage()
           ,new RNFusedLocationPackage()

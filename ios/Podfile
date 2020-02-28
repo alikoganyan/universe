@@ -77,6 +77,7 @@ rn_path = '../node_modules/react-native'
 
   pod 'GoogleIDFASupport', '~> 3.14.0'
 
+
   pod 'RNSentry', :path => '../node_modules/@sentry/react-native'
 
   target 'universeTests' do
