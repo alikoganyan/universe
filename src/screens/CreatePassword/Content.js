@@ -215,7 +215,7 @@ class Content extends Component {
       : false
     passwordError && this.setState({ invalidPassword: passwordError })
 
-    if (invalidPassword || invalidConfirmPassword) {
+    if (invalidPassword || invalidConfirmPassword || passwordError) {
       return
     }
 

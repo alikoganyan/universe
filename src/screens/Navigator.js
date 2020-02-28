@@ -59,6 +59,7 @@ import {
   SettingsMenuIcon,
 } from '../assets'
 import CreatePassword from './CreatePassword/CreatePassword'
+import ChangePhone from './ChangePhone/ChangePhone'
 
 const Label = styled(Text)`
   margin-top: 3;
@@ -193,6 +194,7 @@ const AppStackNavigator = createStackNavigator(
     WebView: { screen: WebView },
     MapView: { screen: MapView },
     VideoView: { screen: VideoView },
+    ChangePhone: { screen: ChangePhone },
   },
   {
     initialRouteName: 'Dialogs',

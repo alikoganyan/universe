@@ -58,10 +58,23 @@ const userReducer = (state = initialState, action) => {
     case SET_CONTACTS:
       return { ...state, contacts: [...action.payload] }
     case ALTER_USER:
-      const { email, first_name, last_name, middle_name } = action.payload
+      const {
+        email,
+        first_name,
+        last_name,
+        middle_name,
+        phone_number,
+      } = action.payload
       return {
         ...state,
-        user: { ...state.user, email, first_name, last_name, middle_name },
+        user: {
+          ...state.user,
+          email,
+          first_name,
+          last_name,
+          middle_name,
+          phone_number,
+        },
       }
     case SET_SETTINGS:
       return {

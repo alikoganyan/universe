@@ -406,6 +406,11 @@ class Content extends Component {
                             (item.value.name ? item.value.name : item.value)}
                         </Value>
                         {item.icon && item.icon}
+                        {item.type === 'Телефон' && (
+                          <TouchableOpacity onPress={this.changePhone}>
+                            <Text>Изменить</Text>
+                          </TouchableOpacity>
+                        )}
                       </Data>
                     </Info>
                   ),
@@ -514,6 +519,12 @@ class Content extends Component {
         : null,
     ]
     this.setState({ UserData: newUserData })
+  }
+
+  changePhone = () => {
+    const { navigate } = this.props
+
+    navigate('ChangePhone')
   }
 
   toChat = () => {
