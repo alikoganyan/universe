@@ -19,6 +19,7 @@ import {
   setUser,
   setAuth,
   setRegisterUserNumber,
+  setPas,
 } from '../../actions/userActions'
 import { trySignToPushes } from '../../actions/pushesActions'
 import { p_login, p_restore_password } from '../../constants/api'
@@ -28,6 +29,7 @@ import { connectToSocket } from '../../utils/socket'
 import * as ICONS from '../../assets/icons'
 import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter'
 import { passwordLevel } from '../../helper/validation'
+import { setIsMyProfile } from '../../actions/profileAction'
 
 const { Colors, fontSize, minPassLength } = helper
 const { lightGrey1, blue, pink } = Colors
@@ -234,7 +236,12 @@ class Content extends Component {
   }
 
   login = () => {
-    const { setRegisterUserNumber, pushesToken, register } = this.props
+    const {
+      setRegisterUserNumber,
+      pushesToken,
+      register,
+      setIsMyProfile,
+    } = this.props
     const { phone: phone_number } = register
     const { password } = this.state
 
@@ -252,7 +259,13 @@ class Content extends Component {
         deviceId: RNDeviceInfo.getDeviceId(),
       },
       success: res => {
-        const { setAuth, setUser, navigate, trySignToPushes } = this.props
+        const {
+          setAuth,
+          setUser,
+          navigate,
+          trySignToPushes,
+          setPas,
+        } = this.props
         const {
           access_token,
           data,
@@ -275,7 +288,9 @@ class Content extends Component {
         this.setState({ loading: false })
         setTimeout(() => {
           connectToSocket(access_token)
-          navigate('Dialogs')
+          setIsMyProfile(true)
+          setPas('')
+          navigate('Profile')
         }, 0)
       },
       failFunc: err => {
@@ -322,6 +337,8 @@ const mapDispatchToProps = dispatch => ({
   setAuth: _ => dispatch(setAuth(_)),
   setUser: _ => dispatch(setUser(_)),
   setRegisterUserNumber: _ => dispatch(setRegisterUserNumber(_)),
+  setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
+  setPas: _ => dispatch(setPas(_)),
   trySignToPushes: trySignToPushes(dispatch),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)
