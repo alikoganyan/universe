@@ -3,7 +3,6 @@ import { Text } from 'react-native'
 import {
   createStackNavigator,
   createAppContainer,
-  // createDrawerNavigator,
   createBottomTabNavigator,
   createSwitchNavigator,
 } from 'react-navigation'
@@ -136,6 +135,7 @@ const TabBarNavigation = createBottomTabNavigator(
     },
   },
 )
+
 const publicNavigation = createStackNavigator(
   {
     Login: {
@@ -163,8 +163,8 @@ const publicNavigation = createStackNavigator(
 
 const AppStackNavigator = createStackNavigator(
   {
-    Group: { screen: Group },
     Dialogs: { screen: TabBarNavigation },
+    Group: { screen: Group },
     Chat: { screen: Chat },
     GroupInfo: { screen: GroupInfo },
     GroupName: { screen: GroupName },
@@ -187,12 +187,6 @@ const AppStackNavigator = createStackNavigator(
     NewGroupParticipants: { screen: NewGroupParticipants },
     NewGroup: { screen: NewGroup },
     IpadView: { screen: IpadView },
-    // FirstScreen: {
-    //   screen: AppDrawerNavigator,
-    //   transitionSpec: {
-    //     duration: 0,
-    //   },
-    // },
     FeedReceivers: { screen: FeedReceivers },
     TaskEdit: { screen: TaskEdit },
     GroupEdit: { screen: GroupEdit },

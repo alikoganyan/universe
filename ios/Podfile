@@ -75,6 +75,9 @@ rn_path = '../node_modules/react-native'
 
   pod 'react-native-cameraroll', :path => '../node_modules/@react-native-community/cameraroll'
 
+  pod 'GoogleIDFASupport', '~> 3.14.0'
+
+  pod 'RNSentry', :path => '../node_modules/@sentry/react-native'
 
   target 'universeTests' do
     inherit! :search_paths
