@@ -406,7 +406,7 @@ class Content extends Component {
                             (item.value.name ? item.value.name : item.value)}
                         </Value>
                         {item.icon && item.icon}
-                        {item.type === 'Телефон' && (
+                        {!!(item.type === 'Телефон' && myProfile) && (
                           <TouchableOpacity onPress={this.changePhone}>
                             <Text>Изменить</Text>
                           </TouchableOpacity>
@@ -436,7 +436,11 @@ class Content extends Component {
 
   componentWillReceiveProps(nextProps, nextContext) {
     const { myProfile } = this.props
-    if (myProfile && nextProps.user.email !== this.props.user.email) {
+    if (
+      myProfile &&
+      (nextProps.user.email !== this.props.user.email ||
+        nextProps.user.phone_number !== this.props.user.phone_number)
+    ) {
       this.createUserInfo(nextProps.user)
     }
   }

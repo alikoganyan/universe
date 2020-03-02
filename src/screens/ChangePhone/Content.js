@@ -321,7 +321,7 @@ class Content extends Component {
         password,
       },
       success: res => {
-        alterUser({
+        this.props.alterUser({
           email: user.email,
           first_name: user.first_name,
           middle_name: user.middle_name,
