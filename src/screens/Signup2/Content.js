@@ -4,9 +4,9 @@ import styled from 'styled-components'
 import { connect } from 'react-redux'
 import helper from '../../utils/helpers'
 import Button from '../../common/Button'
-import { setUser, setRegisterUserSms } from '../../actions/userActions'
+import { setUser, setRegisterUserSms, setPas } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
-import { p_register, p_get_sms } from '../../constants/api'
+import { p_get_sms, p_checkPin } from '../../constants/api'
 
 const { Colors, fontSize } = helper
 const { lightGrey1, blue, pink } = Colors
@@ -130,15 +130,16 @@ class Content extends Component {
     const { forward, register } = this.props
     if (error <= tries) {
       this.setState({ sms: e }, () => {
-        if (e.length === 6) {
+        if (e.length === 4) {
           sendRequest({
-            r_path: p_register,
+            r_path: p_checkPin,
             method: 'post',
             attr: {
               phone_number: register.phone,
-              password: e,
+              pin_code: e,
             },
             success: res => {
+              this.props.setPas(e)
               forward()
             },
             failFunc: () => {
@@ -187,6 +188,8 @@ const mapStateToProps = state => ({
   register: state.userReducer.register,
 })
 const mapDispatchToProps = dispatch => ({
+  setPas: _ => dispatch(setPas(_)),
+
   setUser: _ => dispatch(setUser(_)),
   setRegisterUserSms: _ => dispatch(setRegisterUserSms(_)),
 })

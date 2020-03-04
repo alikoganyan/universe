@@ -439,7 +439,7 @@ class Content extends Component {
       this.setState({ passwordText: e.nativeEvent.text })
     } else if (unit === 'repassword') {
       if (passwordText !== e.nativeEvent.text) {
-        this.setState({ repasswordError: 'Пароль не совпадает' })
+        this.setState({ repasswordError: 'Пароли не совпадают' })
       } else {
         this.setState({ repasswordError: false })
       }
@@ -471,6 +471,7 @@ class Content extends Component {
       email,
       password,
       repassword,
+      phone_number,
     } = user
     this.setState({
       lastNameError: !last_name ? 'Не менее 2х символов' : '',
@@ -504,6 +505,7 @@ class Content extends Component {
             first_name: first_name || userRedux.firstName,
             middle_name: middle_name || userRedux.patronymic,
             last_name: last_name || userRedux.lastName,
+            phone_number,
           })
           back()
         },

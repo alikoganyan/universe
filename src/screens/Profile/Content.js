@@ -406,6 +406,11 @@ class Content extends Component {
                             (item.value.name ? item.value.name : item.value)}
                         </Value>
                         {item.icon && item.icon}
+                        {!!(item.type === 'Телефон' && myProfile) && (
+                          <TouchableOpacity onPress={this.changePhone}>
+                            <Text>Изменить</Text>
+                          </TouchableOpacity>
+                        )}
                       </Data>
                     </Info>
                   ),
@@ -431,8 +436,15 @@ class Content extends Component {
 
   componentWillReceiveProps(nextProps, nextContext) {
     const { myProfile } = this.props
-    if (myProfile && nextProps.user.email !== this.props.user.email) {
+    if (
+      myProfile &&
+      (nextProps.user.email !== this.props.user.email ||
+        nextProps.user.phone_number !== this.props.user.phone_number)
+    ) {
       this.createUserInfo(nextProps.user)
+    }
+    if (nextProps.previousProfile) {
+      this.createUserInfo(nextProps.profile)
     }
   }
 
@@ -449,7 +461,6 @@ class Content extends Component {
       isGroup,
       participants,
     } = profile
-
     const newUserData = [
       department && department.name !== 'Персональный'
         ? {
@@ -516,6 +527,12 @@ class Content extends Component {
     this.setState({ UserData: newUserData })
   }
 
+  changePhone = () => {
+    const { navigate } = this.props
+
+    navigate('ChangePhone')
+  }
+
   toChat = () => {
     const {
       dialogs,
@@ -546,8 +563,10 @@ class Content extends Component {
       setCurrentDialogs(cDialog)
       socket.emit('view', { room, viewer: user._id })
     } else {
-      const { _id } = profile
+      const { _id, room } = profile
       setRoom(_id)
+      setCurrentChat(room)
+      setCurrentDialogs(profile)
       // setCurrentDialogs(profile)
     }
     navigate('Chat')

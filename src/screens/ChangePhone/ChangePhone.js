@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View } from 'react-native'
+import { View, BackHandler } from 'react-native'
 import styled from 'styled-components'
 import SafeAreaView from '../../common/SafeAreaView'
 import Header from './Header'
@@ -11,15 +11,15 @@ const Wrapper = styled(View)`
   height: 100%;
   padding-bottom: ${HeaderHeight};
 `
-export default class Signup extends Component {
+export default class ChangePhone extends Component {
   render() {
     return (
       <SafeAreaView behavior="padding">
         <Wrapper>
           <Header back={this.navigateBack} />
           <Content
-            forward={this.moveForward}
-            navigate={this.props.navigation.navigate}
+            navigate={this.navigate}
+            goBack={this.props.navigation.goBack}
           />
         </Wrapper>
       </SafeAreaView>
@@ -30,9 +30,23 @@ export default class Signup extends Component {
     this.props.navigation.goBack()
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackPress,
+    )
+  }
 
-  moveForward = () => {
-    this.props.navigation.navigate('CreatePassword')
+  componentWillUnmount() {
+    this.backHandler.remove()
+  }
+
+  handleBackPress = () => {
+    this.navigateBack()
+    return true
+  }
+
+  navigate = e => {
+    this.props.navigation.navigate(e)
   }
 }

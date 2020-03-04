@@ -58,6 +58,8 @@ import {
   TasksMenuIcon,
   SettingsMenuIcon,
 } from '../assets'
+import CreatePassword from './CreatePassword/CreatePassword'
+import ChangePhone from './ChangePhone/ChangePhone'
 
 const Label = styled(Text)`
   margin-top: 3;
@@ -149,6 +151,7 @@ const publicNavigation = createStackNavigator(
     Signup: { screen: Signup },
     Signup2: { screen: Signup2 },
     Signup3: { screen: Signup3 },
+    CreatePassword: { screen: CreatePassword },
     PinCode: { screen: PinCode },
     Restore: { screen: Restore },
     Restore2: { screen: Restore2 },
@@ -191,6 +194,7 @@ const AppStackNavigator = createStackNavigator(
     WebView: { screen: WebView },
     MapView: { screen: MapView },
     VideoView: { screen: VideoView },
+    ChangePhone: { screen: ChangePhone },
   },
   {
     initialRouteName: 'Dialogs',

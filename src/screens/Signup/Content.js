@@ -8,7 +8,7 @@ import CountryPicker from 'react-native-country-picker-modal'
 import helper from '../../utils/helpers'
 import { setUser, setRegisterUserNumber } from '../../actions/userActions'
 import sendRequest from '../../utils/request'
-import { p_get_sms } from '../../constants/api'
+import { p_get_get_pincode } from '../../constants/api'
 import Button from '../../common/Button'
 const { Colors, fontSize } = helper
 const { lightGrey1, blue, pink, black } = Colors
@@ -216,7 +216,7 @@ class Content extends Component {
     if (phone_number && this.inputRef.isValidNumber()) {
       setRegisterUserNumber(phone_number)
       sendRequest({
-        r_path: p_get_sms,
+        r_path: p_get_get_pincode,
         method: 'post',
         attr: {
           phone_number,

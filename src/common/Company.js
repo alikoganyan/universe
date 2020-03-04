@@ -14,7 +14,12 @@ import ImageComponent from './Image'
 import helper from '../utils/helpers'
 import sendRequest from '../utils/request'
 import { setTaskList } from '../actions/tasksActions'
-import { setCompanies, setContacts, setUser } from '../actions/userActions'
+import {
+  setCompanies,
+  setContacts,
+  setReset,
+  setUser,
+} from '../actions/userActions'
 import { setDialogs, setCompanyLoading } from '../actions/dialogsActions'
 import DefaultAvatar from './DefaultAvatar'
 import { setNews } from '../actions/newsActions'
@@ -198,8 +203,7 @@ class Company extends Component {
               this.props.setContacts(res.data.contacts)
               this.props.setNews(res.data.news)
               this.props.setCompanyLoading(false)
-
-              // socket.emit('get_dialogs', { id: userData.user._id })
+              this.props.setReset(true)
             },
             failFunc: () => {
               this.props.setCompanyLoading(false)
@@ -246,6 +250,7 @@ const mapDispatchToProps = dispatch => ({
   setUser: _ => dispatch(setUser(_)),
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
+  setReset: _ => dispatch(setReset(_)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Company)

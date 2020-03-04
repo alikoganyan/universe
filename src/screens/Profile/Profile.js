@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   AsyncStorage,
+  BackHandler,
 } from 'react-native'
 // import { Constants } from 'expo';
 import RNDeviceInfo from 'react-native-device-info'
@@ -115,6 +116,7 @@ class Profile extends Component {
       this.props.setCurrentRoomId(previousProfile.room)
       this.props.setCurrentChat(previousProfile.room)
       this.props.setCurrentDialogs(previousProfile)
+      this.backHandler.remove()
     } else {
       navigation.goBack()
     }
@@ -127,11 +129,24 @@ class Profile extends Component {
     navigation.navigate('Chat')
   }
 
-  toSenderProfile = (sender, previousProfile?) => {
+  toSenderProfile = (sender, previousProfile = false) => {
     const { setProfile } = this.props
     this.setState({ previousProfile })
+
     this.props.setIsMyProfile(sender._id === this.props.user._id)
     setProfile(sender)
+
+    if (previousProfile) {
+      this.backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        this.handleBackPress,
+      )
+    }
+  }
+
+  handleBackPress = () => {
+    this.navigateBack()
+    return true
   }
 
   toDialogs = () => {
@@ -165,9 +180,9 @@ class Profile extends Component {
   }
 
   edit = () => {
-    const { navigation, currentDialog, currentChat } = this.props
+    const { navigation, currentDialog, currentChat, myProfile } = this.props
     navigation.navigate(
-      currentChat !== null && currentDialog.isGroup
+      currentChat !== null && currentDialog.isGroup && !myProfile
         ? 'GroupEdit'
         : 'ProfileEdit',
       {
