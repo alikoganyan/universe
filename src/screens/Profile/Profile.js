@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
   AsyncStorage,
+  BackHandler,
 } from 'react-native'
 // import { Constants } from 'expo';
 import RNDeviceInfo from 'react-native-device-info'
@@ -115,6 +116,7 @@ class Profile extends Component {
       this.props.setCurrentRoomId(previousProfile.room)
       this.props.setCurrentChat(previousProfile.room)
       this.props.setCurrentDialogs(previousProfile)
+      this.backHandler.remove()
     } else {
       navigation.goBack()
     }
@@ -130,8 +132,21 @@ class Profile extends Component {
   toSenderProfile = (sender, previousProfile = false) => {
     const { setProfile } = this.props
     this.setState({ previousProfile })
+
     this.props.setIsMyProfile(sender._id === this.props.user._id)
     setProfile(sender)
+
+    if (previousProfile) {
+      this.backHandler = BackHandler.addEventListener(
+        'hardwareBackPress',
+        this.handleBackPress,
+      )
+    }
+  }
+
+  handleBackPress = () => {
+    this.navigateBack()
+    return true
   }
 
   toDialogs = () => {
