@@ -443,6 +443,9 @@ class Content extends Component {
     ) {
       this.createUserInfo(nextProps.user)
     }
+    if (nextProps.previousProfile) {
+      this.createUserInfo(nextProps.profile)
+    }
   }
 
   componentWillUnmount() {}
@@ -458,7 +461,6 @@ class Content extends Component {
       isGroup,
       participants,
     } = profile
-
     const newUserData = [
       department && department.name !== 'Персональный'
         ? {
@@ -561,8 +563,10 @@ class Content extends Component {
       setCurrentDialogs(cDialog)
       socket.emit('view', { room, viewer: user._id })
     } else {
-      const { _id } = profile
+      const { _id, room } = profile
       setRoom(_id)
+      setCurrentChat(room)
+      setCurrentDialogs(profile)
       // setCurrentDialogs(profile)
     }
     navigate('Chat')

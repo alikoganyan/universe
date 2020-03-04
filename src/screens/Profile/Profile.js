@@ -127,7 +127,7 @@ class Profile extends Component {
     navigation.navigate('Chat')
   }
 
-  toSenderProfile = (sender, previousProfile?) => {
+  toSenderProfile = (sender, previousProfile = false) => {
     const { setProfile } = this.props
     this.setState({ previousProfile })
     this.props.setIsMyProfile(sender._id === this.props.user._id)
@@ -165,9 +165,9 @@ class Profile extends Component {
   }
 
   edit = () => {
-    const { navigation, currentDialog, currentChat } = this.props
+    const { navigation, currentDialog, currentChat, myProfile } = this.props
     navigation.navigate(
-      currentChat !== null && currentDialog.isGroup
+      currentChat !== null && currentDialog.isGroup && !myProfile
         ? 'GroupEdit'
         : 'ProfileEdit',
       {
