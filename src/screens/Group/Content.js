@@ -16,6 +16,7 @@ import { connect } from 'react-redux'
 import ActionSheet from 'react-native-actionsheet'
 import moment from 'moment'
 import 'moment/locale/ru'
+import OpenFile from 'react-native-doc-viewer'
 import Message from '../../common/Message'
 import helper, { getHamsterDate } from '../../utils/helpers'
 import { chatBg } from '../../assets/images'
@@ -844,6 +845,44 @@ class Content extends Component {
             }
           })
           this.props.onShowPreviewImages(dialogImages, imageIndex)
+        }
+        break
+      case 'file':
+        if (Platform.OS === 'ios') {
+          OpenFile.openDoc(
+            [
+              {
+                url: `https://seruniverse.asmo.media${item.src}`,
+                fileNameOptional: item.filename,
+              },
+            ],
+            (error, url) => {
+              if (error) {
+                // console.log('error', error)
+              } else {
+                // console.log(url)
+              }
+            },
+          )
+        } else {
+          //Android
+          OpenFile.openDoc(
+            [
+              {
+                url: `https://www.huf-haus.com/fileadmin/Bilder/Header/ART_3/Header_HUF_Haus_ART_3___1_.jpg`,
+                fileName: item.filename,
+                fileType: 'jpg',
+                cache: false,
+              },
+            ],
+            (error, url) => {
+              if (error) {
+                // console.log('error', error)
+              } else {
+                // console.log(url)
+              }
+            },
+          )
         }
         break
       default:
