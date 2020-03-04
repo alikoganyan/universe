@@ -204,7 +204,6 @@ class Company extends Component {
               this.props.setNews(res.data.news)
               this.props.setCompanyLoading(false)
               this.props.setReset(true)
-              // socket.emit('get_dialogs', { id: userData.user._id })
             },
             failFunc: () => {
               this.props.setCompanyLoading(false)

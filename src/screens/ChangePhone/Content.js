@@ -107,6 +107,7 @@ class Content extends Component {
       pin,
       invalidPin,
       success,
+      errorMessage,
     } = this.state
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -228,6 +229,7 @@ class Content extends Component {
             >
               {!success ? 'Продолжить' : 'Сохранить'}
             </Button>
+            {!!errorMessage && <ErrorText>{errorMessage}</ErrorText>}
           </ControlBar>
         </Wrapper>
       </TouchableWithoutFeedback>
@@ -246,6 +248,7 @@ class Content extends Component {
     pin: '',
     invalidPin: false,
     success: false,
+    errorMessage: false,
   }
   inputRef = null
 
@@ -312,6 +315,11 @@ class Content extends Component {
   changePhone = () => {
     const { phone: new_phone_number, pin: pin_code, password } = this.state
     const { user } = this.props
+
+    if (!pin_code || !password) {
+      this.setState({ errorMessage: 'Все поля должны быть заполнены' })
+      return
+    }
     sendRequest({
       r_path: p_change_phone_number,
       method: 'patch',
@@ -330,7 +338,9 @@ class Content extends Component {
         })
         this.props.goBack()
       },
-      failFunc: err => {},
+      failFunc: err => {
+        this.setState({ errorMessage: err.msg })
+      },
     })
   }
 
@@ -346,11 +356,11 @@ class Content extends Component {
   }
 
   handleChangePin = e => {
-    this.setState({ pin: e, invalidPin: false })
+    this.setState({ pin: e, invalidPin: false, errorMessage: false })
   }
 
   handleChangePassword = e => {
-    this.setState({ password: e, invalidPassword: false })
+    this.setState({ password: e, invalidPassword: false, errorMessage: false })
   }
 }
 
