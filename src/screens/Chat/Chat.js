@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { View, Platform } from 'react-native'
+import { View, Platform, BackHandler } from 'react-native'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
 import {
@@ -98,7 +98,12 @@ class Chat extends Component {
     messages: [],
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.backHandler = BackHandler.addEventListener(
+      'hardwareBackPress',
+      this.handleBackPress,
+    )
+  }
 
   componentWillUnmount() {
     const {
@@ -114,6 +119,12 @@ class Chat extends Component {
     setRoom(null)
     // this.props.setDialog({})
     // socket.emit('get_dialogs', { id: user._id })
+    this.backHandler.remove()
+  }
+
+  handleBackPress = () => {
+    this.navigateBack()
+    return true
   }
 
   setMessages = messages => {
