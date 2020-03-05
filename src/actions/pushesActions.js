@@ -1,9 +1,10 @@
-import { Alert, Platform } from 'react-native'
+import { Alert, Platform, AsyncStorage } from 'react-native'
 import RNPermissions from 'react-native-permissions'
 import RNDeviceInfo from 'react-native-device-info'
 import firebase from 'react-native-firebase'
 import sendRequest from '../utils/request'
 import { p_notifications } from '../constants/api'
+import { store } from '../reducers/store'
 
 export const GET_PERMISSION_STATUS = 'GET_PUSHES_PERMISSION_STATUS'
 export const ASK_PERMISSION_STATUS = 'ASK_PUSHES_PERMISSION_STATUS'
@@ -25,13 +26,65 @@ export const getPushesPermissionStatusAndToken = dispatch => async () => {
     dispatch({ type: PERMISSION_STATUS_FULFILLED, payload: isEnabled })
     if (isEnabled) {
       dispatch({ type: GET_PUSH_TOKEN })
-      const fcmToken = await firebase.messaging().getToken()
-      if (fcmToken) {
-        dispatch({ type: PUSH_TOKEN_FULFILLED, payload: fcmToken })
+      const newFcmToken = await firebase.messaging().getToken()
+      const oldFcmToken = await AsyncStorage.getItem('fcmToken')
+      if (newFcmToken) {
+        AsyncStorage.getItem('user').then(res => {
+          const user = JSON.parse(res)
+          if (user && oldFcmToken) {
+            if (newFcmToken !== oldFcmToken) {
+              sendFcmToken(newFcmToken)
+            }
+            AsyncStorage.setItem('fcmToken', newFcmToken)
+          }
+        })
+        dispatch({ type: PUSH_TOKEN_FULFILLED, payload: newFcmToken })
       }
+
+      firebase.messaging().onTokenRefresh(newFcmToken => {
+        AsyncStorage.getItem('fcmToken').then(oldFcmToken => {
+          if (oldFcmToken) {
+            AsyncStorage.getItem('user').then(res => {
+              const user = JSON.parse(res)
+              if (user) {
+                if (newFcmToken !== oldFcmToken) {
+                  sendFcmToken(newFcmToken)
+                  AsyncStorage.setItem('fcmToken', newFcmToken)
+                }
+              }
+            })
+          }
+        })
+      })
     }
   } catch (error) {
     dispatch({ type: PERMISSION_STATUS_REJECTED })
+  }
+}
+
+const sendFcmToken = fcmToken => {
+  if (fcmToken) {
+    store.dispatch({ type: PUSH_TOKEN_FULFILLED, payload: fcmToken })
+    store.dispatch({ type: USER_PUSHES_REQUEST })
+    sendRequest({
+      r_path: p_notifications,
+      method: 'patch',
+      attr: {
+        enable: true,
+        push_token: fcmToken,
+        deviceId: RNDeviceInfo.getDeviceId(),
+        platform: Platform.OS,
+      },
+      success: () => {
+        store.dispatch({ type: USER_PUSHES_FULFILLED })
+        store.dispatch({ type: ENABLE_USER_PUSHES })
+      },
+      failFunc: () => {
+        store.dispatch({ type: USER_PUSHES_REJECTED })
+        store.dispatch({ type: DISABLE_USER_PUSHES })
+      },
+      full_res: true,
+    })
   }
 }
 
@@ -43,6 +96,7 @@ export const trySignToPushes = dispatch => async (firstTimeMode = false) => {
     let fcmToken = ''
     if (isEnabled) {
       fcmToken = await firebase.messaging().getToken()
+      AsyncStorage.setItem('fcmToken', fcmToken)
     } else {
       try {
         dispatch({ type: ASK_PERMISSION_STATUS })
@@ -82,30 +136,7 @@ export const trySignToPushes = dispatch => async (firstTimeMode = false) => {
         }
       }
     }
-
-    if (fcmToken) {
-      dispatch({ type: PUSH_TOKEN_FULFILLED, payload: fcmToken })
-      dispatch({ type: USER_PUSHES_REQUEST })
-      sendRequest({
-        r_path: p_notifications,
-        method: 'patch',
-        attr: {
-          enable: true,
-          push_token: fcmToken,
-          deviceId: RNDeviceInfo.getDeviceId(),
-          platform: Platform.OS,
-        },
-        success: () => {
-          dispatch({ type: USER_PUSHES_FULFILLED })
-          dispatch({ type: ENABLE_USER_PUSHES })
-        },
-        failFunc: () => {
-          dispatch({ type: USER_PUSHES_REJECTED })
-          dispatch({ type: DISABLE_USER_PUSHES })
-        },
-        full_res: true,
-      })
-    }
+    sendFcmToken(fcmToken)
   } catch (error) {
     dispatch({ type: PERMISSION_STATUS_REJECTED })
   }
