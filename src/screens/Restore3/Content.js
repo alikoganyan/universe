@@ -161,7 +161,7 @@ class Content extends Component {
         </PhoneNumber>
         <ControlBar>
           <Button onPress={this.proceed} background={blue} color="#fff">
-            Сохранить и войти
+            Сохранить
           </Button>
         </ControlBar>
       </Wrapper>

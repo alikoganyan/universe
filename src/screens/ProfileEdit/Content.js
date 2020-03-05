@@ -17,7 +17,6 @@ import helper from '../../utils/helpers'
 import ImageComponent from '../../common/Image'
 import RNDeviceInfo from 'react-native-device-info'
 import { getImageFromPicker } from '../../utils/ImagePicker'
-import { socket } from '../../utils/socket'
 import {
   d_profile_avatar,
   p_profile,
@@ -31,7 +30,7 @@ import * as ICONS from '../../assets/icons'
 import { BarPasswordStrengthDisplay } from 'react-native-password-strength-meter'
 
 const { Colors, HeaderHeight, fontSize, IconMiddle } = helper
-const { grey2, blue, lightGrey1 } = Colors
+const { grey2, blue, lightGrey1, pink } = Colors
 const Wrapper = styled(View)`
   padding-top: 30px;
   background: white;
@@ -106,6 +105,7 @@ const Error = styled(View)`
 const ErrorText = styled(Text)`
   font-size: ${fontSize.sm};
   text-align: center;
+  color: ${pink};
 `
 const ShowHidePassword = styled(TouchableOpacity)`
   position: absolute;
@@ -269,6 +269,7 @@ class Content extends Component {
                 hidePassword={this.state.password}
                 onChange={e => this.handleChange(e, 'password')}
                 maxLength={20}
+                style={{ borderColor: passwordError ? pink : lightGrey1 }}
               />
             </InputBox>
             <View
@@ -310,6 +311,7 @@ class Content extends Component {
                 hidePassword={this.state.confirmPassword}
                 onChange={e => this.handleChange(e, 'repassword')}
                 maxLength={20}
+                style={{ borderColor: repasswordError ? pink : lightGrey1 }}
               />
             </InputBox>
             {!!repasswordError && (
@@ -436,7 +438,11 @@ class Content extends Component {
     this.setState({ user: newUser })
 
     if (unit === 'password') {
-      this.setState({ passwordText: e.nativeEvent.text })
+      this.setState({
+        passwordText: e.nativeEvent.text,
+      })
+      e.nativeEvent.text.length > 5 && this.setState({ passwordError: false })
+      !e.nativeEvent.text.length && this.setState({ repasswordError: false })
     } else if (unit === 'repassword') {
       if (passwordText !== e.nativeEvent.text) {
         this.setState({ repasswordError: 'Пароли не совпадают' })
@@ -446,21 +452,13 @@ class Content extends Component {
     }
   }
 
-  toChat = () => {
-    const { toChat, setRoom, user } = this.props
-    const { id } = user
-    socket.emit('select chat', { chatId: id, userId: id })
-    setRoom(id)
-    toChat()
-  }
-
   apply = () => {
     const {
       user,
       imageFormData,
-      emailError,
-      repasswordError,
       imageDeleted,
+      repasswordError,
+      emailError,
     } = this.state
     const { back, alterUser } = this.props
     const userRedux = this.props.user
@@ -473,16 +471,32 @@ class Content extends Component {
       repassword,
       phone_number,
     } = user
-    this.setState({
+
+    const errors = {
       lastNameError: !last_name ? 'Не менее 2х символов' : '',
       firstNameError: !first_name ? 'Не менее 2х символов' : '',
       middleNameError: !middle_name ? 'Не менее 2х символов' : '',
-      emailError: !email ? 'Неправильный электронная почта' : '',
+      emailError,
+      repasswordError: !!(password && !repassword)
+        ? 'Подтвердите пароль'
+        : repasswordError,
+      passwordError: !!(password.length && password.length < 6)
+        ? 'Не менее 6х символов'
+        : '',
+    }
+    this.setState({ ...errors })
+
+    let error = null
+    Object.values(errors).forEach(e => {
+      if (e.length) {
+        return (error = e.length)
+      }
     })
-    validateEmail(email, this)
-    if (emailError || repasswordError) {
+
+    if (error) {
       return
     }
+
     if (first_name && last_name && middle_name && email) {
       sendRequest({
         r_path: p_profile,
