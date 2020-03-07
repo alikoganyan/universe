@@ -47,6 +47,7 @@ import Loader from '../../common/Loader'
 import RNPermissions from 'react-native-permissions'
 import { socket } from '../../utils/socket'
 import { getCurrentCompany } from '../../helper/message'
+import { setReset } from '../../actions/userActions'
 // import RNPermissions from 'react-native-permissions'
 
 const {
@@ -345,6 +346,11 @@ class Content extends Component {
       })
       this.props.setMessages(messages)
       setDialogViewers(null)
+    }
+
+    if (nextProps.reset) {
+      this.props.setMessages(dialog.messages)
+      this.props.setReset(false)
     }
   }
 
@@ -958,6 +964,7 @@ const mapStateToProps = state => ({
   message: state.messageReducer.message,
   sendingMessages: state.messageReducer.sendingMessages,
   dialogViewers: state.dialogsReducer.dialogViewers,
+  reset: state.userReducer.reset,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -972,5 +979,6 @@ const mapDispatchToProps = dispatch => ({
   setEditedMessage: _ => dispatch(getEditedMessage(_)),
   setSendingMessages: _ => dispatch(setSendingMessages(_)),
   setDialogViewers: _ => dispatch(setDialogViewers(_)),
+  setReset: _ => dispatch(setReset(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

@@ -684,7 +684,23 @@ class Dialogs extends Component {
   }
 
   setDialogsSocket = e => {
-    const { setDialogs, setCompanyLoading } = this.props
+    const { setDialogs, setCompanyLoading, currentRoomId, user } = this.props
+    if (currentRoomId) {
+      const currentDialogIndex = e.dialogs.findIndex(
+        d => d._id === currentRoomId,
+      )
+      if (currentDialogIndex) {
+        const currentDialog = e.dialogs[currentDialogIndex]
+        currentDialog.messages.forEach(m => {
+          if (!m.viewers.includes(user._id)) {
+            m.viewers.push(user._id)
+          }
+        })
+        this.props.setDialog(currentDialog)
+        this.props.setReset(true)
+      }
+    }
+
     const newDialogs = e.dialogs.length ? [...e.dialogs] : []
     const newDialogsSorted = newDialogs.length
       ? // eslint-disable-next-line array-callback-return

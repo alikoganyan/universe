@@ -45,6 +45,7 @@ import RNPermissions from 'react-native-permissions'
 import RNFetchBlob from 'rn-fetch-blob'
 import { socket } from '../../utils/socket'
 import { getCurrentCompany } from '../../helper/message'
+import { setReset } from '../../actions/userActions'
 
 const {
   Colors: { gray2 },
@@ -342,6 +343,11 @@ class Content extends Component {
       })
       this.props.setMessages(messages)
       setDialogViewers(null)
+    }
+
+    if (nextProps.reset) {
+      this.props.setMessages(dialog.messages)
+      this.props.setReset(false)
     }
   }
 
@@ -951,6 +957,7 @@ const mapStateToProps = state => ({
   user: state.userReducer.user,
   sendingMessages: state.messageReducer.sendingMessages,
   dialogViewers: state.dialogsReducer.dialogViewers,
+  reset: state.userReducer.reset,
 })
 const mapDispatchToProps = dispatch => ({
   editMessage: _ => dispatch(editMessage(_)),
@@ -965,5 +972,6 @@ const mapDispatchToProps = dispatch => ({
   setEditedMessage: _ => dispatch(getEditedMessage(_)),
   setSendingMessages: _ => dispatch(setSendingMessages(_)),
   setDialogViewers: _ => dispatch(setDialogViewers(_)),
+  setReset: _ => dispatch(setReset(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)
