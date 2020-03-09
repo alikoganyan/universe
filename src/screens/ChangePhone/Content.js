@@ -97,6 +97,17 @@ const ShowHidePassword = styled(TouchableOpacity)`
   align-items: center;
 `
 
+const SendAgain = styled(Text)`
+  text-align: center;
+  font-size: ${fontSize.text};
+  max-width: 90%;
+  margin-bottom: 20px;
+`
+const NoSMS = styled(SendAgain)`
+  color: ${lightGrey1};
+  margin-bottom: 10px;
+`
+
 class Content extends Component {
   render() {
     const {
@@ -108,6 +119,7 @@ class Content extends Component {
       invalidPin,
       success,
       errorMessage,
+      deadline,
     } = this.state
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -222,12 +234,25 @@ class Content extends Component {
             {!!(invalidPassword && success) && (
               <ErrorText>{invalidPassword}</ErrorText>
             )}
+            {success && <NoSMS>Не получили sms?</NoSMS>}
+            {!!(success && deadline) && (
+              <SendAgain>
+                Отправить sms повторно можно будет через 0:
+                {deadline >= 10 ? deadline : `0${deadline}`}
+              </SendAgain>
+            )}
             <Button
-              onPress={!success ? this.getPinCode : this.changePhone}
+              onPress={
+                success && deadline > 0 ? this.changePhone : this.getPinCode
+              }
               background={blue}
               color="#fff"
             >
-              {!success ? 'Продолжить' : 'Сохранить'}
+              {!success
+                ? 'Продолжить'
+                : success && deadline < 1
+                ? 'Повторить'
+                : 'Сохранить'}
             </Button>
             {!!errorMessage && <ErrorText>{errorMessage}</ErrorText>}
           </ControlBar>
@@ -249,6 +274,7 @@ class Content extends Component {
     invalidPin: false,
     success: false,
     errorMessage: false,
+    deadline: 60,
   }
   inputRef = null
 
@@ -286,7 +312,7 @@ class Content extends Component {
 
   getPinCode = () => {
     const { user } = this.props
-    const { phone: new_phone_number, invalidPhone } = this.state
+    const { phone: new_phone_number, invalidPhone, errorMessage } = this.state
 
     if (new_phone_number === user.phone_number) {
       this.setState({ invalidPhone: 'Вы не изменили номер телефона' })
@@ -296,7 +322,11 @@ class Content extends Component {
       this.setState({ invalidPhone: 'Вы ввели неверный номер телефона' })
       return
     }
+    if (errorMessage) {
+      this.setState({ errorMessage: false })
+    }
 
+    this.setState({ deadline: 60 })
     sendRequest({
       r_path: p_get_pin_for_change_phone,
       method: 'post',
@@ -305,6 +335,7 @@ class Content extends Component {
       },
       success: res => {
         this.setState({ success: true })
+        this.msgValidTime()
       },
       failFunc: err => {
         this.setState({ invalidPhone: err.msg })
@@ -342,6 +373,17 @@ class Content extends Component {
         this.setState({ errorMessage: err.msg })
       },
     })
+  }
+
+  msgValidTime = () => {
+    const countdown = setInterval(() => {
+      const { deadline } = this.state
+      if (deadline < 1) {
+        clearInterval(countdown)
+      } else {
+        this.setState({ deadline: deadline - 1 })
+      }
+    }, 1000)
   }
 
   handlePhone = e => {
