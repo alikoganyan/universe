@@ -74,18 +74,21 @@ class Company extends Component {
 
   render() {
     const { user, company, companies } = this.props
-
     if (!company) return null
     return (
       <>
         <TouchableOpacity onPress={() => this.setState({ modalVisible: true })}>
-          <ImageComponent
-            source={{
-              uri: `https://seruniverse.asmo.media${company.logo}`,
-            }}
-            size={36}
-            style={{ marginRight: 16 }}
-          />
+          {company.logo ? (
+            <ImageComponent
+              source={{
+                uri: `https://seruniverse.asmo.media${company.logo}`,
+              }}
+              size={36}
+              style={{ marginRight: 16 }}
+            />
+          ) : (
+            <DefaultAvatar size={36} style={{ marginRight: 16 }} />
+          )}
         </TouchableOpacity>
         <Modal
           visible={this.state.modalVisible}
@@ -135,7 +138,11 @@ class Company extends Component {
                 {companies.map(item => (
                   <Wrapper
                     key={item._id.toString()}
-                    style={{ paddingLeft: 8 }}
+                    style={{
+                      paddingLeft: 8,
+                      backgroundColor:
+                        item._id === company._id ? '#c1c1c159' : '',
+                    }}
                     onPress={() => this.changeCompany(item._id)}
                   >
                     {item.logo ? (

@@ -685,11 +685,12 @@ class Dialogs extends Component {
 
   setDialogsSocket = e => {
     const { setDialogs, setCompanyLoading, currentRoomId, user } = this.props
+
     if (currentRoomId) {
       const currentDialogIndex = e.dialogs.findIndex(
         d => d._id === currentRoomId,
       )
-      if (currentDialogIndex) {
+      if (currentDialogIndex !== -1) {
         const currentDialog = e.dialogs[currentDialogIndex]
         currentDialog.messages.forEach(m => {
           if (!m.viewers.includes(user._id)) {
