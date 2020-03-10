@@ -348,7 +348,7 @@ class Content extends Component {
       setDialogViewers(null)
     }
 
-    if (nextProps.reset) {
+    if (nextProps.reset && dialog && Object.keys(dialog).length) {
       this.props.setMessages(dialog.messages)
       this.props.setReset(false)
     }
@@ -436,7 +436,7 @@ class Content extends Component {
     }
   }
 
-  getMessage = (scrollDown?) => {
+  getMessage = (scrollDown = false) => {
     let { dialog, messages } = this.props
     let { page, scrolledMessages, prevPage } = this.state
     sendRequest({
