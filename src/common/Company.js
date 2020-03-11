@@ -141,7 +141,7 @@ class Company extends Component {
                     style={{
                       paddingLeft: 8,
                       backgroundColor:
-                        item._id === company._id ? '#c1c1c159' : '',
+                        item._id === company._id ? '#c1c1c159' : '#ffffff',
                     }}
                     onPress={() => this.changeCompany(item._id)}
                   >
