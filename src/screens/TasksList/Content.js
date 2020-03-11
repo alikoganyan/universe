@@ -46,7 +46,7 @@ class Content extends Component {
   render() {
     const {
       navigate,
-      tasksWithUsers,
+      tasksWithUsers = [],
       tasksInc,
       tasksOut,
       companyLoading,

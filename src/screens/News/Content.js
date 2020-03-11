@@ -21,7 +21,7 @@ import Company from '../../common/Company'
 import AnimatedEllipsis from 'react-native-animated-ellipsis'
 
 const { borderRadius, Colors, fontSize, sidePadding, HeaderHeight } = helper
-const { yellow, darkBlue2, grey2 } = Colors
+const { yellow, darkBlue2, grey2, lightGrey2 } = Colors
 const Wrapper = styled(View)`
   background: white;
   height: ${Dimensions.get('window').height - HeaderHeight};
@@ -115,7 +115,7 @@ const HeaderContainer = styled(Animated.View)`
 
 class Content extends Component {
   render() {
-    const { news, navigate } = this.props
+    const { news, navigate, user } = this.props
     const opacity = this.scrollY.interpolate({
       inputRange: [0, 90, 91],
       outputRange: [0, 0, 1],
@@ -135,19 +135,26 @@ class Content extends Component {
             ListEmptyComponent={this._renderEmptyComponent}
             contentContainerStyle={{ paddingBottom: 30 }}
             renderItem={({ item }) => {
-              const { created_at, creator, text, comments, likes_сount } = item
+              const {
+                created_at,
+                creator,
+                text,
+                comments,
+                likes_сount,
+                readers,
+              } = item
+
+              const newsIsUnreaded = readers && readers.includes(user._id)
+
+              // console.log(newsIsUnreaded)
               const date = getHamsterDate(created_at)
               return (
-                <NewsItem onPress={() => this.proceed(item)}>
+                <NewsItem
+                  onPress={() => this.proceed(item)}
+                  style={{ backgroundColor: !newsIsUnreaded ? lightGrey2 : '' }}
+                >
                   <Sender>
-                    {creator.image === '/images/default_avatar.jpg' ||
-                    !creator.image ? (
-                      <DefaultAvatar
-                        size="xs"
-                        style={{ marginRight: 10 }}
-                        id={creator._id}
-                      />
-                    ) : (
+                    {!!(creator && creator.image) ? (
                       <ImageComponent
                         source={{
                           uri: `https://seruniverse.asmo.media${creator.image}`,
@@ -155,12 +162,15 @@ class Content extends Component {
                         size="xs"
                         style={{ marginRight: 10 }}
                       />
+                    ) : (
+                      <DefaultAvatar size="xs" style={{ marginRight: 10 }} />
                     )}
                     <SenderInfo>
                       <SenderName numberOfLines={1}>
-                        {creator.first_name
-                          ? `${creator.first_name} ${creator.last_name}`
-                          : creator.phone_number}
+                        {creator &&
+                          (creator.first_name
+                            ? `${creator.first_name} ${creator.last_name}`
+                            : creator.phone_number)}
                       </SenderName>
                       <TimeSent>{date}</TimeSent>
                     </SenderInfo>
@@ -175,7 +185,7 @@ class Content extends Component {
                       <HeartIcon />
                       <Reactionsext>{likes_сount}</Reactionsext>
                       <CommentIcon left />
-                      <Reactionsext>{comments.length}</Reactionsext>
+                      <Reactionsext>{comments && comments.length}</Reactionsext>
                     </Reactions>
                   </NewsItemInfo>
                 </NewsItem>

@@ -16,6 +16,7 @@ import sendRequest from '../utils/request'
 import { setTaskList } from '../actions/tasksActions'
 import {
   setCompanies,
+  setCompaniesDetails,
   setContacts,
   setReset,
   setUser,
@@ -198,6 +199,7 @@ class Company extends Component {
                 }
               })
               const userData = { ...data }
+              this.props.setCompaniesDetails(userData.companies_details)
               this.props.setCompanies({
                 companies: userData.user.companies,
                 company: userData.user.company,
@@ -258,6 +260,7 @@ const mapDispatchToProps = dispatch => ({
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
   setReset: _ => dispatch(setReset(_)),
+  setCompaniesDetails: _ => dispatch(setCompaniesDetails(_)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Company)

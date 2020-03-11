@@ -32,6 +32,7 @@ class News extends Component {
       r_path: p_news,
       method: 'get',
       success: res => {
+        // console.log(res)
         let news = [...res.news]
         news = news.sort((a, b) => {
           // Turn your strings into dates, and then subtract them

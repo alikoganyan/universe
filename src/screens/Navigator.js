@@ -51,15 +51,13 @@ import {
   MapView,
   VideoView,
 } from '.'
-import {
-  NewsMenuIcon,
-  ContactsMenuIcon,
-  DialogMenuIcon,
-  TasksMenuIcon,
-  SettingsMenuIcon,
-} from '../assets'
+import { ContactsMenuIcon, SettingsMenuIcon } from '../assets'
+
+import DialogTabIcon from '../tabIcons/DialogTabIcon'
 import CreatePassword from './CreatePassword/CreatePassword'
 import ChangePhone from './ChangePhone/ChangePhone'
+import NewsTabIcon from '../tabIcons/NewsTabIcon'
+import TasksTabIcon from '../tabIcons/TasksTabIcon'
 
 const Label = styled(Text)`
   margin-top: 3;
@@ -75,7 +73,7 @@ const TabBarNavigation = createBottomTabNavigator(
     News: {
       screen: News,
       navigationOptions: ({ navigation }) => ({
-        tabBarIcon: ({ focused }) => <NewsMenuIcon focused={focused} />,
+        tabBarIcon: ({ focused }) => <NewsTabIcon focused={focused} />,
         tabBarLabel: ({ focused }) => (
           <Label color={focused ? '#fdb557' : '#a3a3a3'}>Новости</Label>
         ),
@@ -95,7 +93,7 @@ const TabBarNavigation = createBottomTabNavigator(
     Dialogs: {
       screen: Dialogs,
       navigationOptions: ({ navigation }) => ({
-        tabBarIcon: ({ focused }) => <DialogMenuIcon focused={focused} />,
+        tabBarIcon: ({ focused }) => <DialogTabIcon focused={focused} />,
         tabBarLabel: ({ focused }) => (
           <Label color={focused ? '#4a83fa' : '#a3a3a3'}>Диалоги</Label>
         ),
@@ -105,7 +103,7 @@ const TabBarNavigation = createBottomTabNavigator(
     TasksTab: {
       screen: TasksList,
       navigationOptions: ({ navigation }) => ({
-        tabBarIcon: ({ focused }) => <TasksMenuIcon focused={focused} />,
+        tabBarIcon: ({ focused }) => <TasksTabIcon focused={focused} />,
         tabBarLabel: ({ focused }) => (
           <Label color={focused ? '#8b81c5' : '#a3a3a3'}>Задачи</Label>
         ),

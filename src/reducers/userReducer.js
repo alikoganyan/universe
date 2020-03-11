@@ -13,6 +13,7 @@ import {
   LOG_OUT,
   SET_RESET,
   SET_PAS,
+  SET_COMPANIES_DETAILS,
 } from '../actions/userActions'
 import {
   ENABLE_USER_PUSHES,
@@ -33,6 +34,7 @@ const initialState = {
   company: {},
   reset: false,
   pas: '',
+  companies_details: {},
 }
 const userReducer = (state = initialState, action) => {
   switch (action.type) {
@@ -42,6 +44,11 @@ const userReducer = (state = initialState, action) => {
       return { ...state, auth: action.payload }
     case SET_PAS:
       return { ...state, pas: action.payload }
+    case SET_COMPANIES_DETAILS:
+      return {
+        ...state,
+        companies_details: action.payload,
+      }
     case SET_ERROR:
       return { ...state, error: action.payload }
     case SET_ALL_USERS:

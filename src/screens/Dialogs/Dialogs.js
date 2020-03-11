@@ -41,6 +41,7 @@ import {
 import {
   setAllUsers,
   setCompanies,
+  setCompaniesDetails,
   setReset,
   setUser,
 } from '../../actions/userActions'
@@ -49,9 +50,7 @@ import { socket } from '../../utils/socket'
 import TabPreHeader from '../../common/TabPreHeader'
 import sendRequest from '../../utils/request'
 import Company from '../../common/Company'
-import { setTaskList } from '../../actions/tasksActions'
 import { setIsMyProfile, setProfile } from '../../actions/profileAction'
-import { setNews } from '../../actions/newsActions'
 import { sortedAllDialogs } from '../../helper/sortedDialogs'
 import {
   setDialogParticipants,
@@ -213,8 +212,9 @@ class Dialogs extends Component {
     this.props.setReceivers([])
     this.props.setCompanyLoading(true)
     this.cachingData()
+    this.getUnviewedInfo()
     // this.getUnreadedMessages()
-    this.getProfile()
+    // this.getProfile()
     this.props.removeAllPreloader()
     socket.removeAllListeners('update_dialogs')
     socket.removeAllListeners('update_dialog')
@@ -264,16 +264,16 @@ class Dialogs extends Component {
   }
 
   cachingData = () => {
-    const { setCompanies, setNews, user } = this.props
+    const { setCompanies, user } = this.props
     setCompanies({
       companies: user.companies,
       company: user.company,
     })
-    setNews(user.news)
-    const tasksInc = [...user.tasks]
-    const tasksOut = [...user.created_tasks]
-    const tasksWithUsers = [...tasksInc, ...tasksOut]
-    this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
+    // setNews(user.news)
+    // const tasksInc = [...user.tasks]
+    // const tasksOut = [...user.created_tasks]
+    // const tasksWithUsers = [...tasksInc, ...tasksOut]
+    // this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
     AsyncStorage.getItem('failedMessages').then(res => {
       const value = JSON.parse(res)
       if (value) {
@@ -297,42 +297,37 @@ class Dialogs extends Component {
   }
 
   setCompanyData = e => {
-    const tasksInc = [...e.tasks]
-    const tasksOut = [...e.created_tasks]
-    const tasksWithUsers = [...tasksInc, ...tasksOut]
-    this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
+    // const tasksInc = [...e.tasks]
+    // const tasksOut = [...e.created_tasks]
+    // const tasksWithUsers = [...tasksInc, ...tasksOut]
+    // this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
     this.props.setUser(e)
     this.props.setReset(true)
   }
-  d
-  // setEmptyCompany = () => {
-  //   const tasksInc = []
-  //   const tasksOut = []
-  //   const tasksWithUsers = []
-  //   this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
-  //   this.props.setCompanies({
-  //     companies: [],
-  //     company: {},
-  //   })
-  //   this.props.setReset(true)
-  // }
 
-  getUnreadedMessages = () => {
-    const { dialogs } = this.props
-    let newDialogs = [...dialogs]
-    if (newDialogs && newDialogs.length) {
-      socket.emit('get_unreaded_messages', null, ({ unreadedMessages }) => {
-        unreadedMessages.forEach(d => {
-          const dIndex = dialogs.findIndex(dialog => dialog._id === d.dialog_id)
-          newDialogs[dIndex].messages = _.uniqBy(
-            [...newDialogs[dIndex].messages, ...d.messages],
-            '_id',
-          )
-        })
-        sortedAllDialogs(newDialogs, this.props)
-      })
-    }
+  getUnviewedInfo = () => {
+    // const {setCompaniesDetails} = this.props
+    socket.emit('get_unviewed_info', null, ({ companies_details }) => {
+      this.props.setCompaniesDetails(companies_details)
+    })
   }
+
+  // getUnreadedMessages = () => {
+  //   const { dialogs } = this.props
+  //   let newDialogs = [...dialogs]
+  //   if (newDialogs && newDialogs.length) {
+  //     socket.emit('get_unreaded_messages', null, ({ unreadedMessages }) => {
+  //       unreadedMessages.forEach(d => {
+  //         const dIndex = dialogs.findIndex(dialog => dialog._id === d.dialog_id)
+  //         newDialogs[dIndex].messages = _.uniqBy(
+  //           [...newDialogs[dIndex].messages, ...d.messages],
+  //           '_id',
+  //         )
+  //       })
+  //       sortedAllDialogs(newDialogs, this.props)
+  //     })
+  //   }
+  // }
 
   getProfile = (adminChange = false) => {
     const { sendingMessages, pushesPermissionsGranted } = this.props
@@ -343,6 +338,7 @@ class Dialogs extends Component {
       r_path: '/profile',
       method: 'get',
       success: async res => {
+        this.props.setCompaniesDetails(res.companies_details)
         const userData = { ...res }
         const companyKey = userData.user.company._id
         const notifications = userData.user.settings.notifications
@@ -384,7 +380,6 @@ class Dialogs extends Component {
           companies: this.props.user.companies,
           company: this.props.user.company,
         })
-        this.props.setNews(this.props.user.news)
       },
     })
   }
@@ -1052,17 +1047,17 @@ const mapDispatchToProps = dispatch => ({
   setCurrentDialogs: _ => dispatch(setCurrentDialogs(_)),
   setCurrentRoomId: _ => dispatch(setCurrentRoomId(_)),
   setCompanies: _ => dispatch(setCompanies(_)),
-  setTaskList: _ => dispatch(setTaskList(_)),
+  // setTaskList: _ => dispatch(setTaskList(_)),
   setIsMyProfile: _ => dispatch(setIsMyProfile(_)),
   setReset: _ => dispatch(setReset(_)),
   setCompanyLoading: _ => dispatch(setCompanyLoading(_)),
   setProfile: _ => dispatch(setProfile(_)),
-  setNews: _ => dispatch(setNews(_)),
   setParticipants: _ => dispatch(setDialogParticipants(_)),
   setReceivers: _ => dispatch(setFeedReceivers(_)),
   setSendingMessages: _ => dispatch(setSendingMessages(_)),
   setDialogViewers: _ => dispatch(setDialogViewers(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
+  setCompaniesDetails: _ => dispatch(setCompaniesDetails(_)),
   trySignToPushes: trySignToPushes(dispatch),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)

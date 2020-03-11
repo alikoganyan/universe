@@ -5,6 +5,8 @@ import Content from './Content'
 import SafeAreaView from '../../common/SafeAreaView'
 import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
+import sendRequest from '../../utils/request'
+import { g_tasks } from '../../constants/api'
 
 const { sidePadding } = helper
 const Wrapper = styled(View)`
@@ -20,6 +22,16 @@ class Tasks extends Component {
         </Wrapper>
       </SafeAreaView>
     )
+  }
+
+  componentDidMount() {
+    sendRequest({
+      r_path: g_tasks,
+      method: 'get',
+      success: res => {
+        // console.log(res)
+      },
+    })
   }
 
   navigateBack = () => {
