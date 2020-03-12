@@ -8,6 +8,7 @@ import { connect } from 'react-redux'
 import sendRequest from '../../utils/request'
 import { g_tasks } from '../../constants/api'
 import { setTaskList } from '../../actions/tasksActions'
+import { setReset } from '../../actions/userActions'
 
 const { sidePadding } = helper
 const Wrapper = styled(View)`
@@ -26,6 +27,10 @@ class Tasks extends Component {
   }
 
   componentDidMount() {
+    this.getAllTasks()
+  }
+
+  getAllTasks = () => {
     sendRequest({
       r_path: g_tasks,
       method: 'get',
@@ -36,6 +41,13 @@ class Tasks extends Component {
         this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
       },
     })
+  }
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevProps.reset) {
+      this.getAllTasks()
+      this.props.setReset(false)
+    }
   }
 
   navigateBack = () => {
@@ -49,10 +61,12 @@ class Tasks extends Component {
 
 const mapStateToProps = state => ({
   companyLoading: state.dialogsReducer.companyLoading,
+  reset: state.userReducer.reset,
 })
 
 const mapDispatchToProps = dispatch => ({
   setTaskList: _ => dispatch(setTaskList(_)),
+  setReset: _ => dispatch(setReset(_)),
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Tasks)

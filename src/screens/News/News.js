@@ -7,6 +7,7 @@ import sendRequest from '../../utils/request'
 import { p_news } from '../../constants/api'
 import Content from './Content'
 import { setNews } from '../../actions/newsActions'
+import { setReset } from '../../actions/userActions'
 
 const Wrapper = styled(View)`
   height: 100%;
@@ -27,6 +28,17 @@ class News extends Component {
   }
 
   componentDidMount() {
+    this.getAllNews()
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.reset) {
+      this.getAllNews()
+      this.props.setReset(false)
+    }
+  }
+
+  getAllNews = () => {
     const { setNews } = this.props
     sendRequest({
       r_path: p_news,
@@ -66,8 +78,10 @@ class News extends Component {
 }
 const mapStateToProps = state => ({
   news: state.newsReducer.news,
+  reset: state.userReducer.reset,
 })
 const mapDispatchToProps = dispatch => ({
   setNews: _ => dispatch(setNews(_)),
+  setReset: _ => dispatch(setReset(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(News)
