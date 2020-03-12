@@ -17,6 +17,8 @@ import TaskComponent from '../../common/Task'
 import { setActiveTask } from '../../actions/tasksActions'
 import helper from '../../utils/helpers'
 import Loader from '../../common/Loader'
+import { socket } from '../../utils/socket'
+import { setCompaniesDetails, setReset } from '../../actions/userActions'
 
 const { Colors, HeaderHeight } = helper
 const { purple } = Colors
@@ -160,11 +162,37 @@ class Content extends Component {
   }
 
   componentDidMount() {
+    const {
+      tasksInc,
+      user,
+      companies_details,
+      setCompaniesDetails,
+      company,
+    } = this.props
     InteractionManager.runAfterInteractions(() => {
       this.setState({
         animationCompleted: true,
       })
     })
+
+    const unreadedTasks = []
+    if (tasksInc.length) {
+      tasksInc.forEach(t => {
+        if (!t.viewers.includes(user._id)) {
+          unreadedTasks.push(t._id)
+        }
+      })
+    }
+    if (unreadedTasks.length) {
+      socket.emit(
+        'view_tasks',
+        { tasks_ids: unreadedTasks },
+        ({ success }) => {},
+      )
+      companies_details[company._id].unviewed_tasks_count = 0
+      setCompaniesDetails(companies_details)
+      this.props.setReset(true)
+    }
   }
 
   unselect = () => {
@@ -199,11 +227,12 @@ const mapStateToProps = state => ({
   tasks: state.tasksReducer.tasks,
   user: state.userReducer.user,
   tasksInc: state.tasksReducer.tasksInc,
+  companies_details: state.userReducer.companies_details,
+  company: state.userReducer.company,
 })
 const mapDispatchToProps = dispatch => ({
   setActiveTask: _ => dispatch(setActiveTask(_)),
+  setCompaniesDetails: _ => dispatch(setCompaniesDetails(_)),
+  setReset: _ => dispatch(setReset(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

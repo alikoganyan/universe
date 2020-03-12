@@ -7,6 +7,7 @@ import helper from '../../utils/helpers'
 import { connect } from 'react-redux'
 import sendRequest from '../../utils/request'
 import { g_tasks } from '../../constants/api'
+import { setTaskList } from '../../actions/tasksActions'
 
 const { sidePadding } = helper
 const Wrapper = styled(View)`
@@ -29,7 +30,10 @@ class Tasks extends Component {
       r_path: g_tasks,
       method: 'get',
       success: res => {
-        // console.log(res)
+        const tasksInc = [...res.tasks]
+        const tasksOut = [...res.created_tasks]
+        const tasksWithUsers = [...tasksInc, ...tasksOut]
+        this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
       },
     })
   }
@@ -47,4 +51,8 @@ const mapStateToProps = state => ({
   companyLoading: state.dialogsReducer.companyLoading,
 })
 
-export default connect(mapStateToProps)(Tasks)
+const mapDispatchToProps = dispatch => ({
+  setTaskList: _ => dispatch(setTaskList(_)),
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(Tasks)

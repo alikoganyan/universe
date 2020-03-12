@@ -21,7 +21,6 @@ import sendRequest from '../../utils/request'
 import { setTasks, setTaskList } from '../../actions/tasksActions'
 import { GroupIcon, CloseIcon } from '../../assets'
 import moment from 'moment'
-import { socket } from '../../utils/socket'
 
 const { Colors, HeaderHeight, sidePadding } = helper
 const { lightGrey1, purple, pink, black } = Colors
@@ -301,7 +300,7 @@ class Content extends Component {
   }
 
   proceed = async e => {
-    const { receivers } = this.props
+    const { receivers, tasksInc, tasksOut } = this.props
     const { taskName, taskText, deadlineDate, deadlineTime } = this.state
     const deadline = moment(
       `${deadlineDate} ${deadlineTime}`,
@@ -332,28 +331,14 @@ class Content extends Component {
           },
         },
         success: async res => {
-          socket.emit('update_user', { user_id: receivers[0]._id })
-          this.getProfile()
+          tasksOut.push(res.task)
+          const tasksWithUsers = [...tasksInc, ...tasksOut]
+          this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
           forward()
         },
         failFunc: err => {},
       })
     }
-  }
-
-  getProfile = () => {
-    sendRequest({
-      r_path: '/profile',
-      method: 'get',
-      success: res => {
-        const userData = { ...res }
-        const tasksInc = [...userData.user.tasks]
-        const tasksOut = [...userData.user.created_tasks]
-        const tasksWithUsers = [...tasksInc, ...tasksOut]
-        this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
-      },
-      failFunc: () => {},
-    })
   }
 
   handleCountry = e => {
@@ -390,7 +375,4 @@ const mapDispatchToProps = dispatch => ({
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
   setTaskList: _ => dispatch(setTaskList(_)),
 })
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(Content)
+export default connect(mapStateToProps, mapDispatchToProps)(Content)

@@ -19,6 +19,8 @@ import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
 import Company from '../../common/Company'
 import AnimatedEllipsis from 'react-native-animated-ellipsis'
+import { socket } from '../../utils/socket'
+import { setCompaniesDetails, setReset } from '../../actions/userActions'
 
 const { borderRadius, Colors, fontSize, sidePadding, HeaderHeight } = helper
 const { yellow, darkBlue2, grey2, lightGrey2 } = Colors
@@ -143,15 +145,15 @@ class Content extends Component {
                 likes_сount,
                 readers,
               } = item
-
               const newsIsUnreaded = readers && readers.includes(user._id)
 
-              // console.log(newsIsUnreaded)
               const date = getHamsterDate(created_at)
               return (
                 <NewsItem
                   onPress={() => this.proceed(item)}
-                  style={{ backgroundColor: !newsIsUnreaded ? lightGrey2 : '' }}
+                  style={{
+                    backgroundColor: !newsIsUnreaded ? lightGrey2 : '#ffffff',
+                  }}
                 >
                   <Sender>
                     {!!(creator && creator.image) ? (
@@ -215,7 +217,25 @@ class Content extends Component {
   componentDidMount() {}
 
   proceed = e => {
-    const { proceed, setFeed } = this.props
+    const {
+      proceed,
+      setFeed,
+      user,
+      news,
+      setNews,
+      setCompaniesDetails,
+      companies_details,
+      company,
+    } = this.props
+    if (!e.readers.includes(user._id)) {
+      news.find(n => n._id === e._id).readers.push(user._id)
+      companies_details[company._id].unreaded_news_count =
+        companies_details[company._id].unreaded_news_count - 1
+      setCompaniesDetails(companies_details)
+      this.props.setReset(true)
+      socket.emit('read_news', { news_id: e._id }, ({ success }) => {})
+    }
+    setNews(news)
     setFeed(e)
     proceed()
   }
@@ -268,9 +288,13 @@ const mapStateToProps = state => ({
   user: state.userReducer.user,
   companyLoading: state.dialogsReducer.companyLoading,
   connection: state.baseReducer.connection,
+  companies_details: state.userReducer.companies_details,
+  company: state.userReducer.company,
 })
 const mapDispatchToProps = dispatch => ({
   setFeed: _ => dispatch(setFeed(_)),
   setNews: _ => dispatch(setNews(_)),
+  setCompaniesDetails: _ => dispatch(setCompaniesDetails(_)),
+  setReset: _ => dispatch(setReset(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

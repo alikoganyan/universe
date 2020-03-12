@@ -14,7 +14,11 @@ import helper from '../../utils/helpers'
 import DefaultAvatar from '../../common/DefaultAvatar'
 import Loader from '../../common/Loader'
 import { ArrowDownIcon } from '../../assets/index'
-import { setContacts, setReset } from '../../actions/userActions'
+import {
+  setCompaniesDetails,
+  setContacts,
+  setReset,
+} from '../../actions/userActions'
 import {
   setRoom,
   setCurrentChat,
@@ -731,6 +735,9 @@ class Content extends Component {
       setCurrentRoomId,
       dialogs,
       setProfile,
+      companies_details,
+      setCompaniesDetails,
+      company,
     } = this.props
     const recipientId = !e.isGroup ? e._id : null
     const currentRoom = dialogs.find(
@@ -741,6 +748,7 @@ class Content extends Component {
           (dialog.participants[0] && dialog.participants[0]._id === e._id)),
     )
     let hasUnreadedMessages = false
+    let unreadMessaagecount = 0
 
     if (e.isGroup) {
       setCurrentRoomId(e._id)
@@ -751,9 +759,11 @@ class Content extends Component {
     }
     const dialog = e.isGroup ? e : currentRoom
     if (dialog) {
+      const { room } = dialog
       dialog.messages.forEach(m => {
         if (!m.viewers.includes(user._id) && m.sender._id !== user._id) {
           m.viewers.push(user._id)
+          unreadMessaagecount++
           if (!hasUnreadedMessages) {
             hasUnreadedMessages = true
           }
@@ -762,6 +772,14 @@ class Content extends Component {
       if (hasUnreadedMessages) {
         viewUnreadedMessages(dialog, this.props)
       }
+      if (unreadMessaagecount > 0) {
+        companies_details[company._id].unreaded_messages_count =
+          companies_details[company._id].unreaded_messages_count -
+          unreadMessaagecount
+        setCompaniesDetails(companies_details)
+        this.props.setReset(true)
+      }
+      socket.emit('view', { room, viewer: user._id })
     }
     if (currentRoom) {
       const { isGroup, participants, creator, room, _id } = currentRoom
@@ -774,7 +792,6 @@ class Content extends Component {
       setCurrentRoomId(_id)
       setCurrentChat(room)
       setCurrentDialogs(currentDialog)
-      socket.emit('view', { room, viewer: user._id })
     } else {
       const { room, _id } = e
       setRoom(_id)
@@ -793,6 +810,7 @@ const mapStateToProps = state => ({
   company: state.userReducer.company,
   connection: state.baseReducer.connection,
   companyLoading: state.dialogsReducer.companyLoading,
+  companies_details: state.userReducer.companies_details,
 })
 const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),
@@ -804,5 +822,6 @@ const mapDispatchToProps = dispatch => ({
   setDialog: _ => dispatch(setDialog(_)),
   setDialogs: _ => dispatch(setDialogs(_)),
   setProfile: _ => dispatch(setProfile(_)),
+  setCompaniesDetails: _ => dispatch(setCompaniesDetails(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

@@ -12,6 +12,8 @@ import Header from './Header'
 import TabPreHeader from '../../common/TabPreHeader'
 import Company from '../../common/Company'
 import AnimatedEllipsis from 'react-native-animated-ellipsis'
+import { setCompaniesDetails, setReset } from '../../actions/userActions'
+import { socket } from '../../utils/socket'
 
 const { HeaderHeight, Colors } = helper
 const { grey2 } = Colors
@@ -51,6 +53,7 @@ class Content extends Component {
       tasksOut,
       companyLoading,
       connection,
+      user,
     } = this.props
     const opacity = this.scrollY.interpolate({
       inputRange: [0, 90, 91],
@@ -144,7 +147,12 @@ class Content extends Component {
               .map((e, i) => {
                 return (
                   <Task
-                    onPress={() => navigate('Tasks')}
+                    onPress={() => {
+                      if (allUserTasks[i]._id === user._id) {
+                        this.readTasks(allUserTasks[i].tasks)
+                      }
+                      navigate('Tasks')
+                    }}
                     key={i}
                     navigate={this.props.navigate}
                   >
@@ -170,6 +178,28 @@ class Content extends Component {
   }
 
   scrollY = new Animated.Value(0)
+
+  readTasks = myTasks => {
+    const { companies_details, company, setCompaniesDetails, user } = this.props
+    const unreadedTasks = []
+    if (myTasks.length) {
+      myTasks.forEach(t => {
+        if (!t.viewers.includes(user._id)) {
+          unreadedTasks.push(t._id)
+        }
+      })
+    }
+    if (unreadedTasks.length) {
+      socket.emit(
+        'view_tasks',
+        { tasks_ids: unreadedTasks },
+        ({ success }) => {},
+      )
+      companies_details[company._id].unviewed_tasks_count = 0
+      setCompaniesDetails(companies_details)
+      this.props.setReset(true)
+    }
+  }
 }
 
 const mapStateToProps = state => ({
@@ -178,8 +208,13 @@ const mapStateToProps = state => ({
   tasksWithUsers: state.tasksReducer.tasksWithUsers,
   connection: state.baseReducer.connection,
   companyLoading: state.dialogsReducer.companyLoading,
+  companies_details: state.userReducer.companies_details,
+  company: state.userReducer.company,
+  user: state.userReducer.user,
 })
 const mapDispatchToProps = dispatch => ({
   setTaskList: _ => dispatch(setTaskList(_)),
+  setCompaniesDetails: _ => dispatch(setCompaniesDetails(_)),
+  setReset: _ => dispatch(setReset(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

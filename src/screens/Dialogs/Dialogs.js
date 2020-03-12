@@ -306,7 +306,6 @@ class Dialogs extends Component {
   }
 
   getUnviewedInfo = () => {
-    // const {setCompaniesDetails} = this.props
     socket.emit('get_unviewed_info', null, ({ companies_details }) => {
       this.props.setCompaniesDetails(companies_details)
     })
@@ -503,6 +502,9 @@ class Dialogs extends Component {
       setDeletedMessage,
       currentRoomId,
       company,
+      companies_details,
+      setCompaniesDetails,
+      user,
     } = this.props
     if (e.company_id === company._id) {
       if (currentRoomId) {
@@ -511,6 +513,18 @@ class Dialogs extends Component {
       const currentDialog = dialogs.find(d => d._id === e.dialog_id)
       if (currentDialog) {
         const index = dialogs.findIndex(d => d._id === e.dialog_id)
+        const messageIsReaded = dialogs[index].messages
+          .find(m => m._id === e.message_id)
+          .viewers.includes(user._id)
+        if (
+          (!messageIsReaded && !currentRoomId) ||
+          (currentRoomId && currentRoomId !== e.dialog_id)
+        ) {
+          companies_details[company._id].unreaded_messages_count =
+            companies_details[company._id].unreaded_messages_count - 1
+          setCompaniesDetails(companies_details)
+          this.props.setReset(true)
+        }
         dialogs[index].messages = dialogs[index].messages.filter(
           m => m._id !== e.message_id,
         )
@@ -775,6 +789,8 @@ class Dialogs extends Component {
       currentRoomId,
       sendingMessages,
       setSendingMessages,
+      setCompaniesDetails,
+      companies_details,
     } = this.props
     try {
       if (e) {
@@ -822,11 +838,16 @@ class Dialogs extends Component {
               this.sortedDialog(updatedCurrentDialog)
             }
           }
+          if (!currentRoomId || (currentRoomId && currentRoomId !== e.dialog)) {
+            companies_details[company._id].unreaded_messages_count =
+              companies_details[company._id].unreaded_messages_count + 1
+            setCompaniesDetails(companies_details)
+            this.props.setReset(true)
+          }
           const currentDialog = dialogs.find(d => d._id === e.dialog)
           if (currentDialog) {
             currentDialog.messages.push(message)
             this.sortedDialog(currentDialog)
-            // this.props.setCurrentRoomId(e.dialog)
           }
         }
       }
@@ -943,16 +964,28 @@ class Dialogs extends Component {
       setCurrentRoomId,
       setProfile,
       setIsMyProfile,
+      companies_details,
+      setCompaniesDetails,
+      company,
     } = this.props
     let hasUnreadedMessages = false
+    let unreadMessaagecount = 0
     e.messages.forEach(m => {
       if (!m.viewers.includes(user._id) && m.sender._id !== user._id) {
         m.viewers.push(user._id)
+        unreadMessaagecount++
         if (!hasUnreadedMessages) {
           hasUnreadedMessages = true
         }
       }
     })
+    if (unreadMessaagecount > 0) {
+      companies_details[company._id].unreaded_messages_count =
+        companies_details[company._id].unreaded_messages_count -
+        unreadMessaagecount
+      setCompaniesDetails(companies_details)
+      this.props.setReset(true)
+    }
     const { isGroup, room, participants, creator, _id } = e
     const recipientId =
       !isGroup && user._id !== e.creator._id
@@ -1031,6 +1064,7 @@ const mapStateToProps = state => ({
   connection: state.baseReducer.connection,
   sendingMessages: state.messageReducer.sendingMessages,
   pushesPermissionsGranted: state.pushesReducer.permissions,
+  companies_details: state.userReducer.companies_details,
 })
 const mapDispatchToProps = dispatch => ({
   setRoom: _ => dispatch(setRoom(_)),

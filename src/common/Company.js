@@ -142,7 +142,7 @@ class Company extends Component {
                     style={{
                       paddingLeft: 8,
                       backgroundColor:
-                        item._id === company._id ? '#c1c1c159' : '',
+                        item._id === company._id ? '#c1c1c159' : '#ffffff',
                     }}
                     onPress={() => this.changeCompany(item._id)}
                   >
@@ -205,12 +205,7 @@ class Company extends Component {
                 company: userData.user.company,
               })
               this.props.setUser(userData.user)
-              const tasksInc = [...res.data.tasks]
-              const tasksOut = [...res.data.created_tasks]
-              const tasksWithUsers = [...tasksInc, ...tasksOut]
-              this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
               this.props.setContacts(res.data.contacts)
-              this.props.setNews(res.data.news)
               this.props.setCompanyLoading(false)
               this.props.setReset(true)
             },

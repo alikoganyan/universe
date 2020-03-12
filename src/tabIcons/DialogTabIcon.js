@@ -2,16 +2,17 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Text, View, StyleSheet } from 'react-native'
 import { DialogMenuIcon } from '../assets'
+import { setReset } from '../actions/userActions'
 class DialogTabIcon extends Component {
   render() {
-    const { unreaded_dialogs_count } = this.state
+    const { unreaded_messages_count } = this.state
     return (
       <View>
         <DialogMenuIcon focused={this.props.focused} />
-        {!!unreaded_dialogs_count > 0 && (
+        {!!unreaded_messages_count > 0 && (
           <View style={styles.textWrapper}>
             <Text style={styles.count}>
-              {unreaded_dialogs_count > 99 ? '99+' : unreaded_dialogs_count}
+              {unreaded_messages_count > 99 ? '99+' : unreaded_messages_count}
             </Text>
           </View>
         )}
@@ -19,16 +20,17 @@ class DialogTabIcon extends Component {
     )
   }
   state = {
-    unreaded_dialogs_count: 0,
+    unreaded_messages_count: 0,
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.company && nextProps.companies_details) {
       if (nextProps.companies_details[nextProps.company._id]) {
-        const { unreaded_dialogs_count } = nextProps.companies_details[
+        const { unreaded_messages_count } = nextProps.companies_details[
           nextProps.company._id
         ]
-        this.setState({ unreaded_dialogs_count })
+        this.setState({ unreaded_messages_count })
+        this.props.setReset(false)
       }
     }
   }
@@ -58,7 +60,10 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   companies_details: state.userReducer.companies_details,
   company: state.userReducer.company,
+  reset: state.userReducer.reset,
 })
-const mapDispatchToProps = dispatch => ({})
+const mapDispatchToProps = dispatch => ({
+  setReset: _ => dispatch(setReset(_)),
+})
 
 export default connect(mapStateToProps, mapDispatchToProps)(DialogTabIcon)
