@@ -776,6 +776,8 @@ class Content extends Component {
         companies_details[company._id].unreaded_messages_count =
           companies_details[company._id].unreaded_messages_count -
           unreadMessaagecount
+        companies_details[company._id].all =
+          companies_details[company._id].all - unreadMessaagecount
         setCompaniesDetails(companies_details)
         this.props.setReset(true)
       }

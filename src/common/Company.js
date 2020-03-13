@@ -74,11 +74,16 @@ class Company extends Component {
   }
 
   render() {
-    const { user, company, companies } = this.props
+    const { user, company, companies, companies_details } = this.props
+    const { countForAllCompanies } = this.state
+
     if (!company) return null
     return (
       <>
-        <TouchableOpacity onPress={() => this.setState({ modalVisible: true })}>
+        <TouchableOpacity
+          sryle={{ position: 'absolute' }}
+          onPress={() => this.setState({ modalVisible: true })}
+        >
           {company.logo ? (
             <ImageComponent
               source={{
@@ -89,6 +94,13 @@ class Company extends Component {
             />
           ) : (
             <DefaultAvatar size={36} style={{ marginRight: 16 }} />
+          )}
+          {!!countForAllCompanies > 0 && (
+            <View style={styles.textWrapper}>
+              <Text style={styles.count}>
+                {countForAllCompanies > 99 ? '99+' : countForAllCompanies}
+              </Text>
+            </View>
           )}
         </TouchableOpacity>
         <Modal
@@ -161,6 +173,12 @@ class Company extends Component {
                         <UserTitle>{item.name}</UserTitle>
                       </UserTextInner>
                     </UserText>
+                    <Text>
+                      {!!(
+                        companies_details[item._id] &&
+                        companies_details[item._id].all
+                      ) && companies_details[item._id].all}
+                    </Text>
                   </Wrapper>
                 ))}
               </View>
@@ -169,6 +187,23 @@ class Company extends Component {
         </Modal>
       </>
     )
+  }
+
+  state = {
+    countForAllCompanies: 0,
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.company && nextProps.companies_details) {
+      let countForAllCompanies = 0
+      Object.values(nextProps.companies_details).forEach(d => {
+        if (d && d.all) {
+          countForAllCompanies += d.all
+        }
+      })
+      this.setState({ countForAllCompanies })
+      this.props.setReset(false)
+    }
   }
 
   changeCompany = id => {
@@ -237,12 +272,32 @@ const styles = StyleSheet.create({
     zIndex: 2,
     padding: 20,
   },
+  textWrapper: {
+    backgroundColor: '#4a83fa',
+    paddingTop: 1,
+    paddingBottom: 1,
+    paddingLeft: 2,
+    paddingRight: 2,
+    borderRadius: 50,
+    position: 'absolute',
+    top: -4,
+    right: 4,
+    minWidth: 15,
+  },
+  count: {
+    color: '#ffffff',
+    fontSize: 10,
+    textAlign: 'center',
+    width: '100%',
+  },
 })
 
 const mapStateToProps = state => ({
   companies: state.userReducer.companies,
   company: state.userReducer.company,
   user: state.userReducer.user,
+  companies_details: state.userReducer.companies_details,
+  reset: state.userReducer.reset,
 })
 
 const mapDispatchToProps = dispatch => ({

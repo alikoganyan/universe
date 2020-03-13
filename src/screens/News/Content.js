@@ -231,6 +231,8 @@ class Content extends Component {
       news.find(n => n._id === e._id).readers.push(user._id)
       companies_details[company._id].unreaded_news_count =
         companies_details[company._id].unreaded_news_count - 1
+      companies_details[company._id].all =
+        companies_details[company._id].all - 1
       setCompaniesDetails(companies_details)
       this.props.setReset(true)
       socket.emit('read_news', { news_id: e._id }, ({ success }) => {})

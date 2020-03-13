@@ -214,7 +214,7 @@ class Dialogs extends Component {
     this.cachingData()
     this.getUnviewedInfo()
     // this.getUnreadedMessages()
-    // this.getProfile()
+    this.getProfile()
     this.props.removeAllPreloader()
     socket.removeAllListeners('update_dialogs')
     socket.removeAllListeners('update_dialog')
@@ -297,10 +297,6 @@ class Dialogs extends Component {
   }
 
   setCompanyData = e => {
-    // const tasksInc = [...e.tasks]
-    // const tasksOut = [...e.created_tasks]
-    // const tasksWithUsers = [...tasksInc, ...tasksOut]
-    // this.props.setTaskList({ tasksInc, tasksOut, tasksWithUsers })
     this.props.setUser(e)
     this.props.setReset(true)
   }
@@ -512,20 +508,25 @@ class Dialogs extends Component {
       }
       const currentDialog = dialogs.find(d => d._id === e.dialog_id)
       if (currentDialog) {
-        const index = dialogs.findIndex(d => d._id === e.dialog_id)
-        const messageIsReaded = dialogs[index].messages
-          .find(m => m._id === e.message_id)
-          .viewers.includes(user._id)
+        // const index = dialogs.findIndex(d => d._id === e.dialog_id)
+        const currentMessage = currentDialog.messages.find(
+          m => m._id === e.message_id,
+        )
+        const messageIsReaded = currentMessage
+          ? currentMessage.viewers.includes(user._id)
+          : null
         if (
           (!messageIsReaded && !currentRoomId) ||
           (currentRoomId && currentRoomId !== e.dialog_id)
         ) {
           companies_details[company._id].unreaded_messages_count =
             companies_details[company._id].unreaded_messages_count - 1
+          companies_details[company._id].all =
+            companies_details[company._id].all - 1
           setCompaniesDetails(companies_details)
           this.props.setReset(true)
         }
-        dialogs[index].messages = dialogs[index].messages.filter(
+        currentDialog.messages = currentDialog.messages.filter(
           m => m._id !== e.message_id,
         )
         setDialogs(dialogs)
@@ -838,17 +839,23 @@ class Dialogs extends Component {
               this.sortedDialog(updatedCurrentDialog)
             }
           }
-          if (!currentRoomId || (currentRoomId && currentRoomId !== e.dialog)) {
-            companies_details[company._id].unreaded_messages_count =
-              companies_details[company._id].unreaded_messages_count + 1
-            setCompaniesDetails(companies_details)
-            this.props.setReset(true)
-          }
           const currentDialog = dialogs.find(d => d._id === e.dialog)
           if (currentDialog) {
             currentDialog.messages.push(message)
             this.sortedDialog(currentDialog)
           }
+        }
+        if (
+          e.company !== company._id ||
+          !currentRoomId ||
+          (currentRoomId && currentRoomId !== e.dialog)
+        ) {
+          companies_details[e.company].unreaded_messages_count =
+            companies_details[e.company].unreaded_messages_count + 1
+          companies_details[e.company].all =
+            companies_details[e.company].all + 1
+          setCompaniesDetails(companies_details)
+          this.props.setReset(true)
         }
       }
     } catch (err) {
@@ -983,6 +990,8 @@ class Dialogs extends Component {
       companies_details[company._id].unreaded_messages_count =
         companies_details[company._id].unreaded_messages_count -
         unreadMessaagecount
+      companies_details[company._id].all =
+        companies_details[company._id].all - unreadMessaagecount
       setCompaniesDetails(companies_details)
       this.props.setReset(true)
     }
