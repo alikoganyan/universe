@@ -292,8 +292,18 @@ class Dialogs extends Component {
   }
 
   checkNotificationPermissions = () => {
-    const { trySignToPushes } = this.props
-    trySignToPushes(false)
+    const {
+      trySignToPushes,
+      user: {
+        settings: { notifications = {} },
+      },
+    } = this.props
+    const pushOption = {
+      all_users: notifications.all_users,
+      news: notifications.news,
+      tasks: notifications.tasks,
+    }
+    trySignToPushes(false, pushOption)
   }
 
   setCompanyData = e => {

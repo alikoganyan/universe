@@ -15,9 +15,18 @@ export const PUSH_TOKEN_FULFILLED = 'PUSH_TOKEN_FULFILLED'
 export const PUSH_TOKEN_REJECTED = 'PUSH_TOKEN_REJECTED'
 export const ENABLE_USER_PUSHES = 'ENABLE_USER_PUSHES'
 export const DISABLE_USER_PUSHES = 'DISABLE_USER_PUSHES'
+export const ALL_PUSHES_REQUEST = 'ALL_PUSHES_REQUEST'
+export const ALL_PUSHES_FULFILLED = 'ALL_PUSHES_FULFILLED'
+export const ALL_PUSHES_REJECTED = 'ALL_PUSHES_REJECTED'
 export const USER_PUSHES_REQUEST = 'USER_PUSHES_REQUEST'
 export const USER_PUSHES_FULFILLED = 'USER_PUSHES_FULFILLED'
 export const USER_PUSHES_REJECTED = 'USER_PUSHES_REJECTED'
+export const TASKS_PUSHES_REQUEST = 'TASKS_PUSHES_REQUEST'
+export const TASKS_PUSHES_FULFILLED = 'TASKS_PUSHES_FULFILLED'
+export const TASKS_PUSHES_REJECTED = 'TASKS_PUSHES_REJECTED'
+export const NEWS_PUSHES_REQUEST = 'NEWS_PUSHES_REQUEST'
+export const NEWS_PUSHES_FULFILLED = 'NEWS_PUSHES_FULFILLED'
+export const NEWS_PUSHES_REJECTED = 'NEWS_PUSHES_REJECTED'
 
 export const getPushesPermissionStatusAndToken = dispatch => async () => {
   try {
@@ -33,7 +42,13 @@ export const getPushesPermissionStatusAndToken = dispatch => async () => {
           const user = JSON.parse(res)
           if (user && oldFcmToken) {
             if (newFcmToken !== oldFcmToken) {
-              sendFcmToken(newFcmToken)
+              const { notifications } = user.settings
+              const pushOption = {
+                all_users: notifications.all_users,
+                news: notifications.news,
+                tasks: notifications.tasks,
+              }
+              sendFcmToken(newFcmToken, pushOption)
             }
             AsyncStorage.setItem('fcmToken', newFcmToken)
           }
@@ -48,7 +63,13 @@ export const getPushesPermissionStatusAndToken = dispatch => async () => {
               const user = JSON.parse(res)
               if (user) {
                 if (newFcmToken !== oldFcmToken) {
-                  sendFcmToken(newFcmToken)
+                  const { notifications } = user.settings
+                  const pushOption = {
+                    all_users: notifications.all_users,
+                    news: notifications.news,
+                    tasks: notifications.tasks,
+                  }
+                  sendFcmToken(newFcmToken, pushOption)
                   AsyncStorage.setItem('fcmToken', newFcmToken)
                 }
               }
@@ -62,25 +83,50 @@ export const getPushesPermissionStatusAndToken = dispatch => async () => {
   }
 }
 
-const sendFcmToken = fcmToken => {
+const sendFcmToken = (fcmToken, option, type = false) => {
   if (fcmToken) {
     store.dispatch({ type: PUSH_TOKEN_FULFILLED, payload: fcmToken })
-    store.dispatch({ type: USER_PUSHES_REQUEST })
+
+    switch (type) {
+      case 'isNotificationsEnabled':
+        store.dispatch({ type: ALL_PUSHES_REQUEST })
+        break
+      case 'all_users':
+        store.dispatch({ type: USER_PUSHES_REQUEST })
+        break
+      case 'news':
+        store.dispatch({ type: NEWS_PUSHES_REQUEST })
+        break
+      case 'tasks':
+        store.dispatch({ type: TASKS_PUSHES_REQUEST })
+        break
+      default:
+        break
+    }
     sendRequest({
       r_path: p_notifications,
       method: 'patch',
       attr: {
-        enable: true,
+        ...option,
         push_token: fcmToken,
         deviceId: RNDeviceInfo.getDeviceId(),
         platform: Platform.OS,
       },
-      success: () => {
+      success: e => {
+        store.dispatch({ type: ALL_PUSHES_FULFILLED })
         store.dispatch({ type: USER_PUSHES_FULFILLED })
-        store.dispatch({ type: ENABLE_USER_PUSHES })
+        store.dispatch({ type: TASKS_PUSHES_FULFILLED })
+        store.dispatch({ type: NEWS_PUSHES_FULFILLED })
+        store.dispatch({
+          type: ENABLE_USER_PUSHES,
+          payload: e.data.notifications,
+        })
       },
       failFunc: () => {
+        store.dispatch({ type: ALL_PUSHES_REJECTED })
         store.dispatch({ type: USER_PUSHES_REJECTED })
+        store.dispatch({ type: TASKS_PUSHES_REJECTED })
+        store.dispatch({ type: NEWS_PUSHES_REJECTED })
         store.dispatch({ type: DISABLE_USER_PUSHES })
       },
       full_res: true,
@@ -88,7 +134,11 @@ const sendFcmToken = fcmToken => {
   }
 }
 
-export const trySignToPushes = dispatch => async (firstTimeMode = false) => {
+export const trySignToPushes = dispatch => async (
+  firstTimeMode = false,
+  option,
+  type = false,
+) => {
   try {
     dispatch({ type: GET_PERMISSION_STATUS })
     const isEnabled = await firebase.messaging().hasPermission()
@@ -136,7 +186,7 @@ export const trySignToPushes = dispatch => async (firstTimeMode = false) => {
         }
       }
     }
-    sendFcmToken(fcmToken)
+    sendFcmToken(fcmToken, option, type)
   } catch (error) {
     dispatch({ type: PERMISSION_STATUS_REJECTED })
   }
@@ -144,26 +194,28 @@ export const trySignToPushes = dispatch => async (firstTimeMode = false) => {
 
 export const requestDisablePushes = dispatch => async (token = '') => {
   try {
-    dispatch({ type: USER_PUSHES_REQUEST })
+    store.dispatch({ type: ALL_PUSHES_REQUEST })
     sendRequest({
       r_path: p_notifications,
       method: 'patch',
       attr: {
-        enable: false,
+        all_users: false,
+        tasks: false,
+        news: false,
         push_token: token,
         deviceId: RNDeviceInfo.getDeviceId(),
         platform: Platform.OS,
       },
       success: () => {
-        dispatch({ type: USER_PUSHES_FULFILLED })
+        dispatch({ type: ALL_PUSHES_FULFILLED })
         dispatch({ type: DISABLE_USER_PUSHES })
       },
       failFunc: () => {
-        dispatch({ type: USER_PUSHES_REJECTED })
+        dispatch({ type: ALL_PUSHES_REJECTED })
       },
       full_res: true,
     })
   } catch (e) {
-    dispatch({ type: USER_PUSHES_REJECTED })
+    dispatch({ type: ALL_PUSHES_REJECTED })
   }
 }

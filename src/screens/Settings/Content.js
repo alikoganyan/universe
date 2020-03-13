@@ -101,7 +101,7 @@ const Loading = styled(ActivityIndicator)`
   position: absolute;
   left: 0;
   top: 0;
-  right: 0;
+  right: -30;
   bottom: 0;
   background: #fff8;
 `
@@ -137,11 +137,18 @@ class Content extends Component {
     const {
       user: {
         settings: {
-          notifications: { enable: isNotificationsEnabled = false } = {},
+          notifications: {
+            all_users: isNotificationsAllUsersEnabled = false,
+            tasks: isNotificationsTasksEnabled = false,
+            news: isNotificationsNewsEnabled,
+          } = {},
         } = {},
       } = {},
       pushesPermissionsGranted,
+      allPushesIsFetching,
       userPushesIsFetching,
+      tasksPushesIsFetching,
+      newsPushesIsFetching,
       permissionsIsFetching,
       tokenIsFetching,
       navigate,
@@ -155,6 +162,10 @@ class Content extends Component {
       ? this.state.settings.slice(0, this.state.settings.length - 1)
       : this.state.settings
     if (isLoading) return null
+    const isNotificationsEnabled =
+      isNotificationsAllUsersEnabled ||
+      isNotificationsTasksEnabled ||
+      isNotificationsNewsEnabled
     return (
       <SafeAreaView>
         <Wrapper>
@@ -167,19 +178,92 @@ class Content extends Component {
               <Label numberOfLines={1}>Уведомления</Label>
               <Status>
                 {pushesPermissionsGranted && isNotificationsEnabled
-                  ? 'Включены'
+                  ? 'Включен'
                   : 'Выключены'}
               </Status>
               <Option>
                 <Toggle
-                  onPress={this.handleTogglePushes}
+                  onPress={() =>
+                    this.handleTogglePushes('isNotificationsEnabled')
+                  }
                   switchOn={pushesPermissionsGranted && isNotificationsEnabled}
                 />
               </Option>
-              {(!!userPushesIsFetching ||
-                !!permissionsIsFetching ||
-                !!tokenIsFetching) && <Loading animating size="small" />}
+              {(!!(allPushesIsFetching && permissionsIsFetching) ||
+                !!(allPushesIsFetching && tokenIsFetching) ||
+                !!allPushesIsFetching) && <Loading animating size="small" />}
             </Box>
+            {isNotificationsEnabled && (
+              <>
+                <Box first>
+                  <Label numberOfLines={2}>Уведомления от пользователях</Label>
+                  <Status>
+                    {pushesPermissionsGranted && isNotificationsAllUsersEnabled
+                      ? 'Включен'
+                      : 'Выключены'}
+                  </Status>
+                  <Option>
+                    <Toggle
+                      onPress={() => this.handleTogglePushes('all_users')}
+                      switchOn={
+                        pushesPermissionsGranted &&
+                        isNotificationsAllUsersEnabled
+                      }
+                    />
+                  </Option>
+                  {(!!(userPushesIsFetching && permissionsIsFetching) ||
+                    !!(userPushesIsFetching && tokenIsFetching) ||
+                    !!userPushesIsFetching) && (
+                    <Loading animating size="small" />
+                  )}
+                </Box>
+
+                <Box first>
+                  <Label numberOfLines={2}>Уведомления от задачах</Label>
+                  <Status>
+                    {pushesPermissionsGranted && isNotificationsTasksEnabled
+                      ? 'Включен'
+                      : 'Выключены'}
+                  </Status>
+                  <Option>
+                    <Toggle
+                      onPress={() => this.handleTogglePushes('tasks')}
+                      switchOn={
+                        pushesPermissionsGranted && isNotificationsTasksEnabled
+                      }
+                    />
+                  </Option>
+                  {(!!(tasksPushesIsFetching && permissionsIsFetching) ||
+                    !!(tasksPushesIsFetching && tokenIsFetching) ||
+                    !!tasksPushesIsFetching) && (
+                    <Loading animating size="small" />
+                  )}
+                </Box>
+
+                <Box first>
+                  <Label numberOfLines={2}>Уведомления от новостях </Label>
+                  <Status>
+                    {pushesPermissionsGranted && isNotificationsNewsEnabled
+                      ? 'Включен'
+                      : 'Выключены'}
+                  </Status>
+                  <Option>
+                    <Toggle
+                      onPress={() => this.handleTogglePushes('news')}
+                      switchOn={
+                        pushesPermissionsGranted && isNotificationsNewsEnabled
+                      }
+                    />
+                  </Option>
+                  {(!!(newsPushesIsFetching && permissionsIsFetching) ||
+                    !!(newsPushesIsFetching && tokenIsFetching) ||
+                    !!newsPushesIsFetching) && (
+                    <Loading animating size="small" />
+                  )}
+                </Box>
+              </>
+            )}
+
             <FlatList
               style={{ paddingRight: 5, paddingLeft: 5, maxHeight: 300 }}
               data={settings}
@@ -347,22 +431,49 @@ class Content extends Component {
     })
   }
 
-  handleTogglePushes = () => {
+  handleTogglePushes = type => {
     const {
       user: {
         settings: {
-          notifications: { enable: isNotificationsEnabled = false } = {},
+          notifications: { all_users = false, tasks = false, news } = {},
         } = {},
       } = {},
+      user: {
+        settings: { notifications = {} },
+      },
       pushesPermissionsGranted,
       pushesToken,
       requestDisablePushes,
       trySignToPushes,
     } = this.props
-    if (isNotificationsEnabled && pushesPermissionsGranted) {
+
+    const isNotificationsEnabled = all_users || tasks || news
+
+    if (
+      pushesPermissionsGranted &&
+      isNotificationsEnabled &&
+      type === 'isNotificationsEnabled'
+    ) {
       requestDisablePushes(pushesToken)
-    } else {
-      trySignToPushes(false)
+      return
+    }
+    if (pushesPermissionsGranted) {
+      let pushOptions
+      if (type === 'isNotificationsEnabled') {
+        pushOptions = {
+          all_users: true,
+          tasks: true,
+          news: true,
+        }
+      } else {
+        pushOptions = {
+          all_users,
+          tasks,
+          news,
+          [type]: !notifications[type],
+        }
+      }
+      trySignToPushes(false, pushOptions, type)
     }
   }
 
@@ -384,9 +495,12 @@ const mapStateToProps = ({
   user: userReducer.user,
   pushesPermissionsGranted: pushesReducer.permissions,
   pushesToken: pushesReducer.token,
-  userPushesIsFetching: pushesReducer.userPushesIsFetching,
   permissionsIsFetching: pushesReducer.permissionsIsFetching,
   tokenIsFetching: pushesReducer.tokenIsFetching,
+  allPushesIsFetching: pushesReducer.allPushesIsFetching,
+  userPushesIsFetching: pushesReducer.userPushesIsFetching,
+  tasksPushesIsFetching: pushesReducer.tasksPushesIsFetching,
+  newsPushesIsFetching: pushesReducer.newsPushesIsFetching,
 })
 const mapDispatchToProps = dispatch => ({
   setSettings: _ => dispatch(setSettings(_)),

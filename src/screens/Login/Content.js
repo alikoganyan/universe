@@ -349,7 +349,12 @@ class Content extends Component {
           JSON.stringify({ ...data, password, access_token }),
         )
         if (!isPushesAsked || isPushesEnabled) {
-          trySignToPushes(true)
+          const pushOptions = {
+            all_users: true,
+            news: true,
+            tasks: true,
+          }
+          trySignToPushes(true, pushOptions)
         }
         this.setState({ loading: false })
         setTimeout(() => {

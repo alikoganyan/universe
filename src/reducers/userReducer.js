@@ -94,9 +94,7 @@ const userReducer = (state = initialState, action) => {
       settings = {
         ...settings,
         notifications: {
-          ...settings.notifications,
-          enable: true,
-          initialized: true,
+          ...action.payload,
         },
       }
       return { ...state, user: { ...state.user, settings } }
@@ -108,7 +106,9 @@ const userReducer = (state = initialState, action) => {
         ...settings,
         notifications: {
           ...settings.notifications,
-          enable: false,
+          all_users: false,
+          tasks: false,
+          news: false,
           initialized: true,
         },
       }
