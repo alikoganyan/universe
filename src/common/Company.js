@@ -69,10 +69,6 @@ const UserTitle = styled(Text)`
 `
 
 class Company extends Component {
-  state = {
-    modalVisible: false,
-  }
-
   render() {
     const { user, company, companies, companies_details } = this.props
     const { countForAllCompanies } = this.state
@@ -80,10 +76,7 @@ class Company extends Component {
     if (!company) return null
     return (
       <>
-        <TouchableOpacity
-          sryle={{ position: 'absolute' }}
-          onPress={() => this.setState({ modalVisible: true })}
-        >
+        <TouchableOpacity onPress={() => this.setState({ modalVisible: true })}>
           {company.logo ? (
             <ImageComponent
               source={{
@@ -190,6 +183,7 @@ class Company extends Component {
   }
 
   state = {
+    modalVisible: false,
     countForAllCompanies: 0,
   }
 
