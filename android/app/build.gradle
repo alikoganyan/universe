@@ -152,6 +152,10 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-firebase')
+    implementation "com.google.android.gms:play-services-base:16.1.0"
+    implementation "com.google.firebase:firebase-core:16.0.9"
+    implementation "com.google.firebase:firebase-messaging:18.0.0"
     implementation project(':@sentry_react-native')
     implementation project(':@react-native-community_cameraroll')
     implementation project(':rn-fetch-blob')
@@ -160,10 +164,6 @@ dependencies {
     implementation project(':react-native-action-sheet')
     implementation project(':react-native-fast-image')
     implementation project(':react-native-linear-gradient')
-    implementation project(':react-native-firebase')
-    implementation "com.google.android.gms:play-services-base:${rootProject.ext.googlePlayServicesVersion}"
-    implementation "com.google.firebase:firebase-core:17.0.1"
-    implementation "com.google.firebase:firebase-messaging:19.0.1"
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-svg')

@@ -10,7 +10,7 @@
       "client_info": {
         "mobilesdk_app_id": "1:744665062099:android:6093792ef39e9460",
         "android_client_info": {
-          "package_name": "elize.univ.team"
+          "package_name": "com.team.universe.media"
         }
       },
       "oauth_client": [
@@ -32,11 +32,11 @@
               "client_type": 3
             },
             {
-              "client_id": "744665062099-7t3lqpe71m79ujar6q03tlghrak43ujg.apps.googleusercontent.com",
+              "client_id": "744665062099-vjp17fj9tfd22l564g4pelq93dvkeqlp.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "team.amigo.media",
-                "app_store_id": "1447868526"
+                "bundle_id": "elize.univ.team",
+                "app_store_id": "1484246136"
               }
             }
           ]
@@ -69,11 +69,11 @@
               "client_type": 3
             },
             {
-              "client_id": "744665062099-7t3lqpe71m79ujar6q03tlghrak43ujg.apps.googleusercontent.com",
+              "client_id": "744665062099-vjp17fj9tfd22l564g4pelq93dvkeqlp.apps.googleusercontent.com",
               "client_type": 2,
               "ios_info": {
-                "bundle_id": "team.amigo.media",
-                "app_store_id": "1447868526"
+                "bundle_id": "elize.univ.team",
+                "app_store_id": "1484246136"
               }
             }
           ]
