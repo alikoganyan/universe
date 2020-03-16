@@ -252,7 +252,7 @@ class Content extends Component {
   RightActions = item => {
     const {
       user,
-      user: { disabled_notifications_users },
+      user: { disabled_notifications_users = [] },
     } = this.props
     const participant =
       item.participants[0]._id !== user._id
@@ -300,7 +300,7 @@ class Content extends Component {
   toggleUserNotification = (user_id, enable) => {
     const { setUser, user } = this.props
     let {
-      user: { disabled_notifications_users },
+      user: { disabled_notifications_users = [] },
     } = this.props
     sendRequest({
       r_path: '/profile/notifications_from_user',
@@ -333,7 +333,7 @@ class Content extends Component {
     const {
       item,
       user,
-      user: { disabled_notifications_users },
+      user: { disabled_notifications_users = [] },
     } = this.props
     const options = ['Удалить', 'Отменить']
 
