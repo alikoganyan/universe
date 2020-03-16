@@ -330,11 +330,27 @@ class Content extends Component {
   }
 
   handleHold = () => {
+    const {
+      item,
+      user,
+      user: { disabled_notifications_users },
+    } = this.props
     const options = ['Удалить', 'Отменить']
+
+    const participant =
+      item.participants[0]._id !== user._id
+        ? item.participants[0]
+        : item.creator
+    if (!item.isGroup) {
+      disabled_notifications_users.includes(participant._id)
+        ? options.unshift('Вкл уведомления')
+        : options.unshift('Выкл уведомления')
+    }
+
     this.props.showActionSheetWithOptions(
       {
         options,
-        cancelButtonIndex: 1,
+        cancelButtonIndex: options.length === 2 ? 1 : 2,
         showSeparators: true,
         textStyle: {
           textAlign: 'center',
@@ -344,31 +360,25 @@ class Content extends Component {
         },
       },
       buttonIndex => {
-        if (buttonIndex === 0) {
-          this.deleteDialog(this.props.item._id)
+        if (options.length === 3 && buttonIndex === 0) {
+          this.toggleUserNotification(
+            participant._id,
+            disabled_notifications_users.includes(participant._id),
+          )
+        } else if (
+          (options.length === 3 && buttonIndex === 1) ||
+          (options.length === 2 && buttonIndex === 0)
+        ) {
+          this.deleteDialog(item._id)
         }
       },
     )
   }
 
-  // deleteDialog = dialog_id => {
-  //   sendRequest({
-  //     r_path: '/dialogs/delete_dialog',
-  //     method: 'delete',
-  //     attr: { dialog_id },
-  //     success: res => {},
-  //     failFunc: e => {},
-  //   })
-  // }
-
   handleClick = () => {
     const { onClick } = this.props
     onClick()
   }
-
-  getUnreadMessageHeight = () => {}
-
-  getUnreadMessageWidth = () => {}
 }
 
 const styles = StyleSheet.create({
