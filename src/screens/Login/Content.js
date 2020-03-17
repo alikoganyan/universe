@@ -9,6 +9,7 @@ import {
   TouchableWithoutFeedback,
   AsyncStorage,
   Image,
+  Clipboard,
 } from 'react-native'
 // import { Constants } from 'expo';
 import RNDeviceInfo from 'react-native-device-info'
@@ -17,6 +18,7 @@ import helper from '../../utils/helpers'
 import FloatingLabel from 'react-native-floating-labels'
 import styled from 'styled-components'
 import { connect } from 'react-redux'
+import firebase from 'react-native-firebase'
 import {
   setUser,
   setAuth,
@@ -152,6 +154,11 @@ class Content extends Component {
           <View>
             <Title>Авторизация</Title>
           </View>
+          {!!this.state.token && (
+            <Text onPress={() => Clipboard.setString(this.state.token)}>
+              {this.state.token}
+            </Text>
+          )}
           <PhoneNumber
             err={invalidPhone}
             style={{
@@ -270,6 +277,8 @@ class Content extends Component {
     invalidPhone: false,
     hidePassword: true,
     cca2: '+7',
+
+    token: '',
   }
   inputRef = null
 
@@ -279,6 +288,12 @@ class Content extends Component {
     this.setState({
       pickerData: this.inputRef.getPickerData(),
     })
+    firebase
+      .messaging()
+      .getToken()
+      .then(res => {
+        this.setState({ token: res })
+      })
   }
 
   onPressFlag() {
