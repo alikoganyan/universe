@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, Text, View } from 'react-native'
 import { NewsMenuIcon } from '../assets'
-import { setReset } from '../actions/userActions'
 
 class NewsTabIcon extends Component {
   render() {
@@ -32,7 +31,6 @@ class NewsTabIcon extends Component {
           nextProps.company._id
         ]
         this.setState({ unreaded_news_count })
-        this.props.setReset(false)
       }
     }
   }
@@ -62,10 +60,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   companies_details: state.userReducer.companies_details,
   company: state.userReducer.company,
-  reset: state.userReducer.reset,
 })
-const mapDispatchToProps = dispatch => ({
-  setReset: _ => dispatch(setReset(_)),
-})
+const mapDispatchToProps = dispatch => ({})
 
 export default connect(mapStateToProps, mapDispatchToProps)(NewsTabIcon)

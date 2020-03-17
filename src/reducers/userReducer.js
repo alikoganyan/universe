@@ -47,7 +47,7 @@ const userReducer = (state = initialState, action) => {
     case SET_COMPANIES_DETAILS:
       return {
         ...state,
-        companies_details: action.payload,
+        companies_details: { ...action.payload },
       }
     case SET_ERROR:
       return { ...state, error: action.payload }

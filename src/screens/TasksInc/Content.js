@@ -193,7 +193,6 @@ class Content extends Component {
       companies_details[company._id].all =
         companies_details[company._id].all - unreadedTasks.length
       setCompaniesDetails(companies_details)
-      this.props.setReset(true)
     }
   }
 

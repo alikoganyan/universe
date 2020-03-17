@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Text, View, StyleSheet } from 'react-native'
 import { DialogMenuIcon } from '../assets'
-import { setReset } from '../actions/userActions'
+
 class DialogTabIcon extends Component {
   render() {
     const { unreaded_messages_count } = this.state
@@ -30,7 +30,6 @@ class DialogTabIcon extends Component {
           nextProps.company._id
         ]
         this.setState({ unreaded_messages_count })
-        this.props.setReset(false)
       }
     }
   }
@@ -60,10 +59,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   companies_details: state.userReducer.companies_details,
   company: state.userReducer.company,
-  reset: state.userReducer.reset,
 })
-const mapDispatchToProps = dispatch => ({
-  setReset: _ => dispatch(setReset(_)),
-})
+const mapDispatchToProps = dispatch => ({})
 
 export default connect(mapStateToProps, mapDispatchToProps)(DialogTabIcon)

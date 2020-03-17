@@ -39,6 +39,7 @@ import {
   replyMessage,
   setCurrentRoomId,
   setSendingMessages,
+  setSocketSon,
 } from '../../actions/messageActions'
 import { d_message } from '../../constants/api'
 import _ from 'lodash'
@@ -47,7 +48,6 @@ import Loader from '../../common/Loader'
 import RNPermissions from 'react-native-permissions'
 import { socket } from '../../utils/socket'
 import { getCurrentCompany } from '../../helper/message'
-import { setReset } from '../../actions/userActions'
 // import RNPermissions from 'react-native-permissions'
 
 const {
@@ -315,6 +315,7 @@ class Content extends Component {
     const { removePreloader, currentRoomId, setDialogViewers } = this.props
     const { dialog } = this.props
     let { messages } = this.props
+
     if (nextProps.message._id !== this.props.message._id) {
       messages.push(nextProps.message)
       this.props.setMessages(messages)
@@ -324,6 +325,10 @@ class Content extends Component {
           geo: true,
         })
       }
+    }
+    if (nextProps.socketSon && dialog && Object.keys(dialog).length) {
+      this.props.setMessages(dialog.messages)
+      this.props.setSocketSon(false)
     }
     if (
       nextProps.deleteMessage.message_id !== this.props.deleteMessage.message_id
@@ -337,7 +342,6 @@ class Content extends Component {
       this.props.setDialog(dialog)
       this.props.setMessages(messages)
     }
-
     if (nextProps.dialogViewers) {
       messages.forEach(m => {
         if (!m.viewers.includes(nextProps.dialogViewers.viewer)) {
@@ -346,11 +350,6 @@ class Content extends Component {
       })
       this.props.setMessages(messages)
       setDialogViewers(null)
-    }
-
-    if (nextProps.reset && dialog && Object.keys(dialog).length) {
-      this.props.setMessages(dialog.messages)
-      this.props.setReset(false)
     }
   }
 
@@ -964,7 +963,7 @@ const mapStateToProps = state => ({
   message: state.messageReducer.message,
   sendingMessages: state.messageReducer.sendingMessages,
   dialogViewers: state.dialogsReducer.dialogViewers,
-  reset: state.userReducer.reset,
+  socketSon: state.messageReducer.socketSon,
 })
 
 const mapDispatchToProps = dispatch => ({
@@ -979,6 +978,6 @@ const mapDispatchToProps = dispatch => ({
   setEditedMessage: _ => dispatch(getEditedMessage(_)),
   setSendingMessages: _ => dispatch(setSendingMessages(_)),
   setDialogViewers: _ => dispatch(setDialogViewers(_)),
-  setReset: _ => dispatch(setReset(_)),
+  setSocketSon: _ => dispatch(setSocketSon(_)),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Content)

@@ -779,7 +779,6 @@ class Content extends Component {
         companies_details[company._id].all =
           companies_details[company._id].all - unreadMessaagecount
         setCompaniesDetails(companies_details)
-        this.props.setReset(true)
       }
       socket.emit('view', { room, viewer: user._id })
     }

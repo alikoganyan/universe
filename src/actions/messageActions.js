@@ -20,6 +20,12 @@ export const ADD_PRELOADER = 'ADD_PRELOADER'
 export const REMOVE_PRELOADER = 'REMOVE_PRELOADER'
 export const REMOVE_ALL_PRELOADER = 'REMOVE_ALL_PRELOADER'
 export const SET_SENDING_MESSAGES = 'SET_SENDING_MESSAGES'
+export const SET_SOCKET_SON = 'SET_SOCKET_SON'
+
+export const setSocketSon = payload => ({
+  type: SET_SOCKET_SON,
+  payload,
+})
 
 export const addMessage = payload => ({
   type: ADD_MESSAGE,
