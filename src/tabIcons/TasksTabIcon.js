@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { StyleSheet, Text, View } from 'react-native'
 import { TasksMenuIcon } from '../assets'
-import { setReset } from '../actions/userActions'
 
 class TasksTabIcon extends Component {
   render() {
@@ -60,10 +59,7 @@ const styles = StyleSheet.create({
 const mapStateToProps = state => ({
   companies_details: state.userReducer.companies_details,
   company: state.userReducer.company,
-  reset: state.userReducer.reset,
 })
-const mapDispatchToProps = dispatch => ({
-  setReset: _ => dispatch(setReset(_)),
-})
+const mapDispatchToProps = dispatch => ({})
 
 export default connect(mapStateToProps, mapDispatchToProps)(TasksTabIcon)

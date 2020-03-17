@@ -196,7 +196,6 @@ class Company extends Component {
         }
       })
       this.setState({ countForAllCompanies })
-      this.props.setReset(false)
     }
   }
 

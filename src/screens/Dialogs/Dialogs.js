@@ -30,6 +30,7 @@ import {
   deleteMessage,
   getEditedMessage,
   setSendingMessages,
+  setSocketSon,
 } from '../../actions/messageActions'
 import {
   setDialogs,
@@ -534,7 +535,6 @@ class Dialogs extends Component {
           companies_details[company._id].all =
             companies_details[company._id].all - 1
           setCompaniesDetails(companies_details)
-          this.props.setReset(true)
         }
         currentDialog.messages = currentDialog.messages.filter(
           m => m._id !== e.message_id,
@@ -661,11 +661,40 @@ class Dialogs extends Component {
   }
 
   socketDialogOpened = e => {
-    const { dialogs, setDialogs, currentRoomId, setDialogViewers } = this.props
+    const {
+      dialogs,
+      setDialogs,
+      currentRoomId,
+      setDialogViewers,
+      user,
+      companies_details,
+      setCompaniesDetails,
+      company,
+    } = this.props
     const { dialog_id, viewer } = e
+    if (user._id === viewer) {
+      if (!currentRoomId || (currentRoomId && currentRoomId !== dialog_id)) {
+        let unreadMessaagecount = 0
+        const currentDialog = dialogs.find(d => d._id === dialog_id)
+        currentDialog.messages.forEach(m => {
+          if (!m.viewers.includes(user._id) && m.sender._id !== user._id) {
+            unreadMessaagecount++
+          }
+        })
+        if (unreadMessaagecount > 0) {
+          companies_details[company._id].unreaded_messages_count =
+            companies_details[company._id].unreaded_messages_count -
+            unreadMessaagecount
+          companies_details[company._id].all =
+            companies_details[company._id].all - unreadMessaagecount
+          setCompaniesDetails(companies_details)
+        }
+      }
+    }
+
     const newMessages = []
     const newDialogs = [...dialogs]
-    const newDialog = newDialogs.filter(e => e._id === dialog_id)[0]
+    const newDialog = newDialogs.find(e => e._id === dialog_id)
     if (newDialog) {
       const newDialogIndex = newDialogs.findIndex(e => e._id === dialog_id)
       if (currentRoomId === e.dialog_id) {
@@ -717,8 +746,10 @@ class Dialogs extends Component {
             m.viewers.push(user._id)
           }
         })
-        this.props.setDialog(currentDialog)
-        this.props.setReset(true)
+        if (currentRoomId) {
+          this.props.setDialog(currentDialog)
+          this.props.setSocketSon(true)
+        }
       }
     }
 
@@ -856,16 +887,19 @@ class Dialogs extends Component {
           }
         }
         if (
-          e.company !== company._id ||
-          !currentRoomId ||
-          (currentRoomId && currentRoomId !== e.dialog)
+          e.sender._id !== user._id &&
+          !e.viewers.includes(user._id) &&
+          (e.company !== company._id ||
+            !currentRoomId ||
+            (currentRoomId && currentRoomId !== e.dialog))
         ) {
-          companies_details[e.company].unreaded_messages_count =
-            companies_details[e.company].unreaded_messages_count + 1
-          companies_details[e.company].all =
-            companies_details[e.company].all + 1
-          setCompaniesDetails(companies_details)
-          this.props.setReset(true)
+          if (companies_details && companies_details[e.company]) {
+            companies_details[e.company].unreaded_messages_count =
+              companies_details[e.company].unreaded_messages_count + 1
+            companies_details[e.company].all =
+              companies_details[e.company].all + 1
+            setCompaniesDetails(companies_details)
+          }
         }
       }
     } catch (err) {
@@ -1003,7 +1037,6 @@ class Dialogs extends Component {
       companies_details[company._id].all =
         companies_details[company._id].all - unreadMessaagecount
       setCompaniesDetails(companies_details)
-      this.props.setReset(true)
     }
     const { isGroup, room, participants, creator, _id } = e
     const recipientId =
@@ -1111,6 +1144,7 @@ const mapDispatchToProps = dispatch => ({
   setDialogViewers: _ => dispatch(setDialogViewers(_)),
   setTaskReceivers: _ => dispatch(setTaskReceivers(_)),
   setCompaniesDetails: _ => dispatch(setCompaniesDetails(_)),
+  setSocketSon: _ => dispatch(setSocketSon(_)),
   trySignToPushes: trySignToPushes(dispatch),
 })
 export default connect(mapStateToProps, mapDispatchToProps)(Dialogs)

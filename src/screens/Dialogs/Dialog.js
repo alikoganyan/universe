@@ -255,7 +255,7 @@ class Content extends Component {
       user: { disabled_notifications_users = [] },
     } = this.props
     const participant =
-      item.participants[0]._id !== user._id
+      item.participants[0] && item.participants[0]._id !== user._id
         ? item.participants[0]
         : item.creator
     return (

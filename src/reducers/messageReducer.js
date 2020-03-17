@@ -16,6 +16,7 @@ import {
   ADD_PRELOADER,
   REMOVE_PRELOADER,
   SET_SENDING_MESSAGES,
+  SET_SOCKET_SON,
 } from '../actions/messageActions'
 import { LOG_OUT } from '../actions/userActions'
 
@@ -24,6 +25,7 @@ const initialState = {
   currentRoom: null,
   currentChat: null,
   currentRoomId: null,
+  socketSon: false,
   editMessage: {},
   editedMessage: {},
   messages: [],
@@ -73,6 +75,8 @@ export default (state = initialState, action) => {
       return { ...state, uploadMessages: [...payload] }
     case REMOVE_PRELOADER:
       return { ...state, uploadMessages: [...payload] }
+    case SET_SOCKET_SON:
+      return { ...state, socketSon: payload }
     case LOG_OUT:
       return initialState
     default:
