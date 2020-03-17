@@ -33,6 +33,7 @@ export default class AppComponent extends Component {
   render() {
     const { loaded, logged } = this.state
     const Navigator = RootNavigator(loaded && logged)
+
     if (!loaded) {
       return null
     }
