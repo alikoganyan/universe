@@ -22,6 +22,7 @@ import {
   requestDisablePushes,
 } from '../../actions/pushesActions'
 
+import * as packageJson from '../../../package'
 const { Colors, sidePadding, fontSize, borderRadius, HeaderHeight } = helper
 const { lightGrey1, blue, lightBlue, grey2, white, black } = Colors
 const Wrapper = styled(View)`
@@ -305,6 +306,18 @@ class Content extends Component {
                 </Checkbox>
               ))}
             </CheckboxHolder>
+            <Text
+              style={{
+                color: 'gray',
+                width: '100%',
+                textAlign: 'center',
+                position: 'relative',
+                top: 20,
+              }}
+            >
+              Версия:{' '}
+              {!!(packageJson && packageJson.version) && packageJson.version}
+            </Text>
           </ScrollView>
           <BottomSheet
             visible={pickerOpened}
